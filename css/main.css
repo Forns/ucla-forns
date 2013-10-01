@@ -1,3 +1,8 @@
+/*
+ * BRUIN BLUE: #536895
+ * BRUIN GOLD: #FFB300
+ */
+
 /* GENERAL */
 * {
   margin: 0;
@@ -60,6 +65,10 @@ body {
   min-width: 500px !important;
 }
 
+.navbar-nav > li {
+  width: 100px !important;
+}
+
 .navbar-nav > li > a {
   height: 70px;
 }
@@ -73,9 +82,12 @@ body {
 ul .dropdown-menu {
   z-index: 2;
   text-align: right;
-  border-right: 4px solid #fdc003;
-  margin-right: -4px;
-  margin-top: -1px !important;
+  border-right: 4px solid #FFB300;
+}
+
+.navbar .glyphicon {
+  margin-top: -10px;
+  margin-bottom: 10px;
 }
 
 /* MISCELLANEOUS */
