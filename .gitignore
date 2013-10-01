@@ -1,0 +1,4 @@
+.project
+dist
+/dist
+/dist/*

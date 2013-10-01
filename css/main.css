@@ -1,0 +1,99 @@
+/* GENERAL */
+* {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  font-style: inherit;
+  font-size: 100%;
+  vertical-align: baseline;
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Lato', sans-serif;
+}
+
+body {
+  background-attachment: fixed !important;
+}
+
+#wrap {
+  min-height: 100%;
+}
+
+.main-spacer {
+  height: 125px;
+}
+
+#main-content {
+  overflow: auto;
+  padding-bottom: 125px;
+  padding-top: 25px;
+}
+
+#footer {
+  position: relative;
+  margin-top: -65px; /* negative value of footer height */
+  min-height: 65px;
+  padding-top: 20px;
+  clear: both;
+  background-color: #333333;
+  color: white;
+}
+
+/* NAVIGATION */
+.nav-accent {
+  height: 4px;
+  background-color: #333;
+  -webkit-box-shadow: 0 1px 10px rgba(0,0,0,.1);
+  -moz-box-shadow: 0 1px 10px rgba(0,0,0,.1);
+  box-shadow: 0 1px 10px rgba(0,0,0,.1);
+}
+
+.navbar-default {
+  height: 74px;
+  border: 0;
+}
+
+.navbar {
+  min-width: 500px !important;
+}
+
+.navbar-nav > li > a {
+  height: 70px;
+}
+
+#brand-text {
+  display: inline-block;
+  margin-top: 12px;
+  font-size: 150%;
+}
+
+ul .dropdown-menu {
+  z-index: 2;
+  text-align: right;
+  border-right: 4px solid #fdc003;
+  margin-right: -4px;
+  margin-top: -1px !important;
+}
+
+/* MISCELLANEOUS */
+.hidden {
+  display: none !important;
+}
+
+/* ACCENT */
+.indent {
+  margin-left: 30px;
+}
+
+.dropdown {
+  cursor: hand;
+  cursor: pointer;
+}
+
+.text-center {
+  text-align: center;
+}
+
