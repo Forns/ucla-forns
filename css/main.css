@@ -28,7 +28,7 @@ body {
 }
 
 .main-spacer {
-  height: 125px;
+  height: 50px;
 }
 
 #main-content {
@@ -73,6 +73,18 @@ body {
   height: 70px;
 }
 
+.navbar-collapse.navbar-main-collapse.in {
+  margin-top: 31px;
+  background: #536895; /* Old browsers */
+  overflow-x: hidden;
+}
+
+.navbar-collapse.navbar-main-collapse.in li.dropdown > ul > li {
+  background-color: #536895;
+  margin-top: -10px;
+  text-align: center;
+}
+
 #brand-text {
   display: inline-block;
   margin-top: 12px;
@@ -86,8 +98,8 @@ ul .dropdown-menu {
 }
 
 .navbar .glyphicon {
-  margin-top: -10px;
-  margin-bottom: 10px;
+  margin-top: -5px;
+  margin-bottom: 15px;
 }
 
 /* MISCELLANEOUS */
@@ -96,6 +108,28 @@ ul .dropdown-menu {
 }
 
 /* ACCENT */
+.btn {
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+
+.navbar .nav > li > a, li.dropdown li > a {
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+
+.menu-accent {
+  height: 4px;
+  background-color: #fdc003;
+  -webkit-box-shadow: 0 1px 10px rgba(0,0,0,.1);
+  -moz-box-shadow: 0 1px 10px rgba(0,0,0,.1);
+  box-shadow: 0 1px 10px rgba(0,0,0,.1);
+}
+
 .indent {
   margin-left: 30px;
 }

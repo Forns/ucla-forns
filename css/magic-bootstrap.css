@@ -35,7 +35,6 @@ audio:not([controls]) {
   display: none;
 }
 html {
-  font-family: sans-serif;
   -webkit-text-size-adjust: 100%;
   -ms-text-size-adjust: 100%;
 }
@@ -258,7 +257,6 @@ html {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 body {
-  font-family: Open Sans;
   font-size: 14px;
   line-height: 1.428571429;
   color: #333333;
@@ -393,7 +391,6 @@ h6,
 .h4,
 .h5,
 .h6 {
-  font-family: Open Sans;
   font-weight: 500;
   line-height: 1.1;
 }
