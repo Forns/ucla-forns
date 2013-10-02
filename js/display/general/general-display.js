@@ -8,7 +8,7 @@ $(function () {
       presentationMode = false,
       presentationClass = "presentation-display",
       glyphiconMap = {
-        ".question": "glyphicon-question-mark",
+        ".question": "glyphicon-question-sign",
         ".definition": "glyphicon-chevron-right",
         ".answer": "glyphicon-chevron-right"
       };
