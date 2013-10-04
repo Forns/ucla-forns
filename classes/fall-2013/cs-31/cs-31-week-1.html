@@ -249,9 +249,10 @@
                   </tr>
                 </tbody>
               </table>
-              <p>Although the smallest unit in a particular address is 1 byte, the CPU on a 32-bit architecture will operate on 4 bytes at a time, or 4 consecutive memory addresses. So, above, a single instruction might include memory blocks 0, 1, 2, and 3 on a 32-bit machine.</p>
+              <p>For example, in a <strong>32-bit architecture</strong>, the smallest addressable unit in any address is 1 byte. Additionally, the CPU on a 32-bit architecture will operate on 4 bytes at a time, or 4 consecutive memory addresses. So, above, a single instruction might include memory blocks 0, 1, 2, and 3 on a 32-bit machine.</p>
+              <p class='example'>In a 32-bit architecture, a single word might look like:<br/><br/>10000111110001000100111110101001<br/><br/>In many architectures, (and without diving into detail) the first 5 bits will map to an instruction (like add, negate), and the rest of the bit string will indicate arguments to that instruction.</p>
               <p class='question' name='memory-q2'>On how many bytes will a CPU of a 64-bit architecture operate at a time?</p>
-              <p class='answer' name='memory-q2'>Stop insulting my intelligence; 8 bytes.</p>
+              <p class='answer' name='memory-q2'>8 bytes.</p>
               <p class='definition'><strong>Fetch:</strong> The Control Unit pulls 4 or 8 bytes of data from memory depending on whether it's a 32- or 64-bit architecture.</p>
               <p class='definition'><strong>Decode:</strong> The Control Unit then determines what instruction is in the newly fetched data.</p>
               <p class='definition'><strong>Execute:</strong> The Control Unit executes the newly decoded instruction, often using the ALU for methods like addition and moving memory blocks around. After execution, the Control Unit will fetch the next instruction, restarting the cycle.</p>
@@ -299,7 +300,7 @@
                   <tr>
                     <td><p>int main () {</p></td>
                     <td>
-                      <p>We are declaring a method with name main that is expected to return a value of type int. Don't worry, we'll talk more about methods, types, and returns later.</p>
+                      <p>We are declaring a function with name main that is expected to return a value of type int. Don't worry, we'll talk more about functions, types, and returns later.</p>
                       <p>For now, just know that every c++ program must have a main method. Note the opening curly-bracket that is associated with the main method.</p>
                     </td>
                   </tr>
