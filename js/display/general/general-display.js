@@ -13,13 +13,31 @@ $(function () {
           classes: "alert alert-warning"
         },
         ".definition": {
-          glyphicon: "glyphicon-chevron-right",
+          glyphicon: "glyphicon-info-sign",
           classes: "alert alert-info"
+        },
+        ".toolkit": {
+          glyphicon: "glyphicon-cog",
+          classes: "alert alert-info"
+        },
+        ".example": {
+          glyphicon: "glyphicon-check",
+          classes: "alert alert-warning"
+        },
+        ".debug": {
+          glyphicon: "glyphicon-warning-sign",
+          classes: "alert alert-danger"
         },
         ".answer": {
           glyphicon: "glyphicon-chevron-right",
-          classes: "alert alert-info"
+          classes: "alert alert-success"
         }
+      },
+      animationTime = 200,
+      refreshScrollspy = function () {
+        $('[data-spy="scroll"]').each(function () {
+          var $spy = $(this).scrollspy('refresh');
+        });
       };
   
   // Set up ScrollSpy elements
@@ -31,9 +49,7 @@ $(function () {
     });
     
   // Refresh scrollspy
-  $('[data-spy="scroll"]').each(function () {
-    var $spy = $(this).scrollspy('refresh');
-  });
+  refreshScrollspy();
   
   // Set up presentation mode
   $(document)
@@ -52,6 +68,9 @@ $(function () {
             .addClass(presentationClass);
         }
         presentationMode = !presentationMode;
+        setTimeout(function () {
+          refreshScrollspy();
+        }, animationTime + 100);
       }
     });
   
@@ -62,27 +81,16 @@ $(function () {
       .prepend("<span class='glyphicon " + styleMap[elements].glyphicon + "'></span>&nbsp");
   }
   
+  $(".example")
+    .prepend("<strong>Example</strong><br/>");
+  
   // Questions can be clicked on for the answer
   $(".question")
     .each(function () {
       $(this)
         .click(function () {
-          $(this)
-            .fadeOut(200, function () {
-              $("[name='" + $(this).attr("name") + "'].answer")
-                .fadeIn(200);
-            });
-        });
-    });
-  $(".answer")
-    .each(function () {
-      $(this)
-        .click(function () {
-          $(this)
-            .fadeOut(200, function () {
-              $("[name='" + $(this).attr("name") + "'].question")
-                .fadeIn(200);
-            });
+          $("[name='" + $(this).attr("name") + "'].answer")
+            .fadeIn(animationTime);
         });
     });
 });
