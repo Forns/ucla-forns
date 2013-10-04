@@ -133,37 +133,92 @@
               <p class='question alert alert-warning' name='compilation-question'><strong>Compilation</strong></br>What is the compilation process?</p>
               <p class='answer alert alert-info' name='compilation-question'><strong>Compilation</strong></br>The process by which you translate your human-readable source code into machine-executable machine code.</p>
               <p>If you haven't yet set up your <emph>two</emph> compilers that are required for this course, here's how below:</p>
-              <table class='table table-striped'>
+              <table class='table table-striped table-bordered'>
                 <thead>
                   <tr>
                     <th></th>
-                    <th><p>g++</p></th>
-                    <th><p>Visual Studio</p></th>
+                    <th><p>clang++ / g++</p></th>
+                    <th><p>Visual C++ 2012</p></th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <th><p>On a Mac</p></th>
-                    <td><p>The g++ compiler comes with <a href='http://developer.apple.com/technology/xcode.html' target="_blank">Apple's XCode Tools</a>, though this is typically already installed.</p></td>
-                    <td><p>You have a couple of options for using Visual Studio.</p></td>
+                    <th><p>On a Mac / Linux</p></th>
+                    <td>
+                      <p>[Mac] The compiler comes with <a href='http://developer.apple.com/technology/xcode.html' target="_blank">Apple's XCode Tools</a>, though this is typically already installed.</p>
+                      <p>[Linux] You can find the g++ for Linux tutorial on our <a href='http://cs.ucla.edu/classes/fall13/cs31/' target="_blank">Course Page</a>.</p>
+                    </td>
+                    <td>
+                      <p>You have a couple of options for using Visual Studio:</p>
+                      <ul class='indent-1'>
+                        <li><p>Install a virtual machine / bootcamp partition with some flavor of Windows and then install Visual C++ 2012.</p></li>
+                        <li><p>Remote into or go to the SEAS net Windows machines (<a href='http://seasnet.ucla.edu/classes/seasnet-terminal-server' target="_blank">details found here</a>.)</p></li>
+                      </ul>
+                    </td>
                   </tr>
                   <tr>
                     <th><p>On Windows:</p></th>
-                    <td><p>TODO</p></td>
-                    <td><p>TODO</p></td>
+                    <td><p>Follow the tutorial under (for some reason) g++ for Linux on our <a href='http://cs.ucla.edu/classes/fall13/cs31/' target="_blank">Course Page</a>.</p></td>
+                    <td>
+                      <p>
+                        <p class='alert alert-danger'>NB: If you are running Windows 8, make sure you download Visual C++ 2012, and not the one labeled for Windows 8!</p>
+                        <p>The full process for using Visual C++ 2012 on your PC can be found on our <a href='http://cs.ucla.edu/classes/fall13/cs31/' target="_blank">Course Page</a> under Visual C++ 2012 on the left.</p>
+                        <p>This process describes but one (school sanctioned) means of acquiring MSDN products:</p>
+                        <ol class='indent-1'>
+                          <li><p>Log into <a href='https://courseweb.seas.ucla.edu/' target='_blank'>courseweb here</a>.</p></li>
+                          <li><p>Look for the Software Download section on the left toolbar.</p></li>
+                          <li><p>Click on MSDN Academic Alliance (for students).</p></li>
+                          <li><p>Search for the product you want (in this case, Visual C++ 2012), download, and follow the installation steps.</p></li>
+                        </ol>
+                      </p>
+                    </td>
                   </tr>
                 </tbody>
               </table>
+              <br/>
+              
+              <h2>Compiling and running your first c++ program</h2>
+              <div class='indent-1'>
+                <strong>Using XCode:</strong><br/>
+                <p>Here I defer to the guide crafted by our professor located on the <a href='http://cs.ucla.edu/classes/fall13/cs31/' target="_blank">Course Page</a> and under title XCode on a Mac.</p>
+                <p>That said, I will deliver a live demo of XCode compilation... now.</p><br/>
+                
+                <strong>Using Visual C++:</strong><br/>
+                <p>Here I defer to the guide crafted by our professor located on the <a href='http://cs.ucla.edu/classes/fall13/cs31/' target="_blank">Course Page</a> and under title Visual C++ 2012.</p>
+                <p>That said, I will deliver a live demo of Visual C++ 2012 compilation... now.</p>
+              </div>
             </div>
-            <hr />
+            <hr/>
             
-            <!-- TODO: How to Compile -->
+            <div id='architecture' class='scrollspy-element' scrollspy-title='Architecture Review'></div>
+            <h1>A Brief Trip into Hardware</h1>
+            <div>
+              <p class='question' name='hardware-joke'>How many computer scientists does it take to change a lightbulb?</p>
+              <p class='answer' name='hardware-joke'>None, it's a hardware problem.</p>
+              <p>That said, it never hurts to know what's happening &quot;under the hood&quot; of your code, so let's take a quick detour into hardware.</p>
+              <p>The following image depicts the standard Von Neumann computer architecture displaying the processor, memory, and I/O:</p>
+              <div class='text-center'>
+                <img src='../../../assets/images/fall-2013/cs-31/week-1/von_neumann.png' />
+              </div>
+              <p class='definition'><strong>Memory</strong><br/> Primary memory (RAM) is the type of hardware that contains program information for fast and active access.<br/>Secondary memory refers to other, slower-access devices like hard drives.</p>
+              <p>With respect to memory, the process of programming generally follows these steps:</p>
+              <ol class='indent-1'>
+                <li><p>You write your source code and save it somewhere on a hard drive (secondary memory).</p></li>
+                <li><p>You compile your source code into machine code, which creates another file on the hard drive.</p></li>
+                <li><p>When you run your compiled machine code, the program is loaded into RAM (primary memory).</p></li>
+                <li><p>The processor then performs the Fetch, Decode, Execute cycle on your program in RAM.</p></li>
+              </ol>
+              <p>So now let's examine what happens in the CPU by first describing its components:</p>
+              <p class='question' name='architecture-q1'>What are the roles of the Control Unit and Arithmetic Logic Unit (ALU) aboard the CPU?</p>
+              <p class='answer' name='architecture-q1'>The </p>
+            </div>
             <!-- TODO: Tiny Architecture -->
               <!-- TODO: How memory works -->
             <!-- TODO: Specifics of C++ -->
             <!-- TODO: Variables (+ naming) -->
               <!-- TODO: Types -->
                 <!-- TODO: Analogies in math / real life -->
+                <!-- TODO: DO NOT DO STRINGS OR CHAR -->
                 <!-- TODO: Declaration -->
                 <!-- TODO: Differences between number types -->
                 <!-- TODO: int vs double and integer arithmetic -->

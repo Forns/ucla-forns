@@ -152,7 +152,7 @@ p, pre {
   margin: 60px;
 }
 
-.question {
+.question, .answer {
   cursor: hand;
   cursor: pointer;
 }
@@ -162,6 +162,14 @@ p, pre {
 }
 
 /* ACCENT */
+.indent-1 {
+  margin-left: 20px;
+}
+
+.indent-2 {
+  margin-left: 40px;
+}
+
 .btn {
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;

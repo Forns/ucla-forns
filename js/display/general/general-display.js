@@ -7,10 +7,19 @@ $(function () {
   var scrollspy = $("#scrollspy"),
       presentationMode = false,
       presentationClass = "presentation-display",
-      glyphiconMap = {
-        ".question": "glyphicon-question-sign",
-        ".definition": "glyphicon-chevron-right",
-        ".answer": "glyphicon-chevron-right"
+      styleMap = {
+        ".question": {
+          glyphicon: "glyphicon-question-sign",
+          classes: "alert alert-warning"
+        },
+        ".definition": {
+          glyphicon: "glyphicon-chevron-right",
+          classes: "alert alert-info"
+        },
+        ".answer": {
+          glyphicon: "glyphicon-chevron-right",
+          classes: "alert alert-info"
+        }
       };
   
   // Set up ScrollSpy elements
@@ -47,9 +56,10 @@ $(function () {
     });
   
   // Configure display of the alert elements
-  for (var elements in glyphiconMap) {
+  for (var elements in styleMap) {
     $(elements)
-      .prepend("<span class='glyphicon " + glyphiconMap[elements] + "'></span>&nbsp");
+      .addClass(styleMap[elements].classes)
+      .prepend("<span class='glyphicon " + styleMap[elements].glyphicon + "'></span>&nbsp");
   }
   
   // Questions can be clicked on for the answer
@@ -60,6 +70,17 @@ $(function () {
           $(this)
             .fadeOut(200, function () {
               $("[name='" + $(this).attr("name") + "'].answer")
+                .fadeIn(200);
+            });
+        });
+    });
+  $(".answer")
+    .each(function () {
+      $(this)
+        .click(function () {
+          $(this)
+            .fadeOut(200, function () {
+              $("[name='" + $(this).attr("name") + "'].question")
                 .fadeIn(200);
             });
         });
