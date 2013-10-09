@@ -1,0 +1,223 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Andrew Forney - UCLA CS</title>
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/magic-bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/main.css" rel="stylesheet" type="text/css">
+    <script src="../../../js/lib/jquery-2.0.3.min.js"></script>
+    <script src="../../../js/lib/bootstrap.min.js"></script>
+    <script src="../../../js/display/general/general-display.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+  </head>
+  
+  <body data-spy="scroll" data-target="#scrollspy">
+    
+    <!-- BEGIN WRAP -->
+    <div id="wrap">
+      
+      <!-- BEGIN NAVIGATION -->
+      <nav class='navbar navbar-default' role='navigation'>
+        <div class='nav-accent'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-12'>
+              <div class='navbar-header'>
+                <button class='navbar-toggle' type='button' data-toggle='collapse' data-target='.navbar-main-collapse'>
+                  <span class='sr-only'>Toggle Navigation</span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                </button>
+                <a class='navbar-brand' href='/~forns/'>
+                  <span id='brand-text'>
+                    Andrew Forney
+                  </span>
+                </a>
+              </div>
+              
+              <div id='nav-main' class='collapse navbar-collapse navbar-main-collapse'>
+                <ul class='nav navbar-nav navbar-right'>
+                  
+                  <li>
+                    <a href='/~forns/about.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-user'></span>
+                      </div>
+                      <p class='text-center'>About</p>
+                    </a>
+                  </li>
+                  
+                  <li class='active'>
+                    <a href='/~forns/classes.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-book'></span>
+                      </div>
+                      <p class='text-center'>Classes</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/contact.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-comment'></span>
+                      </div>
+                      <p class='text-center'>Contact</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/publications.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-file'></span>
+                      </div>
+                      <p class='text-center'>Publications</p>
+                    </a>
+                  </li>
+                  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <!-- END NAVIGATION -->
+      
+      <!-- BEGIN MAIN CONTENT -->
+      <div id="main-content" class="container">
+        <div class="row">
+          
+          <!-- BEGIN SCROLLSPY -->
+          <div class='col-md-2'>
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+              <ul id='scrollspy' class="nav bs-sidenav">
+              </ul>
+            </div>
+          </div>
+          <!-- END SCROLLSPY -->
+          
+          <!-- BEGIN PRESENTATION CONTENT -->
+          <div class='col-md-10 presentation-content' role='main'>
+            
+            <div id='introduction' class='scrollspy-element' scrollspy-title='Review'></div>
+            <h1>Questions from Week 1</h1>
+            <p><strong>Q: Why is &quot;result&quot; highlighted in XCode differently from other variables we define?</strong></p>
+            <p>A: As someone in class suspected, it was highlighted differently because it is defined in one of the files included in our preprocessing. That said, it was difficult to find this definition.</p>
+            <p>As it turns out, there is a simple mechanism for finding definitions in XCode; right click on the variable and select &quot;Jump to Definition.&quot;</p>
+            <br/>
+            
+            <p><strong>Q: What do the &lt;&lt; and &gt;&gt; operators really mean?</strong></p>
+            <div class='toolkit'>
+              <ul class='indent-1'>
+                <li><p><strong>Insertion Operator ( &lt;&lt; )</strong>: Inserts the data on the right into the stream on the left of the operator.</p></li>
+                <li><p><strong>Extraction Operator ( &gt;&gt; )</strong>: Extracts the data from stream on the left into the target on the right of the operator.</p></li>
+              </ul>
+            </div>
+            <br/>
+            
+            <p><strong>Q: Is colon an operator in C++?</strong></p>
+            <p>A: Well, no, at least <emph>not by itself</emph>. This isn't to say that colon isn't used as part of the C++ <emph>syntax</emph>, as later we will see it used with Classes.</p>
+            <br/>
+            
+            <p><strong>Q: What happens when we try to overload a variable defined in the std namespace?</strong></p>
+            <p>This question deals with our later discussion of scope; consider the following example and find the answer to this particular question with explanation to follow:</p>
+            <p class='debug'>Will the following code compile? If so, what will it print out?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  using namespace std;
+
+  int main () {
+      int cin = 5,
+          test;
+          
+      cout &lt;&lt; cin &lt;&lt; endl;
+      
+      // What will be in test after this line?
+      cin &gt;&gt; test;
+      cout &lt;&lt; test;
+  }
+</pre>
+            
+            <p class='question' name='compiler-q1'>Will I get different outcomes from compiling the above program via Visual C++ 2012 vs g++?</p>
+            <div class='answer' name='compiler-q1'>Yes; g++ will compile and run fine (though with junk in variable test), but Visual C++ gives you:<br/>
+              <div class='text-center'>
+                <img src='../../../assets/images/fall-2013/cs-31/week-2/visual_2012_error.png' />
+              </div>
+            </div>
+            <hr/>
+            
+            
+            <div id='scope' class='scrollspy-element' scrollspy-title='Scope'></div>
+            <h1>Introduction to Scope</h1>
+            <div>
+              
+            </div>
+            <hr/>
+            
+            
+            <div id='operators' class='scrollspy-element' scrollspy-title='Operators'></div>
+            <h1>Introduction to Operators</h1>
+            <div>
+              <!-- TODO: Example a = b = c = ... -->
+              <p class='definition'><strong>Operators</strong> are symbolic keywords used to compute values between operands, or the arguments to the operators.</p>
+              <p class='definition'><strong>Unary vs. Binary Operators</strong>: Unary operators... well... operate on a single argument value, whereas binary operators operate on two. Binary operators have an lvalue and an rvalue, on the left and right sides of the operator, respectively.</p>
+              
+              <p class='question' name='operator-q1'>What are some binary operators that we've gone over in class?</p>
+              <div class='answer' name='operator-q1'>
+                <ul class='indent-1'>
+                  <li><strong>Assignment ( = ):</strong> Assigns the rvalue to the variable designated by the lvalue.</li>
+                  <li><strong>Addition ( + ): Returns the sum of the lvalue and the rvalue.</strong></li>
+                  <li><strong>Subtraction ( - ): Returns the difference of the lvalue and the rvalue.</strong></li>
+                  <li><strong>Multiplication ( * ): Returns the product of the lvalue and the rvalue.</strong></li>
+                  <li><strong>Scope Access ( :: ): Returns the entity named by the rvalue in the scope named by the lvalue.</strong></li>
+                </ul>
+              </div>
+            </div>
+            <hr/>
+            
+            
+            <div id='precedence' class='scrollspy-element' scrollspy-title='Precedence'></div>
+            <h1>Precedence</h1>
+            <div>
+              
+            </div>
+            <hr/>
+            
+            <!-- TODO: cout weird space with "running" in XCode -->
+            <!-- TODO: Preview of Operators -->
+            <!-- TODO: Precedence -->
+              <!-- TODO: Grouping -->
+              <!-- TODO: Equal precedence = left to right -->
+            <!-- TODO: cout formatting -->
+              <!-- TODO: cout.setf(ios::fixed); -->
+              <!-- TODO: cout.precision(2); -->
+            <!-- TODO: Short section on scope -->
+            <!-- TODO: STRINNNGGGGSSS -->
+            <!-- TODO: getline(cin, variable) -->
+              <!-- TODO: Example with trying to find something in your house, different rooms, etc. -->
+            
+          </div>
+          <!-- END PRESENTATION CONTENT -->
+          
+        </div>
+      </div>
+      <!-- END MAIN CONTENT -->
+      
+      
+    </div>
+    <!-- END WRAPPER -->
+    
+    <!-- BEGIN FOOTER -->
+    <div id="footer">
+      <div class="container">
+        <div class="col-md-12 text-center">
+          
+        </div>
+      </div>
+    </div>
+    <!-- END FOOTER -->
+    
+  </body>
+</html>
