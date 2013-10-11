@@ -175,28 +175,6 @@
                 </ul>
               </div>
               <p>An interesting property about increment and decrement is that, while they are unary operators, they may appear on either side of a variable with different outcomes.</p>
-              <p class='example'>What will the following code print out?</p>
-<pre class='prettyprint'>
-  #include &lt;iostream&gt;
-  using namespace std;
-  
-  int main () {
-      int x = 5,
-          
-          // x++ says "increment after operation"
-          // What is the value in x
-          // after the line below?
-          y = x++,
-          
-          // ++x says "increment before operation"
-          // What about its value now?
-          z = ++x;
-      
-      cout &lt;&lt; x &lt;&lt; endl;
-      cout &lt;&lt; y &lt;&lt; endl;
-      cout &lt;&lt; z &lt;&lt; endl;
-  }
-</pre>
               <p class='debug'>Will the following code compile? If so, what will it print out?</p>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
@@ -233,6 +211,7 @@
               <p class='definition'><strong>Associativity:</strong> The direction in which operators evaluate their operands; can be left to right (e.g. 5 + 3 + 2) or right to left (e.g. i = 5;)</p>
               <p>So, for each operator in C++, we define its precedence (lower precedence levels are evaluated first) and its associativity (the direction in which it evaluates its arguments).</p>
               <p>Here is the complete C++ list of operators and their precedences (taken from <a href='http://en.cppreference.com/w/cpp/language/operator_precedence'>here</a> if you want more info):</p>
+              <p class='debug'>NOTE: This precedence list is a RULE OF THUMB. There are some exceptions to precedence level to be considered...</p>
               <table class="table table-striped table-bordered">
               <tbody><tr>
               <th style="text-align: left"> Precedence
@@ -492,6 +471,28 @@
       cout &lt;&lt; z;
   }
 </pre>
+            <p class='example'>Remember, we said there will be exceptions to precedence level... What will the following code print out?<br/>Note precedence levels: (=, 15), (+, -, 6), (++, 2 (postfix) or 3 (prefix))</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  using namespace std;
+  
+  int main () {
+      int x = 5,
+          
+          // x++ says "increment after operation"
+          // What is the value in x
+          // after the line below?
+          y = x++,
+          
+          // ++x says "increment before operation"
+          // What about its value now?
+          z = ++x;
+      
+      cout &lt;&lt; x &lt;&lt; endl;
+      cout &lt;&lt; y &lt;&lt; endl;
+      cout &lt;&lt; z &lt;&lt; endl;
+  }
+</pre>
             <hr/>
             
             <div id='strings' class='scrollspy-element' scrollspy-title='Strings'></div>
@@ -565,6 +566,19 @@
       test = test + five;
       
       cout &lt;&lt; test &lt;&lt; endl;
+  }
+</pre>
+            <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  using namespace std;
+  
+  int main () {
+      string test = "hello",
+             goodbye = "goodbye",
+             awkwardExchange = test &lt;&lt; goodbye;
+      
+      cout &lt;&lt; awkwardExchange &lt;&lt; endl;
   }
 </pre>
             <p>There are some cool properties that we can use with strings, like find out their length and determine individual letters.</p>
@@ -752,7 +766,7 @@
       
       if (test == "hello") {
           cout &lt;&lt; "Your greeting upsets me.\n";
-          return;
+          return 0;
       }
       cout &lt;&lt; "Anyone here?\n";
   }
@@ -771,16 +785,30 @@
           y = 2;
       
       if (test.length() != 4 && x == 5) {
-        cout << "The day is mine!" << endl;
+        cout &lt;&lt; "The day is mine!" &lt;&lt; endl;
       } else {
-        cout << "The day will eventually be mine." << endl;
+        cout &lt;&lt; "The day will eventually be mine." &lt;&lt; endl;
       }
       
       if (y % 2 == 1 || x % 2 == 1) {
-        cout << "Something's odd around here..." << endl;
+        cout &lt;&lt; "Something's odd around here..." &lt;&lt; endl;
       } else {
-        cout << "Even I don't think this will print." << endl;
+        cout &lt;&lt; "Even I don't think this will print." &lt;&lt; endl;
       }
+  }
+</pre>
+              <p class='definition'><strong>Ternary Conditional</strong><br/>We can perform conditional evaluations inline with the code without using the if block. The syntax is (conditional) ? statement_if_true : statement_if_false;</p>
+              <p class='example'>What will the following code segment output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  using namespace std;
+  
+  int main () {
+      string test = "hello",
+             stuff = "stuff",
+             result = (test == stuff) ? "equal" : "not equal";
+             
+      cout &lt;&lt; result &lt;&lt; endl;
   }
 </pre>
             <div>
@@ -842,7 +870,32 @@
       }
   }
 </pre>
+              <div class='toolkit'><strong>For Loop</strong> Just like a while loop, except we initialize the iterator, define the conditional, and define the post-iteration behavior all in the signature. The syntax is:<br/>
+                <div>
+                  <br/>
+                  for (int i = value; conditional; post_condition) {<br/>
+                  &nbsp;&nbsp;// Code block<br/>
+                  }<br/>
+                </div>
+              </div>
+              <p class='example'>What does the following code segment output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  using namespace std;
+  
+  int main () {
+      int iterations = 10;
+      for (int i = 0; i &lt; iterations; i++) {
+          if (i % 2 == 0) {
+              cout &lt;&lt; i &lt;&lt; endl;
+          }
+      }
+  }
+</pre>
+
+              <p class='example'>Design a function that prints out a plus sign that is 10 lines high and 10 lines wide.</p>
             </div>
+            <hr/>
               
             
           </div>
