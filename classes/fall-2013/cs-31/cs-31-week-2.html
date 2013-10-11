@@ -108,17 +108,12 @@
             <p>As it turns out, there is a simple mechanism for finding definitions in XCode; right click on the variable and select &quot;Jump to Definition.&quot;</p>
             <br/>
             
-            <p><strong>Q: What do the &lt;&lt; and &gt;&gt; operators really mean?</strong></p>
-            <div class='toolkit'>
-              <ul class='indent-1'>
-                <li><p><strong>Insertion Operator ( &lt;&lt; )</strong>: Inserts the data on the right into the stream on the left of the operator.</p></li>
-                <li><p><strong>Extraction Operator ( &gt;&gt; )</strong>: Extracts the data from stream on the left into the target on the right of the operator.</p></li>
-              </ul>
-            </div>
+            <p><strong>Q: Is colon an operator in C++?</strong></p>
+            <p>A: Well, no, at least <emph>not by itself</emph>. This isn't to say that colon isn't used as part of the C++ <emph>syntax</emph>, as later we will see it used with Classes. We will talk about colon as an operator later.</p>
             <br/>
             
-            <p><strong>Q: Is colon an operator in C++?</strong></p>
-            <p>A: Well, no, at least <emph>not by itself</emph>. This isn't to say that colon isn't used as part of the C++ <emph>syntax</emph>, as later we will see it used with Classes.</p>
+            <p><strong>Q: The XCode printout of &quot;Running&quot; happened after first printout of the program. Is this just a quirk of the debug console in XCode?</strong></p>
+            <p>A: Yes. If you run the same code segment in, say, Visual C++ 2012, you will not see the same behavior.</p>
             <br/>
             
             <p><strong>Q: What happens when we try to overload a variable defined in the std namespace?</strong></p>
@@ -147,33 +142,38 @@
               </div>
             </div>
             <hr/>
-            
-            
-            <div id='scope' class='scrollspy-element' scrollspy-title='Scope'></div>
-            <h1>Introduction to Scope</h1>
-            <div>
-              
-            </div>
-            <hr/>
-            
+
             
             <div id='operators' class='scrollspy-element' scrollspy-title='Operators'></div>
             <h1>Introduction to Operators</h1>
             <div>
-              <!-- TODO: Example a = b = c = ... -->
               <p class='definition'><strong>Operators</strong> are symbolic keywords used to compute values between operands, or the arguments to the operators.</p>
               <p class='definition'><strong>Unary vs. Binary Operators</strong>: Unary operators... well... operate on a single argument value, whereas binary operators operate on two. Binary operators have an lvalue and an rvalue, on the left and right sides of the operator, respectively.</p>
               
               <p class='question' name='operator-q1'>What are some binary operators that we've gone over in class?</p>
               <div class='answer' name='operator-q1'>
                 <ul class='indent-1'>
-                  <li><strong>Assignment ( = ):</strong> Assigns the rvalue to the variable designated by the lvalue.</li>
-                  <li><strong>Addition ( + ): Returns the sum of the lvalue and the rvalue.</strong></li>
-                  <li><strong>Subtraction ( - ): Returns the difference of the lvalue and the rvalue.</strong></li>
-                  <li><strong>Multiplication ( * ): Returns the product of the lvalue and the rvalue.</strong></li>
-                  <li><strong>Scope Access ( :: ): Returns the entity named by the rvalue in the scope named by the lvalue.</strong></li>
+                  <li><p><strong>Assignment ( = ):</strong> Assigns the rvalue to the variable designated by the lvalue.</p></li>
+                  <li><p><strong>Addition ( + ):</strong> Returns the sum of the lvalue and the rvalue.</p></li>
+                  <li><p><strong>Subtraction ( - ):</strong> Returns the difference of the lvalue and the rvalue.</p></li>
+                  <li><p><strong>Multiplication ( * ):</strong> Returns the product of the lvalue and the rvalue.</p></li>
+                  <li><p><strong>Insertion ( &lt;&lt; ):</strong> Inserts the data in the rvalue into the stream in the lvalue.</p></li>
+                  <li><p><strong>Extraction ( &gt;&gt; ):</strong> Extracts the data from stream in the lvalue into the target in the lvalue.</p></li>
+                  <li><p><strong>Scope Access ( :: ):</strong> Returns the entity named by the rvalue in the scope named by the lvalue.</p></li>
                 </ul>
               </div>
+              <p class='question' name='operator-q2'>What is the lvalue and rvalue of the below expression?<br/>x = 5;</p>
+              <p class='answer' name='operator-q2'>lvalue = x<br/>rvalue = 5</p>
+              
+              <p>That said, we've also talked about some unary operators--operators that expect only one operand:</p>
+              <p class='question' name='operator-q3'>What are unary operators that we've gone over in class?</p>
+              <div class='answer' name='operator-q3'>
+                <ul class='indent-1'>
+                  <!-- TODO: MORE STUFF HERE -->
+                  <li><p><strong>Negation ( - ):</strong> Returns the negative of the rvalue.</p></li>
+                </ul>
+              </div>
+              
             </div>
             <hr/>
             
@@ -181,22 +181,55 @@
             <div id='precedence' class='scrollspy-element' scrollspy-title='Precedence'></div>
             <h1>Precedence</h1>
             <div>
-              
+              <p class='question' name='precedence-q1'>What does operator precedence mean?</p>
+              <p class='answer' name='answer-q1'>The order in which operators evaluate their operands. Precedence is a property of each operator.</p>
+              <p>What if I gave you the following set of instructions: &quot;Wash the car, dry the car, and do your homework.&quot;</p>
+              <p>In what order will you perform the tasks?</p>
+              <p>Chances are you'll do one of the following:</p>
+              <ul class='indent-1'>
+                <li><p>Wash the car, then dry the car, and then do your homework.</p></li>
+                <li><p>Do your homework, then wash the car, and then dry the car.</p></li>
+              </ul>
+              <p>Some of you anarchists might want to wash the car, then do your homework, then dry the car because <emph>the man</emph> doesn't tell you how to clean.</p>
+              <p>But, the rest of us tend to group the washing and drying of our cars together, even though we could do our homework before or after.</p>
+              <p class='definition'><strong>Grouping</strong> decides the order in which equal-level precedence operations will be carried out.</p>
             </div>
+            
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  using namespace std;
+  
+  int main () {
+      int a = 5,
+          b = a = 5 * 2 + a; // &quot;Parellel Assignment&quot;
+      
+      cout &lt;&lt; a &lt;&lt; endl;
+      cout &lt;&lt; b &lt;&lt; endl;
+  }
+</pre>
             <hr/>
             
-            <!-- TODO: cout weird space with "running" in XCode -->
             <!-- TODO: Preview of Operators -->
             <!-- TODO: Precedence -->
               <!-- TODO: Grouping -->
               <!-- TODO: Equal precedence = left to right -->
+            <!-- TODO: STRINNNGGGGSSS -->
+              <!-- TODO: Ex: Add number to string -->
+              <!-- TODO: Ex: Uninitialized strings -->
+              <!-- TODO: Special characters? -->
             <!-- TODO: cout formatting -->
               <!-- TODO: cout.setf(ios::fixed); -->
               <!-- TODO: cout.precision(2); -->
-            <!-- TODO: Short section on scope -->
-            <!-- TODO: STRINNNGGGGSSS -->
             <!-- TODO: getline(cin, variable) -->
-              <!-- TODO: Example with trying to find something in your house, different rooms, etc. -->
+              <!-- TODO: "Take all characters up to and including the next newline character and put it into the string" No characters available? Wait until someone types something... -->
+              <!-- TODO: Difference with cin and consuming newlines (getline consumes the newline; cin doesn't) -->
+                <!-- TODO: cin.ignore(number_of_characters, "\n") // number of chars up until a new line character (can work with other characters) -->
+            <!-- TODO: conditionals!!! -->
+              <!-- TODO: conditional block -->
+              <!-- TODO: Booleans??? What is truthy and what is falsy -->
+              <!-- TODO: compound operators -->
+              <!-- TODO: ERROR with = instead of == -->
+              
             
           </div>
           <!-- END PRESENTATION CONTENT -->
