@@ -472,7 +472,7 @@
   
   int main () {
       int a = 5,
-          b = a = 5 * 2 + a; // &quot;Parellel Assignment&quot;
+          b = a = a + 5 * 2; // &quot;Parellel Assignment&quot;
       
       cout &lt;&lt; a &lt;&lt; endl;
       cout &lt;&lt; b &lt;&lt; endl;
@@ -598,29 +598,251 @@
   int main () {
       string me = "Andrew";
       
-      // me[i] returns the ith letter there
+      // me[i] returns the ith letter
       cout &lt;&lt; me &lt;&lt; "="  
            &lt;&lt; me[1] &lt;&lt; me[4] &lt;&lt; me[3] &lt;&lt; me[2] 
            &lt;&lt; endl;
   }
 </pre>
             </div>
+            <hr/>
+            <div id='streams' class='scrollspy-element' scrollspy-title='Streams'></div>
+            <h1>Streams</h1>
+            <div>
+              <p class='definition'><strong>Streams</strong> describe an abstract concept of data flowing into and out of different sources and destinations.</p>
+              <p>Think of an actual river that flows from a source to a destination--the stream can be considered the river itself.</p>
+              <p>Therefore, we can think of our interaction with code using a console in the following way:</p>
+              <ul class='indent-1'>
+                <li><p>cout is like the stream ending, being displayed to the console</p></li>
+                <li><p>cin is like the stream beginning, seeking what the user puts into the stream</p></li>
+              </ul>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  using namespace std;
+  
+  int main () {
+      // Hey! No peeing in the stream!
+      cout &lt;&lt; &quot;pee&quot;;
+  }
+</pre>
+              <h2>cout Formatting</h2>
+              <p>So, just as we might build dams and other means of controlling water flow, so might we modify the way that our cout stream behaves.</p>
+              <div class='toolkit'><p><strong>Manipulating cout Display:</strong></p>
+                <ul class='indent-1'>
+                  <li><p><strong>cout.setf(ios::fixed)</strong> tells the cout stream to format numbers with fixed number of digits.</p></li>
+                  <li><p><strong>cout.setf(ios::scientific)</strong> tells the cout stream to format numbers with scientific notation.</p></li>
+                  <li><p><strong>cout.precision(n)</strong> tells the cout stream to only display n digits and round appropriately.</p></li>
+                </ul>
+              </div>
+              <p class='example'>What does the following code segment output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  using namespace std;
+  
+  int main () {
+      double x = 10.23456789;
+      
+      cout &lt;&lt; x &lt;&lt; endl;
+      
+      cout.setf(ios::scientific);
+      cout.precision(2);
+      cout &lt;&lt; x &lt;&lt; endl;
+      
+      cout.setf(ios::fixed);
+      cout.precision(5);
+      cout &lt;&lt; x &lt;&lt; endl;
+  }
+</pre>
+              <h2>cin Formatting</h2>
+              <p>Returning to our water stream example, just as we may use different lures while fishing to get different fish out of a stream, so do we need different tools to extract different data from the input.</p>
+              <div class='toolkit'><p><strong>Manipulating cin Behavior:</strong></p>
+                <ul class='indent-1'>
+                  <li><p><strong>cin.ignore(n, pattern)</strong> ignores n characters or until the first encountered instance of pattern from the input stream. DOES NOT CONSUME NEWLINE IN INPUT.</p></li>
+                  <li><p><strong>getline(cin, storageVar)</strong> stores the entire line of input into storageVar and DOES consume the newline in the input.</p></li>
+                </ul>
+              </div>
+              <p class='debug'>NOTE: We ONLY use cin.ignore(n, pattern) when we've used cin and then directly after use getline! What happens below?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  using namespace std;
+  
+  int main () {
+      string inputString;
+      int inputInt;
+      
+      cin &gt;&gt; inputInt;
+      cout &lt;&lt; "Input was: "
+           &lt;&lt; inputInt &lt;&lt; endl;
+      
+      getline(cin, inputString);
+      cout &lt;&lt; "Input was: "
+           &lt;&lt; inputString &lt;&lt; endl;
+      
+      cin &gt;&gt; inputString;
+      cout &lt;&lt; "Input was: "
+           &lt;&lt; inputString &lt;&lt; endl;
+  }
+</pre>
+            </div>
+            <hr/>
             
-            <!-- TODO: stream formatting -->
-              <!-- TODO: cout.setf(ios::fixed); -->
-              <!-- TODO: cout.precision(2); -->
-              <!-- TODO: getline(cin, var) -->
-                <!-- TODO: "Take all characters up to and including the next newline character and put it into the string" No characters available? Wait until someone types something... -->
-                <!-- TODO: Difference with cin and consuming newlines (getline consumes the newline; cin doesn't) -->
-                  <!-- TODO: cin.ignore(number_of_characters, "\n") // number of chars up until a new line character (can work with other characters) -->
-                <!-- TODO: Use cin.ignore(num, "\n") ONLY when you've gathered a number and are about to gather a string -->
-            <!-- TODO: conditionals!!! -->
-              <!-- TODO: conditional block -->
-              <!-- TODO: conditional with return -->
-              <!-- TODO: Booleans??? What is truthy and what is falsy -->
-              <!-- TODO: compound operators -->
-              <!-- TODO: ERROR with = instead of == -->
-            <!-- TODO: Intro to iteration: the while loop -->
+            
+            <div id='conditionals' class='scrollspy-element' scrollspy-title='Conditionals'></div>
+            <h1>Conditionals</h1>
+              <p class='toolkit'><strong>Conditionals</strong> direct the flow of our programs by evaluating a statement as either true or false, and then taking appropriate action.</p>
+              <p>Below, you'll find the anatomy of the if statement:</p>
+<pre class='prettyprint'>
+  if (conditional) {
+    // Execute everything in here if
+    // conditional was evaluated to true
+  }
+</pre>
+              <p>This simply says, &quot;Determine whether or not the statement in the condition is true or false, then execute the code block if it is true.&quot;</p>
+              <p>You can also create a branch via the &quot;else&quot; keyword.</p>
+<pre class='prettyprint'>
+  if (conditional) {
+    // Execute everything in here if
+    // conditional was evaluated to true
+  } else {
+    // Execute everything in here if
+    // conditional was evaluated to false
+  }
+</pre>
+              <p>We can even chain if-statements together to form an if-ladder:</p>
+<pre class='prettyprint'>
+  if (conditional1) {
+    // Execute everything in here if
+    // conditional1 was evaluated to true
+  } else if (conditional2) {
+    // Execute everything in here if
+    // conditional1 was evaluated to false AND
+    // conditional2 was evaluated to true
+  } else {
+    // Execute everything in here if
+    // conditional1 was evaluated to false AND
+    // conditional2 was evaluated to false
+  }
+</pre>
+              <p>But what does a conditional look like?</p>
+              <p>Almost any expression can be a conditional, but we'll start by looking at comparisons like &quot;greater than,&quot; &quot;less than,&quot; and &quot;equal to.&quot;</p>
+              <p>If you're ready, let's do some examples... which is to say that if you're not ready, we will not do some examples:</p>
+              <p class='example'>What will the following code segment output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  using namespace std;
+  
+  int main () {
+      int a = 5;
+      
+      if (a &gt; 5) {
+          cout &lt;&lt; "Hooray! I'm true!";
+      } else {
+          cout &lt;&lt; ":( I'm false...";
+      }
+  }
+</pre>
+              <p class='definition'><strong>return</strong><br/>Although we'll talk more about the return statement later, just know that when used in the main method, it will terminate the program. When used in int main() we typically return 1; when the program exited in error.</p>
+              <p class='example'>What will the following code segment output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  using namespace std;
+  
+  int main () {
+      string test = "hello";
+      
+      if (test == "hello") {
+          cout &lt;&lt; "Your greeting upsets me.\n";
+          return;
+      }
+      cout &lt;&lt; "Anyone here?\n";
+  }
+</pre>
+              <p class='definition'><strong>Compound Conditions</strong><br/>We can evaluate multiple conditions using the and ( && ) and or ( || ) operators.</p>
+              <p class='definition'><strong>Logical And ( && )</strong><br/>If the lvalue and rvalue of the && are BOTH true, then the logical And evalues to true.</p>
+              <p class='definition'><strong>Logical Or ( || )</strong><br/>If EITHER the lvalue OR rvalue of the || is true, then the logical Or evalues to true.</p>
+              <p class='example'>What will the following code segment output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  using namespace std;
+  
+  int main () {
+      string test = "hello";
+      int x = 5,
+          y = 2;
+      
+      if (test.length() != 4 && x == 5) {
+        cout << "The day is mine!" << endl;
+      } else {
+        cout << "The day will eventually be mine." << endl;
+      }
+      
+      if (y % 2 == 1 || x % 2 == 1) {
+        cout << "Something's odd around here..." << endl;
+      } else {
+        cout << "Even I don't think this will print." << endl;
+      }
+  }
+</pre>
+            <div>
+            </div>
+            <hr/>
+            
+            
+            <div id='iteration' class='scrollspy-element' scrollspy-title='Iteration'></div>
+            <h1>Iteration</h1>
+            <div>
+              <p>What's wrong in the code below?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  using namespace std;
+  
+  int main () {
+      int x = 0;
+      
+      cout &lt;&lt; "I can count to 7!" &lt;&lt; endl;
+      // (Spoiler: I can't)
+      cout &lt;&lt; x++ &lt;&lt; endl;
+      cout &lt;&lt; x++ &lt;&lt; endl;
+      cout &lt;&lt; x++ &lt;&lt; endl;
+      cout &lt;&lt; x++ &lt;&lt; endl;
+      cout &lt;&lt; x++ &lt;&lt; endl;
+      cout &lt;&lt; x++ &lt;&lt; endl;
+      cout &lt;&lt; x++ &lt;&lt; endl;
+  }
+</pre>
+              <p>Nobody got time to repeat all that!</p>
+              <p>Often times, we want to repeat some segment of code a certain number of times without physically writing out each iteration.</p>
+              <p class='toolkit'><strong>while (condition) {...}</strong><br/>The while loop executes its code block over and over until its condition is false.</p>
+              <p class='example'>What does the following code segment output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  using namespace std;
+  
+  int main () {
+      int x = 0;
+      
+      while (x &lt; 7) {
+          cout &lt;&lt; x &lt;&lt; endl;
+          x++;
+      }
+  }
+</pre>
+              <p class='debug'>What does the following code segment output? Will it suffer from a runtime error?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  using namespace std;
+  
+  int main () {
+      int x = 0;
+      
+      // Get your CTRL+C ready...
+      while (x &gt;= 0) {
+          cout &lt;&lt; x &lt;&lt; endl;
+          x++;
+      }
+  }
+</pre>
+            </div>
               
             
           </div>
