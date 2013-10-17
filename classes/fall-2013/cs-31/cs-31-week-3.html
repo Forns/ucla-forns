@@ -1,0 +1,413 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Andrew Forney - UCLA CS</title>
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/magic-bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/main.css" rel="stylesheet" type="text/css">
+    <script src="../../../js/lib/jquery-2.0.3.min.js"></script>
+    <script src="../../../js/lib/bootstrap.min.js"></script>
+    <script src="../../../js/display/general/general-display.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+  </head>
+  
+  <body data-spy="scroll" data-target="#scrollspy">
+    
+    <!-- BEGIN WRAP -->
+    <div id="wrap">
+      
+      <!-- BEGIN NAVIGATION -->
+      <nav class='navbar navbar-default' role='navigation'>
+        <div class='nav-accent'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-12'>
+              <div class='navbar-header'>
+                <button class='navbar-toggle' type='button' data-toggle='collapse' data-target='.navbar-main-collapse'>
+                  <span class='sr-only'>Toggle Navigation</span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                </button>
+                <a class='navbar-brand' href='/~forns/'>
+                  <span id='brand-text'>
+                    Andrew Forney
+                  </span>
+                </a>
+              </div>
+              
+              <div id='nav-main' class='collapse navbar-collapse navbar-main-collapse'>
+                <ul class='nav navbar-nav navbar-right'>
+                  
+                  <li>
+                    <a href='/~forns/about.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-user'></span>
+                      </div>
+                      <p class='text-center'>About</p>
+                    </a>
+                  </li>
+                  
+                  <li class='active'>
+                    <a href='/~forns/classes.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-book'></span>
+                      </div>
+                      <p class='text-center'>Classes</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/contact.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-comment'></span>
+                      </div>
+                      <p class='text-center'>Contact</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/publications.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-file'></span>
+                      </div>
+                      <p class='text-center'>Publications</p>
+                    </a>
+                  </li>
+                  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <!-- END NAVIGATION -->
+      
+      <!-- BEGIN MAIN CONTENT -->
+      <div id="main-content" class="container">
+        <div class="row">
+          
+          <!-- BEGIN SCROLLSPY -->
+          <div class='col-md-2'>
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+              <ul id='scrollspy' class="nav bs-sidenav">
+              </ul>
+            </div>
+          </div>
+          <!-- END SCROLLSPY -->
+          
+          <!-- BEGIN PRESENTATION CONTENT -->
+          <div class='col-md-10 presentation-content' role='main'>
+            
+            <div id='introduction' class='scrollspy-element' scrollspy-title='Review'></div>
+            <h1>Questions from Week 2</h1>
+            <div>
+              <p><strong>Q: What is cin.ignore actually doing?</strong></p>
+              <p>A: An example might help:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  using namespace std;
+  
+  int main() {
+      int interTheDragon;
+      string anotherInput;
+      
+      cout &lt;&lt; "Enter an int: " &lt;&lt; endl;
+      cin.ignore(1, '\n');
+      cin &gt;&gt; interTheDragon;
+      // Try entering 123
+      cout &lt;&lt; interTheDragon &lt;&lt; endl;
+      
+      cout &lt;&lt; "Enter a string: " &lt;&lt; endl;
+      cin.ignore(10000, 'a');
+      // Don't use cin for strings,
+      // but this is to show you what
+      // cin.ignore is doing
+      cin &gt;&gt; anotherInput;
+      // Try entering "sample"
+      cout &lt;&lt; anotherInput &lt;&lt; endl;
+  }
+</pre>
+            </div>
+            <hr/>
+            
+            
+            <div id='constants' class='scrollspy-element' scrollspy-title='Constants'></div>
+            <h1>Symbolic Constants</h1>
+            <div>
+              <p class='toolkit'>
+                <strong>Symbolic Constants:</strong> 
+                Constants are &quot;variables&quot; (in quotes because constants don't vary) that, once declared, cannot change value anywhere in the scope. They are declared as:<br/>
+                const &lt;type&gt; &lt;name&gt; = &lt;value&gt;;
+              </p>
+              <p>Note, when we declare a constant variable, we name them (by convention) in ALL CAPITAL LETTERS, usually with words separated by underscores.</p>
+              <p class='question' name='constants-q1'>Why might we use constants? Doesn't it seem like we're just putting restrictions on ourselves?</p>
+              <p class='answer' name='constants-q1'>
+                Remember the One Change, One Place philosophy whereby we need only change one variable when we want to replace a value throughout our code. 
+                Forcing constant variables to be unable to change protects us from committing errors by changing values that weren't meant to be changed.
+              </p>
+              <p>Think of type and const declarations as a &quot;contract&quot; between you and the compiler or you and other programmers working on the same project.</p>
+              <p>You want the compiler to honor your wishes of keeping a const value static just as much as you want coworkers to not touch your damn constants.</p>
+              <p class='example'>Here is an example of some const variables:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  using namespace std;
+  
+  int main() {
+      const int X = 6;
+      const double LAME_E = 2.718;
+      const string STUFF = "YELLING";
+      // const comment = good tea;
+      // ^^^ that last one's a joke
+  }
+</pre>
+
+              <p class='debug'>Will the following code compile? If so, what will it print?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  using namespace std;
+  
+  int main() {
+      const int DER = 6;
+      DER = 5;
+  }
+</pre>
+              <p class='debug'>Will the following code compile? If so, what will it print?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  using namespace std;
+  
+  int main() {
+      const int DER = 6;
+      // Assigning the SAME value, i.e., value isn't changing
+      DER = 6;
+  }
+</pre>
+              <p class='debug'>Will the following code compile? If so, what will it print?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  using namespace std;
+  
+  // All consts should be named this
+  const int CANT_TOUCH_THIS = 5;
+  
+  int main() {
+      int CANT_TOUCH_THIS = 6;
+      cout &lt;&lt; CANT_TOUCH_THIS &lt;&lt; endl;
+  }
+</pre>
+            </div>
+            <hr/>
+            
+            
+            <div id='conditionals' class='scrollspy-element' scrollspy-title='More Conditionals'></div>
+            <h1>Some More Notes on Conditionals</h1>
+            <div>
+              <p class='definition'>
+                When dealing with conditionals, what we as humans know as &quot;true&quot; and &quot;false&quot; can be represented in a variety of C++ expressions.<br/>
+                We say that C++ expressions that evaluate to true are <strong>truthy</strong> and those that evaluate to false are <strong>falsy</strong>.
+              </p>
+              <p class='question' name='conditionals-q1'>What are some values that are truthy and what are some values that are falsy in C++?</p>
+              <div class='answer' name='conditionals-q1'>
+                <p>Truthy:</p>
+                <ul class='indent-1'>
+                  <li><p>Non-zero numbers</p></li>
+                </ul>
+                <p>Falsy:</p>
+                <ul class='indent-1'>
+                  <li><p>Zero</p></li>
+                </ul>
+              </div>
+              <p>Because 0 and 1 are the main truthy and falsy values, we know we can store comparison results in variables too:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  using namespace std;
+  
+  int main() {
+      int b00l,
+          e = 2,
+          n = 4;
+      
+      // Comparisons can be stored
+      // as ints
+      b00l = e &gt; n;
+      cout &lt;&lt; b00l &lt;&lt; endl;
+      b00l = e &lt; n;
+      cout &lt;&lt; b00l &lt;&lt; endl;
+  }
+</pre>
+              <p class='example'>We can also use conditionals within assignments:</p>
+              <!-- TODO: TEST THIS ON VISUAL STUDIO -->
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  using namespace std;
+  
+  int main() {
+      int x = 5,
+          y = (x &gt;= 5) * 6,
+          z = (x == 4) &lt; 1;
+      
+      cout &lt;&lt; y &lt;&lt; endl;
+      cout &lt;&lt; z &lt;&lt; endl;
+  }
+</pre>
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  using namespace std;
+  
+  int main() {
+      int i = 5;
+      string kindaI = "5";
+      
+      if (i == kindaI) {
+          cout &lt;&lt; "Hey, we're equal." &lt;&lt; endl;
+      } else {
+          cout &lt;&lt; "Aww, unequal." &lt;&lt; endl;
+      }
+  }
+</pre>
+              <br/>
+              <h2>Switch Statements</h2>
+              <p>We use switch statements when we want to concisely compare equivalence cases of ints (only ints!).</p>
+              <p class='toolkit'>
+                <strong>Switch Statements</strong><br/>
+                The syntax for a switch statement goes something like this:<br/>
+                switch (intBeingCompared) {
+                  case 1:
+                    // Whatever you want to happen if
+                    // intBeingCompared is equal to 1
+                    break;
+                    // Use break to end that case
+                  case 42:
+                    // Whatever you want to happen if
+                    // intBeingCompared is equal to 42
+                  case 2:
+                    // I didn't include a break above,
+                    // so whenever intBeingCompared is
+                    // EITHER 2 or 42, this block will run
+                    break;
+                  default:
+                    // This will run if intBeingCompared
+                    // matches none of the cases above
+                    break;
+                }
+              </p>
+              <p>Let's try an example:</p>
+              <p class='example'>What will the following code output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  using namespace std;
+  
+  int main() {
+      int intBeingCompared = 5;
+      
+      switch (x) {
+          case 1:
+              cout &lt;&lt; "I'm the one" &lt;&lt; endl;
+              break;
+          case 5:
+              cout &lt;&lt; "I'm 5 years old";
+          case 22:
+              cout &lt;&lt; endl &lt;&lt; "No... really.";
+              cout &lt;&lt; endl;
+              break;
+          default:
+              break;
+      }
+  }
+</pre>
+              
+            </div>
+            <hr/>
+            
+            
+            <div id='logic' class='scrollspy-element' scrollspy-title='Logic Notes'></div>
+            <h1>Some Notes on Logic</h1>
+            <div>
+              <div class='toolkit'>
+                <p>Rule of thumb: Unless you group conditionals (using parentheses), your code will evaluate conditionals in this order:</p>
+                <ul class='indent-1'>
+                  <li><p>Logical Binary Operators (e.g. &lt;, ==, etc.)</p></li>
+                  <li><p>Logical AND ( && )</p></li>
+                  <li><p>Logical OR ( || )</p></li>
+                </ul>
+              </div>
+              <p>Notice, logical AND will be evaluated before logical OR.</p>
+              <p class='example'>To what will the following conditional evaluate?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  using namespace std;
+  
+  int main() {
+      int x = 1,
+          y = 2,
+          z = 3;
+      
+      if (x == y || x &lt; 3 && z &lt; y || z != y) {
+          cout &lt;&lt; "You're in here!" &lt;&lt; endl;
+      } else {
+          cout &lt;&lt; "You're in there!" &lt;&lt; endl;
+      }
+  }
+</pre>
+            </div>
+            <br/>
+            <h2>DeMorgan's Laws</h2>
+            
+            <br/>
+            <h2>Reducing Conditionals</h2>
+            
+            <hr/>
+              
+            <!-- TODO: truthy and falsy values -->
+              <!-- TODO: what are all of the truthy and falsy values in C++? -->
+              <!-- TODO: bool type -->
+            <!-- TODO: Ways to reduce conditionals -->
+            <!-- TODO: DeMorgan's Laws -->
+              <!-- TODO: not (A or B) ==> (not A) and (not B) -->
+              <!-- TODO: not (A and B) ==> (not A) or (not B) -->
+              <!-- TODO: not (A < B) ==> A >= B -->
+              <!-- TODO: not (A <= B) ==> A > B -->
+              <!-- TODO: not (A > B) ==> A <= B -->
+              <!-- TODO: not (A >= B) ==> A < B -->
+            <!-- TODO: while statement -->
+            <!-- TODO: do while statement -->
+            <!-- TODO: for loop -->
+              <!-- TODO: equivalence to while loop -->
+              <!-- TODO: for loop without first initialization -->
+              <!-- TODO: string character access (one overflow example) -->
+                <!-- TODO: Character comparisons - double quotes after (string) == vs single quotes (character) -->
+            <!-- TODO: Nested loop -->
+              <!-- TODO: ascii art plus / N -->
+            <!-- TODO: Best practices -->
+              <!-- TODO: ALWAYS use curly brackets on conditionals -->
+              <!-- TODO: ALWAYS use parens on complex conditionals -->
+            <!-- TODO: Note on C++ vs C strings -->
+            <!-- TODO: Start on functions -->
+            
+          </div>
+          <!-- END PRESENTATION CONTENT -->
+          
+        </div>
+      </div>
+      <!-- END MAIN CONTENT -->
+      
+      
+    </div>
+    <!-- END WRAPPER -->
+    
+    <!-- BEGIN FOOTER -->
+    <div id="footer">
+      <div class="container">
+        <div class="col-md-12 text-center">
+          
+        </div>
+      </div>
+    </div>
+    <!-- END FOOTER -->
+    
+  </body>
+</html>
