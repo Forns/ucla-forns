@@ -236,7 +236,6 @@
 </pre>
               <p>So why have bools at all if they're representing 0 and 1 still?</p>
               <p>Well, maybe we want to make sure that something truthy is always equal to 1:</p>
-              <!-- TODO: TEST ON MAC -->
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
   #include &lt;string&gt;
@@ -495,6 +494,28 @@
                 <li><p><strong>Perform Post Loop Action:</strong> If we executed the code block in (3), we perform the post loop action, then go back to (2).</p></li>
               </ol>
               <br/>
+              <p>You should know: variables declared in the for loop declaration are defined within their closest scope.</p>
+              <p class='debug'>Will the following code compile? If so, what will it print out?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+    for (int i = 0; i &lt; 3; i++) {
+          cout &lt;&lt; "Outer i: "
+               &lt;&lt; i &lt;&lt; endl;
+               
+          // Don't ever name your nested
+          // iterator the same as
+          // another above it :(
+          for (int i = 3; i &gt; 0; i--) {
+              cout &lt;&lt; "Inner i: "
+                   &lt;&lt; i &lt;&lt; endl;
+          }
+      }
+  }
+</pre>
               <p class='debug'>NB for Masochists: You can omit any portion of the for syntax and it will still loop. Disclaimer: Please don't do this :(</p>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
@@ -513,6 +534,7 @@
       }
   }
 </pre>
+              <p class='example'>Design a program that writes an 11 by 11 capital letter N made up of the character 'N'.</p>
               <div class='toolkit'><p><strong>Do-While Loop</strong> Just like a while loop, except we always execute the code block before checking the conditional.</p><br/>
 <pre class='prettyprint'>
   do {
@@ -526,8 +548,8 @@
                 <li><p><strong>Check Condition:</strong> If the conditional is true, we execute the code block again, otherwise, we break out of the loop.</p></li>
               </ol>
               <br/>
-              <p>We'll do one practice problem with loops now and a bunch in the coming section.</p>
-              <p class='example'>Design a program that writes an 11 by 11 capital letter N made up of the character 'N'.</p>
+              <p>We'll do one practice problem with the do-while now and more iteration in the coming section.</p>
+              <p class='example'>Design a program that continues to ask the user for their name. Every time they give you the empty string, ask them more forcibly to provide an answer. If they don't answer 3 times, terminate with a an angry goodbye.</p>
             </div>
             <hr/>
             
@@ -543,9 +565,8 @@
               <p class='definition'><strong>C Strings</strong> are arrays of characters <strong>that possess a terminating 0 byte</strong> designating the end of the string.</p>
               <p class='definition'><strong>C++ Strings</strong> are <strong>objects</strong> representing arrays of characters, and do NOT possess the terminating 0 byte.</p>
               <p>Because C++ strings are not 0-terminated, we know that we can access characters from a string's 0th to its (length - 1)th element.</p>
-              <!-- TODO: String overflow? -->
               <p>Today, we'll dive more into C++ strings and characters, and talk about C strings in later lectures.</p>
-              <p>Characters are another native type in C++ that are defined by using the reserved word char.</p>
+              <p>Characters are a native type in C++ that are defined by using the reserved word char.</p>
               <p>Because strings are arrays of characters, we can store individual string characters into char variables.</p>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
@@ -566,7 +587,25 @@
       cout &lt;&lt; beanAt1 &lt;&lt; endl;
   }
 </pre>
-              
+              <p>Characters are interesting because they are each represented by a unique integer value.</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      int iBeC = 'C',
+          iBec = 'c',
+          iBeNewline = '\n';
+      
+      char iBeT = 84;
+      
+      cout &lt;&lt; "C == " &lt;&lt; iBeC &lt;&lt; endl;
+      cout &lt;&lt; "c == " &lt;&lt; iBec &lt;&lt; endl;
+      cout &lt;&lt; "\\n == " &lt;&lt; iBeNewline &lt;&lt; endl;
+      cout &lt;&lt; "84 == " &lt;&lt; iBeT &lt;&lt; endl;
+  }
+</pre>
               <p>There are a variety of operations we can use with characters in the cctype library.</p>
               <div class='toolkit'>
                 <p><strong>Character Classification:</strong></p>
@@ -602,24 +641,34 @@
               <p class='example'>Write a program that queries the user for a string, swaps all lowercase letters for uppercase ones, and then prints out the result.</p>
             </div>
             <hr/>
+
               
-            <!-- TODO: Start on functions -->
-            
+            <br/>
+            <div id='project2' class='scrollspy-element' scrollspy-title='Project 2'></div>
+            <h1>Project 2 Solutions</h1>
+            <div>
+              <p class='definition'>The project 2 solution is now live on the course site, along with Homework 2 solutions.</p>
+              <p>Any questions about the project, homework, or its concepts?</p>
+            </div>
+            <hr/>
+              
+              
             <br/>
             <div id='midterm' class='scrollspy-element' scrollspy-title='Midterm'></div>
             <h1>Midterm</h1>
-            <p>Note: I have not taken the midterm, have not been told what is on the midterm, and will not be returning the bribes expecting that I have or have been.</p>
-            <p class='debug'>You MUST sign up for a midterm time on the course website under "Announcements."</p>
-            <p class='definition'>
-              The midterm covers everything in the past weeks up until strings and loops. Reviewing my lecture notes and doing the practice examples will set you on the right path.
-            </p>
-            <p class='definition'>
-              You are allowed to bring a single 8.5&quot; x 11&quot; sheet of notes, double sided, printed or hand-written into the midterm exam.
-            </p>
-            <p>There is a midterm review session hosted by the CS Honor Society UPE on Wednesday, Oct. 23 starting at 6:00 pm in La Kretz 110.</p>
-            <p class='definition'>I will have office hours 1:30 - 3:30 pm the day of the exam in the typical TA office hours room: Boelter 2432.</p>
-            <p class='definition'>I will be hosting a BONUS online Skype office-hours on Tuesday, October 22, starting at 6:00 pm and going until at least 8:00 pm. My skype handle for this class is UCLA-Forns.</p>
             <div>
+              <p>Note: I have not taken the midterm, have not been told what is on the midterm, and will not be returning the bribes expecting that I have or have been.</p>
+              <p class='debug'>You MUST sign up for a midterm time on the course website under "Announcements."</p>
+              <p class='definition'>
+                The midterm covers everything in the past weeks up until strings and loops. Reviewing my lecture notes and doing the practice examples will set you on the right path.
+              </p>
+              <p class='definition'>
+                You are allowed to bring a single 8.5&quot; x 11&quot; sheet of notes, double sided, printed or hand-written into the midterm exam.
+              </p>
+              <p>There is a midterm review session hosted by the CS Honor Society UPE on Wednesday, Oct. 23 starting at 6:00 pm in La Kretz 110.</p>
+              <p class='definition'>I will have office hours 1:30 - 3:30 pm the day of the exam in the typical TA office hours room: Boelter 2432.</p>
+              <p class='definition'>I will be hosting a BONUS online Skype office-hours on Tuesday, October 22, starting at 6:00 pm and going until at least 8:00 pm. My skype handle for this class is UCLA-Forns.</p>
+              <p class='definition'>I will compose a practice exam with questions on topics that you give me... now. I'll try to get this out by Tuesday at the latest.</p>
             </div>
             
           </div>
