@@ -216,18 +216,6 @@
                 When dealing with conditionals, what we as humans know as &quot;true&quot; and &quot;false&quot; can be represented in a variety of C++ expressions.<br/>
                 We say that C++ expressions that evaluate to true are <strong>truthy</strong> and those that evaluate to false are <strong>falsy</strong>.
               </p>
-              <div class='answer' name='conditionals-q1'>
-                <p>Truthy:</p>
-                <ul class='indent-1'>
-                  <li><p>Non-zero numbers</p></li>
-                  <li><p>true (technically still just 1)</p></li>
-                </ul>
-                <p>Falsy:</p>
-                <ul class='indent-1'>
-                  <li><p>Zero</p></li>
-                  <li><p>false (technically still just 0)</p></li>
-                </ul>
-              </div>
               <p>We've discussed that conditionals evaluate to 1 if they're true and 0 if they're false, but there's also another C++ built-in type that is very similar.</p>
               <p class='toolkit'><strong>Type bool:</strong> Type bool, short for Boolean, are variables that hold only the value true or the value false. These are still represented as 1 and 0 respectively.</p>
               <p>Let's take a look at an example of bools:</p>
@@ -263,6 +251,18 @@
   }
 </pre>
               <p class='question' name='conditionals-q1'>What are some values (that we've discussed) that are truthy and what are some values that are falsy in C++?</p>
+              <div class='answer' name='conditionals-q1'>
+                <p>Truthy:</p>
+                <ul class='indent-1'>
+                  <li><p>Non-zero numbers</p></li>
+                  <li><p>true (technically still just 1)</p></li>
+                </ul>
+                <p>Falsy:</p>
+                <ul class='indent-1'>
+                  <li><p>Zero</p></li>
+                  <li><p>false (technically still just 0)</p></li>
+                </ul>
+              </div>
               <p>Because 0 and 1 are the main truthy and falsy values, we know we can store comparison results in variables too:</p>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
@@ -599,7 +599,7 @@
                   <li><p><strong>toupper</strong> converts the given character to an uppercase version of itself.</p></li>
                 </ul>
               </div>
-              <p class='example'>Write a program that queries the user for a string, and then print out the swap of all of the lowercase letters with uppercase ones, and vice versa.</p>
+              <p class='example'>Write a program that queries the user for a string, swaps all lowercase letters for uppercase ones, and then prints out the result.</p>
             </div>
             <hr/>
               
