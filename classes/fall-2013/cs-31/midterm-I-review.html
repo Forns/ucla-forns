@@ -9,15 +9,17 @@
     <link href="../../../css/main.css" rel="stylesheet" type="text/css">
     <script src="../../../js/lib/jquery-2.0.3.min.js"></script>
     <script src="../../../js/lib/bootstrap.min.js"></script>
+    <script src="../../../js/display/general/general-display.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
   </head>
   
-  <body>
+  <body data-spy="scroll" data-target="#scrollspy">
     
     <!-- BEGIN WRAP -->
     <div id="wrap">
       
       <!-- BEGIN NAVIGATION -->
-      <nav class='navbar navbar-default navbar-fixed-top' role='navigation'>
+      <nav class='navbar navbar-default' role='navigation'>
         <div class='nav-accent'></div>
         <div class='container'>
           <div class='row'>
@@ -84,71 +86,43 @@
       <!-- END NAVIGATION -->
       
       <!-- BEGIN MAIN CONTENT -->
-      <div class="main-spacer visible-desktop"></div>
       <div id="main-content" class="container">
         <div class="row">
-          <div class="jumbotron">
-            <div class="container">
-              <h1>CS 31 - Intro to Programming</h1>
-              <p>Fall 2013 - <a href='http://cs.ucla.edu/classes/fall13/cs31/' target='_blank'>Course Website Here</a></p>
+          
+          <!-- BEGIN SCROLLSPY -->
+          <div class='col-md-2'>
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+              <ul id='scrollspy' class="nav bs-sidenav">
+              </ul>
             </div>
           </div>
+          <!-- END SCROLLSPY -->
           
-          <div class='col-md-12'>
+          <!-- BEGIN PRESENTATION CONTENT -->
+          <div class='col-md-10 presentation-content' role='main'>
             
-            <table class='table table-striped'>
-              <caption>Lecture Notes</caption>
-              <thead>
-              </thead>
-                <tr>
-                  <th>Week</th>
-                  <th>Lecture Subject</th>
-                  <th>Lecture Notes</th>
-                </tr>
-              <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>Basics<br/><small>Introduction, Basic Architecture, Intro to C++, Variables, Types, Errors, and Style</small></td>
-                  <td><a href='/~forns/classes/fall-2013/cs-31/cs-31-week-1.html'>Clicky</a></td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>Strings, Streams, and other Things<br/><small>Review, Operators, Precedence, Strings, Streams, Conditionals, Iteration</small></td>
-                  <td><a href='/~forns/classes/fall-2013/cs-31/cs-31-week-2.html'>Clicky</a></td>
-                </tr>
-                <tr>
-                  <td>3</td>
-                  <td>Expanding on Strings, Logic, and Iteration<br/><small>Review, Constants, Booleans, Condensing Conditionals, Types of Iteration, Characters, and More Strings</small></td>
-                  <td><a href='/~forns/classes/fall-2013/cs-31/cs-31-week-3.html'>Clicky</a><hr/><a href='/~forns/classes/fall-2013/cs-31/cs-31-week-3-classwork.html'>Classwork</a></td>
-                </tr>
-              </tbody>
-            </table>
+            <h1>Midterm I Review</h1>
+            <p>The following review covers the topics you asked me to review at the end of week 3's discussion, plus some other stuff.</p>
+            <p>By no means is it meant to serve as a comprehensive review (look through my other notes for greater detail), but will help you get some more practice as you frantically cram on Thursday at 4:49 pm.</p>
             
-            <table class='table table-striped'>
-              <caption>Resources &amp; Practice</caption>
-              <thead>
-              </thead>
-                <tr>
-                  <th>Date Posted</th>
-                  <th>Resource</th>
-                  <th>Link</th>
-                </tr>
-              <tbody>
-                <tr>
-                  <td>10 / 21 / 12</td>
-                  <td>Midterm I Review <br/><small>C++ vs Java, Types, I/O, Conditionals, Precedence, and Loops</small></td>
-                  <td><a href='/~forns/classes/fall-2013/cs-31/midterm-I-review.html'>Clicky</a></td>
-                </tr>
-              </tbody>
-            </table>
-            <br />
-          
-            <h3>Week 3 Classwork Uploaded <small>10 / 21 / 13</small></h3>
-            <p>Your solutions to the in-class examples are now listed in the week 3 row of the above table.</p>
+            <div id='vsJava' class='scrollspy-element' scrollspy-title='C++ vs Java'></div>
+            <h1>C++ vs. Java</h1>
+            <div>
+              <p>Some of your with a background programming in Java noted that you'd like an outline of major differences between it and C++.</p>
+              <p>Those of you who have not done any programming with Java can ignore this section.</p>
+              <p>There is a long list of differences between C++ and Java on <a href='http://en.wikipedia.org/wiki/Comparison_of_Java_and_C++'>Wikipedia, located here,</a> but the points relevant for our midterm are:</p>
+              <ul class='indent-1'>
+                <li><p>In C++ the empty string is truthy when coerced into a bool.</p></li>
+                <li><p>C++ is cool with statements like <code class='prettyprint'>if (i = 5)</code> (note the single equal sign) but Java is not.</p></li>
+                <li><p>Referencing a variable that hasn't been initialized will cause a compile error in Java, but not in C++.</p></li>
+                <li><p>C++ has the <code class='prettyprint'>const</code> reserved word functionally equivalent to Java's <code class='prettyprint'>final</code></p></li>
+              </ul>
+            </div>
+            <hr/>
             
-            <h3>Welcome <small>10 / 1 / 13</small></h3>
-            <p>The course page is now active! I will upload weekly lecture notes below the page jumbotron, and update the page regularly with news, information, and exercises.</p>
           </div>
+          <!-- END PRESENTATION CONTENT -->
+          
         </div>
       </div>
       <!-- END MAIN CONTENT -->
