@@ -104,17 +104,18 @@
             <h1>Midterm I Review</h1>
             <p>The following review covers the topics you asked me to review at the end of week 3's discussion, plus some other stuff.</p>
             <p>By no means is it meant to serve as a comprehensive review (look through my other notes for greater detail), but will help you get some more practice as you frantically cram on Thursday at 4:49 pm.</p>
+            <p class='definition'>Click on the yellow question boxes to see the answers.</p>
             
             <div id='vsJava' class='scrollspy-element' scrollspy-title='C++ vs Java'></div>
             <h1>C++ vs. Java</h1>
             <div>
-              <p>Some of your with a background programming in Java noted that you'd like an outline of major differences between it and C++.</p>
+              <p>Some of you with a background programming in Java noted that you'd like an outline of major differences between it and C++.</p>
               <p>Those of you who have not done any programming with Java can ignore this section.</p>
               <p>There is a long list of differences between C++ and Java on <a href='http://en.wikipedia.org/wiki/Comparison_of_Java_and_C++'>Wikipedia, located here,</a> but the points relevant for our midterm are:</p>
               <ul class='indent-1'>
                 <li><p>In C++ the empty string is truthy when coerced into a bool.</p></li>
                 <li><p>C++ is cool with statements like <code class='prettyprint'>if (i = 5)</code> (note the single equal sign) but Java is not.</p></li>
-                <li><p>Referencing a variable that hasn't been initialized will cause a compile error in Java, but not in C++.</p></li>
+                <li><p>Referencing a variable that hasn't been initialized will cause a compile error in Java, but not necessarily in C++ (undefined behavior).</p></li>
                 <li><p>C++ has the <code class='prettyprint'>const</code> reserved word functionally equivalent to Java's <code class='prettyprint'>final</code></p></li>
               </ul>
             </div>
@@ -125,7 +126,7 @@
             <h1>Type Conversions</h1>
             <div>
               <div class='question' name='type-q1'>Will the following code compile? If so, what will it output?<br/>
-<pre class='prettprint'>
+<pre class='prettyprint'>
   #include &lt;iostream&gt;
   #include &lt;string&gt;
   using namespace std;
@@ -187,7 +188,7 @@
       char nada = '\0',
            tab = '\t';
       
-      bool ean = nada && tab;
+      bool ean = nada &amp;&amp; tab;
       
       cout &lt;&lt; ean &lt;&lt; endl;
   }
@@ -214,13 +215,13 @@
       char a = 97,
            excited = cheese[5];
       
-      bool ean = isupper(toupper(excited)) && a;
+      bool ean = isupper(toupper(excited)) &amp;&amp; a;
       
       cout &lt;&lt; ean &lt;&lt; endl;
   }
 </pre>
                 </div>
-                  <p class='answer' name='type-q5'>excited = cheese[5] = '!', which means that toupper(excited) = '!', which means isupper('!') = 0 (exclamation marks cannot be uppercase, and so also cannot be converted to uppercase). Therefore, ean = 0 && a = 0.</p>
+                  <p class='answer' name='type-q5'>excited = cheese[5] = '!', which means that toupper(excited) = '!', which means isupper('!') = 0 (exclamation marks cannot be uppercase, and so also cannot be converted to uppercase). Therefore, ean = 0 &amp;&amp; a = 0.</p>
                   
             </div>
             <hr/>
@@ -245,7 +246,7 @@
 </pre>
               </div>
               <p class='answer' name='precedence-q1'>
-                y = (5 * 5 + 5 / 5) % 2, evaluate parens first</br>
+                y = (5 * 5 + 5 / 5) % 2, evaluate parens first<br/>
                 y = (25 + 5 / 5) % 2, * and / have equal precedence, and left to right associativity, so evaluate * on left first<br/>
                 y = (25 + 1) % 2<br/>
                 y = (26) % 2<br/>
@@ -345,13 +346,14 @@
             
             <div id='conditionals' class='scrollspy-element' scrollspy-title='Conditionals'></div>
             <h1>Simplifying Conditionals</h1>
+            <div>
             <p class='definition'>For use with lecture notes from <a href='/~forns/classes/fall-2013/cs-31/cs-31-week-3.html#logic' target='_blank'>Week 3 on Simplifying Conditionals</a>.</p>
               <div class='question' name='conditionals-q1'>
                 In our Week 3 discussion, you made a program that printed a giant letter N. In that program, your inner loop had the following logic. How can we simplify this if-ladder?<br/>
 <pre class='prettyprint'>
   if (j == 0 || j == SIZE - 1) {
       cout &lt;&lt; "N";
-  } else if (j == i && j != 0 && j != SIZE - 1) {
+  } else if (j == i &amp;&amp; j != 0 &amp;&amp; j != SIZE - 1) {
       cout &lt;&lt; "N";
   } else {
       cout &lt;&lt; " ";
@@ -368,8 +370,80 @@
   }
 </pre>
               </div>
-            
-            <div>
+              
+              <div class='question' name='conditionals-q2'>
+                How can we simplify this if-ladder (fewer comparisons) such that its behavior is exactly the same as below?<br/>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      string s = "test",
+             t = "TeSt",
+             test = "t";
+      
+      if (s == "test" &amp;&amp; t == "test" || test == "test") {
+          cout &lt;&lt; test &lt;&lt; endl;
+      } else if (s != "test") {
+          cout &lt;&lt; test &lt;&lt; endl;
+      } else if (test != "test") {
+          cout &lt;&lt; s &lt;&lt; endl;
+      } else {
+          cout &lt;&lt; t &lt;&lt; endl;
+      }
+  }
+</pre>
+                <p><strong>HINT:</strong> I can get it down to a single if-else with 3 conditions in the if statement.</p>
+                <p>Also, probably good to note that this is a challenging problem unlikely to be on the midterm.</p>
+              </div>
+              <div class='answer' name='conditionals-q2'>
+                <p>Our first observation is that the first two conditionals share a common action, so we can condense them with a logical OR:</p>
+<pre class='prettyprint'>
+  if (s == "test" &amp;&amp; t == "test" || test == "test" || s != "test") {
+      cout &lt;&lt; test &lt;&lt; endl;
+  } else if (test != "test") {
+      cout &lt;&lt; s &lt;&lt; endl;
+  } else {
+      cout &lt;&lt; t &lt;&lt; endl;
+  }
+</pre>
+                <br/>
+                <p>Our second observation is that, in the first conditional, if s == &quot;test&quot; and t == &quot;test&quot;, we print the condition, but also if s != &quot;test&quot;.</p>
+                <p>
+                  Thus, if s == &quot;test&quot;, then the if evaluates to true whenever t == &quot;test&quot;, but also if s != &quot;test&quot;. 
+                  We know that for two boolean values A and B, <br/>!A || (A &amp;&amp; B) <br/>= (!A || A) &amp;&amp; (!A || B) <br/>= 1 &amp;&amp; (!A || B) <br/>= !A || B (by distributive property).
+                </p>
+                <p>In our example, A = (s == &quot;test&quot;) and B = (t == &quot;test&quot;) So, we can condense the first conditional down to:</p>
+<pre class='prettyprint'>
+  if (t == "test" || test == "test" || s != "test") {
+      cout &lt;&lt; test &lt;&lt; endl;
+  } else if (test != "test") {
+      cout &lt;&lt; s &lt;&lt; endl;
+  } else {
+      cout &lt;&lt; t &lt;&lt; endl;
+  }
+</pre>
+                <br/>
+                <p>Next, we notice that the first conditional has test == &quot;test&quot; and the second conditional has test != &quot;test&quot;, which are mutually exclusive (and so all possible combinations of s, t, and test will fall into one of the first two conditionals), so the final else would never be able to be reached.</p>
+<pre class='prettyprint'>
+  if (t == "test" || test == "test" || s != "test") {
+      cout &lt;&lt; test &lt;&lt; endl;
+  } else if (test != "test") {
+      cout &lt;&lt; s &lt;&lt; endl;
+  }
+</pre>
+                <br/>
+                <p>Finally, observe that if our first conditional evaluates to false, then we know that test != &quot;test&quot;, so we do not need to check for it again.</p>
+<pre class='prettyprint'>
+  if (t == "test" || test == "test" || s != "test") {
+      cout &lt;&lt; test &lt;&lt; endl;
+  } else {
+      cout &lt;&lt; s &lt;&lt; endl;
+  }
+</pre>
+                <p>Muuuch better... and also more complicated than you'll probably have to do on the midterm! Better to practice hard though.</p>
+              </div>
             </div>
             <hr/>
             
@@ -377,6 +451,69 @@
             <div id='io' class='scrollspy-element' scrollspy-title='I/O'></div>
             <h1>Input / Output</h1>
             <div>
+              <div class='question' name='io-q1'>
+                Take the following program for example...<br/>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      int erestingExample;
+      string stuff;
+
+      cout &lt;&lt; "Enter an int: " &lt;&lt; endl;
+      cin.ignore(2, '\n');
+      cin &gt;&gt; erestingExample;
+      cout &lt;&lt; erestingExample &lt;&lt; endl; // Answer 1?
+      
+      cout &lt;&lt; "Enter a string: " &lt;&lt; endl;
+      cin.ignore(5, '=');
+      cin &gt;&gt; stuff;
+      cout &lt;&lt; stuff &lt;&lt; endl; // Answer 2?
+
+      cout &lt;&lt; "Enter another string: " &lt;&lt; endl;
+      cin.ignore(10000, 'f');
+      cin &gt;&gt; stuff;
+      cout &lt;&lt; stuff &lt;&lt; endl; // Answer 3?
+  }
+</pre>
+                <p>Ignoring its many flaws, what values will get printed out if a user inputs the following values ([Enter] indicates the user hit enter on the keyboard):</p>
+                <p>Enter an int: 555[Enter]<br/>&lt;Answer 1 Here&gt;<br/>Enter a string: input=fun[Enter]<br/>&lt;Answer 2 Here&gt;<br/>Enter another string: input=fun[Enter]<br/>&lt;Answer 3 Here&gt;</p>
+              </div>
+              <div class='answer' name='io-q1'><br/>
+                Answer 1: 5, because we ignored the first 2 characters of 555 before we hit a newline.<br/>
+                Answer 2: t=fun, because we ignored the newline remaining from hitting enter on the last cin, plus 4 more characters for a total of 5. (REMEMBER: cin does not consume the newline generated by hitting enter!)<br/>
+                Answer 3: un, because we ignored everything up until the first f, which was in &quot;fun&quot;
+              </div>
+              
+              
+              <div class='question' name='io-q2'>
+                Take the following program for example...<br/>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      double test = 210.123456789;
+      int i = 54321;
+  
+      cout.setf(ios::fixed);
+      cout.precision(3);
+      cout &lt;&lt; test &lt;&lt; endl; // Answer 1?
+  
+      cout.precision(2);
+      cout &lt;&lt; i &lt;&lt; endl; // Answer 2?
+  }
+</pre>
+                <p>What will we output at the sections indicated Answer 1 and Answer 2?</p>
+              </div>
+              <div class='answer' name='io-q2'><br/>
+                Answer 1: 210.123<br/>
+                Answer 2: 54321
+              </div>
+              
             </div>
             <hr/>
             
@@ -384,6 +521,105 @@
             <div id='loops' class='scrollspy-element' scrollspy-title='Iteration'></div>
             <h1>Iteration &amp; Nested Loops</h1>
             <div>
+              <div class='question' name='iteration-q1'>
+                What will the following code output?<br/>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+    string racecar = "racecar";
+    int length = racecar.size();
+  
+    // I affectionately deem this the "echo" loop
+    for (int i = 0; i &lt; length; i++) {
+        for (int j = i; j &lt; length; j++) {
+            cout &lt;&lt; racecar[j];
+        }
+        cout &lt;&lt; endl;
+    }
+  }
+</pre>
+              </div>
+              <p class='answer' name='iteration-q1'><br/>
+                racecar<br/>
+                acecar<br/>
+                cecar<br/>
+                ecar<br/>
+                car<br/>
+                ar<br/>
+                r<br/>
+              </p>
+              
+              
+              <div class='question' name='iteration-q2'>
+                What will the following code output?<br/>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      int i = 1;
+  
+    // This outer loop is lame
+    while (i &lt; 8) {
+      do {
+        cout &lt;&lt; i &lt;&lt; endl;
+        i *= 2;
+      } while (i &lt;= 8);
+    }
+    cout &lt;&lt; "End value for i: " &lt;&lt; i &lt;&lt; endl;
+  }
+</pre>
+              </div>
+              <p class='answer' name='iteration-q2'><br/>
+                1<br/>
+                2<br/>
+                4<br/>
+                8<br/>
+                End value for i: 16<br/>
+              </p>
+              
+              <p class='example'>In Week 3's class, we developed a program that used nested for-loops to created a giant N (<a href='/~forns/classes/fall-2013/cs-31/cs-31-week-3-classwork.html' target='_blank'>your solution located here</a>).<br/>
+                Now, your task is to re-write that program (having it output the exact same giant N) using only a single for-loop.</p>
+              <div class='question' name='iteration-q3'>
+                Click here to see a sample solution.<br/>
+                <p><strong>HINT:</strong> Think of having to choose a character for each square of an 11 x 11 (or SIZE x SIZE, in general) grid.</p>
+              </div>
+              <div class='answer' name='iteration-q3'><br/>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      const int SIZE = 11;
+      int count = 0;
+      
+      // Loop that goes through
+      // SIZE rows x SIZE columns
+      for (int j = 0; j &lt; SIZE * SIZE; j++) {
+          // if j % SIZE == SIZE - 1, then we've
+          // hit the end of a row and should add an
+          // N and a newline
+          if (j % SIZE == SIZE - 1) {
+              cout &lt;&lt; "N" &lt;&lt; endl;
+  
+          // Otherwise, we add an N when we're at the
+          // start of a row, or when we're on the diagonal
+          } else if (j % SIZE == 0 || (j % (SIZE + 1)) == 0) {
+              cout &lt;&lt; "N";
+  
+          // Put spaces in all other cases
+          } else {
+              cout &lt;&lt; " ";
+          }
+      }
+  }
+</pre>
+              </div>
             </div>
             <hr/>
             
