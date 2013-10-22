@@ -172,8 +172,6 @@
    * don't answer 3 times, terminate with a 
    * an angry goodbye.
    */
-  
-  
   int main () {
       // Want a counter to check which level
       // of angst your progam has achieved
@@ -212,6 +210,48 @@
   }
 </pre>
             <hr/>
+            
+            
+            <div id='example3' class='scrollspy-element' scrollspy-title='Capsizer'></div>
+            <h1>Example Two: Capsizer</h1>
+            <div>
+              <p>Get it? Because it turns caps and lowercase upside-down?</p>
+              <p class='example'>Write a program that queries the user for a string, swaps all lowercase letters for uppercase ones, and then prints out the result.</p>
+            </div>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cctype&gt;
+  using namespace std;
+  
+  /*
+   * Write a program that queries the user for a string,
+   * swaps all lowercase letters for uppercase ones,
+   * and then prints out the result.
+   */
+  int main () {
+      string s;
+      char c;
+      
+      // Ask for a string
+      cout &lt;&lt; "Gimme dat string ";
+      getline(cin, s);
+      cout &lt;&lt; endl;
+      
+      // Size of string == s.length() == s.size()
+      for (int i = 0; i &lt; s.size(); i++) {
+          // If it's uppercase, convert to lower
+          if (isupper(s[i])) {
+              c = tolower(s[i]);
+              cout &lt;&lt; c;
+          } else {
+              c = toupper(s[i]);
+              cout &lt;&lt; c;
+          }
+      }
+      cout &lt;&lt; endl;
+  }
+</pre>
             
           </div>
           <!-- END PRESENTATION CONTENT -->

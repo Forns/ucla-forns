@@ -120,6 +120,273 @@
             </div>
             <hr/>
             
+            
+            <div id='typeConversion' class='scrollspy-element' scrollspy-title='Type Conversions'></div>
+            <h1>Type Conversions</h1>
+            <div>
+              <div class='question' name='type-q1'>Will the following code compile? If so, what will it output?<br/>
+<pre class='prettprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      int bass = 5.6,
+          c = 6.5;
+      double swim = c / bass;
+      
+      cout &lt;&lt; swim &lt;&lt; endl;
+  }
+</pre>
+              </div>
+              <p class='answer' name='type-q1'>swim = 1, which is what will be printed out. Integer division, despite being stored in a double is still an integer result.</p>
+              
+              <div class='question' name='type-q2'>
+                Will the following code compile? If so, what will it output?<br/>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      string test = 'c';
+      int i = test;
+      
+      cout &lt;&lt; i &lt;&lt; endl;
+  }
+</pre>
+              </div>
+                <p class='answer' name='type-q2'>Compilation Error; we're attempting to store a character literal into a string variable (note the single quote). Also, we can't convert from string to int, so storing test into i is also illegal.</p>
+              
+                <div class='question' name='type-q3'>
+                  Assuming the ASCII character coding schema, will the following code compile? If so, what will it output?<br/>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      char one = '1',
+           two = '2';
+      int i = one * two;
+      
+      cout &lt;&lt; i &lt;&lt; endl;
+  }
+</pre>
+              </div>
+                  <p class='answer' name='type-q3'>Contrary to what you might think, the character codes for '1' and '2' are NOT 1 and 2, but are actually 49 and 50, respectively. Instead, i = 2450.</p>
+                
+                <div class='question' name='type-q4'>
+                  Assuming the ASCII character coding schema, will the following code compile? If so, what will it output?<br/>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      char nada = '\0',
+           tab = '\t';
+      
+      bool ean = nada && tab;
+      
+      cout &lt;&lt; ean &lt;&lt; endl;
+  }
+</pre>
+                </div>
+                  <p class='answer' name='type-q4'>nada holds the null character, with integer code = 0. bool ean consists of the logical AND between two chars, one of which is 0 (falsy in C++), and so ean = 0.</p>
+                  
+                  
+                <div class='question' name='type-q5'>
+                  Assuming the ASCII character coding schema, will the following code compile? If so, what will it output?<br/>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cctype&gt;
+  using namespace std;
+  
+  /*
+   * MOTHER OF ALL TYPE QUESTIONS
+   */
+  int main () {
+      string cheese = "Gouda!";
+      // ^^^ bad even by my standards
+      
+      char a = 97,
+           excited = cheese[5];
+      
+      bool ean = isupper(toupper(excited)) && a;
+      
+      cout &lt;&lt; ean &lt;&lt; endl;
+  }
+</pre>
+                </div>
+                  <p class='answer' name='type-q5'>excited = cheese[5] = '!', which means that toupper(excited) = '!', which means isupper('!') = 0 (exclamation marks cannot be uppercase, and so also cannot be converted to uppercase). Therefore, ean = 0 && a = 0.</p>
+                  
+            </div>
+            <hr/>
+            
+            
+            <div id='precedence' class='scrollspy-element' scrollspy-title='Precedence'></div>
+            <h1>Precedence</h1>
+            <div>
+              <div class='question' name='precedence-q1'>
+                Will the following code compile? If so, what will it output?<br/>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      int x = 5;
+      double y = (x * x + x / x) % 2;
+      
+      cout &lt;&lt; y &lt;&lt; endl;
+  }
+</pre>
+              </div>
+              <p class='answer' name='precedence-q1'>
+                y = (5 * 5 + 5 / 5) % 2, evaluate parens first</br>
+                y = (25 + 5 / 5) % 2, * and / have equal precedence, and left to right associativity, so evaluate * on left first<br/>
+                y = (25 + 1) % 2<br/>
+                y = (26) % 2<br/>
+                y = 0, because 26 / 2 = 13 remainder 0<br/>
+              </p>
+              
+              <div class='question' name='precedence-q1-1'>
+                Will the following code compile? If so, what will it output?<br/>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      int x = !(5 / 3 &gt; 2) * 3;
+      
+      cout &lt;&lt; x &lt;&lt; endl;
+  }
+</pre>
+              </div>
+              <p class='answer' name='precedence-q1-1'>
+                x = !(5 / 3 &gt; 2) * 3;<br/>
+                x = !(1 &gt; 2) * 3;<br/>
+                x = !(0) * 3;<br/>
+                x = 1 * 3;<br/>
+                x = 3;
+              </p>
+              
+              <div class='question' name='precedence-q2'>
+                Will the following code compile? If so, what will it output?<br/>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      // 0 = zero, O = oh... the letter
+      const string STRINGY = "0OO0O0O"; // lol
+      
+      int iHateThisTest = isupper(toupper(STRINGY[1])),
+          moreHate = isalpha(STRINGY[0]),
+          answer = !(moreHate) &amp;&amp; (iHateThisTest + moreHate);
+      
+      cout &lt;&lt; answer &lt;&lt; endl;
+  }
+</pre>
+              </div>
+              <p class='answer' name='precedence-q2'>
+                iHateThisTest = isupper(toupper(O))<br/>
+                iHateThisTest = isupper(O)<br/>
+                iHateThisTest = 1<br/><br/>
+                moreHate = isalpha(0)<br/>
+                moreHate = 0<br/><br/>
+                answer = !(moreHate) &amp;&amp; (iHateThisTest + moreHate)<br/>
+                answer = !(0) &amp;&amp; (1 + 0), substituting<br/>
+                answer = 1 &amp;&amp; 1, simplifying<br/>
+                answer = 1, rules of logical AND
+              </p>
+              
+              <div class='question' name='precedence-q3'>
+                Will the following code compile? If so, what will it output?<br/>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      string result;
+      int i = 5;
+      double sadPi = 3.14;
+      char c = 'c';
+      
+      if (i &gt; 5 || 0 || ((sadPi) == c) * 5 &lt; -(-10)) {
+          result = ":D";
+      } else {
+          result = ":(";
+      }
+      
+      cout &lt;&lt; result &lt;&lt; endl;
+  }
+</pre>
+              </div>
+              <p class='answer' name='precedence-q3'>
+                i &gt; 5 || 0 || ((sadPi) == c) * 5 &lt; -(-10)<br/>
+                = i &gt; 5 || 0 || ((sadPi) == c) * 5 &lt; 10<br/>
+                = i &gt; 5 || 0 || (0) * 5 &lt; 10<br/>
+                = i &gt; 5 || 0 || 0 &lt; 10<br/>
+                = 0 || 0 || 0 &lt; 10<br/>
+                = 0 || 0 || 1<br/>
+                = 0 || 1<br/>
+                = 1, so result = ":D", an emotion very different from what you're feeling after this problem.
+              </p>
+              
+            </div>
+            <hr/>
+            
+            
+            <div id='conditionals' class='scrollspy-element' scrollspy-title='Conditionals'></div>
+            <h1>Simplifying Conditionals</h1>
+            <p class='definition'>For use with lecture notes from <a href='/~forns/classes/fall-2013/cs-31/cs-31-week-3.html#logic' target='_blank'>Week 3 on Simplifying Conditionals</a>.</p>
+              <div class='question' name='conditionals-q1'>
+                In our Week 3 discussion, you made a program that printed a giant letter N. In that program, your inner loop had the following logic. How can we simplify this if-ladder?<br/>
+<pre class='prettyprint'>
+  if (j == 0 || j == SIZE - 1) {
+      cout &lt;&lt; "N";
+  } else if (j == i && j != 0 && j != SIZE - 1) {
+      cout &lt;&lt; "N";
+  } else {
+      cout &lt;&lt; " ";
+  }
+</pre>
+              </div>
+              <div class='answer' name='conditionals-q1'>
+                <p>We have repetition of actions and redundant conditions, so we can condense to:</p>
+<pre class='prettyprint'>
+  if (j == 0 || j == i || j == SIZE - 1) {
+      cout &lt;&lt; "N";
+  } else {
+      cout &lt;&lt; " ";
+  }
+</pre>
+              </div>
+            
+            <div>
+            </div>
+            <hr/>
+            
+            
+            <div id='io' class='scrollspy-element' scrollspy-title='I/O'></div>
+            <h1>Input / Output</h1>
+            <div>
+            </div>
+            <hr/>
+            
+            
+            <div id='loops' class='scrollspy-element' scrollspy-title='Iteration'></div>
+            <h1>Iteration &amp; Nested Loops</h1>
+            <div>
+            </div>
+            <hr/>
+            
           </div>
           <!-- END PRESENTATION CONTENT -->
           
