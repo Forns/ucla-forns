@@ -109,13 +109,13 @@
             <div id='vsJava' class='scrollspy-element' scrollspy-title='C++ vs Java'></div>
             <h1>C++ vs. Java</h1>
             <div>
-              <p>Some of your with a background programming in Java noted that you'd like an outline of major differences between it and C++.</p>
+              <p>Some of you with a background programming in Java noted that you'd like an outline of major differences between it and C++.</p>
               <p>Those of you who have not done any programming with Java can ignore this section.</p>
               <p>There is a long list of differences between C++ and Java on <a href='http://en.wikipedia.org/wiki/Comparison_of_Java_and_C++'>Wikipedia, located here,</a> but the points relevant for our midterm are:</p>
               <ul class='indent-1'>
                 <li><p>In C++ the empty string is truthy when coerced into a bool.</p></li>
                 <li><p>C++ is cool with statements like <code class='prettyprint'>if (i = 5)</code> (note the single equal sign) but Java is not.</p></li>
-                <li><p>Referencing a variable that hasn't been initialized will cause a compile error in Java, but not in C++.</p></li>
+                <li><p>Referencing a variable that hasn't been initialized will cause a compile error in Java, but not necessarily in C++ (undefined behavior).</p></li>
                 <li><p>C++ has the <code class='prettyprint'>const</code> reserved word functionally equivalent to Java's <code class='prettyprint'>final</code></p></li>
               </ul>
             </div>
@@ -126,7 +126,7 @@
             <h1>Type Conversions</h1>
             <div>
               <div class='question' name='type-q1'>Will the following code compile? If so, what will it output?<br/>
-<pre class='prettprint'>
+<pre class='prettyprint'>
   #include &lt;iostream&gt;
   #include &lt;string&gt;
   using namespace std;
@@ -497,14 +497,14 @@
   
   int main () {
       double test = 210.123456789;
-    int i = 54321;
-
-    cout.setf(ios::fixed);
-    cout.precision(3);
-    cout &lt;&lt; test &lt;&lt; endl; // Answer 1?
-
-    cout.precision(2);
-    cout &lt;&lt; i &lt;&lt; endl; // Answer 2?
+      int i = 54321;
+  
+      cout.setf(ios::fixed);
+      cout.precision(3);
+      cout &lt;&lt; test &lt;&lt; endl; // Answer 1?
+  
+      cout.precision(2);
+      cout &lt;&lt; i &lt;&lt; endl; // Answer 2?
   }
 </pre>
                 <p>What will we output at the sections indicated Answer 1 and Answer 2?</p>
@@ -521,6 +521,105 @@
             <div id='loops' class='scrollspy-element' scrollspy-title='Iteration'></div>
             <h1>Iteration &amp; Nested Loops</h1>
             <div>
+              <div class='question' name='iteration-q1'>
+                What will the following code output?<br/>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+    string racecar = "racecar";
+    int length = racecar.size();
+  
+    // I affectionately deem this the "echo" loop
+    for (int i = 0; i &lt; length; i++) {
+        for (int j = i; j &lt; length; j++) {
+            cout &lt;&lt; racecar[j];
+        }
+        cout &lt;&lt; endl;
+    }
+  }
+</pre>
+              </div>
+              <p class='answer' name='iteration-q1'><br/>
+                racecar<br/>
+                acecar<br/>
+                cecar<br/>
+                ecar<br/>
+                car<br/>
+                ar<br/>
+                r<br/>
+              </p>
+              
+              
+              <div class='question' name='iteration-q2'>
+                What will the following code output?<br/>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      int i = 1;
+  
+    // This outer loop is lame
+    while (i &lt; 8) {
+      do {
+        cout &lt;&lt; i &lt;&lt; endl;
+        i *= 2;
+      } while (i &lt;= 8);
+    }
+    cout &lt;&lt; "End value for i: " &lt;&lt; i &lt;&lt; endl;
+  }
+</pre>
+              </div>
+              <p class='answer' name='iteration-q2'><br/>
+                1<br/>
+                2<br/>
+                4<br/>
+                8<br/>
+                End value for i: 16<br/>
+              </p>
+              
+              <p class='example'>In Week 3's class, we developed a program that used nested for-loops to created a giant N (<a href='/~forns/classes/fall-2013/cs-31/cs-31-week-3-classwork.html' target='_blank'>your solution located here</a>).<br/>
+                Now, your task is to re-write that program (having it output the exact same giant N) using only a single for-loop.</p>
+              <div class='question' name='iteration-q3'>
+                Click here to see a sample solution.<br/>
+                <p><strong>HINT:</strong> Think of having to choose a character for each square of an 11 x 11 (or SIZE x SIZE, in general) grid.</p>
+              </div>
+              <div class='answer' name='iteration-q3'><br/>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      const int SIZE = 11;
+      int count = 0;
+      
+      // Loop that goes through
+      // SIZE rows x SIZE columns
+      for (int j = 0; j &lt; SIZE * SIZE; j++) {
+          // if j % SIZE == SIZE - 1, then we've
+          // hit the end of a row and should add an
+          // N and a newline
+          if (j % SIZE == SIZE - 1) {
+              cout &lt;&lt; "N" &lt;&lt; endl;
+  
+          // Otherwise, we add an N when we're at the
+          // start of a row, or when we're on the diagonal
+          } else if (j % SIZE == 0 || (j % (SIZE + 1)) == 0) {
+              cout &lt;&lt; "N";
+  
+          // Put spaces in all other cases
+          } else {
+              cout &lt;&lt; " ";
+          }
+      }
+  }
+</pre>
+              </div>
             </div>
             <hr/>
             
