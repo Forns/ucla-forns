@@ -101,8 +101,130 @@
           <!-- BEGIN PRESENTATION CONTENT -->
           <div class='col-md-10 presentation-content' role='main'>
             
-            <div id='introduction' class='scrollspy-element' scrollspy-title='Review'></div>
-            <h1></h1>
+            <div id='functionIntro' class='scrollspy-element' scrollspy-title='Introduction'></div>
+            <h1>Introduction to Functions</h1>
+            <div>
+              <p>We know that functions in the most general sense are not unique to programming or C++. We see functions in a variety of disciplines.</p>
+              <p>The functions that we probably see first in life are of the mathematical variety.</p>
+              <p class='example'>
+                For example, I could create a function called f that takes in a value (we'll call that value x), and then returns another value based on my definition of f.<br/>
+                <code class='prettyprint'>f(x) = x + x^2</code>
+              </p>
+              <p>Notice I haven't used this function yet, I've just told it what I want it to do in case one day I decide my calculator is too far away and I want to just type f(5) or f(-3), depending on my needs.</p>
+              <p>So say that day does come along (spoiler: it will), I can pass in some number (I've used x as a placeholder to refer to it) and get out some result, that I expect to be a number.</p>
+              <p><code class='prettyprint'>f(5) = 5 + 5^2 = 5 + 25 = 30</code></p>
+              <p>So, above, I give my function f the value 5, and get the value 30 back.</p>
+              <p class='question' name='intro-q1'>What, then, is a general definition of a function?</p>
+              <p class='answer' name='intro-q1'>A function uses its definition to describe a relationship between its inputs and how they map to outputs.</p>
+              <p>Andrew, that definition is lame and isn't on the homework, teach me C++.</p>
+              <p>OK, fine. We must first remember that our computer is dumb, and needs us to tell it a lot about our function definitions.</p>
+              <p>Above, I said that I wanted a function called f (its name), which takes in a number called x (its parameter type and name) and spits back another number (its return type).</p>
+              <div class='toolkit'>
+                <p>A <strong>function</strong> definition in C++ has the following syntax:</p>
+<pre class='prettyprint'>
+  // The first line below is commonly called
+  // a "function signature"
+  return_type function_name (parameter1_type parameter1_name, parameter2_type parameter2_name, ...) {
+    // function definition
+  }
+</pre>
+              </div>
+              <p>Of course, the above contains placeholders, so let's start by defining some things:</p>
+              <p class='definition'><strong>Parameters</strong> are the ZERO or MORE inputs to your functions. Each has its type defined, and a placeholder name assigned to it.</p>
+              <p class='definition'><strong>Return type</strong> is the type of value I expect to receive back from a function (e.g. ints, doubles, strings, etc.)</p>
+              <p class='question' name='intro-q2'>So, how would I convert my simple mathematical function <code class='prettyprint'>f(x) = x + x^2</code> into a C++ function?</p>
+              <div class='answer' name='intro-q2'>
+<pre class='prettyprint'>
+  double f (double x) {
+    return x + x * x;
+  }
+</pre>
+              </div>
+              <p>Later, if I wanted to use this function, then I would just say <code class='prettyprint'>f(5.3)</code> or even pass in a variable that's a double like <code class='prettyprint'>f(someDoubleVar)</code>. We call this... &quot;calling&quot; the function.</p>
+              <p class='definition'><strong>Arguments</strong> are what you call the values you pass into a function when you're <strong>calling</strong> it</p>
+            </div>
+            <hr/>
+            
+            
+            <div id='programmingFunctions' class='scrollspy-element' scrollspy-title='C++ Functions'></div>
+            <h1>Functions in C++</h1>
+            <div>
+              <p>Our analogy with <code class='prettyprint'>f(x) = x + x^2</code> can take us far with C++ functions, but not all the way.</p>
+              <p>Let's look at a complete program with our running example:</p>
+              <div class='question' name='functions-q1'>
+                <p>Will the following code compile? If so, what will it print out?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      double x = f(5.0);
+      
+      cout &lt;&lt; x &lt;&lt; endl;
+  }
+  
+  double f (double x) {
+      return x + x * x;
+  }
+</pre>
+              </div>
+              <p class='answer' name='functions-q1'>No! I run my program from the first line of code down to the last. When I hit the line saying <code class='prettyprint'>double x = f(5.0);</code> f has yet to be defined!</p>
+              <p>So how do we get around that? I want to put my main function first because it makes sense for the first thing I run to be up towards the top.</p>
+              <p class='definition'><strong>Function Prototypes</strong> are hints to the compiler that say, &quot;Hey, here's a function with a name, a return type, and some parameters... I'm not going to define it now, but if you use it, I promise I'll have it defined later!&quot;</p>
+              <p>Please, Compiler? I promise I'm good for my function definition!</p>
+              <p>OK, fine, this time kid.</p>
+              <p>So we do this:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  // Function prototype for f
+  double f (double x);
+  
+  int main () {
+      double x = f(5.0);
+      
+      cout &lt;&lt; x &lt;&lt; endl;
+  }
+  
+  double f (double x) {
+      return x + x * x;
+  }
+</pre>
+              <p>So, now we get to the line in main <code class='prettyprint'>double x = f(5.0);</code> and although f is not yet defined, I see a function prototype (later defined after main) and so my code compiles.</p>
+              <div class='question' name='functions-q3'>
+                <p>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  // Function prototype for f
+  double f (double x);
+  
+  int main () {
+      double x = f(5.0);
+      
+      cout &lt;&lt; x &lt;&lt; endl;
+  }
+</pre>
+              </div>
+              <p class='answer' name='functions-q3'>No! We broke our promise to the compiler that we'd define f later, so now we have to leave town or it will break our legs.</p>
+            </div>
+            <hr/>
+            
+            
+            <div id='scope' class='scrollspy-element' scrollspy-title='Scope'></div>
+            <h1>Scope</h1>
+            <div>
+            </div>
+            <hr/>
+            
+            
+            <div id='methods' class='scrollspy-element' scrollspy-title='Methods'></div>
+            <h1>Methods</h1>
             <div>
             </div>
             <hr/>
@@ -110,9 +232,18 @@
             <!-- TODO: FUUUNNNCCTTIIIOOOONSSS -->
               <!-- TODO: Function prototypes -->
               <!-- TODO: Function return types -->
-              <!-- TODO: Method vs. Function -->
               <!-- TODO: Functions with arguments / parameters -->
                 <!-- TODO: Used as placeholders -->
+              <!-- TODO: return bools without using if else -->
+              <!-- TODO: bool function using Canadian eh? question -->
+              <!-- TODO: stub functions (e.g., always return true; comment with TODO) -->
+              <!-- TODO: function control flow doesn't reach return -->
+              <!-- TODO: Method vs. Function -->
+              <!-- TODO: pass by value (default) not changing values of parameters -->
+              <!-- TODO: pass by reference by using type reference-to-type like int& -->
+              <!-- TODO: cmath header -->
+              <!-- TODO: reference means another name for something that already exists -->
+                <!-- TODO: double& is the type reference-to-double and talks about a double that already exists -->
             
           </div>
           <!-- END PRESENTATION CONTENT -->

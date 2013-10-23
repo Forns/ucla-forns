@@ -161,6 +161,7 @@
               
                 <div class='question' name='type-q3'>
                   Assuming the ASCII character coding schema, will the following code compile? If so, what will it output?<br/>
+                  <strong>NB:</strong> Any questions asking for character codes will likely be given on the exam; in this case, the character code for '1' and '2' are 49 and 50, respectively.<br/>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
   #include &lt;string&gt;
@@ -179,6 +180,7 @@
                 
                 <div class='question' name='type-q4'>
                   Assuming the ASCII character coding schema, will the following code compile? If so, what will it output?<br/>
+                  <strong>NB:</strong> Any questions asking for character codes will likely be given on the exam; in this case, the character code for '\0' is 0...<br/>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
   #include &lt;string&gt;
@@ -194,7 +196,7 @@
   }
 </pre>
                 </div>
-                  <p class='answer' name='type-q4'>nada holds the null character, with integer code = 0. bool ean consists of the logical AND between two chars, one of which is 0 (falsy in C++), and so ean = 0.</p>
+                  <p class='answer' name='type-q4'>nada holds the null character, with integer code = 0. bool ean consists of the logical AND between two chars (which compares their character codes), one of which is 0 (falsy in C++), and so ean = 0.</p>
                   
                   
                 <div class='question' name='type-q5'>
@@ -280,6 +282,7 @@
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
   #include &lt;string&gt;
+  #include &lt;cctype&gt;
   using namespace std;
   
   int main () {
@@ -521,6 +524,8 @@
             <div id='loops' class='scrollspy-element' scrollspy-title='Iteration'></div>
             <h1>Iteration &amp; Nested Loops</h1>
             <div>
+              <p class='example'>If you haven't tried our class examples, you should do them (ignoring the answer at first) by the prompts <a href='/~forns/classes/fall-2013/cs-31/cs-31-week-3-classwork.html' target='_blank'>in this link</a>.</p>
+              
               <div class='question' name='iteration-q1'>
                 What will the following code output?<br/>
 <pre class='prettyprint'>
