@@ -151,6 +151,7 @@
             <hr/>
             
             
+            <br/>
             <div id='programmingFunctions' class='scrollspy-element' scrollspy-title='C++ Functions'></div>
             <h1>Functions in C++</h1>
             <div>
@@ -217,38 +218,453 @@
 </pre>
               </div>
               <p class='answer' name='functions-q3'>No! We broke our promise to the compiler that we'd define f later, so now we have to leave town or it will break our legs.</p>
+              <p>Now, as another note, there are certain things I can put into a function that just don't make sense.</p>
+              <p>If I tried to give my function <code class='prettyprint'>f(&quot;functionsSuck&quot;) = x + x^2</code>, it would neither be well defined nor very nice. My function f expects a number and outputs one as well.</p>
+              <p>Similarly, if I put in <code class='prettyprint'>f(5.3)</code> and got <code class='prettyprint'>f(5.3) = &quot;No you do!&quot;</code> in return, I would be both surprised and offended.</p>
+              <p class='definition'>Just as implicit type conversions occur when I try to store a value of type A into a variable of type B, so do conversions happen with parameters and return types. Not all such conversions are legal.</p>
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+    
+  // Function prototype for f
+  double f (double x);
+    
+  int main () {
+      string derp = "you wanted a string?";
+      double x = f(derp);
+        
+      cout &lt;&lt; x &lt;&lt; endl;
+  }
+  
+  double f (double x) {
+      return x + x * x;
+  }
+</pre>
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+    
+  // Function prototype for f
+  double f (double x);
+    
+  int main () {
+      // Function expects double parameter 0_o
+      int i = 5;
+      double x = f(i);
+        
+      cout &lt;&lt; x &lt;&lt; endl;
+  }
+  
+  double f (double x) {
+      return x + x * x;
+  }
+</pre>
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+    
+  // Function prototype for f
+  double f (double x);
+    
+  int main () {
+      double x = f(5.5);
+        
+      cout &lt;&lt; x &lt;&lt; endl;
+  }
+  
+  double f (double x) {
+      // Function returns type double! 0_o
+      bool result = x + x * x;
+      return result;
+  }
+</pre>
+              <p>Although it might be obvious, whenever I call a function, once I return from that function, I resume my program from the point at which I called it.</p>
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+      
+  // Function prototype for g
+  int g (int x);
+      
+  int main () {
+      cout &lt;&lt; g(5) &lt;&lt; endl;
+      cout &lt;&lt; g(-3.2) &lt;&lt; endl;
+      cout &lt;&lt; g('c') &lt;&lt; endl;
+  }
+    
+  int g (int x) {
+      return x + x * x;
+  }
+</pre>
+              
+              
+              <p>Lastly, if I promise my compiler that my function is going to return something of a certain type, I better deliver... or else...</p>
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+    
+  string deliverGoods (string s);
+    
+  int main () {
+      cout &lt;&lt; deliverGoods("My goods, please.") &lt;&lt; endl;
+  }
+  
+  string deliverGoods (string s) {
+      if (s == "Got the goods?") {
+          return "Yeah I got the goods.";
+      }
+      // Uhh... err...
+  }
+</pre>
+              
             </div>
             <hr/>
             
             
+            <br/>
             <div id='scope' class='scrollspy-element' scrollspy-title='Scope'></div>
-            <h1>Scope</h1>
+            <h1>Scope &amp; Functional Scope</h1>
             <div>
+              <p>The long awaited lecture on scope has finally arrived, you may now stop holding your breath.</p>
+              <p class='definition'><strong>Scope</strong> refers to the names of variables, functions, identifiers, and other objects that are visible to your program in a particular region (block) of the code.</p>
+              <p>What do I mean by &quot;a particular region of the code?&quot;</p>
+              <p class='definition'><strong>Blocks</strong> are any regions of code enclosed by the curly brackets {...}. Each block contains its own scope.</p>
+              <p>Some examples:</p>
+<pre class='prettyprint'>
+  if (conditional) {
+    // Everything in here is part of
+    // the "if block"
+  } else {
+    // Everything in here is part of
+    // the "else block"
+  }
+</pre>
+<pre class='prettyprint'>
+  while (conditional) {
+    // Everything in here is part of
+    // the "while block"
+  }
+</pre>
+<pre class='prettyprint'>
+  int main () {
+    // Everything in here is part of
+    // the "main block," which is really
+    // just a "function block"
+  }
+</pre>
+<pre class='prettyprint'>
+  {
+    // This is just a plain ole block!
+  }
+  
+  // This is a chip off the ole block
+  string chip = "-_-";
+</pre>
+              <p>So what do blocks mean and what do they do for us? Well, first we need to know what identifiers are:</p>
+              <p class='definition'><strong>Identifiers</strong> are just the names we assign to variables, functions, templates, classes, namespaces, etc. E.g., int x = 5; x is an identifier.</p>
+              <p>Blocks allow us to keep identifiers in a &quot;container&quot; so that we can reuse them in different parts of the code and always know what identifier we're referring to when we use one.</p>
+              <p>Blocks act like envelopes such that blocks inside of other blocks will have access to their ancestors' identifiers.</p>
+              <div class='example'>
+                <p>So, let's take the below code and display how the blocks are nested:</p>
+              </div>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+    
+  int main () {
+      string s = "I'm in the main block!";
+      cout &lt;&lt; "main s: " &lt;&lt; s &lt;&lt; endl;
+    
+      if (s != "") {
+          string s = "I'm in the if :(";
+          cout &lt;&lt; "if s: " &lt;&lt; s &lt;&lt; endl;
+      }
+    
+      for (int i = 0; i &lt; 3; i++) {
+          string s = "I'm in the loop!";
+          cout &lt;&lt; "for s: " &lt;&lt; s &lt;&lt; endl;
+          
+          if (i == 2) {
+              string s = "I'm special :)";
+              cout &lt;&lt; "for-if s: " &lt;&lt; s &lt;&lt; endl;
+          }
+      }
+  }
+</pre>
+              <p>Here's a graphical representation of the blocks above:</p>
+              <div class='thumbnail'>
+                <p><strong>Global Space</strong></p>
+                <div class='thumbnail alert alert-info'>
+                  <p><strong>Main Block</strong></p>
+                  <p>s = "I'm in the main block!"</p>
+                  <br/>
+                  <div class='thumbnail alert alert-warning'>
+                    <p><strong>if Block</strong></p>
+                    <p>s = "I'm in the if :("</p>
+                  </div>
+                  <div class='thumbnail alert alert-warning'>
+                    <p><strong>for Block</strong></p>
+                    <p>s = "I'm in the loop!"</p>
+                    <br/>
+                    <div class='thumbnail alert alert-danger'>
+                      <p><strong>for-if Block</strong></p>
+                      <p>s = "I'm special :)"</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <br/>
+              <p>So taking variables for example, how do I know which variable name is in scope?</p>
+              <p>The general idea <strong>in C++</strong> is this:</p>
+              <ol class='indent-1'>
+                <li><p>First, look in the current block and see if that identifier is defined. If it is, use that definition, otherwise...</p></li>
+                <li><p>Look for a definition of that identifier in the <strong>next block up</strong>. If it is defined there, then use that definition. Keep looking in the next enclosing block, and if I don't find it in the global space...</p></li>
+                <li><p>I get a compile error, because that identifier isn't defined anywhere in the code.</p></li>
+              </ol>
+              <p class='debug'><strong>NOTE:</strong> I say this is how scope works in C++ (and a variety of other languages), but not all languages in general!</p>
+              <p>Alright, let's look at some examples and trace the blocks and scopes.</p>
+              <div class='question' name='scope-q1'>
+                <p>Will the following code compile? If so, draw the block nesting and say what it will output?</p><br/>
+<pre class='prettyprint'>
+  /*
+   * I call this example:
+   * "Snakes on a Main"
+   */
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  bool snake = true;
+  
+  int main () {
+      string samuel = "I'm tired of these darn snakes. ";
+  
+      if (samuel != "") {
+          cout &lt;&lt; samuel &lt;&lt; snake &lt;&lt; endl;
+      }
+      
+      {
+        string snake = "I hope there are no snakes in here...";
+        cout &lt;&lt; snake &lt;&lt; endl;
+      }
+  }
+</pre>
+              </div>
+              <div class='answer' name='scope-q1'>
+                <div class='thumbnail'>
+                  <p><strong>Global Space</strong></p>
+                  <p>snake = true;</p>
+                  <div class='thumbnail alert alert-info'>
+                    <p><strong>Main Block</strong></p>
+                    <p>samuel = &quot;I'm tired of these darn snakes. &quot;</p><br/>
+                    <div class='thumbnail alert alert-warning'>
+                      <p><strong>if Block</strong></p>
+                      <p>
+                        // variables samuel and snake referenced, but<br/>
+                        // not in block... look back
+                      </p>
+                    </div>
+                    <div class='thumbnail alert alert-warning'>
+                      <p><strong>Plain Block</strong></p>
+                      <p>
+                        snake = "I hope there are no snakes in here..."<br/>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <p>One important note: although a variable may eventually live in a particular block, if it is referenced <strong>before</strong> it's defined, then we'll get a compile error.</p>
+              <div class='question' name='scope-q2'>
+                <p>Will the following code compile? If so, draw the block nesting and say what it will output?</p><br/>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  bool snake = true;
+  
+  int main () {
+      if (samuel != "") {
+          cout &lt;&lt; samuel &lt;&lt; snake &lt;&lt; endl;
+      }
+      
+      // I'm down here now!
+      string samuel = "I'm tired of these darn snakes. ";
+      
+      {
+        string snake = "I hope there are no snakes in here...";
+        cout &lt;&lt; snake &lt;&lt; endl;
+      }
+  }
+</pre>
+              </div>
+              <div class='answer' name='scope-q2'>
+                <div class='thumbnail'>
+                  <p><strong>Global Space</strong></p>
+                  <p>snake = true;</p>
+                  <div class='thumbnail alert alert-info'>
+                    <p><strong>Main Block</strong></p>
+                    <div class='thumbnail alert alert-warning'>
+                      <p><strong>if Block</strong></p>
+                      <p>
+                        // variables samuel and snake referenced, but<br/>
+                        // not in block... look back
+                      </p>
+                    </div>
+                    <p>samuel = &quot;I'm tired of these darn snakes. &quot;</p><br/>
+                    <div class='thumbnail alert alert-warning'>
+                      <p><strong>Plain Block</strong></p>
+                      <p>
+                        snake = "I hope there are no snakes in here..."<br/>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <br/>
+                <p>No! Doesn't compile; even though samuel is technically defined in the main function, by the time I want to use it, it hasn't been defined yet.</p>
+              </div>
+              
+              <p>So how does all of this jazz about scope work with functions? Well, pretty much exactly how you'd expect.</p>
+              <div class='question' name='scope-q3'>
+                <p>What will the output be of the following code?</p><br/>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+    
+  bool snakesHere (string s);
+  string snakes = "No Snakes";
+  
+  int main () {
+      cout &lt;&lt; snakesHere(snakes) &lt;&lt; endl;
+      string snakes = "SNAAAKES!";
+      cout &lt;&lt; snakesHere(snakes) &lt;&lt; endl;
+  }
+  
+  bool snakesHere (string snakes) {
+      return snakes == "SNAAAKES!";
+  }
+</pre>
+              </div>
+              <div class='answer' name='scope-q3'>
+                <div class='thumbnail'>
+                  <p><strong>Global Space</strong></p>
+                  <p>snakes = "No Snakes"</p>
+                  <div class='thumbnail alert alert-info'>
+                    <p><strong>Main Block</strong></p>
+                    <p>snakes = "SNAAAKES!"</p>
+                  </div>
+                  <div class='thumbnail alert alert-info'>
+                    <p><strong>snakesHere Block</strong></p>
+                    <p>// Designates that snakes is defined as a parameter<br/>@param snakes</p>
+                  </div>
+                </div>
+                <br/>
+                <p>So, we get 0 and 1 output, respectively.</p>
+              </div>
+              <p>As a final note, we should talk about how to override scope, viz. what to do in the following scenario:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int getMe = 0;
+  
+  int main () {
+      bool getMe = 1;
+      // How do I print out the int getMe
+      // that's in the global namespace?
+      cout &lt;&lt; getMe &lt;&lt; endl;
+  }
+</pre>
+              <p>How do I print out the global getMe? Well, the easiest way would be to rename one of the variables...</p>
+              <p>But say I insisted upon it being called getMe.</p>
+              <p class='toolkit'><strong>Scope access</strong> is done using the :: operator.</p>
+              <p>If I wanted to access a variable named x in the imANamespace namespace, I would say imANamespace::x</p>
+              <p>If I wanted to access a variable named x in the global namespace (and x was already defined in my scope), I would say ::x</p>
+              <div class='example'>
+                <p>
+                  Design a function called presetSubstring that takes in a string s, and an int i, and then returns a 
+                  string of all characters starting at the index of s designated by a global namespace constant int START 
+                  up until index START + i. You may not use the builtin .substring(...) function!<hr/>
+                  <p>
+                    <strong>Test Cases:</strong><br/>
+                    ...<br/>
+                    const int START = 1;<br/>
+                    ...<br/>
+                    presetSubstring(&quot;test&quot;, 3); // Returns &quot;est&quot;<br/>
+                    presetSubstring(&quot;testing&quot;, 3); // Returns &quot;est&quot;<br/>
+                    presetSubstring(&quot;&quot;, 5); // Returns &quot;&quot;<br/>
+                    presetSubstring(&quot;testing&quot;, -1); // Returns &quot;&quot;<br/>
+                    presetSubstring(&quot;testing&quot;, 5000); // Returns &quot;esting&quot;
+                  </p>
+                </p>
+              </div>
             </div>
             <hr/>
             
             
-            <div id='methods' class='scrollspy-element' scrollspy-title='Methods'></div>
-            <h1>Methods</h1>
+            <br/>
+            <div id='references' class='scrollspy-element' scrollspy-title='References'></div>
+            <h1>References</h1>
+            <div>
+              <p>We all make &quot;references&quot; in English all the time. &quot;The Golden State&quot; is a reference to California. &quot;Nick&quot; is a reference to some guy named Nickolas.</p>
+              <p>References are just different names for the same objects.</p>
+              <p class='definition'>In C++, <strong>references</strong> are aliases for an object, in that they can be treated as actually being the object they're referencing.</p>
+              <p>Here's a simple example:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+    
+  int main () {
+    double trouble = 123.45;
+    double&amp; issue = trouble;
+  
+    cout &lt;&lt; "issue is: " &lt;&lt; issue &lt;&lt; endl;
+  
+    // Now, change issue...
+    issue = 0.0;
+    // ...and see what happens to trouble
+    cout &lt;&lt; "trouble is: " &lt;&lt; trouble &lt;&lt; endl;
+    cout &lt;&lt; "issue is: " &lt;&lt; issue &lt;&lt; endl;
+  }
+</pre>
+              <p>So, when I change issue above, trouble changes also... which isn't surprising because issue is just another name for trouble.</p>
+              <p>So why have references? Well, one illustration is how function parameters work in C++.</p>
+              <p>By default, function parameters are taken in what is known as &quot;pass by value.&quot;</p>
+              <!-- TODO -->
+              <p class='definition'><strong>Pass by value</strong></p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='practice' class='scrollspy-element' scrollspy-title='Practice + HW3'></div>
+            <h1>Practice &amp; Homework 3 Help</h1>
             <div>
             </div>
             <hr/>
             
             <!-- TODO: FUUUNNNCCTTIIIOOOONSSS -->
-              <!-- TODO: Function prototypes -->
-              <!-- TODO: Function return types -->
-              <!-- TODO: Functions with arguments / parameters -->
-                <!-- TODO: Used as placeholders -->
-              <!-- TODO: return bools without using if else -->
-              <!-- TODO: bool function using Canadian eh? question -->
-              <!-- TODO: stub functions (e.g., always return true; comment with TODO) -->
-              <!-- TODO: function control flow doesn't reach return -->
-              <!-- TODO: Method vs. Function -->
-              <!-- TODO: pass by value (default) not changing values of parameters -->
-              <!-- TODO: pass by reference by using type reference-to-type like int& -->
-              <!-- TODO: cmath header -->
               <!-- TODO: reference means another name for something that already exists -->
                 <!-- TODO: double& is the type reference-to-double and talks about a double that already exists -->
+              <!-- TODO: pass by value (default) not changing values of parameters -->
+              <!-- TODO: pass by reference by using type reference-to-type like int& -->
+            <!-- TODO: HW3 help -->
+              <!-- TODO: String class stuff -->
             
           </div>
           <!-- END PRESENTATION CONTENT -->
