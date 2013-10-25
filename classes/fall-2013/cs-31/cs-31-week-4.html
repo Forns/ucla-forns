@@ -622,7 +622,7 @@
             <div>
               <p>We all make &quot;references&quot; in English all the time. &quot;The Golden State&quot; is a reference to California. &quot;Nick&quot; is a reference to some guy named Nickolas.</p>
               <p>References are just different names for the same objects.</p>
-              <p class='definition'>In C++, <strong>references</strong> are aliases for an object, in that they can be treated as actually being the object they're referencing.</p>
+              <p class='definition'>In C++, <strong>references</strong> are aliases for an object, in that they can be treated as actually being the object they're referencing. The syntax for a reference is:<br/>&lt;type&gt; &amp; &lt;name&gt;</p>
               <p>Here's a simple example:</p>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
@@ -646,7 +646,10 @@
               <p>So why have references? Well, one illustration is how function parameters work in C++.</p>
               <p>By default, function parameters are taken in what is known as &quot;pass by value.&quot;</p>
               <!-- TODO -->
-              <p class='definition'><strong>Pass by value</strong></p>
+              <p class='definition'><strong>Pass by value</strong> means that parameter values are copied whenever a function is called, and do not refer to the argument variables.</p>
+              <!-- TODO pass by value example -->
+              <p class='definition'><strong>Pass by reference</strong> means that parameters are references (aliases, nicknames, etc.) to the arguments; they are essentially the same variable.</p>
+              <!-- TODO pass by reference example -->
             </div>
             <hr/>
             
@@ -662,9 +665,10 @@
               <!-- TODO: reference means another name for something that already exists -->
                 <!-- TODO: double& is the type reference-to-double and talks about a double that already exists -->
               <!-- TODO: pass by value (default) not changing values of parameters -->
-              <!-- TODO: pass by reference by using type reference-to-type like int& -->
+              <!-- TODO: call stack -->
             <!-- TODO: HW3 help -->
               <!-- TODO: String class stuff -->
+              <!-- TODO: substring -->
             
           </div>
           <!-- END PRESENTATION CONTENT -->
