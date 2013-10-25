@@ -304,7 +304,33 @@
       return x + x * x;
   }
 </pre>
-              
+              <p>Above, whenever I called g from main, I return to the point in the main from which I called it after g returned an int.</p>
+              <p>So, this means I can also call functions from other functions, so I can function while I function.</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  double f (double x);
+  void update();
+  
+  int main () {
+      cout &lt;&lt; f(2.0) &lt;&lt; endl;
+      cout &lt;&lt; f(5.0) &lt;&lt; endl;
+  }
+  
+  double f (double x) {
+      update();
+      return x + x * x;
+  }
+  
+  // Return type void means
+  // I do NOT need to return
+  // anything!
+  void update () {
+      cout &lt;&lt; "hi :)" &lt;&lt; endl;
+  }
+</pre>
               
               <p>Lastly, if I promise my compiler that my function is going to return something of a certain type, I better deliver... or else...</p>
               <p class='debug'>Will the following code compile? If so, what will it output?</p>
@@ -598,7 +624,7 @@
                 <p>
                   Design a function called presetSubstring that takes in a string s, and an int i, and then returns a 
                   string of all characters starting at the index of s designated by a global namespace constant int START 
-                  up until index START + i. You may not use the builtin .substring(...) function!<hr/>
+                  up until index START + i. You may not use the builtin .substr(...) function!<hr/>
                   <p>
                     <strong>Test Cases:</strong><br/>
                     ...<br/>
@@ -647,9 +673,55 @@
               <p>By default, function parameters are taken in what is known as &quot;pass by value.&quot;</p>
               <!-- TODO -->
               <p class='definition'><strong>Pass by value</strong> means that parameter values are copied whenever a function is called, and do not refer to the argument variables.</p>
-              <!-- TODO pass by value example -->
+              <p class='example'>What are the values of x and result that get printed?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  double f (double x);
+  
+  int main () {
+      double x = 5.0,
+             result = f(x);
+      
+      cout &lt;&lt; result &lt;&lt; endl;
+      cout &lt;&lt; x &lt;&lt; endl;
+  }
+  
+  // Receiving x by value
+  double f (double x) {
+      x = x + x * x;
+      return x;
+  }
+</pre>
+              <p>Notice how I passed in x (by value) in main, but x in main did not get modified after I called f(x).</p>
               <p class='definition'><strong>Pass by reference</strong> means that parameters are references (aliases, nicknames, etc.) to the arguments; they are essentially the same variable.</p>
-              <!-- TODO pass by reference example -->
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  // Note, I also had to put
+  // the &amp; after double in the
+  // function prototype
+  double f (double&amp; x);
+  
+  int main () {
+      double x = 5.0,
+             result = f(x);
+      
+      cout &lt;&lt; result &lt;&lt; endl;
+      cout &lt;&lt; x &lt;&lt; endl;
+  }
+  
+  // Receiving x by reference
+  // Note the &amp; after double
+  double f (double&amp; x) {
+      x = x + x * x;
+      return x;
+  }
+</pre>
             </div>
             <hr/>
             
@@ -658,17 +730,108 @@
             <div id='practice' class='scrollspy-element' scrollspy-title='Practice + HW3'></div>
             <h1>Practice &amp; Homework 3 Help</h1>
             <div>
+              <p>Homework first, because let's face it, that's why you came to discussion.</p>
+              <p>We should talk a little bit about some more things you can do with strings:</p>
+              <p class='toolkit'><strong>Substring</strong> is a string method that returns another string equal to a part of the calling string. The syntax is:<br/>string s = "some string";<br/>s.substr(start, length);</p>
+              <p>In s.substr(start, length), start and length are integers designating the following:</p>
+              <ul class='indent-1'>
+                <li><p>start defines the index at which you'd like to start collecting characters in the calling string.</p></li>
+                <li><p>length defines how many characters from start you'd like to collect</p></li>
+              </ul>
+              <p>You'll get this quickly with an example:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      string s = "stringz";
+      // Print out the first 3
+      // characters of s
+      cout &lt;&lt; s.substr(0, 3) &lt;&lt; endl;
+      
+      // Print out 3 characters
+      // of s following index 2
+      cout &lt;&lt; s.substr(2, 3) &lt;&lt; endl;
+      
+      // Print out all characters
+      // of s
+      cout &lt;&lt; s.substr(0, s.length()) &lt;&lt; endl;
+      
+      // Print NOTHING FROM s
+      cout &lt;&lt; s.substr(2, 0) &lt;&lt; endl;
+      
+      // Notice, none of this
+      // changed s
+      cout &lt;&lt; s &lt;&lt; endl;
+  }
+</pre>
             </div>
+            <p>Because the substring returns a string, I can easily concatenate their results with the + operator.</p>
+            <p>Try some examples?</p>
+            <p class='example'>Design a function called evenLetterThief of return type void that takes in a string <strong>by reference</strong> and then removes all of its even index letters.</p>
+            <p>Examples of this function include:</p>
+            <ul class='indent-1'>
+              <li><p>
+<pre class='prettyprint'>
+  string s = "test";
+  evenLetterThief(s);
+  cout &lt;&lt; s &lt;&lt; endl; // prints "et"
+</pre>
+              </p></li>
+              <li><p>
+<pre class='prettyprint'>
+  s = "t";
+  evenLetterThief(s);
+  cout &lt;&lt; s &lt;&lt; endl; // prints ""
+</pre>
+              </p></li>
+              <li><p>
+<pre class='prettyprint'>
+  s = "";
+  evenLetterThief(s);
+  cout &lt;&lt; s &lt;&lt; endl; // prints ""
+</pre>
+              </p></li>
+            </ul>
+            <div class='example'>
+              <p>Design two functions with the following signatures and purposes:</p>
+            </div>
+            <ol class='indent-1'>
+              <li><p>bool isLameChar (char c, int i); returns whether or not the character code of c is less than i.</p></li>
+              <li><p>string redeemLameChars (string s, int i, char c); returns a string result that is equal to s with all characters whose code is less than i replaced with c.</p></li>
+            </ol>
+            <br/>
+            <h2>Project Development</h2>
+            <p>Some general guidelines for project development:</p>
+            <ul class='indent-1'>
+              <li><p>When developing functions, always test them individually to make sure you're getting what you expect!</p></li>
+              <li><p>If your code is still behaving unexpectedly, you may want to do some simple cout statements to make sure variables have the values you expect.</p></li>
+              <li><p>If your code is STILL behaving unexpectedly, you may want to use an IDE's debugger.</p></li>
+            </ul>
+            <p class='definition'>A <strong>debugger</strong> allows you to take baby-steps through your code, and assess the value of each variable or output without having to run it all at once.</p>
+            <p class='definition'>A <strong>breakpoint</strong> is a point you set in your code at which you would like the debugger to stop for you to assess the state of your program.</p>
+            <p>For example, input the following program into your favorite IDE and insert breakpoints where instructed. Then, run with debugging and see how the breakpoints operate.</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      int i = 3;
+      string snake = "hiss";
+      // Insert breakpoint below
+      
+      while (i &gt; 0) {
+          snake += "s";
+          cout &lt;&lt; snake &lt;&lt; endl;
+          // Insert breakpoint below
+          i--;
+      }
+  }
+</pre>
+              <p>For more informatin on debuggers, consult our course page, which has videos and slides.</p>
             <hr/>
-            
-            <!-- TODO: FUUUNNNCCTTIIIOOOONSSS -->
-              <!-- TODO: reference means another name for something that already exists -->
-                <!-- TODO: double& is the type reference-to-double and talks about a double that already exists -->
-              <!-- TODO: pass by value (default) not changing values of parameters -->
-              <!-- TODO: call stack -->
-            <!-- TODO: HW3 help -->
-              <!-- TODO: String class stuff -->
-              <!-- TODO: substring -->
             
           </div>
           <!-- END PRESENTATION CONTENT -->
