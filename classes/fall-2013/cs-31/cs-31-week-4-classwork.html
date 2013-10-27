@@ -1,0 +1,236 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Andrew Forney - UCLA CS</title>
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/magic-bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/main.css" rel="stylesheet" type="text/css">
+    <script src="../../../js/lib/jquery-2.0.3.min.js"></script>
+    <script src="../../../js/lib/bootstrap.min.js"></script>
+    <script src="../../../js/display/general/general-display.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+  </head>
+  
+  <body data-spy="scroll" data-target="#scrollspy">
+    
+    <!-- BEGIN WRAP -->
+    <div id="wrap">
+      
+      <!-- BEGIN NAVIGATION -->
+      <nav class='navbar navbar-default' role='navigation'>
+        <div class='nav-accent'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-12'>
+              <div class='navbar-header'>
+                <button class='navbar-toggle' type='button' data-toggle='collapse' data-target='.navbar-main-collapse'>
+                  <span class='sr-only'>Toggle Navigation</span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                </button>
+                <a class='navbar-brand' href='/~forns/'>
+                  <span id='brand-text'>
+                    Andrew Forney
+                  </span>
+                </a>
+              </div>
+              
+              <div id='nav-main' class='collapse navbar-collapse navbar-main-collapse'>
+                <ul class='nav navbar-nav navbar-right'>
+                  
+                  <li>
+                    <a href='/~forns/about.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-user'></span>
+                      </div>
+                      <p class='text-center'>About</p>
+                    </a>
+                  </li>
+                  
+                  <li class='active'>
+                    <a href='/~forns/classes.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-book'></span>
+                      </div>
+                      <p class='text-center'>Classes</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/contact.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-comment'></span>
+                      </div>
+                      <p class='text-center'>Contact</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/publications.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-file'></span>
+                      </div>
+                      <p class='text-center'>Publications</p>
+                    </a>
+                  </li>
+                  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <!-- END NAVIGATION -->
+      
+      <!-- BEGIN MAIN CONTENT -->
+      <div id="main-content" class="container">
+        <div class="row">
+          
+          <!-- BEGIN SCROLLSPY -->
+          <div class='col-md-2'>
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+              <ul id='scrollspy' class="nav bs-sidenav">
+              </ul>
+            </div>
+          </div>
+          <!-- END SCROLLSPY -->
+          
+          <!-- BEGIN PRESENTATION CONTENT -->
+          <div class='col-md-10 presentation-content' role='main'>
+            
+            <ol class="breadcrumb">
+              <li><a href="../../../classes.html">Classes</a></li>
+              <li><a href="./cs-31.html">Fall13 CS31</a></li>
+              <li class="active">Week 4 Classwork</li>
+            </ol>
+            
+            <h1>Your Week 4 Classwork</h1>
+            <p>In class, you (as a group) designed programs to match some example specifications. Those answers are listed herein.</p>
+            
+            <div id='example1' class='scrollspy-element' scrollspy-title='Preset Substring'></div>
+            <h1>Example One: Preset Substring</h1>
+            <div>
+              <div class='example'>
+                <p>
+                  Design a function called presetSubstring that takes in a string s, and an int i, and then returns a 
+                  string of all characters starting at the index of s designated by a global namespace constant int START 
+                  up until index START + i. You may not use the builtin .substr(...) function!<hr/>
+                  <p>
+                    <strong>Test Cases:</strong><br/>
+                    ...<br/>
+                    const int START = 1;<br/>
+                    ...<br/>
+                    presetSubstring(&quot;test&quot;, 3); // Returns &quot;est&quot;<br/>
+                    presetSubstring(&quot;testing&quot;, 3); // Returns &quot;est&quot;<br/>
+                    presetSubstring(&quot;&quot;, 5); // Returns &quot;&quot;<br/>
+                    presetSubstring(&quot;testing&quot;, -1); // Returns &quot;&quot;<br/>
+                    presetSubstring(&quot;testing&quot;, 5000); // Returns &quot;esting&quot;
+                  </p>
+                </p>
+              </div>
+            </div>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  /*
+   * Design a function called presetSubstring 
+   * that takes in a string s, and an int length, 
+   * and then returns a string of all characters 
+   * starting at the index of s designated by a 
+   * global namespace constant int START up until 
+   * index START + i. You may not use the builtin 
+   * .substr(...) function!
+   */
+  
+  const int START = 1;
+  string presetSubstring (string s, int length);
+  
+  int main () {
+      // Tests
+      cout &lt;&lt; presetSubstring("test", 3) &lt;&lt; endl; // Returns "est"
+      cout &lt;&lt; presetSubstring("testing", 3) &lt;&lt; endl; // Returns "est"
+      cout &lt;&lt; presetSubstring("", 5) &lt;&lt; endl; // Returns ""
+      cout &lt;&lt; presetSubstring("testing", -1) &lt;&lt; endl; // Returns ""
+      cout &lt;&lt; presetSubstring("testing", 0) &lt;&lt; endl; // Returns ""
+      cout &lt;&lt; presetSubstring("testing", 5000) &lt;&lt; endl; // Returns "esting"
+  }
+  
+  string presetSubstring (string s, int length) {
+      string result;
+      if (length &lt; 0) {
+          return "";
+      }
+      
+      for (int i = START; i &lt; s.size(); i++) {
+          // Case where we've met our length criteria
+          if (result.size() == length) {
+              break;
+          }
+          result += s[i];
+      }
+      
+      return result;
+  }
+</pre>
+
+            <div id='example2' class='scrollspy-element' scrollspy-title='Even Letter Thief'></div>
+            <h1>Example Two: Even Letter Thief</h1>
+            <p class='example'>Design a function called evenLetterThief of return type void that takes in a string <strong>by reference</strong> and then removes all of its even index letters.</p>
+            <div>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  void evenLetterThief (string& s);
+  
+  int main () {
+      string s = "test";
+      evenLetterThief(s);
+      cout &lt;&lt; s &lt;&lt; endl;
+      
+      s = "t";
+      evenLetterThief(s);
+      cout &lt;&lt; s &lt;&lt; endl;
+      
+      s = "";
+      evenLetterThief(s);
+      cout &lt;&lt; s &lt;&lt; endl;
+  }
+  
+  void evenLetterThief (string& s) {
+      for (int i = 0; i &lt; s.length(); i += 2) {
+          s = s.substr(0, i) + s.substr(i + 1, s.length());
+          i--;
+      }
+  }
+</pre>
+            
+          </div>
+          <!-- END PRESENTATION CONTENT -->
+          
+        </div>
+      </div>
+      <!-- END MAIN CONTENT -->
+      
+      
+    </div>
+    <!-- END WRAPPER -->
+    
+    <!-- BEGIN FOOTER -->
+    <div id="footer">
+      <div class="container">
+        <div class="col-md-12 text-center">
+          
+        </div>
+      </div>
+    </div>
+    <!-- END FOOTER -->
+    
+  </body>
+</html>
