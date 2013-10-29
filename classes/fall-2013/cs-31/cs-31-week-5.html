@@ -1,0 +1,183 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Andrew Forney - UCLA CS</title>
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/magic-bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/main.css" rel="stylesheet" type="text/css">
+    <script src="../../../js/lib/jquery-2.0.3.min.js"></script>
+    <script src="../../../js/lib/bootstrap.min.js"></script>
+    <script src="../../../js/display/general/general-display.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+  </head>
+  
+  <body data-spy="scroll" data-target="#scrollspy">
+    
+    <!-- BEGIN WRAP -->
+    <div id="wrap">
+      
+      <!-- BEGIN NAVIGATION -->
+      <nav class='navbar navbar-default' role='navigation'>
+        <div class='nav-accent'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-12'>
+              <div class='navbar-header'>
+                <button class='navbar-toggle' type='button' data-toggle='collapse' data-target='.navbar-main-collapse'>
+                  <span class='sr-only'>Toggle Navigation</span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                </button>
+                <a class='navbar-brand' href='/~forns/'>
+                  <span id='brand-text'>
+                    Andrew Forney
+                  </span>
+                </a>
+              </div>
+              
+              <div id='nav-main' class='collapse navbar-collapse navbar-main-collapse'>
+                <ul class='nav navbar-nav navbar-right'>
+                  
+                  <li>
+                    <a href='/~forns/about.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-user'></span>
+                      </div>
+                      <p class='text-center'>About</p>
+                    </a>
+                  </li>
+                  
+                  <li class='active'>
+                    <a href='/~forns/classes.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-book'></span>
+                      </div>
+                      <p class='text-center'>Classes</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/contact.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-comment'></span>
+                      </div>
+                      <p class='text-center'>Contact</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/publications.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-file'></span>
+                      </div>
+                      <p class='text-center'>Publications</p>
+                    </a>
+                  </li>
+                  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <!-- END NAVIGATION -->
+      
+      <!-- BEGIN MAIN CONTENT -->
+      <div id="main-content" class="container">
+        <div class="row">
+          
+          <!-- BEGIN SCROLLSPY -->
+          <div class='col-md-2'>
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+              <ul id='scrollspy' class="nav bs-sidenav">
+              </ul>
+            </div>
+          </div>
+          <!-- END SCROLLSPY -->
+          
+          <!-- BEGIN PRESENTATION CONTENT -->
+          <div class='col-md-10 presentation-content' role='main'>
+            <ol class="breadcrumb">
+              <li><a href="../../../classes.html">Classes</a></li>
+              <li><a href="./cs-31.html">Fall13 CS31</a></li>
+              <li class="active">Week 5</li>
+            </ol>
+            
+            <div id='cmath' class='scrollspy-element' scrollspy-title='cmath'></div>
+            <h1>The cmath Library</h1>
+            <div>
+            </div>
+            <hr/>
+            
+            
+            <div id='arraysIntro' class='scrollspy-element' scrollspy-title='Arrays'></div>
+            <h1>Introduction to Arrays</h1>
+            <div>
+              <p>We make lists of things every day, for example:</p>
+              <ol class='indent-1'>
+                <li><p>Shopping lists are lists of storebought items.</p></li>
+                <li><p>The even integers between 0 and 100 (inclusive) is a list of 51 integers.</p></li>
+                <li><p>The list of things you can make a list out of is a list of list items... woah...</p></li>
+              </ol>
+              <p>These lists have a variety of properties.</p>
+              <ol class='indent-1'>
+                <li><p>These lists have a number of separate items that are usually of the same type.</p></li>
+                <li><p>Each item has a relative position in the list (e.g. a first item, second item, and last item on a to-do list).</p></li>
+                <li><p>The list has a length, designating the number of items that are currently on it.</p></li>
+                <li><p>If I'm writing my list on paper, I only have so much room to write, so our lists might have a maximum size.</p></li>
+              </ol>
+              <br/>
+              
+            </div>
+            <hr/>
+            
+            
+            <div id='survey' class='scrollspy-element' scrollspy-title='Discussion Survey'></div>
+            <h1>Discussion Section Survey</h1>
+            <div>
+              <p>As perfect as I'd like to think I am, it would be nice to glean a slice of reality from my captive audience.</p>
+              <p>Since we are now 5 weeks into the quarter, I'd like to hear about what you like about these discussion sections, what you don't like, and what you would like to see in the future.</p>
+              <p>To do so, I've crafted a survey that may be taken completely anonymously and will be used to guide the remainder of material I cover in the discussion sections.</p>
+            </div>
+            <hr/>
+            
+          </div>
+          <!-- END PRESENTATION CONTENT -->
+          
+          <!-- TODO: debugging + cerr -->
+          <!-- TODO: how to document functions -->
+          <!-- TODO: Arrays -->
+            <!-- TODO: example: declaring arrays -->
+            <!-- TODO: example: initializing arrays -->
+              <!-- TODO: initializing with variable n size where n is not constant -->
+              <!-- TODO: size must be known at compile time -->
+              <!-- TODO: example: accessing element of un-initialized array -->
+            <!-- TODO: example: initializing without size or array literal // look up array literal -->
+            <!-- TODO: example: getting array index values -->
+            <!-- TODO: example: getting array length -->
+            <!-- TODO: exercise: printing an array index by index -->
+            <!-- TODO: example: comparing arrays -->
+          
+        </div>
+      </div>
+      <!-- END MAIN CONTENT -->
+      
+      
+    </div>
+    <!-- END WRAPPER -->
+    
+    <!-- BEGIN FOOTER -->
+    <div id="footer">
+      <div class="container">
+        <div class="col-md-12 text-center">
+          
+        </div>
+      </div>
+    </div>
+    <!-- END FOOTER -->
+    
+  </body>
+</html>
