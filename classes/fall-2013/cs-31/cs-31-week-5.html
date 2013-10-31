@@ -367,6 +367,120 @@
     cout &lt;&lt; i[2] &lt;&lt; endl;
   }
 </pre>
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main() {
+      string s = "...awkward...";
+      if (s == "...awkward...") {
+          // Weird spacing for
+          // presentation
+          string greeting[]
+              = {"hi...", ":/"};
+      } else {
+          string greeting[]
+              = {"SUP", "&gt;:)"};
+      }
+      cout &lt;&lt; greeting[0] &lt;&lt; endl;
+      cout &lt;&lt; greeting[1] &lt;&lt; endl;
+  }
+</pre>
+              <p>You're all experts now, yes? How about a nice big exercise.</p>
+              <p class='example'>What will the following code output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main() {
+      double andrewsCandy = 5.5;
+      // I ate half of a snickers :(
+      
+      // Weird spacing for presentation
+      const int TYPE_COUNT = 3;
+      string candyTypes[]
+          = {"Snickers", "Starburst", "Banana!"};
+      
+      for (int i = 0; i &lt; andrewsCandy; i++) {
+          cout &lt;&lt; candyTypes[i % TYPE_COUNT] &lt;&lt; endl;
+          candyTypes[i % TYPE_COUNT] 
+              = candyTypes[(i+1) % TYPE_COUNT];
+      }
+  }
+</pre>
+            <hr/>
+            
+            
+            <br/>
+            <div id='arrayfuncs' class='scrollspy-element' scrollspy-title='Arrays &amp; Functions'></div>
+            <h1>Arrays &amp; Functions</h1>
+            <div>
+              <p>Of course we can use functions with arrays! Glad you asked.</p>
+              <p>There's one BIG difference between how C++ functions handle array arguments versus single variables.</p>
+              <p class='question' name='funcs-q1'>How do C++ functions pass arguments for types like int, double, and string?</p>
+              <p class='answer' name='funcs-q1'><strong>Pass by Value:</strong> meaning the function parameters are <strong>copies</strong> of the arguments.</p>
+              <p class='example'>What will the following code output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int arbitraryIntFunctionThatAddsStuff(int a);
+  
+  int main() {
+      int i = 1;
+      arbitraryIntFunctionThatAddsStuff(i);
+      
+      cout &lt;&lt; i &lt;&lt; endl;
+  }
+  
+  int arbitraryIntFunctionThatAddsStuff(int a) {
+      return a++;
+  }
+</pre>
+              <p>Now, if we wanted out function arbitraryIntFunctionThatAddsStuff to modify its argument, then we'd write:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int arbitraryIntFunctionThatAddsStuff(int& a);
+  
+  int main() {
+      int i = 1;
+      arbitraryIntFunctionThatAddsStuff(i);
+      
+      cout &lt;&lt; i &lt;&lt; endl;
+  }
+  
+  int arbitraryIntFunctionThatAddsStuff(int& a) {
+      return a++;
+  }
+</pre>
+              <p class='question' name='funcs-q1'>How do C++ functions pass arguments for arrays like int[], double[], and string[]?</p>
+              <p class='answer' name='funcs-q1'><strong>Pass by Reference:</strong> meaning the function parameters are <strong>nicknames</strong> for the argument; they refer to the same array.</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int arbitraryArrayFunctionThatAddsStuff(int a[]);
+  
+  int main() {
+      int i[] = {1, 2};
+      arbitraryArrayFunctionThatAddsStuff(i);
+      
+      cout &lt;&lt; i[0] &lt;&lt; endl;
+  }
+  
+  int arbitraryArrayFunctionThatAddsStuff(int a[]) {
+      return a[0]++;
+  }
+</pre>
+            </div>
             <hr/>
             
             
@@ -404,7 +518,6 @@
             <!-- TODO: Functions using Arrays f(int a[]) anything defining the size of a is ignored -->
             <!-- TODO: Arrays are kinda passed by reference -- NOT copied (actually pointers to where the argument lives) -->
             <!-- TODO: CANNOT find the length of an array a as an argument from the name a alone -->
-          <!-- TODO: Multi-dimensional arrays -->
           
         </div>
       </div>
