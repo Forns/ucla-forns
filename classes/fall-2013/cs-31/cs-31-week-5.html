@@ -122,15 +122,41 @@
                 <li><p>The even integers between 0 and 100 (inclusive) is a list of 51 integers.</p></li>
                 <li><p>The list of things you can make a list out of is a list of list items... woah...</p></li>
               </ol>
-              <p>These lists have a variety of properties.</p>
-              <ol class='indent-1'>
-                <li><p>These lists have a number of separate items that are usually of the same type.</p></li>
-                <li><p>Each item has a relative position in the list (e.g. a first item, second item, and last item on a to-do list).</p></li>
-                <li><p>The list has a length, designating the number of items that are currently on it.</p></li>
-                <li><p>If I'm writing my list on paper, I only have so much room to write, so our lists might have a maximum size.</p></li>
-              </ol>
+              <!-- TODO: todo list--clone self for office hours -->
+              <p class='question' name='arrays-q1'>What kind of properties do these lists have?</p>
+              <div class='answer' name='arrays-q1'>
+                <ol class='indent-1'>
+                  <li><p>These lists have a number of separate items that are usually of the same type.</p></li>
+                  <li><p>Each item has a relative position in the list (e.g. a first item, second item, and last item on a to-do list).</p></li>
+                  <li><p>If I'm writing my list on paper, I only have so much room to write, so our lists might have a maximum size.</p></li>
+                </ol>
+              </div>
               <br/>
-              
+              <p>But wait! It was an elaborate ruse! I was talking about <strong>C++ arrays</strong> this whole time! (kinda)</p>
+              <p class='toolkit'>An <strong>array</strong> in C++ is a list of a particular type of variable. It has a specific amount of space assigned to it, and indexes its items starting at 0.</p>
+              <p class='toolkit'>
+                We declare arrays using the following syntax:<br/>
+                &lt;type&gt; &lt;name&gt;[size];
+              </p>
+              <p>Notice that I define a value size within my array declaration that decides how big I want it to be.</p>
+              <p>What do I mean by &quot;how big?&quot;</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main() {
+      // An array called i
+      // that can hold 3 ints
+      int i[3];
+      
+      // An array of called
+      // yarn that can hold 2 strings
+      string yarn[2];
+  }
+</pre>
+              <p>So, when I declare an array with a given size, I'm saying:</p>
+              <p>&quot;Dearest computer, please make sure there's space somewhere for a list of &lt;size&gt; &lt;type&gt; variables. -Love, Andrew&quot;</p>
             </div>
             <hr/>
             
@@ -149,6 +175,7 @@
           
           <!-- TODO: debugging + cerr -->
           <!-- TODO: how to document functions -->
+          <!-- TODO: Casting (static casts) -->
           <!-- TODO: Arrays -->
             <!-- TODO: example: declaring arrays -->
             <!-- TODO: example: initializing arrays -->
@@ -157,9 +184,14 @@
               <!-- TODO: example: accessing element of un-initialized array -->
             <!-- TODO: example: initializing without size or array literal // look up array literal -->
             <!-- TODO: example: getting array index values -->
-            <!-- TODO: example: getting array length -->
             <!-- TODO: exercise: printing an array index by index -->
             <!-- TODO: example: comparing arrays -->
+            <!-- TODO: example: passing a const  -->
+          <!-- TODO: Functions using Arrays -->
+            <!-- TODO: Functions using Arrays f(int a[]) anything defining the size of a is ignored -->
+            <!-- TODO: Arrays are kinda passed by reference -- NOT copied (actually pointers to where the argument lives) -->
+            <!-- TODO: CANNOT find the length of an array a as an argument from the name a alone -->
+          <!-- TODO: Multi-dimensional arrays -->
           
         </div>
       </div>
