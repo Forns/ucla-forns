@@ -106,14 +106,8 @@
               <li class="active">Week 5</li>
             </ol>
             
-            <div id='cmath' class='scrollspy-element' scrollspy-title='cmath'></div>
-            <h1>The cmath Library</h1>
-            <div>
-            </div>
-            <hr/>
             
-            
-            <div id='arraysIntro' class='scrollspy-element' scrollspy-title='Arrays'></div>
+            <div id='arraysIntro' class='scrollspy-element' scrollspy-title='Introduction'></div>
             <h1>Introduction to Arrays</h1>
             <div>
               <p>We make lists of things every day, for example:</p>
@@ -122,6 +116,10 @@
                 <li><p>The even integers between 0 and 100 (inclusive) is a list of 51 integers.</p></li>
                 <li><p>The list of things you can make a list out of is a list of list items... woah...</p></li>
               </ol>
+              <p>Here's a typical to-do list for me:</p>
+              <div class='text-center'>
+                <img src='../../../assets/images/fall-2013/cs-31/week-5/arrays0.png' />
+              </div>
               <!-- TODO: todo list--clone self for office hours -->
               <p class='question' name='arrays-q1'>What kind of properties do these lists have?</p>
               <div class='answer' name='arrays-q1'>
@@ -139,6 +137,7 @@
                 &lt;type&gt; &lt;name&gt;[size];
               </p>
               <p>Notice that I define a value size within my array declaration that decides how big I want it to be.</p>
+              <p class='debug'>Note: The value we declare for size MUST be a CONSTANT at compile time.</p>
               <p>What do I mean by &quot;how big?&quot;</p>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
@@ -157,16 +156,230 @@
 </pre>
               <p>So, when I declare an array with a given size, I'm saying:</p>
               <p>&quot;Dearest computer, please make sure there's space somewhere for a list of &lt;size&gt; &lt;type&gt; variables. -Love, Andrew&quot;</p>
+              <p>So, here's what the above statement, <code class='prettyprint'>int i[3];</code> looks like:</p>
+              <div class='text-center'>
+                <img src='../../../assets/images/fall-2013/cs-31/week-5/arrays1.png' />
+              </div>
+              <p>Cool boxes, Andrew! Thanks, I know.</p>
+              <p>But how do we access those boxes?</p>
+              <p class='toolkit'>
+                We can access the elements of an array by the index at which each is defined.<br/>
+                For example, to access the element in the <strong>second</strong> box of i, I would say i[1]; (remember indexes start at 0).
+              </p>
+              <p>Let's look at a bunch of examples with declarations.</p>
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+    int i[3];
+    cout &lt;&lt; i[1] &lt;&lt; endl;
+  }
+</pre>
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+    string yarn[2];
+    cout &lt;&lt; yarn[1] &lt;&lt; endl;
+  }
+</pre>
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+    int flimsySize = 3;
+    int i[flimsySize];
+    cout &lt;&lt; i[1] &lt;&lt; endl;
+  }
+</pre>
+              <p class='question' name='arrays-q2'>How could I make the above compile while still using flimsySize?</p>
+              <p class='answer' name='arrays-q2'>Make flimsySize a constant; e.g., <code class='prettyprint'>const int FLIMSY_SIZE = 3;</code></p>
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+    // Apple of my pi
+    int apple[3.14];
+    cout &lt;&lt; apple[1] &lt;&lt; endl;
+  }
+</pre>
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+    int i[];
+    // Please compiler, I promise I'll
+    // deal with i later ;_;
+  }
+</pre>
+              <p>Some notes from the above examples:</p>
+              <ul class='indent-1'>
+                <li><p>Array sizes must be defined at compile time and must be constant.</p></li>
+                <li><p>Arrays of built-in types, if not initialized, will have indeterminate values in their storage.</p></li>
+                <li><p>Arrays of strings, if not initialized, will have empty strings in their storage.</p></li>
+              </ul>
             </div>
             <hr/>
             
             
+            <br/>
+            <div id='initializing' class='scrollspy-element' scrollspy-title='Initializing Arrays'></div>
+            <h1>Initializing Arrays</h1>
+            <div>
+              <p>So far we've talked about just declaring arrays, but that's dull; what if we want to give them values?</p>
+              <p class='toolkit'>
+                We can initialize arrays using the following syntax:<br/>
+                &lt;type&gt; &lt;name&gt;[&lt;size (optional)&gt;] = {&lt;value0&gt;, &lt;value1&gt;, ...};
+              </p>
+              <p>For example, I can initialize i with the values {1, 2, 3}:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+    int i[] = {1, 2, 3};
+  
+    cout &lt;&lt; i[0] &lt;&lt; endl;
+    cout &lt;&lt; i[1] &lt;&lt; endl;
+    cout &lt;&lt; i[2] &lt;&lt; endl;
+  }
+</pre>
+              <p>But wait a second... I didn't tell my compiler how much space I wanted to reserve for i...</p>
+              <p>Is my compiler going to break my legs for this offense?</p>
+              <p class='toolkit'>As long as you initialize an array at declaration, you do not need to specify the size; it will match the dimension of the initialization.</p>
+              <p>Some examples:</p>
+            </div>
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+    int i[3] = {1, 2, 3};
+  
+    cout &lt;&lt; i[0] &lt;&lt; endl;
+    cout &lt;&lt; i[1] &lt;&lt; endl;
+    cout &lt;&lt; i[2] &lt;&lt; endl;
+  }
+</pre>
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+    int i[4] = {5, 5, 5};
+  
+    cout &lt;&lt; i[0] &lt;&lt; endl;
+    cout &lt;&lt; i[1] &lt;&lt; endl;
+    cout &lt;&lt; i[2] &lt;&lt; endl;
+    // What's in here? :O
+    cout &lt;&lt; i[3] &lt;&lt; endl;
+  }
+</pre>
+              <p>A depiction of the above:</p>
+              <div class='text-center'>
+                <img src='../../../assets/images/fall-2013/cs-31/week-5/arrays2.png' />
+              </div>
+              <p>So, as you see, it's still fine to save more room for more stuff in an array that I initialize to a smaller array of values.</p>
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+    int i[2] = {1, 2, 3};
+  
+    cout &lt;&lt; i[0] &lt;&lt; endl;
+    cout &lt;&lt; i[1] &lt;&lt; endl;
+  }
+</pre>
+              <p>The same thing would happen if I tried to add another list item to my todo-list paper of limited size:</p>
+              <div class='text-center'>
+                <img src='../../../assets/images/fall-2013/cs-31/week-5/arrays3.png' />
+              </div>
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+    int i[3];
+    i = {104, 101, 121};
+  
+    cout &lt;&lt; i[0] &lt;&lt; endl;
+    cout &lt;&lt; i[1] &lt;&lt; endl;
+    cout &lt;&lt; i[2] &lt;&lt; endl;
+  }
+</pre>
+              <p>Weird right? It looks like it should work, but the initialization syntax is special at declaration.</p>
+              <p>That said, we can individually assign values to array elements.</p>
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+    int i[3];
+    i[0] = 1;
+    i[2] = 2;
+    i[1] = 0;
+  
+    cout &lt;&lt; i[0] &lt;&lt; endl;
+    cout &lt;&lt; i[1] &lt;&lt; endl;
+    cout &lt;&lt; i[2] &lt;&lt; endl;
+  }
+</pre>
+              
+              <p>Type coercion works the same way with arrays as it does with variables (pretty much):</p>
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+    char i[3] = {104, 101, 121};
+  
+    cout &lt;&lt; i[0] &lt;&lt; endl;
+    cout &lt;&lt; i[1] &lt;&lt; endl;
+    cout &lt;&lt; i[2] &lt;&lt; endl;
+  }
+</pre>
+            <hr/>
+            
+            
+            <br/>
             <div id='survey' class='scrollspy-element' scrollspy-title='Discussion Survey'></div>
             <h1>Discussion Section Survey</h1>
             <div>
               <p>As perfect as I'd like to think I am, it would be nice to glean a slice of reality from my captive audience.</p>
               <p>Since we are now 5 weeks into the quarter, I'd like to hear about what you like about these discussion sections, what you don't like, and what you would like to see in the future.</p>
               <p>To do so, I've crafted a survey that may be taken completely anonymously and will be used to guide the remainder of material I cover in the discussion sections.</p>
+              <a href="https://www.surveymonkey.com/s/BX7MMS3" target="_blank">
+                <span class='glyphicon glyphicon-hand-right'></span> &nbsp;Click here to take survey
+              </a>
             </div>
             <hr/>
             
