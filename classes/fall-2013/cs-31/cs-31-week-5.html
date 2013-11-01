@@ -109,19 +109,41 @@
             <div id='review' class='scrollspy-element' scrollspy-title='Review'></div>
             <h1>Questions from Week 4</h1>
             <div>
-              <p><strong>What is <code class='prettyprint'>cerr</code>?</strong></p>
+              <p><strong>Q: </strong>What is <code class='prettyprint'>cerr</code>?</p>
               <p>A: Well, just another output stream that is typically used for sending error messages to some output.</p>
               <p>By default, <code class='prettyprint'>cerr</code> is directed at the &quot;standard output stream&quot;, which is why we see its output in the console.</p>
               <p>For the purposes of our assignments, use <code class='prettyprint'>cerr</code> if you want to print something ignored by our grading suite, and <code class='prettyprint'>cout</code> otherwise.</p>
               <br/>
               <p><strong>Q:</strong> How should I be commenting my functions?</p>
               <p>A: Style is important with commenting, but the bottom line is: say what you need to say for a user who knows how to program but might not know what your function does... and say it concisely.</p>
-              <p class='example'>Here's an example of really strong function commenting:</p>
-              
+              <p class='example'>Here's an example of really thorough function commenting:</p>
+<pre class='prettyprint'>
+  // Returns the reverse of the input string
+  // Parameters:
+  //   string fortune: the string to be reversed
+  //   (not modified)
+  // Returns:
+  //   string fortune: the reversed string
+  string reversalOfFortune (string fortune) {
+      for (int i = 0; i &lt; fortune.length() / 2; i++) {
+          char holder = fortune[i];
+          // Weird spacing for presentation
+          fortune[i] 
+              = fortune[fortune.length() - i - 1];
+          fortune[fortune.length() - i - 1] = holder;
+      }
+      return fortune;
+  }
+</pre>
+              <p>Now, in the above simple function, that might be a little verbose, but it's decent practice to get into for later.</p>
+              <p>The first line of the function comment would likely be sufficient for this class' function signatures:</p>
+              <p><code class='prettyprint'>// Returns the reverse of the input string</code></p>
+              <p>NB, there's a nice layout of Google's C++ Styling guide <a href='http://google-styleguide.googlecode.com/svn/trunk/cppguide.xml' target='_blank'>located here</a>.</p>
             </div>
             <hr/>
             
             
+            <br/>
             <div id='arraysIntro' class='scrollspy-element' scrollspy-title='Introduction'></div>
             <h1>Introduction to Arrays</h1>
             <div>
@@ -135,7 +157,6 @@
               <div class='text-center'>
                 <img src='../../../assets/images/fall-2013/cs-31/week-5/arrays0.png' />
               </div>
-              <!-- TODO: todo list--clone self for office hours -->
               <p class='question' name='arrays-q1'>What kind of properties do these lists have?</p>
               <div class='answer' name='arrays-q1'>
                 <ol class='indent-1'>
@@ -610,17 +631,41 @@
       }
   }
 </pre>
+            <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+    
+  void yallPlusOne (int yall[], int n);
+  
+  int main () {
+      int i[] = {1, 2, 3};
+      // argument i has 3 elements...
+      yallPlusOne(i, 3);
+      cout &lt;&lt; i[0] &lt;&lt; endl;
+      cout &lt;&lt; i[1] &lt;&lt; endl;
+      cout &lt;&lt; i[2] &lt;&lt; endl;
+  }
+  
+  // ...but the parameter lists size 2 0_o
+  void yallPlusOne (int a[2], int n) {
+      for (int i = 0; i &lt; n; i++) {
+          a[i]++;
+      }
+  }
+</pre>
             <br/>
             <p>Now, when dealing with arrays, it's helpful to have some... well, helper functions. Let's write a couple.</p>
-            <p class='example'>Design a function intArrayPrint that does nothing but print the comma and space-separated values of the first n values of an array of ints.</p>
+            <p class='example'>Design a function stringArrayPrint that does nothing but print the comma and space-separated values of the first n values of an array of strings.</p>
 <pre class='prettyprint'>
   ...
-  int i[] = {1, 2, 3};
-  intArrayPrint(i, 3);
+  string s[] = {"print", "me", "NOW"};
+  stringArrayPrint(s, 3);
   // Above will print out:
-  // {1, 2, 3}
+  // {"print", "me", "NOW"}
   
-  intArrayPrint(i, 0);
+  stringArrayPrint(s, 0);
   // Above will print out:
   // {}
   ...
@@ -647,14 +692,62 @@
             <h1>Arrays of Strings</h1>
             <div>
               <p class='definition'>For the purposes of this section, &quot;strings&quot; refer to the C++ std strings.</p>
+              <p class='debug'>Note: For the present section, we'll ignore any reference to strings being null terminated. Wait for a later lecture on that...</p>
               <p>What is special about arrays of strings?</p>
               <p>Well, think about what strings actually are...</p>
               <p class='question' name='strings-q1'>In terms of arrays, what are strings?</p>
               <p class='answer' name='strings-q1'>Strings are, for the purposes of the current discussion, an array of characters.</p>
               <p>Take the following for example:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+    
+  int main () {
+      string hola = "hi!";
+      string greets[] = {"howdy", "bonjour", "hallo"}; 
+  }
+</pre>
+            <p>Just as we consider hola[0] to give us the character of hola at index 0, how can we grab a character from a string array item?</p>
+            <p class='toolkit'>
+              Thinking about strings as arrays of characters means that an array of strings is an array of an array of characters!<br/>
+              As such, we can access the j-th character of an i-th string in an array via the syntax:<br/>
+              stringArray[i][j];
+            </p>
+              <p>Here's a small example:</p>
+              <p class='example'>What does the following code segment output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+    
+  int main () {
+      string greets[] = {"howdy", "bonjour", "hallo"};
+      greets[1][0] = 'B';
+      cout &lt;&lt; greets[1] &lt;&lt; endl;
+      cout &lt;&lt; greets[2][4] &lt;&lt; endl;
+  }
+</pre>
+              <p>Finally, let's try one giant array, string, function exercise to drive it home.</p>
+              <p class='example'>
+                Design a function called echoyCapitalz that takes in an array of strings (and its length), and capitalizes every i-th 
+                letter in each array string, where i is the (index + 1) of the string in the array. Make this function a void mutator.<br/><br/>
+                For example, the string at index 0 of the input will have every letter capitalized, the string at index 1 will have every other letter capitalized, etc.
+              </p>
+              <p>Some test cases for the function:</p>
+<pre class='prettyprint'>
+  string s[] = {"this", "example", "is lame"};
+  echoyCapitalz(s, 3);
+  
+  // Use our stringArrayPrint from before
+  stringArrayPrint(s);
+  // Above will print out:
+  // {"THIS", "ExAmPlE", "Is LamE"}
+</pre>
             </div>
             <hr/>
-              
+            
+            
             <br/>
             <div id='survey' class='scrollspy-element' scrollspy-title='Discussion Survey'></div>
             <h1>Discussion Section Survey</h1>
