@@ -106,6 +106,21 @@
               <li class="active">Week 5</li>
             </ol>
             
+            <div id='review' class='scrollspy-element' scrollspy-title='Review'></div>
+            <h1>Questions from Week 4</h1>
+            <div>
+              <p><strong>What is <code class='prettyprint'>cerr</code>?</strong></p>
+              <p>A: Well, just another output stream that is typically used for sending error messages to some output.</p>
+              <p>By default, <code class='prettyprint'>cerr</code> is directed at the &quot;standard output stream&quot;, which is why we see its output in the console.</p>
+              <p>For the purposes of our assignments, use <code class='prettyprint'>cerr</code> if you want to print something ignored by our grading suite, and <code class='prettyprint'>cout</code> otherwise.</p>
+              <br/>
+              <p><strong>Q:</strong> How should I be commenting my functions?</p>
+              <p>A: Style is important with commenting, but the bottom line is: say what you need to say for a user who knows how to program but might not know what your function does... and say it concisely.</p>
+              <p class='example'>Here's an example of really strong function commenting:</p>
+              
+            </div>
+            <hr/>
+            
             
             <div id='arraysIntro' class='scrollspy-element' scrollspy-title='Introduction'></div>
             <h1>Introduction to Arrays</h1>
@@ -160,7 +175,7 @@
               <div class='text-center'>
                 <img src='../../../assets/images/fall-2013/cs-31/week-5/arrays1.png' />
               </div>
-              <p>Cool boxes, Andrew! Thanks, I know.</p>
+              <p>Cool boxes, Andrew! Thanks, I drew them by hand.</p>
               <p>But how do we access those boxes?</p>
               <p class='toolkit'>
                 We can access the elements of an array by the index at which each is defined.<br/>
@@ -174,8 +189,8 @@
   using namespace std;
   
   int main () {
-    int i[3];
-    cout &lt;&lt; i[1] &lt;&lt; endl;
+      int i[3];
+      cout &lt;&lt; i[1] &lt;&lt; endl;
   }
 </pre>
               <p class='debug'>Will the following code compile? If so, what will it output?</p>
@@ -185,8 +200,8 @@
   using namespace std;
   
   int main () {
-    string yarn[2];
-    cout &lt;&lt; yarn[1] &lt;&lt; endl;
+      string yarn[2];
+      cout &lt;&lt; yarn[1] &lt;&lt; endl;
   }
 </pre>
               <p class='debug'>Will the following code compile? If so, what will it output?</p>
@@ -196,9 +211,9 @@
   using namespace std;
   
   int main () {
-    int flimsySize = 3;
-    int i[flimsySize];
-    cout &lt;&lt; i[1] &lt;&lt; endl;
+      int flimsySize = 3;
+      int i[flimsySize];
+      cout &lt;&lt; i[1] &lt;&lt; endl;
   }
 </pre>
               <p class='question' name='arrays-q2'>How could I make the above compile while still using flimsySize?</p>
@@ -210,9 +225,9 @@
   using namespace std;
   
   int main () {
-    // Apple of my pi
-    int apple[3.14];
-    cout &lt;&lt; apple[1] &lt;&lt; endl;
+      // Apple of my pi
+      int apple[3.14];
+      cout &lt;&lt; apple[1] &lt;&lt; endl;
   }
 </pre>
               <p class='debug'>Will the following code compile? If so, what will it output?</p>
@@ -222,9 +237,9 @@
   using namespace std;
   
   int main () {
-    int i[];
-    // Please compiler, I promise I'll
-    // deal with i later ;_;
+      int i[];
+      // Please compiler, I promise I'll
+      // deal with i later ;_;
   }
 </pre>
               <p>Some notes from the above examples:</p>
@@ -253,11 +268,11 @@
   using namespace std;
   
   int main () {
-    int i[] = {1, 2, 3};
-  
-    cout &lt;&lt; i[0] &lt;&lt; endl;
-    cout &lt;&lt; i[1] &lt;&lt; endl;
-    cout &lt;&lt; i[2] &lt;&lt; endl;
+      int i[] = {1, 2, 3};
+    
+      cout &lt;&lt; i[0] &lt;&lt; endl;
+      cout &lt;&lt; i[1] &lt;&lt; endl;
+      cout &lt;&lt; i[2] &lt;&lt; endl;
   }
 </pre>
               <p>But wait a second... I didn't tell my compiler how much space I wanted to reserve for i...</p>
@@ -272,11 +287,11 @@
   using namespace std;
   
   int main () {
-    int i[3] = {1, 2, 3};
-  
-    cout &lt;&lt; i[0] &lt;&lt; endl;
-    cout &lt;&lt; i[1] &lt;&lt; endl;
-    cout &lt;&lt; i[2] &lt;&lt; endl;
+      int i[3] = {1, 2, 3};
+    
+      cout &lt;&lt; i[0] &lt;&lt; endl;
+      cout &lt;&lt; i[1] &lt;&lt; endl;
+      cout &lt;&lt; i[2] &lt;&lt; endl;
   }
 </pre>
               <p class='debug'>Will the following code compile? If so, what will it output?</p>
@@ -286,13 +301,13 @@
   using namespace std;
   
   int main () {
-    int i[4] = {5, 5, 5};
-  
-    cout &lt;&lt; i[0] &lt;&lt; endl;
-    cout &lt;&lt; i[1] &lt;&lt; endl;
-    cout &lt;&lt; i[2] &lt;&lt; endl;
-    // What's in here? :O
-    cout &lt;&lt; i[3] &lt;&lt; endl;
+      int i[4] = {5, 5, 5};
+    
+      cout &lt;&lt; i[0] &lt;&lt; endl;
+      cout &lt;&lt; i[1] &lt;&lt; endl;
+      cout &lt;&lt; i[2] &lt;&lt; endl;
+      // What's in here? :O
+      cout &lt;&lt; i[3] &lt;&lt; endl;
   }
 </pre>
               <p>A depiction of the above:</p>
@@ -307,10 +322,10 @@
   using namespace std;
   
   int main () {
-    int i[2] = {1, 2, 3};
-  
-    cout &lt;&lt; i[0] &lt;&lt; endl;
-    cout &lt;&lt; i[1] &lt;&lt; endl;
+      int i[2] = {1, 2, 3};
+    
+      cout &lt;&lt; i[0] &lt;&lt; endl;
+      cout &lt;&lt; i[1] &lt;&lt; endl;
   }
 </pre>
               <p>The same thing would happen if I tried to add another list item to my todo-list paper of limited size:</p>
@@ -324,12 +339,12 @@
   using namespace std;
   
   int main () {
-    int i[3];
-    i = {104, 101, 121};
-  
-    cout &lt;&lt; i[0] &lt;&lt; endl;
-    cout &lt;&lt; i[1] &lt;&lt; endl;
-    cout &lt;&lt; i[2] &lt;&lt; endl;
+      int i[3];
+      i = {104, 101, 121};
+    
+      cout &lt;&lt; i[0] &lt;&lt; endl;
+      cout &lt;&lt; i[1] &lt;&lt; endl;
+      cout &lt;&lt; i[2] &lt;&lt; endl;
   }
 </pre>
               <p>Weird right? It looks like it should work, but the initialization syntax is special at declaration.</p>
@@ -341,17 +356,52 @@
   using namespace std;
   
   int main () {
-    int i[3];
-    i[0] = 1;
-    i[2] = 2;
-    i[1] = 0;
-  
-    cout &lt;&lt; i[0] &lt;&lt; endl;
-    cout &lt;&lt; i[1] &lt;&lt; endl;
-    cout &lt;&lt; i[2] &lt;&lt; endl;
+      int i[3];
+      i[0] = 1;
+      i[2] = 2;
+      i[1] = 0;
+    
+      cout &lt;&lt; i[0] &lt;&lt; endl;
+      cout &lt;&lt; i[1] &lt;&lt; endl;
+      cout &lt;&lt; i[2] &lt;&lt; endl;
   }
 </pre>
-              
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+    
+  int main () {
+      int i[3];
+      i[0] = 1;
+      i[2] = 2;
+      i[1] = 0;
+      // &gt;_&gt; &lt;_&lt;
+      i[4] = 3;
+      
+      cout &lt;&lt; i[0] &lt;&lt; endl;
+      cout &lt;&lt; i[1] &lt;&lt; endl;
+      cout &lt;&lt; i[2] &lt;&lt; endl;
+      cout &lt;&lt; i[4] &lt;&lt; endl;
+  }
+</pre>
+              <p class='toolkit'>Note, I can declare constant arrays just like I would a variable:</p>
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+    
+  int main () {
+    const int IT[3] = {1, 2, 3};
+  
+    // Am... am I allowed to touch
+    // IT compiler?
+    IT[1] = 5000;
+    cout &lt;&lt; IT[1] &lt;&lt; endl;
+  }
+</pre>
               <p>Type coercion works the same way with arrays as it does with variables (pretty much):</p>
               <p class='debug'>Will the following code compile? If so, what will it output?</p>
 <pre class='prettyprint'>
@@ -460,8 +510,8 @@
       return a++;
   }
 </pre>
-              <p class='question' name='funcs-q1'>How do C++ functions pass arguments for arrays like int[], double[], and string[]?</p>
-              <p class='answer' name='funcs-q1'><strong>Pass by Reference:</strong> meaning the function parameters are <strong>nicknames</strong> for the argument; they refer to the same array.</p>
+              <p class='question' name='funcs-q2'>How do C++ functions pass arguments for arrays like int[], double[], and string[]?</p>
+              <p class='answer' name='funcs-q2'><strong>Pass by Reference:</strong> meaning the function parameters are <strong>nicknames</strong> for the argument; they refer to the same array.</p>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
   #include &lt;string&gt;
@@ -481,9 +531,130 @@
   }
 </pre>
             </div>
+            <p>Notice that I don't have to put the <code class='prettyprint'>&amp;</code> in my parameter <code class='prettyprint'>a</code>.</p>
+            <p>So, what does this look like pictorially? We can look at it in terms of scope:</p>
+            <div class='text-center fit-pres'>
+              <img src='../../../assets/images/fall-2013/cs-31/week-5/arrays4.png' />
+            </div>
+            <br/>
+            <p>So knowing this, how can I make functions that don't touch the original array?</p>
+            <p>Well, if I want to be <strong>extra</strong> safe, then I can declare parameters constant, even though what I pass in is not a constant:</p>
+            <p class='example'>What would the following code segment output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+    
+  int noTouchySum (const int a[], int n);
+  
+  int main () {
+      int i[] = {1, 2, 3};
+      int j = noTouchySum (i, 3);
+      cout &lt;&lt; j &lt;&lt; endl;
+  }
+  
+  int noTouchySum (const int a[], int n) {
+      // Potential hazard with negative input n
+      int result = 0;
+      for (int i = 0; i &lt; n; i++) {
+          result += a[i];
+      }
+      return result;
+  }
+</pre>
+            <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+    
+  int noTouchySum (const int a[], int n);
+  
+  int main () {
+      // Passing in the {...}
+      // notated &quot;array&quot;...
+      int j = noTouchySum ({1, 2, 3}, 3);
+      cout &lt;&lt; j &lt;&lt; endl;
+  }
+  
+  int noTouchySum (const int a[], int n) {
+      // Potential hazard with negative input n
+      int result = 0;
+      for (int i = 0; i &lt; n; i++) {
+         result += a[i];
+      }
+      return result;
+  }
+</pre>
+            <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+    
+  void yallPlusOne (int yall[], int n);
+  
+  int main () {
+      const int i[] = {1, 2, 3};
+      // argument i is constant...
+      yallPlusOne(i, 3);
+      cout &lt;&lt; i[0] &lt;&lt; endl;
+      cout &lt;&lt; i[1] &lt;&lt; endl;
+      cout &lt;&lt; i[2] &lt;&lt; endl;
+  }
+  
+  // ...but the parameter a isn't
+  void yallPlusOne (int a[], int n) {
+      for (int i = 0; i &lt; n; i++) {
+          a[i]++;
+      }
+  }
+</pre>
+            <br/>
+            <p>Now, when dealing with arrays, it's helpful to have some... well, helper functions. Let's write a couple.</p>
+            <p class='example'>Design a function intArrayPrint that does nothing but print the comma and space-separated values of the first n values of an array of ints.</p>
+<pre class='prettyprint'>
+  ...
+  int i[] = {1, 2, 3};
+  intArrayPrint(i, 3);
+  // Above will print out:
+  // {1, 2, 3}
+  
+  intArrayPrint(i, 0);
+  // Above will print out:
+  // {}
+  ...
+</pre>
+            <p class='example'>Design a function intArraysEqual that compares n items starting at an index (called start) of two int arrays and determines (via bool return) if they are equivalent.</p>
+<pre class='prettyprint'>
+  ...
+  int i[] = {1, 2, 3};
+  int j[] = {0, 2, 3, 4, 5};
+  cout &lt;&lt; intArraysEqual(i, j, 1, 2);
+  // Above will print out: 1
+  // because {2, 3} == {2, 3}
+  
+  cout &lt;&lt; intArraysEqual(i, j, 0, 2);
+  // Above will print out: 0
+  // because {1, 2} != {0, 2}
+  ...
+</pre>
             <hr/>
             
             
+            <br/>
+            <div id='stringarrays' class='scrollspy-element' scrollspy-title='String Arrays'></div>
+            <h1>Arrays of Strings</h1>
+            <div>
+              <p class='definition'>For the purposes of this section, &quot;strings&quot; refer to the C++ std strings.</p>
+              <p>What is special about arrays of strings?</p>
+              <p>Well, think about what strings actually are...</p>
+              <p class='question' name='strings-q1'>In terms of arrays, what are strings?</p>
+              <p class='answer' name='strings-q1'>Strings are, for the purposes of the current discussion, an array of characters.</p>
+              <p>Take the following for example:</p>
+            </div>
+            <hr/>
+              
             <br/>
             <div id='survey' class='scrollspy-element' scrollspy-title='Discussion Survey'></div>
             <h1>Discussion Section Survey</h1>
@@ -492,8 +663,10 @@
               <p>Since we are now 5 weeks into the quarter, I'd like to hear about what you like about these discussion sections, what you don't like, and what you would like to see in the future.</p>
               <p>To do so, I've crafted a survey that may be taken completely anonymously and will be used to guide the remainder of material I cover in the discussion sections.</p>
               <a href="https://www.surveymonkey.com/s/BX7MMS3" target="_blank">
-                <span class='glyphicon glyphicon-hand-right'></span> &nbsp;Click here to take survey
+                <p><span class='glyphicon glyphicon-hand-right'></span> &nbsp;Click here to take survey</p>
               </a>
+              <p class='definition'>I will review responses on Wednesday, 11/6/13, if you could fill out a survey by then.</p>
+              <p>Thank you!</p>
             </div>
             <hr/>
             
@@ -504,13 +677,6 @@
           <!-- TODO: how to document functions -->
           <!-- TODO: Casting (static casts) -->
           <!-- TODO: Arrays -->
-            <!-- TODO: example: declaring arrays -->
-            <!-- TODO: example: initializing arrays -->
-              <!-- TODO: initializing with variable n size where n is not constant -->
-              <!-- TODO: size must be known at compile time -->
-              <!-- TODO: example: accessing element of un-initialized array -->
-            <!-- TODO: example: initializing without size or array literal // look up array literal -->
-            <!-- TODO: example: getting array index values -->
             <!-- TODO: exercise: printing an array index by index -->
             <!-- TODO: example: comparing arrays -->
             <!-- TODO: example: passing a const  -->
