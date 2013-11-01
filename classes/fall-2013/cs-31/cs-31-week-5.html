@@ -111,12 +111,12 @@
             <div>
               <p><strong>Q: </strong>What is <code class='prettyprint'>cerr</code>?</p>
               <p>A: Well, just another output stream that is typically used for sending error messages to some output.</p>
-              <p>By default, <code class='prettyprint'>cerr</code> is directed at the &quot;standard output stream&quot;, which is why we see its output in the console.</p>
+              <p>By default, <code class='prettyprint'>cerr</code> is directed at the &quot;standard error stream&quot;, which is why we see its output in the console.</p>
               <p>For the purposes of our assignments, use <code class='prettyprint'>cerr</code> if you want to print something ignored by our grading suite, and <code class='prettyprint'>cout</code> otherwise.</p>
               <br/>
               <p><strong>Q:</strong> How should I be commenting my functions?</p>
               <p>A: Style is important with commenting, but the bottom line is: say what you need to say for a user who knows how to program but might not know what your function does... and say it concisely.</p>
-              <p class='example'>Here's an example of really thorough function commenting:</p>
+              <p class='example'>Here's an example of really thorough (perhaps to excess) function commenting:</p>
 <pre class='prettyprint'>
   // Returns the reverse of the input string
   // Parameters:
@@ -128,6 +128,8 @@
       for (int i = 0; i &lt; fortune.length() / 2; i++) {
           char holder = fortune[i];
           // Weird spacing for presentation
+          // Swap chars at either end of the
+          // fortune string
           fortune[i] 
               = fortune[fortune.length() - i - 1];
           fortune[fortune.length() - i - 1] = holder;
@@ -444,7 +446,7 @@
   #include &lt;string&gt;
   using namespace std;
   
-  int main() {
+  int main () {
       string s = "...awkward...";
       if (s == "...awkward...") {
           // Weird spacing for
@@ -466,7 +468,7 @@
   #include &lt;string&gt;
   using namespace std;
   
-  int main() {
+  int main () {
       double andrewsCandy = 5.5;
       // I ate half of a snickers :(
       
@@ -499,16 +501,16 @@
   #include &lt;string&gt;
   using namespace std;
   
-  int arbitraryIntFunctionThatAddsStuff(int a);
+  int arbitraryIntFunctionThatAddsStuff (int a);
   
-  int main() {
+  int main () {
       int i = 1;
       arbitraryIntFunctionThatAddsStuff(i);
       
       cout &lt;&lt; i &lt;&lt; endl;
   }
   
-  int arbitraryIntFunctionThatAddsStuff(int a) {
+  int arbitraryIntFunctionThatAddsStuff (int a) {
       return a++;
   }
 </pre>
@@ -518,36 +520,36 @@
   #include &lt;string&gt;
   using namespace std;
   
-  int arbitraryIntFunctionThatAddsStuff(int& a);
+  int arbitraryIntFunctionThatAddsStuff (int& a);
   
-  int main() {
+  int main () {
       int i = 1;
       arbitraryIntFunctionThatAddsStuff(i);
       
       cout &lt;&lt; i &lt;&lt; endl;
   }
   
-  int arbitraryIntFunctionThatAddsStuff(int& a) {
+  int arbitraryIntFunctionThatAddsStuff (int& a) {
       return a++;
   }
 </pre>
               <p class='question' name='funcs-q2'>How do C++ functions pass arguments for arrays like int[], double[], and string[]?</p>
-              <p class='answer' name='funcs-q2'><strong>Pass by Reference:</strong> meaning the function parameters are <strong>nicknames</strong> for the argument; they refer to the same array.</p>
+              <p class='answer' name='funcs-q2'><strong>(kinda) Pass by Reference:</strong> meaning the function parameters are <strong>pointers</strong> to the argument; they refer to the same array. (more on pointers later)</p>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
   #include &lt;string&gt;
   using namespace std;
   
-  int arbitraryArrayFunctionThatAddsStuff(int a[]);
+  int arbitraryArrayFunctionThatAddsStuff (int a[]);
   
-  int main() {
+  int main () {
       int i[] = {1, 2};
       arbitraryArrayFunctionThatAddsStuff(i);
       
       cout &lt;&lt; i[0] &lt;&lt; endl;
   }
   
-  int arbitraryArrayFunctionThatAddsStuff(int a[]) {
+  int arbitraryArrayFunctionThatAddsStuff (int a[]) {
       return a[0]++;
   }
 </pre>
@@ -570,7 +572,7 @@
   
   int main () {
       int i[] = {1, 2, 3};
-      int j = noTouchySum (i, 3);
+      int j = noTouchySum(i, 3);
       cout &lt;&lt; j &lt;&lt; endl;
   }
   
@@ -749,6 +751,58 @@
             
             
             <br/>
+            <div id='practice' class='scrollspy-element' scrollspy-title='Practice'></div>
+            <h1>Practice Problems</h1>
+            <div>
+              <p>Here are a few practice problems involving arrays, functions, and stuff...</p>
+              <p class='example'>What will the output of this function be?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int i[] = {1, 2, 3};
+  int awesomeFunc (int a[], int n);
+  
+  int main () {
+      int i[] = {4, 5, 6};
+      cout &lt;&lt; awesomeFunc(i, 3) &lt;&lt; endl;
+  }
+  
+  int awesomeFunc (int a[], int n) {
+      int result = 1;
+      for (int j = 0; j &lt; n; j++) {
+          result *= i[j];
+      }
+      return result;
+  }
+</pre>
+              <br/>
+              <p class='example'>
+                Design a function called interleaveStrings that takes as input 1 array of strings (called s), 
+                a number of elements n, and returns a string composed of all of the elements interleaved in sequence.
+              </p>
+              <p>Some examples of interleaveStrings:</p>
+<pre class='prettyprint'>
+  string s[] = {"AAA", "BB", "CCCC"};
+  cout &lt;&lt; interleaveStrings(s, 3); &lt;&lt; endl;
+  // Above prints out:
+  // ABCABCACC
+  
+  string w[] = {"BB", "AAA", "CCCC"};
+  cout &lt;&lt; interleaveStrings(w, 3); &lt;&lt; endl;
+  // Above prints out:
+  // BACBACACC
+  
+  string t[] = {"AAA", ""};
+  cout &lt;&lt; interleaveStrings(t, 2); &lt;&lt; endl;
+  // Above prints out:
+  // AAA
+</pre>
+            </div>
+            <hr/>
+            
+            <br/>
             <div id='survey' class='scrollspy-element' scrollspy-title='Discussion Survey'></div>
             <h1>Discussion Section Survey</h1>
             <div>
@@ -765,18 +819,6 @@
             
           </div>
           <!-- END PRESENTATION CONTENT -->
-          
-          <!-- TODO: debugging + cerr -->
-          <!-- TODO: how to document functions -->
-          <!-- TODO: Casting (static casts) -->
-          <!-- TODO: Arrays -->
-            <!-- TODO: exercise: printing an array index by index -->
-            <!-- TODO: example: comparing arrays -->
-            <!-- TODO: example: passing a const  -->
-          <!-- TODO: Functions using Arrays -->
-            <!-- TODO: Functions using Arrays f(int a[]) anything defining the size of a is ignored -->
-            <!-- TODO: Arrays are kinda passed by reference -- NOT copied (actually pointers to where the argument lives) -->
-            <!-- TODO: CANNOT find the length of an array a as an argument from the name a alone -->
           
         </div>
       </div>
