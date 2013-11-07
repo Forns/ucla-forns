@@ -1,0 +1,250 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Andrew Forney - UCLA CS</title>
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/magic-bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/main.css" rel="stylesheet" type="text/css">
+    <script src="../../../js/lib/jquery-2.0.3.min.js"></script>
+    <script src="../../../js/lib/bootstrap.min.js"></script>
+    <script src="../../../js/display/general/general-display.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+  </head>
+  
+  <body data-spy="scroll" data-target="#scrollspy">
+    
+    <!-- BEGIN WRAP -->
+    <div id="wrap">
+      
+      <!-- BEGIN NAVIGATION -->
+      <nav class='navbar navbar-default' role='navigation'>
+        <div class='nav-accent'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-12'>
+              <div class='navbar-header'>
+                <button class='navbar-toggle' type='button' data-toggle='collapse' data-target='.navbar-main-collapse'>
+                  <span class='sr-only'>Toggle Navigation</span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                </button>
+                <a class='navbar-brand' href='/~forns/'>
+                  <span id='brand-text'>
+                    Andrew Forney
+                  </span>
+                </a>
+              </div>
+              
+              <div id='nav-main' class='collapse navbar-collapse navbar-main-collapse'>
+                <ul class='nav navbar-nav navbar-right'>
+                  
+                  <li>
+                    <a href='/~forns/about.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-user'></span>
+                      </div>
+                      <p class='text-center'>About</p>
+                    </a>
+                  </li>
+                  
+                  <li class='active'>
+                    <a href='/~forns/classes.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-book'></span>
+                      </div>
+                      <p class='text-center'>Classes</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/contact.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-comment'></span>
+                      </div>
+                      <p class='text-center'>Contact</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/publications.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-file'></span>
+                      </div>
+                      <p class='text-center'>Publications</p>
+                    </a>
+                  </li>
+                  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <!-- END NAVIGATION -->
+      
+      <!-- BEGIN MAIN CONTENT -->
+      <div id="main-content" class="container">
+        <div class="row">
+          
+          <!-- BEGIN SCROLLSPY -->
+          <div class='col-md-2'>
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+              <ul id='scrollspy' class="nav bs-sidenav">
+              </ul>
+            </div>
+          </div>
+          <!-- END SCROLLSPY -->
+          
+          <!-- BEGIN PRESENTATION CONTENT -->
+          <div class='col-md-10 presentation-content' role='main'>
+            <ol class="breadcrumb">
+              <li><a href="../../../classes.html">Classes</a></li>
+              <li><a href="./cs-31.html">Fall13 CS31</a></li>
+              <li class="active">Week 6</li>
+            </ol>
+            
+            <div id='review' class='scrollspy-element' scrollspy-title='Review'></div>
+            <h1>Questions from Week 5</h1>
+            <div>
+              <p><strong>Q: What makes unit tests thorough?</strong></p>
+              <p>Well, unit tests are specific to the functions you're testing, but there are a few good rules of thumb for thoroughly testing a program:</p>
+              <ol class='indent-1'>
+                <li><p><strong>If your program uses functions that can be tested individually</strong>, test that these are functioning properly first!</p></li>
+                <li>
+                  <p>For functions that expect string inputs, test arguments with <strong>at least</strong> the following:</p>
+                  <ul class='indent-1'>
+                    <li><p>Special characters and punctuation</p></li>
+                    <li><p>Uppercase and lowercase letters</p></li>
+                    <li><p>Numbers</p></li>
+                    <li><p>Spaces (especially, starting and ending with spaces)</p></li>
+                  </ul>
+                </li>
+                <li>
+                  <p>For functions that expect numeric inputs, test arguments with <strong>at least</strong> the following:</p>
+                  <ul class='indent-1'>
+                    <li><p>Some int / double x less than -1</p></li>
+                    <li><p>Some int / double x equal to -1</p></li>
+                    <li><p>Some int / double x equal to 0</p></li>
+                    <li><p>Some int / double x equal to 1</p></li>
+                    <li><p>Some int / double x greater than 1</p></li>
+                  </ul>
+                </li>
+                <li>
+                  <p>For functions that handle arrays, test arguments with <strong>at least</strong> the following:</p>
+                  <ul class='indent-1'>
+                    <li><p>Index limits less than and equal to 0</p></li>
+                    <li><p>Index accesses greater than the index limit (if applicable)</p></li>
+                    <li><p>String arrays with empty string elements</p></li>
+                    <li><p>Numeric arrays with 0 and negative elements</p></li>
+                  </ul>
+                </li>
+              </ol>
+              <!-- TODO: test suite example here -->
+              <br/>
+              <p><strong>Results of Survey</strong></p>
+              <p>Many thanks to those of you who filled out the survey, the following represent the key points I've taken from it:</p>
+              <ul class='indent-1'>
+                <li><p>The examples in class appear to be exactly the target difficulty: just right but slightly challenging.</p></li>
+                <li><p>There was a near universal request for more paper-and-pencil exercises, so those will take a greater share of the section.</p></li>
+                <li><p>Many people wanted the coding exercises to be slower, or done individually; we'll try a new tactic for doing these that will be less hectic.</p></li>
+                <li><p>Only a few people indicated that they wanted more puns, so just to spite the majority, I will be including even more.</p></li>
+              </ul>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='cstrings' class='scrollspy-element' scrollspy-title='Introduction to cstrings'></div>
+            <div>
+              <p>C++ strings are so nice, why do I have to learn about this new crap?</p>
+              <!-- TODO: why cstrings? -->
+              <p class='question' name='cstrings-q1'>So what are the main differences between C++ strings and cstrings?</p>
+              <div class='answer' name='cstrings-q1'>
+                <ul class='indent-1'>
+                  <li><p>cstrings have a null-terminating character indicating their conclusion, C++ strings do not.</p></li>
+                  <li><p>cstrings require the programmer to define their space allocation, C++ strings allocate memory dynamically.</p></li>
+                </ul>
+              </div>
+              <p>Remember all of those nice tricks with strings being able to compare equivalence using ==, get the length using .length(), etc.?</p>
+              <p>We get to learn them all over with different names yay!</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='arraysIntro' class='scrollspy-element' scrollspy-title='Introduction'></div>
+            <div>
+            </div>
+            <hr/>
+            
+            
+          </div>
+          <!-- END PRESENTATION CONTENT -->
+          
+        </div>
+      </div>
+      <!-- END MAIN CONTENT -->
+      
+      <!-- TODO: unit tests -->
+      <!-- TODO: char -> numbers -->
+      <!-- TODO: numbers -> char -->
+        <!-- TODO: comparisons and numeric operations with chars -->
+        <!-- TODO: guaranteed: codes for numeric chars are contiguous -->
+        <!-- TODO: guaranteed: code for space is less than any letter char -->
+        <!-- TODO: guaranteed: code for null char is always 0 -->
+        <!-- TODO: NOT guaranteed: codes for letter chars are contiguous -->
+      <!-- TODO: string comparisons -->
+        <!-- TODO: string comparisons: case -->
+        <!-- TODO: string literal comparisons are NOT the same as comparisons between string vars -->
+      <!-- TODO: cstrings -->
+        <!-- TODO: why use? Making code / using code compatible with C, which doesn't have type string -->
+          <!-- TODO: C *does* have ints, doubles, etc, which is why we don't need special representations for those -->
+          <!-- TODO: C also has chars, and since strings in C++ are just sequences of chars, cstrings are arrays of chars -->
+          <!-- TODO: instead of using a length property for each array, the designers decided to use a null termination -->
+            <!-- TODO: so, why do we have a .length for strings, which are arrays of chars, but not for, say, int arrays? -->
+          <!-- TODO: null terminating a char array means that we never look past the null character -->
+            <!-- TODO: declaring char arrays -->
+              <!-- TODO: empty string is an array consisting of JUST the 0 byte -->
+            <!-- TODO: initializing char arrays ({'i', 'n', 'i', 't'} notation) -->
+            <!-- TODO: initializing char arrays ("init" notation) -->
+              <!-- TODO: null character IS AUTOMATICALLY placed at end of char array -->
+              <!-- TODO: char t[10] can ONLY hold 9 interesting characters because \0 takes up a spot -->
+            <!-- TODO: initializing strings with cstrings -->
+            <!-- TODO: C++ strings dynamically adjust their size, but cstrings are required to have defined space allocation -->
+            <!-- TODO: iterating through cstrings: keep going until you find the null character -->
+              <!-- TODO: save strlen into variable so that conditional check does not call it ever time -->
+          <!-- TODO: printing char arrays to cout vs printing int arrays -->
+          <!-- TODO: cstring functions strlen, strcpy, strcmp, strcat -->
+            <!-- TODO: try to compare cstrings using == -->
+            <!-- TODO: storing vs not storing strcat return into string -->
+            <!-- TODO: strcat into a string that can't hold the arguments combined -->
+            <!-- TODO: comparison to empty string using strcmp == 0 (meaning 0 difference) -->
+            <!-- TODO: comparison to strlen == 0 -->
+          <!-- TODO: cstring parameters in functions -->
+      <!-- TODO: multi-dimensional arrays -->
+        <!-- TODO: MUST input 2nd array dimension in parameters of functions -->
+        <!-- TODO: non-square initialization -->
+        <!-- TODO: cstrings in arrays -->
+          <!-- TODO: char c[5][7]; e.g., sometimes write char c[5][6+1] because of +1 for null char -->
+          <!-- TODO: overflow within 2D -->
+          <!-- TODO: addressing single rows c[5] and assigning to them using strcpy, not = -->
+      
+      
+    </div>
+    <!-- END WRAPPER -->
+    
+    <!-- BEGIN FOOTER -->
+    <div id="footer">
+      <div class="container">
+        <div class="col-md-12 text-center">
+          
+        </div>
+      </div>
+    </div>
+    <!-- END FOOTER -->
+    
+  </body>
+</html>
