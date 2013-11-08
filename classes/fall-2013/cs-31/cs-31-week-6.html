@@ -728,7 +728,9 @@
               s[i] = toupper(s[i]);
           }
       }
-  
+      
+      // Note: save strlen because I don't want
+      // to recompute it every time I loop
       int cLen = strlen(c);
       for (int i = 0; i &lt; cLen; i++) {
           if (i % 2 == 0) {
@@ -786,6 +788,123 @@
             <h1>Multi-dimensional Arrays</h1>
             <div>
               <p>Multi dimenstional arrays are just like normal arrays except that instead of having, for example, ints and strings as elements, they have arrays of ints and arrays of strings as elements.</p>
+              <p>So how do we declare multi-dimensional arrays? Let's start by looking at 2D arrays:</p>
+              <p class='definition'>
+                A <strong>2D array</strong> must be declared by optionally specifying the number of rows, but necessarily specifying the number of columns:<br/>
+                int i[ROWS][COLUMNS];<br/>
+                ...where ROWS is optionally specified, but COLUMNS is required.
+              </p>
+              <p class='definition'>
+                A 2D array is initialized using the following syntax:<br/>
+                int i[ROWS][COLUMNS] = {{row_00, row_01, ...}, {row_10, row11, ...}, ..., {row_i0, row_i1, ...}};
+              </p>
+              <p class='definition'>
+                We can access the ith row and jth column of a 2D array using the syntax:<br/>
+                some2DArray[i][j];
+              </p>
+              <p>Notice, we define elements of a 2D array as arrays themselves!</p>
+              <p>This means that if I reference a row, say i[1] in the example above, I get back a 1D array.</p>
+              <p>Here's an example initialization:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      // Odd spacing for presentation
+      int i[][3] = 
+          {
+              {1, 2, 3},
+              {4, 5, 6},
+              {20, -1, 0}
+          };
+  }
+</pre>
+              <p>Here, I say, &quot;Compiler, I'd like you to infer how many rows I want from my initialization, but each column should have no more than 3 elements.&quot;</p>
+              <p>Pictorially:</p>
+              <div class='text-center'>
+                <img src='../../../assets/images/fall-2013/cs-31/week-6/2DArray.png' />
+              </div>
+              <p>This is a nice mental representation that will help us program, but how is our 2D array being stored in memory?</p>
+              <p>Pictorially:</p>
+              <div class='text-center'>
+                <img src='../../../assets/images/fall-2013/cs-31/week-6/2DArrayMem.png' />
+              </div>
+              <p>Andrew, that is one of, if not the, worst illustrations I've ever seen. What did you do, make that in PowerPoint?</p>
+              <p>Save that design talk for North campus, punk!</p>
+              <p>Back on topic...</p>
+              <p class='question' name='multiArrays-q0'>So, knowing how our 2D arrays are represented in memory, why is it necessary for us to define all array dimension sizes other than the first?</p>
+              <p class='answer' name='multiArrays-q0'>
+                Because our 2D array is represented contiguously in memory, meaning, in the above example, I have 9 contiguous ints (3 ROWs x 3 COLUMNs), 
+                I wouldn't know how much column space to leave between starts of rows. I get to leave the number of rows blank because I can infer from my 
+                initialization how many I'll need, and simply stick a new row of ints onto the end of wherever the last one left off.
+              </p>
+              <p>So, knowing that, would the following be a legal declaration?</p>
+              <p class='debug'>Will the following code compile?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      int derp[][3];
+  }
+</pre>
+              <p class='question' name='multiArrays-q1'>So, what does an array of cstrings look like? How many dimensions does it have?</p>
+              <div class='answer' name='multiArrays-q1'>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      char s[2][3] = {"hi", "yo"};
+      
+      cout &lt;&lt; s[0] &lt;&lt; endl;
+      cout &lt;&lt; s[1] &lt;&lt; endl;
+  }
+</pre>
+              </div>
+              <p>So, if we have to define functions that take in multi-dimensionar arrays as parameter inputs, then we must also define all array dimensions except for the first.</p>
+              <p>Here's an example:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  const int MAX_CSTRING_SIZE = 4 + 1;
+  void cMakeUpper (char c[][MAX_CSTRING_SIZE], int n);
+  
+  int main () {
+      char c[][MAX_CSTRING_SIZE]
+          = {"test", "your", "fun"};
+      cMakeUpper(c, 3);
+      
+      cout &lt;&lt; c[0] &lt;&lt; endl;
+      cout &lt;&lt; c[1] &lt;&lt; endl;
+      cout &lt;&lt; c[2] &lt;&lt; endl;
+  }
+  
+  // Mutates an array of cstrings no
+  // longer than MAX_CSTRING_SIZE,
+  // and makes the first n of
+  // those cstrings uppercase
+  void cMakeUpper (char c[][MAX_CSTRING_SIZE], int n) {
+      // Iterate through each cstring
+      for (int i = 0; i &lt; n; i++) {
+          // And then look at each
+          // character in that cstring
+          for (int j = 0; c[i][j] != '\0'; j++) {
+              c[i][j] = toupper(c[i][j]);
+          }
+      }
+  }
+</pre>
+              <p>Now, just to make sure you've got it... what is a 3D array of, let's say, ints?</p>
+              <p>It's an array of an array of an array of ints O_O</p>
+              <p class='question' name='multiArrays-q2'>So, how many dimensions of an n-dimensional array do you need to define, and which ones?</p>
+              <p class='answer' name='multiArrays-q2'>You must define at least n - 1 dimensions, which are all except the first dimension.</p>
+              <p>This holds for n-dimensional array initializations and function parameters, but not simple declarations without initialization!</p>
             </div>
             <hr/>
             
@@ -794,6 +913,14 @@
             <div id='practice' class='scrollspy-element' scrollspy-title='Practice Problems'></div>
             <h1>Practice Problems</h1>
             <div>
+              <p>...and by problems I mean problem... for now!</p>
+              <p class='example'>Design a function, multiCStringAppend, that takes in an array of cstrings (say, target) and a single cstring (say, toAppend), and appends toAppend to each of n elements of target.</p>
+              <p>The function signature will look like:</p>
+<pre class='prettyprint'>
+  void multiCStringAppend (char target[][MAX_CSTRING_SIZE], char toAppend[], int n) {
+    ...
+  }
+</pre>
             </div>
             <hr/>
             
@@ -806,13 +933,12 @@
       <!-- END MAIN CONTENT -->
       
       <!-- TODO: cstrings -->
-              <!-- TODO: save strlen into variable so that conditional check does not call it ever time -->
           <!-- TODO: cstring functions strlen, strcpy, strcmp, strcat -->
             <!-- TODO: try to compare cstrings using == -->
             <!-- TODO: storing vs not storing strcat return into string -->
           <!-- TODO: cstring parameters in functions -->
       <!-- TODO: multi-dimensional arrays -->
-        <!-- TODO: MUST input 2nd array dimension in parameters of functions -->
+        <!-- TODO: MUST input ith array dimension for each i != 0 in parameters of functions -->
         <!-- TODO: non-square initialization -->
         <!-- TODO: cstrings in arrays -->
           <!-- TODO: char c[5][7]; e.g., sometimes write char c[5][6+1] because of +1 for null char -->
