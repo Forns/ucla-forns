@@ -142,7 +142,39 @@
                   </ul>
                 </li>
               </ol>
-              <!-- TODO: test suite example here -->
+              <p class='example'>Design unit tests for the following program that expose its bug.</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cctype&gt;
+  using namespace std;
+  
+  string funkyFunc (string s);
+  
+  int main () {
+      // TODO: Design tests for funkyFunc
+      // in a void unitTests function that
+      // test it thoroughly and exposes its bug
+  }
+  
+  // Takes in a string of numbers and returns a new
+  // string consisting of every number incremented by
+  // one. If a character is not a number, omit it 
+  // from result.
+  // If a number is 0, skip the next character.
+  string funkyFunc (string s) {
+      string result;
+      for (int i = 0; i &lt; s.length(); i++) {
+          if (isdigit(s[i])) {
+              if (s[i] == '0') {
+                  i++;
+              }
+              result += (s[i] + 1);
+          }
+      }
+      return result;
+  }
+</pre>
               <br/>
               <p><strong>Results of Survey</strong></p>
               <p>Many thanks to those of you who filled out the survey, the following represent the key points I've taken from it:</p>
@@ -151,31 +183,616 @@
                 <li><p>There was a near universal request for more paper-and-pencil exercises, so those will take a greater share of the section.</p></li>
                 <li><p>Many people wanted the coding exercises to be slower, or done individually; we'll try a new tactic for doing these that will be less hectic.</p></li>
                 <li><p>Only a few people indicated that they wanted more puns, so just to spite the majority, I will be including even more.</p></li>
+                <li><p>When I have access to the homework ahead of discussion, I will teach more closely related examples to the theme and difficulty of the work.</p></li>
               </ul>
             </div>
             <hr/>
             
             
             <br/>
-            <div id='cstrings' class='scrollspy-element' scrollspy-title='Introduction to cstrings'></div>
+            <div id='cstrings' class='scrollspy-element' scrollspy-title='Intro to cstrings'></div>
+            <h1>Introduction to cstrings</h1>
             <div>
               <p>C++ strings are so nice, why do I have to learn about this new crap?</p>
-              <!-- TODO: why cstrings? -->
-              <p class='question' name='cstrings-q1'>So what are the main differences between C++ strings and cstrings?</p>
+              <p class='question' name='cstrings-q0'>No... seriously... why do we have to learn this stuff?</p>
+              <p class='answer' name='cstrings-q0'>
+                Aside from you being devoted CS academics, there is a practical reason for learning about cstrings: 
+                many libraries that you may wish to interface with will use cstrings and you need to know how they're different from C++ strings.
+              </p>
+              <p>Which segues nicely to the next question...</p>  
+              <p class='question' name='cstrings-q1'>What are the main differences between C++ strings and cstrings?</p>
               <div class='answer' name='cstrings-q1'>
                 <ul class='indent-1'>
                   <li><p>cstrings have a null-terminating character indicating their conclusion, C++ strings do not.</p></li>
                   <li><p>cstrings require the programmer to define their space allocation, C++ strings allocate memory dynamically.</p></li>
+                  <li><p>cstring functions are from the cstring library, but string functions are from the string library.</p></li>
                 </ul>
               </div>
-              <p>Remember all of those nice tricks with strings being able to compare equivalence using ==, get the length using .length(), etc.?</p>
-              <p>We get to learn them all over with different names yay!</p>
+              <p>What exactly does it mean for a cstring to be &quot;null-terminated?&quot;</p>
+              <p class='definition'>A string that is &quot;null-terminated&quot; means that the end of the string is indicated by the 0-byte, AKA the null character, null terminator, etc.</p>
+              <p class='definition'>The null character, regardless of character encoding schema, is always represented as '\0' and has character code 0.</p>
+              <p class='question' name='cstrings-q2'>So, how can we have strlen function for cstrings but not for other types of arrays, like arrays of ints?</p>
+              <p class='answer' name='cstrings-q2'>
+                The 0-byte is special for cstrings and allows us to count the number of characters up until the first '\0'. 
+                We don't have the same luxury for an array of, say, ints because that would mean never being able to store the value 0.
+              </p>
+              <p>So let's take a look at how we can play with cstrings. The methods for doing so may be different, but the general ideas are the same:</p>
+              <p class='toolkit'><strong>Declaring cstrings:</strong><br/>
+                We can declare cstrings just as we would any other type of array:<br/>
+                char &lt;name&gt;[size];
+              </p>
+              <p class='toolkit'><strong>Initializing cstrings:</strong><br/>
+                We can initialize cstrings using a variety of tactics, but the best way is:<br/>
+                char &lt;name&gt;[] = "&lt;string_to_initialize&gt;";
+              </p>
+              <p>Remember that because cstrings are just arrays of characters, we must define size at compile time.</p>
+              <p>This is, of course, assuming that we have not initialized the cstring.</p>
+              <p class='debug'><strong>Warning!</strong> Because cstrings are null-terminated, we must leave space for the extra 0-byte at the end.</p>
+              <p>So, let's look at some examples:</p>
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      char c[3];
+      cout &lt;&lt; c &lt;&lt; endl;
+  }
+</pre>
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      // Play on words, not typo:
+      char acters[3] = "";
+      cout &lt;&lt; acters &lt;&lt; endl;
+  }
+</pre>
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      char acters[3] = "cat";
+      cout &lt;&lt; acters &lt;&lt; endl;
+  }
+</pre>
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+    char acters[3] = "ca\0";
+    cout &lt;&lt; acters &lt;&lt; endl;
+  }
+</pre>
+              <p>So what's the rule of thumb? Don't null terminate your own strings when you initialize with the double quote notation.</p>
+              <p>That said... what happens when we place null characters inside of our strings?</p>
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      char acters[6] = "c\0a\0t";
+      cout &lt;&lt; acters &lt;&lt; endl;
+      cout &lt;&lt; acters[2] &lt;&lt; endl;
+  }
+</pre>
+              <p>Now, if we were being particularly masochistic, we could also initiate cstrings using the array curly-bracket notation.</p>
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      // Do you have a char in the world?
+      char inTheWorld[] = {'y', 'e', 's', '!'};
+      cout &lt;&lt; inTheWorld &lt;&lt; endl;
+  }
+</pre>
+              <p>Well, apparently you should have cared to null terminate your cstring!</p>
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      // Sorry :(
+      char inTheWorld[] = {'y', 'e', 's', '!', '\0'};
+      cout &lt;&lt; inTheWorld &lt;&lt; endl;
+  }
+</pre>
+              <p>We can also leave space for additional characters in our cstrings:</p>
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      // I'm running out of fun variable names
+      char broiled[6] = {'m', 'm', 'm', '\0'};
+      cout &lt;&lt; broiled &lt;&lt; endl;
+  }
+</pre>
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      char broiled[6];
+      broiled = {'m', 'm', 'm', '\0'};
+      cout &lt;&lt; broiled &lt;&lt; endl;
+  }
+</pre>
+              
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      char broiled[6];
+      broiled = "mmm";
+      cout &lt;&lt; broiled &lt;&lt; endl;
+  }
+</pre>
+              <p>Well that's obnoxious... are you sure we can't just use C++ strings?</p>
+              <p>Yes I'm sure, stop complaining.</p>
+              <p>What we can do, however, is single element assignment:</p>
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      char broiled[6];
+      broiled[0] = 'm';
+      broiled[1] = 'm';
+      broiled[2] = 'm';
+      broiled[3] = '\0';
+      cout &lt;&lt; broiled &lt;&lt; endl;
+  }
+</pre>
+              <p>We'll talk about more graceful ways to do this later...</p>
+              <p>Because cstrings are so similar to strings, we can even initialize strings with them!</p>
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      char stuff[] = {'h', 'i', ':', ')', '\0'};
+      string s = stuff;
+  
+      cout &lt;&lt; s &lt;&lt; endl;
+      s = "OVERWRITTEN!!!11!!111!";
+      cout &lt;&lt; s &lt;&lt; endl;
+  }
+</pre>
+              <p>...which is nice, because if we do, in the future, decide to switch everything to C++ strings, we can fairly easily.</p>
+              <p>Subsequently, we can use some string operations whenever strings are expected:</p>
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      string cat = "cat";
+      char dog[] = "dog";
+  
+      cout &lt;&lt; cat + dog &lt;&lt; endl;
+  }
+</pre>
+              <p>But what about when they're not?</p>
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      char cat[] = "cat";
+      char dog[] = "dog";
+  
+      cout &lt;&lt; cat + dog &lt;&lt; endl;
+  }
+</pre>
+              <p>Alright, so you're all pros now, see if you can solve THIS:</p>
+              <p class='example'>What does the following code output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+    
+  int main () {
+      // Just kidding, I've got loads of fun
+      // var names
+      char taker[6] = "&lt;:)~";
+      char rot[] = "&gt;:)";
+  
+      // The mysteriously vanishing devious face
+      for (int i = 0; taker[i] != '\0'; i++) {
+          int j = i;
+          do {
+              cout &lt;&lt; rot[j++];
+          } while (rot[j] != '\0' &amp;&amp; rot[j] == taker[j]);
+          cout &lt;&lt; endl;
+      }
+  }
+</pre>
             </div>
             <hr/>
             
             
             <br/>
-            <div id='arraysIntro' class='scrollspy-element' scrollspy-title='Introduction'></div>
+            <div id='cstringLib' class='scrollspy-element' scrollspy-title='cstring Library'></div>
+            <h1>cstring Library</h1>
+            <div>
+              <p>Remember all of those nice tricks with strings being able to compare equivalence using ==, get the length using .length(), etc.?</p>
+              <p>We get to learn them all over with different names and constraints yay!</p>
+              <p>For this, we'll need the cstring library, which we get by saying <code class='prettyprint'>#include &lt;cstring&gt;</code></p>
+              <p>This library comes with a variety of important functions, the most important of which are to follow:</p>
+              <hr/>
+              <h3>strlen</h3>
+              <p class='toolkit'><strong>strlen</strong> or &quot;string length&quot; behaves similarly the stl string .length() method. It returns the number of characters before the first null character in a cstring.</p>
+              <p>Here are some examples:</p>
+              <p class='example'>What does the following code output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+  
+  int main () {
+      char strlenMeBro[] = "sup";
+      char strlenSux[] = "hey\0you";
+      char imSoEmpty[] = {'\0'};
+  
+      cout &lt;&lt; strlen(strlenMeBro) &lt;&lt; endl;
+      cout &lt;&lt; strlen(strlenSux) &lt;&lt; endl;
+      cout &lt;&lt; strlen(imSoEmpty) &lt;&lt; endl;
+  }
+</pre>
+              <p class='debug'>Will the following code compile? If so, what will it printout?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+  
+  int main () {
+      string strlenMeBro= "sup";
+  
+      cout &lt;&lt; strlen(strlenMeBro) &lt;&lt; endl;
+  }
+</pre>
+              <p>So be wary! Don't try to use any cstring library functions on stl strings.</p>
+              <hr/>
+              <h3>strcmp</h3>
+              <p class='toolkit'><strong>strcmp</strong> or &quot;string compare&quot; behaves differently than the stl string comparison operators like ==, &lt;, &gt;=. It returns a number that determines if the first argument is less than (some value &lt; 0), greater than (some value &gt; 0), or equal to (= 0) the second.</p>
+              <p>So what do we mean by comparing strings?</p>
+              <p>We start at each cstring's first element and compare the two element by element.</p>
+              <ul class='indent-1'>
+                <li><p>If the two elements are the same character, keep looking down each cstring. If they both null-terminate at the same time, return 0.</p></li>
+                <li><p>If the two elements differ, and the first one is a lesser character code than the second, return some int less than 0.</p></li>
+                <li><p>If the two elements differ, and the first one is a greater character code than the second, return some int greater than 0.</p></li>
+              </ul>
+              <p class='debug'>Will the following code compile? If so, what will it print out?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+  
+  int main () {
+      char strcmpMeBro[]= "sup";
+      char strcmpMeToo[] = "sup";
+  
+      cout &lt;&lt; strcmp(strcmpMeBro, strcmpMeToo) &lt;&lt; endl;
+  }
+</pre>
+              <p class='debug'>Will the following code compile? If so, what will it print out?</p>
+              <!-- TODO: double check for undefined behavior -->
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+  
+  int main () {
+      char strcmpMeBro[]= "sup";
+  
+      cout &lt;&lt; strcmp(strcmpMeBro, "sup") &lt;&lt; endl;
+  }
+</pre>
+              <p class='debug'>Will the following code compile? If so, what will it print out?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+  
+  int main () {
+      char strcmpMeBro[]= "sup";
+      char strcmpLOUD[] = "SUP";
+  
+      // Will these two output the same thing?
+      cout &lt;&lt; strcmp(strcmpMeBro, strcmpLOUD) &lt;&lt; endl;
+      cout &lt;&lt; strcmp(strcmpLOUD, strcmpMeBro) &lt;&lt; endl;
+  }
+</pre>
+              <p class='debug'>Will the following code compile? If so, what will it print out?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+  
+  int main () {
+      char strcmpMeBro[]= "sup";
+      char strcmpSux[] = "sup\0man";
+  
+      cout &lt;&lt; strcmp(strcmpMeBro, strcmpSux) &lt;&lt; endl;
+      cout &lt;&lt; strcmp(strcmpSux, strcmpMeBro) &lt;&lt; endl;
+  }
+</pre>
+              <hr/>
+              <h3>strcpy</h3>
+              <p class='toolkit'><strong>strcpy</strong> or &quot;string copy&quot; takes the cstring in the source and copies it into the destination.</p>
+              <p class='debug'><strong>Warning!</strong> The function parameters request the destination <strong>first</strong>, followed by the source.</p>
+              <p>For example:</p>
+              <p class='debug'>Will the following code compile? If so, what will it print out?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+  
+  int main () {
+      char strcpyMeBro[]= "sup";
+      char copyToHere[4];
+      strcpy(copyToHere, strcpyMeBro);
+      strcpyMeBro[0] = 'S';
+      strcpyMeBro[1] = 'U';
+      strcpyMeBro[2] = 'P';
+  
+      cout &lt;&lt; copyToHere &lt;&lt; endl;
+      cout &lt;&lt; strcpyMeBro &lt;&lt; endl;
+  }
+</pre>
+              <p class='debug'>Will the following code compile? If so, what will it print out?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+  
+  int main () {
+      char strcpyMeBro[]= "sup";
+      char copyToHere[4] = strcpyMeBro;
+      strcpyMeBro[0] = 'S';
+      strcpyMeBro[1] = 'U';
+      strcpyMeBro[2] = 'P';
+  
+      cout &lt;&lt; copyToHere &lt;&lt; endl;
+      cout &lt;&lt; strcpyMeBro &lt;&lt; endl;
+  }
+</pre>
+              <p class='debug'>Will the following code compile? If so, what will it print out?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+  
+  int main () {
+      // Did you leave room for dessert?
+      char dessert[]= "banana!";
+      // banana left over from Halloween
+      char stomach[7];
+      strcpy(stomach, dessert);
+  
+      cout &lt;&lt; stomach &lt;&lt; endl;
+  }
+</pre>
+              <hr/>
+              <h3>strcat</h3>
+              <p class='toolkit'><strong>strcat</strong> or &quot;string concatenate&quot; adds the second argument to the end of the first argument, similar to the + operator defined on C++ strings.</p>
+              <p class='debug'>Will the following code compile? If so, what will it print out?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+  
+  int main () {
+      char strcatMeBro[100] = "sup";
+      char toBeAdded[] = " my main bro?";
+      // This is how kids talk these days,
+      // yes?
+      strcat(strcatMeBro, toBeAdded);
+  
+      cout &lt;&lt; strcatMeBro &lt;&lt; endl;
+  }
+</pre>
+              <p class='debug'>Will the following code compile? If so, what will it print out?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+  
+  int main () {
+      char strcatMeBro[100] = "sup";
+      strcat(strcatMeBro, strcatMeBro);
+  
+      cout &lt;&lt; strcatMeBro &lt;&lt; endl;
+  }
+</pre>
+              <p class='debug'>Will the following code compile? If so, what will it print out?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+  
+  int main () {
+      // 0_o
+      char strcatMeBro[100] = "sup\0";
+      char toBeAdded[] = " my main bro?";
+      strcat(strcatMeBro, toBeAdded);
+  
+      cout &lt;&lt; strcatMeBro &lt;&lt; endl;
+  }
+</pre>
+              <hr/>
+              <p>That's about as much of the cstring library as I can take for now...</p>
+              <p>That means there's only one thing left to do: a massive example!</p>
+              <p class='example'>What does the following code output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+  
+  int main () {
+      char numz[] = "0123456789";
+      const char replacer[] = "!";
+      int i;
+  
+      do {
+          i = strlen(numz);
+          numz[i / 2] = '\0';
+          strcat(numz, replacer);
+          cout &lt;&lt; numz &lt;&lt; endl;
+      } while (i &gt; 2);
+  }
+</pre>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='cstringFuncs' class='scrollspy-element' scrollspy-title='cstring Functions'></div>
+            <h1>Functions &amp; cstrings</h1>
+            <div>
+              <p>Functions handle cstrings the same way they do other arrays:</p>
+              <p>So, we'll want to learn how functions handle cstrings, and the answer is, of course, the same way we handle other arrays.</p>
+              <p class='question' name='cstringFunc-q0'>Are cstrings passed by reference or value by default? Are strings passed by reference or value by default?</p>
+              <p class='answer' name='cstringFunc-q0'>cstrings are passed &quot;by reference (kinda, we pass a pointer)&quot;, while stl strings are passed by value.</p>
+              <p>For some reason I made a really elaborate example to illustrate this.</p>
+              <p class='example'>What does the following code print out?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+  
+  string camelcaseAndAppend (string s, char c[]);
+  
+  int main () {
+      string s = "howsit";
+      char c[] = " nada bra";
+  
+      cout &lt;&lt; camelcaseAndAppend(s, c) &lt;&lt; endl;
+      cout &lt;&lt; "s: " &lt;&lt; s &lt;&lt; endl;
+      cout &lt;&lt; "c: " &lt;&lt; c &lt;&lt; endl;
+  }
+  
+  // Realized too late that 
+  // it's not really camelcasing... oh well
+  string camelcaseAndAppend (string s, char c[]) {
+      // Begin by camelcasing the two arguments
+      // NOTE: Should typically be abstracted
+      for (int i = 0; i &lt; s.length(); i++) {
+          if (i % 2 == 0) {
+              s[i] = toupper(s[i]);
+          }
+      }
+  
+      int cLen = strlen(c);
+      for (int i = 0; i &lt; cLen; i++) {
+          if (i % 2 == 0) {
+              c[i] = toupper(c[i]);
+          }
+      }
+  
+      return s + c;
+  }
+</pre>
+              <p>Long story short, just remember that cstring parameters get modified if we change them internally!</p>
+              <p>Quick question then: what would happen if I changed the parameters in the above code to be strings instead of char arrays?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+  
+  string camelcaseAndAppend (string s, string c);
+  
+  int main () {
+      string s = "howsit";
+      char c[] = " nada bra";
+  
+      cout &lt;&lt; camelcaseAndAppend(s, c) &lt;&lt; endl;
+      cout &lt;&lt; "s: " &lt;&lt; s &lt;&lt; endl;
+      cout &lt;&lt; "c: " &lt;&lt; c &lt;&lt; endl;
+  }
+  
+  string camelcaseAndAppend (string s, string c) {
+      // Begin by camelcasing the two arguments
+      // NOTE: Should typically be abstracted
+      for (int i = 0; i &lt; s.length(); i++) {
+          if (i % 2 == 0) {
+              s[i] = toupper(s[i]);
+          }
+      }
+  
+      for (int i = 0; i &lt; c.length(); i++) {
+          if (i % 2 == 0) {
+              c[i] = toupper(c[i]);
+          }
+      }
+  
+      return s + c;
+  }
+</pre>
+              
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='multiArrays' class='scrollspy-element' scrollspy-title='Multi-dimensional Arrays'></div>
+            <h1>Multi-dimensional Arrays</h1>
+            <div>
+              <p>Multi dimenstional arrays are just like normal arrays except that instead of having, for example, ints and strings as elements, they have arrays of ints and arrays of strings as elements.</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='practice' class='scrollspy-element' scrollspy-title='Practice Problems'></div>
+            <h1>Practice Problems</h1>
             <div>
             </div>
             <hr/>
@@ -188,41 +805,11 @@
       </div>
       <!-- END MAIN CONTENT -->
       
-      <!-- TODO: unit tests -->
-      <!-- TODO: char -> numbers -->
-      <!-- TODO: numbers -> char -->
-        <!-- TODO: comparisons and numeric operations with chars -->
-        <!-- TODO: guaranteed: codes for numeric chars are contiguous -->
-        <!-- TODO: guaranteed: code for space is less than any letter char -->
-        <!-- TODO: guaranteed: code for null char is always 0 -->
-        <!-- TODO: NOT guaranteed: codes for letter chars are contiguous -->
-      <!-- TODO: string comparisons -->
-        <!-- TODO: string comparisons: case -->
-        <!-- TODO: string literal comparisons are NOT the same as comparisons between string vars -->
       <!-- TODO: cstrings -->
-        <!-- TODO: why use? Making code / using code compatible with C, which doesn't have type string -->
-          <!-- TODO: C *does* have ints, doubles, etc, which is why we don't need special representations for those -->
-          <!-- TODO: C also has chars, and since strings in C++ are just sequences of chars, cstrings are arrays of chars -->
-          <!-- TODO: instead of using a length property for each array, the designers decided to use a null termination -->
-            <!-- TODO: so, why do we have a .length for strings, which are arrays of chars, but not for, say, int arrays? -->
-          <!-- TODO: null terminating a char array means that we never look past the null character -->
-            <!-- TODO: declaring char arrays -->
-              <!-- TODO: empty string is an array consisting of JUST the 0 byte -->
-            <!-- TODO: initializing char arrays ({'i', 'n', 'i', 't'} notation) -->
-            <!-- TODO: initializing char arrays ("init" notation) -->
-              <!-- TODO: null character IS AUTOMATICALLY placed at end of char array -->
-              <!-- TODO: char t[10] can ONLY hold 9 interesting characters because \0 takes up a spot -->
-            <!-- TODO: initializing strings with cstrings -->
-            <!-- TODO: C++ strings dynamically adjust their size, but cstrings are required to have defined space allocation -->
-            <!-- TODO: iterating through cstrings: keep going until you find the null character -->
               <!-- TODO: save strlen into variable so that conditional check does not call it ever time -->
-          <!-- TODO: printing char arrays to cout vs printing int arrays -->
           <!-- TODO: cstring functions strlen, strcpy, strcmp, strcat -->
             <!-- TODO: try to compare cstrings using == -->
             <!-- TODO: storing vs not storing strcat return into string -->
-            <!-- TODO: strcat into a string that can't hold the arguments combined -->
-            <!-- TODO: comparison to empty string using strcmp == 0 (meaning 0 difference) -->
-            <!-- TODO: comparison to strlen == 0 -->
           <!-- TODO: cstring parameters in functions -->
       <!-- TODO: multi-dimensional arrays -->
         <!-- TODO: MUST input 2nd array dimension in parameters of functions -->
