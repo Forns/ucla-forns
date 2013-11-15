@@ -422,19 +422,20 @@
   #include &lt;iostream&gt;
   #include &lt;string&gt;
   using namespace std;
-    
+      
   int main () {
+      const int MAX_CSTR_SIZE = 6;
       // Just kidding, I've got loads of fun
       // var names
-      char taker[6] = "&lt;:)~";
+      char taker[MAX_CSTR_SIZE] = "&lt;:)~";
       char rot[] = "&gt;:)";
-  
+    
       // The mysteriously vanishing devious face
       for (int i = 0; taker[i] != '\0'; i++) {
           int j = i;
           do {
               cout &lt;&lt; rot[j++];
-          } while (rot[j] != '\0' &amp;&amp; rot[j] == taker[j]);
+          } while (j &lt; 5 &amp;&amp; rot[j] != '\0' &amp;&amp; rot[j] == taker[j]);
           cout &lt;&lt; endl;
       }
   }

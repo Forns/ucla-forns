@@ -1,0 +1,625 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Andrew Forney - UCLA CS</title>
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/magic-bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/main.css" rel="stylesheet" type="text/css">
+    <script src="../../../js/lib/jquery-2.0.3.min.js"></script>
+    <script src="../../../js/lib/bootstrap.min.js"></script>
+    <script src="../../../js/display/general/general-display.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+  </head>
+  
+  <body data-spy="scroll" data-target="#scrollspy">
+    
+    <!-- BEGIN WRAP -->
+    <div id="wrap">
+      
+      <!-- BEGIN NAVIGATION -->
+      <nav class='navbar navbar-default' role='navigation'>
+        <div class='nav-accent'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-12'>
+              <div class='navbar-header'>
+                <button class='navbar-toggle' type='button' data-toggle='collapse' data-target='.navbar-main-collapse'>
+                  <span class='sr-only'>Toggle Navigation</span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                </button>
+                <a class='navbar-brand' href='/~forns/'>
+                  <span id='brand-text'>
+                    Andrew Forney
+                  </span>
+                </a>
+              </div>
+              
+              <div id='nav-main' class='collapse navbar-collapse navbar-main-collapse'>
+                <ul class='nav navbar-nav navbar-right'>
+                  
+                  <li>
+                    <a href='/~forns/about.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-user'></span>
+                      </div>
+                      <p class='text-center'>About</p>
+                    </a>
+                  </li>
+                  
+                  <li class='active'>
+                    <a href='/~forns/classes.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-book'></span>
+                      </div>
+                      <p class='text-center'>Classes</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/contact.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-comment'></span>
+                      </div>
+                      <p class='text-center'>Contact</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/publications.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-file'></span>
+                      </div>
+                      <p class='text-center'>Publications</p>
+                    </a>
+                  </li>
+                  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <!-- END NAVIGATION -->
+      
+      <!-- BEGIN MAIN CONTENT -->
+      <div id="main-content" class="container">
+        <div class="row">
+          
+          <!-- BEGIN SCROLLSPY -->
+          <div class='col-md-2'>
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+              <ul id='scrollspy' class="nav bs-sidenav">
+              </ul>
+            </div>
+          </div>
+          <!-- END SCROLLSPY -->
+          
+          <!-- BEGIN PRESENTATION CONTENT -->
+          <div class='col-md-10 presentation-content' role='main'>
+            <ol class="breadcrumb">
+              <li><a href="../../../classes.html">Classes</a></li>
+              <li><a href="./cs-31.html">Fall13 CS31</a></li>
+              <li class="active">Week 7</li>
+            </ol>
+            
+            <div id='review' class='scrollspy-element' scrollspy-title='Review'></div>
+            <h1>Questions from Week 6</h1>
+            <div>
+              <p><strong>Q:</strong> Remember our old friend strcat from last week? That example of strcat-ing a cstring to itself? Here's a gist version:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+  
+  int main () {
+      char c[8] = "bad!";
+      strcat(c, c);
+  
+      cout &lt;&lt; c &lt;&lt; endl;
+  }
+</pre>
+              <p>Now, we spent some time scratching our heads as to why it wouldn't work... here's a graphic that I spent all night making instead of eating:</p>
+              <div class='text-center'>
+                <img src='../../../assets/images/fall-2013/cs-31/week-7/strcat.GIF' />
+              </div>
+              <p>So the long-story short here is: I've learned how to make gifs and will be requesting a raise.</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='multiArrays' class='scrollspy-element' scrollspy-title='Multi-dimensional Arrays'></div>
+            <h1>Multi-dimensional Arrays</h1>
+            <div>
+              <p>Multi dimenstional arrays are just like normal arrays except that instead of having, for example, ints and strings as elements, they have arrays of ints and arrays of strings as elements.</p>
+              <p>So how do we declare multi-dimensional arrays? Let's start by looking at 2D arrays:</p>
+              <p class='definition'>
+                A <strong>2D array</strong> must be declared by optionally specifying the number of rows, but necessarily specifying the number of columns:<br/>
+                int i[ROWS][COLUMNS];<br/>
+                ...where ROWS is optionally specified, but COLUMNS is required.
+              </p>
+              <p class='definition'>
+                A 2D array is initialized using the following syntax:<br/>
+                int i[ROWS][COLUMNS] = {{row_00, row_01, ...}, {row_10, row11, ...}, ..., {row_i0, row_i1, ...}};
+              </p>
+              <p class='definition'>
+                We can access the ith row and jth column of a 2D array using the syntax:<br/>
+                some2DArray[i][j];
+              </p>
+              <p>Notice, we define elements of a 2D array as arrays themselves!</p>
+              <p>This means that if I reference a row, say i[1] in the example above, I get back a 1D array.</p>
+              <p>Here's an example initialization:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      // Odd spacing for presentation
+      int i[][3] = 
+          {
+              {1, 2, 3},
+              {4, 5, 6},
+              {20, -1, 0}
+          };
+  }
+</pre>
+              <p>Here, I say, &quot;Compiler, I'd like you to infer how many rows I want from my initialization, but each column should have no more than 3 elements.&quot;</p>
+              <p>Pictorially:</p>
+              <div class='text-center'>
+                <img src='../../../assets/images/fall-2013/cs-31/week-6/2DArray.png' />
+              </div>
+              <p>This is a nice mental representation that will help us program, but how is our 2D array being stored in memory?</p>
+              <p>Pictorially:</p>
+              <div class='text-center'>
+                <img src='../../../assets/images/fall-2013/cs-31/week-6/2DArrayMem.png' />
+              </div>
+              <p>Andrew, that is one of, if not the, worst illustrations I've ever seen. What did you do, make that in PowerPoint?</p>
+              <p>Save that design talk for North campus, punk!</p>
+              <p>Back on topic...</p>
+              <p class='question' name='multiArrays-q0'>So, knowing how our 2D arrays are represented in memory, why is it necessary for us to define all array dimension sizes other than the first?</p>
+              <p class='answer' name='multiArrays-q0'>
+                Because our 2D array is represented contiguously in memory, meaning, in the above example, I have 9 contiguous ints (3 ROWs x 3 COLUMNs), 
+                I wouldn't know how much column space to leave between starts of rows. I get to leave the number of rows blank because I can infer from my 
+                initialization how many I'll need, and simply stick a new row of ints onto the end of wherever the last one left off.
+              </p>
+              <p>So, knowing that, would the following be a legal declaration?</p>
+              <p class='debug'>Will the following code compile?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      int derp[][3];
+  }
+</pre>
+              <p class='question' name='multiArrays-q1'>So, what does an array of cstrings look like? How many dimensions does it have?</p>
+              <div class='answer' name='multiArrays-q1'>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      char s[2][3] = {"hi", "yo"};
+      
+      cout &lt;&lt; s[0] &lt;&lt; endl;
+      cout &lt;&lt; s[1] &lt;&lt; endl;
+  }
+</pre>
+              </div>
+              <p>So, if we have to define functions that take in multi-dimensionar arrays as parameter inputs, then we must also define all array dimensions except for the first.</p>
+              <p>Here's an example:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  const int MAX_CSTRING_SIZE = 4 + 1;
+  void cMakeUpper (char c[][MAX_CSTRING_SIZE], int n);
+  
+  int main () {
+      char c[][MAX_CSTRING_SIZE]
+          = {"test", "your", "fun"};
+      cMakeUpper(c, 3);
+      
+      cout &lt;&lt; c[0] &lt;&lt; endl;
+      cout &lt;&lt; c[1] &lt;&lt; endl;
+      cout &lt;&lt; c[2] &lt;&lt; endl;
+  }
+  
+  // Mutates an array of cstrings no
+  // longer than MAX_CSTRING_SIZE,
+  // and makes the first n of
+  // those cstrings uppercase
+  void cMakeUpper (char c[][MAX_CSTRING_SIZE], int n) {
+      // Iterate through each cstring
+      for (int i = 0; i &lt; n; i++) {
+          // And then look at each
+          // character in that cstring
+          for (int j = 0; c[i][j] != '\0'; j++) {
+              c[i][j] = toupper(c[i][j]);
+          }
+      }
+  }
+</pre>
+              <p>Now, just to make sure you've got it... what is a 3D array of, let's say, ints?</p>
+              <p>It's an array of an array of an array of ints O_O</p>
+              <p class='question' name='multiArrays-q2'>So, how many dimensions of an n-dimensional array do you need to define, and which ones?</p>
+              <p class='answer' name='multiArrays-q2'>You must define at least n - 1 dimensions, which are all except the first dimension.</p>
+              <p>This holds for n-dimensional array initializations and function parameters, but not simple declarations without initialization!</p>
+              <p>How about an example for practice?</p>
+              <p class='example'>Design a function, multiCStringAppend, that takes in an array of cstrings (say, target) and a single cstring (say, toAppend), and appends toAppend to each of the first n elements of target.</p>
+              <p>The function signature will look like:</p>
+<pre class='prettyprint'>
+  void multiCStringAppend (char target[][MAX_CSTRING_SIZE], char toAppend[], int n) {
+    ...
+  }
+</pre>
+              <p>Output of this might look like:</p>
+<pre class='prettyprint'>
+  char c[][10] = {"testin", "this", "func!"};
+  char toAppend[] = "!!";
+  
+  multiCStringAppend(c, toAppend, 2);
+  // c will now be {"testin!!", "this!!", "func!"}
+</pre>
+              
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='practice' class='scrollspy-element' scrollspy-title='Practice Problems'></div>
+            <h1>Practice Problems</h1>
+            <div>
+              <h2>Examples</h2>
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;cstring&gt;
+  #include &lt;cctype&gt;
+  using namespace std;
+  
+  int main () {
+      char c[][3] = {
+          "cat",
+          "dog",
+          ":D!"
+      };
+  
+      cout &lt;&lt; c[0] &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;cstring&gt;
+  #include &lt;cctype&gt;
+  using namespace std;
+  
+  int main () {
+      char c[][3] = {
+          {'h', 'i', '\0'},
+          "to",
+          {'u', '\0'},
+          ":)"
+      };
+  
+      cout &lt;&lt; c[0] &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;cstring&gt;
+  #include &lt;cctype&gt;
+  using namespace std;
+  
+  int main () {
+      char c[][3] = {
+          {'h', 'i', '\0'},
+          "to",
+          {'u', '\0'},
+          ":)"
+      };
+  
+      strcat(c[2], "!");
+      cout &lt;&lt; c[2] &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p class='example'>What will the following code output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cctype&gt;
+  using namespace std;
+  
+  double dammitAndrew (double&amp; d);
+  double trickz = 1.0;
+  
+  int main () {
+      cout &lt;&lt; (dammitAndrew(trickz) + trickz) &lt;&lt; endl;
+      trickz = 1.0;
+      cout &lt;&lt; (trickz + dammitAndrew(trickz)) &lt;&lt; endl;
+      trickz = 1.0;
+      cout &lt;&lt; (dammitAndrew(trickz) + dammitAndrew(trickz)) &lt;&lt; endl;
+  }
+  
+  double dammitAndrew (double&amp; d) {
+      d += d;
+      return d;
+  }
+</pre>
+              <br/>
+              <p class='debug'>USC_Brogrammer_22 submitted the following code to an online forum (haha! dig at our rivals!). Find all of their syntax errors.</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  #include &lt;cctype&gt;
+  using namespace std;
+  
+  const int MAX_CSTRING_LENGTH = 1000 + 1;
+  const int CSTRING_ROWS = 3;
+  const int CSTRINGS = 3;
+  void nukeAllChars (char c[][][MAX_CSTRING_LENGTH], char toBeNuked, char nukedChar);
+  
+  int main () {
+      char lotsODimensions[][][MAX_CSTRING_LENGTH] = {
+          {"Test", "Yo", "Arrays"},
+          {"Numbers too", "1234", "Countin meng"},
+          {"", "That one was blank.", "crazy man"}
+      };
+  
+      nukeAllChars(lotsODimensions, 'o');
+  
+      // Select sample
+      cout &lt;&lt; lotsODimensions[0][0] &lt;&lt; endl;
+      cout &lt;&lt; lotsODimensions[0][1] &lt;&lt; endl;
+      cout &lt;&lt; lotsODimensions[1][0] &lt;&lt; endl;
+      cout &lt;&lt; lotsODimensions[2][0] &lt;&lt; endl;
+      cout &lt;&lt; lotsODimensions[2][1] &lt;&lt; endl;
+  }
+  
+  // Replaces all instances of toBeNuked in c with the nukedChar
+  void nukeAllChars (char c[][][MAX_CSTRING_LENGTH], char toBeNuked, char nukedChar) {
+      for (int i = 0; i &lt; CSTRING_ROWS; i++) {
+          for (int j = 0; j &lt; CSTRINGS; j++) {
+              int len = strlen(c[i][j]);
+              for (int k = 0; k &lt; len; k++) {
+                  if (strcmp(c[i][j][k], toBeNuked) == 0) {
+                      c[i][j][k] = nukedChar;
+                  }
+              }
+          }
+      }
+  }
+</pre>
+              <br/>
+              <p>Figure out what this prints and you've mastered... well... something to do with loops and functions:</p>
+              <p class='example'>What will the following code output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  void coolFunc (double d, int i[], int n);
+  double coolerFunc (double&amp; d);
+  
+  int main () {
+      int i[] = {5, 6, 7};
+      int n = 2;
+      double d = 2.2;
+      coolFunc(d, i, n);
+  
+      cout &lt;&lt; "i: ";
+      for (int j = 0; j &lt;= n; j++) {
+          cout &lt;&lt; i[j] &lt;&lt; " ";
+      }
+      cout &lt;&lt; endl &lt;&lt;  "n: " &lt;&lt; n &lt;&lt; endl;
+      cout &lt;&lt; "d: " &lt;&lt; d &lt;&lt; endl;
+  }
+  
+  void coolFunc (double d, int i[], int n) {
+      while (n &gt; 0) {
+          i[n] = coolerFunc(d);
+          n--;
+      }
+  }
+  
+  double coolerFunc (double&amp; d) {
+      double result = 0;
+      for (int j = 0; j &lt; d; j++) {
+          result += d;
+          d--;
+      }
+      return result;
+  }
+</pre>
+              
+              <h2>Exercises</h2>
+              <p class='example'>Implement the isStringDouble function below, which determines whether or not the input string is a string representation of a decimal number with possible leading / ending spaces:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cctype&gt;
+  using namespace std;
+  
+  bool isDoubleString (string s);
+  
+  int main () {
+      cout &lt;&lt; isDoubleString("1.23") &lt;&lt; endl; // True
+      cout &lt;&lt; isDoubleString("  1.23  ") &lt;&lt; endl; // True
+      cout &lt;&lt; isDoubleString(".23") &lt;&lt; endl; // True
+      cout &lt;&lt; isDoubleString("  1.  23  ") &lt;&lt; endl; // False
+      cout &lt;&lt; isDoubleString("1.2.3.4") &lt;&lt; endl; // False
+      cout &lt;&lt; isDoubleString("I IZ DUBLE :DDD") &lt;&lt; endl; // False
+      cout &lt;&lt; isDoubleString("1a.23") &lt;&lt; endl; // False
+      cout &lt;&lt; isDoubleString("a1.23") &lt;&lt; endl; // False
+      cout &lt;&lt; isDoubleString("") &lt;&lt; endl; // False
+  }
+  
+  bool isDoubleString (string s) {
+    // ...
+      for (int i = 0; i &lt; s.length(); i++) {
+          // ...
+      }
+  }
+</pre>
+              <br/>
+              <p class='example'>Design a function selfStrcat that takes as input a cstring, and then safely appends itself to the end of itself. Assume the cstring has room in memory for such an operation.</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;cstring&gt;
+  #include &lt;cctype&gt;
+  using namespace std;
+  
+  void selfStrcat (char c[]);
+  
+  int main () {
+      char c[100] = "Finally, I'll work!";
+      selfStrcat(c);
+  
+      // Prints: "Finally, I'll work!Finally, I'll work!"
+      cout &lt;&lt; c &lt;&lt; endl;
+  
+      char t[100] = "";
+      selfStrcat(t);
+  
+      // Prints: ""
+      cout &lt;&lt; t &lt;&lt; endl;
+  
+      char devious[100] = "HA!\0HA!\0";
+      selfStrcat(devious);
+  
+      // Prints: "HA!HA!"
+      cout &lt;&lt; devious &lt;&lt; endl;
+  }
+  
+  void selfStrcat (char c[]) {
+      // ...
+  }
+</pre>
+              <br/>
+              <p class='example'>
+                Design a function called inflateCString that takes in a cstring and adds a number of null characters at the specified index, 
+                shifting the rest of the cstring after index down by a proportional number of indecies.
+              </p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;cstring&gt;
+  #include &lt;cctype&gt;
+  using namespace std;
+  
+  void inflateCString (char c[], int index, int spaces);
+  
+  int main () {
+      // Cuz it's inflated...
+      char hotAir[100] = "balloon!";
+      inflateCString(hotAir, 0, 2);
+      // hotAir is now: "\0\0balloon!\0"
+  
+      // Political / Economic zinger!
+      char usDollar[100] = "so poor!";
+      inflateCString(usDollar, 3, 1);
+      // usDollar is now: "so \0poor!\0"
+      
+      // :/
+      char andrewsEgo[100] = ""; // not to be confused with breakfast treat
+      inflateCString(andrewsEgo, 0, 2);
+      // andrewsEgo is now: "\0\0\0",
+      // more empty than ever before
+      
+  }
+  
+  void inflateCString (char c[], int index, int spaces) {
+      // ...
+  }
+</pre>
+              <br/>
+              <p class='example'>
+                Using inflateCString that you did above, create a function injectText that takes as input a cstring, some text to inject into it, and then the index at which to inject said text.
+              </p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;cstring&gt;
+  #include &lt;cctype&gt;
+  using namespace std;
+  
+  void injectText (char c[], int index, char injection[]);
+  
+  int main () {
+      char stimpack[] = "nnHmmm";
+      injectText(stimpack, 2, "AIEEE");
+      // Prints "nnAIEEEHmmm"
+      cout &lt;&lt; stimpack &lt;&lt; endl;
+  
+      // Make sure to get yours today, kids!
+      char fluShot[] = "";
+      injectText(fluShot, 0, "Go Ashe Center!");
+      // Prints "Go Ashe Center!"
+      cout &lt;&lt; fluShot &lt;&lt; endl;
+  }
+  
+  void injectText (char c[], int index, char injection[]) {
+      // ...
+  }
+</pre>
+              
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='midterm' class='scrollspy-element' scrollspy-title='Midterm II'></div>
+            <h1>Midterm II</h1>
+            <div>
+              <p>Note: I have not taken the midterm, have not been told what is on the midterm, and will not be returning the bribes expecting that I have or have been.</p>
+              <p class='debug'>You MUST sign up for a midterm time on the course website under "Announcements."</p>
+              <p class='definition'>
+                The midterm covers everything in the past quarter up until cstrings and multi-dimensional arrays. Reviewing my lecture notes and doing the practice examples will set you on the right path.
+              </p>
+              <p class='definition'>
+                You are allowed to bring a single 8.5&quot; x 11&quot; sheet of notes, double sided, printed or hand-written into the midterm exam.
+              </p>
+              <p class='definition'>I will have office hour 4:30 - 5:30 pm the day of the exam in the typical TA office hours room: Boelter 2432.</p>
+              <p class='definition'>I will compose a practice exam with questions on topics that you give me... now. I'll try to get this out by tonight at the latest.</p>
+            </div>
+            
+            
+          </div>
+          <!-- END PRESENTATION CONTENT -->
+          
+        </div>
+      </div>
+      <!-- END MAIN CONTENT -->
+      
+      <!-- TODO: cipher example -->
+      <!-- TODO: multi-dimensional array example -->
+      
+      
+    </div>
+    <!-- END WRAPPER -->
+    
+    <!-- BEGIN FOOTER -->
+    <div id="footer">
+      <div class="container">
+        <div class="col-md-12 text-center">
+          
+        </div>
+      </div>
+    </div>
+    <!-- END FOOTER -->
+    
+  </body>
+</html>

@@ -1,0 +1,410 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Andrew Forney - UCLA CS</title>
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/magic-bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/main.css" rel="stylesheet" type="text/css">
+    <script src="../../../js/lib/jquery-2.0.3.min.js"></script>
+    <script src="../../../js/lib/bootstrap.min.js"></script>
+    <script src="../../../js/display/general/general-display.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+  </head>
+  
+  <body data-spy="scroll" data-target="#scrollspy">
+    
+    <!-- BEGIN WRAP -->
+    <div id="wrap">
+      
+      <!-- BEGIN NAVIGATION -->
+      <nav class='navbar navbar-default' role='navigation'>
+        <div class='nav-accent'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-12'>
+              <div class='navbar-header'>
+                <button class='navbar-toggle' type='button' data-toggle='collapse' data-target='.navbar-main-collapse'>
+                  <span class='sr-only'>Toggle Navigation</span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                </button>
+                <a class='navbar-brand' href='/~forns/'>
+                  <span id='brand-text'>
+                    Andrew Forney
+                  </span>
+                </a>
+              </div>
+              
+              <div id='nav-main' class='collapse navbar-collapse navbar-main-collapse'>
+                <ul class='nav navbar-nav navbar-right'>
+                  
+                  <li>
+                    <a href='/~forns/about.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-user'></span>
+                      </div>
+                      <p class='text-center'>About</p>
+                    </a>
+                  </li>
+                  
+                  <li class='active'>
+                    <a href='/~forns/classes.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-book'></span>
+                      </div>
+                      <p class='text-center'>Classes</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/contact.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-comment'></span>
+                      </div>
+                      <p class='text-center'>Contact</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/publications.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-file'></span>
+                      </div>
+                      <p class='text-center'>Publications</p>
+                    </a>
+                  </li>
+                  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <!-- END NAVIGATION -->
+      
+      <!-- BEGIN MAIN CONTENT -->
+      <div id="main-content" class="container">
+        <div class="row">
+          
+          <!-- BEGIN SCROLLSPY -->
+          <div class='col-md-2'>
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+              <ul id='scrollspy' class="nav bs-sidenav">
+              </ul>
+            </div>
+          </div>
+          <!-- END SCROLLSPY -->
+          
+          <!-- BEGIN PRESENTATION CONTENT -->
+          <div class='col-md-10 presentation-content' role='main'>
+            <ol class="breadcrumb">
+              <li><a href="../../../classes.html">Classes</a></li>
+              <li><a href="./cs-31.html">Fall13 CS31</a></li>
+              <li class="active">Midterm II Review</li>
+            </ol>
+            
+            <h1>Midterm II Review</h1>
+            <p>The following review covers the topics you asked me to review at the end of week 3's discussion, plus some other stuff.</p>
+            <p>By no means is it meant to serve as a comprehensive review (look through my other notes for greater detail), but will help you get some more practice as you suddenly remember Monday's midterm.</p>
+            
+            <br/>
+            <div id='functions' class='scrollspy-element' scrollspy-title='Functions'></div>
+            <h1>Functions</h1>
+            <div>
+              <h2>Examples</h2>
+              <p class='example'>We went over this code in class but there's one small difference: what will this snippet print out?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cctype&gt;
+  using namespace std;
+  
+  double dammitAndrew (double&amp; d);
+  double trickz = 1.0;
+  
+  int main () {
+      cout &lt;&lt; (dammitAndrew(trickz) + trickz) &lt;&lt; endl;
+      trickz = 1.0;
+      cout &lt;&lt; (trickz + dammitAndrew(trickz)) &lt;&lt; endl;
+      trickz = 1.0;
+      cout &lt;&lt; (dammitAndrew(trickz) + dammitAndrew(trickz)) &lt;&lt; endl;
+  }
+  
+  double dammitAndrew (double&amp; d) {
+      return d + d;
+  }
+</pre>
+              <br/>
+              <p class='example'>We went over this code in class but there's one small difference: what will this snippet print out?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  void coolFunc (double&amp; d, int i[], int n);
+  double coolerFunc (double&amp; d);
+  
+  int main () {
+      int i[] = {5, 6, 7};
+      int n = 2;
+      double d = 2.2;
+      coolFunc(d, i, n);
+  
+      cout &lt;&lt; "i: ";
+      for (int j = 0; j &lt;= n; j++) {
+          cout &lt;&lt; i[j] &lt;&lt; " ";
+      }
+      cout &lt;&lt; endl &lt;&lt;  "n: " &lt;&lt; n &lt;&lt; endl;
+      cout &lt;&lt; "d: " &lt;&lt; d &lt;&lt; endl;
+  }
+  
+  void coolFunc (double&amp; d, int i[], int n) {
+      while (n &gt; 0) {
+          i[n] = coolerFunc(d);
+          n--;
+      }
+  }
+  
+  double coolerFunc (double&amp; d) {
+      double result = 0;
+      for (int j = 0; j &lt; d; j++) {
+          result += d;
+          d--;
+      }
+      return result;
+  }
+</pre>
+              <br/>
+              
+              <h2>Exercises</h2>
+              <p class='example'>Design a function gcd that takes as input two ints and returns the int representing their greatest common divisor. Assume inputs are positive.</p>
+<pre class='prettyprint'>
+  // Test Cases
+  cout &lt;&lt; gcd(1, 1) &lt;&lt; endl; // 1
+  cout &lt;&lt; gcd(2, 2) &lt;&lt; endl; // 2
+  cout &lt;&lt; gcd(2, 4) &lt;&lt; endl; // 2
+  cout &lt;&lt; gcd(2, 8) &lt;&lt; endl; // 2
+  cout &lt;&lt; gcd(5, 15) &lt;&lt; endl; // 5
+  cout &lt;&lt; gcd(1000, 300) &lt;&lt; endl; // 100
+</pre>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='cstrings' class='scrollspy-element' scrollspy-title='cstrings'></div>
+            <h1>cstrings</h1>
+            <div>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='multidArrays' class='scrollspy-element' scrollspy-title='Multidimensional Arrays'></div>
+            <h1>Multidimensional Arrays</h1>
+            <div>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='diagnosis' class='scrollspy-element' scrollspy-title='Code Triage'></div>
+            <h1>Code Triage</h1>
+            <div>
+              <p class='example'>Noob A. Nooberson attempted to solve the isDoubleString problem presented in class and threw up the following monstrosity; which test cases in the main method will it fail?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cctype&gt;
+  using namespace std;
+  
+  bool isDoubleString (string s);
+  
+  int main () {
+      cout &lt;&lt; isDoubleString("1.23") &lt;&lt; endl; // True
+      cout &lt;&lt; isDoubleString("  1.23  ") &lt;&lt; endl; // True
+      cout &lt;&lt; isDoubleString(".23") &lt;&lt; endl; // True
+      cout &lt;&lt; isDoubleString("  1.  23  ") &lt;&lt; endl; // False
+      cout &lt;&lt; isDoubleString("1.2.3.4") &lt;&lt; endl; // False
+      cout &lt;&lt; isDoubleString("I IZ DUBLE :DDD") &lt;&lt; endl; // False
+      cout &lt;&lt; isDoubleString("1a.23") &lt;&lt; endl; // False
+      cout &lt;&lt; isDoubleString("a1.23") &lt;&lt; endl; // False
+      cout &lt;&lt; isDoubleString("") &lt;&lt; endl; // False
+  }
+  
+  // Determines whether or not the input string is a string representation
+  // of a decimal number with possible leading / ending spaces
+  bool isDoubleString (string s) {
+      for (int i = 0; i &lt; s.length(); i++) {
+          if (s[i] == ' ') {
+              continue;
+          }
+          if (!(isdigit(s[i]) || s[i] == '.')) {
+              return false;
+          }
+      }
+      return true;
+  }
+</pre>
+              <br/>
+              <p class='example'>
+                Lame O. Badprogrammer, apart from being born to the same parents who named Noob A. Nooberson and somehow changed his last name (shut up, I made you a practice midterm), 
+                attempted to solve the selfStrcat problem presented in class and made a small, insidious error. Where is the problem, and how could you fix it?
+              </p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;cstring&gt;
+  #include &lt;cctype&gt;
+  using namespace std;
+  
+  void selfStrcat (char c[]);
+  
+  int main () {
+      char c[100] = "Finally, I'll work!";
+      selfStrcat(c);
+  
+      // Prints: "Finally, I'll work!Finally, I'll work!"
+      cout &lt;&lt; c &lt;&lt; endl;
+  
+      char t[100] = "";
+      selfStrcat(t);
+  
+      // Prints: ""
+      cout &lt;&lt; t &lt;&lt; endl;
+  
+      char devious[100] = "HA!\0HA!\0";
+      selfStrcat(devious);
+  
+      // Prints: "HA!HA!"
+      cout &lt;&lt; devious &lt;&lt; endl;
+  }
+  
+  void selfStrcat (char c[]) {
+      int len = strlen(c);
+  
+      for (int i = 0; i &lt; 2 * len; i++) {
+          c[i] = c[i % len];
+      }
+      c[strlen(c)] = '\0';
+  }
+</pre>
+              <br/>
+              <p class='example'>
+                James T. Buzzkillington III, Esq. attempted to implement the injectText function covered during class, but made one mistake that will embarrass him greatly at the next clubhouse meating. FIND IT.
+              </p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;cstring&gt;
+  #include &lt;cctype&gt;
+  using namespace std;
+  
+  void inflateCString (char c[], int index, int spaces);
+  void injectText (char c[], int index, char injection[]);
+  
+  int main () {
+      char stimpack[] = "nnHmmm";
+      injectText(stimpack, 2, "AIEEE");
+      // Prints "nnAIEEEHmmm"
+      cout &lt;&lt; stimpack &lt;&lt; endl;
+  
+      // Make sure to get yours today, kids!
+      char fluShot[] = "";
+      injectText(fluShot, 0, "Go Ashe Center!");
+      // Prints "Go Ashe Center!"
+      cout &lt;&lt; fluShot &lt;&lt; endl;
+  }
+  
+  void inflateCString (char c[], int index, int spaces) {
+      // Assume implemented correctly; see class notes
+  }
+  
+  void injectText (char c[], int index, char injection[]) {
+      int len = strlen(c),
+          injectionLen = strlen(injection);
+  
+      // Begin by leaving space for the injection
+      inflateCString(c, index, injectionLen);
+  
+      // Add the injection at the space we just made, which we
+      // know will end with a null character and have enough room
+      // for the injection text
+      strcat(c, injection);
+  }
+</pre>
+              <br/>
+              <p class='example'>
+                Find and fix all of the syntax errors below so that the code behaves as "intended".
+              </p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  #include &lt;cctype&gt;
+  using namespace std;
+  
+  const int MAX_CSTRING_LENGTH = 1000 + 1;
+  const int CSTRING_ROWS = 3;
+  const int CSTRINGS = 3;
+  void nukeAllChars (char c[][][MAX_CSTRING_LENGTH], char toBeNuked, char nukedChar);
+  
+  int main () {
+      char lotsODimensions[][][MAX_CSTRING_LENGTH] = {
+          {"Test", "Yo", "Arrays"},
+          {"Numbers too", "1234", "Countin meng"},
+          {"", "That one was blank.", "crazy man"}
+      };
+  
+      nukeAllChars(lotsODimensions, 'o');
+  
+      // Select sample
+      cout &lt;&lt; lotsODimensions[0][0] &lt;&lt; endl;
+      cout &lt;&lt; lotsODimensions[0][1] &lt;&lt; endl;
+      cout &lt;&lt; lotsODimensions[1][0] &lt;&lt; endl;
+      cout &lt;&lt; lotsODimensions[2][0] &lt;&lt; endl;
+      cout &lt;&lt; lotsODimensions[2][1] &lt;&lt; endl;
+  }
+  
+  // Replaces all instances of toBeNuked in c with the nukedChar
+  void nukeAllChars (char c[][][MAX_CSTRING_LENGTH], char toBeNuked, char nukedChar) {
+      for (int i = 0; i &lt; CSTRING_ROWS; i++) {
+          for (int j = 0; j &lt; CSTRINGS; j++) {
+              int len = strlen(c[i][j]);
+              for (int k = 0; k &lt; len; k++) {
+                  if (strcmp(c[i][j][k], toBeNuked) == 0) {
+                      c[i][j][k] = nukedChar;
+                  }
+              }
+          }
+      }
+  }
+</pre>
+            </div>
+            <hr/>
+            
+            
+          </div>
+          <!-- END PRESENTATION CONTENT -->
+          
+        </div>
+      </div>
+      <!-- END MAIN CONTENT -->
+      
+      
+    </div>
+    <!-- END WRAPPER -->
+    
+    <!-- BEGIN FOOTER -->
+    <div id="footer">
+      <div class="container">
+        <div class="col-md-12 text-center">
+          
+        </div>
+      </div>
+    </div>
+    <!-- END FOOTER -->
+    
+  </body>
+</html>
