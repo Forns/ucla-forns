@@ -198,6 +198,15 @@
             <div id='cstrings' class='scrollspy-element' scrollspy-title='cstrings'></div>
             <h1>cstrings</h1>
             <div>
+              <h2>Exercises</h2>
+              <p class='example'>
+                Design a function cstringSecretMessage that takes as input a cstring and a number n, which is the number of characters in the cstring to examine. 
+                The function will then look at each of the cstring's first n characters, and prints out a word (assume to be never larger than, say, 100 chars) 
+                whenever it finds one between null characters. It will finish whenever it reaches n characters, or when it encounters 3 null characters in a row.
+              </p>
+<pre class='prettyprint'>
+  
+</pre>
             </div>
             <hr/>
             
@@ -332,6 +341,47 @@
       // know will end with a null character and have enough room
       // for the injection text
       strcat(c, injection);
+  }
+</pre>
+              <br/>
+              <p class='example'>
+                &lt;// TODO: INSERT VAGUELY HUMOROUS NAME HERE&gt; tried to fix the stringArrayMatch example from class but failed horribly and was forced to take a job as a TA. Where is the error?
+              </p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+  
+  const int MAX_CSTRING_LENGTH = 100;
+  const int ARRAY_ROWS = 3;
+  void stringArrayMatch (string s[], char c[][MAX_CSTRING_LENGTH], int n);
+  
+  int main () {
+      string s[] = {"this", "func", "ROCKS"};
+      char c[][MAX_CSTRING_LENGTH] = {"This", "func", "rocks"};
+      stringArrayMatch(s, c, ARRAY_ROWS);
+      
+      for (int i = 0; i &lt; 3; i++) {
+          cout &lt;&lt; "s[" &lt;&lt; i &lt;&lt; "]: " &lt;&lt; s[i] &lt;&lt; endl;
+          cout &lt;&lt; "c[" &lt;&lt; i &lt;&lt; "]: " &lt;&lt; c[i] &lt;&lt; endl;
+      }
+  }
+  
+  void stringArrayMatch (string s[], char c[][MAX_CSTRING_LENGTH], int n) {
+      for (int i = 0; i &lt; n; i++) {
+          bool match = true;
+          for (int j = 0; j &lt; s[i].length(); j++) {
+              if (s[i][j] != c[i][j]) {
+                  match = false;
+                  return;
+              }
+          }
+          if (match) {
+              s[i] = "MATCH";
+              strcpy(c[i], "MATCH");
+          }
+      }
   }
 </pre>
               <br/>

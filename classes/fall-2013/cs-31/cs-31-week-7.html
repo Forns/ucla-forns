@@ -337,6 +337,68 @@
   }
 </pre>
               <br/>
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+  
+  const int MAX_CSTRING_LENGTH = 100;
+  const int ARRAY_ROWS = 3;
+  void stringArrayMatch (string s[], char c[][MAX_CSTRING_LENGTH], int n);
+  
+  int main () {
+      string s[] = {"this", "func", "ROCKS"};
+      char c[][MAX_CSTRING_LENGTH] = {"This", "func", "rocks"};
+      stringArrayMatch(s, c, ARRAY_ROWS);
+      
+      for (int i = 0; i &lt; 3; i++) {
+          cout &lt;&lt; "s[" &lt;&lt; i &lt;&lt; "]" &lt;&lt; s[i];
+          cout &lt;&lt; "c[" &lt;&lt; i &lt;&lt; "]" &lt;&lt; c[i];
+      }
+  }
+  
+  void stringArrayMatch (string s[], char c[][MAX_CSTRING_LENGTH], int n) {
+      for (int i = 0; i &lt; n; i++) {
+          if (strcmp(s[i], c[i]) == 0) {
+              s[i] = "MATCH";
+              strcpy(c[i], "MATCH");
+          }
+      }
+  }
+</pre>
+              <br/>
+              <p class='example'>Fix the above function so that it does what it's meant to do; what will it output under normal functioning?</p>
+              <br/>
+              <p class='example'>What will the following code output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+  
+  const int STR_COUNT = 4;
+  const int SQUEEZE = 3;
+  
+  int main () {
+      string s[] = {
+          "abiotic",
+          "queuing",
+          "concern",
+          "itching"
+      };
+      
+      for (int i = 0; i &lt; STR_COUNT; i++) {
+          for (int j = 0; j &lt; SQUEEZE; j++) {
+              s[i] = s[i].substr(j, s[i].length() - j);
+              s[i] = s[i].substr(0, s[i].length() - j);
+          }
+          cout &lt;&lt; s[i] &lt;&lt; endl;
+      }
+  }
+</pre>
+              <br/>
               <p class='example'>What will the following code output?</p>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
