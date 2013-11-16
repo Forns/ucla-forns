@@ -1,0 +1,232 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Andrew Forney - UCLA CS</title>
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/magic-bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/main.css" rel="stylesheet" type="text/css">
+    <script src="../../../js/lib/jquery-2.0.3.min.js"></script>
+    <script src="../../../js/lib/bootstrap.min.js"></script>
+    <script src="../../../js/display/general/general-display.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+  </head>
+  
+  <body data-spy="scroll" data-target="#scrollspy">
+    
+    <!-- BEGIN WRAP -->
+    <div id="wrap">
+      
+      <!-- BEGIN NAVIGATION -->
+      <nav class='navbar navbar-default' role='navigation'>
+        <div class='nav-accent'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-12'>
+              <div class='navbar-header'>
+                <button class='navbar-toggle' type='button' data-toggle='collapse' data-target='.navbar-main-collapse'>
+                  <span class='sr-only'>Toggle Navigation</span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                </button>
+                <a class='navbar-brand' href='/~forns/'>
+                  <span id='brand-text'>
+                    Andrew Forney
+                  </span>
+                </a>
+              </div>
+              
+              <div id='nav-main' class='collapse navbar-collapse navbar-main-collapse'>
+                <ul class='nav navbar-nav navbar-right'>
+                  
+                  <li>
+                    <a href='/~forns/about.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-user'></span>
+                      </div>
+                      <p class='text-center'>About</p>
+                    </a>
+                  </li>
+                  
+                  <li class='active'>
+                    <a href='/~forns/classes.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-book'></span>
+                      </div>
+                      <p class='text-center'>Classes</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/contact.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-comment'></span>
+                      </div>
+                      <p class='text-center'>Contact</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/publications.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-file'></span>
+                      </div>
+                      <p class='text-center'>Publications</p>
+                    </a>
+                  </li>
+                  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <!-- END NAVIGATION -->
+      
+      <!-- BEGIN MAIN CONTENT -->
+      <div id="main-content" class="container">
+        <div class="row">
+          
+          <!-- BEGIN SCROLLSPY -->
+          <div class='col-md-2'>
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+              <ul id='scrollspy' class="nav bs-sidenav">
+              </ul>
+            </div>
+          </div>
+          <!-- END SCROLLSPY -->
+          
+          <!-- BEGIN PRESENTATION CONTENT -->
+          <div class='col-md-10 presentation-content' role='main'>
+            
+            <ol class="breadcrumb">
+              <li><a href="../../../classes.html">Classes</a></li>
+              <li><a href="./cs-31.html">Fall13 CS31</a></li>
+              <li class="active">Week 7 Classwork</li>
+            </ol>
+            
+            <h1>Your Week 7 Classwork</h1>
+            <p>In class, you (as a group) designed programs to match some example specifications. Those answers are listed herein.</p>
+            
+            <div id='example1' class='scrollspy-element' scrollspy-title='stringArrayMatch'></div>
+            <h1>Example One: stringArrayMatch</h1>
+            <p class='example'>
+              Design a function stringArrayMatch that takes as input one array of C++ strings, and one array of cstrings, and compares each of n elements between the two arrays. If the strings / cstrings 
+              at a given element are equal, change that element in both arrays to be the word &quot;MATCH&quot;.
+            </p>
+            <div>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+  
+  const int MAX_CSTRING_LENGTH = 100;
+  const int ARRAY_ROWS = 3;
+  void stringArrayMatch (string s[], char c[][MAX_CSTRING_LENGTH], int n);
+  
+  int main () {
+      string s[] = {"this", "func", "ROCKS"};
+      char c[][MAX_CSTRING_LENGTH] = {"This", "func", "rocks"};
+      stringArrayMatch(s, c, ARRAY_ROWS);
+      
+      for (int i = 0; i &lt; 3; i++) {
+          cout &lt;&lt; "s[" &lt;&lt; i &lt;&lt; "]" &lt;&lt; s[i] &lt;&lt; endl;
+          cout &lt;&lt; "c[" &lt;&lt; i &lt;&lt; "]" &lt;&lt; c[i] &lt;&lt; endl;
+      }
+  }
+  
+  void stringArrayMatch (string s[], char c[][MAX_CSTRING_LENGTH], int n) {
+      for (int i = 0; i &lt; n; i++) {
+          int len = strlen(c[i]);
+          bool match = true;
+          for (int j = 0; j &lt; s[i].length(); j++) {
+              if (j &gt;= len) {
+                  break;
+              }
+              if (s[i][j] != c[i][j]) {
+                  match = false;
+                  break;
+              }
+          }
+          if (match) {
+              s[i] = "MATCH";
+              strcpy(c[i], "MATCH");
+          }
+      }
+  }
+</pre>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='example2' class='scrollspy-element' scrollspy-title='selfStrCat'></div>
+            <h1>Example Two: selfStrCat</h1>
+            <p class='example'>Design a function selfStrcat that takes as input a single cstring and safely appends itself to itself. Assume that the argument has reserved enough room for this operation.</p>
+            <div>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;cstring&gt;
+  #include &lt;cctype&gt;
+  using namespace std;
+  
+  void selfStrcat (char c[]);
+  
+  int main () {
+      char c[100] = "Finally, I'll work!";
+      selfStrcat(c);
+      
+      // Prints: "Finally, I'll work!Finally, I'll work!"
+      cout &lt;&lt; c &lt;&lt; endl;
+      
+      char t[100] = "";
+      selfStrcat(t);
+      
+      // Prints: ""
+      cout &lt;&lt; t &lt;&lt; endl;
+      
+      char devious[100] = "HA!\0HA!\0";
+      selfStrcat(devious);
+      
+      // Prints: "HA!HA!"
+      cout &lt;&lt; devious &lt;&lt; endl;
+  }
+  
+  void selfStrcat (char c[]) {
+      // Find the length until the first null
+      int len = strlen(c);
+      // Go through all len characters
+      for (int i = 0; i &lt; len; i++) {
+          c[len + i] = c[i];
+      }
+      c[2 * len] = '\0';
+  }
+</pre>
+            </div>
+            
+          </div>
+          <!-- END PRESENTATION CONTENT -->
+          
+        </div>
+      </div>
+      <!-- END MAIN CONTENT -->
+      
+      
+    </div>
+    <!-- END WRAPPER -->
+    
+    <!-- BEGIN FOOTER -->
+    <div id="footer">
+      <div class="container">
+        <div class="col-md-12 text-center">
+          
+        </div>
+      </div>
+    </div>
+    <!-- END FOOTER -->
+    
+  </body>
+</html>
