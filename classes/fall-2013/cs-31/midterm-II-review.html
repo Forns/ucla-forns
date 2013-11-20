@@ -111,39 +111,6 @@
             <p>By no means is it meant to serve as a comprehensive review (look through my other notes for greater detail), but will help you get some more practice as you suddenly remember Monday's midterm.</p>
             
             <br/>
-            <div id='fromClass' class='scrollspy-element' scrollspy-title='Week 7 Class'></div>
-            <h1>A Quick Note About Week 7's Discussion</h1>
-            <div>
-              <p>Yeah so... the following program that we reviewed in class and that I thought I encountered different results upon testing... didn't actually get different results across compilers:</p>
-<pre class='prettyprint'>
-  #include &lt;iostream&gt;
-  #include &lt;string&gt;
-  #include &lt;cctype&gt;
-  using namespace std;
-  
-  double dammitAndrew (double&amp; d);
-  double trickz = 1.0;
-  
-  int main () {
-      cout &lt;&lt; (dammitAndrew(trickz) + trickz) &lt;&lt; endl;
-      trickz = 1.0;
-      cout &lt;&lt; (trickz + dammitAndrew(trickz)) &lt;&lt; endl;
-      trickz = 1.0;
-      cout &lt;&lt; (dammitAndrew(trickz) + dammitAndrew(trickz)) &lt;&lt; endl;
-  }
-  
-  double dammitAndrew (double&amp; d) {
-      d += d;
-      return d;
-  }
-</pre>
-              <p>So why do we get 4, 4, 6? We return to our discussion of precedence; function calls are evaluated before the addition, and so the operands are incremented with each call to dammitAndrew before the addition takes place.</p>
-              <p>Sorry, I thought I ran it and got 3 for the second print out one time but clearly I was straight trippin boo. Thanks for enduring my sleep deprivation.</p>
-            </div>
-            <hr/>
-              
-              
-            <br/>
             <div id='grabBag' class='scrollspy-element' scrollspy-title='Miscellaneous'></div>
             <h1>Grab-bag of Examples</h1>
             <div>
@@ -229,30 +196,6 @@
       return mine * mine;
   }
 </pre>
-            <br/>
-            <p class='example'>What will the following code print out?</p>
-<pre class='prettyprint'>
-  #include &lt;iostream&gt;
-  #include &lt;string&gt;
-  #include &lt;cctype&gt;
-  using namespace std;
-    
-  string dammitAndrewII (string&amp; s, int&amp; n);
-    
-  int main () {
-      string s = "0123456789";
-      int n = 0;
-      cout &lt;&lt; dammitAndrewII(s, n) + " " + s &lt;&lt; endl;
-      cout &lt;&lt; s + " " + dammitAndrewII(s, n) &lt;&lt; endl;
-      cout &lt;&lt; dammitAndrewII(s, n) + " " + s &lt;&lt; endl;
-      cout &lt;&lt; n &lt;&lt; endl;
-  }
-    
-  // It returns!!! (and this time, it returns a string)
-  string dammitAndrewII (string&amp; s, int&amp; n) {
-      return s = s.substr(n++, s.length());
-  }
-</pre>
             </div>
             <hr/>
               
@@ -262,29 +205,6 @@
             <h1>Functions</h1>
             <div>
               <h2>Examples</h2>
-              <p class='example'>We went over this code in class but there's one small difference: what will this snippet print out?</p>
-<pre class='prettyprint'>
-  #include &lt;iostream&gt;
-  #include &lt;string&gt;
-  #include &lt;cctype&gt;
-  using namespace std;
-  
-  double dammitAndrew (double&amp; d);
-  double trickz = 1.0;
-  
-  int main () {
-      cout &lt;&lt; (dammitAndrew(trickz) + trickz) &lt;&lt; endl;
-      trickz = 1.0;
-      cout &lt;&lt; (trickz + dammitAndrew(trickz)) &lt;&lt; endl;
-      trickz = 1.0;
-      cout &lt;&lt; (dammitAndrew(trickz) + dammitAndrew(trickz)) &lt;&lt; endl;
-  }
-  
-  double dammitAndrew (double&amp; d) {
-      return d + d;
-  }
-</pre>
-              <br/>
               <p class='example'>We went over this code in class but there's one small difference: what will this snippet print out?</p>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;

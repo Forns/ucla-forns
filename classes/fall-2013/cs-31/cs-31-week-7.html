@@ -399,30 +399,6 @@
   }
 </pre>
               <br/>
-              <p class='example'>What will the following code output?</p>
-<pre class='prettyprint'>
-  #include &lt;iostream&gt;
-  #include &lt;string&gt;
-  #include &lt;cctype&gt;
-  using namespace std;
-  
-  double dammitAndrew (double&amp; d);
-  double trickz = 1.0;
-  
-  int main () {
-      cout &lt;&lt; (dammitAndrew(trickz) + trickz) &lt;&lt; endl;
-      trickz = 1.0;
-      cout &lt;&lt; (trickz + dammitAndrew(trickz)) &lt;&lt; endl;
-      trickz = 1.0;
-      cout &lt;&lt; (dammitAndrew(trickz) + dammitAndrew(trickz)) &lt;&lt; endl;
-  }
-  
-  double dammitAndrew (double&amp; d) {
-      d += d;
-      return d;
-  }
-</pre>
-              <br/>
               <p class='debug'>USC_Brogrammer_22 submitted the following code to an online forum (haha! dig at our rivals!). Find all of their syntax errors.</p>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
