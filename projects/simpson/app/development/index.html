@@ -1,0 +1,217 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+   <head>
+      <title>DAGitty v1.0</title>
+      <meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+      <link rel="stylesheet" href="dags.css" />
+      <style type="text/css">
+	body{ background-color: white; margin: 0; padding: 5pt; font-size: 11pt; overflow: auto; }
+	h1{ text-align: left;  color: #337; padding: .5em; margin: 0 0 .5em 0;  }
+	h2{ text-align: left; 
+      color: #337; font-weight: normal; font-size: 130%;  margin: 3em 0 .5em 0; }
+	a img{ border: none; }
+	td{ text-align: center; } 
+         #versions{
+            position: absolute;
+            top: 18em;
+            left: 44em;
+            width: 20em;
+            background-color: #ccc;
+            padding: .5em;
+         }
+         #versions h2{ margin-top : 0em; } 
+         table a{
+            text-decoration: none;
+         }
+      </style>
+   </head>
+   <body>
+      <div style="width:40em; margin: 0 0 50pt 2em; position: relative;">
+      <h1>Welcome to DAGitty!</h1>
+
+      <table align="center" style="border: 1px solid #007">
+	<tr>
+	  <th style="width:8em">Launch</th>
+	  <th style="width:8em">Download</th>
+	  <th style="width:8em">Read</th>
+     <th style="width:8em">Communicate</th>     
+	</tr>
+	<tr style="font-size: 80%">
+	  <td><a href="dags.html"><img src="images/launch.png" alt="" /></a></td>
+	  <td><a href="dagitty.zip"><img src="images/down.png" alt="" /></a></td>
+	  <td><a href="manual-2.x.pdf"><img src="images/doc.png" alt="" /></a></td>
+     <td><a href="http://dagitty.net/mailman/listinfo/users"><img src="images/mail.png" alt="" /></a></td>
+	</tr>
+	<tr style="font-size: 80%">
+	  <td><a href="dags.html">Launch DAGitty online in your browser</a></td>
+	  <td><a href="dagitty.zip">Download DAGitty's source for offline use</a></td>
+	  <td><a href="manual-2.x.pdf">Read the short manual</a></td>
+     <td>
+         <a href="http://dagitty.net/mailman/listinfo/users">Join the mailing list</a>
+         or <a href="#feedback">contact the author directly</a>
+     </td>     
+	</tr>
+      </table>
+
+      <h2>What is this?</h2>
+
+      <p>
+        DAGitty is a browser-based environment for creating, editing, and analyzing
+        causal models (also known as directed acyclic graphs or causal Bayesian networks). 
+			The focus is on the use of causal diagram for minimizing bias in empirical studies in epidemiology
+			and other disciplines.
+			As a gentle introduction to this subject, we recommend reading the paper 
+	<a href="http://www.biomedcentral.com/1471-2288/8/70/">"Reducing bias through directed acyclic graphs" by Ian Shrier and Robert W. Platt</a>.
+      </p>
+      
+      <h2><a name="feedback">Who are you?</a></h2>
+
+      <p>
+        DAGitty is developed and maintained by <a href="http://bioinformatics.bio.uu.nl/textor/">Johannes Textor</a> 
+      who is currently at the <a href="http://bioinformatics.bio.uu.nl/">Theoretical Biology &amp; Bioinformatics group</a> at the <a href="http://www.uu.nl">University of Utrecht</a>.
+      </p>
+      
+      <p>
+         If you encounter any problems using DAGitty, or would like to have a certain feature implemented,
+			please write to <em>"johannes {dot} textor {at} gmx {dot} de".</em> Your feedback and bug reports are 
+			highly welcome and they contribute to making using DAGitty a better experience for everyone.
+			Past contributors are acknowledged in the <a href="manual-2.x.pdf">manual</a>.
+      </p>
+      
+      <h2>Is it free?</h2>
+
+      <p>
+        Because the main purposoe of DAGitty is facilitating the use of causal models
+			in empirical studies, it is and will always be Free software (both 
+			"free as in beer" and "free
+			as in speech"). You can copy, redistribute, and modify it under the 
+			terms of the  <a href="http://www.gnu.org/licenses/gpl.html">GNU general public license</a>. Enjoy! 
+      </p>
+
+      <h2>How can I cite DAGitty?</h2>
+
+      <p>If you use DAGitty in your scientific work, please cite the following letter:
+	  </p>
+	  
+	  <p>
+	  Johannes Textor, Juliane Hardt, Sven Knüppel. <br />
+      <a href="http://journals.lww.com/epidem/Fulltext/2011/09000/DAGitty__A_Graphical_Tool_for_Analyzing_Causal.22.aspx">DAGitty: A Graphical 
+	  Tool for Analyzing Causal Diagrams.</a><br /> <i>Epidemiology</i>, 5(22):745, 2011.</p>
+
+      <p>The algorithms used in DAGitty are described in more depth the following
+         paper:</p>
+
+      <p>
+Johannes Textor, Maciej Li&#347;kiewicz.<br />
+<a href="http://www.tcs.uni-luebeck.de/downloads/papers/2011/Textor_Liskiewicz_Adjustment_Criteria_in_Causal_Diagrams_An_Algorithmic_Perspective.pdf">Adjustment Criteria in Causal Diagrams: An Algorithmic Perspective.</a><br />
+In <i>Proceedings of the 27th Conference on Uncertainty in Artificial Intelligence (UAI 2011)</i>, pp. 681-688, UAI press, 2011.
+	  </p>
+	  
+
+	  <h2>Do similar programs exist?</h2>
+
+	  <p>Yes.</p>
+	  
+	  <ul>
+		<li><a href="http://www.phil.cmu.edu/projects/tetrad/">TETRAD</a> (recommended)</li>
+		<li><a href="http://epi.dife.de/dag/">DAG program</a> </li>
+		<li><a href="http://journals.lww.com/epidem/Fulltext/2010/07000/dagR__A_Suite_of_R_Functions_for_Directed_Acyclic.26.aspx">dagR</a> </li>
+	  </ul>
+	  
+	  <p>If you know of another program that should be mentioned in this list, please e-Mail me.</p>
+
+   <div id="versions">
+	  
+      <h2>Versions</h2>
+
+      <p>The following versions of DAGitty are available:</p>
+
+      <ul>
+        <li><a href="development/dags.html">Development version</a> <br />
+	  This is the current development snapshot. May contain new 
+	  features, but is not thoroughly tested.</li>
+        <li><a href="history/v1.1/dags.html">2.0: Released 2013-02-07</a></li>
+        <li><a href="history/v1.1/dags.html">1.1: Released 2011-11-29</a></li>
+        <li><a href="history/v1.0/dags.html">1.0: Released 2011-03-24</a></li>
+        <li><a href="history/v0.9b/dags.html">0.9b: Released 2010-11-24</a></li>
+        <li><a href="history/v0.9a/dags.html">0.9a: Released 2010-09-01</a></li>
+      </ul>
+
+      <h2>Changelog</h2>
+
+      <p><strong>2013-02-07</strong></p>
+
+      <p>I am proudly announcing the release of DAGitty version 2.0, which has been vastly 
+			rewritten and improved under the hood. Some highlights are:
+		</p>
+     <ul>
+			<li>Much faster graphics, especially for large diagrams</li>
+			<li>Support for multiple exposures and/or outcomes</li>
+			<li>Export your graph in publication quality in PDF, JPEG or PNG format</li>
+		</ul>
+
+      <p><strong>2012-01-20</strong></p>
+
+      <p>Bugfix in v1.1 and development version: Bias caused by adjustment for descendant of exposure
+			was not displayed correctly.</p>
+
+      <p><strong>2011-11-29</strong></p>
+
+      <p>Version 1.1 released.</p>
+
+      <p><strong>2011-10-12</strong></p>
+      <p>
+         The <a href="development/dags.html">development version</a> now has experimental
+			support for identifying direct effects via adjustment and for outputting testable
+			implications of the model. Beta-testers are very welcome.
+      </p>
+      <p>
+			As a side node, I have moved to <a href="http://www-binf.bio.uu.nl/textor/">Utrecht University</a>.
+      </p>
+
+      <p><strong>2011-03-24</strong></p>
+      <p>
+         DAGitty version 1.0 has been released.
+      </p>
+
+      <p><strong>2011-03-14</strong></p>
+      
+      <p>
+         Another update to the <a href="development/dags.html">development version</a>; this 
+         is the release candidate for version 1.0. Most important changes:
+      </p>
+      
+      <ul>
+         <li>Support for latent (unobserved) variables</li>
+         <li>Optional highlighting of causal and biasing paths</li>
+         <li>Much faster identification of adjustment sets for large models</li>
+         <li>Adjustment and observed status are now saved in the model text data</li>
+      </ul>
+
+      <p><strong>2011-01-19</strong></p>
+      
+      <p>
+         Some bugs fixed in the <a href="development/dags.html">development version</a>.
+              We are getting closer to the release of 1.0! </p>
+
+      <p><strong>2010-12-29</strong></p>
+
+      <ul>
+         <li>I have updated the <a href="development/dags.html">development version</a>.
+            It contains many small "under-the-hood" improvements, which should make 
+            dagitty faster if you're working with bigger models. Please test and 
+            <a href="#feedback">send feedback</a> if you experience any problems.
+         </li>
+         <li>
+            I created a <a href="http://dagitty.net/mailman/listinfo/users">mailing list</a>
+            for those who wish to be notified about updates, and discuss with
+            other users. 
+         </li>
+      </ul>
+
+
+   <div>
+      </div>
+   </body>
+</html>

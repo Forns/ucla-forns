@@ -1,0 +1,315 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+	<head>
+	<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+	<!--
+		DAGitty - a browser-based software for causal modelling and analysis
+		Copyright (C) 2010, 2012 Johannes Textor
+	
+		This program is free software; you can redistribute it and/or
+		modify it under the terms of the GNU General Public License
+		as published by the Free Software Foundation; either version 2
+		of the License, or (at your option) any later version.
+	
+		This program is distributed in the hope that it will be useful,
+		but WITHOUT ANY WARRANTY; without even the implied warranty of
+		MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		GNU General Public License for more details.
+	
+		You should have received a copy of the GNU General Public License
+		along with this program; if not, write to the Free Software
+		Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.   
+	-->
+
+    <title>DAGitty v2.0 alpha</title>
+    <link rel="stylesheet" type="text/css" href="dags.css" />
+    	<!-- IE 6 is no longer supported! -->
+	
+	<script type="text/javascript" src="lib/prototype.js"></script>
+	<script type="text/javascript" src="lib/graph/Graph.js"></script>
+	<script type="text/javascript" src="lib/graph/ObservedGraph.js"></script>
+	<script type="text/javascript" src="lib/graph/GraphTransform.js"></script>
+	<script type="text/javascript" src="lib/graph/GraphAnalyzer.js"></script>
+	<script type="text/javascript" src="lib/graph/GraphParser.js"></script>
+	<script type="text/javascript" src="lib/graph/GraphLayouter.js"></script>
+		
+	<script type="text/javascript" src="js/example-dags.js"></script>
+
+	<!--[if lt IE 9]>
+		<script type="text/javascript" src="lib/raphael-1.52.js"></script>
+		<script type="text/javascript" src="lib/gui/GraphGUI_Raphael.js"></script>
+	<![endif]-->
+	<![if gte IE 9]>
+		<script type="text/javascript" src="lib/gui/GraphGUI_SVG.js"></script>
+	<![endif]>
+	<script type="text/javascript" src="lib/gui/GraphGUI_View.js"></script>
+	<script type="text/javascript" src="lib/gui/GraphGUI_Controller.js"></script>
+	
+    <script type="text/javascript" src="js/main.js"></script>
+	
+    <script type="text/javascript">
+      var redraw;
+      var renderer;
+      var layouter;
+      var height = 300;
+      var width = 600;
+      var mouse_on_canvas;
+      var resize_timeout;
+      var mouse_x = 0;
+      var mouse_y = 0;
+      
+      var GUI = {
+         view_mode : "DAG",
+         highlight_causal : true,
+         highlight_biasing : true,
+         highlight_ancestors : true,
+         allow_intermediate_adjustment : true,
+         set_highlight_biasing : function( b ){
+            if( b ) {
+				DAGitty.style.biasingpath = DAGitty.DefaultStyle.biasingpath;
+				displayShow("legend_biasing");
+            } else {
+				DAGitty.style.biasingpath = DAGitty.DefaultStyle.path;
+				displayHide("legend_biasing");
+            }
+			DAGittyControl.graphLayoutChanged();
+         },
+         set_highlight_causal : function( b ){
+            this.highlight_causal = b;
+            if( b ) {
+				DAGitty.style.causalpath = DAGitty.DefaultStyle.causalpath;
+				displayShow("legend_causal");
+            } else {
+				DAGitty.style.causalpath = DAGitty.DefaultStyle.path;
+				displayHide("legend_causal");
+            }
+			DAGittyControl.graphLayoutChanged();
+         },
+         set_highlight_ancestors : function( b ){
+            this.highlight_ancestors = b;
+			["confounder","anexposure","anoutcome"].each(function(n){
+				DAGitty.style[n+'node'] = DAGitty.DefaultStyle[(b?n:'')+'node'];
+			});
+            b ? displayShow("legend_ancestors")
+			  : displayHide("legend_ancestors");
+			DAGittyControl.graphLayoutChanged();
+         }
+      };
+
+      var Model = {
+         dag : null, 
+         dag_active_bias_graph : null,
+         dag_ancestor_moral_graph : null,
+         dag_ancestor_pair_graph : null,
+         dag_model_text_data : null
+      };
+	 
+	var DAGittyControl;
+	
+	function initialize(){
+		DAGitty.setup();
+		Event.observe( window, 'resize', DAGitty.resize );
+		DAGittyControl = DAGitty.controllers[0];
+		["model","examples","howto","layout","help"].each(function(t){
+			Event.observe( $("menu_"+t+"_title"), 'mouseover', function(){displayShow('menu_'+t)} );
+			Event.observe( $("menu_"+t+"_title"), 'mouseout', function(){displayHide('menu_'+t)} );
+		});
+		
+		DAGittyControl.observe( 'graphchange',
+			function(g){
+				Model.dag = g;
+				$("adj_matrix").value = g.toString();
+				displayImplicationInfo( false );
+				displayAdjustmentInfo();
+				displayGeneralInfo();
+			}
+		);
+		
+		DAGittyControl.observe( 'graphlayoutchange',
+			function(g){
+				$("adj_matrix").value = g.toString();
+			}
+		);
+		
+		DAGittyControl.graphChanged();
+	}
+	  
+
+	Event.observe( window, 'load', initialize );
+	  
+    </script>
+</head>
+<body>
+    <ul id="menu" style="display:block">
+      <li id="menu_model_title">Model
+         <ul id="menu_model" style="display:none">
+            <li><a href="#" onclick="newModel()">New model</a></li>
+            <script type="text/javascript">
+               if( supportsSVG() ){
+					document.write( '<li><a href="#" onclick="exportPDF()">Export PDF</a></li>' );
+					document.write( '<li><a href="#" onclick="exportPNG()">Export PNG</a></li>' );
+					document.write( '<li><a href="#" onclick="exportJPEG()">Export JPEG</a></li>' );
+					document.write( '<li><a href="#" onclick="exportSVG()">Export SVG</a></li>' );
+               }
+            </script>
+         </ul>
+      </li>
+      <li id="menu_examples_title">Examples
+       <ul id="menu_examples">
+         <script type="text/javascript">
+         for( var i = 0 ; i < examples.length ; i++ ){
+            document.write( "<li><a href=\"#\" onclick=\"loadExample("+i+");displayHide('menu_examples')\">"+examples[i].l+"</a></li>" );
+         }
+         </script>
+       </ul>
+      </li>
+      <li id="menu_howto_title">
+         How to ...
+         <ul id="menu_howto" style="display:none">
+            <li><a href="#" onclick="alert('To add a new variable, double-click on the canvas.')">Add a variable</a></li>
+			<li><a href="#" onclick="alert('To rename a variable, move the mouse over it and press the &quot;r&quot; key on your keyboard.')">Rename a variable</a></li>
+            <li><a href="#" onclick="alert('To add a new connection, double-click on the start variable and then on the end variable.')">Add a connection</a></li>
+            <li><a href="#" onclick="alert('To delete a variable, move the mouse over it and press the &quot;delete&quot; key on your keyboard.')">Delete a variable</a></li>
+            <li><a href="#" onclick="alert('To delete a connection, double-click on the start variable and then on the end variable.')">Delete a connection</a></li>   
+            <li><a href="#" onclick="alert('To save the model, copy-paste the content of the &quot;model text data&quot; into your favourite text editor (e.g. &quot;Word&quot;).')">Save a model</a></li>
+            <li><a href="#" onclick="alert('To set the exposure variable, move the mouse over it and press the &quot;e&quot; key on your keyboard.')">Set exposure variable</a></li>
+            <li><a href="#" onclick="alert('To set the outcome variable, move the mouse over it and press the &quot;o&quot; key on your keyboard.')">Set outcome variable</a></li>
+            <li><a href="#" onclick="alert('To toggle adjustment for a variable, move the mouse over it and press the &quot;a&quot; key on your keyboard.')">Adjust for variable</a></li>
+            <li><a href="#" onclick="alert('To toggle observed status for a variable, move the mouse over it and press the &quot;u&quot; key on your keyboard.')">Make a variable unobserved (latent)</a></li>
+            <li><a href="#" onclick="alert('To show the moral graph, press the &quot;m&quot; key on your keyboard.')">Show the moral graph</a></li>
+         </ul>
+      </li>
+      <li id="menu_layout_title">Layout
+         <ul id="menu_layout">
+            <li><a href="#" onclick="generateSpringLayout();displayHide('menu_layout');return false">Generate layout automatically</a></li>
+         </ul>
+      </li>
+      <li id="menu_help_title" style="border-right:none">Help
+         <ul id="menu_help">
+            <li><a href="manual-2.x.pdf" target="_blank">Manual</a></li>
+         </ul>
+      </li>
+      <li style="float:none; overflow: hidden; border-right: none;"> &nbsp;</li>
+   </ul>
+
+   <div id="rlegend">
+    <h3 onclick="toggleDisplay('adjustmentsets_total')"><img src="images/arrow-down.png" alt="" id="a_adjustmentsets_total" /> Adjustment <span id="a_adjustmentsets_type"> for total effect</span></h3>
+
+    <div id="adjustmentsets_total" style="display:block">
+
+    </div>
+
+    <h3 id="h_adjustmentsets_direct" onclick="toggleDisplay('adjustmentsets_direct')"><img src="images/arrow-down.png" alt="" id="a_adjustmentsets_direct" />  Adjustment for direct effect</h3>
+
+    <div id="adjustmentsets_direct" style="display:block">
+
+    </div>
+
+    <h3 onclick="toggleDisplay('testable_implications')"><img src="images/arrow-down.png" alt="" id="a_testable_implications" />  Testable implications</h3>
+
+    <div id="testable_implications" style="display:block">
+
+	<div id="testable_implications_list">  </div>
+    </div>
+
+    <h3 onclick="toggleDisplay('model_data')"><img src="images/arrow-down.png" alt="" id="a_model_data" />  Model text data</h3>
+    <div id="model_data" style="display:block">
+      <form name="model_data_frm">
+      <textarea rows="10" cols="35" name="adj_matrix" id="adj_matrix"
+         onkeydown="if(this.value != Model.dag_model_text_data){ displayShow('model_refresh');this.style.backgroundColor='#fec'; }"></textarea>
+      </form>
+      <p id="model_refresh" style="display:none">You have modified the model text data. To
+      draw the modified model, click here: <a href="#" onclick="loadDAGFromTextData()">Update DAG</a></p>
+    </div>
+   </div>
+
+   <div id="llegend">
+   <h3 onclick="toggleDisplay('view')"><img src="images/arrow-down.png" alt="" id="a_view"> Path and variable display</h3>
+   <div id="view" style="display:block">
+      <form autocomplete="off">
+      <p><input type="checkbox" checked="checked" 
+         onclick="GUI.set_highlight_causal(this.checked)" /> highlight causal paths </p>
+      <p><input type="checkbox" checked="checked"
+         onclick="GUI.set_highlight_biasing(this.checked)"/> highlight biasing paths </p>
+      <p><input type="checkbox" checked="checked"
+         onclick="GUI.set_highlight_ancestors(this.checked)"/> highlight ancestors </p>
+      </form>
+   </div>
+   <h3 onclick="toggleDisplay('legend')"><img src="images/arrow-down.png" alt="" id="a_legend"> Legend</h3>
+   <div id="legend" style="display:block">
+      <p>
+        <img src="images/exposure.png" alt="" />
+        exposure
+      </p>
+      <p>
+          <img src="images/outcome.png" alt="" />
+         outcome
+      </p>
+      <div id="legend_ancestors">
+      <p>
+         <img src="images/lnode.png" alt="" />
+         ancestor of exposure
+      </p>
+      <p>
+        <img src="images/rnode.png" alt="" />
+         ancestor of outcome
+      </p>
+      <p>
+        <img src="images/mnode.png" alt="" />
+        ancestor of exposure <em>and</em> outcome
+      </p> 
+      </div>
+      <p>
+        <img src="images/adjustednode.png" alt="" />
+        adjusted variable
+      </p>
+      <p>
+        <img src="images/latentnode.png" alt="" />
+        unobserved (latent)
+      </p>
+      <p>
+        <img src="images/other.png" alt="" />
+         other variable
+      </p>
+      <p id="legend_causal">
+        <img src="images/causalpath.png" alt="" />
+        causal path
+      </p>
+      <p id="legend_biasing">
+        <img src="images/biasingpath.png" alt="" />
+        biasing path
+      </p>
+   </div>
+   <h3 onclick="toggleDisplay('summary')"><img src="images/arrow-down.png" alt="" id="a_summary"> Summary</h3>
+   <div id="summary" style="display:block">
+      <div id="info_cycle"> </div>
+      <table id="info_summary">
+         <tr><td>exposure(s)</td><td class="info" id="info_exposure">not set</td></tr>
+         <tr><td>outcome(s)</td><td class="info" id="info_outcome">not set</td></tr>
+         <tr><td>covariates</td><td class="info" id="info_covariates">0</td></tr>
+         <tr><td>causal paths</td><td class="info" id="info_frontdoor">0</td></tr>
+         <!--<tr><td>open backdoor paths</td><td class="info" id="info_backdoor">0</td></tr>-->
+      </table>
+   </div>
+  </div>
+
+   <pre id="canvas" class="dagitty">
+A 1 @-2.200,-1.520
+B 1 @1.400,-1.460
+D O @1.400,1.621
+E E @-2.200,1.597
+Z 1 @-0.300,-0.082
+
+A E Z @-0.791,-1.045
+B D Z @0.680,-0.496
+E D
+   </pre>
+   
+   <div id="export" style="display: none;">
+      <form name="exportform" id="exportform" action="http://www.dagitty.net/pdf/pdf.php" method="POST" target="_blank">
+         <input type="hidden" name="exportformsvg" id="exportformsvg" />
+      </form>
+   </div>
+</body>
+</html>
