@@ -191,9 +191,9 @@
               </div>
               <p class='question' name='intro-q1'>Let's start off small... what is a pointer?</p>
               <p class='answer' name='intro-q1'>A variable that stores a reference (memory address) to another variable, or more generally, to some location in memory.</p>
-              <p class='question' name='intro-q2'>So, Andrew... why do we even have pointers?</p>
+              <p class='question' name='intro-q2'>So, Andrew... why do we even have pointers (i.e., what's the point?)</p>
               <div class='answer' name='intro-q2'>
-                <p>To make you suffer! Just kidding (kinda):</p>
+                <p>To make you suffer! Just kidding (kinda, but really):</p>
                 <ul class='indent-1'>
                   <li><p>Interfacing with C libraries and other low-level programming requires that we deal with pointers a lot.</p></li>
                   <li><p>Pointers bear similarities to other data structures (e.g. linked lists), which makes learning those more natural.</p></li>
@@ -437,6 +437,7 @@
               <p>Andrew, that's very zen, we should stop and ponder life.</p>
               <p>Nonsense! There are pointers to discuss!</p>
               <p class='toolkit'>The <strong>nullptr</strong> keyword is a pointer literal that indicates a pointer that isn't pointing anywhere. We use it for safety (to not dereference a nullptr) and clarity.</p>
+              <p class='debug'>WARNING: nullptr might not be supported in your compiler and may throw a compile error saying that nullptr is not defined in scope.</p>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
   #include &lt;string&gt;
@@ -505,8 +506,32 @@
       cout &lt;&lt; pointedAt &lt;&lt; endl;
   }
 </pre>
-              <!-- TODO: Add example with multiple pointers and references etc. -->
+              <br/>
               <p class='example'>What will the following code print out?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cctype&gt;
+  using namespace std;
+  
+  int main () {
+      bool b = 0;
+      int first = 1;
+      double second = 2.2;
+          
+      int* fPtr = &first;
+      int* fPtrRedux = fPtr;
+      double* sPtr = &second;
+      
+      *fPtr += -1;
+      *(sPtr + *fPtrRedux) = 2.222;
+      b = *fPtr &amp;&amp; *sPtr;
+      
+      cout &lt;&lt; b &lt;&lt; endl;
+      cout &lt;&lt; first &lt;&lt; endl;
+      cout &lt;&lt; second &lt;&lt; endl;
+  }
+</pre>
             </div>
             <hr/>
             
@@ -618,6 +643,7 @@
   
       for (char* helper = c; *helper != '\0'; helper++) {
           // What happens when we just print out c?
+          // Forney
           cout &lt;&lt; helper &lt;&lt; endl;
       }
   }
@@ -749,12 +775,35 @@
   }
 </pre>
               <p class='debug'>WARNING: While it is perfectly legal to subtract two pointers, and well defined when they are in the same array, it is NOT legal to add two pointers.</p>
+              <p>Alright, see if you can get THIS:</p>
+              <p class='example'>What does the following code print out?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cctype&gt;
+  using namespace std;
+  
+  int main () {
+      char c[] = "testing";
+      int len = strlen(c);
+      
+      for (int i = 0; i &lt; len / 2; i++) {
+          char* front = &amp;c[i];
+          char* back = &amp;c[len - i - 1];
+          char stuff = *front;
+          *front = *back;
+          *back = stuff;
+      }
+      
+      cout &lt;&lt; c &lt;&lt; endl;
+  }
+</pre>
             </div>
             <hr/>
             
             
             <br/>
-            <div id='arrayFuncs' class='scrollspy-element' scrollspy-title='Pointers &amp; Functions'></div>
+            <div id='pointerFuncs' class='scrollspy-element' scrollspy-title='Pointers &amp; Functions'></div>
             <h1>Pointers &amp; Functions</h1>
             <br/>
             <div>
@@ -857,7 +906,6 @@ void pointerFunc (int* i, int[] p) {
       }
   }
 </pre>
-              <!-- TODO: function example -->
               
               <br/>
               <h3>Side-Notes about Functions</h3>
@@ -870,6 +918,56 @@ void pointerFunc (int* i, int[] p) {
                 <li><p>You can not generate the address of a reference like you can with pointers.</p></li>
                 <li><p>There are no &quot;reference arithmetics&quot; like we do with pointers (e.g., *(ptr + 1) or &amp;ptr + 4)</p></li>
               </ul>
+              <br/>
+              <p class='debug'>WARNING: What happens to local variables in a function once we return from that function?</p>
+              <p>They are no longer safely allocated in memory! This means that I cannot guarantee that any variable local to a function will still be there after I've returned.</p>
+              <p>Take the following for example:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cctype&gt;
+  using namespace std;
+  
+  void naughtyFunc (int*&amp; n) {
+      // What happens to i after naughtyFunc returns?
+      int i[] = {5, 6, 7};
+      n = i;
+  }
+  
+  int main () {
+      int* n;
+      naughtyFunc(n);
+      for (int i = 0; i &lt; 3; i++) {
+          cout &lt;&lt; n[i] &lt;&lt; endl;
+      }
+  }
+</pre>
+              <p>This code has unpredictable behavior because we do not know what has happened to i after naughtyFunc has returned, as i is no longer allocated space in memory (remnants may still remain as junk).</p>
+              <p class='example'>What will the following code print out? Warning, maturity levels are reaching 0...</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cctype&gt;
+  using namespace std;
+  
+  char* secretDecoder (char c[], int i[], int n) {
+      for (int j = 0; j &lt; n; j++) {
+          c[j] = c[*(i+j)];
+      }
+      c[n] = '\0';
+      return c;
+  }
+  
+  int main () {
+      char c[] = "disproportionate";
+      int i[] = {3, 5, 1, 0};
+      // :D
+      char* d = secretDecoder(c, i, 4);
+      
+      cout &lt;&lt; d &lt;&lt; endl;
+  }
+</pre>
+              
             </div>
             <hr/>
             
@@ -877,15 +975,6 @@ void pointerFunc (int* i, int[] p) {
           </div>
           <!-- END PRESENTATION CONTENT -->
           
-          
-          <!-- TODO: POINTERS! -->
-          
-            <!-- TODO: Pointers and Functions -->
-              <!-- TODO: Functions that return pointers to locations of interest -->
-              
-            <!-- TODO: Overflow -->
-            <!-- TODO: Local variables of functions -->
-            
           
         </div>
       </div>
