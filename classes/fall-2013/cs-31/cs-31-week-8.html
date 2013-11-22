@@ -110,7 +110,29 @@
             <h1>dammitAndrew Revisited (for the last time)</h1>
             <div>
               <p>Sooo, turns out I'm dumb and have accepted that now. In the quest for diverse examples, I gave you this:</p>
-              <!-- TODO: Insert dammitAndrew function -->
+
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cctype&gt;
+  using namespace std;
+  
+  double dammitAndrew (double&amp; d);
+  double trickz = 1.0;
+  
+  int main () {
+      cout &lt;&lt; (dammitAndrew(trickz) + trickz) &lt;&lt; endl;
+      trickz = 1.0;
+      cout &lt;&lt; (trickz + dammitAndrew(trickz)) &lt;&lt; endl;
+      trickz = 1.0;
+      cout &lt;&lt; (dammitAndrew(trickz) + dammitAndrew(trickz)) &lt;&lt; endl;
+  }
+  
+  double dammitAndrew (double&amp; d) {
+      d += d;
+      return d;
+  }
+</pre>
               <p>We got some strange results across compilers that appeared to disobey the laws of precedence. Well, you can put your worries to rest, it turns out this is undefined behavior.</p>
               <p>After consulting the C++ standard, asking 4 other TAs (the good news is they didn't know either so I feel less guilty), and finally Smallberg:</p>
               <p class='definition'>Calling a function that modifies a variable by reference in the same expression will have undefined behavior for the variable's value in the expression.</p>
@@ -119,23 +141,738 @@
             
             
             <br/>
-            <div id='introPointers' class='scrollspy-element' scrollspy-title='Pointers: Intro'></div>
-            <h1>Pointers: You'll Love Them or You'll Hate Them</h1>
+            <div id='introMem' class='scrollspy-element' scrollspy-title='Main Memory'></div>
+            <h1>Remember Main Memory?</h1>
             <div>
-              <p>And no, there is no middle ground between those extremes.</p>
-              <p class='question' name='intro-q0'>Let's start off small... what is a pointer?</p>
-              <!-- TODO: add answer here -->
-              <p class='answer' name='intro-q0'></p>
-              <!-- TODO: add illustration -->
+              <p>Pointers put us closer to the memory than we've seen in the past, so let's start with a review of how our code and variables are stored in memory.</p>
+              <p class='definition'><strong>Main Memory</strong> consists of a contiguous sequence of bytes (8 bits) that each have a memory address associated with them.</p>
+              <p class='definition'><strong>Memory Addresses</strong> are just like indexes in an array; they are a sequential numbering of the memory cells.</p>
+              <p>Pictorially, we think of main memory looking like the following, with each cell being 1 byte:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/fall-2013/cs-31/week-8/pointers0.PNG' />
+              </div>
+              <p>Now, the problem is that whenever I declare a variable on different computers with different types and possibly different compilers, I allocate a certain amount of memory.</p>
+              <p>Because the amount of memory allocated might be different depending on these distinctions, I want an easy way of &quot;moving around&quot; memory and its contents (pointers!).</p>
+              <p>Take the following simple statement for example: <code class='prettyprint'>int x = 16;</code></p>
+              <p class='question' name='intro-q0'>Do I, as the programmer, know where the compiler is going to reserve space for x in memory?</p>
+              <p class='answer' name='intro-q0'>No! The compiler will allocate space for x somewhere that is big enough to hold an int, and then place the value 16 inside.</p>
+              <p>So imagine that on some computer, an int takes up 4 bytes of memory (WARNING: We are NOT guaranteed this!), and our compiler sticks it at memory address 1000, then in memory we have:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/fall-2013/cs-31/week-8/pointers1.PNG' />
+              </div>
+              <p>We'll leave the specifics of how x is stored in memory to an architecture class, but because we know it took up 4 bytes on our system, we know that it spans addresses 1000 - 1003.</p>
               
-              <p>So Andrew, why do we have pointers?</p>
-              <!-- TODO: add answer here; similarity to other data types, low level languages, etc. -->
-              
-              <p>Alright, well why do men have nipples?</p>
-              <p>I don't have *all* the answers...</p>
-              
+              <p>Similarly, when we declare an array of some type, we know a couple of things about how it gets represented in memory.</p>
+              <p>Take the following initialization for example: <code class='prettyprint'>char c[] = &quot;cat&quot;;</code></p>
+              <p>We are guaranteed a couple of things:</p>
+              <ul class='indent-1'>
+                <li><p>We know that each cell holding a character of the cstring &quot;cat&quot; will take up the same amount of space on any given system.</p></li>
+                <li><p>
+                  Each character in the cstring &quot;cat&quot; will be located contiguously in memory, meaning that if a <code class='prettyprint'>char</code> takes up 1 byte on our system, 
+                  then above, c will take up 4 bytes of space in a row in memory (don't forget about the null terminator!).
+                </p></li>
+              </ul>
+              <p>Pictorially, if our compiler decided to stick c starting at memory location 1000:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/fall-2013/cs-31/week-8/pointers2.PNG' />
+              </div>
             </div>
             <hr/>
+            
+            
+            <br/>
+            <div id='introPointers' class='scrollspy-element' scrollspy-title='Pointers: Intro'></div>
+            <h1>Pointers: You'll Love Them or You'll Hate Them</h1>
+            <br/>
+            <div>
+              <p>And no, there's no middle ground... But first, a relevant <a href='http://xkcd.com/138/' target='_blank'>XKCD</a>:</p>
+              <div class='text-center fit-pres'>
+                <img src='http://imgs.xkcd.com/comics/pointers.png' />
+              </div>
+              <p class='question' name='intro-q1'>Let's start off small... what is a pointer?</p>
+              <p class='answer' name='intro-q1'>A variable that stores a reference (memory address) to another variable, or more generally, to some location in memory.</p>
+              <p class='question' name='intro-q2'>So, Andrew... why do we even have pointers?</p>
+              <div class='answer' name='intro-q2'>
+                <p>To make you suffer! Just kidding (kinda):</p>
+                <ul class='indent-1'>
+                  <li><p>Interfacing with C libraries and other low-level programming requires that we deal with pointers a lot.</p></li>
+                  <li><p>Pointers bear similarities to other data structures (e.g. linked lists), which makes learning those more natural.</p></li>
+                  <li><p>Any sort of memory management or study of computer architecture will benefit from knowledge of pointers.</p></li>
+                </ul>
+              </div>
+              <p>Alright, well why do men have nipples?</p>
+              <p>I don't have *all* the answers...</p>
+              <p>But what I *do* have are some programmatic tools to help us with pointers in C++:</p>
+              
+              <br/>
+              <h3>Basics: Declaration and Initialization</h3>
+              <p class='toolkit'><strong>The reference operator (&amp;)</strong>: The reference operator says &quot;give me the memory address of my rvalue,&quot; or the expression to the right of the ampersand.</p>
+              <p>We can look at our previous examples from the memory section:</p>
+              <p class='example'>Say we made the following variable initialization and our compiler gave us this picture:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/fall-2013/cs-31/week-8/pointers1.PNG' />
+              </div>
+              <p class='question' name='intro-q3'>What, then, is the value of <code class='prettyprint'>&amp;x</code>?</p>
+              <p class='answer' name='intro-q3'>1000, because <code class='prettyprint'>&amp;x</code> says, &quot;Give me the memory address of x, my rvalue.&quot; Here, 1000 is the memory address of the start of x, so that's what we return.</p>
+              <p>But now we should talk about pointers... I guess...</p>
+              <p class='toolkit'>
+                <strong>Pointers</strong> store references (memory addresses) and are assigned a type corresponding to the type of variable that they point to.<br/><br/>
+                We declare and initialize pointers using the * symbol:<br/>
+                &lt;type&gt;* &lt;name&gt;; // Declares a pointer of the given &lt;type&gt; and calls it &lt;name&gt;.
+              </p>
+              <p>So, here are some legal pointer declarations:</p>
+<pre class='prettyprint'>
+  int* pointy;
+  bool* sharp;
+  char* thorny;
+</pre>
+              <p class='toolkit'>To <strong>initialize</strong> pointers, we give them memory addresses corresponding to locations of variables.</p>
+<pre class='prettyprint'>
+  // The variable being pointed at
+  int pointedAt = 16;
+  
+  // The pointer that saves the memory location
+  // of pointedAt, and so now effectively, points
+  // at pointedAt
+  int* pointer = &amp;pointedAt;
+</pre>
+              <p>Alright, great, so we've stored the memory addresses of some variables, how can pointers access the values that they point to?</p>
+              <p class='toolkit'><strong>The dereference operator (*)</strong>: The dereference operator says &quot;Give me the value of whatever my rvalue is pointing to.&quot; NOTE: This means the rvalue must be a pointer, i.e., a memory address!</p>
+              <p class='debug'>Will the following code compile? Will it have any undefined behavior? If &quot;No&quot; to both questions, what will it print out?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+    
+  int main () {
+      int pointedAt = -100;
+      int* pointer = &amp;pointedAt;
+      cout &lt;&lt; *pointer &lt;&lt; endl;
+  }
+</pre>
+              <p>Assuming our system is representing ints with 4 bytes and the compiler reserved memory for pointedAt at address 1000, then:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/fall-2013/cs-31/week-8/pointers3.PNG' />
+              </div>
+              <p>Alright, so how about some nifty memory tricks for these operators?</p>
+              <p class='toolkit'>To remember when to use &amp; and when to use *, think:<br/>
+                <strong>Ampersand:</strong> Address<br/>
+                <strong>Star:</strong> Substance
+              </p>
+              <p>But Andrew, * is technically an Aster--well fine then! Make your own damn memory trick!</p>
+              <p>So let's see some information about the pointer we've constructed:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+      
+  int main () {
+      int pointedAt = -100;
+      int* pointy = &amp;pointedAt;
+  
+      cout &lt;&lt; "The value of what pointy points at: " 
+           &lt;&lt; *pointy &lt;&lt; endl;
+      cout &lt;&lt; "The address of what pointy points at: " 
+           &lt;&lt; pointy &lt;&lt; endl;
+      cout &lt;&lt; "The address of where pointy is stored: " 
+           &lt;&lt; &amp;pointy &lt;&lt; endl;
+      // Will the above two be the same?
+  }
+</pre>
+
+              <p>How about some examples?</p>
+              <p class='debug'>Will the following code compile? Will it have any undefined behavior? If &quot;No&quot; to both questions, what will it print out?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+    
+  int main () {
+      int ruhRoh;
+      int* pointy = &amp;ruhRoh;
+      cout &lt;&lt; *pointy &lt;&lt; endl;
+  }
+</pre>
+              <p class='debug'>Will the following code compile? Will it have any undefined behavior? If &quot;No&quot; to both questions, what will it print out?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+    
+  int main () {
+      int imAnInt = -100;
+      int* pointy = imAnInt;
+      cout &lt;&lt; *pointy &lt;&lt; endl;
+  }
+</pre>
+              <p class='debug'>WARNING: Unlike with types such as int, double, bool, and char, which, when given another type can sometimes convert to the other, pointers MUST point to the same type as them.</p>
+              <p class='debug'>Will the following code compile? Will it have any undefined behavior? If &quot;No&quot; to both questions, what will it print out?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+    
+  int main () {
+      int imAnInt = 2;
+      double imADouble = 2.2;
+      int* pointy = &amp;imAnInt;
+      cout &lt;&lt; *pointy &lt;&lt; endl;
+      pointy = &amp;imADouble;
+      cout &lt;&lt; *pointy &lt;&lt; endl;
+  }
+</pre>
+              <p>We'll see why we need type rigidity for pointers in a later section.</p>
+                      
+              <p class='definition'>Note: Reference and dereference operators could be considered inverses of one another, i.e., they &quot;undo&quot; each other.</p>
+              <p class='debug'>Will the following code compile? Will it have any undefined behavior? If &quot;No&quot; to both questions, what will it print out?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+    
+  int main () {
+      int imAnInt = -100;
+      int* pointy = &amp;*&amp;imAnInt;
+      cout &lt;&lt; *pointy &lt;&lt; endl;
+  }
+</pre>
+              <p class='debug'>Will the following code compile? Will it have any undefined behavior? If &quot;No&quot; to both questions, what will it print out?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+    
+  int main () {
+      int imAnInt = 2;
+      int* pointy = &amp;imAnInt;
+      cout &lt;&lt; *(&amp;(*pointy)) &lt;&lt; endl;
+  }
+</pre>
+
+              <br/>
+              <h3>Basics: Assigning to Pointers</h3>
+              <p>Knowing when to use the reference and dereference operators is a bit tricky, and so the best thing to do is to translate your intent into English first.</p>
+              <p class='toolkit'>Whenever we want to assign a value to the memory location that a pointer is pointing to, we use the following syntax:<br/><br/>*ptr = value;</p>
+              <p class='example'>Translate the following pointer statements into English analyses of what they're doing. The first is done for you:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+    
+  int main () {
+      // Variables to be pointed at
+      int i = 0;
+      double d = 3.3;
+      bool b;
+  
+      // Pointers
+  
+      // An integer pointer that points to the memory address
+      // at which int i is located
+      int* iPtr = &amp;i;
+  
+      // What's happening here?
+      double* dPtr = &amp;*&amp;d;
+  
+      // Is this going to be a problem? If so, when?
+      bool* bPtr = &amp;b;
+  
+      // What's happening here?
+      *iPtr = 20;
+  
+      // What's happening here?
+      *&amp;*dPtr = 3.33;
+  
+      b = (*iPtr % 2 == 0) || (*dPtr &gt; 4);
+  
+      cout &lt;&lt; i &lt;&lt; endl;
+      cout &lt;&lt; *iPtr &lt;&lt; endl;
+      cout &lt;&lt; d &lt;&lt; endl;
+      cout &lt;&lt; *dPtr &lt;&lt; endl;
+      cout &lt;&lt; b &lt;&lt; endl;
+      cout &lt;&lt; *bPtr &lt;&lt; endl;
+  }
+</pre>
+              <p>It's also perfectly legal to assign pointers to each other, so long as the types agree:</p>
+              <p class='debug'>Will the following code compile? Will it have any undefined behavior? If &quot;No&quot; to both questions, what will it print out?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+      
+  int main () {
+      int pointedAt = 1;
+      int* pointy = &pointedAt;
+      // ditto used point!
+      int* ditto = pointy;
+  
+      // Will these 2 be equal?
+      cout &lt;&lt; *pointy &lt;&lt; endl;
+      cout &lt;&lt; *ditto &lt;&lt; endl;
+  
+      // Will these 2 be equal?
+      cout &lt;&lt; pointy &lt;&lt; endl;
+      cout &lt;&lt; ditto &lt;&lt; endl;
+  }
+</pre>
+              <p>But what about uninitialized pointers?</p>
+              <p class='debug'>Will the following code compile? Will it have any undefined behavior? If &quot;No&quot; to both questions, what will it print out?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+    
+  int main () {
+      // To what is lamePointz pointing after this line?
+      int* lamePointz;
+      // To what address are we making this assignment?
+      *lamePointz = 5;
+  
+      cout &lt;&lt; *lamePointz &lt;&lt; endl;
+  }
+</pre>
+              <p>So be careful! Uninitialized pointers can lead to undefined behavior or illegal memory accesses when they haven't been assigned somewhere first.</p>
+              <p>What can we do to be safe about uninitialized pointers?</p>
+              <p>There is a special keyword called <code class='prettyprint'>nullptr</code> that represents &quot;the pointer that points at nothing.&quot;</p>
+              <p>Andrew, that's very zen, we should stop and ponder life.</p>
+              <p>Nonsense! There are pointers to discuss!</p>
+              <p class='toolkit'>The <strong>nullptr</strong> keyword is a pointer literal that indicates a pointer that isn't pointing anywhere. We use it for safety (to not dereference a nullptr) and clarity.</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+      
+  int main () {
+      // lamePointz is now safely pointing at nothing
+      int* lamePointz = nullptr;
+      // ...so later when we try to dereference and assign...
+      *lamePointz = 5;
+      // ...our code will break, but it will break reliably,
+      // indicating that we have an error in the code, rather
+      // than continuing blissfully unaware of our mistake
+      // as we may have possibly done in the example above
+    
+      cout &lt;&lt; *lamePointz &lt;&lt; endl;
+  }
+</pre>
+              <p>Note, we can check to make sure a pointer is or is not the null pointer (test for equivalence):</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+      
+  int main () {
+      int i = 50;
+      int* latePointer = nullptr;
+  
+      if (latePointer == nullptr) {
+          latePointer = &amp;i;
+      } else {
+          cout &lt;&lt; "&lt;_&lt; &gt;_&gt;" &lt;&lt; endl;
+      }
+      cout &lt;&lt; *latePointer &lt;&lt; endl;
+  }
+</pre>
+              
+              <p class='debug'>Will the following code compile? Will it have any undefined behavior? If &quot;No&quot; to both questions, what will it print out?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+    
+  int main () {
+      int* possiblyLame;
+      int x = 50;
+      possiblyLame = &amp;x;
+  
+      cout &lt;&lt; *possiblyLame &lt;&lt; endl;
+  }
+</pre>
+              <p class='debug'>WARNING: Be wary of using the postfix increment operator with pointers; remember that they increment the lvalue after everything else is done...</p>
+              <p class='debug'>Will the following code compile? Will it have any undefined behavior? If &quot;No&quot; to both questions, what will it print out?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+      
+  int main () {
+      int pointedAt = 1;
+      int* pointy = &pointedAt;
+  
+      *pointy++;
+  
+      cout &lt;&lt; *pointy &lt;&lt; endl;
+      cout &lt;&lt; pointedAt &lt;&lt; endl;
+  }
+</pre>
+              <!-- TODO: Add example with multiple pointers and references etc. -->
+              <p class='example'>What will the following code print out?</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='arrayPointers' class='scrollspy-element' scrollspy-title='Pointers &amp; Arrays'></div>
+            <h1>Pointers &amp; Arrays</h1>
+            <br/>
+            <div>
+              <p>Pointers may have felt like an exercise in futility before now, but they make a little more sense when it comes to arrays.</p>
+              <p>Let's return with our simple example from before, this time, assuming the compiler has placed the array c at index 4000, but still treats characters as 1 byte a piece:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/fall-2013/cs-31/week-8/pointers4.PNG' />
+              </div>
+              <p>But wait a second... I drew an arrow from c to the start of the array in memory... could it be?</p>
+              <p>Could our array identifiers actually be... pointers?!</p>
+              <p>In a twist more dramatic than the conclusion of Survivor XXI, the answer is: yes, but once we've declared an array to an identifier, we can't reassign it (seen later).</p>
+              <p>So what has our bracket notation for array indecies meant this whole time?</p>
+              <p class='toolkit'>The bracket notation of pointers can be thought of as &quot;dereference with offset,&quot; meaning that, if ptr is a pointer:<br/><br/>
+                <code class='prettyprint'>ptr[offset]</code> is equivalent to saying <code class='prettyprint'>*(ptr + offset)</code>, meaning &quot;Give me the value at offset locations away from memory address ptr.&quot;
+              </p>
+              <p class='toolkit'>A <strong>pointer offset</strong> is a number indicating how many x bytes away the next or previous value is, depending on the type of the pointer.<br/><br/>
+                For example, if an int is treated as 4 bytes, and I want to access the int directly following the int at address 1000 (as in an int array starting at address 1000), then 
+                an int pointer offset of 1 tells me to look 4 bytes later, at memory address 1004. Similarly, an int pointer offset of -2 tells me to look 8 bytes before, at memory address 992, etc.
+              </p>
+              <p>So let's look at our example again in terms of offsets:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/fall-2013/cs-31/week-8/pointers5.PNG' />
+              </div>
+              <p>A couple things to note above:</p>
+              <ul class='indent-1'>
+                <li><p>Notice how c is an array of chars, and so c is a char pointer, meaning that its offsets assume the next char is 1 byte away.</p></li>
+                <li><p>The bracket c[i] notation is equivalent to the offset *(c + i) notation.</p></li>
+                <li><p>Although we could generate a pointer to c[4] by saying &amp;c[4], it would be unsafe to assign anything to c[4] (overflow).</p></li>
+              </ul>
+              <br/>
+              <div class='question' name='arrays-q0'>OK, so if I had an array of ints where ints were treated as 4 bytes a piece, then fill in the blanks below:<br/>
+                <div class='text-center fit-pres'>
+                <img src='../../../assets/images/fall-2013/cs-31/week-8/pointers6q.PNG' />
+              </div>
+              </div>
+              <div class='answer' name='arrays-q0'>
+                <div class='text-center fit-pres'>
+                <img src='../../../assets/images/fall-2013/cs-31/week-8/pointers6a.PNG' />
+              </div>
+              </div>
+              <p class='definition'>Takeaway message: Every time I use an offset with a pointer, it automatically scales to how large its type is in memory.</p>
+              <p>Alright, back to our character array example...</p>
+              <p>Although c is still an identifier used as a pointer, because it was declared as an array, we cannot change its value...</p>
+              <p class='debug'>Will the following code compile? If so, what will it print?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+      
+  int main () {
+      char c[] = "cat";
+      int len = strlen(c);
+  
+      for (int i = 0; i &lt; len; i++) {
+          cout &lt;&lt; c[0] &lt;&lt; endl;
+          c++; // hey! that's this language!
+      }
+  }
+</pre>
+              <p>So how could we do what the above is trying to do? Well, we can use another pointer to refer to where c starts:</p>
+              <p class='debug'>Will the following code compile? If so, what will it print?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+      
+  int main () {
+      char c[] = "cat";
+      char* helper = c;
+      int len = strlen(c);
+  
+      for (int i = 0; i &lt; len; i++) {
+          cout &lt;&lt; helper[0] &lt;&lt; endl;
+          helper++;
+      }
+  }
+</pre>
+              <p>I could even condense the above using some pointer dereferences:</p>
+              <p class='debug'>Will the following code compile? If so, what will it print?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+      
+  int main () {
+      char c[] = "cat";
+  
+      for (char* helper = c; *helper != '\0'; helper++) {
+          cout &lt;&lt; helper[0] &lt;&lt; endl;
+      }
+  }
+</pre>
+              <p class='debug'>Will the following code compile? If so, what will it print?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+      
+  int main () {
+      char c[] = "cat";
+  
+      for (char* helper = c; *helper != '\0'; helper++) {
+          // What happens when we just print out c?
+          cout &lt;&lt; helper &lt;&lt; endl;
+      }
+  }
+</pre>
+              <p class='debug'>Will the following code compile? If so, what will it print?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+      
+  int main () {
+      char c[] = "cat";
+      
+      // Notice our new iterator increment...
+      for (char* helper = c; *helper != '\0'; helper = &amp;helper[1]) {
+          cout &lt;&lt; helper[0] &lt;&lt; endl;
+      }
+  }
+</pre>
+              
+              <br/>
+              <h3>Pointer Arithmetic and Operators</h3>
+              <p>We've seen a couple of pointer operations already, but some are not well defined.</p>
+              <p class='toolkit'>Subtraction and addition to pointers is well defined, such that if I say (ptr + i), it means &quot;refer to the address i times x bytes away from ptr,&quot; where x is the size of the type of ptr.</p>
+              <p class='example'>What will the following code output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+      
+  int main () {
+      double d[] = {1.1, 2.2, 3.3, 4.4, 5.5};
+      double* ptr = d;
+  
+      // Here, I'm referencing offsets from ptr
+      cout &lt;&lt; *ptr &lt;&lt; endl;
+      cout &lt;&lt; *(ptr + 1) &lt;&lt; endl;
+      cout &lt;&lt; ptr[2] &lt;&lt; endl;
+  
+      // Note where ptr points now that I've
+      // reassigned it
+      ptr += 2;
+      cout &lt;&lt; ptr[2] &lt;&lt; endl;
+  }
+</pre>
+              <p class='toolkit'>Pointers are NOT defined on multiplication or division; why would you do that to a memory address? :(</p>
+              <p class='debug'>Will the following code compile? If so, what will it print?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+      
+  int main () {
+      double d[] = {1.1, 2.2, 3.3, 4.4, 5.5};
+      double* ptr = d;
+  
+      // Derp!
+      cout &lt;&lt; *(ptr * 2) &lt;&lt; endl;
+  }
+</pre>
+              <p class='toolkit'><strong>Pointer Comparisons</strong><br/>Pointers can always be compared for equivalence (do they point to the same address), but we must be careful... we still don't know where variables will be placed in memory at runtime.</p>
+              <p>A consequence of not knowing where our variables live in memory can be undefined behavior:</p>
+              <p class='debug'>Will the following code compile? Is there any undefined behavior possible? If &quot;No&quot; to both, what will it print?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+      
+  int main () {
+      char c[] = "cat";
+      char t[] = "dog";
+      char* cPtr = c;
+      char* tPtr = t;
+      int len = strlen(c);
+  
+      for (int i = 0; i &lt; len; i++) {
+          if (cPtr &lt; tPtr) {
+              cout &lt;&lt; "cPtr: " &lt;&lt; cPtr &lt;&lt; endl;
+          } else {
+              cout &lt;&lt; "tPtr: " &lt;&lt; tPtr &lt;&lt; endl;
+          }
+      }
+  }
+</pre>
+              <p>Thus, there is no *guarantee* that tPtr will always be greater than cPtr, even though it might appear to work. Unpredictable behavior!</p>
+              <p>That said...</p>
+              <p class='toolkit'>Pointers *within* the same array are always guaranteed to be comparable using &lt;, &gt;, etc. because array elements are located contiguously in memory.</p>
+              <p class='debug'>Will the following code compile? Is there any undefined behavior possible? If &quot;No&quot; to both, what will it print?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+      
+  int main () {
+      char c[] = "catdog";
+      char* cPtr = c;
+      int len = strlen(c);
+  
+      for (int i = 0; i &lt; len; i++) {
+          if (cPtr &lt; &amp;c[3]) {
+              cout &lt;&lt; *cPtr &lt;&lt; endl;
+              cPtr++;
+          }
+      }
+  }
+</pre>
+              <p class='toolkit'>When two pointers are operating in the same array, we can even subtract them to learn their *offsets,* not their difference in bytes.</p>
+              <p class='debug'>Will the following code compile? Is there any undefined behavior possible? If &quot;No&quot; to both, what will it print?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+      
+  int main () {
+      int i[] = {5, 6, 7, 8, 9};
+      int* iPtr = i;
+      int len = 3;
+  
+      for (int j = 0; j &lt; len; j++) {
+          if (iPtr &lt; &amp;i[3]) {
+              // What will print here?
+              cout &lt;&lt; (&amp;i[3] - iPtr) &lt;&lt; endl;
+              iPtr++;
+          }
+      }
+  }
+</pre>
+              <p class='debug'>WARNING: While it is perfectly legal to subtract two pointers, and well defined when they are in the same array, it is NOT legal to add two pointers.</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='arrayFuncs' class='scrollspy-element' scrollspy-title='Pointers &amp; Functions'></div>
+            <h1>Pointers &amp; Functions</h1>
+            <br/>
+            <div>
+              <p>So let's talk about using functions with pointers... we've unlocked a whole new world of return and parameter types.</p>
+              <div class='toolkit'><p>We can accept pointer parameters using a variety of notations:<br/><br/></p>
+<pre class='prettyprint'>
+void pointerFunc (int* i, int[] p) {
+    ...
+}
+</pre>
+              <p>Above, both i and p refer to int pointer parameters.</p>
+              </div>
+              <p class='example'>What does the following code print out?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+  
+  int* findInt (int arr[], int len, int match) {
+      for (int i = 0; i &lt; len; i++) {
+          if (arr[i] == match) {
+              return &amp;arr[i];
+          }
+      }
+      // Case where there is no match!
+      return nullptr;
+  };
+  
+  int main () {
+      int i[] = {5, 6, 7, 8, 9};
+      int* ptr = findInt(i, 5, 7);
+  
+      if (ptr != nullptr) {
+          cout &lt;&lt; *ptr &lt;&lt; endl;
+      } else {
+          cout &lt;&lt; "null!" &lt;&lt; endl;
+      }
+  }
+</pre>
+              <p>Note, I could have just as easily written the following parameter definition for the input array:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+  
+  // See the difference?
+  int* findInt (int* arr, int len, int match) {
+      for (int i = 0; i &lt; len; i++) {
+          if (arr[i] == match) {
+              return &amp;arr[i];
+          }
+      }
+      // Case where there is no match!
+      return nullptr;
+  };
+  
+  int main () {
+      int i[] = {5, 6, 7, 8, 9};
+      int* ptr = findInt(i, 5, 7);
+  
+      if (ptr != nullptr) {
+          cout &lt;&lt; *ptr &lt;&lt; endl;
+      } else {
+          cout &lt;&lt; "null!" &lt;&lt; endl;
+      }
+  }
+</pre>
+              <br/>
+              <p>Perhaps the most important thing to know about pointer parameters:</p>
+              <p class='toolkit'>Pointer parameters are <strong>passed by value,</strong> meaning a copy of the address is made and is named by the parameter. The values that pointer can dereference and change are NOT copied.</p>
+              <p>This explains why we can pass arrays using the pointer notation and still change the individual array elements without changing the pointer itself.</p>
+              <p class='example'>What will the ptr in main point to after the function call to findInt?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+  
+  void findInt (int arr[], int len, int match, int* ptr) {
+      for (int i = 0; i &lt; len; i++) {
+          if (arr[i] == match) {
+              ptr = &amp;arr[i];
+              return;
+          }
+      }
+      ptr = nullptr;
+  };
+  
+  int main () {
+      int i[] = {5, 6, 7, 8, 9};
+      int* ptr = i;
+      findInt(i, 5, 7, ptr);
+  
+      if (ptr != nullptr) {
+          cout &lt;&lt; *ptr &lt;&lt; endl;
+      } else {
+          cout &lt;&lt; "null!" &lt;&lt; endl;
+      }
+  }
+</pre>
+              <!-- TODO: function example -->
+              
+              <br/>
+              <h3>Side-Notes about Functions</h3>
+              <p>If we wanted to set the ptr in main to what was changed in findInt, we'd just make sure to pass by reference via: <code class='prettyprint'>int* &amp;ptr</code></p>
+              <br/>
+              <p>One might ask, then, what the difference is between pointers and references, and the answer is a subtle one (great discussion found <a href='http://stackoverflow.com/questions/57483/what-are-the-differences-between-pointer-variable-and-reference-variable-in-c' target='_blank'>here</a>):</p>
+              <ul class='indent-1'>
+                <li><p>A pointer can be reassigned any number of times while a reference can not be after initialization.</p></li>
+                <li><p>A pointer can be set to the nullptr while references can never point to null (they are just names for other variables).</p></li>
+                <li><p>You can not generate the address of a reference like you can with pointers.</p></li>
+                <li><p>There are no &quot;reference arithmetics&quot; like we do with pointers (e.g., *(ptr + 1) or &amp;ptr + 4)</p></li>
+              </ul>
+            </div>
+            <hr/>
+            
             
           </div>
           <!-- END PRESENTATION CONTENT -->
@@ -143,48 +880,9 @@
           
           <!-- TODO: POINTERS! -->
           
-            <!-- TODO: General syntax -->
-              <!-- TODO: * to get at the value: "&x: the object that x points to" -->
-              <!-- TODO: & to get at the pointer "&x: generate a pointer to x" -->
-              <!-- TODO: memory tricks for each -->
-              <!-- TODO: declaring a pointer -->
-              <!-- TODO: declaring a pointer without a referent -->
-                <!-- TODO: declaring a pointer without a referent and then attempting to access == undefined behavior -->
-                  <!-- TODO: program only has so much memory allocated to it, so if it tries to access memory being used elsewhere, crash -->
-                  <!-- TODO: OR, it may overwrite some other variable, some control sequence in machine code, etc. -->
-                  <!-- TODO: tl;dr DO NOT assign to a dereferenced, uninitialized pointer -->
-                <!-- TODO: you CAN assign a pointer to another pointer if they're the same type -->
-                <!-- TODO: null pointer == nullptr is a special value to indicate a pointer pointing to nothing -->
-                  <!-- TODO: can assign and compare equivalence, but not <, >, etc. -->
-                  <!-- TODO: acts like a pointer of any type; literally not a pointer at all -->
-                <!-- TODO: & and * are inverses of each other; meaning that one "undoes" the other -->
-              <!-- TODO: What are * and & when used in an expression? Operators -->
-            <!-- TODO: Type clashes with pointers (double pointers can only point to doubles) -->
-              <!-- TODO: EVEN between int pointers and char pointers; dereference type differences are OK -->
-            <!-- TODO: Difference between pointers and references; unfortunate that & was used between both -->
-            <!-- TODO: Using operators like * and & in expressions, multiplication, addition, etc. -->
-              <!-- TODO: Pointer arithmetic -->
-                <!-- TODO: Each time I add +1 to a pointer, in memory, it moves ahead by sizeof(type) bytes -->
-                  <!-- TODO: Moves ahead by 8 bytes per double, but 4 bytes for ints... etc. -->
-              
-            <!-- TODO: What are array name identifiers really? -->
-              <!-- TODO: Pointers! So we can do pointer arithmetic with them -->
-                <!-- TODO: An array name all by itself is exactly like generating a pointer to element 0 -->
-              <!-- TODO: &array[5] and what it means -->
-              <!-- TODO: Can we do comparisons between pointers? e.g., can we ask if p1 < p2, pointing to locations in memory? Yes, but only if p1 and p2 are in the same array -->
-                <!-- TODO: Subtracting pointers when they're in the same array -->
-                <!-- TODO: Example of this -->
-                <!-- TODO: Example with undefined behavior if two pointers are compared that point to two different variables -->
-              <!-- TODO: Can *generate* an out-of-bounds pointer in an array, but *cannot* follow it -->
-              <!-- TODO: We *cannot* generate &array[-1] -->
-              
             <!-- TODO: Pointers and Functions -->
-              <!-- TODO: Passing arrays as parameters using the pointer notation * -->
-              <!-- TODO: Passing NON-arrays as parameters using the array notation [] -->
-              <!-- TODO: A pointer and using the subscript notation p[i] == *(p + i); -->
               <!-- TODO: Functions that return pointers to locations of interest -->
               
-            <!-- TODO: Pass pointers by reference -->
             <!-- TODO: Overflow -->
             <!-- TODO: Local variables of functions -->
             
