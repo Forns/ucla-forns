@@ -109,11 +109,257 @@
             <div id='review' class='scrollspy-element' scrollspy-title='Review'></div>
             <h1>Questions from Week 8</h1>
             <div>
-              <!-- TODO! Answer this question -->
               <p><strong>Q:</strong> How do I print out the address of cstring? It always tries to print out the cstring instead!</p>
+              <p>A: We can use our buddy the static cast and use the general &quot;cast to pointer&quot; notation via (void *) as follows:</p>
+<pre class='prettyprint'>
+  char c[] = "test";
+  cout &lt;&lt; static_cast&lt;void *&gt;(&c) &lt;&lt; endl;
+  cout &lt;&lt; static_cast&lt;void *&gt;(&c[1]) &lt;&lt; endl;
+  cout &lt;&lt; static_cast&lt;void *&gt;(&c[2]) &lt;&lt; endl;
+</pre>
+              <p>This will tell cout that we want to print the address of the pointer c with various offsets, rather than treat it as a cstring to be printed character by character.</p>
             </div>
             <hr/>
             
+            
+            <br/>
+            <div id='structs' class='scrollspy-element' scrollspy-title='Intro to Structs'></div>
+            <h1>Introduction to Structs</h1>
+            <div>
+              <p class='toolkit'><strong>Structs</strong> are objects in C++ that represent &quot;data <strong>struct</strong>ures&quot;, or variables, functions, etc. that are organized under a categorizing identifier.</p>
+              <p>Andrew, no one is impressed when you use lots of words.</p>
+              <p>Fine... in other words, structs are ways of grouping variables and functions into single, cohesive objects.</p>
+              <p>For example, instead of shipping you your TV piece by piece, the manufacturers send it as a completed, cohesive television.</p>
+              <p>"Hey, nice screen, antenna, RF input, tuner, and speakers! Is it a Sony?"</p>
+              <p>Don't be foolish, it's a television. We name it by its whole unit and worry less about its individual parts... yet, we still have names for those individual parts:</p>
+              <p class='toolkit'><strong>Struct Members,</strong> are components of a given struct; they can be of any variable type.</p>
+              <p>So, essentially, when we declare a struct, we are declaring a new type! All of the rules we're familiar with (when dealing with types) now similarly apply.</p>
+              <p>For starters, we should look at how to declare a struct...</p>
+              
+              <div class='definition'><p>We declare structs using the following syntax:</p>
+<pre class='prettyprint'>
+  struct &lt;structName&gt; {
+      &lt;member1_type&gt; &lt;member1_name&gt;;
+      &lt;member2_type&gt; &lt;member2_name&gt;;
+      // ...etc.
+  }; // Remember the semicolon!
+</pre>
+              </div>
+                <p>So how about an example? Let's declare a struct, as such:</p>
+<pre class='prettyprint'>
+  struct such {
+      char soCstring[5];
+      int muchNumber;
+  };
+</pre>
+                <p>Here, I've defined a struct named such that has two members: (1) a 5 elemenet cstring named soCstring, and (2) an int named muchNumber.</p>
+                <p class='debug'>Warning! You cannot initialize members within the struct definition using the traditional notation! The following will NOT compile:</p>
+<pre class='prettyprint'>
+  struct such {
+      char soCstring[5] = "test";
+      int muchNumber = 5;
+  };
+</pre>
+                <p>We'll talk about &quot;initializing&quot; structs later.</p>
+                <p class='toolkit'>A struct <strong>instance</strong> is a particular variable that is of a particular type of struct.</p>
+                <p>If we modeled the car company Ford as a struct, then an instance of Ford might be: <code class='prettyprint'>Ford myMustang;</code>.</p>
+                <p>That said, if I wanted to declare an instance of a struct, I need the following notation:</p>
+<pre class='prettyprint'>
+  struct such {
+      char soCstring[5] = "test";
+      int muchNumber = 5;
+  };
+  
+  // ...
+  
+  // [Primitive] "i" is of type "int"
+  int i;
+  
+  // [Struct] "doge" is of type "such"
+  such doge;
+</pre>
+                <p>Here, <code class='prettyprint'>doge</code> is an instance of struct <code class='prettyprint'>such</code>.</p>
+                <p>Alright, so I've declared a struct... now what?</p>
+                <p>The world is your oyster! Go forth and struct!</p>
+                <p>But first... let's talk about how to talk about members of structs...</p>
+                <p class='toolkit'>The <strong>Element / Member Selection Operator (.)</strong> says, &quot;Give me member &lt;rvalue&gt; of my &lt;lvalue&gt;...&quot; That is, we select the member on the right of the period from the struct instance on the left.</p>
+                <p>Here's an example:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+  
+  struct such {
+      char soCstring[5];
+      int muchNumber;
+  };
+  
+  int main () {
+      such doge;
+      strcpy(doge.soCstring, "wow");
+      doge.muchNumber = 5;
+  
+      cout &lt;&lt; doge.soCstring &lt;&lt; endl;
+      cout &lt;&lt; doge.muchNumber &lt;&lt; endl;
+  }
+</pre>
+                <br/>
+                <p class='debug'>Will the following code compile or have any unpredictable behavior? If &quot;No&quot; to both questions, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+  
+  struct such {
+      char soCstring[5];
+      int muchNumber;
+  };
+  
+  int main () {
+      such doge;
+      
+      cout &lt;&lt; doge.soCstring &lt;&lt; endl;
+      cout &lt;&lt; doge.muchNumber &lt;&lt; endl;
+  }
+</pre>
+                <br/>
+                <p class='debug'>Will the following code compile or have any unpredictable behavior? If &quot;No&quot; to both questions, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+  
+  struct such {
+      char soCstring[5];
+      int muchNumber;
+  };
+  
+  int main () {
+      cout &lt;&lt; such.soCstring &lt;&lt; endl;
+      cout &lt;&lt; such.muchNumber &lt;&lt; endl;
+  }
+</pre>
+                <br/>
+                <p class='definition'>Structs are defined within scope the same way variables are:</p>
+                <p>This gives us a couple of implications... for instance, I can have two structs of the same name but in different scopes:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+  
+  struct such {
+      char soCstring[5];
+      int muchNumber;
+  };
+  
+  int main () {
+      struct such {
+          double suchRepetition;
+      };
+  
+      // See which representation of such we use?
+      such doge;
+      doge.suchRepetition = 2.2;
+  
+      // Remember :: selects from the global namespace!
+      ::such doge2;
+      doge2.muchNumber = 3;
+  
+      cout &lt;&lt; doge.suchRepetition &lt;&lt; endl;
+      cout &lt;&lt; doge2.muchNumber &lt;&lt; endl;
+  }
+</pre>
+              <p>Because we can treat struct definitions as entities of a particular scope, there is a shorthand to both define and declare variables of a struct type:</p>
+<pre class='prettyprint'>
+  struct such {
+      char soCstring[5] = "test";
+      int muchNumber = 5;
+  };
+  
+  such doge;
+  such doge2;
+  such doge3;
+  
+  // ...
+  // Is equivalent to saying
+  // ...
+  
+  struct such {
+      char soCstring[5] = "test";
+      int muchNumber = 5;
+  } doge, doge2, doge3;
+</pre>
+              <br/>
+              <p class='debug'>Which of the following marked lines would I need to remove in order for the code to compile and run correctly?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+  
+  struct wow {
+      int woah;
+      char manyWords[11];
+      char* greatWords;
+  } otherDoge;
+  
+  int main () {
+      struct such {
+          double suchRepetition;
+          char manyWords[10];
+      } doge;
+  
+      // Which lines below break the code?
+      // Which lead to undefined behavior?
+      otherDoge.wow.woah = 3;
+      strcpy(such.wow.manyWords, "suchPoetry");
+      strcpy(doge.wow.manyWords, "suchPoetry");
+      strcpy(otherDoge.manyWords, "suchPoetry");
+      
+      such.suchRepetition = 2.222222;
+      otherDoge.greatWords = doge.manyWords;
+      strcpy(otherDoge.greatWords, otherDoge.manyWords);
+      cout &lt;&lt; doge.manyWords &lt;&lt; endl;
+  }
+</pre>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='structsMemory' class='scrollspy-element' scrollspy-title='Structs in Memory'></div>
+            <h1>Structs in Memory</h1>
+            <div>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='structArrays' class='scrollspy-element' scrollspy-title='Struct Arrays'></div>
+            <h1>Arrays of Structs</h1>
+            <div>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='structPointers' class='scrollspy-element' scrollspy-title='Struct Pointers'></div>
+            <h1>Struct Pointers</h1>
+            <div>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='structFuncs' class='scrollspy-element' scrollspy-title='Functions &amp; Structs'></div>
+            <h1>Functions &amp; Structs</h1>
+            <div>
+            </div>
+            <hr/>
             
           </div>
           <!-- END PRESENTATION CONTENT -->
@@ -126,10 +372,12 @@
               <!-- TODO: struct members cannot be initialized!!! (how to?) -->
             <!-- TODO: Declaring structs: Employee e1; -->
             <!-- TODO: Arrays of struct types -->
+            
             <!-- TODO: Pointers to structs -->
               <!-- TODO: How is this represented in main memory? -->
                 <!-- TODO: Sum of member size totals??? -->
                 <!-- TODO: Are these located contiguously in memory? -->
+                
             <!-- TODO: Functions with structs -->
               <!-- TODO: Passed by value!!! Not a pointer -->
                 <!-- TODO: Copying can be expensive on large structs -->
