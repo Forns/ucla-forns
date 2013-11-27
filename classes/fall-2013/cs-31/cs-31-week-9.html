@@ -1,0 +1,175 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Andrew Forney - UCLA CS</title>
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/magic-bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/main.css" rel="stylesheet" type="text/css">
+    <script src="../../../js/lib/jquery-2.0.3.min.js"></script>
+    <script src="../../../js/lib/bootstrap.min.js"></script>
+    <script src="../../../js/display/general/general-display.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+  </head>
+  
+  <body data-spy="scroll" data-target="#scrollspy">
+    
+    <!-- BEGIN WRAP -->
+    <div id="wrap">
+      
+      <!-- BEGIN NAVIGATION -->
+      <nav class='navbar navbar-default' role='navigation'>
+        <div class='nav-accent'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-12'>
+              <div class='navbar-header'>
+                <button class='navbar-toggle' type='button' data-toggle='collapse' data-target='.navbar-main-collapse'>
+                  <span class='sr-only'>Toggle Navigation</span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                </button>
+                <a class='navbar-brand' href='/~forns/'>
+                  <span id='brand-text'>
+                    Andrew Forney
+                  </span>
+                </a>
+              </div>
+              
+              <div id='nav-main' class='collapse navbar-collapse navbar-main-collapse'>
+                <ul class='nav navbar-nav navbar-right'>
+                  
+                  <li>
+                    <a href='/~forns/about.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-user'></span>
+                      </div>
+                      <p class='text-center'>About</p>
+                    </a>
+                  </li>
+                  
+                  <li class='active'>
+                    <a href='/~forns/classes.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-book'></span>
+                      </div>
+                      <p class='text-center'>Classes</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/contact.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-comment'></span>
+                      </div>
+                      <p class='text-center'>Contact</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/publications.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-file'></span>
+                      </div>
+                      <p class='text-center'>Publications</p>
+                    </a>
+                  </li>
+                  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <!-- END NAVIGATION -->
+      
+      <!-- BEGIN MAIN CONTENT -->
+      <div id="main-content" class="container">
+        <div class="row">
+          
+          <!-- BEGIN SCROLLSPY -->
+          <div class='col-md-2'>
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+              <ul id='scrollspy' class="nav bs-sidenav">
+              </ul>
+            </div>
+          </div>
+          <!-- END SCROLLSPY -->
+          
+          <!-- BEGIN PRESENTATION CONTENT -->
+          <div class='col-md-10 presentation-content' role='main'>
+            <ol class="breadcrumb">
+              <li><a href="../../../classes.html">Classes</a></li>
+              <li><a href="./cs-31.html">Fall13 CS31</a></li>
+              <li class="active">Week 9</li>
+            </ol>
+            
+            <div id='review' class='scrollspy-element' scrollspy-title='Review'></div>
+            <h1>Questions from Week 8</h1>
+            <div>
+              <!-- TODO! Answer this question -->
+              <p><strong>Q:</strong> How do I print out the address of cstring? It always tries to print out the cstring instead!</p>
+            </div>
+            <hr/>
+            
+            
+          </div>
+          <!-- END PRESENTATION CONTENT -->
+          
+          
+          <!-- TODO: Structs! -->
+            <!-- TODO: Customized types with their own properties / fields / members -->
+            <!-- TODO: Setting up the header for a struct -->
+              <!-- TODO: struct <name> {<members>}; // don't forget semicolon! -->
+              <!-- TODO: struct members cannot be initialized!!! (how to?) -->
+            <!-- TODO: Declaring structs: Employee e1; -->
+            <!-- TODO: Arrays of struct types -->
+            <!-- TODO: Pointers to structs -->
+              <!-- TODO: How is this represented in main memory? -->
+                <!-- TODO: Sum of member size totals??? -->
+                <!-- TODO: Are these located contiguously in memory? -->
+            <!-- TODO: Functions with structs -->
+              <!-- TODO: Passed by value!!! Not a pointer -->
+                <!-- TODO: Copying can be expensive on large structs -->
+                  <!-- TODO: Rule of thumb: pass by value structs that are small; typically primitive types -->
+              <!-- TODO: Passing by reference -->
+                <!-- TODO: Also with const keyword to forbid change to struct's fields -->
+              <!-- TODO: Passing pointers to structs to funcs -->
+                <!-- TODO: can't do dot member access on pointers to structs; e.g., e.age++; where e is a pointer to an employee won't work -->
+                <!-- TODO: Instead, we use e->age++; to refer to a pointer's dereference -->
+                  <!-- TODO: Not strictly necessary, can do *(e).age++; to override precedence -->
+                  <!-- TODO: Arrow notation with arrays of structs -->
+              <!-- TODO: Passing arrays of structs to funcs -- specifying dimensions if multiple -->
+                <!-- TODO: Const arrays in parameters -->
+            <!-- TODO: Structs within structs yo -->
+            
+            <!-- TODO: Invariants -->
+              <!-- TODO: Rules on struct members that prevents users from putting them into bad or unexpected states -->
+              <!-- TODO: Want users to call the member functions / methods defined in the struct in order to interface with its members -->
+                <!-- TODO: Where to implement the methods that are prototyped in the struct, e.g. define target's init -->
+                  <!-- TODO: void target::init (...) -->
+                  <!-- TODO: keyword: this, refers to the instance / object of a member function of a struct / type -->
+          
+          
+        </div>
+      </div>
+      <!-- END MAIN CONTENT -->
+      
+      
+    </div>
+    <!-- END WRAPPER -->
+    
+    <!-- BEGIN FOOTER -->
+    <div id="footer">
+      <div class="container">
+        <div class="col-md-12 text-center">
+          
+        </div>
+      </div>
+    </div>
+    <!-- END FOOTER -->
+    
+  </body>
+</html>
