@@ -16,7 +16,31 @@
    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA. */
 
 
-var examples = [ 
+var examples = [
+{
+  e: 
+    "A0 X Z4\n" +
+    "A1 A0 Z2\n" +
+    "X Y\n" +
+    "Z1 A1 Z3\n" +
+    "Z3 Z2 Z5\n" +
+    "Z5 Y Z4\n",
+    
+  v:
+    "A0 1 @-2.200,0.400\n" +
+    "A1 1 @-2.200,-0.800\n" +
+    "X E @-2.200,1.500\n" +
+    "Y O @1.400,1.500\n" +
+    "Z1 1 @-0.400,-1.400\n" +
+    "Z2 1 @-0.400,-0.400\n" +
+    "Z3 1 @1.400,-0.800\n" +
+    "Z4 1 @-0.400,0.800\n" +
+    "Z5 1 @1.400,0.400",
+    
+  l: "Multi-stage Simpson's Paradox Machine"
+
+},
+
 {
     e: "E D\n"+
     "A E Z\n"+
