@@ -152,7 +152,7 @@
       int muchNumber;
   };
 </pre>
-                <p>Here, I've defined a struct named such that has two members: (1) a 5 elemenet cstring named soCstring, and (2) an int named muchNumber.</p>
+                <p>Here, I've defined a struct named such that has two members: (1) a 5 element cstring named soCstring, and (2) an int named muchNumber.</p>
                 <p class='debug'>Warning! You cannot initialize members within the struct definition using the traditional notation! The following will NOT compile:</p>
 <pre class='prettyprint'>
   struct such {
@@ -334,6 +334,99 @@
             <div id='structsMemory' class='scrollspy-element' scrollspy-title='Structs in Memory'></div>
             <h1>Structs in Memory</h1>
             <div>
+              <p>Remember when we said that memory addresses are contiguous in the hardware? This is still true! But we didn't say the whole truth...</p>
+              <p>(you couldn't handle the whole truth then, but now you can)</p>
+              <p>Memory addresses are segmented into physical storage locations known as machine words, which we talked about at the beginning of class but as reminder:</p>
+              <p class='definition'>A <strong>machine word</strong> in memory is the architecture-specific &quot;native&quot; data size that the CPU is capable of processing.</p>
+              <p>So, for example, on a 32-bit processor, a machine word is 4 bytes long, because the processor can handle 32 bits at a time, which we know is = 4 bytes * 8 bits / 1 byte.</p>
+              <p>Physical memory is therefore separated into whatever word size the current architecture and operating system can support.</p>
+              <p>Think of a 32-bit machine with 4 byte machine words as having 4 byte &quot;chunks&quot; of memory indicies.</p>
+              <p>If we had a 64-bit machine with 8 byte machine words, then we might envision the memory laid out as follows:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/fall-2013/cs-31/week-9/structs0.PNG' />
+              </div>
+              <p>A couple things to note here:</p>
+              <ul class='indent-1'>
+                <li><p>We still have sequential indecies of memory addresses; that hasn't changed</p></li>
+                <li><p>We still have the same *amount* of memory</p></li>
+                <li><p>BUT, the way different C++ types get stored in memory gets a tiny bit tricky</p></li>
+              </ul>
+              <p class='definition'>A <strong>word boundary</strong> is therefore the end address of a word in memory.</p>
+              <p>So if a word started in memory at address 1000, then on a 32 bit machine, that word's boundary would be at the end of address 1003.</p>
+              <p>Why is this important, Andrew? I've already eaten 5 pumpkin pies and the only reason I'm reading this is because I'm too tired to switch tabs.</p>
+              <p>Glad you asked... my apologies in advance for being a bit handwavy here (the specifics are a bit out of this class' scope), but getting the general idea will help you to understand structs in memory.</p>
+              <p class='definition'>A struct's individual members are guaranteed to be sequential in memory, but not necessarily contiguous. That said, we are also guaranteed that other variables (outside of the struct members) will not be stored in between the members.</p>
+              <p>
+                By sequential, I mean that if member <code class='prettyprint'>int i;</code> is declared before <code class='prettyprint'>char c;</code> in a given struct, then we are guaranteed that
+                <code class='prettyprint'>&amp;i &lt; &amp;c</code> 
+              </p>
+              <p>
+                That said, if <code class='prettyprint'>i</code> starts at memory address 1000 and extends to address 1003 on a 64-bit machine, then we are NOT guaranteed that <code class='prettyprint'>c</code>
+                is located at address 1004.
+              </p>
+              <p>In brief, your compiler is free to add padding in memory between members to align things properly.</p>
+              <p class='example'>
+                Take, for example, the following two structs with the same numbers declared in two different orders. The main method will print different values out for you depending on where the
+                members are put in memory at runtime, but you can still glean the padding that the compiler has added.
+              </p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+  
+  struct inStructive {
+      int i;
+      double d;
+      char c;
+  };
+  
+  int main () {
+      inStructive s;
+  
+      cout &lt;&lt; static_cast&lt;void *&gt;(&amp;s.i) &lt;&lt; endl;
+      cout &lt;&lt; static_cast&lt;void *&gt;(&amp;s.d) &lt;&lt; endl;
+      cout &lt;&lt; static_cast&lt;void *&gt;(&amp;s.c) &lt;&lt; endl;
+  }
+</pre>
+              <p>Your compiler might have done the following allocation of this struct in memory:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/fall-2013/cs-31/week-9/structs1.PNG' />
+              </div>
+              <p>Andrew, that's pretty lame how you couldn't fit &quot;char c;&quot; into that box, it looks really asymmetrical.</p>
+              <p>I will find you and ruin your Thanksgiving meal!</p>
+              <p>Now, if I rearrange the member declarations as such:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+  
+  struct inStructive {
+      double d;
+      int i;
+      char c;
+  };
+  
+  int main () {
+      inStructive s;
+  
+      cout &lt;&lt; static_cast&lt;void *&gt;(&amp;s.d) &lt;&lt; endl;
+      cout &lt;&lt; static_cast&lt;void *&gt;(&amp;s.i) &lt;&lt; endl;
+      cout &lt;&lt; static_cast&lt;void *&gt;(&amp;s.c) &lt;&lt; endl;
+  }
+</pre>
+              <p>Then I *might* get some sort of spacing like the following:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/fall-2013/cs-31/week-9/structs2.PNG' />
+              </div>
+              <p>See how that works? Here are the take-away messages:</p>
+              <ul class='indent-1'>
+                <li><p>Struct members are guaranteed to be sequential (relatively positioned to each other) in memory</p></li>
+                <li><p>Struct members are not guaranteed to be contiguous (absolutely positioned one after another) in memory</p></li>
+                <li><p>Because of the above, the size of our struct types will depend on what members it has, what types those members are, and in what order they're declared.</p></li>
+              </ul>
+              <p>Just how these are arranged will be a topic for a future class, worry not!</p>
             </div>
             <hr/>
             
@@ -342,6 +435,8 @@
             <div id='structArrays' class='scrollspy-element' scrollspy-title='Struct Arrays'></div>
             <h1>Arrays of Structs</h1>
             <div>
+              <p>Now that we know how structs are arranged in memory, we can talk about sticking them into arrays!</p>
+              <p class='toolkit'>To declare an array of structs, we use the notation we're all used to</p>
             </div>
             <hr/>
             
@@ -366,17 +461,26 @@
           
           
           <!-- TODO: Structs! -->
-            <!-- TODO: Customized types with their own properties / fields / members -->
-            <!-- TODO: Setting up the header for a struct -->
-              <!-- TODO: struct <name> {<members>}; // don't forget semicolon! -->
-              <!-- TODO: struct members cannot be initialized!!! (how to?) -->
-            <!-- TODO: Declaring structs: Employee e1; -->
-            <!-- TODO: Arrays of struct types -->
-            
+            <!-- TODO: ConSTRUCTors -->
+              <!-- TODO: Have no return type, and the same name as the struct -->
+              <!-- TODO: Automatically called at struct declaration -->
+            <!-- TODO: Public vs. Private tags in structs -->
+              <!-- TODO: public: ... everything after is public until you say something different -->
+              <!-- TODO: private: ... everything after is private until you say something different -->
+                <!-- TODO: Error referencing private types from outside of member functions -->
+              <!-- TODO: Possible to have multiple public / private tags, though it's better to have 1 of each -->
+              
             <!-- TODO: Pointers to structs -->
               <!-- TODO: How is this represented in main memory? -->
                 <!-- TODO: Sum of member size totals??? -->
                 <!-- TODO: Are these located contiguously in memory? -->
+                
+            <!-- TODO: Arrays of struct types -->
+              <!-- TODO: dynamic memory and why we use it for arrays of structs -->
+                <!-- TODO: don't want to instantiate, say, 100 objects, so we'll only use the memory for however many variables we need -->
+                <!-- TODO: thus, we'll have an array of pointers of type whatever, and we'll instantiate them as we need them -->
+                <!-- TODO: Enter: the new operator, which allocates memory somewhere for a struct, and returns a pointer to the location it put it -->
+                <!-- TODO: Whenever we want to reference an object at an index of an array of that object, we use, say, array[i]->move(); -->
                 
             <!-- TODO: Functions with structs -->
               <!-- TODO: Passed by value!!! Not a pointer -->
@@ -384,6 +488,10 @@
                   <!-- TODO: Rule of thumb: pass by value structs that are small; typically primitive types -->
               <!-- TODO: Passing by reference -->
                 <!-- TODO: Also with const keyword to forbid change to struct's fields -->
+                <!-- TODO: For a member function to promise not to modify the object, we use the keyword placement: -->
+                  <!-- TODO: int position () const; // in the struct -->
+                  <!-- TODO: int position () const {} // at the implementation -->
+                  <!-- TODO: if a const is missing from a member function, and you try to call it on a const struct variable, you'll get an error! -->
               <!-- TODO: Passing pointers to structs to funcs -->
                 <!-- TODO: can't do dot member access on pointers to structs; e.g., e.age++; where e is a pointer to an employee won't work -->
                 <!-- TODO: Instead, we use e->age++; to refer to a pointer's dereference -->
@@ -400,6 +508,12 @@
                   <!-- TODO: void target::init (...) -->
                   <!-- TODO: keyword: this, refers to the instance / object of a member function of a struct / type -->
           
+            <!-- TODO: Struct vs Class -->
+              <!-- TODO: Exactly the same (left around for legacy) EXCEPT: -->
+                <!-- TODO: declaring something with the word struct defaults to its members being public -->
+                <!-- TODO: declaring something with the word class defaults to its members being private -->
+            
+            
           
         </div>
       </div>
