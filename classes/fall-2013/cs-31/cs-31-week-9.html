@@ -329,6 +329,275 @@
             </div>
             <hr/>
             
+              
+            <br/>
+            <div id='constructors' class='scrollspy-element' scrollspy-title='Constructors'></div>
+            <h1>Constructors and Initializing Structs</h1>
+            <div>
+              <p>Now, the next question you might be asking is: how do I initialize a struct?</p>
+              <p>To give values to our struct members, we can use constructors:</p>
+              <p class='toolkit'>A <strong>constructor</strong> is used to assign values to a newly created struct instance's members; it's how we &quot;initialize&quot; them. Constructors are called automatically at struct instance declaration.</p>
+              <p>We define constructor behaviors by listing a function definition with the same name as the struct as a member function and NO return type.</p>
+              <p class='definition'>A member function is a function defined on the struct that instances of the struct have access to.</p>
+              <p>Take the following example for... example:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;cstring&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  struct Ford {
+      int tires;
+      string model;
+      bool fourWheelDrive;
+      
+      // Constructor for Ford objects
+      Ford () {
+          // +One spare
+          tires = 5;
+          model = "Ranger";
+          fourWheelDrive = false;
+      }
+  };
+  
+  int main () {
+      Ford myCar;
+  
+      cout &lt;&lt; myCar.tires &lt;&lt; endl;
+      cout &lt;&lt; myCar.model &lt;&lt; endl;
+      cout &lt;&lt; myCar.fourWheelDrive &lt;&lt; endl;
+  }
+</pre>
+              <p>See how when I declared a new instance of Ford called myCar in the main function, it attains the member values defined in the constructor.</p>
+              <br/>
+              <h3>Member Functions</h3>
+              <p class='definition'>Member functions, sometimes called <strong>methods</strong>, are functions that are called by instances of a particular struct.</p>
+              <p>Here's an example where I define a member function called <code class='prettyprint'>getFlat()</code> that returns the number of remaining tires on my Ford after decrementing how many it has.</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;cstring&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  struct Ford {
+      int tires;
+      string model;
+      bool fourWheelDrive;
+  
+      int getFlat () {
+          tires--;
+          if (tires &lt; 0) {
+              tires = 0;
+          }
+          return tires;
+      }
+  
+      // Constructor
+      Ford () {
+          // +One spare
+          tires = 5;
+          model = "Ranger";
+          fourWheelDrive = false;
+      }
+  };
+  
+  int main () {
+      Ford myCar;
+      Ford yourCar;
+  
+      myCar.getFlat();
+      myCar.getFlat();
+      yourCar.getFlat();
+  
+      cout &lt;&lt; myCar.tires &lt;&lt; endl;
+      cout &lt;&lt; yourCar.tires &lt;&lt; endl;
+  }
+</pre>
+              <p>Some things to notice:</p>
+              <ul class='indent-1'>
+                <li><p>The number of tires each instance of Ford has is specific to each object in main</p></li>
+                <li><p>When I reference a member variable in a member function defined in a struct, it refers to the variable owned by the calling instance</p></li>
+              </ul>
+              <br/>
+              <p>But what if I wanted to define a member function outside of the struct definition? I could use the following syntax:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;cstring&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  struct Ford {
+      int tires;
+      string model;
+      bool fourWheelDrive;
+  
+      // Need function prototype
+      int getFlat();
+  
+      // Constructor
+      Ford () {
+          // +One spare
+          tires = 5;
+          model = "Ranger";
+          fourWheelDrive = false;
+      }
+  };
+  
+  // Member function definition
+  int Ford::getFlat () {
+      // this is a keyword for a pointer to the
+      // calling Ford instance
+      this-&gt;tires--;
+      if (this-&gt;tires &lt; 0) {
+          this-&gt;tires = 0;
+      }
+      return this-&gt;tires;
+  }
+  
+  int main () {
+      Ford myCar;
+      Ford yourCar;
+  
+      myCar.getFlat();
+      myCar.getFlat();
+      yourCar.getFlat();
+  
+      cout &lt;&lt; myCar.tires &lt;&lt; endl;
+      cout &lt;&lt; yourCar.tires &lt;&lt; endl;
+  }
+</pre>
+              <p class='toolkit'>The <strong>this</strong> keyword is a special keyword usable within member functions that provides a pointer to the calling instance.</p>
+              <p class='toolkit'>The <strong>-&gt;</strong> operator is just like the member selector (.) operator except that the lvalue of (-&gt;) is a pointer to an object rather than the object itself.</p>
+              <p>A few things to note about this syntax:</p>
+              <ul class='indent-1'>
+                <li><p>Note how in the struct, I need to provide a function prototype for the member function that I've promised I'll later define.</p></li>
+                <li><p>When I define the member function getFlat outside of the struct, I specify the function name within the struct scope by saying Ford::getFlat</p></li>
+                <li><p>
+                  Now that I've defined the member function outside of struct, I need a way to refer to the instance's members; towards this end, I can use the keyword <code class='prettyprint'>this</code> 
+                  as a pointer to the calling instance of the struct.
+                </p></li>
+                <li><p>Since I'm talking about a pointer to the instance, in order to reference its members, I use the arrow operator (-&gt;) to get at the members when a pointer is the lvalue.</p></li>
+              </ul>
+              <br/>
+              
+              <h3/>Public &amp; Private Tags</h3>
+              <p>What if we didn't want users of our structs to tamper with its internal data members? We could ask them nicely and be disappointed, or we could force them to obey our will!</p>
+              <p class='toolkit'>The <strong>public</strong> tag, used in a struct, says &quot;Everything that comes after this (until you say otherwise) is publically accessible and modifiable.&quot;</p>
+              <p class='toolkit'>The <strong>private</strong> tag, used in a struct, says &quot;Everything that comes after this (until you say otherwise) is ONLY accessible to member functions.&quot;</p>
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;cstring&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  struct Ford {
+      // Available to anyone!
+      public:
+          // Need function prototype
+          int getFlat();
+          // Constructor
+          Ford () {
+              // +One spare
+              tires = 5;
+              model = "Ranger";
+              fourWheelDrive = false;
+          }
+  
+      // Can't touch these!
+      private:
+          int tires;
+          string model;
+          bool fourWheelDrive;
+  };
+  
+  // Member function definition
+  int Ford::getFlat () {
+      // this is a keyword for a pointer to the
+      // calling Ford instance
+      this-&gt;tires--;
+      if (this-&gt;tires &lt; 0) {
+        this-&gt;tires = 0;
+      }
+      return this-&gt;tires;
+  }
+  
+  int main () {
+      Ford myCar;
+      Ford yourCar;
+  
+      myCar.getFlat();
+      myCar.getFlat();
+      yourCar.getFlat();
+  
+      // ...errrr, are tires private?
+      cout &lt;&lt; myCar.tires &lt;&lt; endl;
+      cout &lt;&lt; yourCar.tires &lt;&lt; endl;
+  }
+</pre>
+            </div>
+            <br/>
+            <p>So how do I give users access to my private members? ...there's gotta be a better way to say that...</p>
+            <p class='definition'>Member functions called <strong>getters</strong> are used to allow users access to viewing private member values.</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;cstring&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  struct Ford {
+      // Available to anyone!
+      public:
+          // Need function prototypes
+          int getFlat();
+          int getTires();
+  
+          // Constructor
+          Ford () {
+              // +One spare
+              tires = 5;
+              model = "Ranger";
+              fourWheelDrive = false;
+          }
+  
+      // Can't touch these!
+      private:
+          int tires;
+          string model;
+          bool fourWheelDrive;
+  };
+  
+  // Member function definition
+  int Ford::getFlat () {
+      // this is a keyword for a pointer to the
+      // calling Ford instance
+      this-&gt;tires--;
+      if (this-&gt;tires &lt; 0) {
+        this-&gt;tires = 0;
+      }
+      return this-&gt;tires;
+  }
+  
+  int Ford::getTires () {
+    return this-&gt;tires;
+  }
+  
+  int main () {
+      Ford myCar;
+      Ford yourCar;
+  
+      myCar.getFlat();
+      myCar.getFlat();
+      yourCar.getFlat();
+  
+      // ...now I've provided an interface to see the number
+      // of tires!
+      cout &lt;&lt; myCar.getTires() &lt;&lt; endl;
+      cout &lt;&lt; yourCar.getTires() &lt;&lt; endl;
+  }
+</pre>
+            <hr/>
+            
             
             <br/>
             <div id='structsMemory' class='scrollspy-element' scrollspy-title='Structs in Memory'></div>
@@ -432,19 +701,137 @@
             
             
             <br/>
-            <div id='structArrays' class='scrollspy-element' scrollspy-title='Struct Arrays'></div>
-            <h1>Arrays of Structs</h1>
+            <div id='structPointers' class='scrollspy-element' scrollspy-title='Struct Pointers'></div>
+            <h1>Struct Pointers</h1>
             <div>
-              <p>Now that we know how structs are arranged in memory, we can talk about sticking them into arrays!</p>
-              <p class='toolkit'>To declare an array of structs, we use the notation we're all used to</p>
+              <p>Struct pointers work pretty much exactly as you'd expect.</p>
+              <p class='definition'>Pointers to struct instances must have the same type as the object to which they're pointing</p>
+              <p>Remember our arrow operator to access the members of whatever struct a struct pointer points to:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;cstring&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  struct Stuff {
+      int x;
+      string s;
+  
+      Stuff () {
+        x = 5;
+        s = "hi :)";
+      }
+  };
+  
+  int main () {
+      Stuff ing;
+  
+      // Pointer of type Stuff equal to the
+      // location of the first member of ing
+      Stuff* ptr = &ing;
+  
+      cout &lt;&lt; ptr-&gt;x &lt;&lt; endl;
+      cout &lt;&lt; ptr-&gt;s &lt;&lt; endl;
+  }
+</pre>
+              <p>Notice the addresses that the pointer points to and the address of the first declared member, x:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;cstring&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  struct Stuff {
+      int x;
+      string s;
+  
+      Stuff () {
+        x = 5;
+        s = "hi :)";
+      }
+  };
+  
+  int main () {
+      Stuff ing;
+  
+      // Pointer of type Stuff equal to the
+      // location of the first member of ing
+      Stuff* ptr = &ing;
+  
+      cout &lt;&lt; ptr &lt;&lt; endl;
+      cout &lt;&lt; &ptr-&gt;x &lt;&lt; endl;
+  }
+</pre>
+              <p>What if we had an array as a member of a struct?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;cstring&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  struct Stuff {
+      int x;
+      string s;
+      int i[3];
+  
+      Stuff () {
+          x = 5;
+          s = "hi :)";
+          i[0] = 5;
+          i[1] = 6;
+          i[2] = 7;
+      }
+  };
+  
+  int main () {
+      Stuff ing;
+  
+      // Pointer of type Stuff equal to the
+      // location of the first member of ing
+      Stuff* ptr = &ing;
+  
+      for (int j = 0; j &lt; 3; j++) {
+          cout &lt;&lt; ptr-&gt;i[j] &lt;&lt; endl;
+      }
+  }
+</pre>
             </div>
             <hr/>
             
             
             <br/>
-            <div id='structPointers' class='scrollspy-element' scrollspy-title='Struct Pointers'></div>
-            <h1>Struct Pointers</h1>
+            <div id='structArrays' class='scrollspy-element' scrollspy-title='Struct Arrays'></div>
+            <h1>Arrays of Structs</h1>
             <div>
+              <p>Now that we know how structs are arranged in memory, we can talk about sticking them into arrays!</p>
+              <p class='toolkit'>To declare an array of structs, we use the notation we're all used to with other types:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;cstring&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  struct Stuff {
+      int x;
+      char c[6];
+  
+      Stuff () {
+          x = 3;
+          strcpy(c, "mine?");
+      }
+  };
+  
+  int main () {
+      // An array of 5 Stuffs!
+      Stuff ing[5];
+  
+      // Ways to access members and elements of
+      // members, like arrays
+      cout &lt;&lt; ing[0].c &lt;&lt; endl;
+      cout &lt;&lt; ing[2].c &lt;&lt; endl;
+      cout &lt;&lt; ing[2].c[4] &lt;&lt; endl;
+  }
+</pre>
             </div>
             <hr/>
             
@@ -460,16 +847,6 @@
           <!-- END PRESENTATION CONTENT -->
           
           
-          <!-- TODO: Structs! -->
-            <!-- TODO: ConSTRUCTors -->
-              <!-- TODO: Have no return type, and the same name as the struct -->
-              <!-- TODO: Automatically called at struct declaration -->
-            <!-- TODO: Public vs. Private tags in structs -->
-              <!-- TODO: public: ... everything after is public until you say something different -->
-              <!-- TODO: private: ... everything after is private until you say something different -->
-                <!-- TODO: Error referencing private types from outside of member functions -->
-              <!-- TODO: Possible to have multiple public / private tags, though it's better to have 1 of each -->
-              
             <!-- TODO: Pointers to structs -->
               <!-- TODO: How is this represented in main memory? -->
                 <!-- TODO: Sum of member size totals??? -->
@@ -501,13 +878,6 @@
                 <!-- TODO: Const arrays in parameters -->
             <!-- TODO: Structs within structs yo -->
             
-            <!-- TODO: Invariants -->
-              <!-- TODO: Rules on struct members that prevents users from putting them into bad or unexpected states -->
-              <!-- TODO: Want users to call the member functions / methods defined in the struct in order to interface with its members -->
-                <!-- TODO: Where to implement the methods that are prototyped in the struct, e.g. define target's init -->
-                  <!-- TODO: void target::init (...) -->
-                  <!-- TODO: keyword: this, refers to the instance / object of a member function of a struct / type -->
-          
             <!-- TODO: Struct vs Class -->
               <!-- TODO: Exactly the same (left around for legacy) EXCEPT: -->
                 <!-- TODO: declaring something with the word struct defaults to its members being public -->
