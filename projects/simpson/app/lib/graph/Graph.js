@@ -923,6 +923,55 @@ var Graph = Class.create({
             return;
          }
       }
+   },
+   
+   // >>> [AF] Returns a list of all undirected paths between two verticies
+   listPathsBetween: function (vertex1, vertex2) {
+     // If the two verticies are the same, we're done
+     if (vertex1.id === vertex2.id) {
+       console.log("vertex1");
+       return [];
+     }
+     
+     // Remove the visited status from the Graph's nodes
+     this.clearVisited();
+     
+     // Store the paths in a list; we'll only keep paths that begin with
+     // vertex1 and end with vertex2
+     var pathList = [],
+         currentPath = [],
+     
+         // Recursively call this helper function on the vertex and its adjacencies
+         findPath = function (currentNode) {
+           console.log(currentNode);
+           currentPath.push(currentNode);
+           var toBeVisited = currentNode.getParents().concat(currentNode.getChildren());
+           // For each neighbor, recurse on findPath
+           toBeVisited.each(function (vert) {
+             // If the current node is equal to the target, then we're done
+             if (vert.id === vertex2.id) {
+               currentPath.push(vert);
+               pathList.push(currentPath.slice(0));
+               console.log("---------");
+               console.log(currentPath.slice(0));
+               console.log("---------");
+               currentPath.pop();
+             } else {
+               if (!Graph.Vertex.isVisited(vert)) {
+                 Graph.Vertex.markAsVisited(vert);
+                 findPath(vert);
+               }
+             }
+           });
+           currentPath.pop();
+           Graph.Vertex.markAsNotVisited(currentNode);
+         };
+         
+     // Start the recursion on the first vertex
+     Graph.Vertex.markAsVisited(vertex1);
+     findPath(vertex1);
+     
+     return pathList;
    }
    
 } );
