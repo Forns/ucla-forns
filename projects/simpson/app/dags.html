@@ -61,41 +61,44 @@
       var mouse_y = 0;
       
       var GUI = {
-         view_mode : "DAG",
-         highlight_causal : true,
-         highlight_biasing : true,
-         highlight_ancestors : true,
-         allow_intermediate_adjustment : true,
-         set_highlight_biasing : function( b ){
+          view_mode : "DAG",
+          highlight_causal : true,
+          highlight_biasing : true,
+          highlight_ancestors : true,
+          allow_intermediate_adjustment : true,
+          
+          set_highlight_biasing : function( b ){
             if( b ) {
-				DAGitty.style.biasingpath = DAGitty.DefaultStyle.biasingpath;
-				displayShow("legend_biasing");
+         		  DAGitty.style.biasingpath = DAGitty.DefaultStyle.biasingpath;
+         		  displayShow("legend_biasing");
             } else {
-				DAGitty.style.biasingpath = DAGitty.DefaultStyle.path;
-				displayHide("legend_biasing");
+         	    DAGitty.style.biasingpath = DAGitty.DefaultStyle.path;
+         	    displayHide("legend_biasing");
             }
-			DAGittyControl.graphLayoutChanged();
-         },
-         set_highlight_causal : function( b ){
+         	  DAGittyControl.graphLayoutChanged();
+          },
+          
+          set_highlight_causal : function( b ){
             this.highlight_causal = b;
-            if( b ) {
-				DAGitty.style.causalpath = DAGitty.DefaultStyle.causalpath;
-				displayShow("legend_causal");
-            } else {
-				DAGitty.style.causalpath = DAGitty.DefaultStyle.path;
-				displayHide("legend_causal");
+              if( b ) {
+         			  DAGitty.style.causalpath = DAGitty.DefaultStyle.causalpath;
+         			  displayShow("legend_causal");
+              } else {
+                DAGitty.style.causalpath = DAGitty.DefaultStyle.path;
+         	      displayHide("legend_causal");
+              }
+              DAGittyControl.graphLayoutChanged();
+            },
+            
+            set_highlight_ancestors : function( b ){
+              this.highlight_ancestors = b;
+              ["confounder","anexposure","anoutcome"].each(function(n){
+                DAGitty.style[n+'node'] = DAGitty.DefaultStyle[(b?n:'')+'node'];
+              });
+              b ? displayShow("legend_ancestors")
+                : displayHide("legend_ancestors");
+              DAGittyControl.graphLayoutChanged();
             }
-			DAGittyControl.graphLayoutChanged();
-         },
-         set_highlight_ancestors : function( b ){
-            this.highlight_ancestors = b;
-			["confounder","anexposure","anoutcome"].each(function(n){
-				DAGitty.style[n+'node'] = DAGitty.DefaultStyle[(b?n:'')+'node'];
-			});
-            b ? displayShow("legend_ancestors")
-			  : displayHide("legend_ancestors");
-			DAGittyControl.graphLayoutChanged();
-         }
       };
 
       var Model = {
@@ -134,11 +137,14 @@
 		);
 		
 		DAGittyControl.graphChanged();
+		
+    // Sets the Simpson's Paradox tools in action
+    simpsonInit();
 	}
 	  
 
 	Event.observe( window, 'load', initialize );
-	  
+  
     </script>
 </head>
 <body>
@@ -292,6 +298,13 @@
          <tr><td>covariates</td><td class="info" id="info_covariates">0</td></tr>
          <tr><td>causal paths</td><td class="info" id="info_frontdoor">0</td></tr>
          <!--<tr><td>open backdoor paths</td><td class="info" id="info_backdoor">0</td></tr>-->
+      </table>
+   </div>
+   <h3 onclick="toggleDisplay('simpson')"><img src="images/arrow-down.png" alt="" id="a_simpson"> Simpson's Paradox</h3>
+   <div id="simpson" style="display:block">
+      <table id="info_simpson">
+         <tr><td>Possible?</td><td class="info" id="info_simpson_possible">not set</td></tr>
+         <tr><td>Should Condition?</td><td class="info" id="info_simpson_condition">not set</td></tr>
       </table>
    </div>
   </div>
