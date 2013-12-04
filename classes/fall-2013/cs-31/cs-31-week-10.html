@@ -1,0 +1,191 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Andrew Forney - UCLA CS</title>
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/magic-bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/main.css" rel="stylesheet" type="text/css">
+    <script src="../../../js/lib/jquery-2.0.3.min.js"></script>
+    <script src="../../../js/lib/bootstrap.min.js"></script>
+    <script src="../../../js/display/general/general-display.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+  </head>
+  
+  <body data-spy="scroll" data-target="#scrollspy">
+    
+    <!-- BEGIN WRAP -->
+    <div id="wrap">
+      
+      <!-- BEGIN NAVIGATION -->
+      <nav class='navbar navbar-default' role='navigation'>
+        <div class='nav-accent'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-12'>
+              <div class='navbar-header'>
+                <button class='navbar-toggle' type='button' data-toggle='collapse' data-target='.navbar-main-collapse'>
+                  <span class='sr-only'>Toggle Navigation</span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                </button>
+                <a class='navbar-brand' href='/~forns/'>
+                  <span id='brand-text'>
+                    Andrew Forney
+                  </span>
+                </a>
+              </div>
+              
+              <div id='nav-main' class='collapse navbar-collapse navbar-main-collapse'>
+                <ul class='nav navbar-nav navbar-right'>
+                  
+                  <li>
+                    <a href='/~forns/about.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-user'></span>
+                      </div>
+                      <p class='text-center'>About</p>
+                    </a>
+                  </li>
+                  
+                  <li class='active'>
+                    <a href='/~forns/classes.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-book'></span>
+                      </div>
+                      <p class='text-center'>Classes</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/contact.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-comment'></span>
+                      </div>
+                      <p class='text-center'>Contact</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/publications.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-file'></span>
+                      </div>
+                      <p class='text-center'>Publications</p>
+                    </a>
+                  </li>
+                  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <!-- END NAVIGATION -->
+      
+      <!-- BEGIN MAIN CONTENT -->
+      <div id="main-content" class="container">
+        <div class="row">
+          
+          <!-- BEGIN SCROLLSPY -->
+          <div class='col-md-2'>
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+              <ul id='scrollspy' class="nav bs-sidenav">
+              </ul>
+            </div>
+          </div>
+          <!-- END SCROLLSPY -->
+          
+          <!-- BEGIN PRESENTATION CONTENT -->
+          <div class='col-md-10 presentation-content' role='main'>
+            <ol class="breadcrumb">
+              <li><a href="../../../classes.html">Classes</a></li>
+              <li><a href="./cs-31.html">Fall13 CS31</a></li>
+              <li class="active">Week 10</li>
+            </ol>
+            
+            <div id='review' class='scrollspy-element' scrollspy-title='Review'></div>
+            <h1>Questions from Week 9</h1>
+            <div>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='structs' class='scrollspy-element' scrollspy-title='More on Structs'></div>
+            <h1>More on Structs</h1>
+            <div>
+              <p>...because I didn't say enough about structs last week...</p>
+            </div>
+            <hr/>
+            
+          </div>
+          <!-- END PRESENTATION CONTENT -->
+          
+            <!-- TODO: structs -->
+              <!-- TODO: constructors with arguments for initializing -->
+                <!-- TODO: constructors with NO arguments called "Default constructor" -->
+                <!-- TODO: If you DON'T define ANY constructor, the compiler will write a default constructor -->
+                  <!-- TODO: the default constructor will NOT initialize any primitives, but will call the default constructor of any objects -->
+                <!-- TODO: if only constructor expects 1 or more parameters, can no longer just declare; Pet p; // ERROR: need to specify arguments Pet p(...) -->
+                <!-- TODO: You CAN have more than one constructor / function as long as the parameter list of each is of different length or of different types -->
+                  <!-- TODO: example with multiple parameter lists under same constructor / function name -->
+                <!-- TODO: What if we want an object to have another object type as a member? -->
+                  <!-- TODO: Just declare a member that is a pointer to the type of interest -->
+                    <!-- TODO: then, in a constructor or other function, just dynamically allocate memory to the pointer member -->
+                    <!-- TODO: Define Memory Leak -->
+                    <!-- TODO: BUT if the object falls out of scope, then any member that was dynamically allocated in memory will get leaked unless we delete it -->
+                      <!-- TODO: how to get rid of dynamically allocated member automatically? -->
+                        <!-- TODO: we can call a special function every time an object is about to "go away" -->
+                        <!-- TODO: that function is called a Destructor for a class and is named ~<nameOfClass> without return type and without arguments (it's never directly called) -->
+                        <!-- TODO: BUT, what if what we want to delete never got allocated? -->
+                          <!-- TODO: We're OK because then that pointer will be the nullptr, and delete operation on the nullptr is OK -->
+                      <!-- TODO: What if we dynamically allocate to a pointer that has already been allocated to? memleak! -->
+                        <!-- TODO: Solution: whenever you're about to allocate new memory to a pointer, delete it right beforehand! In the worst case, it's nullptr and you're fine, or it pointed to something and it gets deleted -->
+              <!-- TODO: If an Employee belongs to a Company, but needs to know something about the Company, then we need a pointer to the company that the Employee belongs to -->
+                <!-- TODO: how to initialize? put it in the constructor for starters... -->
+                  <!-- TODO: which company is this employee a part of? Use "this", which is referring to the company being constructed, to construct the employee member! -->
+          
+            <!-- TODO: Dynamic Memory -->
+              <!-- TODO: new keyword for dynamic memory allocation -->
+                <!-- TODO: memory in the "heap" -->
+                <!-- TODO: non-dynamic memory => memory in the stack -->
+                  <!-- TODO: why even have dynamic memory? Can't we do everything using standard declarations and pointers? -->
+              <!-- TODO: delete keyword to remove memory dynamically allocated -->
+                <!-- TODO: delete does NOT set pointers to null; it leaves the pointer address, but memory is deallocated -->
+                <!-- TODO: delete called on *already deleted* objects is undefined behavior :O -->
+                  <!-- TODO: example with possible replicant deletion -->
+                <!-- TODO: whenever new is used, must also delete or memory leak; ONLY dynamically allocated memory is susceptible to leaks -->
+                <!-- TODO: can only delete on something pointed to by a new declaration -->
+              
+          
+            <!-- TODO: Arrays of struct types -->
+              <!-- TODO: dynamic memory and why we use it for arrays of structs -->
+                <!-- TODO: don't want to instantiate, say, 100 objects, so we'll only use the memory for however many variables we need -->
+                <!-- TODO: thus, we'll have an array of pointers of type whatever, and we'll instantiate them as we need them -->
+                <!-- TODO: Enter: the new operator, which allocates memory somewhere for a struct, and returns a pointer to the location it put it -->
+                <!-- TODO: Whenever we want to reference an object at an index of an array of that object, we use, say, array[i]->move(); -->
+                
+          
+        </div>
+      </div>
+      <!-- END MAIN CONTENT -->
+      
+      
+    </div>
+    <!-- END WRAPPER -->
+    
+    <!-- BEGIN FOOTER -->
+    <div id="footer">
+      <div class="container">
+        <div class="col-md-12 text-center">
+          
+        </div>
+      </div>
+    </div>
+    <!-- END FOOTER -->
+    
+  </body>
+</html>

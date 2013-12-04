@@ -5,10 +5,33 @@
 
 
 
-var simpsonInit = function () {
-      // console.log(Model.dag);
+var simpsonAnalysis = function () {
+      var dag = Model.dag,
+          allPaths = [],
+          sources = dag.getSources(),
+          targets = dag.getTargets();
       
-      console.log(Model.dag.listPathsBetween(Model.dag.getSources()[0], Model.dag.getTargets()[0]));
+      // Let's make sure we can even run the rest of our algorithm before continuing
+      if (dag.containsCycle()) {
+        return {
+          possible: "No; Cycle in graph",
+          condition: 
+        };
+      }
+      
+      // We'll start off by looking at every path between our sources and targets
+      sources.each(function (s) {
+        targets.each(function (t) {
+          dag.listPathsBetween(s, t).each(function (p) {
+            allPaths.push(p.splice(0));
+          });
+        });
+      });
+    },
+
+    displaySimpsonInfo = function () {
+      var results = simpsonAnalysis();
+      console.log(allPaths);
       
       // Bool value for whether node is adjusted for or not
       // console.log(Model.dag.isAdjustedNode(Model.dag.getVertex("Z1")));

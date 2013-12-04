@@ -943,7 +943,6 @@ var Graph = Class.create({
      
          // Recursively call this helper function on the vertex and its adjacencies
          findPath = function (currentNode) {
-           console.log(currentNode);
            currentPath.push(currentNode);
            var toBeVisited = currentNode.getParents().concat(currentNode.getChildren());
            // For each neighbor, recurse on findPath
@@ -952,9 +951,6 @@ var Graph = Class.create({
              if (vert.id === vertex2.id) {
                currentPath.push(vert);
                pathList.push(currentPath.slice(0));
-               console.log("---------");
-               console.log(currentPath.slice(0));
-               console.log("---------");
                currentPath.pop();
              } else {
                if (!Graph.Vertex.isVisited(vert)) {
