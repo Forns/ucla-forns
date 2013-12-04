@@ -106,9 +106,32 @@
               <li class="active">Week 10</li>
             </ol>
             
-            <div id='review' class='scrollspy-element' scrollspy-title='Review'></div>
-            <h1>Questions from Week 9</h1>
+            <div id='dynamicMem' class='scrollspy-element' scrollspy-title='Dynamic Memory'></div>
+            <h1>Dynamic Memory</h1>
             <div>
+              <p>Just when you thought you could forget about memory (fact: that pun is inexaustible), we start talking about dynamic memory...</p>
+              <p>So what's the big deal about this <code class='prettyprint'>new</code> craze called dynamic memory?</p>
+              <p>Well, let's think about the memory we've been using in the recent past...</p>
+              <p class='question' name='dyn-q0'>When we wanted to create an array of ints, do we always have to somehow specify its size? Could this be done at runtime?</p>
+              <div class='answer' name='dyn-q0'><p>In our experience, we needed to specify the size of an array; sometimes this could be inferred via syntax: 
+                <code class='prettyprint'>int i[] = {1, 2, 3};</code> but size allocations like the following could not be done at runtime:</p>
+<pre class='prettyprint'>
+  ...
+  int count;
+  cin &gt;&gt; count;
+  
+  // Would this be legal?
+  int i[count];
+  ...
+</pre>
+              </div>
+              <p>But Andrew... does that mean we are forever bound to specifying our memory allocations at runtime?</p>
+              <p>Will we ever be free of these shackles?</p>
+              <p>Fear not, for now we turn to Dynamic Memory.</p>
+              <p class='question' name='dyn-q1'>So for starters... what is dynamic memory?</p>
+              <p class='question' name='dyn-q1'>Dynamic Memory is the runtime-capable allocation of memory that is managed by the programmer.</p>
+              <p>We should discuss a couple of topics to see the big difference between dynamic memory and local allocations.</p>
+              <p class='definition'>The <strong>stack</strong>, more formally known as the call stack,  </p>
             </div>
             <hr/>
             
@@ -124,6 +147,18 @@
           </div>
           <!-- END PRESENTATION CONTENT -->
           
+            <!-- TODO: Dynamic Memory -->
+              <!-- TODO: new keyword for dynamic memory allocation -->
+                <!-- TODO: memory in the "heap" -->
+                <!-- TODO: non-dynamic memory => memory in the stack -->
+                  <!-- TODO: why even have dynamic memory? Can't we do everything using standard declarations and pointers? -->
+              <!-- TODO: delete keyword to remove memory dynamically allocated -->
+                <!-- TODO: delete does NOT set pointers to null; it leaves the pointer address, but memory is deallocated -->
+                <!-- TODO: delete called on *already deleted* objects is undefined behavior :O -->
+                  <!-- TODO: example with possible replicant deletion -->
+                <!-- TODO: whenever new is used, must also delete or memory leak; ONLY dynamically allocated memory is susceptible to leaks -->
+                <!-- TODO: can only delete on something pointed to by a new declaration -->
+                
             <!-- TODO: structs -->
               <!-- TODO: constructors with arguments for initializing -->
                 <!-- TODO: constructors with NO arguments called "Default constructor" -->
@@ -147,19 +182,6 @@
               <!-- TODO: If an Employee belongs to a Company, but needs to know something about the Company, then we need a pointer to the company that the Employee belongs to -->
                 <!-- TODO: how to initialize? put it in the constructor for starters... -->
                   <!-- TODO: which company is this employee a part of? Use "this", which is referring to the company being constructed, to construct the employee member! -->
-          
-            <!-- TODO: Dynamic Memory -->
-              <!-- TODO: new keyword for dynamic memory allocation -->
-                <!-- TODO: memory in the "heap" -->
-                <!-- TODO: non-dynamic memory => memory in the stack -->
-                  <!-- TODO: why even have dynamic memory? Can't we do everything using standard declarations and pointers? -->
-              <!-- TODO: delete keyword to remove memory dynamically allocated -->
-                <!-- TODO: delete does NOT set pointers to null; it leaves the pointer address, but memory is deallocated -->
-                <!-- TODO: delete called on *already deleted* objects is undefined behavior :O -->
-                  <!-- TODO: example with possible replicant deletion -->
-                <!-- TODO: whenever new is used, must also delete or memory leak; ONLY dynamically allocated memory is susceptible to leaks -->
-                <!-- TODO: can only delete on something pointed to by a new declaration -->
-              
           
             <!-- TODO: Arrays of struct types -->
               <!-- TODO: dynamic memory and why we use it for arrays of structs -->
