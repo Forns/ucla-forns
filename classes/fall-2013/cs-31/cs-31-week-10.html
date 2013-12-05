@@ -132,6 +132,38 @@
               <p class='question' name='dyn-q1'>Dynamic Memory is the runtime-capable allocation of memory that is managed by the programmer.</p>
               <p>We should discuss a couple of topics to see the big difference between dynamic memory and local allocations.</p>
               <p class='definition'>The <strong>stack</strong>, more formally known as the call stack,  </p>
+              
+              <!-- TODO: stuff -->
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+  
+  struct inStructive {
+      inStructive() {
+          i = 5;
+      }
+  
+      double d;
+      int i;
+      char c;
+  };
+  
+  int main () {
+      int count;
+      cout &lt;&lt; "Enter the size:" &lt;&lt; endl;
+      cin &gt;&gt; count;
+  
+      int* i = new int[count];
+  
+      for (int j = 0; j &lt; count; j++) {
+          i[j] = j;
+          cout &lt;&lt; i[j] &lt;&lt; endl;
+      }
+      delete[] i;
+  }
+</pre>
             </div>
             <hr/>
             

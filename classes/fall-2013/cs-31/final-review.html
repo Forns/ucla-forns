@@ -1,0 +1,569 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Andrew Forney - UCLA CS</title>
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/magic-bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/main.css" rel="stylesheet" type="text/css">
+    <script src="../../../js/lib/jquery-2.0.3.min.js"></script>
+    <script src="../../../js/lib/bootstrap.min.js"></script>
+    <script src="../../../js/display/general/general-display.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+  </head>
+  
+  <body data-spy="scroll" data-target="#scrollspy">
+    
+    <!-- BEGIN WRAP -->
+    <div id="wrap">
+      
+      <!-- BEGIN NAVIGATION -->
+      <nav class='navbar navbar-default' role='navigation'>
+        <div class='nav-accent'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-12'>
+              <div class='navbar-header'>
+                <button class='navbar-toggle' type='button' data-toggle='collapse' data-target='.navbar-main-collapse'>
+                  <span class='sr-only'>Toggle Navigation</span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                </button>
+                <a class='navbar-brand' href='/~forns/'>
+                  <span id='brand-text'>
+                    Andrew Forney
+                  </span>
+                </a>
+              </div>
+              
+              <div id='nav-main' class='collapse navbar-collapse navbar-main-collapse'>
+                <ul class='nav navbar-nav navbar-right'>
+                  
+                  <li>
+                    <a href='/~forns/about.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-user'></span>
+                      </div>
+                      <p class='text-center'>About</p>
+                    </a>
+                  </li>
+                  
+                  <li class='active'>
+                    <a href='/~forns/classes.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-book'></span>
+                      </div>
+                      <p class='text-center'>Classes</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/contact.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-comment'></span>
+                      </div>
+                      <p class='text-center'>Contact</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/publications.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-file'></span>
+                      </div>
+                      <p class='text-center'>Publications</p>
+                    </a>
+                  </li>
+                  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <!-- END NAVIGATION -->
+      
+      <!-- BEGIN MAIN CONTENT -->
+      <div id="main-content" class="container">
+        <div class="row">
+          
+          <!-- BEGIN SCROLLSPY -->
+          <div class='col-md-2'>
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+              <ul id='scrollspy' class="nav bs-sidenav">
+              </ul>
+            </div>
+          </div>
+          <!-- END SCROLLSPY -->
+          
+          <!-- BEGIN PRESENTATION CONTENT -->
+          <div class='col-md-10 presentation-content' role='main'>
+            <ol class="breadcrumb">
+              <li><a href="../../../classes.html">Classes</a></li>
+              <li><a href="./cs-31.html">Fall13 CS31</a></li>
+              <li class="active">Final Review</li>
+            </ol>
+            
+            <h1>Final Review</h1>
+            <p>The following review covers the remaining topics since the last review, as well as some commonly missed problems on the last exams.</p>
+            <p>By no means is it meant to serve as a comprehensive review (look through my other notes for greater detail), but will help you get some more practice before 
+              <span class='strike'>doomsday</span> your Saturday final.
+            </p>
+            
+            <br/>
+            <div id='structs' class='scrollspy-element' scrollspy-title='Structs &amp; Classes'></div>
+            <h1>Structs &amp; Classes</h1>
+            <div>
+              <p>The following examples are designed to be open-ended in the sense that they may contain runtime or compile time errors... or may work just fine! See if you can figure them out.</p>
+              <p class='debug'>Will the following code compile? Is there any undefined behavior? If &quot;No&quot; to both questions, what will it print out?</p>
+              <br/>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+  
+  struct builder {
+      int yearsExperience,
+          yearsAtCompany;
+      string name;
+  
+      // Interview questions were getting stale...
+      char favoriteLetter;
+  
+      // Get it? Constructor?
+      builder () {
+          // Must have 2 years experience to apply
+          int yearsExperience = 2;
+          int yearsAtCompany = 0;
+          string name = "Bob";
+          favoriteLetter = 'B';
+      }
+  };
+  
+  int main () {
+      builder bob;
+  
+      cout &lt;&lt; bob.name &lt;&lt; endl;
+      cout &lt;&lt; ((bob.yearsExperience &lt; 2) ? "Veteran" : "Noobuilder") &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p class='debug'>Will the following code compile? Is there any undefined behavior? If &quot;No&quot; to both questions, what will it print out?</p>
+              <br/>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+  
+  struct builder {
+      int yearsExperience,
+          yearsAtCompany;
+      string name;
+      char favoriteLetter;
+  
+      builder (int experience, string name) {
+          // Must have 2 years experience to apply
+          int yearsExperience = experience;
+          int yearsAtCompany = 0;
+          string name = name;
+          favoriteLetter = 'B';
+      }
+  
+      builder (int atCompany, string name) {
+          // Must have 2 years experience to apply
+          int yearsExperience = 0;
+          int yearsAtCompany = atCompany;
+          string name = name;
+          favoriteLetter = 'B';
+      }
+  };
+  
+  int main () {
+      int experience = 5;
+      string name = "Bob";
+      builder bob(experience, name);
+  
+      cout &lt;&lt; bob.name &lt;&lt; endl;
+      cout &lt;&lt; ((bob.yearsExperience &lt; 2) ? "Veteran" : "Noobuilder") &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p class='debug'>Find all of the syntax errors in the following code:</p>
+              <br/>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+  
+  const int NAME_LEN = 100;
+  
+  class Spy {
+      int agentId;
+      char name[NAME_LEN];
+      bool tellsTruth;
+      Spy* target;
+      Spy* contact;
+  
+      Spy (int id, char codeName[], bool truthiness) {
+          agentId = id;
+          name = codeName;
+          tellsTruth = truthiness;
+      }
+  };
+  
+  int main () {
+      Spy jamesBond(007, "Bond... James Bond", 1);
+  
+      cout &lt;&lt; jamesBond.name &lt;&lt; endl;
+      cout &lt;&lt; jamesBond.tellsTruth &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p>Oh hey, look... they got fixed:</p>
+              <p class='example'>Use the following over-elaborate class for exercise with the subsequent main functions.</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+  
+  const int NAME_LEN = 100;
+  
+  class Spy {
+      int agentId;
+      char name[NAME_LEN];
+      bool tellsTruth;
+      Spy* target;
+      Spy* contact;
+  
+  public:
+      Spy (int id, char codeName[], bool truthiness) {
+          agentId = id;
+          strcpy(name, codeName);
+          tellsTruth = truthiness;
+          target = nullptr;
+          contact = nullptr;
+      }
+  
+      void setContact (Spy* con) {
+          // Betrayal most foul!
+          if (contact != nullptr) {
+              target = contact;
+          }
+          contact = con;
+      }
+  
+      void getTargetFromContact () {
+          this-&gt;setTarget(contact-&gt;target);
+      }
+  
+      void setTarget (Spy* tar) {
+          // Yet more betrayal!
+          if (tar == contact) {
+              tellsTruth = !tellsTruth;
+          }
+          target = tar;
+      }
+  
+      // How the *caller* would reply if asked his / her name
+      void giveName () {
+          cout &lt;&lt; ((tellsTruth) ? name : "Timothy Dalton") &lt;&lt; endl;
+      }
+      
+      Spy* getTarget () {
+          return target;
+      }
+  
+      Spy* getContact () {
+          return contact;
+      }
+  };
+</pre>
+
+              <p class='debug'>Using the above class definition, find all of the syntax / runtime errors in the following main functions:</p>
+<pre class='prettyprint'>
+  int main () {
+      Spy jamesBond(007, "Bond... James Bond", 1);
+      Spy blofeld(100, "Blofeld", 0);
+      
+      jamesBond.setTarget(blofeld);
+      blofeld.setTarget(jamesBond);
+  }
+</pre>
+<pre class='prettyprint'>
+  int main () {
+      Spy jamesBond(007, "Bond... James Bond", 1);
+      Spy blofeld(100, "Blofeld", 0);
+      
+      jamesBond.setTarget(&amp;blofeld);
+  
+      // Trust no one but yourself!
+      jamesBond.setContact(&amp;jamesBond);
+      jamesBond.getTargetFromContact();
+  
+      jamesBond.getTarget().giveName();
+  }
+</pre>
+<pre class='prettyprint'>
+  int main () {
+      Spy jamesBond(007, "Bond... James Bond", 1);
+      Spy blofeld(100, "Blofeld", 0);
+      
+      jamesBond.setTarget(&amp;blofeld);
+      blofeld.getTargetFromContact();
+      blofeld.getTarget()-&gt;giveName();
+  }
+</pre>
+
+              <p class='example'>The following main functions compile and run just fine; what will they print out?</p>
+<pre class='prettyprint'>
+  int main () {
+      Spy jamesBond(007, "Bond... James Bond", 1);
+      Spy leChiffre(100, "LeChiffre", 0);
+      Spy Q('Q', "Q", 1);
+  
+      jamesBond.setContact(&amp;Q);
+      Q.setTarget(&amp;leChiffre);
+      jamesBond.getTargetFromContact();
+  
+      jamesBond.getContact()-&gt;giveName();
+      jamesBond.getTarget()-&gt;giveName();
+  }
+</pre>
+<pre class='prettyprint'>
+  int main () {
+      Spy jaws(0, "Jaws", 0);
+  
+      // He was never the smartest henchman...
+      jaws.setTarget(&amp;jaws);
+      jaws.setContact(&amp;jaws);
+      jaws.getTargetFromContact();
+  
+      jaws.getTarget()-&gt;giveName();
+  }
+</pre>
+<pre class='prettyprint'>
+  int main () {
+      Spy jamesBond(007, "Bond... James Bond", 1);
+      Spy leChiffre(100, "LeChiffre", 0);
+      Spy vesper(0, "Vesper", 0);
+  
+      // NB: I will not answer for any transgressions against
+      // actual James Bond plots... this is my practice final dammit!
+      jamesBond.setContact(&amp;leChiffre);
+      vesper.setContact(&amp;jamesBond);
+      vesper.setTarget(&amp;leChiffre);
+      leChiffre.setTarget(&amp;jamesBond);
+      jamesBond.setContact(&amp;vesper);
+  
+      jamesBond.getTarget()-&gt;giveName();
+      vesper.getTarget()-&gt;getTarget()-&gt;giveName();
+  }
+</pre>
+
+              <p>If you can figure out this one... well done.</p>
+<pre class='prettyprint'>
+  int main () {
+      Spy jamesBond(007, "Bond... James Bond", 1);
+      Spy blofeld(100, "Blofeld", 0);
+      Spy ninja1(0, "Ninja 1", 1);
+      Spy ninja2(0, "Ninja 2", 0);
+      
+      // Ninjas hired...
+      ninja1.setContact(&amp;blofeld);
+      ninja2.setContact(&amp;blofeld);
+      blofeld.setTarget(&amp;jamesBond);
+      
+      // Betrayal!
+      ninja1.setTarget(&amp;blofeld);
+      ninja2.setContact(&amp;ninja1);
+      ninja2.getTargetFromContact();
+  
+      ninja1.giveName();
+      ninja2.giveName();
+      ninja1.getTarget()-&gt;giveName();
+      ninja2.getTarget()-&gt;giveName();
+  }
+</pre>
+              <br/>
+              
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='pointers' class='scrollspy-element' scrollspy-title='Pointer Potpourri'></div>
+            <h1>Pointer Potpourri</h1>
+            <div>
+              <p>Admit it. You just googled &quot;potpourri&quot;.</p>
+              <p>Let's work on dynamic memory, hmm?</p>
+              <p class='debug'>Will the following code compile? Does it involve any undefined behavior? If &quot;No&quot; to both questions, what will it print out?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+  
+  struct dullExample {
+      int i;
+  
+      dullExample (int j) {
+          i = j;
+      };
+  };
+  
+  int main () {
+      dullExample* arr[5];
+  
+      for (int i = 0; i &lt; 5; i++) {
+          arr[i] = new dullExample(i);
+      }
+  
+      // What is ptr pointing to?
+      dullExample* ptr = arr[0];
+  
+      for (int j = 0; j &lt; 5; j++) {
+          cout &lt;&lt; ptr-&gt;i &lt;&lt; endl;
+          ptr++;
+      }
+  }
+</pre>
+              <br/>
+              <p class='debug'>Will the following code compile? Does it involve any undefined behavior? If &quot;No&quot; to both questions, what will it print out?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+  
+  struct dullExample {
+      int i;
+  
+      dullExample (int j) {
+          i = j;
+      };
+  };
+  
+  int main () {
+      dullExample* arr[5];
+  
+      for (int i = 0; i &lt; 5; i++) {
+          arr[i] = new dullExample(i);
+      }
+  
+      // >>> CHANGE HERE
+      // What is ptr pointing to now?
+      dullExample** ptr = arr;
+  
+      for (int j = 0; j &lt; 5; j++) {
+          cout &lt;&lt; ptr-&gt;i &lt;&lt; endl;
+          ptr++;
+      }
+  }
+</pre>
+              <br/>
+              <p class='example'>Fix the previous problem to print out the member i of each element of arr using the pointer ptr as defined in the previous example. Also, resolve any memory leaks.</p>
+            </div>
+            <hr/>
+            
+            
+            <!-- TODO: pointer addresses in and out of two arrays -->
+            <br/>
+            <div id='openEnded' class='scrollspy-element' scrollspy-title='Open-Ended'></div>
+            <h1>Open-Ended Questions</h1>
+            <div>
+              <p>&quot;That exam question was just so abstract!&quot; Well now you'll be ready for them.</p>
+              <div class='example'><p>Take the following struct definition outline for example:</p>
+<pre class='prettyprint'>
+  struct crazyCard {
+      int digit;
+      char letter;
+      
+      // Returns a boolean of the following scenario:
+        // if this card's digit is even, then return false if letter is a vowel
+        // return true otherwise
+      bool isValidCard ();
+      
+      // Prints to cout EITHER the calling crazyCard's digit or letter
+      void revealDigitOrLetter ();
+      
+      // Assume isValidCard and revealDigitOrLetter are implemented
+      // elsewhere... and done so correctly
+      
+      // Constructor randomly assigns a digit and letter to the instance's members
+      crazyCard() {...}
+  };
+</pre>
+                <p>
+                  Here's the question: if I wanted to verify that isValidCard was working correctly (i.e., that all of my cards are valid),
+                  but I only get to see one &quot;side&quot; of each card (i.e. EITHER the digit or the letter), which of the following cards must I check, and why?
+                 </p>
+                <p>By &quot;check,&quot; I mean that if I'm given the digit from revealDigitOrLetter, then check the letter to make sure it conforms to the rules of isValidCard, and vice versa if shown the letter.</p>
+                <br/>
+<pre class='prettyprint'>
+  // Assume values printed out are the same for each run
+  crazyCard a;
+  a.revealDigitOrLetter(); // Prints out 6
+  
+  crazyCard b;
+  b.revealDigitOrLetter(); // Prints out E
+  
+  crazyCard c;
+  c.revealDigitOrLetter(); // Prints out 7
+  
+  crazyCard d;
+  d.revealDigitOrLetter(); // Prints out F
+</pre>
+                <br/>
+                <p>Another way to think about the problem is: which of the above cards do I know will return true from isValidCard()? The ones I do *not* know must be checked.</p>
+              </div>
+            </div>
+            <hr/>
+            
+            
+            <!-- TODO: trying to swap array elements with pointers... poorly -->
+            <!-- TODO: student tried to make dynamic int array; show failure with reassigning pointer to internal int array -->
+            <br/>
+            <div id='codeTriage' class='scrollspy-element' scrollspy-title='Code Triage'></div>
+            <h1>Code Triage</h1>
+            <div>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='diy' class='scrollspy-element' scrollspy-title='DIY'></div>
+            <h1>DIY</h1>
+            <div>
+              
+            </div>
+            <hr/>
+            
+          </div>
+          <!-- END PRESENTATION CONTENT -->
+          
+        </div>
+      </div>
+      <!-- END MAIN CONTENT -->
+      
+      
+    </div>
+    <!-- END WRAPPER -->
+    
+    <!-- BEGIN FOOTER -->
+    <div id="footer">
+      <div class="container">
+        <div class="col-md-12 text-center">
+          
+        </div>
+      </div>
+    </div>
+    <!-- END FOOTER -->
+    
+  </body>
+</html>
