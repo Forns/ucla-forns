@@ -377,6 +377,7 @@
                   <li><p>delete effectively says, &quot;I'm done with this object's dynamically allocated memory; feel free to do with it what you please!&quot;</p></li>
                   <li><p>NOTE: This does NOT say, &quot;Zero out the memory it was pointing to&quot; nor does it say &quot;Set the pointer that was pointing there to NULL or nullptr.&quot;</p></li>
                   <li><p>delete called on an object that was already deleted is undefined behavior!</p></li>
+                  <li><p>delete called on a <code class='prettyprint'>nullptr</code> is fine, and does nothing.</p></li>
                   <li><p>delete only NEEDS to be called on objects that were initialized using the <code class='prettyprint'>new</code> operator.</p></li>
                 </ul>
               </div>
@@ -658,12 +659,169 @@
 </pre>
               <br/>
               <p>OK that's enough constructor trivia for now... let's address the following scenario:</p>
-              <p>Say I had a struct with a bunch of dynamically allocated members..</p>
+              <p>Say I had a struct with a bunch of dynamically allocated members...</p>
+              <p>What would I need to do before I deallocated an instance of that object?</p>
+              <p>I would have to individually deallocate each of the dynamically allocated members! Nobody got time for that!</p>
+              <p class='toolkit'>
+                Enter <strong>destructors</strong>, which are special functions defined on a struct / class that are called whenever (1) that object was locally defined and fell out of scope, 
+                or (2) that object was dynamically defined and had a form of <code class='prettyprint'>delete</code> called upon it.
+              </p>
+              <p>Destructors use the following syntax:</p>
+<pre class='prettyprint'>
+  struct someStruct {
+    ...
+    // Constructor
+    someStruct (...) {
+      ...
+    }
+    
+    // Destructor
+    ~someStruct () {
+      ...
+    }
+  };
+</pre>
+              <p>Notice that the destructor syntax has the following properties:</p>
+              <ul class='indent-1'>
+                <li><p>Shares the same name of the struct / class</p></li>
+                <li><p>Starts with a tilde (~)</p></li>
+                <li><p>Has no return type</p></li>
+                <li><p>Expects no arguments</p></li>
+              </ul>
+              <p>So let's look at some correct destructor definitions and uses:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+  
+  struct superInterestingObject {
+      string actuallyNotThatInteresting;
+  
+      superInterestingObject () {
+          actuallyNotThatInteresting = "Meh...";
+      }
+  };
+  
+  struct superInterestingExample {
+      int i;
+      string s;
+      superInterestingObject* ob;
+  
+      superInterestingExample () {
+          i = 5;
+          s = "wow that's interesting!";
+          ob = new superInterestingObject();
+      }
+  
+      // DESTRUCTOOOOOOR
+      ~superInterestingExample () {
+          delete ob;
+      }
+  };
+  
+  int main () {
+      // NOTICE: super is not a pointer, just an object declaration
+      superInterestingExample super;
+    
+      cout &lt;&lt; super.ob-&gt;actuallyNotThatInteresting &lt;&lt; endl;
+  }
+</pre>
+            <br/>
+            <p>Now, what if we had a dynamic allocation?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+  
+  struct superInterestingObject {
+      string actuallyNotThatInteresting;
+  
+      superInterestingObject () {
+          actuallyNotThatInteresting = "Meh...";
+      }
+  };
+  
+  struct superInterestingExample {
+      int i;
+      string s;
+      superInterestingObject* ob;
+  
+      superInterestingExample () {
+          i = 5;
+          s = "wow that's interesting!";
+          ob = new superInterestingObject();
+      }
+  
+      // DESTRUCTOOOOOOR
+      ~superInterestingExample () {
+          delete ob;
+      }
+  
+  };
+  
+  int main () {
+      // NOTICE: super is now a dynamically allocated var
+      superInterestingExample* super = new superInterestingExample();
+    
+      cout &lt;&lt; super-&gt;ob-&gt;actuallyNotThatInteresting &lt;&lt; endl;
+    
+      // Destructor will get called here so I
+      // don't have to worry about releasing ob
+      delete super;
+  }
+</pre>
+              <p>How nice that is!</p>
+              <p>Alright, let's look at some crumby examples when some fools tried to use destructors:</p>
+              <p class='debug'>Will the following code compile? If so, will it suffer any undefined behavior? Will it print something?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+  
+  struct superInterestingObject {
+      string actuallyNotThatInteresting;
+  
+      superInterestingObject () {
+          actuallyNotThatInteresting = "Meh...";
+      }
+  };
+  
+  struct superInterestingExample {
+      int i;
+      string s;
+      superInterestingObject* ob;
+  
+      // NOTICE: change in the constructor...
+      superInterestingExample () {
+          i = 5;
+          s = "wow that's interesting!";
+      }
+  
+      ~superInterestingExample () {
+          delete ob;
+      }
+  
+  };
+  
+  int main () {
+    superInterestingExample* super = new superInterestingExample();
+  
+    cout &lt;&lt; super-&gt;ob-&gt;actuallyNotThatInteresting &lt;&lt; endl;
+  
+    delete super;
+  }
+</pre>
+              <br/>
+              <p class='question' name='con-q0'>So how can we avoid this issue of not initializing a member object (maybe we don't want to until we need it) and having our destructor try to clean it up?</p>
+              <p class='answer' name='con-q0'>Initialize it to the nullptr in the constructor!</p>
+              
             </div>
             <hr/>
             
             
-            <!-- TODO: Example with locally allocated object in a function, then returned, with dynamic member -- destructor -->
             <!-- TODO: Example with dynamically allocated object in a function, then returned, with pointer still on it -->
             <br/>
             <div id='practice' class='scrollspy-element' scrollspy-title='Practice'></div>
@@ -698,27 +856,235 @@
       delete faucet;
   }
 </pre>
+              <br/>
+              <p class='debug'>Will the following code compile? If so, what will it print out?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+  
+  struct superEx {
+      int i;
+      double d;
+  
+      superEx (double iSetter, double dSetter) {
+          cout &lt;&lt; "I'm in 1!" &lt;&lt; endl;
+          i = iSetter;
+          d = dSetter;
+      }
+  
+      superEx (int iSetter, int dSetter) {
+          cout &lt;&lt; "I'm in 2!" &lt;&lt; endl;
+          i = iSetter;
+          d = dSetter;
+      }
+  };
+  
+  int main () {
+      superEx* super = new superEx(5, 3);
+      cout &lt;&lt; super-&gt;i &lt;&lt; endl;
+      cout &lt;&lt; super-&gt;d &lt;&lt; endl;
+  
+      superEx* nice = new superEx(5.5, 3.3);
+      cout &lt;&lt; nice-&gt;i &lt;&lt; endl;
+      cout &lt;&lt; nice-&gt;d &lt;&lt; endl;
+  
+      // or is it? 0_o
+      superEx* naughty = new superEx(5, 3.3);
+      cout &lt;&lt; naughty-&gt;i &lt;&lt; endl;
+      cout &lt;&lt; naughty-&gt;d &lt;&lt; endl;
+  
+      delete super;
+      delete nice;
+      delete naughty;
+  }
+</pre>
+              <br/>
+              <p class='debug'>Find the memory leak!</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+  
+  struct superInterestingObject {
+      string actuallyNotThatInteresting;
+  
+      superInterestingObject () {
+          actuallyNotThatInteresting = "Meh...";
+      }
+  };
+  
+  struct superInterestingExample {
+      int i;
+      string s;
+      superInterestingObject* ob;
+  
+      // NOTICE: change in the constructor...
+      superInterestingExample () {
+          i = 5;
+          s = "wow that's interesting!";
+      }
+  
+      ~superInterestingExample () {
+          delete ob;
+      }
+  
+  };
+  
+  int main () {
+      superInterestingExample* super = new superInterestingExample();
+    
+      cout &lt;&lt; super-&gt;ob-&gt;actuallyNotThatInteresting &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p class='debug'>Find the memory leak!</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+  
+  struct superOb {
+      int i[3];
+  
+      superOb () {
+          for (int j = 0; j &lt; 3; j++) {
+              i[j] = j;
+          }
+      }
+  };
+  
+  struct superEx {
+      int i;
+      string s;
+      superOb* ob;
+  
+      superEx () {
+          i = 5;
+          s = "wow that's interesting!";
+          ob = new superOb();
+      }
+  
+      ~superEx () {
+          delete ob;
+      }
+  };
+  
+  superEx* generateCoolness () {
+      superEx* coolness = new superEx();
+      return coolness;
+  }
+  
+  int main () {
+    superEx* super = generateCoolness();
+  
+    for (int j = 0; j &lt; 3; j++) {
+        cout &lt;&lt; super-&gt;ob-&gt;i[j] &lt;&lt; endl;
+    }
+  }
+</pre>
+              <br/>
+              <p class='debug'>Will the following code compile? Will there be any undefined behavior? Will it print anything out?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+  
+  struct superOb {
+      string s;
+  
+      superOb () {
+          string s = "watch out!";
+      }
+  };
+  
+  struct superEx {
+      int i;
+      string s;
+      superOb* ob;
+  
+      superEx () {
+          i = 5;
+          s = "wow that's interesting!";
+          ob = new superOb();
+      }
+  
+      ~superEx () {
+          delete ob;
+      }
+  };
+  
+  int main () {
+      superEx* super = new superEx();
+  
+      cout &lt;&lt; super-&gt;ob-&gt;s &lt;&lt; endl;
+  
+      delete super-&gt;ob;
+      delete super;
+  }
+</pre>
+              <br/>
+              <p>OK... are you ready? I don't know if you're ready... OK you're ready!</p>
+              <p class='example'>What does the following code print out?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+  
+  const int MAX_SIZE = 3;
+  
+  struct superEx;
+  
+  struct superOb {
+      int i[MAX_SIZE];
+      double d[MAX_SIZE];
+      superEx* ex;
+  
+      superOb () {
+          for (int j = 0; j &lt; MAX_SIZE; j++) {
+              i[j] = j;
+              d[j] = i[j] - 0.1 * j;
+          }
+      }
+  };
+  
+  struct superEx {
+      int i[MAX_SIZE];
+      double d[MAX_SIZE];
+      superOb* ob;
+  
+      superEx () {
+          for (int j = 0; j &lt; MAX_SIZE; j++) {
+              i[j] = j;
+              d[j] = i[j] + 0.1 * j;
+          }
+      }
+  };
+  
+  double trickyFunc (superEx* ex, superOb* ob, int index) {
+      ob-&gt;d[ex-&gt;i[index]] = ob-&gt;d[ex-&gt;i[index]] + 1;
+      return ob-&gt;d[ex-&gt;i[index]];
+  }
+  
+  int main () {
+      superEx* ex = new superEx();
+      superOb* ob = new superOb();
+  
+      cout &lt;&lt; trickyFunc(ex, ob, 0) &lt;&lt; endl;
+      cout &lt;&lt; trickyFunc(ex, ob, 1) &lt;&lt; endl;
+  }
+</pre>
             </div>
             <hr/>
             
           </div>
           <!-- END PRESENTATION CONTENT -->
           
-            <!-- TODO: structs -->
-                <!-- TODO: What if we want an object to have another object type as a member? -->
-                  <!-- TODO: Just declare a member that is a pointer to the type of interest -->
-                    <!-- TODO: then, in a constructor or other function, just dynamically allocate memory to the pointer member -->
-                      <!-- TODO: how to get rid of dynamically allocated member automatically? -->
-                        <!-- TODO: we can call a special function every time an object is about to "go away" -->
-                        <!-- TODO: that function is called a Destructor for a class and is named ~<nameOfClass> without return type and without arguments (it's never directly called) -->
-                        <!-- TODO: BUT, what if what we want to delete never got allocated? -->
-                          <!-- TODO: We're OK because then that pointer will be the nullptr, and delete operation on the nullptr is OK -->
-                      <!-- TODO: What if we dynamically allocate to a pointer that has already been allocated to? memleak! -->
-                        <!-- TODO: Solution: whenever you're about to allocate new memory to a pointer, delete it right beforehand! In the worst case, it's nullptr and you're fine, or it pointed to something and it gets deleted -->
-              <!-- TODO: If an Employee belongs to a Company, but needs to know something about the Company, then we need a pointer to the company that the Employee belongs to -->
-                <!-- TODO: how to initialize? put it in the constructor for starters... -->
-                  <!-- TODO: which company is this employee a part of? Use "this", which is referring to the company being constructed, to construct the employee member! -->
-                
           
         </div>
       </div>
