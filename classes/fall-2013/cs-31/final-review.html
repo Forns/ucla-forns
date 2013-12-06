@@ -474,10 +474,64 @@
             
             <!-- TODO: pointer addresses in and out of two arrays -->
             <br/>
-            <div id='openEnded' class='scrollspy-element' scrollspy-title='Open-Ended'></div>
-            <h1>Open-Ended Questions</h1>
+            <div id='fuzzy' class='scrollspy-element' scrollspy-title='Fuzzy Questions'></div>
+            <h1>Fuzzy Questions</h1>
             <div>
-              <p>&quot;That exam question was just so abstract!&quot; Well now you'll be ready for them.</p>
+              <p>&quot;That exam question was just so abstract!&quot; ...is not something you'll say after practicing with the following.</p>
+              <p class='example'>Take the following struct definition and for example:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+  
+  const int MAX_OPS = 100;
+  
+  struct opString {
+      double d;
+      char op[MAX_OPS];
+      
+      opString (double start, char* ops) {
+          d = start;
+          strcpy(op, ops);
+      }
+      
+      double applyOp () {
+          int len = strlen(op);
+          if (len == 0) {
+              return d;
+          }
+      
+          for (int i = 0; i &lt; len; i++) {
+              char currentOp = op[i];
+              switch (currentOp) {
+                  case '+':
+                      d += d;
+                      break;
+                  case '-':
+                      d -= d;
+                      break;
+                  case '^':
+                  case '*':
+                      d *= d;
+                      break;
+                  case '/':
+                      d /= d;
+                      break;
+                  default:
+                      d++;
+                      break;
+              }
+          }
+          return d;
+      }
+  };
+</pre>
+              <p>For each of the following main function snippets, determine whether, for any x, any of the following are true:</p>
+              <!-- TODO: LEFT OFF HERE!!! -->
+              <ul class='indent-1'>
+                <li><p></p></li>
+              </ul>
               <div class='example'><p>Take the following struct definition outline for example:</p>
 <pre class='prettyprint'>
   struct crazyCard {
@@ -536,6 +590,7 @@
             <hr/>
             
             
+            <!-- TODO: implementing class ground-up -->
             <br/>
             <div id='diy' class='scrollspy-element' scrollspy-title='DIY'></div>
             <h1>DIY</h1>
