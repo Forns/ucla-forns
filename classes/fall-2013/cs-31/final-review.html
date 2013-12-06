@@ -471,14 +471,181 @@
             </div>
             <hr/>
             
+            <!-- TODO: trying to swap array elements with pointers... poorly -->
+            <!-- TODO: student tried to make dynamic int array; show failure with reassigning pointer to internal int array -->
+            <br/>
+            <div id='codeTriage' class='scrollspy-element' scrollspy-title='Code Triage'></div>
+            <h1>Code Triage</h1>
+            <div>
+              <p class='example'>
+                Last practice midterm we discussed a function isDoubleString that returns true if the input string is a representation 
+                of a decimal number (dictated by the tests in the main function as follows). Someone tried to solve it and did an insultingly
+                poor job at it. Below is their attempt to solve it; they've made 1 error and left out 2 important components. Find the error and
+                complete their code where YOUR CODE HERE is indicated.
+              </p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cctype&gt;
+  using namespace std;
+  
+  bool isDoubleString (string s);
+  
+  int main () {
+      cout &lt;&lt; isDoubleString("1.23") &lt;&lt; endl; // True
+      cout &lt;&lt; isDoubleString("  1.23  ") &lt;&lt; endl; // True
+      cout &lt;&lt; isDoubleString(".23") &lt;&lt; endl; // True
+      cout &lt;&lt; isDoubleString("  1.  23  ") &lt;&lt; endl; // False
+      cout &lt;&lt; isDoubleString("1.2.3.4") &lt;&lt; endl; // False
+      cout &lt;&lt; isDoubleString("I IZ DUBLE :DDD") &lt;&lt; endl; // False
+      cout &lt;&lt; isDoubleString("1a.23") &lt;&lt; endl; // False
+      cout &lt;&lt; isDoubleString("a1.23") &lt;&lt; endl; // False
+      cout &lt;&lt; isDoubleString("") &lt;&lt; endl; // False
+  }
+  
+  bool isDoubleString (string s) {
+      // Set up flags
+      bool foundFirstChar = false,
+           foundDecimal = false,
+           trailingWhitespace = false;
+      for (int i = 0; i &lt; s.length(); i++) {
+          // Our two legal character classes are
+          // digits and the decimal point
+          if (isalnum(s[i]) || s[i] == '.') {
+              // Case where we've seen whitespace
+              // at the end but then see another
+              // legal char
+              // YOUR CODE HERE
+  
+              if (!foundFirstChar) {
+                  foundFirstChar = true;
+              }
+              if (s[i] == '.') {
+                  if (!foundDecimal) {
+                      foundDecimal = true;
+                  } else {
+                      // Case where we've seen 2 decimals
+                      return false;
+                  }
+              }
+  
+          // Otherwise, we've seen a character that
+          // is not a decimal or digit
+          } else {
+              if (s[i] == ' ') {
+                  // Case where we've already seen our
+                  // first legal char but then have
+                  // trailing whitespace
+                  if (foundFirstChar) {
+                      trailingWhitespace = true;
+                  }
+  
+              // Catch-all for bad chars...
+              }
+              // YOUR CODE HERE
+          }
+      }
+      // If we reach this point, we have a legal double-string
+      return foundFirstChar;
+  }
+</pre>
+              <br/>
+              <p class='example'>You take pity on the poor programmer who produced the following code: they attempted to solve a function that reverses a substring in a cstring. Fix their mistake below:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cctype&gt;
+  using namespace std;
+  
+  char* reverseSubstring (char c[], int start, int count);
+  
+  int main () {
+      {
+          char c[] = "art";
+          cout &lt;&lt; reverseSubstring(c, 0, 1) &lt;&lt; endl; // Should be "rat"
+      }
+      {
+          char c[] = "pretty";
+          cout &lt;&lt; reverseSubstring(c, 1, 1) &lt;&lt; endl; // Should be "pertty"
+      }
+      {
+          char c[] = "howdy!";
+          cout &lt;&lt; reverseSubstring(c, 0, 1000) &lt;&lt; endl; // Should be "!ydwoh"
+      }
+  }
+  
+  // Returns a pointer to the cstring c after all elements from
+  // index start to (start + count) have been reversed
+  char* reverseSubstring (char c[], int start, int count) {
+      int endIndex = start + count,
+          len = strlen(c);
+      char* iter = &c[start];
+      char* holder;
+  
+      if (endIndex &gt;= len) {
+          endIndex = len - 1;
+      }
+  
+      while (iter &lt; &amp;c[endIndex]) {
+          holder = &amp;c[endIndex];
+          *iter = c[endIndex--];
+          *holder = *iter;
+          iter++;
+      }
+      return c;
+  }
+</pre>
+            </div>
+            <hr/>
             
-            <!-- TODO: pointer addresses in and out of two arrays -->
+            
+            <!-- TODO: implementing class ground-up -->
+            <br/>
+            <div id='diy' class='scrollspy-element' scrollspy-title='DIY'></div>
+            <h1>DIY</h1>
+            <div>
+              <p class='example'>Using the Spy class definition we defined earlier in the exam, implement a new class SpyRing that has the following interface:</p>
+              <ul class='indent-1'>
+                <li>
+                  <p>Private members:</p>
+                  <ul class='indent-1'>
+                    <li><p>Spy* m_ring[MAX_SPIES]; // the internal array of pointers to spies</p></li>
+                    <li><p>Spy* leader; // the leader of the spy ring; the leader is also within m_ring</p></li>
+                    <li><p>int m_nSpies; // tracking count for the number of spies in the ring</p></li>
+                  </ul>
+                </li>
+                <li>
+                  <p>Public interface:</p>
+                  <ul class='indent-1'>
+                    <li><p>Spy* findLeader (); // returns a pointer to the true leader if he / she tells the truth, the true leader's target otherwise (if it has one, otherwise the nullptr)</p></li>
+                    <li><p>void issueHit (Spy* target); // sets each member of the spy ring's target to that of the leader</p></li>
+                    <li><p>int findLoyal (); // returns the number of spies in the ring that have the leader as their contact</p></li>
+                  </ul>
+                </li>
+              </ul>
+              <p class='example'>Add a constructor and destructor to your implementation of the SpyRing to avoid memory leaks.</p>
+              <p class='example'>Create an auxiliary function isSpyCycle that takes as input a Spy pointer and determines whether or not a cycle of targets leads back to him / her.</p>
+              <p>For example:</p>
+<pre class='prettyprint'>
+  Spy a;
+  Spy b;
+  Spy c;
+  a.setTarget(&amp;b);
+  b.setTarget(&amp;c);
+  c.setTarget(&amp;a);
+  
+  cout &lt;&lt; isSpyCycle(&amp;a) &lt;&lt; endl; // would print 1
+</pre>
+            </div>
+            <hr/>
+            
+            
             <br/>
             <div id='fuzzy' class='scrollspy-element' scrollspy-title='Fuzzy Questions'></div>
             <h1>Fuzzy Questions</h1>
             <div>
               <p>&quot;That exam question was just so abstract!&quot; ...is not something you'll say after practicing with the following.</p>
-              <p class='example'>Take the following struct definition and for example:</p>
+              <p class='example'>Take the following struct definition for example:</p>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
   #include &lt;string&gt;
@@ -527,11 +694,41 @@
       }
   };
 </pre>
-              <p>For each of the following main function snippets, determine whether, for any x, any of the following are true:</p>
-              <!-- TODO: LEFT OFF HERE!!! -->
+              <p>For each of the following main function snippets, determine whether, for any x and the given string of operations, any of the following are true:</p>
               <ul class='indent-1'>
-                <li><p></p></li>
+                <li><p>Can the output ever be negative?</p></li>
+                <li><p>Can the output ever be positive?</p></li>
+                <li><p>Can the output ever be zero?</p></li>
               </ul>
+                <br/>
+<pre class='prettyprint'>
+  int main () {
+      // x = ...
+      opString op1(x, "+++");
+      cout &lt;&lt; op1.applyOp() &lt;&lt; endl;
+  }
+</pre>
+<pre class='prettyprint'>
+  int main () {
+      // x = ...
+      opString op1(x, "+-+");
+      cout &lt;&lt; op1.applyOp() &lt;&lt; endl;
+  }
+</pre>
+<pre class='prettyprint'>
+  int main () {
+      // x = ...
+      opString op1(x, "+-^$^");
+      cout &lt;&lt; op1.applyOp() &lt;&lt; endl;
+  }
+</pre>
+<pre class='prettyprint'>
+  int main () {
+      // x = ...
+      opString op1(x, "**");
+      cout &lt;&lt; op1.applyOp() &lt;&lt; endl;
+  }
+</pre>
               <div class='example'><p>Take the following struct definition outline for example:</p>
 <pre class='prettyprint'>
   struct crazyCard {
@@ -580,24 +777,6 @@
             <hr/>
             
             
-            <!-- TODO: trying to swap array elements with pointers... poorly -->
-            <!-- TODO: student tried to make dynamic int array; show failure with reassigning pointer to internal int array -->
-            <br/>
-            <div id='codeTriage' class='scrollspy-element' scrollspy-title='Code Triage'></div>
-            <h1>Code Triage</h1>
-            <div>
-            </div>
-            <hr/>
-            
-            
-            <!-- TODO: implementing class ground-up -->
-            <br/>
-            <div id='diy' class='scrollspy-element' scrollspy-title='DIY'></div>
-            <h1>DIY</h1>
-            <div>
-              
-            </div>
-            <hr/>
             
           </div>
           <!-- END PRESENTATION CONTENT -->
