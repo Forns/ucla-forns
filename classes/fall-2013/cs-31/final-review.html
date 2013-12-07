@@ -434,39 +434,6 @@
   }
 </pre>
               <br/>
-              <p class='debug'>Will the following code compile? Does it involve any undefined behavior? If &quot;No&quot; to both questions, what will it print out?</p>
-<pre class='prettyprint'>
-  #include &lt;iostream&gt;
-  #include &lt;string&gt;
-  #include &lt;cstring&gt;
-  using namespace std;
-  
-  struct dullExample {
-      int i;
-  
-      dullExample (int j) {
-          i = j;
-      }
-  };
-  
-  int main () {
-      dullExample* arr[5];
-  
-      for (int i = 0; i &lt; 5; i++) {
-          arr[i] = new dullExample(i);
-      }
-  
-      // >>> CHANGE HERE
-      // What is ptr pointing to now?
-      dullExample** ptr = arr;
-  
-      for (int j = 0; j &lt; 5; j++) {
-          cout &lt;&lt; ptr[0]-&gt;i &lt;&lt; endl;
-          ptr++;
-      }
-  }
-</pre>
-              <br/>
               <p class='example'>Fix the previous problem to print out the member i of each element of arr using the pointer ptr as defined in the previous example. Also, resolve any memory leaks.</p>
             </div>
             <hr/>

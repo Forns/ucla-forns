@@ -721,10 +721,10 @@
   };
   
   int main () {
-      // NOTICE: super is not a pointer, just an object declaration
-      superInterestingExample super;
+      // NOTICE: sup is not a pointer, just an object declaration
+      superInterestingExample sup;
     
-      cout &lt;&lt; super.ob-&gt;actuallyNotThatInteresting &lt;&lt; endl;
+      cout &lt;&lt; sup.ob-&gt;actuallyNotThatInteresting &lt;&lt; endl;
   }
 </pre>
             <br/>
@@ -762,14 +762,14 @@
   };
   
   int main () {
-      // NOTICE: super is now a dynamically allocated var
-      superInterestingExample* super = new superInterestingExample();
+      // NOTICE: sup is now a dynamically allocated var
+      superInterestingExample* sup = new superInterestingExample();
     
-      cout &lt;&lt; super-&gt;ob-&gt;actuallyNotThatInteresting &lt;&lt; endl;
+      cout &lt;&lt; sup-&gt;ob-&gt;actuallyNotThatInteresting &lt;&lt; endl;
     
       // Destructor will get called here so I
       // don't have to worry about releasing ob
-      delete super;
+      delete sup;
   }
 </pre>
               <p>How nice that is!</p>
@@ -807,11 +807,11 @@
   };
   
   int main () {
-    superInterestingExample* super = new superInterestingExample();
+    superInterestingExample* sup = new superInterestingExample();
   
-    cout &lt;&lt; super-&gt;ob-&gt;actuallyNotThatInteresting &lt;&lt; endl;
+    cout &lt;&lt; sup-&gt;ob-&gt;actuallyNotThatInteresting &lt;&lt; endl;
   
-    delete super;
+    delete sup;
   }
 </pre>
               <br/>
@@ -882,9 +882,9 @@
   };
   
   int main () {
-      superEx* super = new superEx(5, 3);
-      cout &lt;&lt; super-&gt;i &lt;&lt; endl;
-      cout &lt;&lt; super-&gt;d &lt;&lt; endl;
+      superEx* sup = new superEx(5, 3);
+      cout &lt;&lt; sup-&gt;i &lt;&lt; endl;
+      cout &lt;&lt; sup-&gt;d &lt;&lt; endl;
   
       superEx* nice = new superEx(5.5, 3.3);
       cout &lt;&lt; nice-&gt;i &lt;&lt; endl;
@@ -895,7 +895,7 @@
       cout &lt;&lt; naughty-&gt;i &lt;&lt; endl;
       cout &lt;&lt; naughty-&gt;d &lt;&lt; endl;
   
-      delete super;
+      delete sup;
       delete nice;
       delete naughty;
   }
@@ -925,6 +925,7 @@
       superInterestingExample () {
           i = 5;
           s = "wow that's interesting!";
+          ob = new superInterestingObject();
       }
   
       ~superInterestingExample () {
@@ -934,9 +935,9 @@
   };
   
   int main () {
-      superInterestingExample* super = new superInterestingExample();
+      superInterestingExample* sup = new superInterestingExample();
     
-      cout &lt;&lt; super-&gt;ob-&gt;actuallyNotThatInteresting &lt;&lt; endl;
+      cout &lt;&lt; sup-&gt;ob-&gt;actuallyNotThatInteresting &lt;&lt; endl;
   }
 </pre>
               <br/>
@@ -979,10 +980,10 @@
   }
   
   int main () {
-    superEx* super = generateCoolness();
+    superEx* sup = generateCoolness();
   
     for (int j = 0; j &lt; 3; j++) {
-        cout &lt;&lt; super-&gt;ob-&gt;i[j] &lt;&lt; endl;
+        cout &lt;&lt; sup-&gt;ob-&gt;i[j] &lt;&lt; endl;
     }
   }
 </pre>
@@ -1019,12 +1020,12 @@
   };
   
   int main () {
-      superEx* super = new superEx();
+      superEx* sup = new superEx();
   
-      cout &lt;&lt; super-&gt;ob-&gt;s &lt;&lt; endl;
+      cout &lt;&lt; sup-&gt;ob-&gt;s &lt;&lt; endl;
   
-      delete super-&gt;ob;
-      delete super;
+      delete sup-&gt;ob;
+      delete sup;
   }
 </pre>
               <br/>
