@@ -929,7 +929,6 @@ var Graph = Class.create({
    listPathsBetween: function (vertex1, vertex2) {
      // If the two verticies are the same, we're done
      if (vertex1.id === vertex2.id) {
-       console.log("vertex1");
        return [];
      }
      
@@ -968,6 +967,23 @@ var Graph = Class.create({
      findPath(vertex1);
      
      return pathList;
+   },
+   
+   // >>> [AF] Determines whether a given path between two observed variables consists of only
+   // >>> latent variables
+   isLatentPath: function (p, g) {
+     var latentOnPath = 0,
+         totalPath = 0;
+     // Test to make sure all nodes are not latent
+     p.each(function (n) {
+       totalPath++;
+       if (g.isLatentNode(n)) {
+         latentOnPath++;
+       }
+     });
+     
+     // Account for the two variables at either end that must be observed...
+     return (latentOnPath > 0 && latentOnPath === (totalPath - 2));
    }
    
 } );

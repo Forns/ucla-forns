@@ -8,14 +8,16 @@
 var simpsonAnalysis = function () {
       var dag = Model.dag,
           allPaths = [],
+          pathCount = 0,
           sources = dag.getSources(),
-          targets = dag.getTargets();
+          targets = dag.getTargets(),
+          allLatentReport = "";
       
       // Let's make sure we can even run the rest of our algorithm before continuing
       if (dag.containsCycle()) {
         return {
           possible: "No; Cycle in graph",
-          condition: 
+          condition: "N/A"
         };
       }
       
@@ -27,11 +29,88 @@ var simpsonAnalysis = function () {
           });
         });
       });
+      
+      pathCount = allPaths.length;
+      
+      // Verify that there are enough paths between X and Y for Simpson's paradox
+      if (pathCount <= 1) {
+        return {
+          possible: "No; one path from exposure to outcome",
+          condition: "N/A"
+        };
+      }
+      
+      // Next, we want to test if there's an all-latent variable undirected path from X to Y
+      allPaths.each(function (p) {
+        if (dag.isLatentPath(p, dag)) {
+          allLatentReport = {
+            possible:
+              "No; all latent path:<br/>" +
+              "<ul>" +
+                (function () {
+                  var result = "";
+                  p.each(function (n) {
+                    result += "<li><p>" + n.id + "</p></li>"
+                  });
+                  return result;
+                })() +
+              "</ul>",
+            condition: "N/A"
+          };
+        }
+      });
+      
+      if (allLatentReport) {
+        return allLatentReport;
+      }
+      
+      // Otherwise, it's possible and we should report where the correct answer is!
+      if (dag.activeBiasGraph().edges.length) {
+        return {
+          possible: "Yes",
+          report: "sets",
+          condition: GraphAnalyzer.listMsasTotalEffect(dag)
+        };
+      } else {
+        return {
+          possible: "Yes",
+          condition: "No"
+        };
+      }
+      
+      // [TESTING] Default return
+      return {
+        possible: "N/A",
+        condition: "N/A"
+      };
     },
 
     displaySimpsonInfo = function () {
-      var results = simpsonAnalysis();
-      console.log(allPaths);
+      console.log(Model.dag.activeBiasGraph());
+      var results = simpsonAnalysis(),
+          infoSimpsonPossible = $("info_simpson_possible"),
+          infoSimpsonCondition = $("info_simpson_condition");
+      
+      infoSimpsonPossible.innerHTML = "<p>" + results.possible + "</p>";
+      infoSimpsonCondition.innerHTML = 
+        "<p>" + 
+        ((results.report === "sets") 
+          ? (function () {
+            var report = "<ul>";
+            results.condition.each(function (s) {
+              console.log(s);
+              report += "<li>{";
+              s.each(function (n) {
+                report += n.id + ", ";
+              });
+              report = report.substring(0, report.length - 2);
+              report += "}</li>";
+            });
+            report += "</ul>"
+            return report;
+          })()
+          : results.condition) + 
+        "</p>";
       
       // Bool value for whether node is adjusted for or not
       // console.log(Model.dag.isAdjustedNode(Model.dag.getVertex("Z1")));
