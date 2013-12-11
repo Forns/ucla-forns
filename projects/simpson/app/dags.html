@@ -23,9 +23,13 @@
 	-->
 
     <title>DAGitty Simpson's Paradox Engine</title>
+    <link rel="stylesheet" type="text/css" href="../../../css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="dags.css" />
     	<!-- IE 6 is no longer supported! -->
 	
+	<script type="text/javascript" src="../../../js/lib/jquery-2.0.3.min.js"></script>
+	<script type="text/javascript" src="../../../js/lib/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../../../js/util/modal-popup.js"></script>
 	<script type="text/javascript" src="lib/prototype.js"></script>
 	<script type="text/javascript" src="lib/graph/Graph.js"></script>
 	<script type="text/javascript" src="lib/graph/ObservedGraph.js"></script>
@@ -136,6 +140,7 @@
 				$("adj_matrix").value = g.toString();
 			}
 		);
+		
 		
 		DAGittyControl.graphChanged();
 	}
@@ -302,7 +307,7 @@
    <div id="simpson" style="display:block">
       <table id="info_simpson">
          <tr><td>Possible?</td><td class="info" id="info_simpson_possible">not set</td></tr>
-         <tr><td>Should Condition?</td><td class="info" id="info_simpson_condition">not set</td></tr>
+         <tr><td>Info:</td><td class="info" id="info_simpson_condition"><button id='simpson_info_button' class='btn btn-info'>Explanation</button></td></tr>
       </table>
    </div>
   </div>
