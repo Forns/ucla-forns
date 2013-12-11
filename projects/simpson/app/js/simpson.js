@@ -100,10 +100,16 @@ var simpsonAnalysis = function () {
           code: 3
         };
       } else {
-        var conditioned = [];
+        var conditioned = false;
         dag.getVertices().each(function (v) {
           if (dag.isAdjustedNode(v)) {
-            conditioned.push(v);
+            minimalSeparators.each(function (s) {
+              s.each(function (n) {
+                if (n.id === v.id) {
+                  conditioned = true;
+                }
+              });
+            });
           }
         });
         
@@ -111,7 +117,7 @@ var simpsonAnalysis = function () {
           possible: "Yes",
           condition: "No",
           dontCondition: dontCondition,
-          answer: (minimalSeparators.intersect(conditioned).length) ? "Disaggregated Data" : "Aggregated Data",
+          answer: (conditioned) ? "Disaggregated Data" : "Aggregated Data",
           code: 4
         };
       }
