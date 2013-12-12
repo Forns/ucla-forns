@@ -18,7 +18,7 @@ var simpsonAnalysis = function () {
       // Let's make sure we can even run the rest of our algorithm before continuing
       if (dag.containsCycle()) {
         return {
-          possible: "No; Cycle in graph",
+          possible: "No; cycle in graph",
           condition: "N/A",
           code: 0
         };
@@ -26,7 +26,7 @@ var simpsonAnalysis = function () {
       
       if (sources.length === 0 || targets.length === 0) {
         return {
-          possible: "No; No exposure or outcome set",
+          possible: "No; exposure or outcome not set",
           condition: "N/A",
           code: -1
         }
@@ -187,7 +187,7 @@ var simpsonAnalysis = function () {
                                     })()
                                   );
                                 }
-                                report = "Yes, adjust for (at least one of):<br/>" + report.join(", ");
+                                report = "Yes, adjust for (at least one of):<br/>" + ((report.length) ? report.join(", ") : "{}");
                               }
                               return report;
                             })() +
@@ -208,7 +208,7 @@ var simpsonAnalysis = function () {
                         ((!results.dontCondition.length && results.code === 4) 
                           ? 
                             "<tr class='success'>" +
-                              "<td><strong>TE of exposure on outcome in:</strong></td>" +
+                              "<td><strong>Correct TE of exposure on outcome in:</strong></td>" +
                               "<td>" + results.answer + "</td>" +
                             "</tr>"
                           : "")
