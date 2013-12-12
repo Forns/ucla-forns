@@ -242,29 +242,6 @@ var simpsonAnalysis = function () {
             .modal("show");
         });
       
-      /*
-      infoSimpsonCondition.innerHTML = 
-        "<p>" + 
-        ((results.report === "sets") 
-          ? (function () {
-            var report = "<ul>";
-            results.condition.each(function (s) {
-              console.log(s);
-              report += "<li>{";
-              s.each(function (n) {
-                report += n.id + ", ";
-              });
-              report = report.substring(0, report.length - 2);
-              report += "}</li>";
-            });
-            report += "</ul>"
-            return report;
-          })()
-          : results.condition) + 
-        "</p>";
-      */
-      
-      
       // Bool value for whether node is adjusted for or not
       // console.log(Model.dag.isAdjustedNode(Model.dag.getVertex("Z1")));
       
