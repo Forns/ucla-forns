@@ -1,35 +1,236 @@
 /**
  * simpson.js
- * Includes Daggity-mediated functionality for Simpson's Paradox operations
+ * Includes DAGitty-mediated functionality for Simpson's Paradox operations
  */
 
 
 
 var $sim = {
       cpts: {},
+      population: [],
       
-      addToCPT = function (cptName, cptParent, mappedCProbs) {
-        if (this.cpts[cptName] || this.cpts[cptName][cptParent]) {
+      
+      // Adds a CPT to the given simulation 
+      addCPT: function (cptName, cptParents, mappedCProbs) {
+        if (this.cpts[cptName]) {
           console.warn("[!] Warning: Attempting to overwrite CPT values");
         }
-        if (!this.cpts[cptName]) {
-          this.cpts[cptName] = {variables: [cptName], params: [], factors: []};
+        this.cpts[cptName] = {
+          variables: [cptName],
+          params: [],
+          name: cptName + ((cptParents.length) ? " | " + cptParents.join(", ") : "")
+        };
+        // Sometimes, may not have parent to push
+        if (cptParents.length) {
+          this.cpts[cptName].variables = this.cpts[cptName].variables.concat(cptParents);
         }
-        this.cpts.variables.push(cptParent);
-        this.cpts.factors.push(mappedCProbs);
         
-        var size = 1;
-        
-        // Make sure the CPT is valid by calculating the params from the factors
-        for (var i = 0; i < size; i++) {
-          // Go through every variable...
-          for (var j = 0; j < variables.length; j++) {
-            // For every variable, calculate the correct CPT value
-            size *= 2;
+        this.cpts[cptName].params = mappedCProbs;
+      },
+      
+      
+      // Returns the given CPT parameter given the instantiation over variables
+      getParameter: function (cptName, instantiation) {
+        var currentCPT = this.cpts[cptName],
+            ordering = [],
+            count = 0;
             
-            // TODO: calculate parameters
+        for (var i in instantiation) {
+          count++;
+          for (var j = 0; j < currentCPT.variables.length; j++) {
+            if (i === currentCPT.variables[j]) {
+              ordering[j] = instantiation[i];
+              break;
+            }
           }
         }
+        
+        if (count !== currentCPT.variables.length) {
+          console.error("[X] Request for undefined parameter");
+        }
+        
+        return (currentCPT.params[parseInt(ordering.join(""), 2)]);
+      },
+      
+      
+      // Runs the simulation parameter calculation on a causal diagram with the given
+      // Simpson's reversal order
+      simulateSimpson: function (dag, order, n) {
+        // Clear any previous sim
+        this.population = [];
+        
+        var covariates = dag.getVertices(),
+            source = dag.getSources()[0].id,
+            target = dag.getTargets()[0].id,
+            orderFollowed = [],
+            
+            randomChance = function (UB, LB) {
+              var result;
+              do {
+                result = Math.random();
+              } while (Math.abs(result - 0.5) > UB || Math.abs(result - 0.5) < LB);
+              return result;
+            },
+            
+            chanceUB = 0.4,
+            chanceLB = 0.15,
+            chanceTake = randomChance(chanceUB, chanceLB),
+            chanceRecover = [randomChance(chanceUB, chanceLB), randomChance(chanceUB, chanceLB)];
+            
+        // Seed the population with n samples of the cause on effect (aggregate)
+        for (var i = 0; i < n; i++) {
+          var take = Math.random(),
+              recover = Math.random();
+              
+          this.population[i] = {};
+          this.population[i][source] = (take < chanceTake) ? 0 : 1;
+          this.population[i][target] = (recover < chanceRecover[this.population[i][source]]) ? 0 : 1;
+        }
+        
+        // At this point, we have our distribution over X and Y aggregated... now
+        // it's time to examine the conditioning on covariates
+        for (var cov = 0; cov < order.length; cov++) {
+          // Determine the proper reversal at this step
+          var counts = this.countFromPopulation(source, target, orderFollowed),
+              conditionChance = randomChance(chanceUB, chanceLB),
+              preferred = Math.max(conditionChance, 1 - conditionChance),
+              
+              // If we got a negative correlation in the previous step
+              // then we need to infuse a positive one in this step
+              focus = (counts.difference < 0) ? 0 : 1;
+          
+          for (var i = 0; i < n; i++) {
+            var currentSubject = this.population[i],
+                randChoice = Math.random();
+                
+            // TODO: PICK UP HERE!!!
+            this.population[i][order[cov]] = 
+              ((this.population[i][source] === 0 && this.population[i][source] === 1));
+          }
+          
+          
+          orderFollowed.push(order[cov]);
+        }
+      },
+      
+      
+      // Takes the population and returns the Y | X, Z counts
+      countFromPopulation: function (source, target, covariates) {
+        var matches = [[0, 0], [0, 0]],
+            currentSubject,
+            targetRates = [0, 0],
+            targetDifference;
+            
+        for (var i = 0; i < this.population.length; i++) {
+          currentSubject = this.population[i];
+          var instantiationMatches = true;
+          for (var c in covariates) {
+            if (currentSubject[c] !== covariates[c]) {
+              instantiationMatches = false;
+              break;
+            }
+          }
+          if (instantiationMatches) {
+            matches[currentSubject[source]][currentSubject[target]]++;
+          }
+        }
+        
+        targetRates[0] = matches[0][1] / (matches[0][0] + matches[0][1]);
+        targetRates[1] = matches[1][1] / (matches[1][0] + matches[1][1]);
+        targetDifference = targetRates[0] - targetRates[1];
+        
+        return {
+          tabs: matches,
+          rates: targetRates,
+          difference: targetDifference
+        };
+      },
+      
+      
+      // Reports a table with exposure and recovery rates
+      ratesToTable: function (source, target, covariates) {
+        // Covariates represents the filtering, otherwise, we'll
+        // use a 2D array to count the matches
+        var rateColoring,
+            covariateString = "",
+            counts = this.countFromPopulation(source, target, covariates),
+            matches = counts.tabs,
+            targetRates = counts.rates;
+            
+        for (var c in covariates) {
+          covariateString += c + " = " + covariates[c] + ", ";
+        }
+        if (covariateString) {
+          covariateString = covariateString.substring(0, covariateString.length - 2);
+        }
+        
+        rateColoring = (targetRates[0] > targetRates[1]) ? "danger" : "success";
+        
+        return "<table class='table table-bordered table-compressed'>" +
+                 // TODO: List covariates
+                 "<caption>" + target + " | " + source + ((covariateString) ? ", " + covariateString : "") + "</caption>" +
+                 "<thead>" +
+                   "<tr>" +
+                     "<th></th>" +
+                     "<th>" + target + " = 0</th>" +
+                     "<th>" + target + " = 1</th>" +
+                     "<th class='" + rateColoring + "'>Rate</th>" +
+                   "</tr>" +
+                 "</thead>" +
+                 "<tbody>" +
+                   "<tr>" +
+                     "<th>" + source + " = 0</th>" +
+                     "<td>" + matches[0][0] + "</td>" +
+                     "<td>" + matches[0][1] + "</td>" +
+                     "<td class='" + rateColoring + "'>" + targetRates[0].toFixed(2) + "</td>" +
+                   "</tr>" +
+                   "<tr>" +
+                     "<th>" + source + " = 1</th>" +
+                     "<td>" + matches[1][0] + "</td>" +
+                     "<td>" + matches[1][1] + "</td>" +
+                     "<td class='" + rateColoring + "'>" + targetRates[1].toFixed(2) + "</td>" +
+                   "</tr>" +
+                 "</tbody>" +
+               "</table>";
+      },
+      
+      
+      // Provides a table print-out of the given CPT
+      cptToTable: function (cptName) {
+        if (!this.cpts[cptName]) {
+          console.error("[X] No CPT with that variable name found!");
+          return "";
+        }
+        var currentCPT = this.cpts[cptName],
+            rows = Math.pow(2, currentCPT.variables.length),
+            rowDisplays = [],
+            result = 
+              "<table class='table table-bordered table-compressed'>" +
+                "<caption>CPT for: " + currentCPT.name + "</caption>" +
+                "<thead>" +
+                  "<tr>";
+            
+        // Add headings
+        for (var i = 0; i < currentCPT.variables.length; i++) {
+          result += "<th>" + currentCPT.variables[i] + "</th>";
+          // Set row displays of binary values
+          rowDisplays.push(Math.pow(2, (currentCPT.variables.length - i - 1)));
+        }
+        result += "<th>Pr</th></tr></thead><tbody><tr>";
+        
+        
+        // Add parameters
+        for (var i = 0; i < rows; i++) {
+          // Add variable values
+          for (var j = 0; j < currentCPT.variables.length; j++) {
+            // 0 or 1 depending on which row for the variable
+            result += "<td>" + Math.floor(i / rowDisplays[j]) % (rowDisplays[j] * 2) + "</td>"
+          }
+          result += "<td>" + currentCPT.params[i] + "</td></tr>";
+        }
+        result += "</tbody></table>";
+        
+        return result;
       }
     },
     
@@ -158,7 +359,10 @@ var $sim = {
       };
     },
 
+
     displaySimpsonInfo = function () {
+      $sim.simulateSimpson(Model.dag, ["Z1"], 1000);
+      
       var results = simpsonAnalysis(),
           infoSimpsonPossible = $("info_simpson_possible"),
           infoButton = jQuery("#simpson_info_button"),
@@ -172,7 +376,7 @@ var $sim = {
             "<ul class='nav nav-tabs'>" +
               "<li class='active'><a href='#explanation' data-toggle='tab'>Explanation</a></li>" +
               "<li><a href='#simulation' data-toggle='tab'>Simulation</a></li>" +
-              "<li><a href='#analysis' data-toggle='tab'>Analysis</a></li>" +
+              "<li><a href='#sim-analysis' data-toggle='tab'>Analysis</a></li>" +
             "</ul>" +
             
             // --------------------------------------------------------------------
@@ -254,7 +458,10 @@ var $sim = {
               "</div>" +
               
               // Analysis nav pane
-              "<div class='tab-pane' id='analysis'>" +
+              "<div class='tab-pane' id='sim-analysis'>" +
+                $sim.ratesToTable(Model.dag.getSources()[0].id, Model.dag.getTargets()[0].id, {}) +
+                $sim.ratesToTable(Model.dag.getSources()[0].id, Model.dag.getTargets()[0].id, {"Z1": 0}) +
+                $sim.ratesToTable(Model.dag.getSources()[0].id, Model.dag.getTargets()[0].id, {"Z1": 1}) +
               "</div>" +
               
             "</div>";
@@ -269,7 +476,7 @@ var $sim = {
           simpsonPopup
             .modal("show");
         });
-      
+        
     };
     
 jQuery(function () {
