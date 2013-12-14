@@ -5,7 +5,35 @@
 
 
 
-var simpsonAnalysis = function () {
+var $sim = {
+      cpts: {},
+      
+      addToCPT = function (cptName, cptParent, mappedCProbs) {
+        if (this.cpts[cptName] || this.cpts[cptName][cptParent]) {
+          console.warn("[!] Warning: Attempting to overwrite CPT values");
+        }
+        if (!this.cpts[cptName]) {
+          this.cpts[cptName] = {variables: [cptName], params: [], factors: []};
+        }
+        this.cpts.variables.push(cptParent);
+        this.cpts.factors.push(mappedCProbs);
+        
+        var size = 1;
+        
+        // Make sure the CPT is valid by calculating the params from the factors
+        for (var i = 0; i < size; i++) {
+          // Go through every variable...
+          for (var j = 0; j < variables.length; j++) {
+            // For every variable, calculate the correct CPT value
+            size *= 2;
+            
+            // TODO: calculate parameters
+          }
+        }
+      }
+    },
+    
+    simpsonAnalysis = function () {
       var dag = Model.dag,
           allPaths = [],
           pathCount = 0,
@@ -242,29 +270,6 @@ var simpsonAnalysis = function () {
             .modal("show");
         });
       
-      // Bool value for whether node is adjusted for or not
-      // console.log(Model.dag.isAdjustedNode(Model.dag.getVertex("Z1")));
-      
-      // Bool value for whether or not graph contains a cycle
-      // console.log(Model.dag.containsCycle());
-      
-      // Returns a new copy of the calling dag that can then be safely mutilated
-      // console.log(Model.dag.clone());
-      
-      // List of outcome variables Y
-      //console.log(Model.dag.getTargets());
-      
-      // List of exposure variables X
-      // console.log(Model.dag.getSources());
-      
-      // Returns all nodes from X -> ... -> Y
-      // console.log(Model.dag.nodesOnCausalPaths());
-      
-      // The graph with backdoor from exposure to effect alone; no causal path from X -> Y
-      // console.log(Model.dag.backDoorGraph().toString());
-      
-      // Ordering from top node (fewest parents) to exposure and effect
-      // console.log(Model.dag.topologicalOrdering());
     };
     
 jQuery(function () {
