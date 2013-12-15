@@ -64,18 +64,106 @@ var $sim = {
             target = dag.getTargets()[0].id,
             orderFollowed = [],
             
-            randomChance = function (UB, LB) {
+            randomChance = function (UB, LB, noAbs) {
               var result;
               do {
                 result = Math.random();
-              } while (Math.abs(result - 0.5) > UB || Math.abs(result - 0.5) < LB);
+              } while (Math.abs((result - ((noAbs) ? 0 : 0.5))) > UB || Math.abs((result - ((noAbs) ? 0 : 0.5))) < LB);
               return result;
+            },
+            
+            // Determines whether or not the given split is valid (has values that are positive or zero and
+            // that are not greater than the original amounts) and if not, where the problem is in the table
+            // We also check that the directionality is valid compared to the previous step so as to perform
+            // the reversal
+            isValidSplit = function (original, tabs, previousDir) {
+              var directions = [[0, 0], [0, 0]],
+                  result;
+              for (var i = 0; i < 2; i++) {
+                for (var j = 0; j < 2; j++) {
+                  if (tabs[i][j][0] < 0 || tabs[i][j][1] < 0) {
+                    return {problem: (tabs[i][j][0] < 0) ? [i, j, 0] : [i, j, 1], solution: -1};
+                  }
+                  if (tabs[i][j][0] > original[j][0] || tabs[i][j][1] > original[j][1]) {
+                    return {problem: (tabs[i][j][0] > original[j][0]) ? [i, j, 0] : [i, j, 1], solution: 1};
+                  }
+                  directions[i][j] += tabs[i][j][0] + tabs[i][j][1];
+                }
+              }
+              
+              // If we previously had a negative direction...
+              if (previousDir < 0) {
+                if (directions[0][0] - directions[0][1] < 0) {
+                  return {problem: [0, 0], solution: 1};
+                }
+                if (directions[1][0] - directions[1][1] < 0) {
+                  return {problem: [1, 0], solution: 1};
+                }
+                
+              // If we previously had a positive direction...
+              } else {
+                if (directions[0][0] - directions[0][1] > 0) {
+                  return {problem: [0, 0], solution: -1};
+                }
+                if (directions[1][0] - directions[1][1] > 0) {
+                  return {problem: [1, 0], solution: -1};
+                }
+              }
+              return {problem: false, solution: false};
+            },
+            
+            // Used to split tables for simulating Simpson's paradox
+            // tabs is a 2x2 array input containing the exposure by outcome combos
+            // in the current conditioning; previousDir indicates the correlative
+            // direction of the previous step in the conditioning chain, which must be
+            // reversed in this step
+            splitTable = function (tabs, previousDir) {
+              var split = [
+                    [[0, 0], [0, 0]],
+                    [[0, 0], [0, 0]]
+                  ],
+                  randomSplit = randomChance(0.6, 0.4, true);
+                  
+              for (var i = 0; i < 2; i++) {
+                for (var j = 0; j < 2; j++) {
+                  for (var k = 0; k < 2; k++) {
+                    if (i === 0) {
+                      split[i][j][k] = ((k % 2) ? Math.floor(tabs[j][k] * randomSplit) : Math.ceil(tabs[j][k] * (1 - randomSplit)));
+                    } else {
+                      split[i][j][k] = tabs[j][k] - split[0][j][k];
+                    }
+                  }
+                }
+              }
+              
+              console.log(split.toString());
+              console.log(isValidSplit(tabs, split, previousDir));
+              
+              // TODO: Find a way to split the tables; try using a "difference matrix"
+              // that is equivalent in dimension to split, but instead has the differences for
+              // each cell that could be used to achieve the correct reversal direction
+              
+              /*
+              // Meaning we must flip to the positive direction  
+              while (true) {
+                var isValid = isValidSplit(tabs, split, previousDir);
+                if (!isValid.problem) {
+                  return split;
+                } else {
+                  // We need to transfer some values around the tables
+                  
+                }
+              }
+              */
             },
             
             chanceUB = 0.4,
             chanceLB = 0.15,
             chanceTake = randomChance(chanceUB, chanceLB),
             chanceRecover = [randomChance(chanceUB, chanceLB), randomChance(chanceUB, chanceLB)];
+            
+        splitTable([[25, 25], [25, 25]], -1);
+        splitTable([[100, 20], [30, 90]], -1);
             
         // Seed the population with n samples of the cause on effect (aggregate)
         for (var i = 0; i < n; i++) {
@@ -91,39 +179,10 @@ var $sim = {
         // it's time to examine the conditioning on covariates
         for (var cov = 0; cov < order.length; cov++) {
           // Determine the proper reversal at this step
-          var counts = this.countFromPopulation(source, target, orderFollowed),
-              conditionChance = randomChance(chanceUB, chanceLB),
-              preferred = Math.max(conditionChance, 1 - conditionChance);
+          var counts = this.countFromPopulation(source, target, orderFollowed);
               
           for (var i = 0; i < n; i++) {
-            var currentSubject = this.population[i],
-                randChoice = Math.random(),
-                preferredOutcome = (randChoice < preferred) ? 1 : 0;
-                
-            // Case where we've given the treatment
-            if (currentSubject[source] === 1) {
-              // ...and there was recovery
-              if (currentSubject[target] === 1) {
-                // NB: counts.difference will be negative when getting the treatment elicited recovery more
-                // than NOT getting the treatment elicited recovery
-                this.population[i][order[cov]] = preferredOutcome;
-                
-              // ...and there was NOT recovery
-              } else {
-                this.population[i][order[cov]] = 1 - preferredOutcome;
-              }
-            
-            // Case where we haven't given the treatment
-            } else {
-              // ...and there was recovery
-              if (currentSubject[target] === 1) {
-                this.population[i][order[cov]] = preferredOutcome;
-              
-              // ...and there was NOT recovery
-              } else {
-                this.population[i][order[cov]] = 1 - preferredOutcome;
-              }
-            }
+            var currentSubject = this.population[i];
           }
           
           orderFollowed.push(order[cov]);
