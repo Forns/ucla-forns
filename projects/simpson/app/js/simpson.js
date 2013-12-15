@@ -93,21 +93,38 @@ var $sim = {
           // Determine the proper reversal at this step
           var counts = this.countFromPopulation(source, target, orderFollowed),
               conditionChance = randomChance(chanceUB, chanceLB),
-              preferred = Math.max(conditionChance, 1 - conditionChance),
+              preferred = Math.max(conditionChance, 1 - conditionChance);
               
-              // If we got a negative correlation in the previous step
-              // then we need to infuse a positive one in this step
-              focus = (counts.difference < 0) ? 0 : 1;
-          
           for (var i = 0; i < n; i++) {
             var currentSubject = this.population[i],
-                randChoice = Math.random();
+                randChoice = Math.random(),
+                preferredOutcome = (randChoice < preferred) ? 1 : 0;
                 
-            // TODO: PICK UP HERE!!!
-            this.population[i][order[cov]] = 
-              ((this.population[i][source] === 0 && this.population[i][source] === 1));
+            // Case where we've given the treatment
+            if (currentSubject[source] === 1) {
+              // ...and there was recovery
+              if (currentSubject[target] === 1) {
+                // NB: counts.difference will be negative when getting the treatment elicited recovery more
+                // than NOT getting the treatment elicited recovery
+                this.population[i][order[cov]] = preferredOutcome;
+                
+              // ...and there was NOT recovery
+              } else {
+                this.population[i][order[cov]] = 1 - preferredOutcome;
+              }
+            
+            // Case where we haven't given the treatment
+            } else {
+              // ...and there was recovery
+              if (currentSubject[target] === 1) {
+                this.population[i][order[cov]] = preferredOutcome;
+              
+              // ...and there was NOT recovery
+              } else {
+                this.population[i][order[cov]] = 1 - preferredOutcome;
+              }
+            }
           }
-          
           
           orderFollowed.push(order[cov]);
         }
@@ -174,6 +191,7 @@ var $sim = {
                      "<th></th>" +
                      "<th>" + target + " = 0</th>" +
                      "<th>" + target + " = 1</th>" +
+                     "<th>Total " + source + "</th>" +
                      "<th class='" + rateColoring + "'>Rate</th>" +
                    "</tr>" +
                  "</thead>" +
@@ -182,13 +200,22 @@ var $sim = {
                      "<th>" + source + " = 0</th>" +
                      "<td>" + matches[0][0] + "</td>" +
                      "<td>" + matches[0][1] + "</td>" +
+                     "<td>" + (matches[0][0] + matches[0][1]) + "</td>" +
                      "<td class='" + rateColoring + "'>" + targetRates[0].toFixed(2) + "</td>" +
                    "</tr>" +
                    "<tr>" +
                      "<th>" + source + " = 1</th>" +
                      "<td>" + matches[1][0] + "</td>" +
                      "<td>" + matches[1][1] + "</td>" +
+                     "<td>" + (matches[1][0] + matches[1][1]) + "</td>" +
                      "<td class='" + rateColoring + "'>" + targetRates[1].toFixed(2) + "</td>" +
+                   "</tr>" +
+                   "<tr>" +
+                     "<th>Total " + target + "</th>" +
+                     "<td>" + (matches[0][0] + matches[1][0]) + "</td>" +
+                     "<td>" + (matches[0][1] + matches[1][1]) + "</td>" +
+                     "<td>" + (matches[0][0] + matches[0][1] + matches[1][0] + matches[1][1]) + "</td>" +
+                     "<td class='" + rateColoring + "'></td>" +
                    "</tr>" +
                  "</tbody>" +
                "</table>";
