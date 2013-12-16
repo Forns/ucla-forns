@@ -63,6 +63,7 @@ var $sim = {
             source = dag.getSources()[0].id,
             target = dag.getTargets()[0].id,
             orderFollowed = [],
+            splitAttempt = 0,
             
             randomChance = function (UB, LB, noAbs) {
               var result;
@@ -82,10 +83,10 @@ var $sim = {
               for (var i = 0; i < 2; i++) {
                 for (var j = 0; j < 2; j++) {
                   if (tabs[i][j][0] < 0 || tabs[i][j][1] < 0) {
-                    return {problem: (tabs[i][j][0] < 0) ? [i, j, 0] : [i, j, 1], solution: -1};
+                    return {problem: -1, solution: -1};
                   }
                   if (tabs[i][j][0] > original[j][0] || tabs[i][j][1] > original[j][1]) {
-                    return {problem: (tabs[i][j][0] > original[j][0]) ? [i, j, 0] : [i, j, 1], solution: 1};
+                    return {problem: -2, solution: 1};
                   }
                   directions[i][j] += tabs[i][j][0] + tabs[i][j][1];
                 }
@@ -112,6 +113,15 @@ var $sim = {
               return {problem: false, solution: false};
             },
             
+            tryMigration = function (distribution, migration) {
+              for (var j = 0; j < 2; j++) {
+                for (var k = 0; k < 2; k++) {
+                  distribution[0][j][k] += migration[0][j][k];
+                  distribution[1][j][k] += migration[1][j][k];
+                }
+              }
+            },
+            
             // Used to split tables for simulating Simpson's paradox
             // tabs is a 2x2 array input containing the exposure by outcome combos
             // in the current conditioning; previousDir indicates the correlative
@@ -119,6 +129,18 @@ var $sim = {
             // reversed in this step
             splitTable = function (tabs, previousDir) {
               var split = [
+                    [[0, 0], [0, 0]],
+                    [[0, 0], [0, 0]]
+                  ],
+                  originalSplit = [
+                    [[0, 0], [0, 0]],
+                    [[0, 0], [0, 0]]
+                  ],
+                  splitRequest = [
+                    [[0, 0], [0, 0]],
+                    [[0, 0], [0, 0]]
+                  ],
+                  originalRequest = [
                     [[0, 0], [0, 0]],
                     [[0, 0], [0, 0]]
                   ],
@@ -132,29 +154,53 @@ var $sim = {
                     } else {
                       split[i][j][k] = tabs[j][k] - split[0][j][k];
                     }
+                    
+                    // Save in case we need to retry
+                    originalSplit[i][j][k] = split[i][j][k];
+                    
+                    // Now deal with the split request
+                    splitRequest[i][j][k] = 
+                      ((j === 0) ? -1 : 1) *
+                      ((previousDir < 0) 
+                        ? ((i === 0) ? 1 : -1)
+                        : ((i === 0) ? -1 : 1));
+                        
+                    originalRequest[i][j][k] = splitRequest[i][j][k];
                   }
                 }
               }
-              
-              console.log(split.toString());
-              console.log(isValidSplit(tabs, split, previousDir));
               
               // TODO: Find a way to split the tables; try using a "difference matrix"
               // that is equivalent in dimension to split, but instead has the differences for
               // each cell that could be used to achieve the correct reversal direction
               
-              /*
               // Meaning we must flip to the positive direction  
               while (true) {
                 var isValid = isValidSplit(tabs, split, previousDir);
-                if (!isValid.problem) {
+                if (isValid.problem === false) {
                   return split;
+                } else if(isValid.problem <= -1) {
+                  if (splitAttempt >= 2) {
+                    console.warn("[!] Warning, unable to split");
+                    return split;
+                  }
+                  // Reset to the next attempt schema
+                  for (var i = 0; i < 2; i++) {
+                    for (var j = 0; j < 2; j++) {
+                      split[i][j][0] = originalSplit[i][j][0];
+                      split[i][j][1] = originalSplit[i][j][1];
+                      splitRequest[i][j][splitAttempt] = 0;
+                      splitRequest[i][j][(splitAttempt) ? 0 : 1] = originalRequest[i][j][(splitAttempt) ? 0 : 1];
+                    }
+                  }
+                  
+                  console.log(splitRequest);
+                  splitAttempt++;
                 } else {
                   // We need to transfer some values around the tables
-                  
+                  tryMigration(split, splitRequest);
                 }
               }
-              */
             },
             
             chanceUB = 0.4,
@@ -164,6 +210,11 @@ var $sim = {
             
         splitTable([[25, 25], [25, 25]], -1);
         splitTable([[100, 20], [30, 90]], -1);
+        
+        var x = [[[25, 25], [25, 25]], [[25, 25], [25, 25]]],
+            y = [[[1, 1], [-1, -1]], [[-1, -1], [1, 1]]];
+        tryMigration(x, y);
+        console.log(x);
             
         // Seed the population with n samples of the cause on effect (aggregate)
         for (var i = 0; i < n; i++) {
