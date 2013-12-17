@@ -132,6 +132,9 @@ var $sim = {
                     [[0, 0], [0, 0]],
                     [[0, 0], [0, 0]]
                   ],
+                  tabsCopy = [
+                    [0, 0], [0, 0]
+                  ],
                   originalSplit = [
                     [[0, 0], [0, 0]],
                     [[0, 0], [0, 0]]
@@ -144,19 +147,24 @@ var $sim = {
                     [[0, 0], [0, 0]],
                     [[0, 0], [0, 0]]
                   ],
+                  splitFocus = (previousDir < 0) ? 1 : 0,
                   randomSplit = randomChance(0.6, 0.4, true);
                   
+              
               for (var i = 0; i < 2; i++) {
                 for (var j = 0; j < 2; j++) {
+                  tabsCopy[i][j] = tabs[i][j];
+                  
                   for (var k = 0; k < 2; k++) {
+                    /*
+                    // Save in case we need to retry
+                    originalSplit[i][j][k] = split[i][j][k];
+                    
                     if (i === 0) {
                       split[i][j][k] = ((k % 2) ? Math.floor(tabs[j][k] * randomSplit) : Math.ceil(tabs[j][k] * (1 - randomSplit)));
                     } else {
                       split[i][j][k] = tabs[j][k] - split[0][j][k];
                     }
-                    
-                    // Save in case we need to retry
-                    originalSplit[i][j][k] = split[i][j][k];
                     
                     // Now deal with the split request
                     splitRequest[i][j][k] = 
@@ -166,41 +174,24 @@ var $sim = {
                         : ((i === 0) ? -1 : 1));
                         
                     originalRequest[i][j][k] = splitRequest[i][j][k];
+                    */
                   }
                 }
               }
               
-              // TODO: Find a way to split the tables; try using a "difference matrix"
-              // that is equivalent in dimension to split, but instead has the differences for
-              // each cell that could be used to achieve the correct reversal direction
-              
-              // Meaning we must flip to the positive direction  
-              while (true) {
-                var isValid = isValidSplit(tabs, split, previousDir);
-                if (isValid.problem === false) {
-                  return split;
-                } else if(isValid.problem <= -1) {
-                  if (splitAttempt >= 2) {
-                    console.warn("[!] Warning, unable to split");
-                    return split;
-                  }
-                  // Reset to the next attempt schema
-                  for (var i = 0; i < 2; i++) {
-                    for (var j = 0; j < 2; j++) {
-                      split[i][j][0] = originalSplit[i][j][0];
-                      split[i][j][1] = originalSplit[i][j][1];
-                      splitRequest[i][j][splitAttempt] = 0;
-                      splitRequest[i][j][(splitAttempt) ? 0 : 1] = originalRequest[i][j][(splitAttempt) ? 0 : 1];
-                    }
-                  }
+              for (var i = 0; i < 2; i++) {
+                var migration1 = Math.floor(3 * tabsCopy[i][splitFocus] / 4),
+                    migration2 = Math.floor(3 * tabsCopy[i][1 - splitFocus] / 4);
                   
-                  console.log(splitRequest);
-                  splitAttempt++;
-                } else {
-                  // We need to transfer some values around the tables
-                  tryMigration(split, splitRequest);
-                }
+                split[0][i][splitFocus] = migration1;
+                tabsCopy[i][splitFocus] -= migration1;
+                split[0][i][1 - splitFocus] = tabsCopy[i][splitFocus];
+                split[1][i][1 - splitFocus] = migration2;
+                tabsCopy[i][1 - splitFocus] -= migration2;
+                split[1][i][splitFocus] = tabsCopy[i][1 - splitFocus];
               }
+              
+              return split;
             },
             
             chanceUB = 0.4,
@@ -208,14 +199,16 @@ var $sim = {
             chanceTake = randomChance(chanceUB, chanceLB),
             chanceRecover = [randomChance(chanceUB, chanceLB), randomChance(chanceUB, chanceLB)];
             
-        splitTable([[25, 25], [25, 25]], -1);
-        splitTable([[100, 20], [30, 90]], -1);
-        
-        var x = [[[25, 25], [25, 25]], [[25, 25], [25, 25]]],
-            y = [[[1, 1], [-1, -1]], [[-1, -1], [1, 1]]];
-        tryMigration(x, y);
-        console.log(x);
-            
+        var test1 = [[24, 16], [20, 20]],
+            split1 = splitTable(test1, -1),
+            test2 = [[40, 80], [30, 90]],
+            split2 = splitTable(test2, 1);
+
+        console.log(split1);
+        console.log(split2);
+        console.log(isValidSplit(test1, split1, 1));
+        console.log(isValidSplit(test2, split2, -1));
+                    
         // Seed the population with n samples of the cause on effect (aggregate)
         for (var i = 0; i < n; i++) {
           var take = Math.random(),
