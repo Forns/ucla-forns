@@ -199,8 +199,11 @@ function generateSpringLayout(){
 	DAGittyControl.setGraph( Model.dag ); // trigges to refresh the rendering
 };
 
+var currentExample = 0;
+
 function loadExample( nr ){
     $("adj_matrix").value = examples[parseInt(nr)].v+"\n\n"+examples[parseInt(nr)].e;
+    currentExample = nr;
     loadDAGFromTextData();
 }
 
