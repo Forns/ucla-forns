@@ -55,37 +55,58 @@ var $sim = {
       
       // Runs the simulation parameter calculation on a causal diagram with the given
       // Simpson's reversal order
-      simulateSimpson: function (dag, order, n) {
+      simulateSimpson: function (dag) {
         // Clear any previous sim
         this.population = [];
         
-        var covariates = dag.getVertices(),
-            source = dag.getSources()[0].id,
-            target = dag.getTargets()[0].id,
-            example = examples[currentExample],
+        var example = examples[currentExample].dist,
+            aggregate = (example) ? example["X|Y"] : false,
+            covariates = [],
+            covariateSplit,
+            conditionSplit,
+            count = 0,
+            covExists = false,
+            result = "";
             
-        // Seed the population with samples of the cause on effect (aggregate) from examples table
-        for (var i = 0; i < n; i++) {
-          var take = Math.random(),
-              recover = Math.random();
-              
-          this.population[i] = {};
-          this.population[i][source] = (take < chanceTake) ? 0 : 1;
-          this.population[i][target] = (recover < chanceRecover[this.population[i][source]]) ? 0 : 1;
+        for (var e in example) {
+          // First we want to know what is being conditioned upon
+          covariateSplit = e.split("|")[1].split(",");
+          for (var c = 1; c < covariateSplit.length; c++) {
+            covExists = false;
+            conditionSplit = covariateSplit[c].split("=");
+            for (var cov in covariates) {
+              if (covariates[cov] === conditionSplit[0]) {
+                covExists = true;
+              }
+            }
+            if (!covExists) {
+              covariates.push(conditionSplit[0]);
+            }
+          }
         }
         
-        // At this point, we have our distribution over X and Y aggregated... now
-        // it's time to examine the conditioning on covariates
-        for (var cov = 0; cov < order.length; cov++) {
-          // Determine the proper reversal at this step
-          var counts = this.countFromPopulation(source, target, orderFollowed);
-              
-          for (var i = 0; i < n; i++) {
-            var currentSubject = this.population[i];
+        if (aggregate) {
+          // Seed the population with samples of the cause on effect (aggregate) from examples table
+          for (var x = 0; x < 2; x++) {
+            for (var y = 0; y < 2; y++) {
+              for (var s = 0; s < aggregate[x][y]; s++) {
+                this.population[s] = {"X": x, "Y": y};
+                count = 1;
+                for (var c in example) {
+                  if (c !== "Y|X" && example[c][x][y] > 0) {
+                    example[c][x][y]--;
+                    this.population[s][covariates[count - (count % 2)]] = (count % 2 === 0) ? 0 : 1;
+                  }
+                  console.log(this.population);
+                  count++;
+                }
+              }
+            }
           }
           
-          orderFollowed.push(order[cov]);
         }
+        console.log(this.population);
+        
       },
       
       
@@ -346,7 +367,7 @@ var $sim = {
 
 
     displaySimpsonInfo = function () {
-      $sim.simulateSimpson(Model.dag, ["Z1"], 1000);
+      $sim.simulateSimpson(Model.dag);
       
       var results = simpsonAnalysis(),
           infoSimpsonPossible = $("info_simpson_possible"),
@@ -444,9 +465,10 @@ var $sim = {
               
               // Analysis nav pane
               "<div class='tab-pane' id='sim-analysis'>" +
-                $sim.ratesToTable(Model.dag.getSources()[0].id, Model.dag.getTargets()[0].id, {}) +
-                $sim.ratesToTable(Model.dag.getSources()[0].id, Model.dag.getTargets()[0].id, {"Z1": 0}) +
-                $sim.ratesToTable(Model.dag.getSources()[0].id, Model.dag.getTargets()[0].id, {"Z1": 1}) +
+                (function () {
+                  
+                  return "";
+                })() +
               "</div>" +
               
             "</div>";
