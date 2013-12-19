@@ -60,75 +60,106 @@ var $sim = {
         this.population = [];
         
         var example = examples[currentExample].dist,
-            aggregate = (example) ? example["X|Y"] : false,
-            covariates = [],
-            covariateSplit,
-            conditionSplit,
-            count = 0,
-            covExists = false,
-            result = "";
-            
-        for (var e in example) {
-          // First we want to know what is being conditioned upon
-          covariateSplit = e.split("|")[1].split(",");
-          for (var c = 1; c < covariateSplit.length; c++) {
-            covExists = false;
-            conditionSplit = covariateSplit[c].split("=");
-            for (var cov in covariates) {
-              if (covariates[cov] === conditionSplit[0]) {
-                covExists = true;
-              }
-            }
-            if (!covExists) {
-              covariates.push(conditionSplit[0]);
-            }
-          }
-        }
+            currentPop = this.population,
         
-        if (aggregate) {
+            // Modifies the population given the current population and
+            // frequencies for a new covariate
+            modifyPopulation = function (covariate, pop) {
+              var freq = covariate.freq,
+                  freqCopy = [[freq[0][0], freq[0][1]], [freq[1][0], freq[1][1]]],
+                  name = covariate.covariate,
+                  conditionOn = covariate.conditionOn,
+                  prev = covariate.previous;
+                  
+              // Seed the population with samples of the cause on effect (aggregate) from examples table
+              for (var x = 0; x < 2; x++) {
+                for (var y = 0; y < 2; y++) {
+                  for (var s = 0; s < pop.length; s++) {
+                    var currentSubject = pop[s],
+                        match = true;
+                        
+                    // Only add to this data point if it is consistent with x and y for this subject,
+                    // hasn't been set yet, still has a point to "give," and is consistent with the previously
+                    // conditioned-upon stuff
+                    if (currentSubject["X"] === x && 
+                        currentSubject["Y"] === y && 
+                        !currentSubject[name] &&
+                        freqCopy[x][y] > 0) {
+                          
+                      // Finally, check that the previous covariates conditioned on are consistent
+                      // with this data point
+                      for (var p in prev) {
+                        if (pop[p] !== prev[p]) {
+                          match = false;
+                        }
+                      }
+                      if (match) {
+                        pop[s][name] = conditionOn;
+                        freqCopy[x][y]--;
+                      }
+                    }
+                  }
+                }
+              }
+            };
+        
+        // OBJECTIVES:
+        //  1) Find the aggregate over Y|X and generate the population
+        //  2) For each sub population over covariates Z = {Z1, ...},
+        //     add the appropriate value for each variable to the population
+        //     found in (1)
+        //  3) With the full population over Y|X,Z established, learn the
+        //     network parameters that could model it
+        
+        if (example) {
+          var aggregate = example[0].freq;
           // Seed the population with samples of the cause on effect (aggregate) from examples table
           for (var x = 0; x < 2; x++) {
             for (var y = 0; y < 2; y++) {
               for (var s = 0; s < aggregate[x][y]; s++) {
-                this.population[s] = {"X": x, "Y": y};
-                count = 1;
-                for (var c in example) {
-                  if (c !== "Y|X" && example[c][x][y] > 0) {
-                    example[c][x][y]--;
-                    this.population[s][covariates[count - (count % 2)]] = (count % 2 === 0) ? 0 : 1;
-                  }
-                  console.log(this.population);
-                  count++;
-                }
+                this.population.push({"X": x, "Y": y});
               }
             }
           }
-          
+              
+          for (var e = 1; e < example.length; e++) {
+            modifyPopulation(example[e], currentPop);
+          }
         }
+        
+        // At this point, our population is stable, so we'll 
+          
         console.log(this.population);
         
       },
       
       
       // Takes the population and returns the Y | X, Z counts
-      countFromPopulation: function (source, target, covariates) {
+      countFromPopulation: function (source, target, covariates, table) {
         var matches = [[0, 0], [0, 0]],
             currentSubject,
             targetRates = [0, 0],
             targetDifference;
             
-        for (var i = 0; i < this.population.length; i++) {
-          currentSubject = this.population[i];
-          var instantiationMatches = true;
-          for (var c in covariates) {
-            if (currentSubject[c] !== covariates[c]) {
-              instantiationMatches = false;
-              break;
+        if (table) {
+          matches = table;
+        } else {
+          // TODO: Once general solution is found
+          /*
+          for (var i = 0; i < this.population.length; i++) {
+            currentSubject = this.population[i];
+            var instantiationMatches = true;
+            for (var c in covariates) {
+              if (currentSubject[c] !== covariates[c]) {
+                instantiationMatches = false;
+                break;
+              }
+            }
+            if (instantiationMatches) {
+              matches[currentSubject[source]][currentSubject[target]]++;
             }
           }
-          if (instantiationMatches) {
-            matches[currentSubject[source]][currentSubject[target]]++;
-          }
+          */
         }
         
         targetRates[0] = matches[0][1] / (matches[0][0] + matches[0][1]);
@@ -144,26 +175,22 @@ var $sim = {
       
       
       // Reports a table with exposure and recovery rates
-      ratesToTable: function (source, target, covariates) {
+      ratesToTable: function (source, target, covariates, table) {
+        console.log(table);
         // Covariates represents the filtering, otherwise, we'll
         // use a 2D array to count the matches
         var rateColoring,
             covariateString = "",
-            counts = this.countFromPopulation(source, target, covariates),
+            counts = this.countFromPopulation(source, target, covariates, table),
             matches = counts.tabs,
             targetRates = counts.rates;
             
-        for (var c in covariates) {
-          covariateString += c + " = " + covariates[c] + ", ";
-        }
-        if (covariateString) {
-          covariateString = covariateString.substring(0, covariateString.length - 2);
-        }
+        // TODO: Temporary; will flush out once general solution is found
+        covariateString = covariates;
         
         rateColoring = (targetRates[0] > targetRates[1]) ? "danger" : "success";
         
         return "<table class='table table-bordered table-compressed'>" +
-                 // TODO: List covariates
                  "<caption>" + target + " | " + source + ((covariateString) ? ", " + covariateString : "") + "</caption>" +
                  "<thead>" +
                    "<tr>" +
@@ -180,14 +207,14 @@ var $sim = {
                      "<td>" + matches[0][0] + "</td>" +
                      "<td>" + matches[0][1] + "</td>" +
                      "<td>" + (matches[0][0] + matches[0][1]) + "</td>" +
-                     "<td class='" + rateColoring + "'>" + targetRates[0].toFixed(2) + "</td>" +
+                     "<td class='" + rateColoring + "'>" + (100.0 * targetRates[0]).toFixed(4) + "%</td>" +
                    "</tr>" +
                    "<tr>" +
                      "<th>" + source + " = 1</th>" +
                      "<td>" + matches[1][0] + "</td>" +
                      "<td>" + matches[1][1] + "</td>" +
                      "<td>" + (matches[1][0] + matches[1][1]) + "</td>" +
-                     "<td class='" + rateColoring + "'>" + targetRates[1].toFixed(2) + "</td>" +
+                     "<td class='" + rateColoring + "'>" + (100.0 * targetRates[1]).toFixed(4) + "%</td>" +
                    "</tr>" +
                    "<tr>" +
                      "<th>Total " + target + "</th>" +
@@ -374,6 +401,30 @@ var $sim = {
           infoButton = jQuery("#simpson_info_button"),
           simpsonPopup = jQuery("#simpsonPopup"),
           popupBody = simpsonPopup.find(".modal-body"),
+          example = examples[currentExample].dist,
+          
+          generateTables = function () {
+            var tableSchemas = [],
+                covariateString = [],
+                result = "";
+                
+            if (!example) {
+              return "<br/><p class='text-center'>No example frequencies available for this model</p>";
+            }
+            
+            for (var i = 0; i < example.length; i++) {
+              covariateString = [];
+              if (example[i].covariate) {
+                covariateString.push((example[i].covariate + "=" + example[i].conditionOn));
+                for (var j in example[i].previous) {
+                  covariateString.push(j + "=" + example[i].previous[j]);
+                }
+              }
+              covariateString = covariateString.join(",");
+              result += $sim.ratesToTable("X", "Y", covariateString, example[i].freq);
+            }
+            return result;
+          },
           
           // Holds the report info... could probably be cleaned up but... meh
           infoReport = 
@@ -461,14 +512,16 @@ var $sim = {
               
               // Simulation nav pane
               "<div class='tab-pane' id='simulation'>" +
+                "<p class='text-center'><strong>NOTE: Simulation currently only supported for example models; any changes made will not be reflected here... yet!</strong></p>" +
+                ((results.code > 2) 
+                  ? "<br/><p class='text-center'>Simulation presently unsupported... check back soon!</p>"
+                  : "<br/><p class='text-center'>Simulation not available on models where paradox is not possible</p>") +
               "</div>" +
               
               // Analysis nav pane
               "<div class='tab-pane' id='sim-analysis'>" +
-                (function () {
-                  
-                  return "";
-                })() +
+                "<p class='text-center'><strong>NOTE: Analysis currently only supported for example models; any changes made will not be reflected here... yet!</strong></p>" +
+                generateTables() +
               "</div>" +
               
             "</div>";
