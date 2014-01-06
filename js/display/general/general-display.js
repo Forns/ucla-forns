@@ -7,6 +7,8 @@ $(function () {
   var scrollspy = $("#scrollspy"),
       presentationMode = false,
       presentationClass = "presentation-display",
+      noteMode = false,
+      currentNote = 0,
       styleMap = {
         ".question": {
           glyphicon: "glyphicon-question-sign",
@@ -59,6 +61,11 @@ $(function () {
         if (presentationMode) {
           $("." + presentationClass)
             .removeClass(presentationClass);
+          $(".presentation-content")
+            .addClass("col-md-10")
+            .removeClass("presentation-container");
+          $("#scrollspy")
+            .removeClass("hidden");
         
         // Otherwise, we need to apply presentation mode
         } else {
@@ -66,6 +73,11 @@ $(function () {
           $(".presentation-content")
             .find("p, pre")
             .addClass(presentationClass);
+          $(".presentation-content")
+            .removeClass("col-md-10")
+            .addClass("presentation-container");
+          $("#scrollspy")
+            .addClass("hidden");
         }
         presentationMode = !presentationMode;
         setTimeout(function () {
@@ -92,5 +104,58 @@ $(function () {
           $("[name='" + $(this).attr("name") + "'].answer")
             .fadeIn(animationTime);
         });
+    });
+  
+  /*
+   * NOTE TAKING MECHANICS
+   */
+  
+  // Note-taking mode: engage!
+  $(document)
+    .on("keypress", function (e) {
+      if (e.keyCode === 78) {
+        // If we're in noteMode, then disable it...
+        if (noteMode) {
+          $(document).unbind("click");
+          $(".presentation-content").removeClass("note-aim");
+        
+        // ...otherwise, go ahead and turn it on
+        } else {
+          $(".presentation-content").addClass("note-aim");
+          $(document).click(function(event) {
+            var target = $(event.target);
+            if ($(".presentation-content").find(target).length) {
+              target
+                .after(
+                  "<div id='note-" + currentNote + "' class='alert alert-note'>" +
+                    "<a id='note-remove-" + currentNote + "' class='pull-right'>" +
+                      "<span class='glyphicon glyphicon-remove'></span>" +
+                    "</a>" +
+                    "<span class='glyphicon glyphicon-pencil'></span>" +
+                    "<strong> Notes</strong><br/><br/>" +
+                    "<textarea class='expanding note-textarea' />" +
+                  "</div>"
+                );
+                
+              // Event handler for the remove button
+              (function (note) {
+                $("#note-remove-" + note)
+                  .click(function () {
+                    $("#note-" + note)
+                      .remove();
+                  });
+              })(currentNote);
+                
+              // Make the text area stretchy
+              $("#note-" + currentNote + " textarea")
+                .expandingTextarea();
+              currentNote++;
+              
+              $(document).unbind("click");
+              $(".presentation-content").removeClass("note-aim");
+            }
+          });
+        }
+      }
     });
 });

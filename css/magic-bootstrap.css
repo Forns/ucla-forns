@@ -4384,6 +4384,11 @@ a.thumbnail:focus {
 .alert-info .alert-link {
   color: #2d6987;
 }
+.alert-note {
+  background-color: #FFFFAA;
+  border-color: #FFFF00;
+  color: black;
+}
 .alert-warning {
   background-color: #fcf8e3;
   border-color: #fbeed5;

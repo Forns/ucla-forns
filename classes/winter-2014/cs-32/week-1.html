@@ -4,20 +4,23 @@
 
   <head>
     <title>Andrew Forney - UCLA CS</title>
-    <link href="./css/bootstrap.min.css" rel="stylesheet" type="text/css">
-    <link href="./css/magic-bootstrap.css" rel="stylesheet" type="text/css">
-    <link href="./css/main.css" rel="stylesheet" type="text/css">
-    <script src="./js/lib/jquery-2.0.3.min.js"></script>
-    <script src="./js/lib/bootstrap.min.js"></script>
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/magic-bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/main.css" rel="stylesheet" type="text/css">
+    <script src="../../../js/lib/jquery-2.0.3.min.js"></script>
+    <script src="../../../js/lib/bootstrap.min.js"></script>
+    <script src="../../../js/lib/expanding.js"></script>
+    <script src="../../../js/display/general/general-display.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
   </head>
   
-  <body>
+  <body data-spy="scroll" data-target="#scrollspy">
     
     <!-- BEGIN WRAP -->
     <div id="wrap">
       
       <!-- BEGIN NAVIGATION -->
-      <nav class='navbar navbar-default navbar-fixed-top' role='navigation'>
+      <nav class='navbar navbar-default' role='navigation'>
         <div class='nav-accent'></div>
         <div class='container'>
           <div class='row'>
@@ -84,41 +87,41 @@
       <!-- END NAVIGATION -->
       
       <!-- BEGIN MAIN CONTENT -->
-      <div class="main-spacer visible-desktop"></div>
       <div id="main-content" class="container">
         <div class="row">
-          <div class='col-md-12'>
-            <h1>Classes</h1>
-            <p>You can find course notes, exercises, lectures, bad puns, and other material relevant to each course I've taught below. The current quarter's classes will always be listed on top.</p><br />
-            <h3>Current Quarter: Winter 2014</h3>
-            <table class='table table-striped'>
-              <thead>
-              </thead>
-                <tr>
-                  <th>Course</th>
-                  <th>Title</th>
-                  <th>Lecture</th>
-                  <th>Office Hours</th>
-                  <th>Course Page</th>
-                </tr>
-              <tbody>
-                <tr>
-                  <td>CS 32</td>
-                  <td>Introduction to Programming II</td>
-                  <td><p>Boelter 3400</p><p>MW 12:00 - 1:50 pm</p></td>
-                  <td><p>Boelter 2432</p><p>M 2:30 - 5:30 pm</p></td>
-                  <td><a href='/~forns/classes/winter-2014/cs-32/cs-32.html'>Clicky</a></td>
-                </tr>
-                <tr>
-                  <td>CS 31</td>
-                  <td>Introduction to Programming (or something like that)</td>
-                  <td><p>Dodd 147</p><p>MW 2:00 - 3:50 pm</p></td>
-                  <td><p>Boelter 2432</p><p>M 4:30 - 5:30 pm</p><p>R 1:30 - 3:30 pm</p></td>
-                  <td><a href='/~forns/classes/fall-2013/cs-31/cs-31.html'>Clicky</a></td>
-                </tr>
-              </tbody>
-            </table>
+          
+          <!-- BEGIN SCROLLSPY -->
+          <div class='col-md-2'>
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+              <ul id='scrollspy' class="nav bs-sidenav">
+              </ul>
+            </div>
           </div>
+          <!-- END SCROLLSPY -->
+          
+          <!-- BEGIN PRESENTATION CONTENT -->
+          <div class='col-md-10 presentation-content' role='main'>
+            
+            <ol class="breadcrumb hidden-print">
+              <li><a href="../../../classes.html">Classes</a></li>
+              <li><a href="./cs-31.html">Winter14 CS32</a></li>
+              <li class="active">Week 1</li>
+            </ol>
+            
+            <div id='introduction' class='scrollspy-element' scrollspy-title='Introduction'></div>
+            <h1>Introduction: The Discussion Section</h1>
+            <div>
+            </div>
+            <hr/>
+            
+            <a class='btn btn-default pull-right hidden-print' href='javascript:window.print();'>
+              <span class='glyphicon glyphicon-print'></span>
+              &nbsp; PDF / Print
+            </a>
+            
+          </div>
+          <!-- END PRESENTATION CONTENT -->
+          
         </div>
       </div>
       <!-- END MAIN CONTENT -->

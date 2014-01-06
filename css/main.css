@@ -140,6 +140,11 @@ ul .dropdown-menu {
 }
 
 /* PRESENTATION */
+.presentation-container {
+  margin: 0 auto;
+  width: 100%;
+}
+
 .presentation-display {
   font-size: 200%;
   margin-bottom: 20px;
@@ -185,6 +190,15 @@ p, pre {
 .fit-pres img {
   max-width: 90%;
   max-height: 90%;
+}
+
+.note-aim {
+  cursor: crosshair !important;
+}
+
+.note-textarea {
+  padding: 5px;
+  width: 100%;
 }
 
 .btn {
