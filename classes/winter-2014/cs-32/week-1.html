@@ -111,6 +111,37 @@
             <div id='introduction' class='scrollspy-element' scrollspy-title='Introduction'></div>
             <h1>Introduction: The Discussion Section</h1>
             <div>
+              <p>Welcome to CS32!</p>
+              <p>To those of you joining from last quarter... really? You're all gluttons for punishment? And those of you who are just now joining, welcome <span class='strike'>to hell</span> aboard!</p>
+              <p>To say a little bit about the discussion section and its format:</p>
+              <ul class='indent-1'>
+                <li><p>The discussion section is largely review and practice of everything that was covered during lecture in the previous week, plus some greater depth.</p></li>
+                <li><p>This is the time when you ask questions that you didn't during lecture--leave nothing to chance!</p></li>
+                <li><p>The general discussion format is to review topics at the high level, examine a bunch of examples that illustrate them, and then practice them by hand.</p></li>
+              </ul>
+              <p>To say a bit about my role as your TA:</p>
+              <ul class='indent-1'>
+                <li><p>I am always available to email; don't hesitate to ask for any clarifications.</p></li>
+                <li><p>
+                  My office hours are on Mondays from 2:30 - 5:30pm, right after class for your convenience, in Boelter 2432. If you can't make those hours, and can't take advantage 
+                  of the other TA office hours, email me to set up an appointment.
+                </p></li>
+                <li><p>
+                  I grade the *style and comments* of your assignments, but not the correctness... so if you have time, entertain me with fun comments... 
+                  but you know... focus on getting things right first...
+              </ul>
+              <p>Finally, some upgrades to my site (if you thought it was great before...):</p>
+              <ul class='indent-1'>
+                <li><p>
+                  You can now add notes inside the website so that you can follow along and type as I say stuff! Just hit <code class='prettyprint'>SHIFT + N</code> 
+                  and then click on a paragraph to add an editable note area. NOTE: the notes you add will not persist if you close your browser, so make sure you save 
+                  it to PDF when you're done taking notes! (see below)
+                </p></li>
+                <li><p>
+                  The site has been optimized for printing, which includes the notes that you add, above. I've added a print button to the bottom of the site, but really it just 
+                  calls your printer functionality, which typically includes the export to PDF.
+                </p></li>
+              </ul>
             </div>
             <hr/>
             
@@ -121,6 +152,52 @@
             
           </div>
           <!-- END PRESENTATION CONTENT -->
+          
+          <!-- MATERIALS FROM CLASS: -->
+          
+          <!-- TODO: Object construction -->
+            <!-- TODO: Constructor operation steps -->
+            <!-- TODO: Member initialization list -->
+          <!-- TODO: Overloading function names -->
+          <!-- TODO: Splitting the program into separate components -->
+            <!-- TODO: Why do in the first place? -->
+            <!-- TODO: Source files -->
+              <!-- TODO: Compiled, these become object files (though the names and extensions will be different after compilation) -->
+              <!-- TODO: Process of linking, especially with libraries -->
+                <!-- TODO: For each object file, there are two tables: (1) what the file defines, and (2) what it uses -->
+                <!-- TODO: Libraries typically only define functions, rather than using them -->
+                <!-- TODO: The linker ensure that whatever is used is defined, which includes not defining something twice -->
+                <!-- TODO: Analogy of some sort where objects are both used and required -->
+              <!-- TODO: These contain all of the "meat" of the program: (1) the code for what you've written, including the main function -->
+            <!-- TODO: Header files -->
+              <!-- TODO: Source files can use these to list the common components that might be used together -->
+              <!-- TODO: For includes in the standard library, we use the angle brackets like with <cmath> -->
+              <!-- TODO: For includes that we're making ourselves, we use quotations with the file name -->
+                <!-- TODO: NOTE: This file has to be in the same project (for IDEs ?) or directory -->
+                <!-- TODO: Think of the header as a contract: you draw up a contract (header file) for what you promise to do, and then implement them (the .cpp files) -->
+                <!-- TODO: By analogy, think of islands (the cpps) that don't know of each other until you give them maps (the headers) -->
+              <!-- TODO: Class definitions in header files -->
+              <!-- TODO: What if I have two header files with the same definition? -->
+              <!-- TODO: Having headers that include whatever files they're dependent upon--don't rely on orders of includes -->
+              <!-- TODO: Mutual header dependence? -->
+              <!-- TODO: What if I try to include something twice on accident? -->
+                <!-- TODO: Define and endif declarations to make sure that I don't unnecessarily re-include -->
+                <!-- TODO: ifdef and endif aka "include guards" -->
+                  <!-- TODO: EVERY header should have include guards -->
+                  <!-- TODO: go over #DEFINE ??? -->
+              <!-- TODO: What if I put a function implementation in a header file? Will it compile? -->
+                <!-- TODO: No, if that header is included multiple times in multiple .cpps--it will be multiply defined -->
+                <!-- TODO: Rule of thumb: DO NOT put implementations of (non-inline) funcions into header files -->
+                <!-- TODO: inline functions here??? -->
+          
+          <!-- QUESTIONS FROM CLASS: -->
+          
+          <!-- TODO: Note creation on site gives warning about leaving the page -->
+          
+          <!-- TODO: Difference between parameters that are pointers to an object and references to an object -->
+            <!-- TODO: Can't change where a reference points to  -->
+          <!-- TODO: Why friend functions are not a good idea -->
+          <!-- TODO: Global constants in the header files? Problematic based on the type--primitives are OK -->
           
         </div>
       </div>

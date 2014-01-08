@@ -170,6 +170,16 @@ p, pre {
   display: none;
 }
 
+/* NOTES */
+.note-aim {
+  cursor: crosshair !important;
+}
+
+.note-textarea {
+  padding: 5px;
+  width: 100%;
+}
+
 /* ACCENT */
 .indent-1 {
   margin-left: 20px;
@@ -190,15 +200,6 @@ p, pre {
 .fit-pres img {
   max-width: 90%;
   max-height: 90%;
-}
-
-.note-aim {
-  cursor: crosshair !important;
-}
-
-.note-textarea {
-  padding: 5px;
-  width: 100%;
 }
 
 .btn {
