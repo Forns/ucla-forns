@@ -143,9 +143,12 @@ $(function () {
                   .click(function () {
                     $("#note-" + note)
                       .remove();
+                    if (!$(".note").length) {
+                      window.onbeforeunload = null;
+                    }
                   });
               })(currentNote);
-                
+              
               // Make the text area stretchy
               $("#note-" + currentNote + " textarea")
                 .expandingTextarea();
@@ -153,9 +156,27 @@ $(function () {
               
               $(document).unbind("click");
               $(".presentation-content").removeClass("note-aim");
+              
+              // Window warning for notes
+              // Shamelessly taken from http://stackoverflow.com/questions/1119289/how-to-show-the-are-you-sure-you-want-to-navigate-away-from-this-page-when-ch
+              window.onbeforeunload = function (e) {
+                // If we haven't been passed the event get the window.event
+                e = e || window.event;
+                
+                var message = "[!] WARNING: You have made notes on this page that will be lost if you navigate away.";
+                
+                // For IE6-8 and Firefox prior to version 4
+                if (e) {
+                  e.returnValue = message;
+                }
+                
+                // For Chrome, Safari, IE8+ and Opera 12+
+                return message;
+              }
             }
           });
         }
       }
     });
+    
 });
