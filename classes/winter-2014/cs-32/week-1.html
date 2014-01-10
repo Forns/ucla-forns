@@ -157,7 +157,15 @@
           
           <!-- TODO: Object construction -->
             <!-- TODO: Constructor operation steps -->
+              <!-- TODO: 1. ??? -->
+              <!-- TODO: 2. Construct the data members -->
+              <!-- TODO: 3. Call the body of the constructor -->
             <!-- TODO: Member initialization list -->
+              <!-- TODO: Useful for constructing data members before step 2 that don't have a default constructor -->
+              <!-- TODO: EXAMPLE: Using something in step 3 that will follow from using member initialization list -->
+              <!-- TODO: EXAMPLE: Trying to construct with private member values or something with private shit -->
+              <!-- TODO: Rule of thumb: put as much into the member initialization list as possible -->
+              <!-- TODO: Dynamic allocation of members in member initialization list? -->
           <!-- TODO: Overloading function names -->
           <!-- TODO: Splitting the program into separate components -->
             <!-- TODO: Why do in the first place? -->
@@ -187,6 +195,7 @@
                 <!-- TODO: ifdef and endif aka "include guards" -->
                   <!-- TODO: EVERY header should have include guards -->
                   <!-- TODO: go over #DEFINE ??? -->
+              <!-- TODO: NOTE: using namespace std; in header files -- not good for big projects in industry: OK for this course -->
                   
               <!-- TODO: What if I put a function implementation in a header file? Will it compile? -->
                 <!-- TODO: No, if that header is included multiple times in multiple .cpps--it will be multiply defined -->
@@ -194,7 +203,17 @@
                 <!-- TODO: inline functions here??? -->
                 
             <!-- TODO: Circular dependencies -->
+              <!-- TODO: Just use incomplete class definitions, like "class Student;" in the files that reference Students -->
+              <!-- TODO: If you need to call a member function of a circular dependency? -->
+                <!-- TODO: OR if a particular type is required in a parameter list -->
           
+            <!-- TODO: Exercises -->
+              <!-- TODO: The Dependency Game -->
+              
+            <!-- TODO: Homework Help -->
+              <!-- TODO: NOTE: although it may work, you may NOT include any superfluous dependencies -->
+              <!-- TODO: NOTE: are letters *always* contiguous in encoding schemas? -->
+            
           <!-- QUESTIONS FROM CLASS: -->
           
           <!-- TODO: Difference between parameters that are pointers to an object and references to an object -->
