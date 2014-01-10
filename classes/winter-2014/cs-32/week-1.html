@@ -161,14 +161,16 @@
           <!-- TODO: Overloading function names -->
           <!-- TODO: Splitting the program into separate components -->
             <!-- TODO: Why do in the first place? -->
+            
             <!-- TODO: Source files -->
               <!-- TODO: Compiled, these become object files (though the names and extensions will be different after compilation) -->
-              <!-- TODO: Process of linking, especially with libraries -->
+              <!-- TODO: Process of linking follows compilation of each file, especially with libraries -->
                 <!-- TODO: For each object file, there are two tables: (1) what the file defines, and (2) what it uses -->
                 <!-- TODO: Libraries typically only define functions, rather than using them -->
                 <!-- TODO: The linker ensure that whatever is used is defined, which includes not defining something twice -->
                 <!-- TODO: Analogy of some sort where objects are both used and required -->
               <!-- TODO: These contain all of the "meat" of the program: (1) the code for what you've written, including the main function -->
+              
             <!-- TODO: Header files -->
               <!-- TODO: Source files can use these to list the common components that might be used together -->
               <!-- TODO: For includes in the standard library, we use the angle brackets like with <cmath> -->
@@ -185,10 +187,13 @@
                 <!-- TODO: ifdef and endif aka "include guards" -->
                   <!-- TODO: EVERY header should have include guards -->
                   <!-- TODO: go over #DEFINE ??? -->
+                  
               <!-- TODO: What if I put a function implementation in a header file? Will it compile? -->
                 <!-- TODO: No, if that header is included multiple times in multiple .cpps--it will be multiply defined -->
                 <!-- TODO: Rule of thumb: DO NOT put implementations of (non-inline) funcions into header files -->
                 <!-- TODO: inline functions here??? -->
+                
+            <!-- TODO: Circular dependencies -->
           
           <!-- QUESTIONS FROM CLASS: -->
           
