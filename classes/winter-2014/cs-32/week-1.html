@@ -713,8 +713,238 @@
               <p>Neat eh? EH?!</p>
               <p class='question' name='files-q1'>There's one superfluous inclusion directive in my 5-file package listed above. Can you find it?</p>
               <p class='answer' name='files-q1'>You don't need to include the string library in Survivor.h any more because it's been included in Weapon.h, which is included by Survivor.h :D</p>
+              <br/>
+              <h3>Summary</h3>
+              <ul class='indent-1'>
+                <li><p>Header files used to abstract common components and declarations from the meat of the source and are handy for organizing large projects.</p></li>
+                <li><p>Use header files for class and function declarations, and .cpp files for their implementations and uses.</p></li>
+                <li><p>
+                  Your header files should include whatever other files they're dependent upon, that way your .cpps that use the header files don't have to worry about including more than one for
+                  a single dependency.
+                </p></li>
+              </ul>
             </div>
             <hr/>
+            
+            
+            <br/>
+            <div id='includes' class='scrollspy-element' scrollspy-title='Inclusion Tricks'></div>
+            <h1>Inclusion Tips &amp; Tricks</h1>
+            <div>
+              <p>Our example so far has had pretty tame and dull uses of the inclusion directive, and a straightforward dependence hierarchy.</p>
+              <p>LET'S RUIN EVERYTHING.</p>
+              <p>Say I wanted to add an owner data member to my weapon class that is a pointer to a Survivor, as follows:</p>
+<pre class='prettyprint'>
+  // Weapon.h
+  #include &lt;string&gt;
+  
+  class Weapon {
+      private:
+          std::string m_name;
+          int m_ammo;
+          Survivor* m_owner;
+      
+      public:
+          Weapon ();
+          Weapon (std::string name, int ammo);
+          std::string getName ();
+          int getAmmo ();
+  };
+</pre>
+              <p>Am I good? Will that compile?</p>
+              <p>No! Everything's wrong! Our compiler doesn't know what a Survivor is in our Weapon.h class specification.</p>
+              <p>&quot;Well,&quot; you might remark, &quot;Fine then, I'll just include the Survivor header and everything will be fine!&quot;</p>
+              <p class='debug'>Will the following code compile?</p>
+<pre class='prettyprint'>
+  // Weapon.h
+  #include &lt;string&gt;
+  #include "Survivor.h"
+  
+  class Weapon {
+      private:
+          std::string m_name;
+          int m_ammo;
+          Survivor* m_owner;
+      
+      public:
+          Weapon ();
+          Weapon (std::string name, int ammo);
+          std::string getName ();
+          int getAmmo ();
+  };
+</pre>
+              <p>Aieee! No, we have what's called a circular dependency because Survivor.h also includes Weapon.h:</p>
+              <p class='definition'>
+                A <strong>circular dependency</strong> exists when we have two or more class definitions that each need something from the other. When we try to include one inside of the other, 
+                it creates an infinite loop attempting to resolve the other class!
+              </p>
+              <p>So, we use a little trick...</p>
+              <p class='toolkit'>
+                A <strong>forward declaration</strong> can be used to tell the compiler that a certain class exists, even though we do not fully specify its data members, public interface, 
+                or full implementation in line with the forward declaration. 
+              </p>
+              <p>So I can tell the compiler that class Survivor exists (and that I promise to give it meaning later, thanks to the Linker!), without providing the whole class definition on the spot, as follows:</p>
+<pre class='prettyprint'>
+  #include &lt;string&gt;
+  
+  // Forward declaration!
+  class Survivor;
+  
+  class Weapon {
+      private:
+          std::string m_name;
+          int m_ammo;
+          Survivor* m_owner;
+      
+      public:
+          Weapon ();
+          Weapon (std::string name, int ammo);
+          std::string getName ();
+          int getAmmo ();
+  };
+</pre>
+              <p>Now, my compiler trusts me that there exists some Survivor class out there while resolving the circular dependency.</p>
+              <p>A warning about forward declarations:</p>
+              <div class='debug'>
+                <ul class='indent-1'>
+                  <li><p>
+                    You cannot specify an incomplete type (like above) to resolve a circular dependency when the data member needing resolution is an object, rather than a pointer to an object, 
+                    of the desired class.
+                  </p></li>
+                  <li><p>
+                    If you use a forward declaration with an incomplete type (like above), you cannot reference any of the pointer's public interface elements until the Linker has resolved 
+                    that other class as well. Typically, this is not an issue if you separate your code into header and .cpp files.
+                  </p></li>
+                </ul>
+              </div>
+              <br/>
+              
+              <h3>Include Guards</h3>
+              <p>Finally, let's talk about a useful and common practice with header files: include guards.</p>
+              <p>
+                In large projects with a ton of dependencies flying back and forth trying to be resolved by the compiler, it could be easy to lose track of what you've already included and what 
+                you still need to include.
+              </p>
+              <p>
+                To this end, we have include guards to make sure we avoid the multiple-definition error, which occurs when we accidentally include something twice that attempts to redefine 
+                a previously defined identifier.
+              </p>
+              <p class='toolkit'>
+                The <strong>include guard</strong> directive prevents the multiple-definition error by *only* performing an inclusion if it hasn't already been included. The method for doing this 
+                is to say, &quot;If I haven't set a flag yet saying that I've included this, then set that flag and include this.&quot;
+              </p>
+              <div class='toolkit'>
+                <p>The syntax for an include guard is as follows:</p><br/>
+<pre class='prettyprint'>
+  // If FLAG_NAME is not defined...
+  #ifndef FLAG_NAME
+  
+  // ...then define it...
+  #define FLAG_NAME
+  ...
+  // Perform the necessary inclusions
+  // and source body definitions here
+  ...
+  
+  // ...up until you see the endif
+  #endif
+</pre>
+              </div>
+              <p>Let's add include guards to our example headers:</p>
+              <div class='col-md-6'>
+<pre class='prettyprint'>
+  // Weapon.h
+  #ifndef WEAPON_INCLUDE
+  #define WEAPON_INCLUDE
+  
+  #include &lt;string&gt;
+  
+  // Forward declaration!
+  class Survivor;
+  
+  class Weapon {
+      private:
+          std::string m_name;
+          int m_ammo;
+          Survivor* m_owner;
+      
+      public:
+          Weapon ();
+          Weapon (std::string name, int ammo);
+          std::string getName ();
+          int getAmmo ();
+  };
+  
+  #endif
+</pre>
+              </div>
+              <div class='col-md-6'>
+<pre class='prettyprint'>
+  // Survivor.h
+  #ifndef SURVIVOR_INCLUDE
+  #define SURVIVOR_INCLUDE
+  
+  #include "Weapon.h"
+  
+  class Survivor {
+      private:
+          std::string m_name;
+          bool m_infected;
+          int m_health;
+          Weapon m_gun;
+  
+      public:
+          Survivor::Survivor();
+          std::string getName ();
+          bool isInfected ();
+          int getHealth ();
+          Weapon getWeapon ();
+  };
+  
+  #endif
+  
+</pre>
+              </div>
+              <p>Cool... now if, by some accident I included one of my headers twice on accident, I protect myself from having to perform relentless book-keeping.</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='faq' class='scrollspy-element' scrollspy-title='FAQ'></div>
+            <h1>Inclusion FAQ</h1>
+            <div>
+              <p>I wrote a couple things down that I thought I should address but <span class='strike'>it's Saturday and I'm lazy</span> including examples might confound good practice so:</p>
+              <p><strong>What if I put a non-inline function implementation into a header file. Will it compile?</strong></p>
+              <p>(Don't worry about what a non-inline function means yet--just think of the function definitions we've learned thus far)</p>
+              <p>
+                There are a couple things wrong with that: (1) you generally want to separate your implementations into .cpp files, and (2) if you try to include that header file twice, you'll get a 
+                multiple-definition error for implementing that function twice. tl;dr: don't do it until we've learned about the inline keyword.
+              </p>
+              <br/>
+              <p><strong>Can I put global constants in header files? Could there be a multiple-definition problem here?</strong></p>
+              <p>You might run into problems with non-primitive global constants, but primitive constants are OK.</p>
+              <br/>
+              <p><strong>With all of these different files, how do I know what runs when I run my program?</strong></p>
+              <p>Remember that the main function is special--it is what gets executed at runtime, regardless of what file it is in, as long as it's part of the compiled project.</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='hw' class='scrollspy-element' scrollspy-title='Project 1'></div>
+            <h1>Project 1 Tips</h1>
+            <div>
+              <p>A couple things to look out for on Project 1 that may doom you:</p>
+              <p class='debug'>Although your code may still work, superfluous include directives may cost you points! Make sure that you include only what is necessary to include in each header.</p>
+              <p class='debug'>Remember to test compilation under multiple compilers!</p>
+              <p class='debug'>Are capital letters contiguous is every character coding schema? Make sure to account for this...</p>
+              <p class='debug'>Include guards!</p>
+              <p class='debug'>Comments!</p>
+              <p>Good luck!</p>
+            </div>
+            <hr/>
+            
             
             <a class='btn btn-default pull-right hidden-print' href='javascript:window.print();'>
               <span class='glyphicon glyphicon-print'></span>
@@ -727,38 +957,16 @@
           <!-- MATERIALS FROM CLASS: -->
           
             <!-- TODO: Header files -->
-              <!-- TODO: Source files can use these to list the common components that might be used together -->
-              <!-- TODO: Class definitions in header files -->
               <!-- TODO: What if I have two header files with the same definition? -->
-              <!-- TODO: Having headers that include whatever files they're dependent upon--don't rely on orders of includes -->
-              <!-- TODO: Mutual header dependence? -->
               <!-- TODO: What if I try to include something twice on accident? -->
                 <!-- TODO: Define and endif declarations to make sure that I don't unnecessarily re-include -->
                 <!-- TODO: ifdef and endif aka "include guards" -->
                   <!-- TODO: EVERY header should have include guards -->
-              <!-- TODO: NOTE: using namespace std; in header files -- not good for big projects in industry: OK for this course -->
                   
-              <!-- TODO: What if I put a function implementation in a header file? Will it compile? -->
-                <!-- TODO: No, if that header is included multiple times in multiple .cpps--it will be multiply defined -->
-                <!-- TODO: Rule of thumb: DO NOT put implementations of (non-inline) functions into header files -->
-                <!-- TODO: inline functions here??? -->
-                
-            <!-- TODO: Circular dependencies -->
-              <!-- TODO: Just use incomplete class definitions, like "class Student;" in the files that reference Students -->
-              <!-- TODO: If you need to call a member function of a circular dependency? -->
-                <!-- TODO: OR if a particular type is required in a parameter list -->
-          
-            <!-- TODO: Exercises -->
-              <!-- TODO: The Dependency Game -->
-              
             <!-- TODO: Homework Help -->
               <!-- TODO: NOTE: although it may work, you may NOT include any superfluous dependencies -->
               <!-- TODO: NOTE: are letters *always* contiguous in encoding schemas? -->
             
-          <!-- QUESTIONS FROM CLASS: -->
-          
-          <!-- TODO: Global constants in the header files? Problematic based on the type--primitives are OK -->
-          
         </div>
       </div>
       <!-- END MAIN CONTENT -->
