@@ -127,8 +127,8 @@ $(function () {
             if ($(".presentation-content").find(target).length) {
               target
                 .after(
-                  "<div id='note-" + currentNote + "' class='alert alert-note'>" +
-                    "<a id='note-remove-" + currentNote + "' class='pull-right'>" +
+                  "<div id='note-" + currentNote + "' class='alert alert-note note'>" +
+                    "<a id='note-remove-" + currentNote + "' class='pull-right note-removal'>" +
                       "<span class='glyphicon glyphicon-remove'></span>" +
                     "</a>" +
                     "<span class='glyphicon glyphicon-pencil'></span>" +
@@ -141,10 +141,20 @@ $(function () {
               (function (note) {
                 $("#note-remove-" + note)
                   .click(function () {
-                    $("#note-" + note)
-                      .remove();
-                    if (!$(".note").length) {
-                      window.onbeforeunload = null;
+                    var removeNote = function () {
+                      $("#note-" + note)
+                        .remove();
+                      if (!$(".note").length) {
+                        window.onbeforeunload = null;
+                      }
+                    };
+                    
+                    if ($(this).siblings().find("textarea").val()) {
+                      if (confirm("[!] WARNING: You've entered text into this note; are you sure you want to delete it?")) {
+                        removeNote();
+                      }
+                    } else {
+                      removeNote();
                     }
                   });
               })(currentNote);
@@ -159,19 +169,21 @@ $(function () {
               
               // Window warning for notes
               // Shamelessly taken from http://stackoverflow.com/questions/1119289/how-to-show-the-are-you-sure-you-want-to-navigate-away-from-this-page-when-ch
-              window.onbeforeunload = function (e) {
-                // If we haven't been passed the event get the window.event
-                e = e || window.event;
-                
-                var message = "[!] WARNING: You have made notes on this page that will be lost if you navigate away.";
-                
-                // For IE6-8 and Firefox prior to version 4
-                if (e) {
-                  e.returnValue = message;
+              if (!window.onbeforeunload) {
+                window.onbeforeunload = function (e) {
+                  // If we haven't been passed the event get the window.event
+                  e = e || window.event;
+                  
+                  var message = "[!] WARNING: You have made notes on this page that will be lost if you navigate away.";
+                  
+                  // For IE6-8 and Firefox prior to version 4
+                  if (e) {
+                    e.returnValue = message;
+                  }
+                  
+                  // For Chrome, Safari, IE8+ and Opera 12+
+                  return message;
                 }
-                
-                // For Chrome, Safari, IE8+ and Opera 12+
-                return message;
               }
             }
           });

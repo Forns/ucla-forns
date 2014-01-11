@@ -175,6 +175,10 @@ p, pre {
   cursor: crosshair !important;
 }
 
+.note-removal {
+  cursor: pointer;
+}
+
 .note-textarea {
   padding: 5px;
   width: 100%;
