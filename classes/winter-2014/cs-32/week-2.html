@@ -1,0 +1,175 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Andrew Forney - UCLA CS</title>
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/magic-bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/main.css" rel="stylesheet" type="text/css">
+    <script src="../../../js/lib/jquery-2.0.3.min.js"></script>
+    <script src="../../../js/lib/bootstrap.min.js"></script>
+    <script src="../../../js/lib/expanding.js"></script>
+    <script src="../../../js/display/general/general-display.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+  </head>
+  
+  <body data-spy="scroll" data-target="#scrollspy">
+    
+    <!-- BEGIN WRAP -->
+    <div id="wrap">
+      
+      <!-- BEGIN NAVIGATION -->
+      <nav class='navbar navbar-default' role='navigation'>
+        <div class='nav-accent'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-12'>
+              <div class='navbar-header'>
+                <button class='navbar-toggle' type='button' data-toggle='collapse' data-target='.navbar-main-collapse'>
+                  <span class='sr-only'>Toggle Navigation</span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                </button>
+                <a class='navbar-brand' href='/~forns/'>
+                  <span id='brand-text'>
+                    Andrew Forney
+                  </span>
+                </a>
+              </div>
+              
+              <div id='nav-main' class='collapse navbar-collapse navbar-main-collapse'>
+                <ul class='nav navbar-nav navbar-right'>
+                  
+                  <li>
+                    <a href='/~forns/about.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-user'></span>
+                      </div>
+                      <p class='text-center'>About</p>
+                    </a>
+                  </li>
+                  
+                  <li class='active'>
+                    <a href='/~forns/classes.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-book'></span>
+                      </div>
+                      <p class='text-center'>Classes</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/contact.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-comment'></span>
+                      </div>
+                      <p class='text-center'>Contact</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/publications.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-file'></span>
+                      </div>
+                      <p class='text-center'>Publications</p>
+                    </a>
+                  </li>
+                  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <!-- END NAVIGATION -->
+      
+      <!-- BEGIN MAIN CONTENT -->
+      <div id="main-content" class="container">
+        <div class="row">
+          
+          <!-- BEGIN SCROLLSPY -->
+          <div class='col-md-2 hidden-sm hidden-xs'>
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+              <ul id='scrollspy' class="nav bs-sidenav">
+              </ul>
+            </div>
+          </div>
+          <!-- END SCROLLSPY -->
+          
+          <!-- BEGIN PRESENTATION CONTENT -->
+          <div class='col-md-10 presentation-content' role='main'>
+            
+            <ol class="breadcrumb hidden-print">
+              <li><a href="../../../classes.html">Classes</a></li>
+              <li><a href="./cs-31.html">Winter14 CS32</a></li>
+              <li class="active">Week 2</li>
+            </ol>
+            
+            <div id='resources' class='scrollspy-element' scrollspy-title='Resource Management'></div>
+            <h1>Introduction to Resource Management</h1>
+            <div>
+              <p>
+                As you might have already seen in class, one of the interesting aspects of programming is that different problem solutions (although eliciting the same correct behavior), 
+                may go about finding the solution in wildly different ways.
+              </p>
+              <p>The next thing you'll notice is that not all solutions are the same quality!</p>
+              <p>What I mean by this is that what one solution takes 2 minutes to solve, another takes 2 days...</p>
+              <p>Just because they arrive at the same answer, doesn't mean that one of them wasn't incredibly stupid in doing it.</p>
+            </div>
+            <hr/>
+            
+            <a class='btn btn-default pull-right hidden-print' href='javascript:window.print();'>
+              <span class='glyphicon glyphicon-print'></span>
+              &nbsp; PDF / Print
+            </a>
+            
+          </div>
+          <!-- END PRESENTATION CONTENT -->
+          
+          <!-- MATERIALS FROM CLASS: -->
+          <!-- TODO: Resource management -->
+            <!-- TODO: Rule of thumb, choose the cleaner solution that will be easiest to use by a stranger who knows little about the implementation -->
+            <!-- TODO: Data members that are pointers to dynamically allocated objects -->
+              <!-- TODO: Upon construction, need a means of taking the constructor's input argument (which should be a pointer), but copies the value rather than just copying the pointer -->
+                <!-- TODO: Steps: (1) use new operator to get dynamic storage, (2) copy the necessary values of the constructor's parameter -->
+              <!-- TODO: Helper functions to abstract commonalities between constructors -->
+                <!-- TODO: Constructor / Functions with default parameter values -->
+            <!-- TODO: Destructors: A review -->
+              <!-- TODO: Review of two types of delete keywords -->
+                <!-- TODO: Use delete for singly allocated objects -->
+                <!-- TODO: Use delete[] for an array of allocated objects -->
+            <!-- TODO: Copy constructors -->
+              <!-- TODO: Can be called with EXACTLY one argument of the same type as the object that's being constructed -->
+                <!-- TODO: e.g., calling the Circle constructor with a Circle argument -->
+              <!-- TODO: Compiler automatically defines its own copy constructor if one is not provided: -->
+                <!-- TODO: The behavior of this is that it just copies each of the members -->
+                <!-- TODO: Problematic: pointers will be copied and cause two objects to refer to the same data in memory! -->
+                  <!-- TODO: Example: making sure to copy values rather than pointer addresses -->
+                    <!-- TODO: May not let you compile without address -->
+                  <!-- TODO: Use const references to the copied parameter rather than omitting the & because it will make an unnecessary copy -->
+                  <!-- TODO: Example: copy constructor for object with other class data member -->
+          
+            
+        </div>
+      </div>
+      <!-- END MAIN CONTENT -->
+      
+      
+    </div>
+    <!-- END WRAPPER -->
+    
+    <!-- BEGIN FOOTER -->
+    <div id="footer">
+      <div class="container">
+        <div class="col-md-12 text-center">
+          
+        </div>
+      </div>
+    </div>
+    <!-- END FOOTER -->
+    
+  </body>
+</html>
