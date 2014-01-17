@@ -118,6 +118,21 @@
               <p>The next thing you'll notice is that not all solutions are the same quality!</p>
               <p>What I mean by this is that what one solution takes 2 minutes to solve, another takes 2 days...</p>
               <p>Just because they arrive at the same answer, doesn't mean that one of them wasn't incredibly stupid in doing it.</p>
+              <p class='definition'><strong>Resource management</strong> involves the ability to effectively, efficiently, and economically use data structures to accomplish your program's goals.</p>
+              <p>That sounded more like a business slogan than a definition, but the idea is that you want to use the right tool for the right job, and then effectively clean up after ourselves.</p>
+              <p>So, let's examine how to engineer the right tools so we won't be sad.</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='functionTrickz' class='scrollspy-element' scrollspy-title='Function Stuff'></div>
+            <h1>A Few Notes on Functions</h1>
+            <div>
+              <p>I didn't know where else to put this section, so why not here?</p>
+              <p>Say I had a function that I wanted to give the user some parameter flexibility with.</p>
+              <p>If my function could take in 3 arguments, but I only *needed* the user to specify 2 of those, I could use default parameter values:</p>
+              <p class='definition'></p>
             </div>
             <hr/>
             
@@ -137,10 +152,10 @@
                 <!-- TODO: Steps: (1) use new operator to get dynamic storage, (2) copy the necessary values of the constructor's parameter -->
               <!-- TODO: Helper functions to abstract commonalities between constructors -->
                 <!-- TODO: Constructor / Functions with default parameter values -->
-            <!-- TODO: Destructors: A review -->
-              <!-- TODO: Review of two types of delete keywords -->
-                <!-- TODO: Use delete for singly allocated objects -->
-                <!-- TODO: Use delete[] for an array of allocated objects -->
+                  <!-- TODO: Place default values into the header rather than the implementation; users will look here for function usage first! -->
+                  <!-- TODO: If you define it in more than two places (the declaration AND the header, for instance) compiler error -->
+                  <!-- TODO: Also, MUST supply default parameter values for all parameters listed AFTER the first given a default parameter -->
+                  
             <!-- TODO: Copy constructors -->
               <!-- TODO: Can be called with EXACTLY one argument of the same type as the object that's being constructed -->
                 <!-- TODO: e.g., calling the Circle constructor with a Circle argument -->
@@ -150,8 +165,37 @@
                   <!-- TODO: Example: making sure to copy values rather than pointer addresses -->
                     <!-- TODO: May not let you compile without address -->
                   <!-- TODO: Use const references to the copied parameter rather than omitting the & because it will make an unnecessary copy -->
+                    <!-- TODO: Problem because copy constructor defines what it means to pass by value, so returning a copy will lead to infinite regress -->
                   <!-- TODO: Example: copy constructor for object with other class data member -->
+                <!-- TODO: REMEMBER: If you declare any constructors for a class, the compiler will NOT create one for you -->
+              <!-- TODO: Note: Private members of a class are accessible for ANY object referenced in the calling class' function, even those of parameters -->
+              <!-- TODO: Syntax for copy constructors can also be adapted to the assignment operator; String s = s2; for example -->
+              <!-- TODO: BUT, if a String already has a value, and we assign it using s1 = s2; to another String, this is NOT an invocation of the copy constructor -->
+              <!-- TODO: Instead, it is an ASSIGNMENT; if we don't tell our class how to perform assignment, the compiler will create one for us, the same way as the copy constructor -->
+                <!-- TODO: Operator overloading: we call our function operator= if we want to overload the = operator for our class -->
+                  <!-- TODO: Example with another operator like +; interesting example with += ??? -->
+                <!-- TODO: If you want to allow operator chaining, you can return *this; at the end of your overloaded function -->
+                  <!-- TODO: We would then need to return a reference to a String, otherwise we're making a copy of the returned object -->
+                <!-- TODO: Note! The operator's precedence in the language are what determine the precedence of the overloaded symbol -->
+                <!-- TODO: Possible problem with "aliasing?" -->
+                  <!-- TODO: Aliasing is when you have two different variables referring to the same object -->
+                  <!-- TODO: Problematic with assignment overloading when your two operands are the same object! -->
+                    <!-- TODO: One way to check equivalence is to check the address pointed to by "this" vs the RHS operand -->
+                    <!-- TODO: This allows you to only do the copying and deallocation if they do not have the same address -->
+                <!-- TODO: Does the destructor get called upon assignment? -->
+                <!-- TODO: "Copy and Swap" technique for assignment -->
+                  <!-- TODO: Copy construct a local variable of the same type, then swap pointers to any dynamic members; destructor will take care of the temp deletion -->
+              <!-- TODO: tl;dr Avoid dangling pointers, memory leaks, and pointer copying with the copy constructor and assignment -->
+                  
+            <!-- TODO: Destructors: A review -->
+              <!-- TODO: Review of two types of delete keywords -->
+                <!-- TODO: Use delete for singly allocated objects -->
+                <!-- TODO: Use delete[] for an array of allocated objects -->
           
+            <!-- TODO: Homework Help -->
+              <!-- TODO: Go over typedef -->
+              <!-- TODO: Online office hours -->
+            
             
         </div>
       </div>
