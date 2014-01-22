@@ -1,0 +1,488 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Andrew Forney - UCLA CS</title>
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/magic-bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/main.css" rel="stylesheet" type="text/css">
+    <script src="../../../js/lib/jquery-2.0.3.min.js"></script>
+    <script src="../../../js/lib/bootstrap.min.js"></script>
+    <script src="../../../js/lib/expanding.js"></script>
+    <script src="../../../js/display/general/general-display.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+    <script>
+      var macToggle = false;
+      $(document)
+        .on("keypress", function (e) {
+          if (e.keyCode === 77) {
+            var from = (macToggle) ? "nullptr" : "NULL",
+                to = (macToggle) ? "NULL" : "nullptr";
+            $("body").html($("body").html().replace(from, to));
+            macToggle = !macToggle;
+          }
+        });
+    </script>
+  </head>
+  
+  <body data-spy="scroll" data-target="#scrollspy">
+    
+    <!-- BEGIN WRAP -->
+    <div id="wrap">
+      
+      <!-- BEGIN NAVIGATION -->
+      <nav class='navbar navbar-default' role='navigation'>
+        <div class='nav-accent'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-12'>
+              <div class='navbar-header'>
+                <button class='navbar-toggle' type='button' data-toggle='collapse' data-target='.navbar-main-collapse'>
+                  <span class='sr-only'>Toggle Navigation</span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                </button>
+                <a class='navbar-brand' href='/~forns/'>
+                  <span id='brand-text'>
+                    Andrew Forney
+                  </span>
+                </a>
+              </div>
+              
+              <div id='nav-main' class='collapse navbar-collapse navbar-main-collapse'>
+                <ul class='nav navbar-nav navbar-right'>
+                  
+                  <li>
+                    <a href='/~forns/about.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-user'></span>
+                      </div>
+                      <p class='text-center'>About</p>
+                    </a>
+                  </li>
+                  
+                  <li class='active'>
+                    <a href='/~forns/classes.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-book'></span>
+                      </div>
+                      <p class='text-center'>Classes</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/contact.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-comment'></span>
+                      </div>
+                      <p class='text-center'>Contact</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/publications.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-file'></span>
+                      </div>
+                      <p class='text-center'>Publications</p>
+                    </a>
+                  </li>
+                  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <!-- END NAVIGATION -->
+      
+      <!-- BEGIN MAIN CONTENT -->
+      <div id="main-content" class="container">
+        <div class="row">
+          
+          <!-- BEGIN SCROLLSPY -->
+          <div class='col-md-2 hidden-sm hidden-xs'>
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+              <ul id='scrollspy' class="nav bs-sidenav">
+              </ul>
+            </div>
+          </div>
+          <!-- END SCROLLSPY -->
+          
+          <!-- BEGIN PRESENTATION CONTENT -->
+          <div class='col-md-10 presentation-content' role='main'>
+            
+            <ol class="breadcrumb hidden-print">
+              <li><a href="../../../classes.html">Classes</a></li>
+              <li><a href="./cs-31.html">Winter14 CS32</a></li>
+              <li class="active">Week 3 - Lecture</li>
+            </ol>
+            
+            <div id='linkedList' class='scrollspy-element' scrollspy-title='Linked Lists'></div>
+            <h1>Introduction to Linked Lists</h1>
+            <div>
+              <p>The following notes are intended for review and supplement of Professor Smallberg's video lecture on Linked Lists...</p>
+              <p>...which means we're probably all seeing this stuff for the first time!</p>
+              <p>Let's start things off with a bang...</p>
+              <p class='question' name='ll-q0'>What is a general definition of a linked list?</p>
+              <p class='answer' name='ll-q0'>
+                An ordered set of data elements where each Node contains some data and a link to its successor (and, in the case of doubly linked lists, to its predecessor as well)
+              </p>
+              <p>Here's what that looks like, roughly, where Data can represent any sort of data structure that I want to store in a Node (like an int, string, etc.):</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-3/linkedLists-0.PNG' />
+              </div>
+              <br/>
+              <p>&quot;But Andrew, Arrays are sets of ordered data elements, and as an Array loyalist, I am distrustful of this newcomer. Why do we need linked lists?&quot;</p>
+              <p class='question' name='ll-q1'>Why do we study linked lists if they (ostensibly) do the same thing as arrays?</p>
+              <p class='answer' name='ll-q1'>Just because linked lists and arrays can do (most) of the same things, it doesn't mean that they're both equally good at the same operations!</p>
+              <br/>
+              <p>So, let's do the following:</p>
+              <ol class='indent-1'>
+                <li><p>Get a linked list class started</p></li>
+                <li><p>Look at how some linked list operations compare to the same operations in arrays</p></li>
+                <li><p>Do some examples and sample debugging with linked lists</p></li>
+                <li><p>???</p></li>
+                <li><p>Profit!</p></li>
+              </ol>
+              <p>Sound good? Sounds good.</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='buildingLLs' class='scrollspy-element' scrollspy-title='Building Linked Lists'></div>
+            <h1>Building Linked Lists</h1>
+            <div>
+              <p>Alright, so we've got our abstract notion of a linked list, let's put it in action.</p>
+              <p>We already know what a Node looks like, so why don't we implement that first?</p>
+              <p class='question' name='ll-q2'>Show me a Node data structure with a string data member, and pointer to the next Node in a linked list.</p>
+              <div class='answer' name='ll-q2'>
+<pre class='prettyprint'>
+  struct Node {
+      string m_data;
+      Node* m_next;
+  };
+</pre>
+                </div>
+                <p>Simple enough... almost... too simple...</p>
+                <p>Alright, now that we have our representation for the nodes in a linked list, how will we implement the actual list?</p>
+                <p class='question' name='ll-q3'>Let's make a LinkedList class... what data member need it have?</p>
+                <p class='answer' name='ll-q3'>A pointer to a Node object that will always point to the first Node in our list! Let's call that pointer &quot;head&quot;</p>
+                <br/>
+                <p>Tada!</p>
+<pre class='prettyprint'>
+  // LinkedList.h
+  #ifndef LINKED_LIST_INCLUDED
+  #define LINKED_LIST_INCLUDED
+  #include &lt;string&gt;
+  #include &lt;iostream&gt;
+  
+  class LinkedList {
+      private:
+          struct Node {
+              std::string m_data;
+              Node* m_next;
+              Node (std::string s) {
+                  m_data = s;
+                  m_next = nullptr;
+              }
+          };
+          Node* head;
+          int size;
+  
+      public:
+          LinkedList();
+          ~LinkedList();
+          void insert(std::string);
+          bool erase(std::string);
+          bool contains(std::string s);
+          void print();
+  };
+  
+  #endif
+</pre>
+<pre class='prettyprint'>
+  // LinkedList.cpp
+  #include "LinkedList.h"
+  
+  // Default constructor
+  LinkedList::LinkedList () {
+      head = nullptr;
+      size = 0;
+  }
+  
+  // Destructor
+  LinkedList::~LinkedList () {
+      // TODO
+  }
+</pre>
+              <br/>
+              <p>Neat! Now we have an empty LinkedList. K...</p>
+              <p>...wanna add some Nodes?</p>
+              <p>First, I'd like us to think about how we would do it with an array of strings.</p>
+              <p>Say I had an array of strings (call it a) that was i elements long:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-3/linkedLists-1.PNG' />
+              </div>
+              <p class='question' name='ll-q4'>What would I say to add another string, called newString, to the i+1 element of a? (then increment i?)</p>
+              <div class='answer' name='ll-q4'>
+<pre class='prettyprint'>
+  a[i + 1] = newString;
+  i++;
+</pre>
+              <p>In other words, we knew the memory address of the start of a, found the address that was i + 1 string-lengths away, and just stuck the new string in there!</p>
+              <p>We did this in a very quick amount of time... two lines in fact!</p>
+              </div>
+              <br/>
+              
+              <p>&quot;Wow... Andrew this isn't Kindergarten, take the training wheels off.&quot;</p>
+              <p>OK OK! I'm about to draw a killer contrast!</p>
+              <p>Say we wanted to add a new element to the end of a LinkedList... what might that look like?</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-3/linkedLists-2.PNG' />
+              </div>
+              <p>Notice how much more work we have to do to find the end of the LinkedList?</p>
+              <p>Well, if you didn't you're about to...</p>
+              <p class='question' name='ll-q5'>I know the address of the head Node, why can't I just use pointer arithmetic to access nodes with an offset?</p>
+              <p class='answer' name='ll-q5'>Because they're dynamically allocated one at a time silly! They're not guaranteed to be contiguous in memory like array indexes are.</p>
+              <br/>
+              <p class='example'>Complete the LinkedList insert function below:</p>
+<pre class='prettyprint'>
+  // Insert a new Node at the end of the List
+  // with the given string data
+  void LinkedList::insert (std::string s) {
+      // 1) Dynamically allocate a Node
+      Node* toAdd = new Node(s);
+  
+      // 2) Update the head if first insertion
+      if (head == nullptr) {
+          head = toAdd;
+      } else {
+          // 3) Make an iterator to find the last
+          // position in the List
+          Node* iterator = head;
+  
+          // 4) Stick the new Node on the end of the List
+          while ( ??? ) {
+              ???
+          }
+          ???
+      }
+      // 5) Add one to the size
+      size++;
+  }
+</pre>
+              <br/>
+              <p>I'll give you the print function for testing... it's a freebie:</p>
+<pre class='prettyprint'>
+  void LinkedList::toString () {
+      if (head == nullptr) {
+          return;
+      }
+      
+      for (Node* pointy = head; pointy != nullptr; pointy = pointy-&gt;m_next) {
+          std::cout &lt;&lt; pointy-&gt;m_data &lt;&lt; " ";
+      }
+      std::cout &lt;&lt; std::endl;
+  }
+</pre>
+              <p>Try it out in a main function?</p>
+<pre class='prettyprint'>
+  #include "LinkedList.h"
+  
+  int main () {
+      LinkedList listy;
+      listy.insert("Andrew");
+      listy.insert("makes");
+      listy.insert("great");
+      listy.insert("examples!");
+      listy.print();
+  }
+</pre>
+              <p>Cool. Cool cool cool.</p>
+              <p>So, we've seen that as far as inserting data elements to the ends of LinkedLists vs. Arrays, Arrays are the leader in this implementation.</p>
+              <p>Now that we've built our LinkedList, let's destroy it. One. Node. At. A. Time.</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='linkedListDESTRUCTION' class='scrollspy-element' scrollspy-title='Erasing Nodes'></div>
+            <h1>Erasing LinkedList Nodes</h1>
+            <div>
+              <p>So let's return to our array of strings...</p>
+              <p class='question' name='erasure-q0'>What would I do if I wanted to delete *any* element in the array and I don't care what order the elements are in?</p>
+              <p class='answer' name='erasure-q0'>Just take the last element of the array and over-write the element you want to delete! If there's only 1 element, then just set your array's size to 0.</p>
+              <br/>
+              <p>OK that's cool... how would it look if I wanted to nuke element 1?</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-3/linkedLists-3.PNG' />
+              </div>
+              <p>Easy. BUT...</p>
+              <p class='question' name='erasure-q1'>What would I do if I wanted to delete *any* element in the array and I DO want to preserve the order the elements are in?</p>
+              <p class='answer' name='erasure-q1'>Shift the whole array after the deleted element left by 1!</p>
+              <br/>
+              <p>So if I wanted to nuke element 1 again (poor thing), and wanted to preserve order:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-3/linkedLists-4.PNG' />
+              </div>
+              <p>That's a lot more work!</p>
+              <p>Now, let's think about LinkedLists again...</p>
+              <p class='question' name='erasure-q2'>How do I delete a Node? Can I do it in a way that order is easily preserved?</p>
+              <p class='answer' name='erasure-q2'>Yes! Find the Node you want, set its predecessor's m_next to that Node's m_next, then delete that Node!</p>
+              <br/>
+              <p>What would it look like if I had the following scenario?</p>
+<pre class='prettyprint'>
+  #include "LinkedList.h"
+  
+  int main () {
+      LinkedList listy;
+      listy.insert("Andrew");
+      listy.insert("makes");
+      listy.insert("great");
+      listy.insert("examples!");
+      
+      listy.erase("great");
+      listy.print();
+  }
+</pre>
+              <br/>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-3/linkedLists-5.PNG' />
+              </div>
+              <p>Great! Now we just do a quick print and get... &quot;Andrew makes examples!&quot;</p>
+              <p>Thanks guys... that's... informative.</p>
+              <p class='question' name='erasure-q3'>So who's the winner with deleting arbitrary elements? Arrays or LinkedLists? Is there a case where one outperforms the other?</p>
+              <p class='answer' name='erasure-q3'>
+                If we don't know the location of the Node to delete, and we have to find it, then LinkedLists perform equivalently to Arrays with deletion... BUT 
+                if we had a pointer to the Node we wanted to delete, then the LinkedLists perform better than Arrays.
+              </p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='codeTriage' class='scrollspy-element' scrollspy-title='LL Triage'></div>
+            <h1>Linked List Triage</h1>
+            <div>
+              <p class='debug'>Noob R. Nooberson thought that the following destructor would work for the LinkedList. Is there a problem with it?</p>
+<pre class='prettyprint'>
+  // Destructor
+  LinkedList::~LinkedList () {
+      delete head;
+  }
+</pre>
+              <p><strong>Food for thought:</strong> is there a way I could keep Mr. Nooberson's blunder, and add something somewhere to make it work? (Hint: Dominoes)</p>
+              <br/>
+              <p class='debug'>Lord Voldemort himself produced the following attempt at the LinkedList contains function. Why should he not be named (in respectable programming circles)?</p>
+<pre class='prettyprint'>
+  bool LinkedList::contains (std::string s) {
+      Node* iterator = head;
+      while (iterator-&gt;m_data != s &amp;&amp; iterator != nullptr) {
+          iterator = iterator-&gt;m_next;
+      }
+      return iterator != nullptr;
+  }
+</pre>
+              <p>He then tested it on this main function and concluded success:</p>
+<pre class='prettyprint'>
+  #include "LinkedList.h"
+  
+  int main () {
+      LinkedList listy;
+      listy.insert("WHERE");
+      listy.insert("IS");
+      listy.insert("POTTER");
+      std::cout &lt;&lt; listy.contains("POTTER") &lt;&lt; std::endl;
+  }
+</pre>
+              <br/>
+              <p class='debug'>Bob broke the build with his twist on our implementation of insert. Where was he a fool?</p>
+<pre class='prettyprint'>
+  // Insert a new Node at the end of the List
+  // with the given string data
+  void LinkedList::insert (std::string s) {
+      Node* toAdd;
+      toAdd-&gt;m_data = s;
+      toAdd-&gt;m_next = nullptr;
+  
+      if (head == nullptr) {
+          head = toAdd;
+      } else {
+          Node* iterator = head;
+  
+          while (iterator-&gt;m_next != nullptr) {
+              iterator = iterator-&gt;m_next;
+          }
+          iterator-&gt;m_next = toAdd;
+      }
+      size++;
+  }
+</pre>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='debugger' class='scrollspy-element' scrollspy-title='Debugger'></div>
+            <h1>Brief Tour of Debugger</h1>
+            <div>
+              <p>Alright, time for a brief tour of debugging.</p>
+              <p>Since you're all perfect and will not make mistakes to begin with, this might be an exercise in futility.</p>
+              <p>That said, consider the following implementation of insert (hey, I don't get paid to think of more examples):</p>
+              <p class='debug'>Use the debugger to find the problem with this function (if it's obvious, don't say anything!)</p>
+<pre class='prettyprint'>
+  // Insert a new Node at the end of the List
+  // with the given string data
+  void LinkedList::insert (std::string s) {
+      Node toAdd(s);
+  
+      if (head == nullptr) {
+          head = &amp;toAdd;
+      } else {
+          Node* iterator = head;
+  
+          while (iterator-&gt;m_next != nullptr) {
+              iterator = iterator-&gt;m_next;
+          }
+          iterator-&gt;m_next = &amp;toAdd;
+      }
+      size++;
+  }
+</pre>
+            </div>
+            <hr/>
+            
+            
+            <a class='btn btn-default pull-right hidden-print' href='javascript:window.print();'>
+              <span class='glyphicon glyphicon-print'></span>
+              &nbsp; PDF / Print
+            </a>
+            
+          </div>
+          <!-- END PRESENTATION CONTENT -->
+          
+            
+        </div>
+      </div>
+      <!-- END MAIN CONTENT -->
+      
+      
+    </div>
+    <!-- END WRAPPER -->
+    
+    <!-- BEGIN FOOTER -->
+    <div id="footer">
+      <div class="container">
+        <div class="col-md-12 text-center">
+          
+        </div>
+      </div>
+    </div>
+    <!-- END FOOTER -->
+    
+  </body>
+</html>
