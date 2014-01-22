@@ -435,24 +435,29 @@
               <p>That said, consider the following implementation of insert (hey, I don't get paid to think of more examples):</p>
               <p class='debug'>Use the debugger to find the problem with this function (if it's obvious, don't say anything!)</p>
 <pre class='prettyprint'>
-  // Insert a new Node at the end of the List
-  // with the given string data
-  void LinkedList::insert (std::string s) {
-      Node toAdd(s);
-  
-      if (head == nullptr) {
-          head = &amp;toAdd;
-      } else {
-          Node* iterator = head;
-  
-          while (iterator-&gt;m_next != nullptr) {
-              iterator = iterator-&gt;m_next;
+  // Returns a count of how many times
+  // s appears in the LinkedList
+  int LinkedList::count (std::string s) {
+      Node* n = head;
+      int count = 0;
+      
+      // Go through all size Nodes
+      // in the List and compare to s
+      for (int i = 0; i &lt; size; i++) {
+          if (n-&gt;m_data == s) {
+              count++;
           }
-          iterator-&gt;m_next = &amp;toAdd;
       }
-      size++;
+      return count;
   }
 </pre>
+              <p>Steps for debugging:</p>
+              <ol class='indent-1'>
+                <li><p>Set breakpoints</p></li>
+                <li><p>Open debugger</p></li>
+                <li><p>Step through your code, stopping at each breakpoint</p></li>
+                <li><p>Conquer your bugs</p></li>
+              </ol>
             </div>
             <hr/>
             
