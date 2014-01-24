@@ -116,18 +116,20 @@ $(function () {
       if (e.keyCode === 78) {
         // If we're in noteMode, then disable it...
         if (noteMode) {
+          noteMode = false;
           $(document).unbind("click");
           $(".presentation-content").removeClass("note-aim");
         
         // ...otherwise, go ahead and turn it on
         } else {
+          noteMode = true;
           $(".presentation-content").addClass("note-aim");
           $(document).click(function(event) {
             var target = $(event.target);
             if ($(".presentation-content").find(target).length) {
               target
                 .after(
-                  "<div id='note-" + currentNote + "' class='alert alert-note note'>" +
+                  "<div id='note-" + currentNote + "' class='alert alert-note note text-left'>" +
                     "<a id='note-remove-" + currentNote + "' class='pull-right note-removal'>" +
                       "<span class='glyphicon glyphicon-remove'></span>" +
                     "</a>" +
