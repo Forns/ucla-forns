@@ -803,7 +803,109 @@
               <div class='text-center fit-pres'>
                 <img src='../../../assets/images/winter-2014/cs-32/week-3/linkedLists-8.PNG' />
               </div>
-              
+              <br/>
+              <p>Alright... so we've been dealing with Nodes this whole time, but you know what?</p>
+              <p>I'm bored with Nodes... let's use a more pop-culture-friendly class and implementation.</p>
+              <br/>
+<pre class='prettyprint'>
+  // HumanCentipede.h
+  #ifndef HC_INCLUDED
+  #define HC_INCLUDED
+  #include &lt;string&gt;
+  #include &lt;iostream&gt;
+  
+  class HumanCentipede {
+      private:
+          struct Person {
+              std::string m_data;
+              Person* m_front;
+              Person* m_behind;
+              Person (std::string s) {
+                  m_data = s;
+                  m_front = nullptr;
+                  m_behind = nullptr;
+              }
+          };
+  
+          Person* head;
+          Person* tail;
+          int size;
+  
+      public:
+          HumanCentipede();
+          ~HumanCentipede();
+          void insert(std::string);
+          bool erase(std::string);
+          void print();
+  };
+  
+  #endif
+</pre>
+              <p>...and if you haven't seen the movie, or didn't catch the reference, please don't look it up (read: please don't sue me if you do)</p>
+              <br/>
+              <p class='example'>Make a single change to our LinkedList insert function to bring it up to speed with the HumanCentipede. That rhymed:</p>
+<pre class='prettyprint'>
+  // Add a new person to the centipede at the
+  // end with name s
+  void HumanCentipede::insert (std::string s) {
+      // 1) Dynamically allocate a Person
+      // ...whatever that translates to in
+      // people terms...
+      Person* toAdd = new Person(s);
+    
+      // 2) Update the head if first victim
+      if (head == nullptr) {
+          head = toAdd;
+  
+      // 2) Otherwise, we already have some People
+      } else {
+          // TODO: Use tail in HumanCentipede to track
+          // the last slot in the centipede instead
+  
+          // Make an iterator to find the last
+          // Person in the Centipede
+          Person* iterator = head;
+      
+          // Stick the new Person on the end of the
+          // centipede
+          while ( iterator-&gt;m_front != nullptr ) {
+              iterator = iterator-&gt;m_front;
+          }
+          // Update the last Person's m_front
+          iterator-&gt;m_front = toAdd;
+          
+          // Update the new Person's m_back
+          // [!] Fill in here!
+      }
+  
+      // 3) Add one to the size
+      size++;
+  }
+</pre>
+              <br/>
+              <p>It should work with this main function:</p>
+<pre class='prettyprint'>
+  int main () {
+      // Looked up the character names
+      HumanCentipede cent;
+      cent.insert("Katsuro");
+      cent.insert("Lindsay");
+      cent.insert("Jenny");
+      cent.print();
+  }
+</pre>
+              <br/>
+              <p>Alright, that one was basically a freebie... no more freebies for HumanCentipede... instead, let's just walk through the erase function.</p>
+              <p>Here are some behaviors for erasing a node at certain positions in a Doubly Linked... err... HumanCentipede:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-3/linkedLists-9.PNG' />
+              </div>
+              <hr/>
+              <p>K, how about this one?</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-3/linkedLists-10.PNG' />
+              </div>
+              <p>There are a couple other cases for you to isolate and handle... we'll cover them in the next section, but won't diagram them here.</p>
             </div>
             <hr/>
             
@@ -812,6 +914,22 @@
             <div id='project2' class='scrollspy-element' scrollspy-title='Project 2'></div>
             <h1>Project 2: Testing and Advice</h1>
             <div>
+              <p>Write tests for your functions... lots of tests...</p>
+              <p>Here are the minimum, but probably sufficient, tests you should make for your functions:</p>
+              <ul class='indent-1'>
+                <li><p>Handling for Nodes in the middle of the list</p></li>
+                <li><p>Handling for Nodes at the beginning of the list</p></li>
+                <li><p>Handling for Nodes at the end of the list</p></li>
+                <li><p>Handling for the empty list</p></li>
+                <li><p>Handling for a one-element list</p></li>
+              </ul>
+              <p class='debug'>
+                WARNING: You're required to implement two *non-member* functions of your Map. This means you don't have access to their private members and must instead 
+                rely on the public interface. Don't make the mistake of making these functions a part of the Map class.
+              </p>
+              <p class='debug'>
+                Remember to implement the copy constructors, assignment overloading, and destructors for your Map!
+              </p>
             </div>
             <hr/>
             
@@ -857,8 +975,64 @@
               <p class='definition'>Your first Midterm will be on January 29!</p>
               <p>There are two midterm sections for you to sign up for, so watch on the course page; the two time slots are:</p>
               <ul class='indent-1'>
-                <li><p></p></li>
+                <li><p>5:00 - 6:05pm, location TBA</p></li>
+                <li><p>5:45 - 6:50pm, location TBA</p></li>
               </ul>
+              <p class='definition'>Please send me a list of items you'd like on a practice midterm by tonight, or tell me now! I'll try to make a few extra questions...</p>
+              <p>Good luck!</p>
+            </div>
+            <hr/>
+            
+            <br/>
+            <div id='challenges' class='scrollspy-element' scrollspy-title='Challenges'></div>
+            <h1>Challenges</h1>
+            <div>
+              <p>So you think you've got LinkedLists down eh? Try out this weird example:</p>
+              <p class='example'>Implement the humanCentiCircle function, which returns a boolean as to whether or not a cycle exists in the set of linked People:</p>
+<pre class='prettyprint'>
+  #include "HumanCentipede.h"
+  using namespace std;
+  
+  struct Person {
+      std::string m_data;
+      Person* m_front;
+      Person (std::string s) {
+          m_data = s;
+          m_front = nullptr;
+      }
+  };
+  
+  // Returns true iff a cycle exists in the links
+  bool humanCentiCircle (const Person* first) {
+      // TODO
+      return false;
+  }
+  
+  int main () {
+      Person p1("P1");
+      Person p2("P2");
+      Person p3("P3");
+      Person p4("P4");
+      p1.m_front = &amp;p2;
+      p2.m_front = &amp;p3;
+      p3.m_front = &amp;p4;
+      p4.m_front = &amp;p1;
+  
+      // True
+      std::cout &lt;&lt; humanCentiCircle(&amp;p1) &lt;&lt; std::endl;
+  
+      Person p5("P5");
+      Person p6("P6");
+      Person p7("P7");
+      p5.m_front = &amp;p6;
+      p6.m_front = &amp;p7;
+  
+      // False
+      std::cout &lt;&lt; humanCentiCircle(&amp;p5) &lt;&lt; std::endl;
+  }
+</pre>
+              <br/>
+              <p class='example'>Figured it out? OK... now, is there a solution you can think of where you don't end up comparing each individual to every other one?</p>
             </div>
             <hr/>
             
