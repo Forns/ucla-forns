@@ -1,0 +1,299 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Andrew Forney - UCLA CS</title>
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/magic-bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/main.css" rel="stylesheet" type="text/css">
+    <script src="../../../js/lib/jquery-2.0.3.min.js"></script>
+    <script src="../../../js/lib/bootstrap.min.js"></script>
+    <script src="../../../js/lib/expanding.js"></script>
+    <script src="../../../js/display/general/general-display.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+  </head>
+  
+  <body data-spy="scroll" data-target="#scrollspy">
+    
+    <!-- BEGIN WRAP -->
+    <div id="wrap">
+      
+      <!-- BEGIN NAVIGATION -->
+      <nav class='navbar navbar-default' role='navigation'>
+        <div class='nav-accent'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-12'>
+              <div class='navbar-header'>
+                <button class='navbar-toggle' type='button' data-toggle='collapse' data-target='.navbar-main-collapse'>
+                  <span class='sr-only'>Toggle Navigation</span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                </button>
+                <a class='navbar-brand' href='/~forns/'>
+                  <span id='brand-text'>
+                    Andrew Forney
+                  </span>
+                </a>
+              </div>
+              
+              <div id='nav-main' class='collapse navbar-collapse navbar-main-collapse'>
+                <ul class='nav navbar-nav navbar-right'>
+                  
+                  <li>
+                    <a href='/~forns/about.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-user'></span>
+                      </div>
+                      <p class='text-center'>About</p>
+                    </a>
+                  </li>
+                  
+                  <li class='active'>
+                    <a href='/~forns/classes.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-book'></span>
+                      </div>
+                      <p class='text-center'>Classes</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/contact.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-comment'></span>
+                      </div>
+                      <p class='text-center'>Contact</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/publications.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-file'></span>
+                      </div>
+                      <p class='text-center'>Publications</p>
+                    </a>
+                  </li>
+                  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <!-- END NAVIGATION -->
+      
+      <!-- BEGIN MAIN CONTENT -->
+      <div id="main-content" class="container">
+        <div class="row">
+          
+          <!-- BEGIN SCROLLSPY -->
+          <div class='col-md-2 hidden-sm hidden-xs'>
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+              <ul id='scrollspy' class="nav bs-sidenav">
+              </ul>
+            </div>
+          </div>
+          <!-- END SCROLLSPY -->
+          
+          <!-- BEGIN PRESENTATION CONTENT -->
+          <div class='col-md-10 presentation-content' role='main'>
+            
+            <ol class="breadcrumb hidden-print">
+              <li><a href="../../../classes.html">Classes</a></li>
+              <li><a href="./cs-31.html">Winter14 CS32</a></li>
+              <li class="active">Week 4</li>
+            </ol>
+            
+            <div id='review' class='scrollspy-element' scrollspy-title='Review'></div>
+            <h1>Questions from Last Week</h1>
+            <div>
+              <p><strong>What does it mean for a function to return by reference?</strong></p>
+              <p>A: Well, I'll start off my answer by asking a question of my own. Take that Socrates.</p>
+              <p class='question' name='review-q0'>What exactly is a reference? How is it different from a pointer?</p>
+              <div class='answer' name='review-q0'>
+                <p>A reference is just another name for some other variable--it's an alias! It refers to the same object in memory as its referent.</p>
+                <p>It's different from a pointer because:</p>
+                <ul class='indent-1'>
+                  <li><p>Unlike a pointer, once a reference is set to another variable, it cannot refer to another variable.</p></li>
+                  <li><p>In order to change the value of a reference's object, or some member of that object, we need not perform a dereference like we would with a pointer.</p></li>
+                </ul>
+              </div>
+              <p>
+                So, to return by reference just means: &quot;I'm not returning a copy of my return object (as in pass by value), I'm returning the *exact* object in memory, just 
+                with a different name than before.&quot;
+              </p>
+              <br/>
+              <p class='debug'>Will the following code have any undefined behavior? If not, what will it print out?</p>
+<pre class='prettyprint'>
+  // funRef = function with references,
+  // or just finds them fun?
+  string&amp; funRef (string&amp; s) {
+      s = "get the reference?";
+      
+      // To what does s refer?
+      return s;
+  }
+  
+  int main() {
+      string s1 = "I'm a string!";
+      string &amp;s2 = funRef(s1);
+      s2 = "YOUR STRING IS MINE";
+      
+      cout &lt;&lt; s1 &lt;&lt; endl;
+      cout &lt;&lt; s2 &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p class='debug'>Will the following code have any undefined behavior? If not, what will it print out?</p>
+<pre class='prettyprint'>
+  string&amp; funRef (string&amp; s) {
+      s = "get the reference?";
+      
+      // To what does s refer?
+      return s;
+  }
+  
+  int main() {
+      string s1 = "I'm a string!";
+  
+      // [!] Note declaration of s2
+      string s2 = funRef(s1);
+      s2 = "YOUR STRING IS MINE";
+      
+      cout &lt;&lt; s1 &lt;&lt; endl;
+      cout &lt;&lt; s2 &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p class='debug'>Will the following code have any undefined behavior? If not, what will it print out?</p>
+<pre class='prettyprint'>
+  string&amp; funRef (string&amp; s) {
+      string t = s;
+      
+      // To what does t refer?
+      return t;
+  }
+  
+  int main() {
+      string s1 = "I'm a string!";
+      string&amp; s2 = funRef(s1);
+      s2 = "YOUR STRING IS MINE";
+      
+      cout &lt;&lt; s1 &lt;&lt; endl;
+      cout &lt;&lt; s2 &lt;&lt; endl;
+  }
+</pre>
+            </div>
+            <hr/>
+            
+            <a class='btn btn-default pull-right hidden-print' href='javascript:window.print();'>
+              <span class='glyphicon glyphicon-print'></span>
+              &nbsp; PDF / Print
+            </a>
+            
+          </div>
+          <!-- END PRESENTATION CONTENT -->
+          
+          <!-- MATERIALS FROM CLASS: -->
+          
+          <!-- TODO: Review of std::list ??? -->
+          
+          <!-- TODO: Stacks -->
+            <!-- TODO: The call stack and local variables -->
+            <!-- TODO: LIFO list: last in, first out list -->
+            <!-- TODO: example of tic-tac-toe where the computer decides the best case scenario by pushing and popping possible game states -->
+            <!-- TODO: benefit of using stacks: -->
+              <!-- TODO: occlusion of states below the top one -->
+              <!-- TODO: more efficient data structure because only pushing and popping from the top -->
+            <!-- TODO: review of std::stack -->
+              <!-- TODO: #include <stack> -->
+              <!-- TODO: How to define the type of variable that can go in the stack? -->
+                <!-- TODO: New syntax: stack<int> s; -->
+                <!-- TODO: Push member function: s.push(10); s.push(-12); -->
+                <!-- TODO: Top member function: peak at the top item on the stack (returns reference) -->
+                <!-- TODO: Pop member function: s.pop(); removes the top member BUT is a void function -->
+                <!-- TODO: Empty member function: s.empty(); -->
+                <!-- TODO: Size member function: s.size(); -->
+              <!-- TODO: Stacks have a copy constructor internally that can be used to make a new stack -->
+              <!-- TODO: Example: turn a string encoding into a stack of some operations -->
+              
+            <!-- TODO: Go over call stack ??? -->
+              
+          <!-- TODO: precedence rules and operators -->
+            <!-- TODO: prefix operators -->
+              <!-- TODO: add(sub(8, div(6, 2)), 1) -->
+              <!-- TODO: algorithm to convert to postfix ??? -->
+            <!-- TODO: infix operators -->
+              <!-- TODO: can be ambiguous without precedence rules -->
+                <!-- TODO: e.g. 6 - 1 + 2; what if I wanted to compute 1 + 2 first? Need to parenthesize -->
+              <!-- TODO: algorithm to convert to postfix: -->
+                <!-- TODO: keep a sequence of characters -->
+                <!-- TODO: always add operands to the sequence -->
+                <!-- TODO: IF we encounter an operator: -->
+                  <!-- TODO: OPEN PARENS are ALWAYS pushed onto the stack -->
+                  <!-- TODO: CLOSED PARENS mean to pop operators from the stack onto the sequence UNTIL you see an open paren (don't put parens in sequence) -->
+                  <!-- TODO: IF stack is empty, add an operator to stack -->
+                  <!-- TODO: IF stack is NOT empty, and the new operator has precedence (strictly) > the top, then push new operator to top -->
+                    <!-- TODO: treat parens as having the lowest possible precedence -->
+                    <!-- TODO: if the new operator does not have strictly higher precedence, then put it onto the sequence -->
+                  <!-- TODO: once we reach the end of the expression, just put everything  -->
+            <!-- TODO: postfix operators -->
+              <!-- TODO: algorithm to convert to postfix: -->
+                <!-- TODO: just push operators and whenever you see operand -->
+            <!-- TODO: using postfix sequence to find answer -->
+              <!-- TODO: replace each two operands to the left of an operator with their answer -->
+              
+          <!-- TODO: Queues -->
+            <!-- TODO: FIFO list: first in, first out -->
+            <!-- TODO: Add from one end and remove from the other -->
+            <!-- TODO: review of std::queue -->
+              <!-- TODO: queue<int> q; -->
+              <!-- TODO: push: typically referred to as enqueue, but adds element to the back of the queue -->
+              <!-- TODO: pop: typically referred to as dequeue, remove element from front of queue--void function, no return -->
+              <!-- TODO: front: q.front(); look at front -->
+              <!-- TODO: empty: q.empty(); -->
+              <!-- TODO: size: q.size(); -->
+              
+            <!-- TODO: Go over priority queues ??? -->
+            <!-- TODO: Circular buffers? -->
+            
+          <!-- TODO: inline functions -->
+            <!-- TODO: cost of calls to functions are high -->
+              <!-- TODO: have to push local variables on stack, copy parameters, etc. -->
+            <!-- TODO: the inline declaration is merely a hint to your compiler--it may not honor your request to inline! -->
+            <!-- TODO: inline functions (also implementation) must be placed in header files, or else the compiler won't know what to replace -->
+              <!-- TODO: when to inline functions? -->
+                <!-- TODO: code abstraction -->
+                <!-- TODO: functions that don't do a whole lot but still have overhead can be simplified -->
+              <!-- TODO: inlining member functions -->
+          
+          <!-- TODO: Inheritance and Polymorphism -->
+            <!-- TODO: What to do if I want an array with different types? (called a heterogeneous collection) -->
+            <!-- TODO: class Rectangle :: public Shape { ... }; -->
+              <!-- TODO: Rectangle is a Derived Class and Shape is a Base Class; Shape is a class from which rectangle is derived -->
+            <!-- TODO: defines "is-a" relationships -->
+          
+        </div>
+      </div>
+      <!-- END MAIN CONTENT -->
+      
+      
+    </div>
+    <!-- END WRAPPER -->
+    
+    <!-- BEGIN FOOTER -->
+    <div id="footer">
+      <div class="container">
+        <div class="col-md-12 text-center">
+          
+        </div>
+      </div>
+    </div>
+    <!-- END FOOTER -->
+    
+  </body>
+</html>
