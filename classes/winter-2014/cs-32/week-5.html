@@ -1,0 +1,326 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Andrew Forney - UCLA CS</title>
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/magic-bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/main.css" rel="stylesheet" type="text/css">
+    <script src="../../../js/lib/jquery-2.0.3.min.js"></script>
+    <script src="../../../js/lib/bootstrap.min.js"></script>
+    <script src="../../../js/lib/expanding.js"></script>
+    <script src="../../../js/display/general/general-display.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+  </head>
+  
+  <body data-spy="scroll" data-target="#scrollspy">
+    
+    <!-- BEGIN WRAP -->
+    <div id="wrap">
+      
+      <!-- BEGIN NAVIGATION -->
+      <nav class='navbar navbar-default' role='navigation'>
+        <div class='nav-accent'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-12'>
+              <div class='navbar-header'>
+                <button class='navbar-toggle' type='button' data-toggle='collapse' data-target='.navbar-main-collapse'>
+                  <span class='sr-only'>Toggle Navigation</span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                </button>
+                <a class='navbar-brand' href='/~forns/'>
+                  <span id='brand-text'>
+                    Andrew Forney
+                  </span>
+                </a>
+              </div>
+              
+              <div id='nav-main' class='collapse navbar-collapse navbar-main-collapse'>
+                <ul class='nav navbar-nav navbar-right'>
+                  
+                  <li>
+                    <a href='/~forns/about.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-user'></span>
+                      </div>
+                      <p class='text-center'>About</p>
+                    </a>
+                  </li>
+                  
+                  <li class='active'>
+                    <a href='/~forns/classes.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-book'></span>
+                      </div>
+                      <p class='text-center'>Classes</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/contact.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-comment'></span>
+                      </div>
+                      <p class='text-center'>Contact</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/publications.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-file'></span>
+                      </div>
+                      <p class='text-center'>Publications</p>
+                    </a>
+                  </li>
+                  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <!-- END NAVIGATION -->
+      
+      <!-- BEGIN MAIN CONTENT -->
+      <div id="main-content" class="container">
+        <div class="row">
+          
+          <!-- BEGIN SCROLLSPY -->
+          <div class='col-md-2 hidden-sm hidden-xs'>
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+              <ul id='scrollspy' class="nav bs-sidenav">
+              </ul>
+            </div>
+          </div>
+          <!-- END SCROLLSPY -->
+          
+          <!-- BEGIN PRESENTATION CONTENT -->
+          <div class='col-md-10 presentation-content' role='main'>
+            
+            <ol class="breadcrumb hidden-print">
+              <li><a href="../../../classes.html">Classes</a></li>
+              <li><a href="./cs-31.html">Winter14 CS32</a></li>
+              <li class="active">Week 4</li>
+            </ol>
+            
+            
+            <br/>
+            <div id='inheritance' class='scrollspy-element' scrollspy-title='Inheritance'></div>
+            <h1>Class Inheritance</h1>
+            <div>
+              <p>Alright, I'm bored with all that... can we do something vaguely resembling entertainment?</p>
+              <p>Yeah I wish so too... unfortunately, all I have is the following:</p>
+              <hr/>
+              <p>I'm glad you guys are here because I'm designing a new discussion-section simulator that is in no way, shape, or form related to a certain franchise of Nintendo's...</p>
+              <p>The gist is this: I want to model the intense back-and-forth that we have in class as a game with certain actors locked in the battle of classroom participation.</p>
+              <p>I have the following so far:</p>
+              <ul class='indent-1'>
+                <li><p><strong>TA_Mon</strong> ask Student_Mons to do examples, after which the students fall asleep and lose some health.</p></li>
+                <li><p><strong>Student_Mon</strong> ask TA_Mons questions, after which the TA loses 2 health from exhaustion.</p></li>
+                <li><p>
+                  Later, I might want to add a Crasher_Mon, who isn't enrolled in the class but attends anyways and for some reason participates excessively... I'll probably
+                  want to add other actors as well, each of which will interact with one another
+                </p></li>
+              </ul>
+              <p>...anyways I could use some feedback, take a look:</p>
+              <br/>
+<pre class='prettyprint'>
+  #include &lt;queue&gt;
+  #include &lt;stack&gt;
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  class Discussion_Mon {};
+  class Student_Mon;
+  
+  class TA_Mon {
+      private:
+          int m_health;
+          bool m_conscious;
+          queue&lt;char&gt; m_plan;
+  
+      public:
+          void answerQuestion ();
+          void provideBoringExample (Student_Mon&amp; s);
+          // ... other functions omitted
+  };
+  
+  class Student_Mon {
+      private:
+          int m_health;
+          bool m_conscious;
+          queue&lt;char&gt; m_plan;
+  
+      public:
+          void askQuestion (TA_Mon&amp; ta);
+          void doBoringExample ();
+          // ... other functions omitted
+  };
+  
+  void TA_Mon::answerQuestion () {m_health -= 2;}
+  void TA_Mon::provideBoringExample (Student_Mon&amp; s) {
+      s.doBoringExample();
+  }
+  
+  void Student_Mon::askQuestion (TA_Mon&amp; ta) {
+      if (m_conscious) {
+          ta.answerQuestion();
+      }
+      m_conscious = true;
+  }
+  void Student_Mon::doBoringExample () {
+      m_health -= 1;
+      m_conscious = false;
+  }
+  
+  int main () {
+      TA_Mon forns;
+      Student_Mon s;
+      forns.provideBoringExample(s);
+      // ... riveting gameplace mechanics omitted
+  }
+</pre>
+              <br/>
+              <p class='question' name='inheritance-q0'>Point out some problems with my class definitions (and don't you dare say the whole example!).</p>
+              <div class='answer' name='inheritance-q0'>
+                <ul class='indent-1'>
+                  <li><p>No ability to talk about groups of actors, regardless of whether they're TA_Mons or Student_Mons</p></li>
+                  <li><p>Code repetition, especially with private members and constructors</p></li>
+                  <li><p>No scalability: all of my functions that target other actors are specific to the class of the other actor!</p></li>
+                </ul>
+              </div>
+              <p>Let's look at each of these problems separately and see how we might fix them:</p>
+              
+              <br/>
+              
+              <!-- TODO:
+              <h3>Abstracting Common Members</h3>
+              <p>As we noticed, the private members and constructors for our two classes are the same!</p>
+              <p class='question' name='inheritance-q1'>Remind me, why is code repetition bad?</p>
+              <p class='answer' name='inheritance-q1'>It violates the One-Change, One-Place principal, wastes file space, and can potentially hinder efficiency.</p>
+              <p>If we could somehow abstract those elements outside of these two classes into another class that, say, was higher in a hierarchy, that would be great!</p>
+              <p>Turns out, that's exactly what we'll do...</p>
+              -->
+              
+              <h3>Heterogeneous Collections</h3>
+              <p>One of the issues we noticed was that I cannot make a collection (let's say, a stack) of actors that consists of both TA_Mons and Student_Mons.</p>
+              <p>It would be nice if I could tell the compiler that I want to make a sort of type hierarchy where I arrange both of these classes under amore general one...</p>
+              <p>Hey, how bout that! Turns out I can:</p>
+              <p class='definition'>A <strong>base class</strong> is a class that does not inherit from any other class.</p>
+              <p>We'll define a base class from which our two classes inherit some common elements. This makes our two classes that inherit from the base class called derived classes.</p>
+              <p class='definition'>A <strong>derived class</strong> is a class that inherits features from a base class.</p>
+              <p class='definition'>
+                <strong>Inheritance</strong>, therefore, is the process of defining a derived class from an existing base class. We say that the derived class <strong>inherits</strong>
+                certain characteristics of its base.
+              </p>
+              <p>The syntax for defining inheritance is the following:</p>
+<pre class='prettyprint'>
+  class DerivedClass: public BaseClass {
+    // ...
+  };
+</pre>
+              <p>So, let's define a new base class called Discussion_Mon and use it to make a heterogeneous collection:</p>
+<pre class='prettyprint'>
+  #include &lt;queue&gt;
+  #include &lt;stack&gt;
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  class Discussion_Mon {};
+  class Student_Mon;
+  
+  class TA_Mon: public Discussion_Mon {
+      private:
+          int m_health;
+          bool m_conscious;
+          queue&lt;char&gt; m_plan;
+  
+      public:
+          void answerQuestion ();
+          void provideBoringExample (Student_Mon&amp; s);
+          // ... other functions omitted
+  };
+  
+  class Student_Mon: public Discussion_Mon {
+      private:
+          int m_health;
+          bool m_conscious;
+          queue&lt;char&gt; m_plan;
+  
+      public:
+          void askQuestion (TA_Mon&amp; ta);
+          void doBoringExample ();
+          // ... other functions omitted
+  };
+  
+  void TA_Mon::answerQuestion () {m_health -= 2;}
+  void TA_Mon::provideBoringExample (Student_Mon&amp; s) {
+      s.doBoringExample();
+  }
+  
+  void Student_Mon::askQuestion (TA_Mon&amp; ta) {
+      if (m_conscious) {
+          ta.answerQuestion();
+      }
+      m_conscious = true;
+  }
+  void Student_Mon::doBoringExample () {
+      m_health -= 1;
+      m_conscious = false;
+  }
+</pre>
+              <br/>
+              <p>Now, I can make statements like:</p>
+<pre class='prettyprint'>
+  int main () {
+      TA_Mon forns;
+      Student_Mon s;
+      
+      stack&lt;Discussion_Mon&gt; actorStack;
+      actorStack.push(forns);
+      actorStack.push(s);
+  }
+</pre>
+              <p>See how I was able to store both a TA_Mon and a Student_Mon object in that stack?! Crazy!</p>
+              <p>Unfortunately, we're going to have to wait to see what more we can do with inheritance... next week!</p>
+            </div>
+            <hr/>
+            
+            
+            <a class='btn btn-default pull-right hidden-print' href='javascript:window.print();'>
+              <span class='glyphicon glyphicon-print'></span>
+              &nbsp; PDF / Print
+            </a>
+            
+          </div>
+          <!-- END PRESENTATION CONTENT -->
+          
+          <!-- MATERIALS FROM CLASS: -->
+          
+        </div>
+      </div>
+      <!-- END MAIN CONTENT -->
+      
+      
+    </div>
+    <!-- END WRAPPER -->
+    
+    <!-- BEGIN FOOTER -->
+    <div id="footer">
+      <div class="container">
+        <div class="col-md-12 text-center">
+          
+        </div>
+      </div>
+    </div>
+    <!-- END FOOTER -->
+    
+  </body>
+</html>
