@@ -123,7 +123,7 @@
                 </ul>
               </div>
               <p>
-                So, to return by reference just means: &quot;I'm not returning a copy of my return object (as in pass by value), I'm returning the *exact* object in memory, just 
+                So, to return by reference just means: &quot;I'm not returning a copy of my return object (as in return by value), I'm returning the *exact* object in memory, just 
                 with a different name than before.&quot;
               </p>
               <br/>
@@ -187,8 +187,988 @@
       cout &lt;&lt; s2 &lt;&lt; endl;
   }
 </pre>
+              <br/>
+              <p><strong>Last week's challenge, revisited:</strong></p>
+              <p>Last week, I posed the following problem:</p>
+              <p class='example'>Implement the humanCentiCircle function, which returns a boolean as to whether or not a cycle exists in the set of linked People:</p>
+<pre class='prettyprint'>
+  #include "HumanCentipede.h"
+  using namespace std;
+  
+  struct Person {
+      std::string m_data;
+      Person* m_front;
+      Person (std::string s) {
+          m_data = s;
+          m_front = nullptr;
+      }
+  };
+  
+  // Returns true iff a cycle exists in the links
+  bool humanCentiCircle (const Person* first) {
+      // TODO
+      return false;
+  }
+  
+  int main () {
+      Person p1("P1");
+      Person p2("P2");
+      Person p3("P3");
+      Person p4("P4");
+      p1.m_front = &amp;p2;
+      p2.m_front = &amp;p3;
+      p3.m_front = &amp;p4;
+      p4.m_front = &amp;p1;
+  
+      // True
+      std::cout &lt;&lt; humanCentiCircle(&amp;p1) &lt;&lt; std::endl;
+  
+      Person p5("P5");
+      Person p6("P6");
+      Person p7("P7");
+      p5.m_front = &amp;p6;
+      p6.m_front = &amp;p7;
+  
+      // False
+      std::cout &lt;&lt; humanCentiCircle(&amp;p5) &lt;&lt; std::endl;
+  }
+</pre>
+              <p>(originally, our HumanCentipede class was used to represent Doubly Linked Lists, but for the purposes of this problem we made them singly linked... don't think about it)</p>
+              <p>Then, I wanted to know the following:</p>
+              <p class='example'>Given any arbitrary set of linked People, can I determine if a cycle exists without comparing each Person to each other Person multiple times?</p>
+              <p>Let's trace some suggested algorithms...</p>
             </div>
             <hr/>
+            
+            
+            <br/>
+            <div id='stacks' class='scrollspy-element' scrollspy-title='Stacks'></div>
+            <h1>Stacks on Stacks</h1>
+            <div>
+              <p>Although we went over the basics of stacks last week, we uhh... didn't cover much more in class this week, so we'll dive a little deeper today.</p>
+              <p>First, a little review... remember we implemented a stack using a linked list design:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-3/linkedLists-6.PNG' />
+              </div>
+              <p class='question' name='stacks-q0'>Are stacks designed for the "Last in, first out" (LIFO) or "First in, first out" (FIFO) behavior of insertion / retrieval?</p>
+              <p class='answer' name='stacks-q0'>
+                <strong>LIFO:</strong> The last items (of a sequence of items) we push onto the stack are at the top, and therefore the first to be retrieved (popped).
+              </p>
+              <br/>
+              <p>We also discussed a variety of benefits for using stacks:</p>
+              <p class='question' name='stacks-q1'>Name a couple benefits of using stacks over Lists, which allow access to all elements, rather than just the top.</p>
+              <div class='answer' name='stacks-q1'>
+                <p>Although there a variety of situational reasons to use stacks, in general, they are superior to Lists when:</p>
+                <ul class='indent-1'>
+                  <li><p>We don't want users of the interface to be able to see what's below the top of the stack (information hiding)</p></li>
+                  <li><p>We want to enforce efficient insertion (push) and retrieval (pop) behavior (always at top of stack)</p></li>
+                  <li><p>We want to enforce the LIFO behavior</p></li>
+                </ul>
+              </div>
+              <br/>
+              <p>We'll look at a few more applications with stacks later.</p>
+              <p>First, let's take a quick look at the stack interface we have available through the C++ standard library.</p>
+              <p><strong>Aside:</strong> I should note that stacks are a member of a classification of data structures called abstract data types:</p>
+              <p class='definition'>
+                An <strong>abstract data type (ADT)</strong> is a model for a certain class of data structures with similar behaviors. Just as the notion of a &quot;stack&quot; is an 
+                abstract data type describing a list with the LIFO constraint, the C++ standard library stack is an implementation of that ADT.
+              </p>
+              <p>Here is the interface for the standard library stack</p>
+              <p>We begin by using the necessary STL inclusion: <code class='prettyprint'>#include &lt;stack&gt;</code></p>
+              <p>Now, if we want to define a new stack we have to use some notation we haven't seen before.</p>
+              <div class='toolkit'>
+                <p>To define a stack, we must specify the type of objects that we wish to stack; we do this via a <strong>template:</strong></p><br/>
+<pre class='prettyprint'>
+  // Where classT is the template
+  // for the declared stack
+  stack&lt;classT&gt; stacky;
+</pre>
+              </div>
+              <br/>
+              <p class='question' name='stacks-q2'>Why do we have to provide a type template to our stacks?</p>
+              <p class='answer' name='stacks-q2'>The compiler will want to know the size of the objects we're stacking, as well as what operations are legal on its elements.</p>
+              <br/>
+              <h3>STL Stack Interface</h3>
+              <p>Let's look at the public interface for our stacks.</p>
+              <p class='definition'>
+                As we've seen, we need to specify a template type for our stacks; for the purposes of the following function signatures, we'll assume that type is the generic &lt;classT&gt;
+              </p>
+              
+              <br/>
+              <h4>Construction</h4>
+<pre class='prettyprint'>
+  int main () {
+      stack&lt;string&gt; stringStack;
+      stack&lt;int&gt;* intStack = new stack&lt;int&gt;;
+      delete intStack;
+  }
+</pre>
+              <p>Note the syntax for dynamically allocating a stack with a template type. We must also specify the type in our <code class='prettyprint'>new</code> operator usage.</p>
+              
+              <br/>
+              <h4>void push(const &lt;classT&gt; value)</h4>
+<pre class='prettyprint'>
+  // Making stack examples always reminds me
+  // of someone because of the backwards
+  // order of words...
+  int main () {
+      stack&lt;string&gt; stringStack;
+      stringStack.push("-Yoda");
+      stringStack.push("stack");
+      stringStack.push("this");
+      stringStack.push("is");
+      stringStack.push("Lame");
+  }
+</pre>
+
+              <br/>
+              <h4>void pop()</h4>
+              <p class='debug'>Warning: Notice that this particular implementation of a stack chooses a void return, and so the pop does not also return the object just popped.</p>
+              <p>
+                This is why we call stacks an abstract data type--it's abstract because different implementations can decide certain behavioral nuances (non essential to the key properties
+                of a stack) differently.
+              </p>
+<pre class='prettyprint'>
+  // [!] WARNING: will not compile
+  int main () {
+      stack&lt;string&gt; stringStack;
+      string derp = stringStack.push(":(");
+  }
+</pre>
+              
+              <br/>
+              <h4>&lt;classT&gt;&amp; top()</h4>
+              <p>Returns a <strong>*reference*</strong> to the item on the top of the stack. Sometimes called &quot;peeking&quot; at the top.</p>
+<pre class='prettyprint'>
+  int main () {
+      // Is fabric technically a stack of
+      // string? Kinda not... oh well, I
+      // already typed it, so...
+      stack&lt;string&gt; fabric;
+      fabric.push("sheet");
+      fabric.push("is the");
+      fabric.push("This linen");
+  
+      fabric.top() = "This satin";
+      cout &lt;&lt; fabric.top() &lt;&lt; endl;
+  }
+</pre>
+              <p>Wow that... that example was beyond bad... I'm even sorry...</p>
+              
+              <br/>
+              <h3>Other Functions:</h3>
+              <p>Read: I'm too lazy to give each of these their own section:</p>
+              <ul class='indent-1'>
+                <li><p><strong>empty()</strong> returns a boolean designating whether or not the stack has any elements.</p></li>
+                <li><p><strong>size()</strong> returns a count of the number of elements currently in the stack.</p></li>
+              </ul>
+              
+              <br/>
+              <h3>Stacks as Parameters:</h3>
+              <p class='example'>Implement the printStack function signature designated below:</p>
+<pre class='prettyprint'>
+  // Returns a string representation of the given
+  // stack of strings, added from top to bottom
+  string printStringStack (stack&lt;string&gt; stacky) {
+      // ...
+  }
+  
+  int main () {
+      stack&lt;string&gt; loudStack;
+      loudStack.push("BRO");
+      loudStack.push("STRINGS");
+      loudStack.push("COOL");
+      cout &lt;&lt; printStringStack(loudStack) &lt;&lt; endl;
+  }
+</pre>
+              <p>We'll cover the way to accept generic stack / object template inputs in a later lecture.</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='callStack' class='scrollspy-element' scrollspy-title='Call Stack'></div>
+            <h1>The Call Stack</h1>
+            <div>
+              <p class='definition'>
+                The <strong>call stack</strong> is the data structure that stores variables relevant to the active function, including, but not limited to: local variables, function parameters, 
+                and return addresses.
+              </p>
+              <p>We talk a lot about the call stack and how it relates to functions, local variables, and scope in general, but only now are we equipped to view it in terms of a stack.</p>
+              <p>What we'll look at right now is a general, high-level picture of the call stack as we trace code through a couple arbitrary functions.</p>
+              <p class='definition'>Remember that whenever we call a function, we go to the portion of the running machine code that corresponds to its code body.</p>
+              <p>But, when we leave the function that calls another function, we have to remember things like the local variables of the calling scope and where to return to when we're done with our call.</p>
+              <p class='definition'>A <strong>stack frame</strong> consists of the function-specific variables and return addresses of a function call placed on the stack.</p>
+              <p>Check out this simple example:</p>
+<pre class='prettyprint'>
+  string helpImStacked (int i, string s) {
+      // i and s pass-by-value copies
+      // that are local to function
+      string result;
+      for (int j = 0; j &lt; i; j++) {
+          result += s + "\n";
+      }
+  
+      // Need to know where to return to!
+      return result;
+  }
+  
+  int main () {
+      // i and s local to main
+      int i = 5;
+      string s = "Is it 1:50 yet?";
+  
+      // Push the helpImStacked stack frame
+      // onto the call stack
+      // [!] Save this point to be where I want
+      // to return to!
+      s = helpImStacked(i, s);
+      cout &lt;&lt; s;
+  }
+</pre>
+              <p>So, let's look at the call stack pictorially, with each function's stack frame color coded:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-4/stacks-0.PNG' />
+              </div>
+              <p>So, we see that we push the function's stack frame that we just called onto the top of the stack, and then pop it as soon as we need to return! Elegant...</p>
+              <br/>
+              <p>Now that we know something about the call stack, let's analyze why we said that LinkedList Node destructor chaining is a bad idea.</p>
+              <p>Let's say we had the following, partial implementation:</p>
+              <p class='debug'>From the perspective of the call stack, what is wrong with chaining Node destructors like so: (hint, destructors are functions!)</p>
+<pre class='prettyprint'>
+  class LinkedList {
+      private:
+          struct Node {
+              std::string m_data;
+              Node* m_next;
+              Node (std::string s) {
+                  m_data = s;
+                  m_next = nullptr;
+              }
+  
+              // [!] Look at this destructor
+              ~Node () {
+                  delete m_next;
+              }
+          };
+  
+          Node* head;
+          // ... other members omitted
+  
+      public:
+          LinkedList();
+  
+          // [!] Look at this destructor
+          ~LinkedList() {
+              delete head;
+          };
+          // ... other members omitted
+  };
+  
+  int main () {
+      LinkedList linky;
+      for (int i = 0; i &lt; 10000; i++) {
+          linky.insert("NO SPAAAAAAACE!");
+      }
+  }
+</pre>
+              <br/>
+              <h3>Inline Functions</h3>
+              <p>So, as we see now, calls to functions are expensive because of the need to construct stack frames and pop them after returning.</p>
+              <p>This is the impetus behind inline functions.</p>
+              <p class='toolkit'>
+                <strong>Inline functions</strong> act just like normal functions, except that declaring a function as inline gives a hint to our compiler that it may be
+                more efficient to replace the function call with the function's body.
+              </p>
+              <p>This hint, however, can be ignored by our compiler, depending on how complex the function body is.</p>
+              <p>For example, if my function loops thousands of times in the body, the extra few machine instructions to construct the stack frame will pale in comparison, and so the compiler may not inline.</p>
+              <p>Here's the dullest example I could think of before I move on:</p>
+<pre class='prettyprint'>
+  inline void inlineMeNow () {
+      cout &lt;&lt; "Hi :)" &lt;&lt; endl;
+  }
+  
+  int main () {
+      inlineMeNow();
+      inlineMeNow();
+      inlineMeNow();
+  }
+</pre>
+              <p>You'll probably never have to use this, which is why I'm blitzing past it.</p>
+              <p>The only nice benefit is if you can use an inline function to avoid code repetition--instead of repeating some lines between two functions, you can inline it instead.</p>
+              <p class='definition'>
+                Inline function definitions, unlike non-inline ones, are typically stored in header files so that they can be used by multiple sources. They avoid the multiple definition problem.
+              </p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='opGrouping' class='scrollspy-element' scrollspy-title='Operator Grouping'></div>
+            <h1>Operator Grouping</h1>
+            <div>
+              <p>Just because that other stuff wasn't boring enough, why don't we try something really exciting like dissecting basic algebra?</p>
+              <p>Operator grouping deals with the relative positioning of operators (e.g.: +, -, &gt;) to their operands (e.g.: 5, 3.14, &quot;hi!!1!!&quot;).</p>
+              <p class='definition'><strong>Operator grouping,</strong> along with rules of precedence, decide the order of operations for expressions</p>
+              <p>
+                We're familiar with order of operations from grade school, and the C++ rules-of-thumb from CS 31 
+                <a href='http://cs.ucla.edu/~forns/classes/fall-2013/cs-31/cs-31-week-2.html#precedence' target='_blank'>(reminder lecture here)</a>.
+              </p>
+              <p>We have three main representations of the positioning, detailed below:</p>
+              
+              <br/>
+              <h3>Infix Operators</h3>
+              <p>The operator grouping that we all know and love...</p>
+              <p class='definition'><strong>Infix operators</strong> are written *between* the operands on which they... operate, and equal precedence is evaluated from left to right.</p>
+              <p>So:</p>
+<pre class='prettyprint'>
+  // Forgive this example; I know you're
+  // in college
+  int i = 6 + 2; // i = 8
+  int j = 10 - 6 + 3; // j = 7
+  int k = 10 + 3 * 2 - 5; // k = 11
+  int m = 5 * (3 + 2); // m = 25
+</pre>
+              <p>We've been doing this all of our lives, it seems so simple on paper... but we have to remember how dumb our computer is.</p>
+              <p>Programming precedence and order of operations to evaluate infix expressions is actually a bit obnoxious...</p>
+              <p>So, we might consider converting our infix expressions to one of the following other groupings, in which evaluation is trivial:</p>
+              
+              <br/>
+              <h3>Postfix Operators</h3>
+              <p class='definition'><strong>Postfix operators</strong> are written *after* the operands on which they operate.</p>
+              <p>Often, we will convert infix expressions to postfix because postfix expressions are much simpler to evaluate.</p>
+              <p class='question' name='op-q0'>What major advantage do postfix expressions have over their equivalent infix ones?</p>
+              <p class='answer' name='op-q0'>Postfix order of operation is precedence unambiguous and does not require parentheses! CS people like linear operations...</p>
+              <p>Here are some basic postfix expressions:</p>
+<pre class='prettyprint'>
+  // evaluates to 1
+  5 4 -
+  
+  // evaluates to 25
+  5 3 2 + *
+</pre>
+              <br/>
+              <p>These are nice and simple, but what about more complicated expressions? Let's discover an algorithm for dealing with arbitrary postfix expressions.</p>
+              <p class='definition'>To evaluate a postfix expression, we perform the following steps from left to right. This algorithm assumes only binary operators. (taken shamelessly from wikipedia)</p>
+<pre class='prettyprint'>
+  while input is not empty
+      get next token (t) from input
+      if t is a value
+          push onto stack
+      else t is an operator (op)
+          let n = number of operands op expects
+          if fewer than n elements on stack
+              [ERROR] too few values
+          else
+              pop top n values from stack
+              evalutate these top n values with op
+              push returned result onto stack
+  
+  // Out of loop by now
+  if stack size equal to 1
+      that value is the result
+  else
+      [ERROR] too many values
+</pre>
+              <br/>
+              <p class='example'>Evaluate the following postfix expression:</p>
+<pre class='prettyprint'>
+  10 8 4 + 13 - *
+</pre>
+              <table class='table table-bordered table-striped table-condensed'>
+                <caption>Steps of Evaluation</caption>
+                <thead>
+                  <tr>
+                    <th><p>Step</p></th>
+                    <th><p>Current token</p></th>
+                    <th><p>Stack</p></th>
+                    <th><p>What to do</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><p>1</p></td>
+                    <td><p>10</p></td>
+                    <td><p>(top)</p></td>
+                    <td><p>Operand: push on stack</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>2</p></td>
+                    <td><p>8</p></td>
+                    <td><p>(top)<br/>10</p></td>
+                    <td><p>Operand: push on stack</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>3</p></td>
+                    <td><p>4</p></td>
+                    <td><p>(top)<br/>8<br/>10</p></td>
+                    <td><p>Operand: push on stack</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>4</p></td>
+                    <td><p>+</p></td>
+                    <td><p>(top)<br/>4<br/>8<br/>10</p></td>
+                    <td><p>Operator: apply + to top 2 stack elements (4 + 8), push result (12) onto stack</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>5</p></td>
+                    <td><p>13</p></td>
+                    <td><p>(top)<br/>12<br/>10</p></td>
+                    <td><p>Operand: push on stack</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>6</p></td>
+                    <td><p>-</p></td>
+                    <td><p>(top)<br/>13<br/>12<br/>10</p></td>
+                    <td><p>Operator: apply - to top 2 stack elements (13 - 12), push result (1) onto stack</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>7</p></td>
+                    <td><p>*</p></td>
+                    <td><p>(top)<br/>1<br/>10</p></td>
+                    <td><p>Operator: apply * to top 2 stack elements (1 * 10), push result (10) onto stack</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>8</p></td>
+                    <td><p>&lt;NULL&gt;</p></td>
+                    <td><p>(top)<br/>10</p></td>
+                    <td><p>No more tokens and 1 item on stack -- that's my answer!</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+              <p>OK, cool, all well and good... but how do we convert from infix to postfix to be able to evaluate it in the first place?</p>
+              <p class='definition'>We can convert infix expressions to postfix ones using the following algorithm:</p>
+<pre class='prettyprint'>
+  start with empty result sequence
+  while input is not empty
+      get next token (t) from input
+      if t is a value
+          push to end of result
+      if t is an operator
+          switch t
+              open paren:
+                  push to stack
+              closed paren:
+                  pop all tokens on stack up to open paren
+                  push them in order to result
+              default:
+                  if stack empty
+                      push t to stack
+                  else
+                      if precedence of t strictly higher than top
+                          pop top and append it to result
+                          push t to stack
+                      else
+                          push t to result
+  
+  pop rest of stack onto result
+  return result
+</pre>
+              <br/>
+              <p class='example'>Convert the following infix expression to a postfix one:</p>
+<pre class='prettyprint'>
+  5 + 3 * (1 + 2) / 2
+</pre>
+              <table class='table table-bordered table-striped table-condensed'>
+                <caption>Steps of Evaluation</caption>
+                <thead>
+                  <tr>
+                    <th><p>Step</p></th>
+                    <th><p>Current token</p></th>
+                    <th><p>Stack</p></th>
+                    <th><p>Result sequence</p></th>
+                    <th><p>What to do</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><p>1</p></td>
+                    <td><p>5</p></td>
+                    <td><p>(top)</p></td>
+                    <td><p></p></td>
+                    <td><p>Operand: push to end of result</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>2</p></td>
+                    <td><p>+</p></td>
+                    <td><p>(top)</p></td>
+                    <td><p>5</p></td>
+                    <td><p>Operator: empty stack, so push to stack</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>3</p></td>
+                    <td><p>3</p></td>
+                    <td><p>(top)<br/>+</p></td>
+                    <td><p>5</p></td>
+                    <td><p>Operand: push to end of result</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>4</p></td>
+                    <td><p>*</p></td>
+                    <td><p>(top)<br/>+</p></td>
+                    <td><p>5 3</p></td>
+                    <td><p>Operator: precedence of * strictly higher than + so push to stack</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>5</p></td>
+                    <td><p>(</p></td>
+                    <td><p>(top)<br/>*<br/>+</p></td>
+                    <td><p>5 3</p></td>
+                    <td><p>Operator: open paren always pushed to stack</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>6</p></td>
+                    <td><p>1</p></td>
+                    <td><p>(top)<br/>(<br/>*<br/>+</p></td>
+                    <td><p>5 3</p></td>
+                    <td><p>Operand: push to end of result</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>7</p></td>
+                    <td><p>+</p></td>
+                    <td><p>(top)<br/>(<br/>*<br/>+</p></td>
+                    <td><p>5 3 1</p></td>
+                    <td><p>Operator: precedence of + strictly higher than ( so push to stack</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>8</p></td>
+                    <td><p>2</p></td>
+                    <td><p>(top)<br/>+<br/>(<br/>*<br/>+</p></td>
+                    <td><p>5 3 1</p></td>
+                    <td><p>Operand: push to end of result</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>8</p></td>
+                    <td><p>)</p></td>
+                    <td><p>(top)<br/>+<br/>(<br/>*<br/>+</p></td>
+                    <td><p>5 3 1 2</p></td>
+                    <td><p>Operator: close paren, so pop everything until open paren to result</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>9</p></td>
+                    <td><p>/</p></td>
+                    <td><p>(top)<br/>*<br/>+</p></td>
+                    <td><p>5 3 1 2 +</p></td>
+                    <td><p>Operator: precedence of / NOT strictly higher than * so pop * and push to result; push / to stack</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>10</p></td>
+                    <td><p>2</p></td>
+                    <td><p>(top)<br/>/<br/>+</p></td>
+                    <td><p>5 3 1 2 + *</p></td>
+                    <td><p>Operand: push to end of result</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>11</p></td>
+                    <td><p>&lt;NULL&gt;</p></td>
+                    <td><p>(top)<br/>/<br/>+</p></td>
+                    <td><p>5 3 1 2 + * 2</p></td>
+                    <td><p>End of tokens reached -- pop each remaining element of stack onto result</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>12</p></td>
+                    <td><p></p></td>
+                    <td><p></p></td>
+                    <td><p>5 3 1 2 + * 2 / +</p></td>
+                    <td><p>Done!</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+              <p class='example'>Convert the following infix expression to a postfix one:<br/><code class='prettyprint'>(10 * (5 - 2)) / 5</code></p>
+              
+              <br/>
+              <h3>Prefix Operators</h3>
+              <p class='definition'><strong>Prefix operators</strong> are written *before* the operands on which they operate.</p>
+              <p>We won't use prefix operators very much, so a small overview is all that's necessary:</p>
+              <p>Here are some basic prefix expressions analogous to our postfix from before:</p>
+<pre class='prettyprint'>
+  // evaluates to 1
+  (- 5 4)
+  
+  // evaluates to 25
+  (* 5 (+ 3 2))
+</pre>
+              <p>Often, we'll use parentheses to disambiguate our prefix expression order.</p>
+              <p>Any LISP programmers will know this convention well, as it is a language of prefix operators (BONUS: what does LISP *sarcastically* stand for?)</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='queues' class='scrollspy-element' scrollspy-title='Queues'></div>
+            <h1>Queueueueueues</h1>
+            <div>
+              <p>Queues aren't a whole lot different from stacks, except that instead of pushing to and popping from the top, we queue to the back of the queue and dequeue from the front.</p>
+              <p class='definition'>A <strong>queue</strong> is another abstract data type that maintains the FIFO (first in, first out) behavior of insertion and retrieval of its elements.</p>
+              <p>Here's what that might look like as a singly linked list:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-4/stacks-2.PNG' />
+              </div>
+              <p>Again, though, you should be aware that a queue is an abstract data type, and that some implementations WILL allow you to access the intermediary nodes behind the front.</p>
+              <p>That, however, is not true of the C++ STL queue, which only has access to the front and back element.</p>
+              <p>Because the STL queue and stack have such a similar interface, let's race through this real quick!</p>
+              <h3>Construction</h3>
+<pre class='prettyprint'>
+  #include &lt;queue&gt;
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      queue&lt;string&gt; q; // ;_;
+      queue&lt;int&gt;* qi = new queue&lt;int&gt;;
+      delete qi;
+  }
+</pre>
+              <br/>
+              <h3>Push, pop, front, back</h3>
+              <p>Cha cha real smooth.</p>
+              <p>We can enqueue elements to the back of queues using the push function, and dequeue those from the front via pop:</p>
+<pre class='prettyprint'>
+  int main () {
+      queue&lt;string&gt; q;
+      q.push("Is");
+      q.push("this");
+      q.push("class");
+      q.push("like...");
+      q.push("5 hours?");
+  
+      for (int i = 0; i &lt; 5; i++) {
+          cout &lt;&lt; q.front() &lt;&lt; endl;
+          q.pop();
+      }
+  }
+</pre>
+              <h3>Other functions</h3>
+              <ul class='indent-1'>
+                <li><p><strong>back()</strong> returns a reference to the element at the back of the queue (most recently added)</p></li>
+                <li><p><strong>empty()</strong> returns true if the queue has no elements, false otherwise</p></li>
+                <li><p><strong>size()</strong> returns a count of the number of elements in the queue</p></li>
+              </ul>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='homework' class='scrollspy-element' scrollspy-title='Homework 2'></div>
+            <h1>Homework 2 Stuff</h1>
+            <div>
+              <h3>Problem 1</h3>
+              <p>So, our objective is to determine whether or not a path exists from the given start coordinate to the given end coord.</p>
+              <p>Our only valid moves are through corridors indicated by periods.</p>
+              <p>Let's trace through the algorithm on a couple of different mazes (I'm going to use O for my explored character):</p>
+<pre class='prettyprint'>
+  push starting coord(sr, sc) on stack
+      maze[sr][sc] = 'O'
+  while stack NOT empty
+      explore &amp; pop coord at top of stack (ex)
+      if ex is end coord
+          return true
+      if NORTH is valid move and unexplored
+          push onto stack (ex.row - 1, ex.c)
+      if EAST is valid move and unexplored
+          push onto stack (ex.row, ex.c + 1)
+      if SOUTH is valid move and unexplored
+          push onto stack (ex.row + 1, ex.c)
+      if WEST is valid move and unexplored
+          push onto stack (ex.row, ex.c - 1)
+          
+  return false
+</pre>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-4/stacks-1.PNG' />
+              </div>
+              <br/>
+              <h3>Problem 5</h3>
+              <p class='definition'>Make helper functions!</p>
+              <p>One of the most useful you could make would be an &quot;evaluate&quot; function that takes in the operator token and its operands, like so:</p>
+<pre class='prettyprint'>
+  // Notice the default value for b2 so you could call it
+  // with unary operators, e.g. evaluate('!', arr[3]);
+  bool evaluate (char operator, bool b1, bool b2 = 0) {
+      bool result;
+      
+      // Handle each operator separately
+      switch (operator) {
+          case '!':
+              // ...
+              break;
+          default:
+              break; 
+      }
+      
+      return result;
+  }
+</pre>
+              <p>You might also consider making a <code class='prettyprint'>string toPostfix (string s);</code> function to abstract some code.</p>
+              <br/>
+              <p class='definition'>Know your boolean operators!</p>
+              <table class='table table-bordered table-striped'>
+                <caption>Boolean AND operation (&amp;)</caption>
+                <thead>
+                  <tr>
+                    <th>b1</th>
+                    <th>b2</th>
+                    <th>b1 &amp; b2</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                  </tr>
+                  <tr>
+                    <td>0</td>
+                    <td>1</td>
+                    <td>0</td>
+                  </tr>
+                  <tr>
+                    <td>1</td>
+                    <td>0</td>
+                    <td>0</td>
+                  </tr>
+                  <tr>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                  </tr>
+                </tbody>
+              </table>
+              <table class='table table-bordered table-striped'>
+                <caption>Boolean OR operation ( | )</caption>
+                <thead>
+                  <tr>
+                    <th>b1</th>
+                    <th>b2</th>
+                    <th>b1 | b2</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                  </tr>
+                  <tr>
+                    <td>0</td>
+                    <td>1</td>
+                    <td>1</td>
+                  </tr>
+                  <tr>
+                    <td>1</td>
+                    <td>0</td>
+                    <td>1</td>
+                  </tr>
+                  <tr>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='inheritance' class='scrollspy-element' scrollspy-title='Inheritance'></div>
+            <h1>Class Inheritance</h1>
+            <div>
+              <p>Alright, I'm bored with all that... can we do something vaguely resembling entertainment?</p>
+              <p>Yeah I wish so too... unfortunately, all I have is the following:</p>
+              <hr/>
+              <p>I'm glad you guys are here because I'm designing a new discussion-section simulator that is in no way, shape, or form related to a certain franchise of Nintendo's...</p>
+              <p>The gist is this: I want to model the intense back-and-forth that we have in class as a game with certain actors locked in the battle of classroom participation.</p>
+              <p>I have the following so far:</p>
+              <ul class='indent-1'>
+                <li><p><strong>TA_Mon</strong> ask Student_Mons to do examples, after which the students fall asleep and lose some health.</p></li>
+                <li><p><strong>Student_Mon</strong> ask TA_Mons questions, after which the TA loses 2 health from exhaustion.</p></li>
+                <li><p>
+                  Later, I might want to add a Crasher_Mon, who isn't enrolled in the class but attends anyways and for some reason participates excessively... I'll probably
+                  want to add other actors as well, each of which will interact with one another
+                </p></li>
+              </ul>
+              <p>...anyways I could use some feedback, take a look:</p>
+              <br/>
+<pre class='prettyprint'>
+  #include &lt;queue&gt;
+  #include &lt;stack&gt;
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  class Discussion_Mon {};
+  class Student_Mon;
+  
+  class TA_Mon {
+      private:
+          int m_health;
+          bool m_conscious;
+          queue&lt;char&gt; m_plan;
+  
+      public:
+          void answerQuestion ();
+          void provideBoringExample (Student_Mon&amp; s);
+          // ... other functions omitted
+  };
+  
+  class Student_Mon {
+      private:
+          int m_health;
+          bool m_conscious;
+          queue&lt;char&gt; m_plan;
+  
+      public:
+          void askQuestion (TA_Mon&amp; ta);
+          void doBoringExample ();
+          // ... other functions omitted
+  };
+  
+  void TA_Mon::answerQuestion () {m_health -= 2;}
+  void TA_Mon::provideBoringExample (Student_Mon&amp; s) {
+      s.doBoringExample();
+  }
+  
+  void Student_Mon::askQuestion (TA_Mon&amp; ta) {
+      if (m_conscious) {
+          ta.answerQuestion();
+      }
+      m_conscious = true;
+  }
+  void Student_Mon::doBoringExample () {
+      m_health -= 1;
+      m_conscious = false;
+  }
+  
+  int main () {
+      TA_Mon forns;
+      Student_Mon s;
+      forns.provideBoringExample(s);
+      // ... riveting gameplace mechanics omitted
+  }
+</pre>
+              <br/>
+              <p class='question' name='inheritance-q0'>Point out some problems with my class definitions (and don't you dare say the whole example!).</p>
+              <div class='answer' name='inheritance-q0'>
+                <ul class='indent-1'>
+                  <li><p>No ability to talk about groups of actors, regardless of whether they're TA_Mons or Student_Mons</p></li>
+                  <li><p>Code repetition, especially with private members and constructors</p></li>
+                  <li><p>No scalability: all of my functions that target other actors are specific to the class of the other actor!</p></li>
+                </ul>
+              </div>
+              <p>Let's look at each of these problems separately and see how we might fix them:</p>
+              
+              <br/>
+              
+              <!-- TODO:
+              <h3>Abstracting Common Members</h3>
+              <p>As we noticed, the private members and constructors for our two classes are the same!</p>
+              <p class='question' name='inheritance-q1'>Remind me, why is code repetition bad?</p>
+              <p class='answer' name='inheritance-q1'>It violates the One-Change, One-Place principal, wastes file space, and can potentially hinder efficiency.</p>
+              <p>If we could somehow abstract those elements outside of these two classes into another class that, say, was higher in a hierarchy, that would be great!</p>
+              <p>Turns out, that's exactly what we'll do...</p>
+              -->
+              
+              <h3>Heterogeneous Collections</h3>
+              <p>One of the issues we noticed was that I cannot make a collection (let's say, a stack) of actors that consists of both TA_Mons and Student_Mons.</p>
+              <p>It would be nice if I could tell the compiler that I want to make a sort of type hierarchy where I arrange both of these classes under amore general one...</p>
+              <p>Hey, how bout that! Turns out I can:</p>
+              <p class='definition'>A <strong>base class</strong> is a class that does not inherit from any other class.</p>
+              <p>We'll define a base class from which our two classes inherit some common elements. This makes our two classes that inherit from the base class called derived classes.</p>
+              <p class='definition'>A <strong>derived class</strong> is a class that inherits features from a base class.</p>
+              <p class='definition'>
+                <strong>Inheritance</strong>, therefore, is the process of defining a derived class from an existing base class. We say that the derived class <strong>inherits</strong>
+                certain characteristics of its base.
+              </p>
+              <p>The syntax for defining inheritance is the following:</p>
+<pre class='prettyprint'>
+  class DerivedClass: public BaseClass {
+    // ...
+  };
+</pre>
+              <p>So, let's define a new base class called Discussion_Mon and use it to make a heterogeneous collection:</p>
+<pre class='prettyprint'>
+  #include &lt;queue&gt;
+  #include &lt;stack&gt;
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  class Discussion_Mon {};
+  class Student_Mon;
+  
+  class TA_Mon: public Discussion_Mon {
+      private:
+          int m_health;
+          bool m_conscious;
+          queue&lt;char&gt; m_plan;
+  
+      public:
+          void answerQuestion ();
+          void provideBoringExample (Student_Mon&amp; s);
+          // ... other functions omitted
+  };
+  
+  class Student_Mon: public Discussion_Mon {
+      private:
+          int m_health;
+          bool m_conscious;
+          queue&lt;char&gt; m_plan;
+  
+      public:
+          void askQuestion (TA_Mon&amp; ta);
+          void doBoringExample ();
+          // ... other functions omitted
+  };
+  
+  void TA_Mon::answerQuestion () {m_health -= 2;}
+  void TA_Mon::provideBoringExample (Student_Mon&amp; s) {
+      s.doBoringExample();
+  }
+  
+  void Student_Mon::askQuestion (TA_Mon&amp; ta) {
+      if (m_conscious) {
+          ta.answerQuestion();
+      }
+      m_conscious = true;
+  }
+  void Student_Mon::doBoringExample () {
+      m_health -= 1;
+      m_conscious = false;
+  }
+</pre>
+              <br/>
+              <p>Now, I can make statements like:</p>
+<pre class='prettyprint'>
+  int main () {
+      TA_Mon forns;
+      Student_Mon s;
+      
+      stack&lt;Discussion_Mon&gt; actorStack;
+      actorStack.push(forns);
+      actorStack.push(s);
+  }
+</pre>
+              <p>See how I was able to store both a TA_Mon and a Student_Mon object in that stack?! Crazy!</p>
+              <p>Unfortunately, we're going to have to wait to see what more we can do with inheritance... next week!</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='practice' class='scrollspy-element' scrollspy-title='Practice'></div>
+            <h1>Extra Practice</h1>
+            <div>
+              <p class='example'>
+                Using our LinkedList class from Week 3, implement a <code class='prettyprint'>void LinkedList::reverse ();</code> function that pushes all of the Node addresses onto a stack,
+                and then pops them with the new head pointing to the last pushed Node. Don't forget to fix the pointers!
+              </p>
+            </div>
+            <hr/>
+            
             
             <a class='btn btn-default pull-right hidden-print' href='javascript:window.print();'>
               <span class='glyphicon glyphicon-print'></span>
@@ -199,77 +1179,6 @@
           <!-- END PRESENTATION CONTENT -->
           
           <!-- MATERIALS FROM CLASS: -->
-          
-          <!-- TODO: Review of std::list ??? -->
-          
-          <!-- TODO: Stacks -->
-            <!-- TODO: The call stack and local variables -->
-            <!-- TODO: LIFO list: last in, first out list -->
-            <!-- TODO: example of tic-tac-toe where the computer decides the best case scenario by pushing and popping possible game states -->
-            <!-- TODO: benefit of using stacks: -->
-              <!-- TODO: occlusion of states below the top one -->
-              <!-- TODO: more efficient data structure because only pushing and popping from the top -->
-            <!-- TODO: review of std::stack -->
-              <!-- TODO: #include <stack> -->
-              <!-- TODO: How to define the type of variable that can go in the stack? -->
-                <!-- TODO: New syntax: stack<int> s; -->
-                <!-- TODO: Push member function: s.push(10); s.push(-12); -->
-                <!-- TODO: Top member function: peak at the top item on the stack (returns reference) -->
-                <!-- TODO: Pop member function: s.pop(); removes the top member BUT is a void function -->
-                <!-- TODO: Empty member function: s.empty(); -->
-                <!-- TODO: Size member function: s.size(); -->
-              <!-- TODO: Stacks have a copy constructor internally that can be used to make a new stack -->
-              <!-- TODO: Example: turn a string encoding into a stack of some operations -->
-              
-            <!-- TODO: Go over call stack ??? -->
-              
-          <!-- TODO: precedence rules and operators -->
-            <!-- TODO: prefix operators -->
-              <!-- TODO: add(sub(8, div(6, 2)), 1) -->
-              <!-- TODO: algorithm to convert to postfix ??? -->
-            <!-- TODO: infix operators -->
-              <!-- TODO: can be ambiguous without precedence rules -->
-                <!-- TODO: e.g. 6 - 1 + 2; what if I wanted to compute 1 + 2 first? Need to parenthesize -->
-              <!-- TODO: algorithm to convert to postfix: -->
-                <!-- TODO: keep a sequence of characters -->
-                <!-- TODO: always add operands to the sequence -->
-                <!-- TODO: IF we encounter an operator: -->
-                  <!-- TODO: OPEN PARENS are ALWAYS pushed onto the stack -->
-                  <!-- TODO: CLOSED PARENS mean to pop operators from the stack onto the sequence UNTIL you see an open paren (don't put parens in sequence) -->
-                  <!-- TODO: IF stack is empty, add an operator to stack -->
-                  <!-- TODO: IF stack is NOT empty, and the new operator has precedence (strictly) > the top, then push new operator to top -->
-                    <!-- TODO: treat parens as having the lowest possible precedence -->
-                    <!-- TODO: if the new operator does not have strictly higher precedence, then put it onto the sequence -->
-                  <!-- TODO: once we reach the end of the expression, just put everything  -->
-            <!-- TODO: postfix operators -->
-              <!-- TODO: algorithm to convert to postfix: -->
-                <!-- TODO: just push operators and whenever you see operand -->
-            <!-- TODO: using postfix sequence to find answer -->
-              <!-- TODO: replace each two operands to the left of an operator with their answer -->
-              
-          <!-- TODO: Queues -->
-            <!-- TODO: FIFO list: first in, first out -->
-            <!-- TODO: Add from one end and remove from the other -->
-            <!-- TODO: review of std::queue -->
-              <!-- TODO: queue<int> q; -->
-              <!-- TODO: push: typically referred to as enqueue, but adds element to the back of the queue -->
-              <!-- TODO: pop: typically referred to as dequeue, remove element from front of queue--void function, no return -->
-              <!-- TODO: front: q.front(); look at front -->
-              <!-- TODO: empty: q.empty(); -->
-              <!-- TODO: size: q.size(); -->
-              
-            <!-- TODO: Go over priority queues ??? -->
-            <!-- TODO: Circular buffers? -->
-            
-          <!-- TODO: inline functions -->
-            <!-- TODO: cost of calls to functions are high -->
-              <!-- TODO: have to push local variables on stack, copy parameters, etc. -->
-            <!-- TODO: the inline declaration is merely a hint to your compiler--it may not honor your request to inline! -->
-            <!-- TODO: inline functions (also implementation) must be placed in header files, or else the compiler won't know what to replace -->
-              <!-- TODO: when to inline functions? -->
-                <!-- TODO: code abstraction -->
-                <!-- TODO: functions that don't do a whole lot but still have overhead can be simplified -->
-              <!-- TODO: inlining member functions -->
           
           <!-- TODO: Inheritance and Polymorphism -->
             <!-- TODO: What to do if I want an array with different types? (called a heterogeneous collection) -->
