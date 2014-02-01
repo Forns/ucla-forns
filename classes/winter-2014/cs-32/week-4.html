@@ -639,6 +639,10 @@
               <br/>
               <p>OK, cool, all well and good... but how do we convert from infix to postfix to be able to evaluate it in the first place?</p>
               <p class='definition'>We can convert infix expressions to postfix ones using the following algorithm:</p>
+              <p class='debug'>
+                Warning! For simplicity and homework sake, this algorithm is for left-associative operators only; for the complete, general algorithm, check out 
+                the wiki page <a href='http://en.wikipedia.org/wiki/Shunting-yard_algorithm' target='_blank'>located here</a>.
+              </p>
 <pre class='prettyprint'>
   start with empty result sequence
   while input is not empty
