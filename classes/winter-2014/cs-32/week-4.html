@@ -561,6 +561,8 @@
               [ERROR] too few values
           else
               pop top n values from stack
+                  value on top is operand2
+                  value below is operand1
               evalutate these top n values with op
               push returned result onto stack
   
@@ -573,7 +575,7 @@
               <br/>
               <p class='example'>Evaluate the following postfix expression:</p>
 <pre class='prettyprint'>
-  10 8 4 + 13 - *
+  10 8 4 + 11 - *
 </pre>
               <table class='table table-bordered table-striped table-condensed'>
                 <caption>Steps of Evaluation</caption>
@@ -608,25 +610,25 @@
                     <td><p>4</p></td>
                     <td><p>+</p></td>
                     <td><p>(top)<br/>4<br/>8<br/>10</p></td>
-                    <td><p>Operator: apply + to top 2 stack elements (4 + 8), push result (12) onto stack</p></td>
+                    <td><p>Operator: apply + to top 2 stack elements (8 + 4), push result (12) onto stack</p></td>
                   </tr>
                   <tr>
                     <td><p>5</p></td>
-                    <td><p>13</p></td>
+                    <td><p>11</p></td>
                     <td><p>(top)<br/>12<br/>10</p></td>
                     <td><p>Operand: push on stack</p></td>
                   </tr>
                   <tr>
                     <td><p>6</p></td>
                     <td><p>-</p></td>
-                    <td><p>(top)<br/>13<br/>12<br/>10</p></td>
-                    <td><p>Operator: apply - to top 2 stack elements (13 - 12), push result (1) onto stack</p></td>
+                    <td><p>(top)<br/>11<br/>12<br/>10</p></td>
+                    <td><p>Operator: apply - to top 2 stack elements (12 - 11), push result (1) onto stack</p></td>
                   </tr>
                   <tr>
                     <td><p>7</p></td>
                     <td><p>*</p></td>
                     <td><p>(top)<br/>1<br/>10</p></td>
-                    <td><p>Operator: apply * to top 2 stack elements (1 * 10), push result (10) onto stack</p></td>
+                    <td><p>Operator: apply * to top 2 stack elements (10 * 1), push result (10) onto stack</p></td>
                   </tr>
                   <tr>
                     <td><p>8</p></td>
