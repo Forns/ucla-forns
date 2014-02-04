@@ -662,11 +662,9 @@
                   if stack empty
                       push t to stack
                   else
-                      if precedence of t strictly higher than top
+                      while precedence of t strictly higher than top
                           pop top and append it to result
-                          push t to stack
-                      else
-                          push t to result
+                      push t to stack
   
   pop rest of stack onto result
   return result

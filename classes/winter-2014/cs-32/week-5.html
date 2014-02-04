@@ -110,10 +110,17 @@
             
             
             <br/>
+            <div id='review' class='scrollspy-element' scrollspy-title='Review'></div>
+            <h1>Questions from Last Week</h1>
+            <div>
+            </div>
+            <hr/>
+            
+            <br/>
             <div id='inheritance' class='scrollspy-element' scrollspy-title='Inheritance'></div>
             <h1>Class Inheritance</h1>
             <div>
-              <p>Alright, I'm bored with all that... can we do something vaguely resembling entertainment?</p>
+              <p>Last week was unfortunately... quite dull... can we do something vaguely resembling entertainment?</p>
               <p>Yeah I wish so too... unfortunately, all I have is the following:</p>
               <hr/>
               <p>I'm glad you guys are here because I'm designing a new discussion-section simulator that is in no way, shape, or form related to a certain franchise of Nintendo's...</p>
@@ -304,9 +311,70 @@
           
           <!-- MATERIALS FROM CLASS: -->
           
+          <!-- TODO: Inheritance -->
+            <!-- TODO: Base class / superclass / generalization -->
+            <!-- TODO: Derived class / subclass / specialization -->
+              <!-- TODO: Derived classes has embedded within it the Base class(es) that it is a part of -->
+              <!-- TODO: Within each of the derived classes, you inherit the data members of the base class -->
+              <!-- TODO: Any time you need a pointer to a derived class where a pointer to its base class is expected, there's an automatic conversion to the base -->
+                <!-- TODO: This conversion makes a pointer to the BASE CLASS portion of the derived class (remember the base class is a part of the derived) -->
+                <!-- TODO: Shape* shapePtrs[3]; ... shapePtrs[0] = new Circle(); // OK! heterogeneous collection established -->
+                <!-- TODO: Shape shapePtrs[3]; ... shapePtrs[0] = Circle(); // BAD! now array is not an array of the same thing! -->
+              <!-- TODO: Any time you have a derived object and you need a reference to a Base object, it will also perform the automatic conversion -->
+                <!-- TODO: The reference will be to the BASE CLASS portion of the derived object -->
+              <!-- TODO: Summary *Circle => *Shape, Circle& => Shape& -->
+              
+          <!-- TODO: If a base class says it has some function (like move), then all derived classes must declare it UNLESS They wish to inherit it from the base -->
+            <!-- TODO: e.g., if I have a Circle that did NOT declare a member function called move, but the Shape class (a Base for Circle) DOES, then it just uses that implementation -->
+            <!-- TODO: Example: Call to different functions that are implemented in the base class, but not the derived, and every variation of that -->
+            <!-- TODO: You can provide overriding implementations in derived classes, should the base class also contain a function definition -->
+              <!-- TODO: How to get the base class implementation of a function from a derived class? can use the base class::functionName -->
+                <!-- TODO: PROBLEM: what if you have a base class' virtual move function, and in a derived class, you have a function called move that invokes the superclass' move? -->
+                  <!-- TODO: It will try to call the Derived class': infinite loop! -->
+              <!-- TODO: PROBLEM: what if the base class' move is NOT virtual? Then we call different functions based on which object is expected (e.g., a Shape parameter for a Circle object) -->
+                <!-- TODO: Circle c; Shape* sPtr = c; c.move() different from sPtr->move()!!! -->
+                <!-- TODO: SOLUTION: NEVER override a non-virtual function!!! -->
+            <!-- TODO: How does the compiler know which function to call? Well, if it is uncertain if it's the superclass or the subclass at runtime, it DEFAULTS to calling the base class' implementation! -->
+              <!-- TODO: If the decision of what call to make happens at compile time, it's called Static Binding -->
+                <!-- TODO: Need to bind a call to some portion of machine code -->
+              <!-- TODO: We WANT dynamic binding, which will be decided at runtime, after a particular object has been EITHER generalized or specialized -->
+                <!-- TODO: Every other language (Java, C#) does dynamic binding by default, but C++, designed for performance, doesn't -->
+                  <!-- TODO: With inheritance, dynamic binding is the right choice, so we need to make sure that our code makes the right decision -->
+                  <!-- TODO: Declaring a function as virtual in the base class will choose the correct function implementation during runtime -->
+                    <!-- TODO: Declaring a function virtual IS ONLY REQUIRED in the base class, and is unnecessary in the derived classes, but often good to write virtual there too -->
+                  <!-- TODO: Example with different member functions defined as virtual (dynamic) vs. non-virtual (static) -->
+                <!-- TODO: For every class that has at least 1 virtual function, the compiler sets up a Virtual Table (vtbl), that has one entry for every virtual function -->
+                  <!-- TODO: NO virtual functions => NO virtual table -->
+                  <!-- TODO: IF a function has no implementation in a derived class, better to make it NON virtual (no need to follow virtual pointers at that point) -->
+                  <!-- TODO: 
+                    Each table element has a pointer to the particular implementations of that virtual function; SO, if we have a Shape, it will have a virtual table entry for
+                    every virtual function it has, and Rectangle will have a Virtual table entry for every virtual function... etc.
+                  -->
+                <!-- TODO: When an object is created, it contains a POINTER (the Virtual Pointer) to the VIRTUAL TABLE that applies to it -->
+                  <!-- TODO: This provides runtime definitions for the functions that have been overrided -->
+                  <!-- TODO: Virtual pointers are correctly linked to the right table during RUNTIME because we won't know what object's table to point to until new objects are made -->
+                  
+            <!-- TODO: Abstract / Pure Virtual functions -->
+              <!-- TODO: Declaring a virtual function with = 0 after the signature says that this might be an implemented function in derived classes, but NOT to be implemented by the Base class -->
+              <!-- TODO: virtual void draw() const = 0; // for example -->
+              <!-- TODO: AS SOON AS you declare one abstract function in a class, that becomes an Abstract Class that cannot be constructed directly (unlike Concrete Classes: Circle, Rectangle) -->
+              <!-- TODO: Banned statements: Shape s; Shape* sPtr = new Shape(); // BAD -->
+              <!-- TODO: Why not just omit the draw function from Shape? Without including it, any derived class objects will not be able to call their draw! -->
+              <!-- TODO: Abstract classes are useful for grouping common characteristics and adhering to a contract -->
+                <!-- TODO: Ex: abstract class with abstract functions that has a derived class that DOES NOT implement that function--then that derived class is now abstract as well! -->
+                
+            <!-- TODO: Construction, revisited -->
+              <!-- TODO: Steps: -->
+                <!-- TODO: 1) Construct the base part (looks for it in member initialization list) -->
+                  <!-- TODO: Circle::Circle (double x, double y, double r) : Shape(x, y), m_r(r) {...} -->
+                <!-- TODO: 2) Construct the data members (member initialization list) -->
+                <!-- TODO: 3) Execute the body of the constructor -->
+            <!-- TODO: Destruction goes in the opposite order -->
+          
         </div>
       </div>
       <!-- END MAIN CONTENT -->
+      
       
       
     </div>
