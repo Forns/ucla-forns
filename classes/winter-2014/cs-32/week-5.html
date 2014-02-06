@@ -123,96 +123,61 @@
               <p>Last week was unfortunately... quite dull... can we do something vaguely resembling entertainment?</p>
               <p>Yeah I wish so too... unfortunately, all I have is the following:</p>
               <hr/>
-              <p>I'm glad you guys are here because I'm designing a new discussion-section simulator that will have a shocking likeness to our own section.</p>
-              <p>The gist is this: I want to model the intense back-and-forth that we have in class as a game with certain actors locked in the battle of classroom participation.</p>
-              <p>I have the following so far:</p>
+              <p>I'm glad you guys are here because I'm designing an all new battle game that in no way, shape, or form resembles a certain Nintendo franchise...</p>
+              <p>Naturally, I'm calling it ForneyMon, where we have different mythical pets of different types locked in psuedo-humane combat for our amusement!</p>
+              <p>I'm starting off slow and hoping we can develop the concept a bit in this class... here's the gist:</p>
               <ul class='indent-1'>
-                <li><p><strong>TA</strong> ask Students to do examples, after which the students fall asleep and lose some health.</p></li>
-                <li><p><strong>Student</strong> ask TAs questions, after which the TA loses 2 health from exhaustion.</p></li>
+                <li><p>I have two types of ForneyMon right now: the BurnyMon, which singes its opponents with the fire of 5 suns, and DampyMon, which annoys its opponents by getting them wet.</p></li>
+                <li><p>Both have a certain amount of starting health and a name that its <span class='strike'>trainer</span> err... owner has given it.</p></li>
+                <li><p>Presently, ForneyMon can only interact by dealing damage and taking damage of a certain type (e.g. Burny damage or Dampy damage).</p></li>
+                <li><p>DampyMon take bonus damage from BurnyMon, but DampyMon start with more health.</p></li>
               </ul>
-              <p>...anyways I could use some feedback, take a look:</p>
+              <p>...anyways here's the sketch I have so far, take a look:</p>
               <br/>
 <pre class='prettyprint'>
-  #include &lt;queue&gt;
-  #include &lt;stack&gt;
   #include &lt;iostream&gt;
   #include &lt;string&gt;
   using namespace std;
+    
+  class DampyMon;
   
-  class Student;
-  
-  class TA {
+  class BurnyMon {
       private:
-          string name;
-          int m_conscious;
-          queue&lt;string&gt; m_answers;
+          string m_name;
+          int m_health;
   
       public:
-          void answerQuestion ();
-          void askName (Student&amp; s);
-          void provideBoringExample (Student&amp; s);
-          // ... other functions omitted
+          BurnyMon (string name);
+          int takeDamage (int dam, string type);
+          void dealDamage (DampyMon* other, int dam, string type);
   };
   
-  class Student {
+  class DampyMon {
       private:
-          string name;
-          int m_conscious;
-          stack&lt;string&gt; m_questions;
+          string m_name;
+          int m_health;
   
       public:
-          void askQuestion (TA&amp; ta);
-          void doBoringExample ();
-          // ... other functions omitted
+          DampyMon (string name);
+          int takeDamage (int dam, string type);
+          void dealDamage (BurnyMon* other, int dam, string type);
   };
-  
-  void TA::answerQuestion () {m_health -= 2;}
-  void TA::provideBoringExample (Student&amp; s) {
-      s.doBoringExample();
-  }
-  
-  void Student::askQuestion (TA&amp; ta) {
-      if (m_conscious) {
-          ta.answerQuestion();
-      }
-      m_conscious = true;
-  }
-  void Student::doBoringExample () {
-      m_health -= 1;
-      m_conscious = false;
-  }
-  
-  int main () {
-      TA forns;
-      Student s;
-      forns.provideBoringExample(s);
-      // ... riveting simulation mechanics omitted
-  }
 </pre>
               <br/>
-              <p class='question' name='inheritance-q0'>Point out some problems with my class definitions (and don't you dare say the whole example!).</p>
+              <p class='question' name='inheritance-q0'>Point out some problems with my class definitions (and don't you dare say the whole example).</p>
               <div class='answer' name='inheritance-q0'>
                 <ul class='indent-1'>
-                  <li><p>No ability to talk about groups of actors, regardless of whether they're TAs or Students</p></li>
+                  <li><p>No ability to talk about groups of ForneyMon, regardless of whether they're DampyMon or BurnyMon</p></li>
                   <li><p>Code repetition, especially with private members and constructors</p></li>
-                  <li><p>No scalability: all of my functions that target other actors are specific to the class of the other actor!</p></li>
+                  <li><p>No scalability: all of my functions that target other ForneyMon are specific to the class of the other ForneyMon!</p></li>
                 </ul>
               </div>
               <p>Let's look at each of these problems separately and see how we might fix them:</p>
               
               <br/>
               
-              <!-- TODO:
-              <h3>Abstracting Common Members</h3>
-              <p>As we noticed, the private members and constructors for our two classes are the same!</p>
-              <p class='question' name='inheritance-q1'>Remind me, why is code repetition bad?</p>
-              <p class='answer' name='inheritance-q1'>It violates the One-Change, One-Place principal, wastes file space, and can potentially hinder efficiency.</p>
-              <p>If we could somehow abstract those elements outside of these two classes into another class that, say, was higher in a hierarchy, that would be great!</p>
-              <p>Turns out, that's exactly what we'll do...</p>
-              -->
-              
               <h3>Heterogeneous Collections</h3>
-              <p>One of the issues we noticed was that I cannot make a collection (let's say, a stack) of actors that consists of both TAs and Students.</p>
+              <p>One of the issues we noticed was that I cannot make a collection (let's say, an array) of ForneyMon that consists of both BurnyMon and DampyMon.</p>
               <p>It would be nice if I could tell the compiler that I want to make a sort of type hierarchy where I arrange both of these classes under amore general one...</p>
               <p>Hey, how bout that! Turns out I can:</p>
               <p class='definition'>A <strong>base class</strong> is a class that does not inherit from any other class.</p>
@@ -228,71 +193,61 @@
     // ...
   };
 </pre>
-              <p>So, let's define a new base class called Discussion_Mon and use it to make a heterogeneous collection:</p>
+              <p class='example'>Here's a simple example of inheritance of a Base class to a Derived class:</p>
 <pre class='prettyprint'>
-  #include &lt;queue&gt;
-  #include &lt;stack&gt;
-  #include &lt;iostream&gt;
-  #include &lt;string&gt;
-  using namespace std;
-  
-  class Discussion_Mon {};
-  class Student;
-  
-  class TA: public Discussion_Mon {
-      private:
-          int m_health;
-          bool m_conscious;
-          queue&lt;char&gt; m_plan;
-  
-      public:
-          void answerQuestion ();
-          void provideBoringExample (Student&amp; s);
-          // ... other functions omitted
-  };
-  
-  class Student: public Discussion_Mon {
-      private:
-          int m_health;
-          bool m_conscious;
-          queue&lt;char&gt; m_plan;
-  
-      public:
-          void askQuestion (TA&amp; ta);
-          void doBoringExample ();
-          // ... other functions omitted
-  };
-  
-  void TA::answerQuestion () {m_health -= 2;}
-  void TA::provideBoringExample (Student&amp; s) {
-      s.doBoringExample();
-  }
-  
-  void Student::askQuestion (TA&amp; ta) {
-      if (m_conscious) {
-          ta.answerQuestion();
+  struct DropTheBase {
+      int a;
+      string s;
+      string m;
+      DropTheBase () {
+          a = 3;
+          s = "[s] Base!";
+          m = "[m] Base!";
       }
-      m_conscious = true;
-  }
-  void Student::doBoringExample () {
-      m_health -= 1;
-      m_conscious = false;
-  }
+  };
+  
+  // This example's puns are off the hook
+  struct DerivingMeCrazy : public DropTheBase {
+      int a;
+      string s;
+      string t;
+      DerivingMeCrazy () {
+          a = 1;
+          s = "[s] Derived!";
+          t = "[t] Derived!";
+      }
+  };
+</pre>
+              <p>So what's happening behind the scenes here? Let's look at a few properties of inheritance:</p>
+              <p class='definition'>The <strong>is-a</strong> relationship describes the inheritance flow from a base class to a derived class. We say that a derived class is-a type of the base class.</p>
+              <p>Well, during lecture, we said that a <code class='prettyprint'>Dog</code> (derived class) is-a <code class='prettyprint'>Mammal</code> (base class).</p>
+              <p>So, above, we say that <code class='prettyprint'>DerivingMeCrazy</code> is-a <code class='prettyprint'>DropTheBase</code>... hmm, not one of my finest examples... but worth the joke.</p>
+              <p>See how that relationship works out?</p>
+              
+              
+              <!-- TODO: LEFT OFF HERE -->
+              
+              
+              <p>So, let's define a new base class called ForneyMon and use it to make a heterogeneous collection:</p>
+<pre class='prettyprint'>
 </pre>
               <br/>
               <p>Now, I can make statements like:</p>
 <pre class='prettyprint'>
   int main () {
-      TA forns;
-      Student s;
-      
-      stack&lt;Discussion_Mon&gt; actorStack;
-      actorStack.push(forns);
-      actorStack.push(s);
   }
 </pre>
-              <p>See how I was able to store both a TA and a Student object in that stack?! Crazy!</p>
-              <p>Unfortunately, we're going to have to wait to see what more we can do with inheritance... next week!</p>
+              <p>See how I was able to store both a BurnyMon and DampyMon in that array?! Crazy!</p>
+              
+              <!-- TODO:
+              <h3>Abstracting Common Members</h3>
+              <p>As we noticed, the private members and constructors for our two classes are the same!</p>
+              <p class='question' name='inheritance-q1'>Remind me, why is code repetition bad?</p>
+              <p class='answer' name='inheritance-q1'>It violates the One-Change, One-Place principal, wastes file space, and can potentially hinder efficiency.</p>
+              <p>If we could somehow abstract those elements outside of these two classes into another class that, say, was higher in a hierarchy, that would be great!</p>
+              <p>Turns out, that's exactly what we'll do...</p>
+              -->
+              
             </div>
             <hr/>
             
