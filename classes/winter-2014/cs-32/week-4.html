@@ -663,7 +663,7 @@
                       push t to stack
                   else
                       while stack not empty 
-                      AND precedence of top strictly higher than t 
+                      AND precedence of t &lt;= precedence of top
                       AND top is not '('
                           pop top and append it to result
                       push t to stack
