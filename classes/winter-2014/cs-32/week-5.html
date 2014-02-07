@@ -113,6 +113,55 @@
             <div id='review' class='scrollspy-element' scrollspy-title='Review'></div>
             <h1>Questions from Last Week</h1>
             <div>
+              <p><strong>Q: What data structure does the standard library implementation of stacks employ?</strong></p>
+              <p>Turns out, *you* can specify the type of container that you want it to use, as long as that container supports the following three operations:</p>
+              <ul class='indent-1'>
+                <li><p>Back: get the item at the &quot;back&quot; of the collection.</p></li>
+                <li><p>Push: push an item to the back of the collection.</p></li>
+                <li><p>Pop: pop an item from the back of the collection.</p></li>
+              </ul>
+              <p>The following three standard library &quot;container types&quot; support these operations:</p>
+              <ul class='indent-1'>
+                <li><p>Vector</p></li>
+                <li><p>List</p></li>
+                <li><p>Deque (pronounced like &quot;Deck&quot;)</p></li>
+              </ul>
+              <p>If you do not specify which container you'd like to use, then a deque is used by default.</p>
+              <p>A deque is short for &quot;double-ended queue&quot;, which is simply a dynamic array that tracks the begin and end index offsets, expanding as needed.</p>
+              <p>Not something you really need to know, but some trivia that someone asked about last time :)</p>
+              
+              <br/>
+              <p><strong>Q: Are global variables located on the stack? If so, where are they located?</strong></p>
+              <p>No, global variables are not found in the stack.</p>
+              <p>They exist in a portion of the running process called the data segment, which is far beyond the scope (pun intended) of this class.</p>
+              <p>
+                We won't talk about it, but if you're really interested and ambitious, a breakdown of the process' memory divisions and how the compiler manages them can be 
+                <a href='http://www.tenouk.com/ModuleW.html' target='_blank'>found here</a>.
+              </p>
+              <p>...or you could... you know... wait for CS33</p>
+              
+              <br/>
+              <p><strong>Q: Does inlining member functions really do anything?</strong></p>
+              <p>Well, yes and no:</p>
+              <p>Modern compilers are so much smarter than the programmer that giving the inline hint is likely to encounter 1 of 2 scenarios:</p>
+              <ul class='indent'>
+                <li><p>The inline hint will get ignored because the compiler doesn't think the inline is a good idea.</p></li>
+                <li><p>The inline strategy would have already been considered by the compiler had you not included the hint, thus making it redundant and pointless.</p></li>
+              </ul>
+              <p>That said, the only time you get a real benefit from the inline keyword is if you decide to provide a member function definition outside of the class definition:</p>
+<pre class='prettyprint'>
+  class Stuff {
+      public:
+          // [X] Useless to declare inline here, really
+          inline int doStuff () {return 20;};
+  };
+  
+  // ... vs ...
+  
+  // [!] OK, prevents multiple definition issue
+  inline int Stuff::doStuff () {return 20;}
+</pre>
+              <p>And, of course, there is not benefit to inlining functions in .cpp files. Your compiler's got you covered :)</p>
             </div>
             <hr/>
             
@@ -225,9 +274,12 @@
               <p>Well, during lecture, we said that a <code class='prettyprint'>Dog</code> (derived class) is-a <code class='prettyprint'>Mammal</code> (base class).</p>
               <p>So, above, we say that <code class='prettyprint'>DerivingMeCrazy</code> is-a <code class='prettyprint'>DropTheBase</code>... hmm, not one of my finest examples... but worth the joke.</p>
               <p>What this means is that the Base class, and all of its members, are now a PART of the derived class!</p>
-              
-              <!-- TODO: DIAGRAM HERE -->
-              
+              <p>
+                The UML standard for representing inheritance is by drawing an arrow from the Derived classes to their Base class(es); I've also represented our inheritance from a sort of... member perspective:
+              </p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-5/inheritance-0.PNG' />
+              </div>
               <p>See how that relationship works out?</p>
               <p>This means that I can access any member of a Base class from its Derived classes.</p>
               <p class='example'>See how we access the m member from a DerivingMeCrazy class:</p>
@@ -315,9 +367,75 @@
   }
 </pre>
               <br/>
+              <p class='example'>Will any of the following lines of code need to be removed to allow it to compile? If so, which of the numbered lines, and what will it print out once they're removed?</p>
+<pre class='prettyprint'>
+  struct Basically {
+      int a;
+      int b;
+      Basically () {a = 1; b = 2;}
+  };
+  struct Best : public Basically {
+      int a;
+      int c;
+      Best () {a = 3; c = 4;}
+  };
+  struct Example : public Basically {
+      int a;
+      int d;
+      Example () {a = 5; d = 6;}
+  };
+  
+  int main () {
+      Basically base;
+      Best best;
+      Example ex;
+      cout &lt;&lt; base.a &lt;&lt; endl; // 1
+      cout &lt;&lt; best.a &lt;&lt; endl; // 2
+      cout &lt;&lt; ex.a &lt;&lt; endl;   // 3
+      cout &lt;&lt; best.b &lt;&lt; endl; // 4
+      cout &lt;&lt; ex.c &lt;&lt; endl;   // 5
+      cout &lt;&lt; ex.d &lt;&lt; endl;   // 6
+      cout &lt;&lt; base.d &lt;&lt; endl; // 7
+  }
+</pre>
+              <br/>
+              <p class='example'>Draw a UML-like inheritance diagram and show what classes are a &quot;part&quot; of the others.</p>
               
-              <!-- TODO: What classes have access to what members? Do a 3 class chain, a Base object trying to get a Derived member, and a 2 Derived - 1 Base -->
-              
+              <br/>
+              <p class='example'>Will any of the following lines of code need to be removed to allow it to compile? If so, which of the numbered lines, and what will it print out once they're removed?</p>
+<pre class='prettyprint'>
+  struct Basically {
+      int a;
+      int b;
+      Basically () {a = 1; b = 2;}
+  };
+  struct Best : public Basically {
+      int a;
+      int c;
+      Best () {a = 3; c = 4;}
+  };
+  // [!] Note the inheritance change!
+  struct Example : public Best {
+      int a;
+      int d;
+      Example () {a = 5; d = 6;}
+  };
+  
+  int main () {
+      Basically base;
+      Best best;
+      Example ex;
+      cout &lt;&lt; base.a &lt;&lt; endl; // 1
+      cout &lt;&lt; best.a &lt;&lt; endl; // 2
+      cout &lt;&lt; ex.a &lt;&lt; endl;   // 3
+      cout &lt;&lt; best.b &lt;&lt; endl; // 4
+      cout &lt;&lt; ex.c &lt;&lt; endl;   // 5
+      cout &lt;&lt; ex.d &lt;&lt; endl;   // 6
+      cout &lt;&lt; base.d &lt;&lt; endl; // 7
+  }
+</pre>
+              <p class='example'>Draw a UML-like inheritance diagram and show what classes are a &quot;part&quot; of the others.</p>
+              <br/>
               <p>Now, here comes the magic...</p>
               <p>I know that because DerivingMeCrazy inherits from DropTheBase, which means that somewhere in DerivingMeCrazy is a DropTheBase object... how do I access its members?</p>
               <p class='toolkit'>
@@ -325,8 +443,9 @@
                 Derived class object.
               </p>
               <p>Here's what that looks like:</p>
-              
-              <!-- TODO: DIAGRAM HERE -->
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-5/inheritance-1.PNG' />
+              </div>
               
               <p class='example'>So knowing that's how pointers of the Base class behave, what will the following print out?</p>
 <pre class='prettyprint'>
@@ -372,30 +491,556 @@
       cout &lt;&lt; dPtr-&gt;s &lt;&lt; endl;
   }
 </pre>
-              
-              <!-- TODO: LEFT OFF HERE -->
-              
-              
-              <p>So, let's define a new base class called ForneyMon and use it to make a heterogeneous collection:</p>
-<pre class='prettyprint'>
-</pre>
               <br/>
-              <p>Now, I can make statements like:</p>
+              <p>Will the following code compiler? If so, what will it print out?</p>
 <pre class='prettyprint'>
   int main () {
+      DropTheBase b = DerivingMeCrazy();
+        
+      cout &lt;&lt; b.a &lt;&lt; endl;
+      cout &lt;&lt; b.s &lt;&lt; endl;
+      cout &lt;&lt; b.m &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p>Will the following code compiler? If so, what will it print out?</p>
+<pre class='prettyprint'>
+  int main () {
+      DerivingMeCrazy b = DropTheBase();
+        
+      cout &lt;&lt; b.a &lt;&lt; endl;
+      cout &lt;&lt; b.s &lt;&lt; endl;
+      cout &lt;&lt; b.m &lt;&lt; endl;
+  }
+</pre>
+              
+              <br/>
+              <h3>Heterogeneous Collections</h3>
+              <p>One of the issues we noticed was that I cannot make a collection (let's say, an array) of ForneyMon that consists of both BurnyMon and DampyMon.</p>
+              <p>It would be nice if I could tell the compiler that I want to make a sort of type hierarchy where I arrange both of these classes under a more general one...</p>
+              <p>Hey, how bout that! Turns out I can...</p>
+              <p>So, let's start by defining a new base class called ForneyMon:</p>
+              <p class='example'>Have the BurnyMon and DampyMon classes inherit from a new ForneyMon base class, which you'll define. Abstract the m_name and m_health members into ForneyMon.</p>
+<pre class='prettyprint'>
+  class ForneyMon {
+      private:
+          // [!] Need to add members
+          
+      public:
+          ForneyMon (string n, int h);
+  };
+  
+  // [!] Need to change something here
+  class BurnyMon {
+      private:
+          // [!] Need to change something here
+          string m_name;
+          int m_health;
+  
+      public:
+          BurnyMon (string name);
+          int takeDamage (int dam, string type);
+          // [!] Need to change something here
+          void dealDamage (DampyMon* other, int dam, string type);
+  };
+  
+  // [!] Need to change something here
+  class DampyMon {
+      private:
+          // [!] Need to change something here
+          string m_name;
+          int m_health;
+  
+      public:
+          DampyMon (string name);
+          int takeDamage (int dam, string type);
+          // [!] Need to change something here
+          void dealDamage (BurnyMon* other, int dam, string type);
+  };
+</pre>
+              <br/>
+              <p>Now, all that we're missing is a way to construct our objects and we'll be on our way!</p>
+              <p>Let's look at how to do that next...</p>
+            </div>
+            <hr/>
+            
+            <br/>
+            <div id='construction' class='scrollspy-element' scrollspy-title='Constructors'></div>
+            <h1>Hey Look, More on Construction</h1>
+            <div>
+              <p>Before we can implement our constructors for the ForneyMon, BurnyMon, and DampyMon classes, we'll need to see all of the construction steps:</p>
+              <ol class='indent-1'>
+                <li><p>Construct this class' base class(es)</p></li>
+                <li><p>Construct this class' data members</p></li>
+                <li><p>Execute the body of the constructor</p></li>
+              </ol>
+              <p>Let's look at each step and then integrate them into our ForneyMon implementation.</p>
+              
+              <br/>
+              <p>We construct the base class of the object we're constructing before we do anything else.</p>
+              <p class='toolkit'>Although the base class is not technically a member of the derived class, we construct it using the member initialization list of the derived class.</p>
+              <p>So, let's look at how that constructor might look for some inheritance structure:</p>
+              <p class='example'>What will the following code print out?</p>
+<pre class='prettyprint'>
+  // Possibly the most topical reference I've
+  // ever made
+  struct AllYourBase {
+      string stuff;
+      AllYourBase (string s) {
+          cout &lt;&lt; "[Base] Constructor!" &lt;&lt; endl;
+          stuff = s;
+      }
+  };
+    
+  struct AreBelongToUs : public AllYourBase {
+      int i;
+      AreBelongToUs (string s, int j) : AllYourBase(s) {
+          cout &lt;&lt; "[Derived] Constructor!" &lt;&lt; endl;
+          i = j;
+      }
+  };
+    
+  int main () {
+      AreBelongToUs a(":D", 3);
+      cout &lt;&lt; a.i &lt;&lt; endl;
+      cout &lt;&lt; a.stuff &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p class='debug'>Will the following code compile? If so, what will it print out?</p>
+<pre class='prettyprint'>
+  // Possibly the most topical reference I've
+  // ever made
+  struct AllYourBase {
+      string stuff;
+      AllYourBase (string s) {
+          cout &lt;&lt; "[Base] Constructor!" &lt;&lt; endl;
+          stuff = s;
+      }
+  };
+    
+  struct AreBelongToUs : public AllYourBase {
+      int i;
+      
+      // [!] Member initialization of base class removed
+      AreBelongToUs (string s, int j) {
+          cout &lt;&lt; "[Derived] Constructor!" &lt;&lt; endl;
+          i = j;
+      }
+  };
+    
+  int main () {
+      AreBelongToUs a(":D", 3);
+      cout &lt;&lt; a.i &lt;&lt; endl;
+      cout &lt;&lt; a.stuff &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p>Now that we know how construction works, let's implement our constructors for ForneyMon!</p>
+              <p>Here's what I want of each ForneyMon constructor:</p>
+              <ul class='indent-1'>
+                <li><p>Each ForneyMon will be given a name</p></li>
+                <li><p>Health is decided by the type of ForneyMon; a BurnyMon will start with 10 health, and a DampyMon with 15.</p></li>
+              </ul>
+<pre class='prettyprint'>
+  ForneyMon::ForneyMon (string n, int h) {
+      // [!] TODO
+  }
+  
+  BurnyMon::BurnyMon (string n) /* [!] TODO */ {}
+  DampyMon::DampyMon (string n) /* [!] TODO */ {}
+</pre>
+              <br/>
+              <p>Returning to our heterogeneous collections example, and assuming we did the above correctly, I can now say things like:</p>
+<pre class='prettyprint'>
+  int main () {
+      ForneyMon* menagere[3];
+      menagere[0] = new BurnyMon("Emberterd");
+      menagere[1] = new DampyMon("Blastoilet");
+      // Now with double the copyright infringement!
+      menagere[2] = new BurnyMon("Firefox");
   }
 </pre>
               <p>See how I was able to store both a BurnyMon and DampyMon in that array?! Crazy!</p>
-              
-              <!-- TODO:
-              <h3>Heterogeneous Collections</h3>
-              <p>One of the issues we noticed was that I cannot make a collection (let's say, an array) of ForneyMon that consists of both BurnyMon and DampyMon.</p>
-              <p>It would be nice if I could tell the compiler that I want to make a sort of type hierarchy where I arrange both of these classes under amore general one...</p>
-              <p>Hey, how bout that! Turns out I can:</p>
-              
-              
-              -->
-              
+              <p>But why is this useful if all I can ever access are the common ForneyMon elements of each?</p>
+              <p>Let's find out!</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='polymorphism' class='scrollspy-element' scrollspy-title='Polymorphism'></div>
+            <h1>Polymorphism</h1>
+            <div>
+              <p class='definition'><strong>Polymorphism</strong> is defined as &quot;the provision of a single interface to entities of different types.&quot;</p>
+              <p>Ugh... let's unpack that:</p>
+              <p>
+                We have two different types: BurnyMon and DampyMon, and each of them can take damage (i.e., they each have a takeDamage function, the single interface), but the way each
+                handles taking damage is slightly different.
+              </p>
+              <p>We know that pointers of polymorphic Base classes are type-compatible with objects of their Derived classes...</p>
+              <p class='question' name='poly-q0'>
+                If we have a ForneyMon pointer to a BurnyMon object vs a ForneyMon pointer to a DampyMon object, do we want each pointer's member function calls to have the exact same behavior?
+              </p>
+              <p class='answer' name='poly-q0'>No! We've already said that some operations of DampyMon differ from those of BurnyMon.</p>
+              <p>So, let's see how to distinguish between member functions.</p>
+              <p>First off, some definitions and rules:</p>
+              <p class='definition'>A function <strong>binding</strong> determines which function implementation in which class to call when that function name is overloaded.</p>
+              <p class='definition'><strong>Non-virtual</strong> member functions will bind to the implementation within the type of the object or pointer that called them (aka static-binding, the default).</p>
+              <p class='example'>What will the following code print out?</p>
+<pre class='prettyprint'>
+  // Too good to just have in one example:
+  // (read: I'm too lazy to think of another)
+  struct AllYourBase {
+      void yell () {
+          cout &lt;&lt; "[Base] AIEEE!" &lt;&lt; endl;
+      }
+  };
+      
+  struct AreBelongToUs : public AllYourBase {
+      void yell () {
+          cout &lt;&lt; "[Derived] AIEEE!" &lt;&lt; endl;
+      }
+  };
+      
+  int main () {
+      AllYourBase base;
+      AreBelongToUs derived;
+      AllYourBase* basePtr = &amp;derived;
+  
+      base.yell();
+      derived.yell();
+      basePtr-&gt;yell();
+  }
+</pre>
+              <br/>
+              <p class='question' name='poly-q1'>Is it a problem that <code class='prettyprint'>derived.yell();</code> and <code class='prettyprint'>basePtr-&gt;yell();</code> elicited different behaviors?</p>
+              <p class='answer' name='poly-q1'>
+                Generally, yes; there would be no point to having base and derived classes if we couldn't have a Base class pointer to a Derived class that elicits the derived class' member function
+                behavior. We'll look at how to solve that problem shortly. 
+              </p>
+              <br/>
+              <p class='definition'>If a function is not defined for a Derived class, but it is for the Base class, then we will use the Base class' implementation.</p>
+              <p class='debug'>Will the following code compile? If so, what will it print out?</p>
+<pre class='prettyprint'>
+  // Too good to just have in one example:
+  // (read: I'm too lazy to think of another)
+  struct AllYourBase {
+      void yell () {
+          cout &lt;&lt; "[Base] AIEEE!" &lt;&lt; endl;
+      }
+  };
+      
+  struct AreBelongToUs : public AllYourBase {
+      // &gt;_&gt; &lt;_&lt;
+  };
+      
+  int main () {
+      AllYourBase base;
+      AreBelongToUs derived;
+      AllYourBase* basePtr = &amp;derived;
+  
+      base.yell();
+      derived.yell();
+      basePtr-&gt;yell();
+  }
+</pre>
+              <br/>
+              <p class='definition'>You can call a base class' functions from inside a derived class by using the scope access (::) operator:</p>
+              <p class='example'>What will the following code print out?</p>
+<pre class='prettyprint'>
+  struct AllYourBase {
+      void yell () {
+          cout &lt;&lt; "[Base] AIEEE!" &lt;&lt; endl;
+      }
+  };
+      
+  struct AreBelongToUs : public AllYourBase {
+      void yell () {
+          AllYourBase::yell();
+      }
+  };
+      
+  int main () {
+      AllYourBase base;
+      AreBelongToUs derived;
+      AllYourBase* basePtr = &amp;derived;
+  
+      base.yell();
+      derived.yell();
+      basePtr-&gt;yell();
+  }
+</pre>
+              <br/>
+              <p>Cool right? So knowing these three rules for non-virtual member functions, let's try implementing takeDamage and dealDamage for ForneyMons... ForneyMen? ForneyMon (plural and singular).</p>
+              <p>I want to define a general ForneyMon takeDamage and then specify any different behavior within the derived classes.</p>
+              <p>Since there's nothing special about how BurnyMon take damage, let's let the Base class handle that.</p>
+              <p>However, since I want special handling of how DampyMon take damage, we'll override its implementation.</p>
+<pre class='prettyprint'>
+  // ...
+  
+  class BurnyMon : public ForneyMon {
+      public:
+          BurnyMon (string name);
+          // [!] takeDamage removed from BurnyMon!
+          void dealDamage (ForneyMon* other, int dam, string type);
+  };
+  
+  // ...
+  
+  // (General) Take damage regardless of the type of attack
+  int ForneyMon::takeDamage (int dam, string type) {
+      // Reduce the current health by dam amount
+      m_health -= dam;
+      cout &lt;&lt; "[" &lt;&lt; type &lt;&lt; "] Damage: -" &lt;&lt; dam &lt;&lt; endl;
+      return m_health;
+  }
+  
+  // (DampyMon) Take damage equal to dam UNLESS the type
+  // of the attack was burny, in which case take 1 extra
+  int DampyMon::takeDamage (int dam, string type) {
+      // [!] TODO: Note, I do not have access to the Base
+      // class' private members in derived class member
+      // functions! What to do, what to do?
+      if ( ... ) { ... }
+      return /* TODO ??? */;
+  }
+</pre>
+              <br/>
+              <p>If all went according to plan, I should see the following output -2 and -3 damage respectively:</p>
+<pre class='prettyprint'>
+  int main () {
+      // Why do all my variables end with y?
+      // It's not even cute...
+      BurnyMon scorchy("Scorchy");
+      DampyMon puddly("Puddly");
+  
+      scorchy.takeDamage(2, "dampy");
+      puddly.takeDamage(2, "burny");
+  }
+</pre>
+              <br/>
+              <p>But there's one problem left... what happens if I try the following?</p>
+<pre class='prettyprint'>
+  int main () {
+      BurnyMon scorchy("Scorchy");
+      DampyMon puddly("Puddly");
+      ForneyMon* ptr = &amp;puddly;
+  
+      scorchy.takeDamage(2, "dampy");
+      ptr-&gt;takeDamage(2, "burny");
+  }
+</pre>
+              <p>Uh oh, even though I had a ForneyMon pointer to a DampyMon, I still only took 2 damage from a burny attack... let's see how to fix this next!</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='virtualFuncs' class='scrollspy-element' scrollspy-title='Virtual Functions'></div>
+            <h1>Virtual Functions</h1>
+            <div>
+              <p>We've already seen the behavior of static-binding such that we call the member function implementation within the class of the object, or pointer to object, that's calling it.</p>
+              <p class='definition'><strong>Static binding</strong> is decided at compile-time.</p>
+              <p>In the case where we want the function implementation of the Derived class that a Base class pointer points to, then we need dynamic-binding.</p>
+              <p class='definition'>
+                <strong>Dynamic binding</strong> is decided at runtime, and executes the Derived class function implementation of any overloaded Base class function tagged with the keyword
+                <code class='prettyprint'>virtual</code>.
+              </p>
+              <p>That's a lot of noise, let's look at it in action:</p>
+              <p class='example'>What will the following code print out?</p>
+<pre class='prettyprint'>
+  struct AllYourBase {
+      // [!] Note the virtual keyword
+      virtual void yell () {
+          cout &lt;&lt; "[Base] AIEEE!" &lt;&lt; endl;
+      }
+  };
+        
+  struct AreBelongToUs : public AllYourBase {
+      virtual void yell () {
+          cout &lt;&lt; "[Derived] AIEEE!" &lt;&lt; endl;
+      }
+  };
+        
+  int main () {
+      AllYourBase base;
+      AreBelongToUs derived;
+      AllYourBase* basePtr = &amp;derived;
+    
+      base.yell();
+      derived.yell();
+      basePtr-&gt;yell();
+  }
+</pre>
+              <p>Woah, so <code class='prettyprint'>basePtr</code> knew to use the Derived class' implementation? Doesn't it just point to the Base object within the Derived one? How'd it know to use it?</p>
+              <p class='definition'>
+                Whenever we declare at least one member function of a Base class as virtual, it is considered a virtual class. It, and any of its derived classes, will establish virtual tables that
+                are pointers to the correct function implementation to use for each context.
+              </p>
+              <p>
+                NOTE: I did NOT have to declare the AreBelongToUs::yell (); as virtual, though it is clean programming to do so in order to alert users that the overloaded function will be dynamically bound.
+              </p>
+              <p>So, whenever I create an object with a Base class that has *at least one* virtual function, I create hidden pointers within the object stored in its virtual table.</p>
+              <p class='definition'>A <strong>virtual table</strong> is just an array of pointers to virtual functions that point to the correct implementation at runtime.</p>
+              <p>We won't talk much about virtual tables, but know that they are hidden members that we, as programmers, don't interface with.</p>
+              <br/>
+              <p>So let's return to the problem of our ForneyMon possibly having the wrong implementation of takeDamage called (when a ForneyMon pointer points to a DampyMon object and calls takeDamage).</p>
+              <p class='question' name='virtual-q1'>I need make only one change to my ForneyMon class to elicit the desired behavior. What is it?</p>
+              <p class='answer' name='virtual-q1'>Simply declare ForneyMon::takeDamage to be virtual!</p>
+              <br/>
+              <p class='example'>With this fix made, what does the following code print out?</p>
+<pre class='prettyprint'>
+  int main () {
+      AllYourBase base;
+      AreBelongToUs derived;
+      AllYourBase* basePtr = &amp;derived;
+    
+      base.yell();
+      derived.yell();
+      basePtr-&gt;yell();
+  }
+</pre>
+              <p>Sweet! Well that problem's resolved... of course there's one last thing to consider with our ForneyMon...</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='abstractClasses' class='scrollspy-element' scrollspy-title='Pure Virtual Functions'></div>
+            <h1>Pure Virtual Functions</h1>
+            <div>
+              <p>There's one thing left that we'll discuss about ForneyMon... take the following code for example:</p>
+<pre class='prettyprint'>
+  int main () {
+      ForneyMon f("Forneytron", 2000);
+      f.takeDamage(0, "NOTHING HARMS FORNEYTRON");
+  }
+</pre>
+              <p>Errr... I've created a ForneyMon... ForneyMon... that's not right, I only wanted to allow BurneyMon and DampyMon to be created!</p>
+              <p>Like we said in class, we should never be able to create a Mammal (base) object so much as a Dog (derived) object, because Mammal is just an archtype classification.</p>
+              <p>So, I want to find a way to prevent users from creating ForneyMon objects, because this class is meant to be abstract.</p>
+              <p class='definition'>An <strong>abstract class</strong> is one in which at least one function is declared as pure-virtual. You cannot create objects of abstract classes.</p>
+              <p>Alright, so what's a pure virtual function?</p>
+              <p class='definition'>
+                A <strong>pure virtual function</strong> is denoted by placing &quot;= 0&quot; after the function signature, meaning that the class in which the signature exists is now
+                an abstract class, and that all classes derived from it must either implement said function or become abstract themselves.
+              </p>
+              <p>Let's see how that looks...</p>
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  struct Basically {
+      int a;
+      int b;
+      Basically () {a = 1; b = 2;}
+      // [!] Pure virtual function
+      virtual int compute () = 0;
+  };
+  struct Best : public Basically {
+      int a;
+      int c;
+      Best () {a = 3; c = 4;}
+      virtual int compute () {return a + b;}
+  };
+  
+  int main () {
+      Basically base;
+      Best best;
+      cout &lt;&lt; best.compute() &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  struct Basically {
+      int a;
+      int b;
+      Basically () {a = 1; b = 2;}
+      // [!] Pure virtual function
+      virtual int compute () = 0;
+  };
+  struct Best : public Basically {
+      int a;
+      int c;
+      Best () {a = 3; c = 4;}
+      virtual int compute () {return a + b;}
+  };
+  // [!] Added another class...
+  struct Example : public Best {
+      int a;
+      int d;
+      Example () {a = 5; d = 6;}
+  };
+  
+  int main () {
+      Best best;
+      Example ex;
+      cout &lt;&lt; ex.compute() &lt;&lt; endl;
+  }
+</pre>
+                <br/>
+                <p>Very cool... so, let's look again at our ForneyMon classes:</p>
+<pre class='prettyprint'>
+  class ForneyMon {
+      private:
+          string m_name;
+          int m_health;
+      public:
+          ForneyMon (string n, int h);
+          virtual int takeDamage (int dam, string type);
+  };
+  
+  class BurnyMon : public ForneyMon {
+      public:
+          BurnyMon (string name);
+          // [!] Take damage removed from BurnyMon!
+          void dealDamage (ForneyMon* other, int dam, string type);
+  };
+  
+  class DampyMon : public ForneyMon {
+      public:
+          DampyMon (string name);
+          int takeDamage (int dam, string type);
+          void dealDamage (ForneyMon* other, int dam, string type);
+  };
+</pre>
+              <br/>
+              <p class='question' name='abstract-q0'>Is there a function I could make pure virtual so that my ForneyMon class becomes abstract?</p>
+              <p class='answer' name='abstract-q0'>Yes! The dealDamage function, which has the same signature for each derived class!</p>
+              <br/>
+              <p class='example'>We'll need to implement the dealDamage function in our derived classes now that we declared in pure virtual in our base. Do so now!</p>
+              <p>So, let's make that change now and see if our code behaves as intended...</p>
+              <p>If everything went according to plan, then the following code should *not* compile:</p>
+<pre class='prettyprint'>
+  // [!] Warning: Should NOT compile if everything went well
+  int main () {
+      ForneyMon f("FORNEYTRON", 2000);
+      cout &lt;&lt; f.takeDamage(0, "INVINCIBLLLE") &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p>Alright! My ForneyMon classes are looking pretty good!</p>
+              <p>Now, let's abandon them forever!</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='destructors' class='scrollspy-element' scrollspy-title='Destructors'></div>
+            <h1>Destructors &amp; Virtual Destructors</h1>
+            <div>
+              <p>There's a final concern with inheritance that we should consider: the clean up!</p>
+              <p>We know, of course, that this must involve the destructors.</p>
+              <p>As it turns out, the destruction process is simply the reverse of the construction one:</p>
+              <ol class='indent-1'>
+                <li><p>Execute the destructor body.</p></li>
+                <li><p>Destroy any remaining non-dynamic data members (built-in types are ignored)</p></li>
+                <li><p>Destroy the base part.</p></li>
+              </ol>
+              <p>So, let's look back at our constructor example and add some dynamically allocated members:</p>
+<pre class='prettyprint'>
+  
+</pre>
             </div>
             <hr/>
             
@@ -410,68 +1055,8 @@
           
           <!-- MATERIALS FROM CLASS: -->
           
-          <!-- TODO: Inheritance -->
-            <!-- TODO: Base class / superclass / generalization -->
-            <!-- TODO: Derived class / subclass / specialization -->
-              <!-- TODO: Derived classes has embedded within it the Base class(es) that it is a part of -->
-              <!-- TODO: Within each of the derived classes, you inherit the data members of the base class -->
-              <!-- TODO: Any time you need a pointer to a derived class where a pointer to its base class is expected, there's an automatic conversion to the base -->
-                <!-- TODO: This conversion makes a pointer to the BASE CLASS portion of the derived class (remember the base class is a part of the derived) -->
-                <!-- TODO: Shape* shapePtrs[3]; ... shapePtrs[0] = new Circle(); // OK! heterogeneous collection established -->
-                <!-- TODO: Shape shapePtrs[3]; ... shapePtrs[0] = Circle(); // BAD! now array is not an array of the same thing! -->
-              <!-- TODO: Any time you have a derived object and you need a reference to a Base object, it will also perform the automatic conversion -->
-                <!-- TODO: The reference will be to the BASE CLASS portion of the derived object -->
-              <!-- TODO: Summary *Circle => *Shape, Circle& => Shape& -->
-              
-          <!-- TODO: If a base class says it has some function (like move), then all derived classes must declare it UNLESS They wish to inherit it from the base -->
-            <!-- TODO: e.g., if I have a Circle that did NOT declare a member function called move, but the Shape class (a Base for Circle) DOES, then it just uses that implementation -->
-            <!-- TODO: Example: Call to different functions that are implemented in the base class, but not the derived, and every variation of that -->
-            <!-- TODO: You can provide overriding implementations in derived classes, should the base class also contain a function definition -->
-              <!-- TODO: How to get the base class implementation of a function from a derived class? can use the base class::functionName -->
-                <!-- TODO: PROBLEM: what if you have a base class' virtual move function, and in a derived class, you have a function called move that invokes the superclass' move? -->
-                  <!-- TODO: It will try to call the Derived class': infinite loop! -->
-              <!-- TODO: PROBLEM: what if the base class' move is NOT virtual? Then we call different functions based on which object is expected (e.g., a Shape parameter for a Circle object) -->
-                <!-- TODO: Circle c; Shape* sPtr = c; c.move() different from sPtr->move()!!! -->
-                <!-- TODO: SOLUTION: NEVER override a non-virtual function!!! -->
-            <!-- TODO: How does the compiler know which function to call? Well, if it is uncertain if it's the superclass or the subclass at runtime, it DEFAULTS to calling the base class' implementation! -->
-              <!-- TODO: If the decision of what call to make happens at compile time, it's called Static Binding -->
-                <!-- TODO: Need to bind a call to some portion of machine code -->
-              <!-- TODO: We WANT dynamic binding, which will be decided at runtime, after a particular object has been EITHER generalized or specialized -->
-                <!-- TODO: Every other language (Java, C#) does dynamic binding by default, but C++, designed for performance, doesn't -->
-                  <!-- TODO: With inheritance, dynamic binding is the right choice, so we need to make sure that our code makes the right decision -->
-                  <!-- TODO: Declaring a function as virtual in the base class will choose the correct function implementation during runtime -->
-                    <!-- TODO: Declaring a function virtual IS ONLY REQUIRED in the base class, and is unnecessary in the derived classes, but often good to write virtual there too -->
-                  <!-- TODO: Example with different member functions defined as virtual (dynamic) vs. non-virtual (static) -->
-                <!-- TODO: For every class that has at least 1 virtual function, the compiler sets up a Virtual Table (vtbl), that has one entry for every virtual function -->
-                  <!-- TODO: NO virtual functions => NO virtual table -->
-                  <!-- TODO: IF a function has no implementation in a derived class, better to make it NON virtual (no need to follow virtual pointers at that point) -->
-                  <!-- TODO: 
-                    Each table element has a pointer to the particular implementations of that virtual function; SO, if we have a Shape, it will have a virtual table entry for
-                    every virtual function it has, and Rectangle will have a Virtual table entry for every virtual function... etc.
-                  -->
-                <!-- TODO: When an object is created, it contains a POINTER (the Virtual Pointer) to the VIRTUAL TABLE that applies to it -->
-                  <!-- TODO: This provides runtime definitions for the functions that have been overrided -->
-                  <!-- TODO: Virtual pointers are correctly linked to the right table during RUNTIME because we won't know what object's table to point to until new objects are made -->
-                  
-            <!-- TODO: Abstract / Pure Virtual functions -->
-              <!-- TODO: Declaring a virtual function with = 0 after the signature says that this might be an implemented function in derived classes, but NOT to be implemented by the Base class -->
-              <!-- TODO: virtual void draw() const = 0; // for example -->
-              <!-- TODO: AS SOON AS you declare one abstract function in a class, that becomes an Abstract Class that cannot be constructed directly (unlike Concrete Classes: Circle, Rectangle) -->
-              <!-- TODO: Banned statements: Shape s; Shape* sPtr = new Shape(); // BAD -->
-              <!-- TODO: Why not just omit the draw function from Shape? Without including it, any derived class objects will not be able to call their draw! -->
-              <!-- TODO: Abstract classes are useful for grouping common characteristics and adhering to a contract -->
-                <!-- TODO: Ex: abstract class with abstract functions that has a derived class that DOES NOT implement that function--then that derived class is now abstract as well! -->
-                
-            <!-- TODO: Construction, revisited -->
-              <!-- TODO: Steps: -->
-                <!-- TODO: 1) Construct the base part (looks for it in member initialization list) -->
-                  <!-- TODO: Circle::Circle (double x, double y, double r) : Shape(x, y), m_r(r) {...} -->
-                  <!-- TODO: Example: what if I left the member initialization list w/o the Circle constructor, and it doesn't have a default? Won't compile -->
-                <!-- TODO: 2) Construct the data members (member initialization list) -->
-                <!-- TODO: 3) Execute the body of the constructor -->
-            
             <!-- TODO: Destruction goes in the opposite order -->
-              <!-- TODO: 1) Execute the body of the constructor -->
+              <!-- TODO: 1) Execute the body of the destructor -->
               <!-- TODO: 2) Destroy the data members -->
               <!-- TODO: 3) Destroy the base members -->
                 <!-- TODO: Derived class need not worry about the Base class' member cleanup; that's handled in the base class'  -->
@@ -484,14 +1069,6 @@
                 <!-- TODO: What if I just declare the base class destructor as virtual but then don't implement it? Linker error! -->
                 <!-- TODO: Any derived class will call the destructor for the base class which, if not implemented, will cause problems -->
                 <!-- TODO: Rule: if a class is going to be a base class, need to at least give the base class a shell of a destructor implementation or it won't compile -->
-            
-            <!-- TODO: Interface classes -->
-              <!-- TODO: Classes that have NO function implementations; every function is pure virtual / abstract -->
-              <!-- TODO: No special keywords like in java to indicate this, just the nomenclature for C++ -->
-            
-            <!-- TODO: What class (derived, base) has access from and to what other class? (derived, base) -->
-            <!-- TODO: Example: virtual function that goes from base A -> derived B, which is a base to -> derived C -->
-            
             
             <!-- TODO: Sorting -->
               <!-- TODO: Review of merge sort of two stacks of sorted papers: simple -->
