@@ -1328,36 +1328,6 @@
           
           <!-- MATERIALS FROM CLASS: -->
           
-            <!-- TODO: Sorting -->
-              <!-- TODO: Review of merge sort of two stacks of sorted papers: simple -->
-              <!-- TODO: What about sorting two *unsorted* stacks? -->
-              <!-- TODO: Merge sort algorithm: -->
-                <!-- TODO: if n >= 2 -->
-                  <!-- TODO: Split pile into two -->
-                  <!-- TODO: *Sort one half and then sort the other, separately -->
-                <!-- TODO: Merge the two results -->
-              <!-- TODO: *how to perform this sort? Well, I already have the algorithm for this split: the original! -->
-              <!-- TODO: Each sort of a sub-problem is just a smaller instance of the same algorithm -->
-              <!-- TODO: This is a divide-and-conquer method that uses Recursion -->
-                <!-- TODO: Notice that it has a stopping condition when we no longer recurse: this is called the base case, and above it's when n < 2 -->
-                <!-- TODO: The remaining cases are the recursive cases, with the *condition* that each recursive call must be getting smaller / closer to the base case -->
-              <!-- TODO: Just a mention that recursion can be proven using mathematical induction -->
-              <!-- TODO: Merge sort in code:
-                  void sort (int a[], int b, int e) {
-                    // If we have at least 2 elements to sort,
-                    // then split the array into two pieces:
-                    if (e - b >= 2) {
-                      int mid = (b + e) / 2;
-                      // Sort left half
-                      sort(a, b, mid);
-                      // Sort right half
-                      sort(a, mid, e);
-                      // Assume merge implemented
-                      merge(a, b, mid, e); 
-                    }
-                  }
-               -->
-          
         </div>
       </div>
       <!-- END MAIN CONTENT -->
