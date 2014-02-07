@@ -161,7 +161,26 @@
   // [!] OK, prevents multiple definition issue
   inline int Stuff::doStuff () {return 20;}
 </pre>
-              <p>And, of course, there is not benefit to inlining functions in .cpp files. Your compiler's got you covered :)</p>
+              <p>And, of course, there is no benefit to inlining functions in .cpp files. Your compiler's got you covered :)</p>
+              
+              <br/>
+              <p><strong>Q: I got marked off on my homework for not having good (read: any) top-level function comments. What should I be doing?</strong></p>
+              <p>
+                Top-level function comments are important because they give at-a-glance information about what the function does, what parameters it expects, and 
+                what the result / return will look like.
+              </p>
+              <p>It is largely insufficient to nest this information within the function body itself lest a user of your function have to read through the entire code!</p>
+              <p>Here's what a good, concise top-level comment looks like:</p>
+<pre class='prettyprint'>
+  // Combines the key value pairs of two Maps, m1 &amp; m2 such that Map result
+  // is the set union of m1 &amp; m2. Matching keys in m1 &amp; m2 will only be
+  // included in result if their corresponding values also match. If any such 
+  // values do not match, return false. Return true otherwise.
+  bool combine(const Map&amp; m1, const Map&amp; m2, Map&amp; result) {
+      // ...
+  }
+</pre>
+              <p>OK, that's a little verbose, but you get the idea :)</p>
             </div>
             <hr/>
             
@@ -926,6 +945,7 @@
                 A <strong>pure virtual function</strong> is denoted by placing &quot;= 0&quot; after the function signature, meaning that the class in which the signature exists is now
                 an abstract class, and that all classes derived from it must either implement said function or become abstract themselves.
               </p>
+              <p class='definition'>A pure virtual function can still be implemented, but need not be so.</p>
               <p>Let's see how that looks...</p>
               <p class='debug'>Will the following code compile? If so, what will it output?</p>
 <pre class='prettyprint'>
@@ -1006,9 +1026,22 @@
 </pre>
               <br/>
               <p class='question' name='abstract-q0'>Is there a function I could make pure virtual so that my ForneyMon class becomes abstract?</p>
-              <p class='answer' name='abstract-q0'>Yes! The dealDamage function, which has the same signature for each derived class!</p>
+              <p class='answer' name='abstract-q0'>Yes! The dealDamage function, which has the same signature for each derived class! Alternately, I could declare, and implement, a pure virtual destructor.</p>
               <br/>
               <p class='example'>We'll need to implement the dealDamage function in our derived classes now that we declared in pure virtual in our base. Do so now!</p>
+<pre class='prettyprint'>
+  // [!] Hmm, these are the same function! I probably should make
+  // this a function of ForneyMon instead... left as an exercise ;)
+  void BurnyMon::dealDamage (ForneyMon* other, int dam, string type) {
+      other-&gt;takeDamage(dam, type);
+  }
+  void DampyMon::dealDamage (ForneyMon* other, int dam, string type) {
+      other-&gt;takeDamage(dam, type);
+  }
+</pre>
+              <p>
+                As a final note, if I don't have any functions that I want to make pure virtual, but still want an abstract class, then I can define a pure virtual destructor for the base that I implement.
+              </p>
               <p>So, let's make that change now and see if our code behaves as intended...</p>
               <p>If everything went according to plan, then the following code should *not* compile:</p>
 <pre class='prettyprint'>
@@ -1039,8 +1072,197 @@
               </ol>
               <p>So, let's look back at our constructor example and add some dynamically allocated members:</p>
 <pre class='prettyprint'>
-  
+  struct AllYourBase {
+      // [!] New data member is pointer to
+      // dynamically allocated string!
+      string* stuff;
+      AllYourBase (string s) {
+          cout &lt;&lt; "[Base] Constructor!" &lt;&lt; endl;
+          stuff = new string(s);
+      }
+      ~AllYourBase () {
+          cout &lt;&lt; "[Base] Destructor!" &lt;&lt; endl;
+          delete stuff;
+      }
+  };
+      
+  struct AreBelongToUs : public AllYourBase {
+      // [!] New data member is pointer to
+      // dynamically allocated int array!
+      int* i;
+      AreBelongToUs (string s, int* j, int size) : AllYourBase(s) {
+          cout &lt;&lt; "[Derived] Constructor!" &lt;&lt; endl;
+          i = new int[size];
+          for (int k = 0; k &lt; size; k++) {
+              i[k] = j[k];
+          }
+      }
+      ~AreBelongToUs () {
+          cout &lt;&lt; "[Derived] Destructor!" &lt;&lt; endl;
+          delete[] i;
+      }
+  };
 </pre>
+              <p class='debug'>Remembering our steps of construction and destruction, will there be any memory leaks in the following code? What will it print out?</p>
+<pre class='prettyprint'>
+  int main () {
+      int j[] = {1, 2, 3};
+      AreBelongToUs a(":D", j, 3);
+  }
+</pre>
+              <br/>
+              <p class='debug'>Remembering our steps of construction and destruction, will there be any memory leaks in the following code? What will it print out?</p>
+<pre class='prettyprint'>
+  int main () {
+      AllYourBase b("AIEE!!!");
+  }
+</pre>
+              <br/>
+              <p class='debug'>Remembering our steps of construction and destruction, will there be any memory leaks in the following code? What will it print out?</p>
+<pre class='prettyprint'>
+  int main () {
+      int j[] = {1, 2, 3};
+      AllYourBase* ptr = new AreBelongToUs(":(", j, 3);
+      delete ptr;
+  }
+</pre>
+              <br/>
+              <p>Ruh roh... I see I called my derived constructor (which performs dynamic allocation), but never my derived destructor! Memory leak! What happened?</p>
+              <p class='question' name='destructor-q0'>Why didn't the derived destructor get called in the example above?</p>
+              <p class='answer' name='destructor-q0'>Because the base destructor is statically bound due to the pointer being of the Base type!</p>
+              <br/>
+              <p>So, again, we rely on the <code class='prettyprint'>virtual</code> keyword to save the day by using virtual destructors to get dynamic binding.</p>
+              <p class='definition'>A <strong>virtual destructor</strong> ensures that the proper object destructor is called at runtime, regardless of what type of pointer is having delete called on it.</p>
+              <p>So, to fix our error above, we simply add the virtual keyword to the Base class' destructor!</p>
+<pre class='prettyprint'>
+  // ...
+  // [!] Now, destructor is virtual
+  virtual ~AllYourBase () {
+      cout &lt;&lt; "[Base] Destructor!" &lt;&lt; endl;
+      delete stuff;
+  }
+  // ...
+</pre>
+              <p>So, let's revisit our problematic example and make sure that the dynamic binding is indeed happening:</p>
+<pre class='prettyprint'>
+  int main () {
+      int j[] = {1, 2, 3};
+      AllYourBase* ptr = new AreBelongToUs(":(", j, 3);
+      delete ptr;
+  }
+</pre>
+              <p>Whew! All clear!</p>
+              <p>So, we see that it's very dangerous to leave a base class without a virtual destructor, even if there are no dynamic members to clean up in the base class.</p>
+              <p class='definition'>Rule: if a class is going to be a Base class, give it a virtual destructor, which means you must also implement it, even if the body is blank!</p>
+              <p class='example'>Implement a virtual destructor for the ForneyMon class.</p>
+              <p>That's it for inheritance and polymorphism... on to the fun stuff...</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='recursion' class='scrollspy-element' scrollspy-title='Recursion'></div>
+            <h1>Recursion</h1>
+            <div>
+              <p>Recursion is just one of those iconic elements of computer science that takes a rather large paradigm shift to learn.</p>
+              <p>Not only is recursion useful, and can often simplify otherwise messy code, but it is the butt of many CS jokes; even Google is in on it:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-5/inheritance-2.PNG' />
+              </div>
+              <p>Recursion is a little difficult to wrap your head around at first, but it will quickly feel like second nature.</p>
+              <p>Let's start with some definitions:</p>
+              <p class='definition'><strong>Recursion</strong> is the repeated application of a recursive process; less formally, in CS, it is when a function calls itself.</p>
+              <p>
+                Typically, we use recursion to take a large problem that is difficult to solve, break it into some number of small problems that are easy to solve, and then combine our mini-results into
+                a result that solves the original large problem!
+              </p>
+              <p>Usually, this splitting of a problem involves two key cases:</p>
+              <p class='definition'>
+                The <strong>Base Case</strong> or stopping condition, is when we've split our problem into a sufficiently small one that we can trivially solve. We return a solution
+                to our small problem in the base case(s) and do not recurse further.
+              </p>
+              <p class='definition'>
+                The <strong>Recursive Case(s)</strong> are when we have not reached a small enough subproblem to solve and need to continue looking for a base case that is trivially solved.
+                In these cases, we call our function from within our function on some even smaller problems.
+              </p>
+              <br/>
+              <p>Now, there are some constraints on valid recursive functions:</p>
+              <ul class='indent-1'>
+                <li><p>Recursive functions must have some stopping condition lest they recurse infinitely.</p></li>
+                <li><p>Each recursive case must bring the problem closer to a base case or solution; if they diverge, then we're not guaranteed that the recursion will successfully terminate.</p></li>
+              </ul>
+              <p>Let's start off gently, shall we?</p>
+              
+              <br/>
+              <h3>First &amp; Rest Split</h3>
+              <p>When we talk about solving smaller subproblems, we don't always have to think about performing massive splits on our data set to achieve our goal.</p>
+              <p>For our first example, we'll focus on an array of ints.</p>
+              <p class='example'>Create a recursive function <code class='prettyprint'>sum</code> that returns the sum of an array of ints.</p>
+              <p>Let's use the following function signature for sum:</p>
+<pre class='prettyprint'>
+  int sum (const int arr[], int size, int total);
+</pre>
+              <p>Here, I have an int array arr, the number of elements remaining in it (size), and the running total of the elements' sum.</p>
+              <p>My strategy is to look at the first element in my current sub-list, add it to my total, then recurse on the rest of the list!</p>
+              <p class='question' name='recursion-0'>What is my base case in this scenario?</p>
+              <p class='answer' name='recursion-0'>Since I'm summing all of the elements, my base case is when I've summed the last element and have run out of list items! i.e., size will be 0.</p>
+              <p>As soon as I hit my base case, I want to return the solution that I've collected.</p>
+              <p class='example'>Trace the stack frames of the following call to sum:</p>
+<pre class='prettyprint'>
+  int i[] = {1, 3, 6};
+  cout &lt;&lt; sum(i, 3, 0) &lt;&lt; endl;
+</pre>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-5/recursion.GIF' />
+              </div>
+              <p>Yeah I haven't mastered the whole gif thing yet so... enjoy all that whitespace above...</p>
+              <br/>
+              <p>OK, here's some pseudocode to get us on our way:</p>
+<pre class='prettyprint'>
+  int sum (const int arr[], int size, int total) {
+      // [!] Base case check
+      if ( ... ) {
+          // [!] Return solution
+          return ...;
+      }
+      // [!] Recursive case; go to next element, dec
+      // size, and then add the current front to total
+      return sum( ... );
+  }
+</pre>
+              <p class='definition'>Whenever a recursive call is made, I suspend my position in the current stack frame until the ones above it return.</p>
+              <p>Why don't we trace a simple execution of our sum function?</p>
+              <br/>
+              
+              
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='homework3' class='scrollspy-element' scrollspy-title='Homework 3'></div>
+            <h1>Homework 3 Help</h1>
+            <div>
+              <p>Well, we got recursion covered pretty much above... let's just do a quick runthrough with the maze:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-4/stacks-1.PNG' />
+              </div>
+              <p>Here's the new recursive algorithm:</p>
+<pre class='prettyprint'>
+  If the start location is equal to the ending location, then we've
+      solved the maze, so return true.
+  Mark the start location as visted.
+  For each of the four directions,
+      If the location one step in that direction (from the start
+    location) is unvisited,
+        then call pathExists starting from that location (and
+        ending at the same ending location as in the
+        current call).
+       If that returned true,
+           then return true.
+  Return false.
+</pre>
+              <p>Whew! That's all I have for today... that was a lot of stuff... go relax a bit and then GET TO WORK.</p>
             </div>
             <hr/>
             
@@ -1055,21 +1277,6 @@
           
           <!-- MATERIALS FROM CLASS: -->
           
-            <!-- TODO: Destruction goes in the opposite order -->
-              <!-- TODO: 1) Execute the body of the destructor -->
-              <!-- TODO: 2) Destroy the data members -->
-              <!-- TODO: 3) Destroy the base members -->
-                <!-- TODO: Derived class need not worry about the Base class' member cleanup; that's handled in the base class'  -->
-            
-            <!-- TODO: Virtual destructors -->
-              <!-- TODO: Consists of a linked list of vertices -->
-              <!-- TODO: What if I declare a Shape* s = new Polygon(); -->
-              <!-- TODO: How to know which destructor to call? At compile time, it might try to call the shape destructor ALONE, and not the appropriate one for Polygon -->
-              <!-- TODO: Need to declare the destructor for the base class as Virtual -->
-                <!-- TODO: What if I just declare the base class destructor as virtual but then don't implement it? Linker error! -->
-                <!-- TODO: Any derived class will call the destructor for the base class which, if not implemented, will cause problems -->
-                <!-- TODO: Rule: if a class is going to be a base class, need to at least give the base class a shell of a destructor implementation or it won't compile -->
-            
             <!-- TODO: Sorting -->
               <!-- TODO: Review of merge sort of two stacks of sorted papers: simple -->
               <!-- TODO: What about sorting two *unsorted* stacks? -->
