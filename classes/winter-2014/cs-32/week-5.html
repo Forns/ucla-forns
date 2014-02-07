@@ -176,11 +176,13 @@
               
               <br/>
               
-              <h3>Heterogeneous Collections</h3>
-              <p>One of the issues we noticed was that I cannot make a collection (let's say, an array) of ForneyMon that consists of both BurnyMon and DampyMon.</p>
-              <p>It would be nice if I could tell the compiler that I want to make a sort of type hierarchy where I arrange both of these classes under amore general one...</p>
-              <p>Hey, how bout that! Turns out I can:</p>
-              <p class='definition'>A <strong>base class</strong> is a class that does not inherit from any other class.</p>
+              <h3>Abstracting Common Members</h3>
+              <p>As we noticed, the private members for our two classes are the same!</p>
+              <p class='question' name='inheritance-q1'>Remind me, why is code repetition bad?</p>
+              <p class='answer' name='inheritance-q1'>It violates the One-Change, One-Place principal, wastes file space, and can potentially hinder efficiency.</p>
+              <p>If we could somehow abstract those elements outside of these two classes into another class that, say, was higher in a hierarchy, that would be great!</p>
+              <p>Turns out, that's exactly what we'll do...</p>
+              <p class='definition'>A <strong>base class</strong> is a class from which other (derived) classes inherit properties.</p>
               <p>We'll define a base class from which our two classes inherit some common elements. This makes our two classes that inherit from the base class called derived classes.</p>
               <p class='definition'>A <strong>derived class</strong> is a class that inherits features from a base class.</p>
               <p class='definition'>
@@ -222,8 +224,154 @@
               <p class='definition'>The <strong>is-a</strong> relationship describes the inheritance flow from a base class to a derived class. We say that a derived class is-a type of the base class.</p>
               <p>Well, during lecture, we said that a <code class='prettyprint'>Dog</code> (derived class) is-a <code class='prettyprint'>Mammal</code> (base class).</p>
               <p>So, above, we say that <code class='prettyprint'>DerivingMeCrazy</code> is-a <code class='prettyprint'>DropTheBase</code>... hmm, not one of my finest examples... but worth the joke.</p>
-              <p>See how that relationship works out?</p>
+              <p>What this means is that the Base class, and all of its members, are now a PART of the derived class!</p>
               
+              <!-- TODO: DIAGRAM HERE -->
+              
+              <p>See how that relationship works out?</p>
+              <p>This means that I can access any member of a Base class from its Derived classes.</p>
+              <p class='example'>See how we access the m member from a DerivingMeCrazy class:</p>
+<pre class='prettyprint'>
+  struct DropTheBase {
+      int a;
+      string s;
+      string m;
+      DropTheBase () {
+          a = 3;
+          s = "[s] Base!";
+          m = "[m] Base!";
+      }
+  };
+  
+  struct DerivingMeCrazy : public DropTheBase {
+      int a;
+      string s;
+      string t;
+      DerivingMeCrazy () {
+          a = 1;
+          s = "[s] Derived!";
+          t = "[t] Derived!";
+      }
+  };
+  
+  int main () {
+      DerivingMeCrazy d;
+      cout &lt;&lt; d.a &lt;&lt; endl;
+      cout &lt;&lt; d.s &lt;&lt; endl;
+      cout &lt;&lt; d.t &lt;&lt; endl;
+      cout &lt;&lt; d.m &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p>
+                Now that's all fine and good, but why did I get the Derived class versions of <code class='prettyprint'>a</code> and <code class='prettyprint'>s</code>
+                over the <code class='prettyprint'>DropTheBase</code> versions?
+              </p>
+              <div class='definition'>
+                <p>If a data member is defined in both a Derived class and its Base class, AND:</p>
+                <ul class='indent-1'>
+                  <li><p>An object is an instance of the Derived class, then we use the Derived class' definitions of those members.</p></li>
+                  <li><p>An object is an instance of the Base class, then we use the Base class' definitions of those members.</p></li>
+                </ul>
+              </div>
+              <p>So, if I have a DropTheBase object, I use the Base class' <code class='prettyprint'>a</code> and <code class='prettyprint'>s</code>...</p>
+              <p>So, if I have a DerivingMeCrazy object, I use the Derived class' <code class='prettyprint'>a</code> and <code class='prettyprint'>s</code>...</p>
+              <p class='definition'>If a member is not defined in my object's class, I will try to find it in my Base classes.</p>
+              <p class='example'>What will the following code print out?</p>
+<pre class='prettyprint'>
+  struct DropTheBase {
+      int a;
+      string s;
+      string m;
+      DropTheBase () {
+          a = 3;
+          s = "[s] Base!";
+          m = "[m] Base!";
+      }
+  };
+  
+  struct DerivingMeCrazy : public DropTheBase {
+      int a;
+      string s;
+      string t;
+      DerivingMeCrazy () {
+          a = 1;
+          s = "[s] Derived!";
+          t = "[t] Derived!";
+      }
+  };
+  
+  int main () {
+      DropTheBase b;
+      DerivingMeCrazy d;
+      cout &lt;&lt; d.a &lt;&lt; endl;
+      cout &lt;&lt; b.a &lt;&lt; endl;
+      
+      cout &lt;&lt; d.s &lt;&lt; endl;
+      cout &lt;&lt; b.s &lt;&lt; endl;
+      
+      cout &lt;&lt; d.m &lt;&lt; endl;
+      cout &lt;&lt; b.m &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              
+              <!-- TODO: What classes have access to what members? Do a 3 class chain, a Base object trying to get a Derived member, and a 2 Derived - 1 Base -->
+              
+              <p>Now, here comes the magic...</p>
+              <p>I know that because DerivingMeCrazy inherits from DropTheBase, which means that somewhere in DerivingMeCrazy is a DropTheBase object... how do I access its members?</p>
+              <p class='toolkit'>
+                If I have a pointer of type Base class, and it points to an object of one that Base class' Derived classes, then my pointer now points to the Base class portion of that
+                Derived class object.
+              </p>
+              <p>Here's what that looks like:</p>
+              
+              <!-- TODO: DIAGRAM HERE -->
+              
+              <p class='example'>So knowing that's how pointers of the Base class behave, what will the following print out?</p>
+<pre class='prettyprint'>
+  struct DropTheBase {
+      int a;
+      string s;
+      string m;
+      DropTheBase () {
+          a = 3;
+          s = "[s] Base!";
+          m = "[m] Base!";
+      }
+  };
+  
+  struct DerivingMeCrazy : public DropTheBase {
+      int a;
+      string s;
+      string t;
+      DerivingMeCrazy () {
+          a = 1;
+          s = "[s] Derived!";
+          t = "[t] Derived!";
+      }
+  };
+  
+  int main () {
+      DerivingMeCrazy d;
+      DropTheBase* bPtr = &amp;d;
+      
+      cout &lt;&lt; bPtr-&gt;a &lt;&lt; endl;
+      cout &lt;&lt; bPtr-&gt;s &lt;&lt; endl;
+      cout &lt;&lt; bPtr-&gt;m &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p>NOTE: I said that a Base class pointer can point to the Base class portion of one of its Derived class' objects... it does NOT work the other way around.</p>
+              <p class='debug'>Will the following code compile?</p>
+<pre class='prettyprint'>
+  int main () {
+      DropTheBase b;
+      DerivingMeCrazy* dPtr = &amp;b;
+      
+      cout &lt;&lt; dPtr-&gt;s &lt;&lt; endl;
+  }
+</pre>
               
               <!-- TODO: LEFT OFF HERE -->
               
@@ -240,12 +388,12 @@
               <p>See how I was able to store both a BurnyMon and DampyMon in that array?! Crazy!</p>
               
               <!-- TODO:
-              <h3>Abstracting Common Members</h3>
-              <p>As we noticed, the private members and constructors for our two classes are the same!</p>
-              <p class='question' name='inheritance-q1'>Remind me, why is code repetition bad?</p>
-              <p class='answer' name='inheritance-q1'>It violates the One-Change, One-Place principal, wastes file space, and can potentially hinder efficiency.</p>
-              <p>If we could somehow abstract those elements outside of these two classes into another class that, say, was higher in a hierarchy, that would be great!</p>
-              <p>Turns out, that's exactly what we'll do...</p>
+              <h3>Heterogeneous Collections</h3>
+              <p>One of the issues we noticed was that I cannot make a collection (let's say, an array) of ForneyMon that consists of both BurnyMon and DampyMon.</p>
+              <p>It would be nice if I could tell the compiler that I want to make a sort of type hierarchy where I arrange both of these classes under amore general one...</p>
+              <p>Hey, how bout that! Turns out I can:</p>
+              
+              
               -->
               
             </div>
