@@ -177,6 +177,7 @@
       other-&gt;takeDamage(dam, type);
   }
 </pre>
+              <p class='example'>We never got to do one thing with our ForneyMon's destructor. What is it?</p>
             </div>
             <hr/>
             
@@ -334,6 +335,20 @@
   &lt;&lt;&lt; POP Stack frame
   Did my call find the destination? YES!
   return true
+</pre>
+            </div>
+            <hr/>
+            
+            
+            <div id='recursion' class='scrollspy-element' scrollspy-title='Recursion Chaining'></div>
+            <h1>Simple Recursion &quot;Chaining&quot;</h1>
+            <div>
+              <p>And no, that's not a real name for something in recursion, I just think it sounds cool and describes this type of process.</p>
+              <p class='example'>Determine what this dumb little function returns. Notice how I'm able to &quot;chain&quot; the results together. Pay attention to the stack frames!</p>
+<pre class='prettyprint'>
+  int coolRecursion (int n) {
+      return (n &lt;= 0) ? 0 : 1 + coolRecursion(n - 1);
+  }
 </pre>
             </div>
             <hr/>
