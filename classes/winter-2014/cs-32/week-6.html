@@ -1,0 +1,193 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Andrew Forney - UCLA CS</title>
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/magic-bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/main.css" rel="stylesheet" type="text/css">
+    <script src="../../../js/lib/jquery-2.0.3.min.js"></script>
+    <script src="../../../js/lib/bootstrap.min.js"></script>
+    <script src="../../../js/lib/expanding.js"></script>
+    <script src="../../../js/display/general/general-display.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+  </head>
+  
+  <body data-spy="scroll" data-target="#scrollspy">
+    
+    <!-- BEGIN WRAP -->
+    <div id="wrap">
+      
+      <!-- BEGIN NAVIGATION -->
+      <nav class='navbar navbar-default' role='navigation'>
+        <div class='nav-accent'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-12'>
+              <div class='navbar-header'>
+                <button class='navbar-toggle' type='button' data-toggle='collapse' data-target='.navbar-main-collapse'>
+                  <span class='sr-only'>Toggle Navigation</span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                </button>
+                <a class='navbar-brand' href='/~forns/'>
+                  <span id='brand-text'>
+                    Andrew Forney
+                  </span>
+                </a>
+              </div>
+              
+              <div id='nav-main' class='collapse navbar-collapse navbar-main-collapse'>
+                <ul class='nav navbar-nav navbar-right'>
+                  
+                  <li>
+                    <a href='/~forns/about.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-user'></span>
+                      </div>
+                      <p class='text-center'>About</p>
+                    </a>
+                  </li>
+                  
+                  <li class='active'>
+                    <a href='/~forns/classes.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-book'></span>
+                      </div>
+                      <p class='text-center'>Classes</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/contact.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-comment'></span>
+                      </div>
+                      <p class='text-center'>Contact</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/publications.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-file'></span>
+                      </div>
+                      <p class='text-center'>Publications</p>
+                    </a>
+                  </li>
+                  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <!-- END NAVIGATION -->
+      
+      <!-- BEGIN MAIN CONTENT -->
+      <div id="main-content" class="container">
+        <div class="row">
+          
+          <!-- BEGIN SCROLLSPY -->
+          <div class='col-md-2 hidden-sm hidden-xs'>
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+              <ul id='scrollspy' class="nav bs-sidenav">
+              </ul>
+            </div>
+          </div>
+          <!-- END SCROLLSPY -->
+          
+          <!-- BEGIN PRESENTATION CONTENT -->
+          <div class='col-md-10 presentation-content' role='main'>
+            
+            <ol class="breadcrumb hidden-print">
+              <li><a href="../../../classes.html">Classes</a></li>
+              <li><a href="./cs-31.html">Winter14 CS32</a></li>
+              <li class="active">Week 6</li>
+            </ol>
+            
+            
+            <br/>
+            <div id='review' class='scrollspy-element' scrollspy-title='Review'></div>
+            <h1>Questions from Last Week</h1>
+            <div>
+            </div>
+            <hr/>
+            
+            
+            <a class='btn btn-default pull-right hidden-print' href='javascript:window.print();'>
+              <span class='glyphicon glyphicon-print'></span>
+              &nbsp; PDF / Print
+            </a>
+            
+          </div>
+          <!-- END PRESENTATION CONTENT -->
+          
+          <!-- MATERIALS FROM CLASS: -->
+          
+          <!-- TODO: How to solve recursion problems -->
+            <!-- TODO: Think about the inductive proof first, don't look through the code immediately -->
+            <!-- TODO: When to use iteration vs recursion -->
+            
+          <!-- TODO: Templates -->
+            <!-- TODO: template <typename T> -->
+            <!-- TODO: T min(T t1, T t2); -->
+            <!-- TODO: Templates are NOT functions; they are PATTERNS for functions -->
+            <!-- TODO: Template argument deduction is the process by which the compiler attempts to assign a type to the typename in the template and create its OWN function using the template -->
+              <!-- TODO: If T min(T t1, T t2) gets called with min("hi", "to you"); then T will be deduced to be a string -->
+              <!-- TODO: If T min(T t1, T t2) gets called with min(3, 3.14); then T will NOT convert the double to int or int to double; they must be the EXACT same type! -->
+            <!-- TODO: 3 guidelines for correct template behavior: -->
+              <!-- TODO: 1) the call must match a template -->
+              <!-- TODO: 2) the resulting function must compile -->
+                <!-- TODO: this means that you might have to override some operators in order to get proper behavior -->
+              <!-- TODO: 3) the resulting function must do the right thing -->
+            <!-- TODO: You can overload template definitions -->
+              <!-- TODO: If you have T min(T t1, T t2) and then char* min (char* c1, char* c2), then whenever a function calls min with 2 char pointers, we always match any non-template versions first -->
+                <!-- TODO: this will attempt to find the best match of input parameters -->
+            <!-- TODO: Stylistic concern: template parameters should be passed by constant reference where possible -->
+            <!-- TODO: Templates can mix template parameters and builtin type parameters template <typename T> double sum (const T s1[], int n); -->
+            <!-- TODO: Initialization to empty follows language convention: int(), string(), etc. which can then be abstracted to T() whenever we want 0 there -->
+          
+          <!-- TODO: Class Templates -->
+            <!-- TODO: again, we can define a *pattern* for class definitions -->
+            <!-- TODO: template <typename T> class Stack { ... } -->
+              <!-- TODO: each member function definition needs to have that template definition as well: -->
+              <!-- TODO: template <typename T> Stack<T>::pop () { ... } -->
+              <!-- TODO: The constructor need not specify the parameterization -->
+              <!-- TODO: template <typename T> Stack::Stack () { ... } -->
+            <!-- TODO: can have a stack of ints class that we want to abstract into a stack of arbitrary type -->
+            <!-- TODO: can also define member functions in terms of special case handling; e.g., Stack<Coord>::Stack () { ... } vs. Stack<int>::Stack () { ... } -->
+              
+          <!-- TODO: Standard Template Library (STL) -->
+            <!-- TODO: All generic-capable containers -->
+            <!-- TODO: Review of vector STL -->
+              <!-- TODO: Vectors can start off with a certain amount of default initializations -->
+                <!-- TODO: vector <double> v(10); -->
+              <!-- TODO: initialize a vector (for old C++): -->
+                <!-- TODO: int a[] = {1, 3, 5, 7}; -->
+                <!-- TODO: vector<int> va(a, a + 4); -->
+          
+          
+        </div>
+      </div>
+      <!-- END MAIN CONTENT -->
+      
+      
+      
+    </div>
+    <!-- END WRAPPER -->
+    
+    <!-- BEGIN FOOTER -->
+    <div id="footer">
+      <div class="container">
+        <div class="col-md-12 text-center">
+          
+        </div>
+      </div>
+    </div>
+    <!-- END FOOTER -->
+    
+  </body>
+</html>
