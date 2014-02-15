@@ -105,14 +105,122 @@
             <ol class="breadcrumb hidden-print">
               <li><a href="../../../classes.html">Classes</a></li>
               <li><a href="./cs-31.html">Winter14 CS32</a></li>
-              <li class="active">Week 6</li>
+              <li class="active">Midterm II Exercises</li>
             </ol>
+            
+            <div id='review' class='scrollspy-element' scrollspy-title='Midterm II'></div>
+            <h1>Midterm II Review</h1>
+            <div>
+              <p>The following practice problems are meant to be supplemental to the lecture notes, and give some extra practice for problem types you might encounter on the midterm.</p>
+              <p>Topics that are *probably* fair game include, but are not limited to, the following:</p>
+              <ul class='indent-1'>
+                <li><p>Inheritance</p></li>
+                <li><p>Polymorphism</p></li>
+                <li><p>Recursion</p></li>
+                <li><p>Templates</p></li>
+                <li><p>(STL Classes) maybe?</p></li>
+                <li><p>(Iterators) probably not?</p></li>
+              </ul>
+            </div>
+            <hr/>
             
             
             <br/>
-            <div id='review' class='scrollspy-element' scrollspy-title='Review'></div>
-            <h1>Questions from Last Week</h1>
+            <div id='noisyClass' class='scrollspy-element' scrollspy-title='NoisyClass'></div>
+            <h1>NoisyClass? Again? Really?</h1>
             <div>
+              <p>Yes really, make your own damn practice if you don't like it!</p>
+              <p>You'll thank me later :)</p>
+              <p>Here's the latest inheritance and polymorphism version:</p>
+              
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='recursion' class='scrollspy-element' scrollspy-title='Recursion'></div>
+            <h1>Recursion Examples</h1>
+            <div>
+              <p>More recursion than one person can handle!</p>
+              <p>Let's start off with some warm up problems and then ramp up to that heavy ish.</p>
+              
+              <p class='example'>Implement the cliche recursion problem factorial, which takes in <code class='prettyprint'>int n</code> and returns the value n!.</p>
+<pre class='prettyprint'>
+  int factorial(int n) {
+      // ...
+  }
+</pre>
+<pre class='prettyprint'>
+  int main () {
+      // Prints 1 (0! is defined as 1)
+      cout &lt;&lt; factorial(0) &lt;&lt; endl;
+      // Prints 1
+      cout &lt;&lt; factorial(1) &lt;&lt; endl;
+      // Prints 2 = 2 * 1
+      cout &lt;&lt; factorial(2) &lt;&lt; endl;
+      // Prints 6 = 3 * 2 * 1
+      cout &lt;&lt; factorial(3) &lt;&lt; endl;
+      // Prints 24 = 4 * 3 * 2 * 1
+      cout &lt;&lt; factorial(4) &lt;&lt; endl;
+  }
+</pre>
+              <p class='question' name='recursion-q0'>Click here for a sample solution.</p>
+              <div class='answer' name='recursion-q0'>
+<pre class='prettyprint'>
+  int factorial(int n) {
+      return (n == 1 || n == 0) ? 1 : factorial(n - 1) * n;
+  }
+</pre>
+              </div>
+              <br/>
+              
+              <p class='example'>
+                Implement the isPalindrome function recursively, which determines whether or not the input array of chars is a palindrome (the same forward as backward). If the input 
+                has spaces, ignore them.
+              </p>
+<pre class='prettyprint'>
+  bool isPalindrome(char* c, int len) {
+      // ...
+  }
+</pre>
+<pre class='prettyprint'>
+  int main () {
+      char p0[] = " a ";
+      char p1[] = "racecar";
+      char p2[] = "I R PALINDROME?";
+      char p3[] = "nurses run";
+      char p4[] = " ";
+      char p5[] = "ra ce ca r";
+      
+      // All tests except for p2 return true
+      cout &lt;&lt; isPalindrome(p0, 3) &lt;&lt; endl;
+      cout &lt;&lt; isPalindrome(p1, 7) &lt;&lt; endl;
+      cout &lt;&lt; isPalindrome(p2, 15) &lt;&lt; endl;
+      cout &lt;&lt; isPalindrome(p3, 10) &lt;&lt; endl;
+      cout &lt;&lt; isPalindrome(p4, 1) &lt;&lt; endl;
+      cout &lt;&lt; isPalindrome(p5, 10) &lt;&lt; endl;
+  }
+</pre>
+              <p class='question' name='recursion-q1'>Click here for a sample solution.</p>
+              <div class='answer' name='recursion-q1'>
+<pre class='prettyprint'>
+  bool isPalindrome(char* c, int len) {
+      if (c[0] == ' ') {
+          return isPalindrome(&amp;c[1], len - 1);
+      }
+      if (c[len - 1] == ' ') {
+          return isPalindrome(&amp;c[0], len - 1);
+      }
+      if(len &lt; 2) {
+          return true;
+      } else {
+          return c[0] == c[len-1] &amp;&amp; isPalindrome(&amp;c[1], len - 2);
+      }
+  }
+</pre>
+              </div>
+              <br/>
+              
             </div>
             <hr/>
             
@@ -125,59 +233,30 @@
           </div>
           <!-- END PRESENTATION CONTENT -->
           
-          <!-- MATERIALS FROM CLASS: -->
-          
-          <!-- TODO: How to solve recursion problems -->
-            <!-- TODO: Think about the inductive proof first, don't look through the code immediately -->
-            <!-- TODO: When to use iteration vs recursion -->
-            
+          <!-- TODO: NoisyClass with recursion / inheritance / polymorphism -->
+          <!-- TODO: Recursion -->
+            <!-- TODO: Input string of nested elements to parse somehow??? -->
+              <!-- TODO: Length in closure??? -->
+                <!-- TODO: (this is (a test) !) -> (10(6)) -->
+            <!-- TODO: Maze longest path -->
+          <!-- TODO: countDigit, which looks like: -->
+            <!-- TODO:
+              int count_digit(int n, int digit)
+                {
+                  int count;
+                  if (n == 0) return 0;
+                
+                  if (n % 10 == digit) return 1 + count_digit(n / 10, digit);
+                  else return count_digit(n / 10, digit);
+                }
+            -->
           <!-- TODO: Templates -->
-            <!-- TODO: template <typename T> -->
-            <!-- TODO: T min(T t1, T t2); -->
-            <!-- TODO: Templates are NOT functions; they are PATTERNS for functions -->
-            <!-- TODO: Template argument deduction is the process by which the compiler attempts to assign a type to the typename in the template and create its OWN function using the template -->
-              <!-- TODO: If T min(T t1, T t2) gets called with min("hi", "to you"); then T will be deduced to be a string -->
-              <!-- TODO: If T min(T t1, T t2) gets called with min(3, 3.14); then T will NOT convert the double to int or int to double; they must be the EXACT same type! -->
-            <!-- TODO: 3 guidelines for correct template behavior: -->
-              <!-- TODO: 1) the call must match a template -->
-              <!-- TODO: 2) the resulting function must compile -->
-                <!-- TODO: this means that you might have to override some operators in order to get proper behavior -->
-              <!-- TODO: 3) the resulting function must do the right thing -->
-            <!-- TODO: You can overload template definitions -->
-              <!-- TODO: If you have T min(T t1, T t2) and then char* min (char* c1, char* c2), then whenever a function calls min with 2 char pointers, we always match any non-template versions first -->
-                <!-- TODO: this will attempt to find the best match of input parameters -->
-            <!-- TODO: Stylistic concern: template parameters should be passed by constant reference where possible -->
-            <!-- TODO: Templates can mix template parameters and builtin type parameters template <typename T> double sum (const T s1[], int n); -->
-            <!-- TODO: Initialization to empty follows language convention: int(), string(), etc. which can then be abstracted to T() whenever we want 0 there -->
-            <!-- TODO: You can define a function with MULTIPLE templates: -->
-              <!-- TODO: template<typename Iter, typename T> -->
+          <!-- TODO: Triage -->
           
-          <!-- TODO: Class Templates -->
-            <!-- TODO: again, we can define a *pattern* for class definitions -->
-            <!-- TODO: template <typename T> class Stack { ... } -->
-              <!-- TODO: each member function definition needs to have that template definition as well: -->
-              <!-- TODO: template <typename T> Stack<T>::pop () { ... } -->
-              <!-- TODO: The constructor need not specify the parameterization -->
-              <!-- TODO: template <typename T> Stack::Stack () { ... } -->
-            <!-- TODO: can have a stack of ints class that we want to abstract into a stack of arbitrary type -->
-            <!-- TODO: can also define member functions in terms of special case handling; e.g., Stack<Coord>::Stack () { ... } vs. Stack<int>::Stack () { ... } -->
-              
-          <!-- TODO: Standard Template Library (STL) -->
-            <!-- TODO: All generic-capable containers -->
-            <!-- TODO: Review of vector STL -->
-              <!-- TODO: Vectors can start off with a certain amount of default initializations -->
-                <!-- TODO: vector <double> v(10); -->
-              <!-- TODO: initialize a vector (for old C++): -->
-                <!-- TODO: int a[] = {1, 3, 5, 7}; -->
-                <!-- TODO: vector<int> va(a, a + 4); -->
-                <!-- TODO: 
-                  vector supports subscripting v[3], but is only defined if you've used push to stick an element into that index; e.g., cannot say v[5] = 3; if you haven't pushed 6 elements on already
-                -->
-          
+            
         </div>
       </div>
       <!-- END MAIN CONTENT -->
-      
       
       
     </div>

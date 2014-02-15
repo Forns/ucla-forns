@@ -105,7 +105,7 @@
             <ol class="breadcrumb hidden-print">
               <li><a href="../../../classes.html">Classes</a></li>
               <li><a href="./cs-31.html">Winter14 CS32</a></li>
-              <li class="active">Week 6</li>
+              <li class="active">Week 7</li>
             </ol>
             
             
@@ -127,52 +127,38 @@
           
           <!-- MATERIALS FROM CLASS: -->
           
-          <!-- TODO: How to solve recursion problems -->
-            <!-- TODO: Think about the inductive proof first, don't look through the code immediately -->
-            <!-- TODO: When to use iteration vs recursion -->
-            
-          <!-- TODO: Templates -->
-            <!-- TODO: template <typename T> -->
-            <!-- TODO: T min(T t1, T t2); -->
-            <!-- TODO: Templates are NOT functions; they are PATTERNS for functions -->
-            <!-- TODO: Template argument deduction is the process by which the compiler attempts to assign a type to the typename in the template and create its OWN function using the template -->
-              <!-- TODO: If T min(T t1, T t2) gets called with min("hi", "to you"); then T will be deduced to be a string -->
-              <!-- TODO: If T min(T t1, T t2) gets called with min(3, 3.14); then T will NOT convert the double to int or int to double; they must be the EXACT same type! -->
-            <!-- TODO: 3 guidelines for correct template behavior: -->
-              <!-- TODO: 1) the call must match a template -->
-              <!-- TODO: 2) the resulting function must compile -->
-                <!-- TODO: this means that you might have to override some operators in order to get proper behavior -->
-              <!-- TODO: 3) the resulting function must do the right thing -->
-            <!-- TODO: You can overload template definitions -->
-              <!-- TODO: If you have T min(T t1, T t2) and then char* min (char* c1, char* c2), then whenever a function calls min with 2 char pointers, we always match any non-template versions first -->
-                <!-- TODO: this will attempt to find the best match of input parameters -->
-            <!-- TODO: Stylistic concern: template parameters should be passed by constant reference where possible -->
-            <!-- TODO: Templates can mix template parameters and builtin type parameters template <typename T> double sum (const T s1[], int n); -->
-            <!-- TODO: Initialization to empty follows language convention: int(), string(), etc. which can then be abstracted to T() whenever we want 0 there -->
-            <!-- TODO: You can define a function with MULTIPLE templates: -->
-              <!-- TODO: template<typename Iter, typename T> -->
+          <!-- TODO: Lists / Iterators -->
+            <!-- TODO: Represent doubly linked lists -->
+            <!-- TODO: Have push_back and push_front functions -->
+            <!-- TODO: Unlike our Node implementations, we don't have access to the nodes in the List class, so no way to call next or prev -->
+            <!-- TODO: We could point to the data elements but then we wouldn't be able to find the next element in the list, even if we had access to the Node members -->
+            <!-- TODO: So how do we access the elements with the potential to define some means of traversing the list? -->
+              <!-- TODO: For every standard container, instead of getting a pointer to a Node, each container defines an Iterator object -->
+                <!-- TODO: Iterators can be retrieved from a List via the begin() and end() functions -->
+                <!-- TODO: NOTE: The end() iterator points to *just past* the last item of the list, unless the list is empty, in which case begin() == end() -->
+                  <!-- TODO: This means that ++ is ill defined for the end(), as well as dereference -->
+                  <!-- TODO: insert is still OK to call with the end iterator, and will mimic the push_back behavior -->
+                <!-- TODO: In order to traverse the List, you can perform the following iterator operations: -->
+                  <!-- TODO: Construction: list<int>::iterator p; -->
+                  <!-- TODO: Equivalence and non-equivalence: p == p.end(); // reached the end of the list -->
+                  <!-- TODO: Increment; go to next element: p++; -->
+                  <!-- TODO: Dereference: return the data element of whatever the iterator points to -->
+                <!-- TODO: In any STL container, you can construct a copy of the elements between two iterators, inclusive: -->
+                  <!-- TODO: list<string> ls; // insertions here -->
+                  <!-- TODO: vector<string> vs(ls.begin(), ls.end()); -->
+                <!-- TODO: CANNOT perform += or -= operators on iterators in the List (check if you can do for vectors, probably not) -->
+                <!-- TODO: CANNOT perform <= or >= operations on iterators -->
+                <!-- TODO: You can use iterators to capture positions in a List; e.g., list<int>::iterator q = li.insert(p, 40); will insert the int 40 BEFORE the item pointed to by p -->
+                <!-- TODO: You can use iterators as targets for deletion in a list: p = li.erase(q); // returns the position of the item you just erased (try out) -->
+            <!-- TODO: issue with iterators in vectors: what happens if I save v.begin() but then insert an element and the vector resizes? Iterator now ponts to deallocated memory -->
+              <!-- TODO: ANY insertion operation will actually invalidate iterators in vectors, so not safe to use after insert is called -->
+          <!-- TODO: We can use templates in unison with iterators and collections in order to form *algorithms* -->
+            <!-- TODO: Library of <algorithm> can be used to perform type-agnostic operations like a linear search: template<typename Iter, typename T> Iter find(Iter b, Iter e, const T& target) -->
+            <!-- TODO: We can even use templates where we include functions for arguments to template functions -->
+              <!-- TODO: template<typename Iter, typename Func> Iter find_if(Iter b, Iter e, Func f) { ... } -->
+              <!-- TODO: We can pass in a *pointer to a function* which is just the name of that function -->
+              <!-- TODO: e.g. find_if(b, e, isNegative); // where isNegative takes in a single int and returns true if it's negative -->
           
-          <!-- TODO: Class Templates -->
-            <!-- TODO: again, we can define a *pattern* for class definitions -->
-            <!-- TODO: template <typename T> class Stack { ... } -->
-              <!-- TODO: each member function definition needs to have that template definition as well: -->
-              <!-- TODO: template <typename T> Stack<T>::pop () { ... } -->
-              <!-- TODO: The constructor need not specify the parameterization -->
-              <!-- TODO: template <typename T> Stack::Stack () { ... } -->
-            <!-- TODO: can have a stack of ints class that we want to abstract into a stack of arbitrary type -->
-            <!-- TODO: can also define member functions in terms of special case handling; e.g., Stack<Coord>::Stack () { ... } vs. Stack<int>::Stack () { ... } -->
-              
-          <!-- TODO: Standard Template Library (STL) -->
-            <!-- TODO: All generic-capable containers -->
-            <!-- TODO: Review of vector STL -->
-              <!-- TODO: Vectors can start off with a certain amount of default initializations -->
-                <!-- TODO: vector <double> v(10); -->
-              <!-- TODO: initialize a vector (for old C++): -->
-                <!-- TODO: int a[] = {1, 3, 5, 7}; -->
-                <!-- TODO: vector<int> va(a, a + 4); -->
-                <!-- TODO: 
-                  vector supports subscripting v[3], but is only defined if you've used push to stick an element into that index; e.g., cannot say v[5] = 3; if you haven't pushed 6 elements on already
-                -->
           
         </div>
       </div>
