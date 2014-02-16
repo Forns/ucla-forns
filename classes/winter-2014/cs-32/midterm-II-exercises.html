@@ -114,25 +114,361 @@
               <p>The following practice problems are meant to be supplemental to the lecture notes, and give some extra practice for problem types you might encounter on the midterm.</p>
               <p>Topics that are *probably* fair game include, but are not limited to, the following:</p>
               <ul class='indent-1'>
+                <li><p>Stacks and Queues</p></li>
                 <li><p>Inheritance</p></li>
                 <li><p>Polymorphism</p></li>
                 <li><p>Recursion</p></li>
-                <li><p>Templates</p></li>
-                <li><p>(STL Classes) maybe?</p></li>
-                <li><p>(Iterators) probably not?</p></li>
               </ul>
             </div>
             <hr/>
             
             
             <br/>
-            <div id='noisyClass' class='scrollspy-element' scrollspy-title='NoisyClass'></div>
+            <div id='inheritanceAndPolymorphism' class='scrollspy-element' scrollspy-title='Inheritance and Polymorphism'></div>
             <h1>NoisyClass? Again? Really?</h1>
             <div>
-              <p>Yes really, make your own damn practice if you don't like it!</p>
-              <p>You'll thank me later :)</p>
+              <p>Yes really!</p>
+              <p>You'll thank me later...</p>
               <p>Here's the latest inheritance and polymorphism version:</p>
+<pre class='prettyprint'>
+  class NoisyBase {
+      private:
+          string s;
+      public:
+          NoisyBase (string sBase) {
+              cout &lt;&lt; "[B] Base Constructor: " &lt;&lt; sBase &lt;&lt; endl;
+              s = sBase;
+          }
+          virtual ~NoisyBase () {
+              cout &lt;&lt; "[B] Base Destructor!" &lt;&lt; endl;
+          }
+          virtual string getS () {
+              return s;
+          }
+  };
+  
+  class NoisyDerived: public NoisyBase {
+      private:
+          string s;
+      public:
+          NoisyDerived (string sBase, string sDerived): NoisyBase(sBase) {
+              cout &lt;&lt; "[D] Derived Constructor: " &lt;&lt; sDerived &lt;&lt; endl;
+              s = sDerived;
+          }
+          ~NoisyDerived () {
+              cout &lt;&lt; "[D] Derived Destructor!" &lt;&lt; endl;
+          }
+          virtual string getS () {
+              return s;
+          }
+  };
+</pre>
+              <br/>
+              <p>So, let's start off with the simple stuff and then ramp it up. Make sure you remember the order of construction and destruction!</p>
               
+              <br/>
+              <p class='example'>Using the NoisyBase and NoisyDerived implementations above, what will the following code print out?</p>
+<pre class='prettyprint'>
+  int main() {
+      NoisyBase b("base!");
+      NoisyDerived d("base!", "derived!");
+  }
+</pre>
+
+              <br/>
+              <p class='example'>Using the NoisyBase and NoisyDerived implementations above, what will the following code print out?</p>
+<pre class='prettyprint'>
+  int main() {
+      NoisyDerived d("base!", "derived!");
+      NoisyBase* bPtr = &amp;d;
+      cout &lt;&lt; bPtr-&gt;getS() &lt;&lt; endl;
+  }
+</pre>
+
+              <br/>
+              <p class='example'>Using the NoisyBase and NoisyDerived implementations above, what will the following code print out?</p>
+<pre class='prettyprint'>
+  // [!] Note: no noisy copy constructor defined, but
+  // b is still passed by value... so what happens
+  // at the end of this function?
+  void NoisyFunc (NoisyBase b) {
+      cout &lt;&lt; b.getS() &lt;&lt; endl;
+  }
+  
+  int main() {
+      NoisyDerived d("base!", "derived!");
+      NoisyFunc(d);
+  }
+</pre>
+
+              <br/>
+              <p class='example'>Using the NoisyBase and NoisyDerived implementations above, what will the following code print out?</p>
+<pre class='prettyprint'>
+  int main() {
+      NoisyBase* bPtr0 = new NoisyBase("base!");
+      NoisyBase* bPtr1 = new NoisyDerived("base!", "derived!");
+      delete bPtr0;
+      // [!] Remember your order of destruction!
+      delete bPtr1;
+  }
+</pre>
+              <br/>
+              
+              <p class='example'>Using the NoisyBase and NoisyDerived implementations above, what will the following code print out?</p>
+<pre class='prettyprint'>
+  void f(int n) {
+      NoisyDerived* d = new NoisyDerived("base!", "derived!");
+      if (n &lt;= 0) {
+          delete d;
+          return;
+      } else {
+          f(n - 1);
+      }
+      delete d;
+  }
+  
+  int main() {
+      f(1);
+  }
+</pre>
+              <br/>
+              <p>OK, I think that's enough of that...</p>
+              
+              <br/>
+              <h3>ForneyMon Revisited</h3>
+              <p>Just when you thought we were done with ForneyMon, let's take a look at a modified version, with changes marked by [!]:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+    
+  class DampyMon;
+  
+  class ForneyMon {
+      private:
+          string m_name;
+          int m_health;
+      public:
+          ForneyMon (string n, int h);
+          virtual int takeDamage (int dam, string type);
+          // [!] dealDamage no longer takes a type, but instead deals the
+          // damage type of the attacking ForneyMon (burny for BurnyMon, etc.)
+          virtual void dealDamage (ForneyMon* other, int dam) = 0;
+          // [!] Added virtual destructor, just in case
+          virtual ~ForneyMon () {};
+  };
+  
+  class BurnyMon : public ForneyMon {
+      public:
+          BurnyMon (string name);
+          void dealDamage (ForneyMon* other, int dam);
+  };
+  
+  class DampyMon : public ForneyMon {
+      public:
+          DampyMon (string name);
+          int takeDamage (int dam, string type);
+          void dealDamage (ForneyMon* other, int dam);
+  };
+  
+  ForneyMon::ForneyMon (string n, int h) {
+      m_name = n;
+      m_health = h;
+  }
+  
+  BurnyMon::BurnyMon (string n) : ForneyMon(n, 10) {}
+  DampyMon::DampyMon (string n) : ForneyMon(n, 15) {}
+  
+  // (General) Take damage regardless of the type of attack
+  int ForneyMon::takeDamage (int dam, string type) {
+      // Reduce the current health by dam amount
+      m_health -= dam;
+      // [!] Added more readable damage text
+      cout &lt;&lt; m_name &lt;&lt; " took [" &lt;&lt; type &lt;&lt; "] Damage: -" &lt;&lt; dam &lt;&lt; endl;
+      return m_health;
+  }
+  
+  // (DampyMon) Take damage equal to dam UNLESS the type
+  // of the attack was burny, in which case take 1 extra
+  int DampyMon::takeDamage (int dam, string type) {
+      if (type == "burny") {
+          dam += 1;
+      }
+      return ForneyMon::takeDamage(dam, type);
+  }
+  
+  void BurnyMon::dealDamage (ForneyMon* other, int dam) {
+      other-&gt;takeDamage(dam, "burny");
+  }
+  void DampyMon::dealDamage (ForneyMon* other, int dam) {
+      other-&gt;takeDamage(dam, "dampy");
+  }
+</pre>
+              <br/>
+              <p>Let's play around with a few features to get some practice with inheritance and polymorphism:</p>
+              <br/>
+              <p class='example'>Implement the following new &quot;block&quot; game component that completes this specification:</p>
+              <ul class='indent-1'>
+                <li><p>All ForneyMon can now initiate a block, which, after blocking, will prevent them from taking any damage from an attack.</p></li>
+                <li><p>A ForneyMon is no longer blocking after it has blocked an attack or initiated an attack.</p></li>
+                <li><p>(Overblocking) If a ForneyMon blocks, but wasn't attacked before their next move, then their next move (whether it be another block or an attack) causes them to take 1 damage.</p></li>
+                <li><p>Successful blocking should print &quot;&lt;nameOfForneyMon&gt; blocked the attack!&quot;</p></li>
+                <li><p>Initiating a block should print &quot;&lt;nameOfForneyMon&gt; started blocking!&quot;</p></li>
+                <li><p>Overblocking should print &quot;&lt;nameOfForneyMon&gt; took [overblock] Damage: -1&quot;</p></li>
+                <li><p>
+                  You may add a private variable to the ForneyMon class indicating whether or not the ForneyMon is blocking, a public getter for that variable, and a void function to set blocking status.
+                </p></li>
+              </ul>
+              <p>Here's how that behavior plays out:</p>
+<pre class='prettyprint'>
+  int main () {
+      DampyMon d("Pewpewtortoise");
+      BurnyMon b("Singelizard");
+  
+      cout &lt;&lt; "Turn 1:" &lt;&lt; endl;
+      d.block(true);
+      b.dealDamage(&amp;d, 2);
+  
+      cout &lt;&lt; endl &lt;&lt; "Turn 2:" &lt;&lt; endl;
+      d.dealDamage(&amp;b, 2);
+      b.block(true);
+  
+      cout &lt;&lt; endl &lt;&lt; "Turn 3:" &lt;&lt; endl;
+      d.block(true);
+      b.dealDamage(&amp;d, 2);
+  
+      cout &lt;&lt; endl &lt;&lt; "Turn 4:" &lt;&lt; endl;
+      d.block(true);
+      b.block(true);
+  
+      cout &lt;&lt; endl &lt;&lt; "Turn 5:" &lt;&lt; endl;
+      d.block(true);
+      b.dealDamage(&amp;d, 2);
+  }  
+</pre>
+              <p>...will print out:</p>
+<pre class='prettyprint'>
+  Turn 1:
+  Pewpewtortoise started blocking!
+  Pewpewtortoise blocked the attack!
+  
+  Turn 2:
+  Singelizard took [dampy] Damage: -2
+  Singelizard started blocking!
+  
+  Turn 3:
+  Pewpewtortoise started blocking!
+  Pewpewtortoise blocked the attack!
+  
+  Turn 4:
+  Pewpewtortoise started blocking!
+  Singelizard started blocking!
+  
+  Turn 5:
+  Pewpewtortoise took [overblock] Damage: -1
+  Pewpewtortoise started blocking!
+  Pewpewtortoise blocked the attack!
+</pre>
+              <br/>
+              <p class='question' name='forneymon-q0'>Once you've given it a shot, you can look at my sloppy solution here, with notes on the changes I made.</p>
+              <div class='answer' name='forneymon-q0'>
+<pre class='prettyprint'>
+  class DampyMon;
+  
+  class ForneyMon {
+      private:
+          string m_name;
+          int m_health;
+          // [!] Private member added
+          bool m_blocking;
+      public:
+          ForneyMon (string n, int h);
+          virtual int takeDamage (int dam, string type);
+          virtual void dealDamage (ForneyMon* other, int dam) = 0;
+          // [!] New member functions
+          bool isBlocking ();
+          void block (bool blocking);
+          virtual ~ForneyMon () {};
+  };
+  
+  class BurnyMon : public ForneyMon {
+      public:
+          BurnyMon (string name);
+          void dealDamage (ForneyMon* other, int dam);
+  };
+  
+  class DampyMon : public ForneyMon {
+      public:
+          DampyMon (string name);
+          int takeDamage (int dam, string type);
+          void dealDamage (ForneyMon* other, int dam);
+  };
+  
+  ForneyMon::ForneyMon (string n, int h) {
+      m_name = n;
+      m_health = h;
+      // [!] Initializing new private member
+      m_blocking = false;
+  }
+  
+  // [!] New member function definitions
+  bool ForneyMon::isBlocking () {return m_blocking;}
+  void ForneyMon::block (bool blocking) {
+      if (isBlocking() &amp;&amp; blocking) {
+          m_blocking = false;
+          this-&gt;takeDamage(1, "overblock");
+      }
+      if (blocking) {
+          cout &lt;&lt; m_name &lt;&lt; " started blocking!" &lt;&lt; endl;
+      }
+      m_blocking = blocking;
+  }
+  
+  BurnyMon::BurnyMon (string n) : ForneyMon(n, 10) {}
+  DampyMon::DampyMon (string n) : ForneyMon(n, 15) {}
+  
+  // (General) Take damage regardless of the type of attack
+  int ForneyMon::takeDamage (int dam, string type) {
+      // Reduce the current health by dam amount if not blocking
+      // [!] New blocking logic
+      if (!m_blocking) {
+          m_health -= dam;
+          cout &lt;&lt; m_name &lt;&lt; " took [" &lt;&lt; type &lt;&lt; "] Damage: -" &lt;&lt; dam &lt;&lt; endl;
+      } else {
+          cout &lt;&lt; m_name &lt;&lt; " blocked the attack!" &lt;&lt; endl;
+          this-&gt;block(false);
+      }
+      return m_health;
+  }
+  
+  // (DampyMon) Take damage equal to dam UNLESS the type
+  // of the attack was burny, in which case take 1 extra
+  int DampyMon::takeDamage (int dam, string type) {
+      if (type == "burny") {
+          dam += 1;
+      }
+      return ForneyMon::takeDamage(dam, type);
+  }
+  
+  void BurnyMon::dealDamage (ForneyMon* other, int dam) {
+      // [!] Added check for blocking
+      if (this-&gt;isBlocking()) {
+          this-&gt;block(false);
+      }
+      other-&gt;takeDamage(dam, "burny");
+  }
+  void DampyMon::dealDamage (ForneyMon* other, int dam) {
+      // [!] Added check for blocking
+      if (this-&gt;isBlocking()) {
+          this-&gt;block(false);
+      }
+      other-&gt;takeDamage(dam, "dampy");
+  }
+</pre>
+              </div>
+              <br/>
+              <p>Well that was certainly ellaborate... did you get some semblance of practice dealing with inheritance and polymorphism?</p>
+              <p>Oh well, whatever... let's move on to the easy stuff: recursion.</p>
             </div>
             <hr/>
             
@@ -221,10 +557,231 @@
               </div>
               <br/>
               
+              <p class='example'>
+                Implement the lengthInClosure function recursively, which prints out how many non-parenthesis characters (whitespace included) are within AND on either side of a set of parentheses in an input
+                cstring ('\0' terminated array of characters).
+                If no characters appear on a side of a parenthesis, print nothing (i.e., do not print anything, do not print '0').
+                You may assume all input is syntactically valid (no mismatched parens) and that all expressions begin with an open parenthesis.
+              </p>
+<pre class='prettyprint'>
+  void lengthInClosure (char* c, int n = 0)
+      // ...
+  }
+</pre>
+<pre class='prettyprint'>
+  int main () {
+      char c1[] = "(testing(stuff) now)";
+      char c2[] = "(testing() now)(wow(yo))";
+      char c3[] = "(((stuff)))";
+  
+      // Prints (7(5)4)
+      lengthInClosure(c1);
+  
+      // Prints (7()4)(3(2))
+      lengthInClosure(c2);
+  
+      // Prints (((5)))
+      lengthInClosure(c3);
+  }
+</pre>
+              <p class='question' name='recursion-q2'>Click here for a sample solution.</p>
+              <div class='answer' name='recursion-q2'>
+<pre class='prettyprint'>
+  void lengthInClosure (char* c, int n = 0) {
+      switch (*c) {
+          case '\0':
+              cout &lt;&lt; endl;
+              return;
+          case '(':
+          case ')':
+              if (n != 0) {
+                  cout &lt;&lt; n;
+              }
+              cout &lt;&lt; *c;
+              lengthInClosure(c + 1, 0);
+              break;
+          default:
+              lengthInClosure(c + 1, n + 1);
+      }
+  }
+</pre>
+              </div>
+              <br/>
+              
+              
+              <p class='example'>
+                Implement the countDigit function recursively, which takes in an input int n and then an input digit (int from 0 - 9) and returns how many times the given digit appears within n. Assume only 
+                input n > 0.
+                <br/>
+                [!] Hint: The input int n is a *deci*mal number. Do we have integer arithmetic that could perform a first-and-rest split on n? Maybe a last-and-rest split even?
+              </p>
+<pre class='prettyprint'>
+  int countDigit(int n, int digit) {
+      // ...
+  }
+</pre>
+<pre class='prettyprint'>
+  int main () {
+      int n1 = 1000,
+          n2 = 10101;
+  
+      // Prints 3
+      cout &lt;&lt; countDigit(n1, 0) &lt;&lt; endl;
+  
+      // Prints 1
+      cout &lt;&lt; countDigit(n1, 1) &lt;&lt; endl;
+  
+      // Prints 0
+      cout &lt;&lt; countDigit(n1, 2) &lt;&lt; endl;
+  
+      // Prints 3
+      cout &lt;&lt; countDigit(n2, 1) &lt;&lt; endl;
+  }
+</pre>
+              <p class='question' name='recursion-q3'>Click here for a sample solution.</p>
+              <div class='answer' name='recursion-q3'>
+  <p class='question' name='recursion-q4'>Seriously though, did you try it or did you think about it for a second and then be like, "well, I'll just take a peek at what he did..."?</p>
+  <div class='answer' name='recursion-q4'>
+<pre class='prettyprint'>
+  int countDigit(int n, int digit) {
+      int count;
+      if (n == 0) {
+          return 0;
+      }
+      
+      if (n % 10 == digit) {
+          return 1 + countDigit(n / 10, digit);
+      } else {
+          return countDigit(n / 10, digit);
+      }
+  }
+</pre>
+  </div>
+              </div>
+              <br/>
+              
+              <p>Are you guys ready for this one? This is a fantastic recursion problem, I got really happy when I thought of it.</p>
+              <p class='example'>
+                Implement the maxPath function recursively, which takes in a Maze (just like in homeworks 2 and 3) that is an array of strings with 'X' characters for walls and '.' characters for corridors,
+                and returns the longest path one could walk starting at the given start row and start column.
+                <br/>
+                [!] Hint: You might want to use the cmath max(int1, int2); function, which returns the maximum of its two arguments.
+              </p>
+<pre class='prettyprint'>
+  int maxPath(string maze[], int nRows, int nCols, int sr, int sc) {
+      // ...
+  }
+</pre>
+<pre class='prettyprint'>
+  int main () {
+      string maze0[] = {
+        "XXXXX",
+        "XX.XX",
+        "XX..X",
+        "X..XX",
+        "XXXXX"
+    };
+    string maze0Copy[] = {
+        "XXXXX",
+        "XX.XX",
+        "XX..X",
+        "X..XX",
+        "XXXXX"
+    };
+    string maze1[] = {
+        "XXXXX",
+        "XX.XX",
+        "XX..X",
+        "X.XXX",
+        "XXXXX"
+    };
+    string maze1Copy[] = {
+        "XXXXX",
+        "XX.XX",
+        "XX..X",
+        "X.XXX",
+        "XXXXX"
+    };
+    string maze2[] = {
+        "XXXXX",
+        "X...X",
+        "X...X",
+        "X...X",
+        "XXXXX"
+    };
+    
+    // Prints 4
+    cout &lt;&lt; maxPath(maze0, 5,5, 3,1) &lt;&lt; endl;
+    // Prints 3
+    cout &lt;&lt; maxPath(maze0Copy, 5,5, 3,2) &lt;&lt; endl;
+    // Prints 1
+    cout &lt;&lt; maxPath(maze1, 5,5, 3,1) &lt;&lt; endl;
+    // Prints 0
+    cout &lt;&lt; maxPath(maze1Copy, 5,5, 3,2) &lt;&lt; endl;
+    // Prints 9
+    // (observe the "serpentine" path we can take)
+    cout &lt;&lt; maxPath(maze2, 5,5, 3,1) &lt;&lt; endl;
+  }
+</pre>
+              <p class='question' name='recursion-q5'>Click here for a sample solution.</p>
+              <div class='answer' name='recursion-q5'>
+  <p class='question' name='recursion-q6'>OK, don't try to pull a fast one on me... you gotta try this yourself first...</p>
+  <div class='answer' name='recursion-q6'>
+    <p class='question' name='recursion-q7'>I know you haven't tried it yet! No easy answers here!</p>
+    <div class='answer' name='recursion-q7'>
+<pre class='prettyprint'>
+  int maxPath(string maze[], int nRows, int nCols, int sr, int sc) {
+      if (maze[sr][sc] != '.') {
+          return 0;
+      }
+  
+      maze[sr][sc] = '@';
+      int currentMax = 0;
+      currentMax = max(1 + maxPath(maze, nRows, nCols, sr - 1, sc), currentMax);
+      currentMax = max(1 + maxPath(maze, nRows, nCols, sr, sc + 1), currentMax);
+      currentMax = max(1 + maxPath(maze, nRows, nCols, sr + 1, sc), currentMax);
+      currentMax = max(1 + maxPath(maze, nRows, nCols, sr, sc - 1), currentMax);
+  
+      return currentMax;
+  }
+</pre>
+    </div>
+  </div>
+              </div>
+              <br/>
+              
+              
             </div>
             <hr/>
             
             
+            <br/>
+            <div id='triage' class='scrollspy-element' scrollspy-title='Code Triage'></div>
+            <h1>Code Triage</h1>
+            <div>
+              <p class='debug'>Someone tried to solve the isPalindrome function above with the following implementation. What is the error and show a test case on which it will break.</p>
+<pre class='prettyprint'>
+  bool isPalindrome(char* c, int len) {
+      if (c[0] == ' ') {
+          c++; // THAT'S THIS LANGUAGE! :DDD
+          len--;
+      }
+      if (c[len - 1] == ' ') {
+          len--;
+      }
+      if(len &lt; 2) {
+          return true;
+      } else {
+          return c[0] == c[len-1] &amp;&amp; isPalindrome(&amp;c[1], len - 2);
+      }
+  }
+</pre>
+              <br/>
+              
+              <p>...maybe more to come... I just got really lazy... congrats on finishing the practice midterm!</p>
+            </div>
+            <hr/>
+              
             <a class='btn btn-default pull-right hidden-print' href='javascript:window.print();'>
               <span class='glyphicon glyphicon-print'></span>
               &nbsp; PDF / Print
@@ -234,23 +791,6 @@
           <!-- END PRESENTATION CONTENT -->
           
           <!-- TODO: NoisyClass with recursion / inheritance / polymorphism -->
-          <!-- TODO: Recursion -->
-            <!-- TODO: Input string of nested elements to parse somehow??? -->
-              <!-- TODO: Length in closure??? -->
-                <!-- TODO: (this is (a test) !) -> (10(6)) -->
-            <!-- TODO: Maze longest path -->
-          <!-- TODO: countDigit, which looks like: -->
-            <!-- TODO:
-              int count_digit(int n, int digit)
-                {
-                  int count;
-                  if (n == 0) return 0;
-                
-                  if (n % 10 == digit) return 1 + count_digit(n / 10, digit);
-                  else return count_digit(n / 10, digit);
-                }
-            -->
-          <!-- TODO: Templates -->
           <!-- TODO: Triage -->
           
             
