@@ -477,8 +477,56 @@
             <div id='recursion' class='scrollspy-element' scrollspy-title='Recursion'></div>
             <h1>Recursion Examples</h1>
             <div>
-              <p>More recursion than one person can handle!</p>
-              <p>Let's start off with some warm up problems and then ramp up to that heavy ish.</p>
+              <p>More recursion than one person can handle! Before we start, keep the following tips in mind:</p>
+              <p><strong>Q: Is there a general strategy to approaching a recursion problem?</strong></p>
+              <p>General? Well, not really, but there are some guidelines that might help you to think recursively:</p>
+              <ul class='indent-1'>
+                <li>
+                  <p>Start with the very simplest case of the problem that you know how to solve.</p>
+                  <ul class='indent-1'>
+                    <li><p>Write down the steps that you use to solve it</p></li>
+                    <li><p>See if you can reduce those steps to recursive ones</p></li>
+                  </ul>
+                </li>
+                <li>
+                  <p>Once you see the very simple case, try applying the same strategy to a more difficult case</p>
+                  <ul class='indent-1'>
+                    <li><p>If that works, then cool! You're done!</p></li>
+                    <li><p>If that *doesn't* work, see if you can split the data in a meaningful way that reduces it to the simple case that you know how to solve.</p></li>
+                  </ul>
+                </li>
+                <li>
+                  <p>It also helps to think about base cases and the conditions of termination</p>
+                  <ul class='indent-1'>
+                    <li><p>
+                      Problems involving arrays usually have to look out for index out of bound problems, for example, and how the &quot;end index&quot; relates to where the current recursive
+                      call pointer is to an element in that array
+                    </p></li>
+                  </ul>
+                </li>
+                <li>
+                  <p>Remember the tools available to you in your problem's scenario:</p>
+                  <ul class='indent-1'>
+                    <li><p>
+                      If it's an array input, remember that the elements are indexed; this means that if I have a pointer to the &quot;first&quot; element 
+                      (I put &quot;first&quot; in quotes because that might be the first element of a recursive call, but not necessarily the true first element of the array) 
+                      and also the length of that array, then I know I have access to that first element and any offset up to the length - 1.
+                    </p></li>
+                    <li><p>
+                      Remember that you can add to and chain recursive calls, for example some function f taking in a pointer to some array element and the remaining length, 
+                      I can do: return f(a1 + 1, n1 - 1) + f(a2, n2 - 1); (just an example, not a real answer to anything)
+                    </p></li>
+                    <li><p>
+                      If your function isn't void, try to put your recursive cases into return statements (like above) and plan around that mechanic.
+                    </p></li>
+                  </ul>
+                </li>
+              </ul>
+              <p>
+                The most fruitful experience I have is to do problems by hand, see how I solve it mentally, and then try to abstract those steps to an algorithm--after 
+                that, I'll try to make that algorithm recursive!
+              </p>
+              <p>That said, let's start off with some warm up problems and then ramp up to that heavy ish.</p>
               
               <p class='example'>Implement the cliche recursion problem factorial, which takes in <code class='prettyprint'>int n</code> and returns the value n!.</p>
 <pre class='prettyprint'>
