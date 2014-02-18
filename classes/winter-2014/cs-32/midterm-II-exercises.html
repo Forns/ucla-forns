@@ -358,6 +358,7 @@
   
   Turn 3:
   Pewpewtortoise started blocking!
+  Singelizard took [overblock] Damage: -1
   Pewpewtortoise blocked the attack!
   
   Turn 4:
@@ -367,6 +368,7 @@
   Turn 5:
   Pewpewtortoise took [overblock] Damage: -1
   Pewpewtortoise started blocking!
+  Singelizard took [overblock] Damage: -1
   Pewpewtortoise blocked the attack!
 </pre>
               <br/>
@@ -414,7 +416,8 @@
   // [!] New member function definitions
   bool ForneyMon::isBlocking () {return m_blocking;}
   void ForneyMon::block (bool blocking) {
-      if (isBlocking() &amp;&amp; blocking) {
+      // [X] Typo Fixed here -- sorry! :)
+      if (isBlocking()) {
           m_blocking = false;
           this-&gt;takeDamage(1, "overblock");
       }
@@ -436,7 +439,8 @@
           cout &lt;&lt; m_name &lt;&lt; " took [" &lt;&lt; type &lt;&lt; "] Damage: -" &lt;&lt; dam &lt;&lt; endl;
       } else {
           cout &lt;&lt; m_name &lt;&lt; " blocked the attack!" &lt;&lt; endl;
-          this-&gt;block(false);
+          // [X] Other typo fixed here!
+          this-&gt;m_blocking = false;
       }
       return m_health;
   }
