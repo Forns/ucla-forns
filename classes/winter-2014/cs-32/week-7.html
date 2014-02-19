@@ -109,10 +109,186 @@
             </ol>
             
             
-            <br/>
             <div id='review' class='scrollspy-element' scrollspy-title='Review'></div>
             <h1>Questions from Last Week</h1>
             <div>
+              <p><strong>Q: Say I have the following inheritance structure...</strong></p>
+<pre class='prettyprint'>
+  class Basey {
+      string s;
+  
+      public:
+          Basey (string st) {
+              s = st;
+          }
+          virtual string func () {
+              return "[B] You can't stop the func!";
+          }
+  };
+  
+  class Derivey : public Basey {
+      string s;
+  
+      public:
+          Derivey (string sb, string sd): Basey(sb) {
+              s = sd;
+          }
+          virtual string func () {
+              return "[D] You can stop the func :(";
+          }
+  };
+</pre>
+              <p><strong>Now, let's play a game... *based* on these class definitions, tell me if the following code segments will print the same thing twice or not:</strong></p>
+<pre class='prettyprint'>
+  int main () {
+      Basey b("base!");
+      Derivey d("base!", "derived!");
+      cout &lt;&lt; b.func() &lt;&lt; endl;
+      cout &lt;&lt; d.func() &lt;&lt; endl;
+  }
+</pre>
+<pre class='prettyprint'>
+  int main () {
+      Derivey d("base!", "derived!");
+      Basey b = d;
+      cout &lt;&lt; b.func() &lt;&lt; endl;
+      cout &lt;&lt; d.func() &lt;&lt; endl;
+  }
+</pre>
+<pre class='prettyprint'>
+  int main () {
+      Derivey d("base!", "derived!");
+      Basey* bPtr = &amp;d;
+      cout &lt;&lt; bPtr-&gt;func() &lt;&lt; endl;
+      cout &lt;&lt; d.func() &lt;&lt; endl;
+  }
+</pre>
+<pre class='prettyprint'>
+  int main () {
+      Basey b("base!");
+      Basey* bPtr = &amp;b;
+      cout &lt;&lt; bPtr-&gt;func() &lt;&lt; endl;
+      cout &lt;&lt; b.func() &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p>Hope that wasn't too little too late! Never hurts to review.</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='stl' class='scrollspy-element' scrollspy-title='STL'></div>
+            <h1>The Standard Template Library</h1>
+            <div>
+              <p>Oh right, we've been talking about templates...</p>
+              <p>In fact, we've actually been using templates without knowing much about them!</p>
+              <p>When we've used a stack of ints from the STL stack, we've said something like <code class='prettyprint'>stack&lt;int&gt; si;</code></p>
+              <p class='definition'>The <strong>standard template library</strong> is a template-driven code base with 4 main components: containers, iterators, algorithms, and functors.</p>
+              <br/>
+              <p>We'll see examples of each of those momentarily!</p>
+              <p>The impetus for the STL was that programmers witnessed commonalities in many of their data structures and algorithms that differed only in the types they were using them with.</p>
+              <p>Sorry for ending that sentence in a preposition.</p>
+              <p>I'll make it up to you by starting with the exciting STL world of containers.</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='containers' class='scrollspy-element' scrollspy-title='Containers'></div>
+            <h1>STL Containers</h1>
+            <div>
+              <p>Just when you thought things would get dull, we get to tackle containers!... which are basically what we've been covering...</p>
+              <p class='definition'><strong>Containers</strong> are simply means by which we refer to groups of objects while abiding by the &quot;rules&quot; of a given container.</p>
+              <br/>
+              <p>So what are the rules of a container?</p>
+              <p class='question' name='containers-q0'>What are some containers we've discussed in class and by what rules should each abide?</p>
+              <div class='answer' name='containers-q0'>
+                <ul class='indent-1'>
+                  <li><p>A <code class='prettyprint'>stack</code> is a container that follows the last-in, first-out (LIFO) interface with pushing and popping from the top of the stack.</p></li>
+                  <li><p>A <code class='prettyprint'>queue</code> is a container that follows the first-in, first-out (FIFO) interface with pushing to the back and popping from the front.</p></li>
+                  <li><p>A <code class='prettyprint'>vector</code> is a dynamic array with random index access and dynamic resizing. (contiguous elements)</p></li>
+                  <li><p>A <code class='prettyprint'>list</code> is the STL implementation of a doubly linked list without random index access, but no need for dynamic resizing. (non-contiguous elements)</p></li>
+                </ul>
+              </div>
+              <br/>
+              <p>So none of this is particularly new... in fact, it's kinda what we've been doign this whole quarter...</p>
+              <p>That said, we haven't closely examined the intricacies of some STL containers, so let's use vectors and lists as our examples for the next section or two:</p>
+              
+              <br/>
+              <h3>#include &lt;vector&gt;</h3>
+              <p class='definition'>The <strong>vector</strong> container is just a dynamic array, which means we have random access to its elements plus the ability to resize it as we need.</p>
+              <p class='question' name='container-q1'>What does it mean for a container to have random access?</p>
+              <p class='answer' name='container-q1'>
+                It means that at any time, we can access elements at an arbitrary offset, similar to how pointers operate with random access (we can talk about pointers with any offset).
+              </p>
+              <br/>
+              <p>Let's look at some vector operations and see how they're similar and different from what we know:</p>
+              
+              <br/>
+              <p class='toolkit'><strong>push_back( ... )</strong> appends an element to the end of the vector. <strong>pop_back()</strong> removes the last element (and does NOT return it).</p>
+<pre class='prettyprint'>
+  int main () {
+      // Anyone catch this reference?
+      // *tumbleweed*
+      vector&lt;int&gt; victor;
+      victor.push_back(5);
+      victor.push_back(10);
+      victor.push_back(15);
+      victor.pop_back();
+      // Victor is now just: {5, 10}
+  }
+</pre>
+              <p>Nothing surprising there...</p>
+              
+              <br/>
+              <p class='toolkit'>The <strong>front(), back()</strong> member functions return the items at the front and back of the vector, respectively.</p>
+<pre class='prettyprint'>
+  int main () {
+      vector&lt;int&gt; victor;
+      victor.push_back(5);
+      victor.push_back(10);
+      victor.push_back(15);
+      cout &lt;&lt; victor.front() &lt;&lt; endl;
+      cout &lt;&lt; victor.back() &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p>We also said that vectors enjoy random access, so we have the following accessor functions at our disposal as well:</p>
+              <p class='toolkit'>The <strong>at(n)</strong> accessor returns the element at index n in the vector.</p>
+<pre class='prettyprint'>
+  int main () {
+      vector&lt;int&gt; victor;
+      victor.push_back(5);
+      victor.push_back(10);
+      victor.push_back(15);
+      // victor = {5, 10, 15}
+  
+      cout &lt;&lt; victor.at(1) &lt;&lt; endl;
+      victor.at(1) = 20;
+      // victor = {5, 20, 15}
+  }
+</pre>
+              <br/>
+              <p>Vectors also overload the pointer offset notation, so we can replicate the above code by saying:</p>
+<pre class='prettyprint'>
+  int main () {
+      vector&lt;int&gt; victor;
+      victor.push_back(5);
+      victor.push_back(10);
+      victor.push_back(15);
+      // victor = {5, 10, 15}
+  
+      cout &lt;&lt; victor[1] &lt;&lt; endl;
+      victor[1] = 20;
+      // victor = {5, 20, 15}
+      cout &lt;&lt; victor[1] &lt;&lt; endl;
+  }
+</pre>
+            <!-- TODO: size() and capacity() -->
+              <br/>
+              <p class='debug'>[!] WARNING: Accessing or assigning to vector (let's say vector v) elements using v.at(n) or v[n] is only defined if n is currently less than v.size().</p>
+            <!-- TODO: dangers of access before pushing -->
             </div>
             <hr/>
             
@@ -127,17 +303,6 @@
           
           <!-- MATERIALS FROM CLASS: -->
           
-          <!-- TODO: Standard Template Library (STL) -->
-            <!-- TODO: All generic-capable containers -->
-            <!-- TODO: Review of vector STL -->
-              <!-- TODO: Vectors can start off with a certain amount of default initializations -->
-                <!-- TODO: vector <double> v(10); -->
-              <!-- TODO: initialize a vector (for old C++): -->
-                <!-- TODO: int a[] = {1, 3, 5, 7}; -->
-                <!-- TODO: vector<int> va(a, a + 4); -->
-                <!-- TODO: 
-                  vector supports subscripting v[3], but is only defined if you've used push to stick an element into that index; e.g., cannot say v[5] = 3; if you haven't pushed 6 elements on already
-                -->
           
           <!-- TODO: Lists / Iterators -->
             <!-- TODO: Represent doubly linked lists -->
@@ -170,6 +335,9 @@
               <!-- TODO: template<typename Iter, typename Func> Iter find_if(Iter b, Iter e, Func f) { ... } -->
               <!-- TODO: We can pass in a *pointer to a function* which is just the name of that function -->
               <!-- TODO: e.g. find_if(b, e, isNegative); // where isNegative takes in a single int and returns true if it's negative -->
+              
+          <!-- TODO: Project 3 -->
+            <!-- TODO: String streams -->
           
           
         </div>
