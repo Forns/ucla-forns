@@ -109,75 +109,6 @@
             </ol>
             
             
-            <div id='review' class='scrollspy-element' scrollspy-title='Review'></div>
-            <h1>Questions from Last Week</h1>
-            <div>
-              <p><strong>Q: Say I have the following inheritance structure...</strong></p>
-<pre class='prettyprint'>
-  class Basey {
-      string s;
-  
-      public:
-          Basey (string st) {
-              s = st;
-          }
-          virtual string func () {
-              return "[B] You can't stop the func!";
-          }
-  };
-  
-  class Derivey : public Basey {
-      string s;
-  
-      public:
-          Derivey (string sb, string sd): Basey(sb) {
-              s = sd;
-          }
-          virtual string func () {
-              return "[D] You can stop the func :(";
-          }
-  };
-</pre>
-              <p><strong>Now, let's play a game... *based* on these class definitions, tell me if the following code segments will print the same thing twice or not:</strong></p>
-<pre class='prettyprint'>
-  int main () {
-      Basey b("base!");
-      Derivey d("base!", "derived!");
-      cout &lt;&lt; b.func() &lt;&lt; endl;
-      cout &lt;&lt; d.func() &lt;&lt; endl;
-  }
-</pre>
-<pre class='prettyprint'>
-  int main () {
-      Derivey d("base!", "derived!");
-      Basey b = d;
-      cout &lt;&lt; b.func() &lt;&lt; endl;
-      cout &lt;&lt; d.func() &lt;&lt; endl;
-  }
-</pre>
-<pre class='prettyprint'>
-  int main () {
-      Derivey d("base!", "derived!");
-      Basey* bPtr = &amp;d;
-      cout &lt;&lt; bPtr-&gt;func() &lt;&lt; endl;
-      cout &lt;&lt; d.func() &lt;&lt; endl;
-  }
-</pre>
-<pre class='prettyprint'>
-  int main () {
-      Basey b("base!");
-      Basey* bPtr = &amp;b;
-      cout &lt;&lt; bPtr-&gt;func() &lt;&lt; endl;
-      cout &lt;&lt; b.func() &lt;&lt; endl;
-  }
-</pre>
-              <br/>
-              <p>Hope that wasn't too little too late! Never hurts to review.</p>
-            </div>
-            <hr/>
-            
-            
-            <br/>
             <div id='stl' class='scrollspy-element' scrollspy-title='STL'></div>
             <h1>The Standard Template Library</h1>
             <div>
@@ -301,6 +232,7 @@
       cout &lt;&lt; victor.capacity() &lt;&lt; endl;
   }
 </pre>
+              <br/>
               <p class='debug'>[!] WARNING: Accessing or assigning to vector (let's say vector v) elements using v.at(n) or v[n] is only defined if n is currently less than v.size().</p>
               <p class='debug'>Does the following code exhibit any undefined behavior? If not, what will it print out?</p>
 <pre class='prettyprint'>
@@ -320,6 +252,293 @@
 </pre>
               <br/>
               <p>So, remember, we can only reliably use the at and [] functions for indexes less than the size, not the capacity!</p>
+              
+              <br/>
+              <h3>#include &lt;list&gt;</h3>
+              <p>So, whereas vectors are the STL dynamic array container, lists are the STL doubly linked list.</p>
+              <p>There are some key differences between the interfaces of vectors and lists; let's look at some below:</p>
+              <p class='toolkit'>We can add items to the front and back of a list using the <strong>push_front(...)</strong> and <strong>push_back(...)</strong> functions, respectively.</p>
+              <p class='question' name='lists-q0'>Why do we have the ability to push_front() with lists but not with vectors?</p>
+              <p class='answer' name='lists-q0'>Insertion to the front of a linked list is easy and performed in constant time; it is non-trivial with arrays because we need to shift everything down!</p>
+              <br/>
+              <p class='toolkit'>Similarly, we can pop items from the front or back of a list using <strong>pop_front()</strong> and <strong>pop_back()</strong> respectively.</p>
+<pre class='prettyprint'>
+  int main () {
+      list&lt;string&gt; less;
+      less.push_back("playing");
+      less.push_back("BugBlast");
+      less.push_front("Busy");
+      less.pop_front();
+      less.push_front("NOT");
+  }
+</pre>
+              <br/>
+              <p class='toolkit'>
+                We have a variety of accessor strategies for lists, two of which are to get references to the front and back via functions <strong>front()</strong> and <strong>back()</strong>
+                respectively.
+              </p>
+<pre class='prettyprint'>
+  int main () {
+      list&lt;string&gt; less;
+      less.push_back("DAMN");
+      less.push_back("BUG");
+      less.push_back("SPRAY");
+      less.back() = "SMALLBERG!";
+      cout &lt;&lt; less.front() &lt;&lt; endl;
+      cout &lt;&lt; less.back() &lt;&lt; endl;
+  }
+</pre>
+              <p class='definition'>Remember! We *cannot* perform random access with linked lists. This means that lists do NOT have the at and [] functions.</p>
+              <p>So how can we access elements that aren't at the back or the front? Let's shift our discussion to iterators...</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='iterators' class='scrollspy-element' scrollspy-title='Iterators'></div>
+            <h1>Iterators</h1>
+            <div>
+              <p>
+                When we dealt with linked lists in the past, the way we would iterate through elements was through a Node pointer on which we could successively look at 
+                <code class='prettyprint'>n-&gt;next;</code>
+              </p>
+              <p>With the STL list, however, we no longer have access to the internal representation of the Node, so how do we iterate?!</p>
+              <p class='toolkit'>Iterators are STL *objects* (not pointers, necessarily) that refer to a position in some sort of sequential collection.</p>
+              <p>Iterators are objects specific to a particular collection, so lists have their own iterators, vectors have their own iterators, etc.</p>
+              <p>For the purposes of lists, iterators are somewhat analogous to our familiar Node pointers, but with several key differences.</p>
+              <p>Let's look at the specifics next:</p>
+              
+              <br/>
+              <h3>Construction &amp; Assignment</h3>
+              <p class='toolkit'>We can construct new Iterators for a collection via the syntax: <code class='prettyprint'>collection&lt;type&gt;::iterator name;</code></p>
+              <p>So, to define a string iterator for a list, we'd say:</p>
+<pre class='prettyprint'>
+  list&lt;string&gt;::iterator iter;
+</pre>
+              <p>Not very useful yet...</p>
+              <br/>
+              <p class='toolkit'>
+                For *both vectors and lists* we can get an iterator at the position of the first or last element via the functions <strong>begin()</strong> and <strong>end()</strong>
+                respectively.
+              </p>
+              <p>So, let's make a couple iterators:</p>
+<pre class='prettyprint'>
+  int main () {
+      list&lt;string&gt; less;
+      less.push_back("Hey");
+      less.push_back("Iterate");
+      less.push_back("THIS!");
+      list&lt;string&gt;::iterator b = less.begin();
+      list&lt;string&gt;::iterator e = less.end();
+  }
+</pre>
+              <p class='debug'>[!] WARNING: the end() iterator refers to the theoretical position *just past* the last element. Keep this in mind for the next sections.</p>
+              <p>So, the current picture we have is:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-7/iterators-0.PNG' />
+              </div>
+              
+              <br/>
+              <h3>Dereference</h3>
+              <p class='toolkit'>Iterators support the dereference operation (*), which functions just like pointer dereference, returning the value that the iterator points to in the container.</p>
+              <br/>
+              <p class='debug'>Will the following code compile? If so, what will it print?</p>
+<pre class='prettyprint'>
+  int main () {
+      list&lt;string&gt; less;
+      less.push_back("Hey");
+      less.push_back("Iterate");
+      less.push_back("THIS!");
+      list&lt;string&gt;::iterator b = less.begin();
+      list&lt;string&gt;::iterator e = less.end();
+      cout &lt;&lt; *b &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p class='debug'>Will the following code compile? If so, what will it print?</p>
+<pre class='prettyprint'>
+  int main () {
+      list&lt;string&gt; less;
+      less.push_back("Hey");
+      less.push_back("Iterate");
+      less.push_back("THIS!");
+      list&lt;string&gt;::iterator b = less.begin();
+      list&lt;string&gt;::iterator e = less.end();
+      cout &lt;&lt; *e &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p>Always be careful with the iterator returned by end()!</p>
+              <p>Now, let's see how we can use iterators for something useful...</p>
+              
+              <br/>
+              <h3>Increment &amp; Decrement</h3>
+              <p class='toolkit'>Iterators support the increment (++) and decrement (--) operations when there is a legitimate position to iterate to in that direction.</p>
+              <p>
+                So, just like we could never call n-&gt;next on a Node pointer that is equal to the nullptr, we can't perform decrement on the iterator equivalent with begin() nor increment on the iterator
+                equivalent with end().
+              </p>
+              <p class='debug'>Will the following code compile? If so, what will it print?</p>
+<pre class='prettyprint'>
+  int main () {
+      list&lt;string&gt; less;
+      less.push_back("Hey");
+      less.push_back("Iterate");
+      less.push_back("THIS!");
+      list&lt;string&gt;::iterator b = less.begin();
+      list&lt;string&gt;::iterator e = less.end();
+      
+      // b--; BAD! Iterates off the beginning of the list
+      // e++; BAD! Iterates off the end of the list
+  
+      b++;
+      e--;
+      cout &lt;&lt; *b &lt;&lt; endl;
+      cout &lt;&lt; *e &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p>We're almost done looking at the basic operations of iterators... I kinda promise...</p>
+              
+              <br/>
+              <h3>Equivalence &amp; Nonequivalence</h3>
+              <p class='toolkit'>We can compare two iterators to see if they refer to the same container element via the familiar equivalence (==) and nonequivalence (!=) operators.</p>
+              <p>This allows us to use iterators in loops!</p>
+<pre class='prettyprint'>
+  int main () {
+      list&lt;string&gt; less;
+      less.push_back("Hey");
+      less.push_back("Iterate");
+      less.push_back("THIS!");
+      list&lt;string&gt;::iterator b = less.begin();
+      list&lt;string&gt;::iterator e = less.end();
+      
+      // Print out the data at b, then increment
+      // it until we reach the end of the list!
+      while (b != e) {
+          cout &lt;&lt; *b++ &lt;&lt; endl;
+      }
+  }
+</pre>
+
+              <br/>
+              <h3>Iterator Trickz</h3>
+              <p class='toolkit'>You can use iterators as ranges for copying between collections.</p>
+              <p>Here, I'll choose to copy all of the contents of my list into a new vector, specifying the begin and end copy range as the full list (less.begin(), less.end())</p>
+<pre class='prettyprint'>
+  int main () {
+      list&lt;string&gt; less;
+      less.push_back("Cool");
+      less.push_back("Copy");
+      less.push_back("Bro");
+  
+      vector&lt;string&gt; v(less.begin(), less.end());
+      vector&lt;string&gt;::iterator b = v.begin();
+      vector&lt;string&gt;::iterator e = v.end();
+  
+      while (b != e) {
+          cout &lt;&lt; *b++ &lt;&lt; endl;
+      }
+  }
+</pre>
+              <br/>
+              <p class='toolkit'>Use the <strong>insert(iterator, value);</strong> function to insert a value at the position *just before* the given iterator.</p>
+<pre class='prettyprint'>
+  int main () {
+      list&lt;string&gt; less;
+      less.push_back("Cool");
+      less.push_back("Insertion");
+      less.push_back("Bro");
+  
+      list&lt;string&gt;::iterator b = less.begin();
+      list&lt;string&gt;::iterator e = less.end();
+  
+      list&lt;string&gt;::iterator iter = less.begin();
+      iter++;
+      less.insert(iter, "HELP I'M TRAPPED IN A LIST");
+  
+      while (b != e) {
+          cout &lt;&lt; *b++ &lt;&lt; endl;
+      }
+  }
+</pre>
+              <br/>
+              <p class='toolkit'>Use the <strong>erase(iter)</strong> to erase a single iterator item, or <strong>erase(begin, end)</strong> to delete a range of items.</p>
+<pre class='prettyprint'>
+  int main () {
+      list&lt;string&gt; less;
+      less.push_back("Cool");
+      less.push_back("Insertion");
+      less.push_back("Bro");
+  
+      list&lt;string&gt;::iterator b = less.begin();
+      list&lt;string&gt;::iterator e = less.end();
+  
+      list&lt;string&gt;::iterator iter = less.begin();
+      iter++;
+      less.erase(iter, e);
+  
+      while (b != e) {
+          cout &lt;&lt; *b++ &lt;&lt; endl;
+      }
+  }
+</pre>
+              
+              <br/>
+              <h3>Dangers &amp; Caveats</h3>
+              <p class='definition'>*VECTOR* iterators support random access because of the dynamic array indexing. *LIST* iterators do NOT!</p>
+              <p>This means that (++) and (--) are the only ways to traverse lists, but we can perform additions and subtractions to iterators in vectors:</p>
+<pre class='prettyprint'>
+  int main () {
+      vector&lt;string&gt; v;
+      v.push_back("Cool");
+      v.push_back("Insertion");
+      v.push_back("Bro");
+  
+      vector&lt;string&gt;::iterator b = v.begin();
+      b += 2;
+      cout &lt;&lt; *b &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p class='debug'>For this same reason, &gt;, &gt;=, &lt;, and &lt;= comparisons are valid for vector iterators but NOT list iterators!</p>
+              <br/>
+              <p>One final warning before we move on from iterators...</p>
+              <p class='debug'>Insertions and deletions on *vectors*, but not lists, will INVALIDATE any iterators defined on that vector.</p>
+              <p class='debug'>Will the following code have any undefined behavior? If not, what will it print?</p>
+<pre class='prettyprint'>
+  int main () {
+      vector&lt;int&gt; v;
+      v.push_back(50);
+      v.push_back(22);
+      v.push_back(10);
+  
+      vector&lt;int&gt;::iterator b = v.begin();
+      vector&lt;int&gt;::iterator e = v.end();
+      for (int i = 0; i &lt; 100; i++) {
+          v.push_back(i);
+      }
+      while (b != e) {
+          cout &lt;&lt; *b++ &lt;&lt; endl;
+      }
+  }
+</pre>
+              <br/>
+              <p class='question' name='iterator-q1'>Why is this a problem?</p>
+              <p class='answer' name='iterator-q1'>
+                Vectors are dynamic arrays, which means they might resize themselves as needed. Whenever this happens, the old array is deleted in favor of a new one, but the old iterators
+                are not also updated, and so they refer to deallocated memory.
+              </p>
+              <br/>
+              <p>Alright you can wake up now! Time to move on to some kinda interesting stuffs.</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='algorithms' class='scrollspy-element' scrollspy-title='Algorithms'></div>
+            <h1>STL Algorithms</h1>
+            <div>
             </div>
             <hr/>
             
@@ -335,31 +554,6 @@
           <!-- MATERIALS FROM CLASS: -->
           
           
-          <!-- TODO: Lists / Iterators -->
-            <!-- TODO: Represent doubly linked lists -->
-            <!-- TODO: Have push_back and push_front functions -->
-            <!-- TODO: Unlike our Node implementations, we don't have access to the nodes in the List class, so no way to call next or prev -->
-            <!-- TODO: We could point to the data elements but then we wouldn't be able to find the next element in the list, even if we had access to the Node members -->
-            <!-- TODO: So how do we access the elements with the potential to define some means of traversing the list? -->
-              <!-- TODO: For every standard container, instead of getting a pointer to a Node, each container defines an Iterator object -->
-                <!-- TODO: Iterators can be retrieved from a List via the begin() and end() functions -->
-                <!-- TODO: NOTE: The end() iterator points to *just past* the last item of the list, unless the list is empty, in which case begin() == end() -->
-                  <!-- TODO: This means that ++ is ill defined for the end(), as well as dereference -->
-                  <!-- TODO: insert is still OK to call with the end iterator, and will mimic the push_back behavior -->
-                <!-- TODO: In order to traverse the List, you can perform the following iterator operations: -->
-                  <!-- TODO: Construction: list<int>::iterator p; -->
-                  <!-- TODO: Equivalence and non-equivalence: p == p.end(); // reached the end of the list -->
-                  <!-- TODO: Increment; go to next element: p++; -->
-                  <!-- TODO: Dereference: return the data element of whatever the iterator points to -->
-                <!-- TODO: In any STL container, you can construct a copy of the elements between two iterators, inclusive: -->
-                  <!-- TODO: list<string> ls; // insertions here -->
-                  <!-- TODO: vector<string> vs(ls.begin(), ls.end()); -->
-                <!-- TODO: CANNOT perform += or -= operators on iterators in the List (check if you can do for vectors, probably not) -->
-                <!-- TODO: CANNOT perform <= or >= operations on iterators -->
-                <!-- TODO: You can use iterators to capture positions in a List; e.g., list<int>::iterator q = li.insert(p, 40); will insert the int 40 BEFORE the item pointed to by p -->
-                <!-- TODO: You can use iterators as targets for deletion in a list: p = li.erase(q); // returns the position of the item you just erased (try out) -->
-            <!-- TODO: issue with iterators in vectors: what happens if I save v.begin() but then insert an element and the vector resizes? Iterator now points to deallocated memory -->
-              <!-- TODO: ANY insertion operation will actually invalidate iterators in vectors, so not safe to use after insert is called -->
           <!-- TODO: We can use templates in unison with iterators and collections in order to form *algorithms* -->
             <!-- TODO: Library of <algorithm> can be used to perform type-agnostic operations like a linear search: template<typename Iter, typename T> Iter find(Iter b, Iter e, const T& target) -->
             <!-- TODO: We can even use templates where we include functions for arguments to template functions -->
