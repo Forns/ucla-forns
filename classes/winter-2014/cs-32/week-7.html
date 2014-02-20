@@ -255,7 +255,7 @@
 </pre>
               <br/>
               <p>We also said that vectors enjoy random access, so we have the following accessor functions at our disposal as well:</p>
-              <p class='toolkit'>The <strong>at(n)</strong> and <strong>[n]</strong> accessors return references to the element at index n in the vector.</p>
+              <p class='toolkit'>The <strong>at(n)</strong> accessor returns the element at index n in the vector.</p>
 <pre class='prettyprint'>
   int main () {
       vector&lt;int&gt; victor;
@@ -285,10 +285,41 @@
       cout &lt;&lt; victor[1] &lt;&lt; endl;
   }
 </pre>
-            <!-- TODO: size() and capacity() -->
               <br/>
+              <p class='toolkit'>
+                The <strong>size()</strong> function returns how many elements are currently in the vector. The <strong>capacity</strong> function returns how much space the vector has reserved.
+              </p>
+              <p class='question' name='vector-q0'>Remembering that vectors are dynamic arrays, will size() and capacity() always be equivalent? What can we say about their relationship?</p>
+              <p class='answer' name='vector-q0'>No, they may not be equivalent, but we know that size() &lt;= capacity()</p>
+<pre class='prettyprint'>
+  int main() {
+      vector&lt;int&gt; victor;
+      for (int i = 0; i &lt; 100; i++) {
+          victor.push_back(i);
+      }
+      cout &lt;&lt; victor.size() &lt;&lt; endl;
+      cout &lt;&lt; victor.capacity() &lt;&lt; endl;
+  }
+</pre>
               <p class='debug'>[!] WARNING: Accessing or assigning to vector (let's say vector v) elements using v.at(n) or v[n] is only defined if n is currently less than v.size().</p>
-            <!-- TODO: dangers of access before pushing -->
+              <p class='debug'>Does the following code exhibit any undefined behavior? If not, what will it print out?</p>
+<pre class='prettyprint'>
+  int main() {
+      vector&lt;int&gt; victor;
+      for (int i = 0; i &lt; 100; i++) {
+          victor.push_back(i);
+      }
+      cout &lt;&lt; victor.size() &lt;&lt; endl;
+      cout &lt;&lt; victor.capacity() &lt;&lt; endl;
+      victor[100] = 1;
+      victor.push_back(2);
+      cout &lt;&lt; victor[100] &lt;&lt; endl;
+      cout &lt;&lt; victor.size() &lt;&lt; endl;
+      cout &lt;&lt; victor.capacity() &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p>So, remember, we can only reliably use the at and [] functions for indexes less than the size, not the capacity!</p>
             </div>
             <hr/>
             
@@ -327,7 +358,7 @@
                 <!-- TODO: CANNOT perform <= or >= operations on iterators -->
                 <!-- TODO: You can use iterators to capture positions in a List; e.g., list<int>::iterator q = li.insert(p, 40); will insert the int 40 BEFORE the item pointed to by p -->
                 <!-- TODO: You can use iterators as targets for deletion in a list: p = li.erase(q); // returns the position of the item you just erased (try out) -->
-            <!-- TODO: issue with iterators in vectors: what happens if I save v.begin() but then insert an element and the vector resizes? Iterator now ponts to deallocated memory -->
+            <!-- TODO: issue with iterators in vectors: what happens if I save v.begin() but then insert an element and the vector resizes? Iterator now points to deallocated memory -->
               <!-- TODO: ANY insertion operation will actually invalidate iterators in vectors, so not safe to use after insert is called -->
           <!-- TODO: We can use templates in unison with iterators and collections in order to form *algorithms* -->
             <!-- TODO: Library of <algorithm> can be used to perform type-agnostic operations like a linear search: template<typename Iter, typename T> Iter find(Iter b, Iter e, const T& target) -->
@@ -335,8 +366,59 @@
               <!-- TODO: template<typename Iter, typename Func> Iter find_if(Iter b, Iter e, Func f) { ... } -->
               <!-- TODO: We can pass in a *pointer to a function* which is just the name of that function -->
               <!-- TODO: e.g. find_if(b, e, isNegative); // where isNegative takes in a single int and returns true if it's negative -->
+              <!-- TODO: dangers of sorting with <=, >= because on one pass, a >= b is true but b >= a could also be true -->
               
-          <!-- TODO: Project 3 help -->
+          <!-- TODO: Algorithm analysis -->
+            <!-- TODO: Interested in time and space requirements of a given algorithm -->
+              <!-- TODO: Useful for comparing algorithms for the best -->
+              <!-- TODO: Useful for seeing how well an algorithm scales; growth of complexity with the more items an algorithm operates on -->
+            <!-- TODO: Needed because we can't count time of operation due to hardware differences between test machines -->
+            <!-- TODO: Instead, we'll measure the number of steps that the algorithm takes -->
+              <!-- TODO: When expressions grow in number of inputs N, the higher-order terms are the biggest contributors, until as N->infinity, the lower-order terms are ignored -->
+              <!-- TODO: We really only care about large N, because if N is small, usually computers are so fast it won't matter -->
+              <!-- TODO: As N->infinity, we really don't care about highest-order coefficients; we're interested in growth patterns -->
+              <!-- TODO: So, we only focus on the highest order N term -->
+              <!-- TODO: We say that the Big O notation for a function f(n) is O(f(n)) if there exists N_o and k such that for all N >= N_o, |f(n)| <= k*g(n) -->
+                <!-- TODO: We want to find a simple function that f(n) is always less than for large N -->
+                <!-- TODO: We say that N_o is the point where O(n) is always bigger than f(n) -->
+                <!-- TODO: We also want O(n) to be a tight bound to f(n) -->
+            <!-- TODO: Common growth patterns: -->
+              <!-- TODO: Constant time O(1): array element access, linked list deletion (when you know the address of the Node) -->
+              <!-- TODO: Linear time O(n): linked list element access; any list "find" mechanism -->
+              <!-- TODO: Quadratic time O(n^2): is each element in one array found somewhere in another? -->
+                <!-- TODO: Even if we're examining one element fewer with each iteration, still O(n^2) -->
+                <!-- TODO: Sum(N - 1) from 0 to N = N(N-1)/2 = 1/2*N^2 - N/2 ~~ O(n^2) -->
+              <!-- TODO: Logarithmic time O(log(n)): we can omit the base because log functions are proportional, though usually base 2 -->
+              <!-- TODO: O(n*log(n)): common with sorting -->
+              <!-- TODO: Exponential time O(2^n): very bad; adding one more item doubles the time it takes; complete outcome analysis--chess? -->
+            <!-- TODO: How to trace algorithmic steps -->
+              <!-- TODO: Leave off lower order terms: statements that are only done once are ignored -->
+              <!-- TODO: Easiest strategy: work from the inside->out, at each step asking if each statement depends on the size of the input -->
+                <!-- TODO: Loop body constant time? OK -->
+                <!-- TODO: Loop executes N times? OK that's constant (1) * linear (N) = N times -->
+              <!-- TODO: What if loops are nested and both iterate N times? O(n^2) -->
+              <!-- TODO: What if loops are nested and inner loop iterates i times where i = the outer loop's iterator? -->
+                <!-- TODO: We can add i, N times, which is N(N-1)/2, giving us quadratic time: O(n^2) -->
+              <!-- TODO: Pitfall: calling functions is not necessarily constant time if that function call involves a loop or something other than constant time -->
+              <!-- TODO: Binary search: log(n) -->
+            <!-- TODO: Example comparing our linked list circularity function -->
+            
+          <!-- TODO: Sorting -->
+            <!-- TODO: Selection sort: -->
+              <!-- TODO: | 1 8 2 3 4 7 5 6 -->
+              <!-- TODO: 1 | 8 2 3 4 7 5 6 -->
+              <!-- TODO: 1 2 | 8 3 4 7 5 6 -->
+              <!-- TODO: 1 2 3 | 8 4 7 5 6 -->
+              <!-- TODO: 1 2 3 4 | 8 7 5 6 -->
+              <!-- TODO: 1 2 3 4 5 | 7 8 6 -->
+              <!-- TODO: 1 2 3 4 5 6 | 8 7 -->
+              <!-- TODO: 1 2 3 4 5 6 7 | 8 -->
+              <!-- TODO: 1 2 3 4 5 6 7 8 | -->
+              <!-- TODO: Terrible algorithm: only learning one thing per iteration: where 1 thing is meant to be; complexity of O(n^2) -->
+            <!-- TODO: XKCD sort -->
+              
+          <!-- TODO: Project 3 -->
+            <!-- TODO: enums? -->
             <!-- TODO: String streams -->
           
           
