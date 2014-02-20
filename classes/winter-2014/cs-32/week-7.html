@@ -285,10 +285,41 @@
       cout &lt;&lt; victor[1] &lt;&lt; endl;
   }
 </pre>
-            <!-- TODO: size() and capacity() -->
               <br/>
+              <p class='toolkit'>
+                The <strong>size()</strong> function returns how many elements are currently in the vector. The <strong>capacity</strong> function returns how much space the vector has reserved.
+              </p>
+              <p class='question' name='vector-q0'>Remembering that vectors are dynamic arrays, will size() and capacity() always be equivalent? What can we say about their relationship?</p>
+              <p class='answer' name='vector-q0'>No, they may not be equivalent, but we know that size() &lt;= capacity()</p>
+<pre class='prettyprint'>
+  int main() {
+      vector&lt;int&gt; victor;
+      for (int i = 0; i &lt; 100; i++) {
+          victor.push_back(i);
+      }
+      cout &lt;&lt; victor.size() &lt;&lt; endl;
+      cout &lt;&lt; victor.capacity() &lt;&lt; endl;
+  }
+</pre>
               <p class='debug'>[!] WARNING: Accessing or assigning to vector (let's say vector v) elements using v.at(n) or v[n] is only defined if n is currently less than v.size().</p>
-            <!-- TODO: dangers of access before pushing -->
+              <p class='debug'>Does the following code exhibit any undefined behavior? If not, what will it print out?</p>
+<pre class='prettyprint'>
+  int main() {
+      vector&lt;int&gt; victor;
+      for (int i = 0; i &lt; 100; i++) {
+          victor.push_back(i);
+      }
+      cout &lt;&lt; victor.size() &lt;&lt; endl;
+      cout &lt;&lt; victor.capacity() &lt;&lt; endl;
+      victor[100] = 1;
+      victor.push_back(2);
+      cout &lt;&lt; victor[100] &lt;&lt; endl;
+      cout &lt;&lt; victor.size() &lt;&lt; endl;
+      cout &lt;&lt; victor.capacity() &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p>So, remember, we can only reliably use the at and [] functions for indexes less than the size, not the capacity!</p>
             </div>
             <hr/>
             
@@ -387,6 +418,7 @@
             <!-- TODO: XKCD sort -->
               
           <!-- TODO: Project 3 -->
+            <!-- TODO: enums? -->
             <!-- TODO: String streams -->
           
           
