@@ -165,7 +165,7 @@
       int i[] = {2, 4, 6, 8};
       // Anyone catch this reference?
       // *tumbleweed*
-      vector&lt;int&gt; victor(i, i+3);
+      vector&lt;int&gt; victor(i, i+4);
   }
 </pre>
               
@@ -606,7 +606,7 @@
 <pre class='prettyprint'>
   int main () {
       int i[] = {1, 5, 8, 32, 45, 99, 100};
-      vector&lt;int&gt; v(i, i+6);
+      vector&lt;int&gt; v(i, i+7);
   
       cout &lt;&lt; binarySearch(v, 45) &lt;&lt; endl;
       cout &lt;&lt; binarySearch(v, 42) &lt;&lt; endl;
@@ -665,7 +665,7 @@
 <pre class='prettyprint'>
   int main () {
       int i[] = {50, 29, 100, 72};
-      list&lt;int&gt; listy(i, i+3);
+      list&lt;int&gt; listy(i, i+4);
   
       cout &lt;&lt; maximum(listy) &lt;&lt; endl;
   }
@@ -728,7 +728,7 @@
 <pre class='prettyprint'>
   int main () {
       int i[] = {50, 29, 100, 72};
-      list&lt;int&gt; listy(i, i+3);
+      list&lt;int&gt; listy(i, i+4);
   
       cout &lt;&lt; lookAtEach(listy, greaterThan) &lt;&lt; endl;
       cout &lt;&lt; lookAtEach(listy, lessThan) &lt;&lt; endl;
@@ -750,7 +750,7 @@
   
   int main () {
       int i[] = {-10, 22, 50, 29, 100, 72, -5, 17};
-      list&lt;int&gt; listy(i, i+7);
+      list&lt;int&gt; listy(i, i+8);
       list&lt;int&gt;::iterator b = listy.begin();
       list&lt;int&gt;::iterator e = listy.end();
   
