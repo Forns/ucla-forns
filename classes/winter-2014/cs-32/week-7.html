@@ -705,9 +705,6 @@
   // [!] Add Function f as a parameter
   int lookAtEach(list&lt;int&gt; listy, Function f) {
       list&lt;int&gt;::iterator it = listy.begin();
-      if (it == listy.end()) {
-          return NULL;
-      }
   
       int currentMax = *it++;
       while (it != listy.end()) {
