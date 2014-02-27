@@ -167,7 +167,53 @@
             <!-- TODO: On average, order n*log(n) -->
             <!-- TODO: One improvement: when your split gets down to k items, just leave them alone and go over the list with insertion sort because everything will be close to its destination -->
               <!-- TODO: What is k? Well, a PhD dissertation by Sedgewick found that k is about 9 -->
+          <!-- TODO: Intro sort: is quicksort but monitors its own sorting and determines if it's headed towards the n^2 degeneration; if it is, it switches to another sorting algorithm -->
+            <!-- TODO: Intro sort: "introspection" quicksort -->
+            
+          <!-- TODO: Trees -->
+            <!-- TODO: Tree has a bunch of nodes -->
+            <!-- TODO: Nodes are connected by edges -->
+              <!-- TODO: They can be represented by some data component and then a vector of pointers to other nodes representing its children -->
+            <!-- TODO: Notion of a path whereby we follow edges from one node to another -->
+            <!-- TODO: The node at the "top" is the root -->
+            <!-- TODO: Leaves are nodes at the bottom that do not have any descendants -->
+              <!-- TODO: Leaves have a vector of children with no elements -->
+            <!-- TODO: Any node not a leaf is called an interior node -->
+            <!-- TODO: The node directly above a node is its parent -->
+            <!-- TODO: The nodes that come before a node between it and the root are its ancestors, including the root -->
+            <!-- TODO: The depth of a node is the number of edges between it and the root -->
+            <!-- TODO: The depth of a tree is the MAXIMUM depth of any node -->
+            <!-- TODO: What makes it a tree is that: for every node, there is *exactly* one path to the root -->
+            
+            <!-- TODO: Algorithm for how many nodes are in the tree -->
+              <!-- TODO: Recurse to each child -->
+              <!-- TODO: Count each node as its visited, adding to a total, and then combines each count from the children -->
+            <!-- TODO: [!] Example for max value in tree? -->
         
+            <!-- TODO: Tips for designing tree algorithms -->
+              <!-- TODO: Does it work for the null pointer? (not break) -->
+              <!-- TODO: Does it work for the root? -->
+              <!-- TODO: Does it work for an internal node? -->
+              <!-- TODO: Does it work for a leaf? -->
+            
+            <!-- TODO: Algorithm for how to print tree structure in text output -->
+              <!-- TODO: Write out the data of the current node, then recurse on the children -->
+            <!-- TODO: [!] Breadth first printout -->
+            
+            <!-- TODO: Traversal methods: -->
+              <!-- TODO: Preorder: (breadth first???) do something with the current node before dealing with any of the children -->
+                <!-- TODO: Ex: if-else conditional in C++ via tree structure -->
+              <!-- TODO: Postorder: (depth first???) do something with the current node after dealing with any of the children -->
+                <!-- TODO: Ex: evaluating arithmetic operations -->
+                
+            <!-- TODO: N-ary trees -->
+              <!-- TODO: Any tree can be converted into an n-ary tree of n maximum children per node -->
+              <!-- TODO: Binary trees: -->
+                <!-- TODO: Binary trees are either empty or a node with a left binary subtree and/or a right binary subtree -->
+                  <!-- TODO: Base case: empty tree -->
+                  <!-- TODO: Recursive case: left and right subtrees -->
+                <!-- TODO: Applications: binary search tree -->
+                  <!-- TODO: All nodes less than the current on the left, and all nodes greater than the current are on the right -->
       
     </div>
     <!-- END WRAPPER -->
