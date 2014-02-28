@@ -374,21 +374,91 @@
               <p>The sort of choice for the discerning programmer, Quick Sort (or some variant of it) is used in many modern sorting applications.</p>
               <p>It goes something like this:</p>
 <pre class='prettyprint'>
-  Choose a pivot value (randomly, for now) in the current subarray
-  Swap the value at the front of the array with that pivot
-  Track the position of the pivot with an index var
-  For each element i in the array starting at the 2nd:
-      If arr[i] is less than a[0],
-          Swap a[i] with the item to the right of the pivot
-          Increment the pivot index
-  Swap a[0] with the pivot index
-  Recurse on a[0, pivot index - 1]
-  Recurse on a[pivot index + 1, size of the array]
+  Return the current array if 1 element or fewer
+  Randomly choose a pivot value in the array
+  Remove the pivot from the array
+  For each remaining array element:
+      Put those greater than the pivot into an array
+      Put those smaller than the pivot into another
+  // Recursive step on lesser and greater arrays:
+  return concat(quickSort(lesser), pivot, quicksort(greater))
 </pre>
               <br/>
+              <p>So, we want to, at each call, choose a pivot randomly, divide the numbers less than and greater than the pivot into two piles, then recurse on those and combine back up!</p>
+              <p class='example'>Use QuickSort to sort the following list of ints:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-8/sorting-8.PNG' />
+              </div>
+              <p class='question' name='sorting-q9'>Click here for the steps the algorithm *could* take.</p>
+              <div class='answer' name='sorting-q9'>
+                <div class='text-center fit-pres'>
+                  <img src='../../../assets/images/winter-2014/cs-32/week-8/sorting-9.PNG' />
+                  <img src='../../../assets/images/winter-2014/cs-32/week-8/sorting-10.PNG' />
+                </div>
+              </div>
               
-              <!-- TODO: EXAMPLE OF QUICKSORT -->
+              <p>Here's a, perhaps more intuitive, implementation of quicksort that has an increased high space cost but illustrates the point:</p>
+<pre class='prettyprint'>
+  vector&lt;int&gt; quickSort (vector&lt;int&gt; arr) {
+      // Base case: return current array if 1
+      // element or fewer
+      if (arr.size() &lt;= 1) {return arr;}
+  
+      // Randomly choose a pivot
+      int pivotChoice = (rand() % arr.size());
+      int pivot = arr[pivotChoice];
+  
+      // We'll make 3 blank vectors: 1 that holds
+      // all of the numbers less than the pivot,
+      // 1 that holds all of the numbers greater,
+      // and then 1 that just holds the pivot itself
+      // for ease of concatenation
+      vector&lt;int&gt; lesser, greater, pivotHolder;
+      vector&lt;int&gt;::iterator it = arr.begin();
+      pivotHolder.push_back(pivot);
+  
+      // Erase the pivot from the current vector
+      arr.erase(it + pivotChoice);
+  
+      for (int i = 0; i &lt; arr.size(); i++) {
+          // Put remaining elements in their respective
+          // greater or less than piles
+          if (arr[i] &lt; pivot) {
+              lesser.push_back(arr[i]);
+          } else {
+              greater.push_back(arr[i]);
+          }
+      }
+  
+      // Recurse on the lesser and greater vectors,
+      // and then concatenate their results with the
+      // pivot in the center
+      return concatVect(quickSort(lesser), 
+             concatVect(pivotHolder, quickSort(greater)));
+  }
+  
+  int main () {
+      int i[] = {0, 4, 2, 0, 1, 6, 9, 3};
+      vector&lt;int&gt; v(i, i+8);
+      v = quickSort(v);
+      printIntVArr(v);
+  }
+</pre>
+              <br/>
+              <p class='question' name='sorting-q10'>Is QuickSort stable? i.e., is it going to perform equally well every time it runs?</p>
+              <p class='answer' name='sorting-q10'>No! We can get really unlucky with pivot choices and divisions, trending towards O(n^2)</p>
+              <p class='question' name='sorting-q11'>So what is the time complexity of QuickSort?</p>
+              <p class='answer' name='sorting-q11'>The average case is that it hits O(n*log(n)) because of its divide and conquer behavior.</p>
+              <br/>
+              <p>There are a variety of improvements to this QuickSort algorithm that better its performance, including:</p>
+              <ul class='indent-1'>
+                <li><p>Perform a 3-way partitioning</p></li>
+                <li><p>When a sub list is small enough (typically around 9 items) use another sort like insertion sort, then recombine upwards.</p></li>
+              </ul>
+              <p class='debug'>Warning: QuickSort performs best when the elements are randomly distributed; a lack of unique values will actually slow it down!</p>
+              <p class='definition'>There are some good QuickSort animations <a href='http://www.sorting-algorithms.com/quick-sort' target='_blank'>located here</a>.</p>
               
+              <br/>
               <p>Now that you're accustomed to QuickSort, this won't be you in a job interview:</p>
               <div class='text-center fit-pres'>
                 <a href='http://xkcd.com/1185/' target='_blank'>
@@ -397,6 +467,38 @@
                   <small>(credit to XKCD)</small>
                 </a>
               </div>
+              
+              <br/>
+              <h3>Practice</h3>
+              <p>How about a couple of practice problems to round this all out?</p>
+              <p class='example'>The following examples show a starting list of ints, followed by several steps taken by a sorting algorithm. Identify which algorithm(s) are being applied!</p>
+<pre class='prettyprint'>
+  8, 6, 1, 2, 5, 0, 7, 3, 9, 4
+  ====== BEGIN SORTING ======
+  6, 8, 1, 2, 5, 0, 7, 3, 9, 4
+  6, 1, 8, 2, 5, 0, 7, 3, 9, 4
+  1, 6, 8, 2, 5, 0, 7, 3, 9, 4
+  1, 6, 2, 8, 5, 0, 7, 3, 9, 4
+  1, 2, 6, 8, 5, 0, 7, 3, 9, 4
+  1, 2, 6, 8, 5, 0, 7, 3, 9, 4
+  1, 2, 6, 5, 8, 0, 7, 3, 9, 4
+  1, 2, 5, 6, 8, 0, 7, 3, 9, 4
+  1, 2, 5, 6, 8, 0, 7, 3, 9, 4
+  1, 2, 5, 6, 0, 8, 7, 3, 9, 4
+  1, 2, 5, 0, 6, 8, 7, 3, 9, 4
+  1, 2, 0, 5, 6, 8, 7, 3, 9, 4
+  1, 0, 2, 5, 6, 8, 7, 3, 9, 4
+</pre>
+              <br/>
+              <p class='example'>How many *swaps* will BubbleSort make in sorting the following:</p>
+<pre class='prettyprint'>
+  1, 2, 0, 3, 4
+</pre>
+              <br/>
+              <p class='example'>Which sorting algorithm will excel at sorting the following input? Which will degenerate to quadratic time?</p>
+<pre class='prettyprint'>
+  
+</pre>
             </div>
             <hr/>
             
@@ -416,24 +518,6 @@
       </div>
       <!-- END MAIN CONTENT -->
       
-      <!-- TODO: Sorting -->
-          <!-- TODO: Quick sort: the order function that everyone did for homework -->
-            <!-- TODO: We split into everything smaller than a pivot and then everything larger than it -->
-              <!-- TODO: Recurse on sub-splits -->
-            <!-- TODO: Performs really well when the piles are about even; poorly when one pile is small and the other large -->
-            <!-- TODO: Example: 5 3 7 6 1 8 2 4 -->
-            <!-- TODO: *5 3 7 6 1 8 2 4 -->
-            <!-- TODO: 1 3 4 2 (5) 8 6 7 -->
-              <!-- TODO: LHS: *1 3 4 2 => (1) 3 4 2 -->
-                <!-- TODO: *3 4 2 => 2 (3) 4 -->
-              <!-- TODO: RHS: *8 6 7 => 6 7 (8) -->
-            <!-- TODO: Degenerates to n^2 if pivot choices are poor -->
-            <!-- TODO: On average, order n*log(n) -->
-            <!-- TODO: One improvement: when your split gets down to k items, just leave them alone and go over the list with insertion sort because everything will be close to its destination -->
-              <!-- TODO: What is k? Well, a PhD dissertation by Sedgewick found that k is about 9 -->
-          <!-- TODO: Intro sort: is quicksort but monitors its own sorting and determines if it's headed towards the n^2 degeneration; if it is, it switches to another sorting algorithm -->
-            <!-- TODO: Intro sort: "introspection" quicksort -->
-            
           <!-- TODO: Trees -->
             <!-- TODO: Tree has a bunch of nodes -->
             <!-- TODO: Nodes are connected by edges -->
