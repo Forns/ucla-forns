@@ -495,13 +495,366 @@
   1, 2, 0, 3, 4
 </pre>
               <br/>
-              <p class='example'>Which sorting algorithm will excel at sorting the following input? Which will degenerate to quadratic time?</p>
+              <p class='example'>Which sorting algorithm will excel at sorting the following input? Which will degenerate toward quadratic time?</p>
 <pre class='prettyprint'>
-  
+  0, 0, 0, 0, 2, 2, 1, 1, 2, 2, 1, 1, 3, 3, 3, 3, 4, 4, 4, 4
 </pre>
             </div>
             <hr/>
             
+            
+            <br/>
+            <div id='trees' class='scrollspy-element' scrollspy-title='Tree Basics'></div>
+            <h1>Tree Basics</h1>
+            <div>
+              <p>Hey, remember doubly linked lists?</p>
+              <p>Yeah me neither... well that's OK, here's a refresher:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-3/linkedLists-7.PNG' />
+              </div>
+              <p>Double linked lists consisted of a sequence of nodes with data elements and pointers to the previous and next node in the sequence.</p>
+              <p>Indeed, the concept of a Node is something that Trees and Linked Lists have in common:</p>
+              <p class='definition'>A <strong>Node</strong> is just an object that stores some data as well as a means of accessing other Nodes in the data structure.</p>
+              <p>The &quot;means of accessing other Nodes&quot; from a Node in a Linked List was to traverse it via prev and next; for Trees, it's only slightly more complicated.</p>
+              <p>Trees (in the general definition) possess Nodes with any number of &quot;children,&quot; which are pointers to the next Node in the Tree.</p>
+              <p>Let's go over some definitions, see a Tree, and then run some code!</p>
+              <p class='definition'>
+                A <strong>Tree</strong> is yet another abstract data type consisting of data nodes arranged hierarchically, with a root node possessing some number of pointers (edges) to other children nodes,
+                who in turn have their own children, etc.
+              </p>
+              <p class='definition'>There are two primary constraints for a Tree to be a... Tree: (1) no node's pointer (edge) points to the root, and (2) no two pointers point to the same node.</p>
+              <p>To formalize some of those definitions:</p>
+              <p class='definition'>The <strong>root</strong> of a tree is a single node that has no inbound edges.</p>
+              <p class='definition'>A <strong>leaf</strong> node is one that has no outbound edges.</p>
+              <p class='definition'>An <strong>internal node</strong> has both inbound and outbound edges.</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-8/trees-0.PNG' />
+              </div>
+              <br/>
+              <p>A tree can have duplicate values in its data nodes.</p>
+              <p>There are also a variety of relationships we can define between nodes:</p>
+              <p class='definition'>An edge extends from a <strong>parent</strong> to a <strong>child</strong> with the arrow pointing to the child.</p>
+              <p class='definition'>An <strong>path</strong> is any set of connected, directed edges.</p>
+              <p class='definition'>A <strong>descendant</strong> of a node A is any node B with a directed path from A to B.</p>
+              <p class='definition'>An <strong>ancestor</strong> of a node B is any node A with a directed path from A to B.</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-8/trees-1.PNG' />
+              </div>
+              <br/>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-8/trees-2.PNG' />
+              </div>
+              <br/>
+              <p class='definition'>The <strong>depth</strong> of a node is equal to the number of edges along the path that separate it and the root.</p>
+              <p class='definition'>The <strong>tree-depth</strong> a given tree is equal to maximum depth of any node in the tree.</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-8/trees-3.PNG' />
+              </div>
+              <br/>
+              <p>Well, those are the tree basics! Let's look at some code now...</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='treeAlgos' class='scrollspy-element' scrollspy-title='Tree Algorithms'></div>
+            <h1>Tree Algorithms</h1>
+            <div>
+              <p>I hope you liked recursion because trees were built for it! (or from it? any who...)</p>
+              <p>Let's start off with how we might construct a Node class:</p>
+<pre class='prettyprint'>
+  struct TreeNode {
+      int data;
+      TreeNode(int d) {data = d;}
+      void addChild (TreeNode* c) {
+          this-&gt;children.push_back(c);
+      }
+      vector&lt;TreeNode*&gt; children;
+  };
+</pre>
+              <p>Here, we have our TreeNode with an int data member and then an STL vector with TreeNode pointers to all of that TreeNode's children.</p>
+              <p>Let's reformat our tree from before with numerical values.</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-8/trees-4.PNG' />
+              </div>
+              <br/>
+              <p>Now, let's say I wanted to create this tree using my new TreeNode class... since my numbers are conveniently in sequence, I can make a vector with them and then create the edges!</p>
+<pre class='prettyprint'>
+  int main () {
+      vector&lt;TreeNode&gt; tree;
+      int nodes = 13;
+  
+      // Create the TreeNodes in the tree
+      for (int i = 0; i &lt; 13; i++) {
+          tree.push_back(TreeNode(i));
+      }
+  
+      // Connect the nodes with edges!
+      // (obviously there's a better way to do
+      // this that we'll discuss next time)
+      // [!] Left branch
+      tree[0].addChild(&amp;tree[7]);
+      tree[7].addChild(&amp;tree[2]);
+      tree[7].addChild(&amp;tree[10]);
+      tree[10].addChild(&amp;tree[5]);
+      tree[5].addChild(&amp;tree[4]);
+  
+      // [!] Middle branch
+      tree[0].addChild(&amp;tree[6]);
+      tree[6].addChild(&amp;tree[3]);
+      tree[3].addChild(&amp;tree[8]);
+      tree[3].addChild(&amp;tree[11]);
+  
+      // [!] Right branch
+      tree[0].addChild(&amp;tree[12]);
+      tree[12].addChild(&amp;tree[1]);
+      tree[1].addChild(&amp;tree[9]);
+  
+      // ...
+  }
+</pre>
+              <br/>
+              <p>Now, before we dive head-first into Tree algorithms, we should always be on the lookout for these 4 test cases:</p>
+              <ul class='indent-1'>
+                <li><p>Does my algorithm work (read: not break) for an input nullptr?</p></li>
+                <li><p>Does my algorithm work for an input root node?</p></li>
+                <li><p>Does my algorithm work for an input interior node?</p></li>
+                <li><p>Does my algorithm work for an input leaf node?</p></li>
+              </ul>
+              <p>Let's start off light with the following problem... which might look a little familiar:</p>
+<pre class='prettyprint'>
+  // Returns the maximum data node value in the
+  // tree; expect no input nullptr
+  int maxInTree (TreeNode* n) {
+      // Set the current max to the input node's
+      // data member
+      int currentMax = n-&gt;data;
+  
+      // Find the max of each child's subtree
+      for (int i = 0; i &lt; n-&gt;children.size(); i++) {
+          // Set currentMax equal to the max of
+          // child i's subtree
+          currentMax = max(currentMax, maxInTree(n-&gt;children[i]));
+      }
+      return currentMax;
+  }
+</pre>
+              <br/>
+              <p>Not too bad... let's try one ourselves:</p>
+              <p class='example'>Modify your maxInTree function to implement treeDepth, a function that determines the tree depth of the input tree (TreeNode pointer).</p>
+<pre class='prettyprint'>
+  int treeDepth (TreeNode* n) {
+      int currentMax = 0;
+      for (int i = 0; i &lt; n-&gt;children.size(); i++) {
+          currentMax = ??? ;
+      }
+      return currentMax;
+  }
+</pre>
+              <br/>
+              <p class='example'>Implement the nodesAtLevel function, which returns the number of nodes located at the depth specified.</p>
+<pre class='prettyprint'>
+  int nodesAtLevel (TreeNode* n, int level) {
+      // Base case! Return when...
+      if ( ??? ) {
+          return ???;
+      }
+  
+      // Iterate through every child
+      int nodes = 0;
+      for (int i = 0; i &lt; n-&gt;children.size(); i++) {
+          // [!] Add the number of nodes at the next level
+          // if that's our target level! (hint: don't
+          // need to use a conditional due to our base case)
+          nodes += ???;
+      }
+      return nodes;
+  }
+</pre>
+              <br/>
+              <p>Cool! How about a question to round things off?</p>
+              <p class='question' name='trees-q0'>Are all doubly linked lists also trees?</p>
+              <p class='answer' name='trees-q0'>No! Linked lists allow for the possibility of cycles.</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='naryTrees' class='scrollspy-element' scrollspy-title='N-ary Trees'></div>
+            <h1>N-ary Trees</h1>
+            <div>
+              <p>Whereas with the general definition of a tree allowed us to specify an arbitrary number of children for any node, there may be some benefits in restricting that number...</p>
+              <p class='definition'>An <strong>n-ary tree</strong> is a tree in which each node can have at most n children.</p>
+              <p>Thus, a binary tree has nodes with at most 2 children, a trinary tree has nodes with at most 3 children... etc.</p>
+              <p>For the purposes of this discussion, we'll be examining binary trees.</p>
+              <p>Hey! Here comes one now!</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-8/trees-5.PNG' />
+              </div>
+              <br/>
+              <p>&quot;Hey... isn't that just the last example but with the right branch gone and a couple of numbers swi--&quot;</p>
+              <p>It's 3:00am! Sue me!</p>
+              <p>Now, the Node structure that we define for binary trees might look a tiny bit different, just by convention because we like to define &quot;left&quot; and &quot;right&quot; children.</p>
+<pre class='prettyprint'>
+  struct BinTreeNode {
+      int data;
+      BinTreeNode* left;
+      BinTreeNode* right;
+      BinTreeNode(int d) {
+          data = d;
+          left = nullptr;
+          right = nullptr;
+      }
+  };
+</pre>
+              <br/>
+              <p>Again representing our example from above:</p>
+<pre class='prettyprint'>
+  int main () {
+      vector&lt;BinTreeNode&gt; tree;
+      int nodes = 10;
+  
+      // Create the TreeNodes in the tree
+      for (int i = 0; i &lt; nodes; i++) {
+          tree.push_back(BinTreeNode(i));
+      }
+  
+      // Connect the nodes with edges!
+      // (obviously there's a better way to do
+      // this that we'll discuss next time)
+      // [!] Left branch
+      tree[0].left = &tree[1];
+      tree[1].left = &tree[2];
+      tree[1].right = &tree[9];
+      tree[9].left = &tree[5];
+      tree[5].right = &tree[4];
+  
+      // [!] Right branch
+      tree[0].right = &tree[6];
+      tree[6].left = &tree[3];
+      tree[3].left = &tree[8];
+      tree[3].right = &tree[7];
+  
+      // ...
+  }
+</pre>
+              <p>Let's look at some neat properties of binary trees.</p>
+              
+              <br/>
+              <h3>Tree Traversal</h3>
+              <p class='definition'>Tree traversal determines the order in which we visit each node in a tree, starting at some node (usually the root).</p>
+              <p>Traversal strategies are defined recursively, in terms of the current node, its left child, and its right child.</p>
+              <p>There are three primary traversal strategies under the heading of &quot;Depth first&quot; which we'll talk about later:</p>
+              
+              <br/>
+              <h3>Pre-order Traversal</h3>
+              <p>The preorder traversal strategy follows these steps:</p>
+              <ol class='indent-1'>
+                <li><p>Visit the current node (base case)</p></li>
+                <li><p>Visit the left subtree (recursive case)</p></li>
+                <li><p>Visit the right subtree (recursive case)</p></li>
+              </ol>
+              <p>The definition of &quot;visit&quot; will depend on your application. For the moment, let's consider our application to be simply to print out the data at each Node in a given order.</p>
+<pre class='prettyprint'>
+  // Prints the data in each node using
+  // the preorder traversal strategy
+  void preorderPrint (BinTreeNode* n) {
+      if (n == nullptr) {return;}
+      cout &lt;&lt; n-&gt;data &lt;&lt; endl;
+      preorderPrint(n-&gt;left);
+      preorderPrint(n-&gt;right);
+  }
+</pre>
+              <p>Preorder traversal looks like this:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-8/trees-6.PNG' />
+              </div>
+              <p>So, here, preorder traversal prints out: 0, 1, 2, 9, 5, 4, 6, 3, 8, 7</p>
+              
+              <br/>
+              <h3>Post-order Traversal</h3>
+              <p>The postorder traversal strategy follows these steps:</p>
+              <ol class='indent-1'>
+                <li><p>Visit the left subtree (recursive case)</p></li>
+                <li><p>Visit the right subtree (recursive case)</p></li>
+                <li><p>Visit the current node (base case)</p></li>
+              </ol>
+              <p class='debug'>NOTE: This means, even though we might &quot;pass through&quot; a node, we don't print it until its left and right subtrees have been processed!</p>
+              <p>Here is the postorderPrint function:</p>
+<pre class='prettyprint'>
+  void postorderPrint (BinTreeNode* n) {
+      if (n == nullptr) {return;}
+      postorderPrint(n-&gt;left);
+      postorderPrint(n-&gt;right);
+      cout &lt;&lt; n-&gt;data &lt;&lt; endl;
+  }
+</pre>
+              <p>So, what will the postorder traversal of our tree print out?</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-8/trees-5.PNG' />
+              </div>
+              <br/>
+              <p class='question' name='trees-q1'>The postorder traversal prints...</p>
+              <p class='answer' name='trees-q1'>2, 4, 5, 9, 1, 8, 7, 3, 6, 0</p>
+              
+              <br/>
+              <h3>In-order Traversal</h3>
+              <p>The inorder traversal strategy follows these steps:</p>
+              <ol class='indent-1'>
+                <li><p>Visit the left subtree (recursive case)</p></li>
+                <li><p>Visit the current node (base case)</p></li>
+                <li><p>Visit the right subtree (recursive case)</p></li>
+              </ol>
+              <p>For completion, here's that in code form:</p>
+<pre class='prettyprint'>
+  void inorderPrint (BinTreeNode* n) {
+      if (n == nullptr) {return;}
+      inorderPrint(n-&gt;left);
+      cout &lt;&lt; n-&gt;data &lt;&lt; endl;
+      inorderPrint(n-&gt;right);
+  }
+</pre>
+              <br/>
+              <h3>Applications for Binary Trees</h3>
+              <p>We've already discussed one of the most prevalent applications for binary trees: binary search.</p>
+              <p class='definition'>
+                A <strong>binary search tree</strong> is a binary tree in which all elements in the left subtree of a node are less than the data member of that node, and all elements of the right
+                subtree are greater than the data member of that node.
+              </p>
+              <p>Some other constraints for binary search trees is that there must be no duplicate nodes, and the left and right subtrees of each node must also be a binary search tree.</p>
+              <p>Let's revise our ongoing example:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-8/trees-7.PNG' />
+              </div>
+              <p>We observe that, for each node, the left subtree contains data elements strictly less than the data element of the subtree root, and vice versa for the right subtrees.</p>
+              <p>Now, binary search becomes a trivial algorithm:</p>
+<pre class='prettyprint'>
+  bool binarySearch (BinTreeNode* n, int query) {
+      if (n == nullptr) {return false;}
+      if (n-&gt;data == query) {return true;}
+      else if (query &lt; n-&gt;data) {
+          return binarySearch(n-&gt;left, query);
+      } else {
+        return binarySearch(n-&gt;right, query);
+      }
+  }
+</pre>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='practice' class='scrollspy-element' scrollspy-title='Practice'></div>
+            <h1>Practice Problems</h1>
+            <div>
+              <p class='example'>Provide two binary trees that could elicit the preorder traversal print out: <code class='prettyprint'>5, 3, 1, 2, 0</code></p>
+              <p class='question' name='practice-q0'>Is it possible for a binary search tree to have the postorder traversal print out of: <code class='prettyprint'>12, 18, 14, 21, 20, 17</code></p>
+              <p class='answer' name='practice-q0'>
+                No! The 18 wedged between the 12 and 14 implies that a number greater than the root (which we know must be 17 because it was printed last) existed on the side intended to be less than
+                the root.
+              </p>
+            </div>
+            <hr/>
               
             <a class='btn btn-default pull-right hidden-print' href='javascript:window.print();'>
               <span class='glyphicon glyphicon-print'></span>
@@ -519,20 +872,6 @@
       <!-- END MAIN CONTENT -->
       
           <!-- TODO: Trees -->
-            <!-- TODO: Tree has a bunch of nodes -->
-            <!-- TODO: Nodes are connected by edges -->
-              <!-- TODO: They can be represented by some data component and then a vector of pointers to other nodes representing its children -->
-            <!-- TODO: Notion of a path whereby we follow edges from one node to another -->
-            <!-- TODO: The node at the "top" is the root -->
-            <!-- TODO: Leaves are nodes at the bottom that do not have any descendants -->
-              <!-- TODO: Leaves have a vector of children with no elements -->
-            <!-- TODO: Any node not a leaf is called an interior node -->
-            <!-- TODO: The node directly above a node is its parent -->
-            <!-- TODO: The nodes that come before a node between it and the root are its ancestors, including the root -->
-            <!-- TODO: The depth of a node is the number of edges between it and the root -->
-            <!-- TODO: The depth of a tree is the MAXIMUM depth of any node -->
-            <!-- TODO: What makes it a tree is that: for every node, there is *exactly* one path to the root -->
-            
             <!-- TODO: Algorithm for how many nodes are in the tree -->
               <!-- TODO: Recurse to each child -->
               <!-- TODO: Count each node as its visited, adding to a total, and then combines each count from the children -->
