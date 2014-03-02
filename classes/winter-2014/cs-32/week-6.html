@@ -615,6 +615,109 @@
             <hr/>
             
             
+            <br/>
+            <div id='advancedTemplates' class='scrollspy-element' scrollspy-title='Advanced Templates'></div>
+            <h1>Advanced Templates</h1>
+            <div>
+              <h3>STL Template Functions</h3>
+              <p>We'll talk about STL in depth next week, but templating with standard template library objects is a little bit different than with others.</p>
+              <p>Performing some hand waving for the moment, let's say we wanted to accept any STL collection in some function, and then perform some operation using its iterators.</p>
+              <p>We can use the following syntax:</p>
+<pre class='prettyprint'>
+  template&lt;typename T&gt;
+  void printElements (T&amp; collection) {
+      for (T::iterator it = collection.begin(); it != collection.end(); it++) {
+          cout &lt;&lt; (*it) &lt;&lt; endl;
+      }
+  }
+  
+  int main () {
+      int i[] = {5, 6, 1, 20, 22};
+      vector&lt;int&gt; vi(i, i+5);
+  
+      string s[] = {"this", "example", "rox"};
+      list&lt;string&gt; sl(s, s+3);
+  
+      printElements(vi);
+      printElements(sl);
+  }
+</pre>
+              <p>Notice here that saying our printElements takes a template type T by reference allows the compiler to infer the iterator type when we use it internally.</p>
+              
+              <br/>
+              <h3>Template Template Functions</h3>
+              <p>...so you can template while you template.</p>
+              <p>Say I had the following class / struct template:</p>
+<pre class='prettyprint'>
+  template&lt;typename K, typename V&gt;
+  struct Example {
+      K k;
+      V v;
+      Example(K kP, V vP) {
+          k = kP;
+          v = vP;
+      }
+      K&amp; getKey () {
+          return k;
+      }
+      V&amp; getVal () {
+          return v;
+      }
+  };
+</pre>
+              <p>Now, I want to make a non-member function that accepts Example objects with different templated fields, but how do I then reference those field names in the function?</p>
+              <p>For example, I might create a new Example object like: <code class='prettyprint'>Example&lt;int, string&gt; e;</code> or <code class='prettyprint'>Example&lt;char, char&gt; e;</code></p>
+              <p>Above, the first Example object has its template K matching the int builtin type and V matching the string class. In the second example K and V both match to the char builtin type.</p>
+              <p>Now, I want to make a function that can operate knowing what types K and V refer to in a passed-in template class (Example) object.</p>
+              <p>The syntax is funky, so let's take a look:</p>
+<pre class='prettyprint'>
+  template&lt;template&lt;typename, typename&gt; class Container, typename K, typename V&gt;
+  void printAddedElements (Container&lt;K, V&gt;&amp; c) {
+      K keyDup = c.getKey() + c.getKey();
+      V valDup = c.getVal() + c.getVal();
+      cout &lt;&lt; "KeyDup: " &lt;&lt; keyDup &lt;&lt; endl;
+      cout &lt;&lt; "ValDup: " &lt;&lt; valDup &lt;&lt; endl;
+  }
+</pre>
+              <p>There are a couple of lines in the function signature to scrutinize:</p>
+<pre class='prettyprint'>
+  template&lt;template&lt;typename, typename&gt; class Container, typename K, typename V&gt;
+</pre>
+              <p>
+                This line says: "Expect a container (called Container) with two template parameters", and then I provide two typenames K and V 
+                (which, at this point, aren't connected to the Container).
+              </p>
+              <p>I'll preempt your next question:</p>
+              <p class='question' name='templateTemplates-q0'>
+                What's the difference between declaring a template class with the keyword <code class='prettyprint'>class</code> vs 
+                <code class='prettyprint'>typename</code>?
+              </p>
+              <p class='answer' name='templateTemplates-q0'>
+                There's one case where it matters to your compiler which to use: when you're templating a function with a class template (in the case where we have an Example template class, we want a 
+                way to refer to the types that the particular Example parameter was created with). Otherwise, the two are *functionally* equivalent, but *conventionally* different, whereby we sometimes
+                like to refer to objects that are class / user defined objects with the &quot;class&quot; keyword, and types that can also be built-in objects with the &quot;typename&quot; keyword.
+              </p>
+              <p>The other line of importance:</p>
+<pre class='prettyprint'>
+  void printAddedElements (Container&lt;K, V&gt;&amp; c) { ...
+</pre>
+              <p>Says: "Hey remember that Container template that has two template params? Well, let's call those K and V, our named template typenames from before."</p>
+              <p>Now, I've connected the two template typename declarations as being expected within the context of the templated Container in the parameter.</p>
+              <p>So, the following will now work!</p>
+<pre class='prettyprint'>
+  int main () {
+      int i = 5;
+      string s = "test";
+      Example&lt;int, string&gt; e1(i, s);
+      Example&lt;double, int&gt; e2(3.14, 3.14);
+      printAddedElements(e1);
+      printAddedElements(e2);
+  }
+</pre>
+            </div>
+            <hr/>
+            
+            
             <a class='btn btn-default pull-right hidden-print' href='javascript:window.print();'>
               <span class='glyphicon glyphicon-print'></span>
               &nbsp; PDF / Print
