@@ -1,0 +1,219 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Andrew Forney - UCLA CS</title>
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/magic-bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/main.css" rel="stylesheet" type="text/css">
+    <script src="../../../js/lib/jquery-2.0.3.min.js"></script>
+    <script src="../../../js/lib/bootstrap.min.js"></script>
+    <script src="../../../js/lib/expanding.js"></script>
+    <script src="../../../js/lib/chart.min.js"></script>
+    <script src="../../../js/display/general/general-display.js"></script>
+    <script src="week-7-display.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+  </head>
+  
+  <body data-spy="scroll" data-target="#scrollspy">
+    
+    <!-- BEGIN WRAP -->
+    <div id="wrap">
+      
+      <!-- BEGIN NAVIGATION -->
+      <nav class='navbar navbar-default' role='navigation'>
+        <div class='nav-accent'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-12'>
+              <div class='navbar-header'>
+                <button class='navbar-toggle' type='button' data-toggle='collapse' data-target='.navbar-main-collapse'>
+                  <span class='sr-only'>Toggle Navigation</span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                </button>
+                <a class='navbar-brand' href='/~forns/'>
+                  <span id='brand-text'>
+                    Andrew Forney
+                  </span>
+                </a>
+              </div>
+              
+              <div id='nav-main' class='collapse navbar-collapse navbar-main-collapse'>
+                <ul class='nav navbar-nav navbar-right'>
+                  
+                  <li>
+                    <a href='/~forns/about.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-user'></span>
+                      </div>
+                      <p class='text-center'>About</p>
+                    </a>
+                  </li>
+                  
+                  <li class='active'>
+                    <a href='/~forns/classes.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-book'></span>
+                      </div>
+                      <p class='text-center'>Classes</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/contact.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-comment'></span>
+                      </div>
+                      <p class='text-center'>Contact</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/publications.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-file'></span>
+                      </div>
+                      <p class='text-center'>Publications</p>
+                    </a>
+                  </li>
+                  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <!-- END NAVIGATION -->
+      
+      <!-- BEGIN MAIN CONTENT -->
+      <div id="main-content" class="container">
+        <div class="row">
+          
+          <!-- BEGIN SCROLLSPY -->
+          <div class='col-md-2 hidden-sm hidden-xs'>
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+              <ul id='scrollspy' class="nav bs-sidenav">
+              </ul>
+            </div>
+          </div>
+          <!-- END SCROLLSPY -->
+          
+          <!-- BEGIN PRESENTATION CONTENT -->
+          <div class='col-md-10 presentation-content' role='main'>
+            
+            <ol class="breadcrumb hidden-print">
+              <li><a href="../../../classes.html">Classes</a></li>
+              <li><a href="./cs-32.html">Winter14 CS32</a></li>
+              <li class="active">Week 8</li>
+            </ol>
+            
+            
+            <div id='review' class='scrollspy-element' scrollspy-title='Review'></div>
+            <h1>Practice from Last Week</h1>
+            <div>
+              <p class='example'>Provide two binary trees that could elicit the preorder traversal print out: <code class='prettyprint'>5, 3, 1, 2, 0</code></p>
+              <p class='question' name='practice-q0'>Is it possible for a binary search tree to have the postorder traversal print out of: <code class='prettyprint'>12, 18, 14, 21, 20, 17</code></p>
+              <p class='answer' name='practice-q0'>
+                No! The 18 wedged between the 12 and 14 implies that a number greater than the root (which we know must be 17 because it was printed last) existed on the side intended to be less than
+                the root.
+              </p>
+            </div>
+            <hr/>
+              
+            <a class='btn btn-default pull-right hidden-print' href='javascript:window.print();'>
+              <span class='glyphicon glyphicon-print'></span>
+              &nbsp; PDF / Print
+            </a>
+            
+          </div>
+          <!-- END PRESENTATION CONTENT -->
+          
+          <!-- MATERIALS FROM CLASS: -->
+          
+          
+        </div>
+      </div>
+      <!-- END MAIN CONTENT -->
+      
+          <!-- TODO: Trees -->
+            <!-- TODO: Binary Search Trees -->
+              <!-- TODO: Insertion algorithm for placing into a binary tree -->
+                <!-- TODO: If empty, add insertion as the root -->
+                <!-- TODO: Otherwise, find the first empty spot by properly traversing the tree's subtrees (less than => left subtree, greater than => right subtree) -->
+                <!-- TODO: The order by which we add items determines the structure of the binary search tree -->
+                  <!-- TODO: Some orders of addition can be problematic; you'll end up with a linear tree! -->
+                <!-- TODO: Comparison with sorted vectors; can do binary search with sorted vectors, but insertion and deletion are less difficult with binary trees -->
+              <!-- TODO: Deleting nodes -->
+                <!-- TODO: Deleting a leaf is easy: log(n) (on average) to find it, and then constant time simply to prune it by deleting and removing the inbound pointer -->
+                <!-- TODO: Deleting an internal / root is going to be difficult, because we need to restructure some aspects -->
+                  <!-- TODO: 
+                    Easiest tactic is to simply choose a new root from the immediate predecessor (one step left, as far as possible to right) 
+                    or immediate successor (one step right, as far as possible to the left) of the deleted node 
+                  -->
+                  <!-- TODO: Can find the immediate predecessor / successor in log(n) time -->
+                  <!-- TODO: New root promoted to root has to have at least 1 empty subtree (guaranteed based on search for candidate); if it has a subtree, just hang that in the proper place of its parent -->
+              <!-- TODO: Getting a sorted list from a binary search tree: easy, just traverse it inorder -->
+              <!-- TODO: No matter what, there will always be lousy orderings for insertion into the tree -->
+                <!-- TODO: As such, if you want to keep the tree balanced, you need to perform balancing algorithms -->
+                <!-- TODO: 
+                  An AVL tree is a binary search tree with an additional property: for every node, the height of the left subtree and the height of the right subtree, must be different by no more than 1 
+                -->
+                <!-- TODO: Insertion into an AVL tree is less trivial; add the node in the traditional sense, but then verify that the heights of each subtree aren't unbalanced (nodes notekeep the balance) -->
+                  <!-- TODO: Find the first node that is unbalanced, and then shift everything around -->
+                  <!-- TODO: Look up AVL tree balancing; it performs tree rotations (not very important to cover)--the rebalancing costs O(log(n)), so insertion is still O(log(n)) -->
+                  <!-- TODO: tl;dr: it is possible to maintain a balanced search tree with tractable insertion and deletion -->
+              <!-- TODO: Naive insertion / deletion: average O(log(n)), worst: O(n) -->
+              <!-- TODO: AVL insertion / deletion: average O(log(n)), worst: O(log(n)) -->
+            <!-- TODO: Transformation to / from binary search tree and sorted vector? -->
+          
+            <!-- TODO: 2-3 Trees -->
+              <!-- TODO: Each node has 1 or 2 values; if it has 1 value, then it has 2 children; if it has 2 values, then it has 3 children (all leaves need to have same depth???) -->
+                <!-- TODO: 1 value nodes follow the standard binary search tree rules -->
+                <!-- TODO:  
+                  2 value nodes have a left subtree with everything less than the lesser of the two values, a right subtree with everything greater than the greater of the two values, and a middle
+                  subtree with everything in between the two
+                 -->
+                <!-- TODO: Insertion is nontrivial: -->
+                  <!-- TODO: Find the first leaf that is a candidate for the proper insertion -->
+                    <!-- TODO: If it has 1 value, fine just add the value to that node -->
+                    <!-- TODO: If it has 2 values, promote the middle of the 3 (including the one wanting to be inserted) recursively upwards -->
+              <!-- TODO: Insertion / deletion: average and worst case of O(log(n)) -->
+            <!-- TODO: [!] AVL and 2-3 Trees are good choices if you're doing more searches than you are insertions / deletions -->
+            
+            <!-- TODO: 2-3-4 Trees -->
+              <!-- TODO: Can convert to binary trees however you want: termed "red black trees" when a 2-3-4 tree is convtered to binary -->
+                <!-- TODO: Guaranteed property: heights of two subtrees defer by at most a factor of 2 -->
+                <!-- TODO: Doesn't have to do massive amounts of rebalancing all the time like AVL / 2-3 trees -->
+              <!-- TODO: Insertion / deletion: O(log(n)) -->
+          <!-- TODO: All of this to know that there are balancing algorithms that keep binary search trees tractable; most modern libraries use red-black trees -->
+      
+          <!-- TODO: STL provides no Tree collection, but: -->
+            <!-- TODO: #include <set> -->
+              <!-- TODO: Sets: groups of data types without duplicates -->
+              <!-- TODO: Multisets: groups of data types allowing for duplicates -->
+              <!-- TODO: As it turns out, sets are implemented using binary search trees -->
+                <!-- TODO: Insert into set: set<int> s; s.insert(20); ... -->
+                <!-- TODO: Find in set: s.find(20); // returns an iterator equal to the position in the set of the item if it's found, or the end iterator otherwise -->
+                <!-- TODO: Erase in set: s.erase(20); OR s.erase(someIterator); // does NOT return another iterator -->
+                <!-- TODO: Set iterators still support increment / decrement -->
+            <!-- TODO: #include <map>  -->
+              <!-- TODO: Maps (NOT the linked list / vectors we did for homework) -->
+          
+    </div>
+    <!-- END WRAPPER -->
+    
+    <!-- BEGIN FOOTER -->
+    <div id="footer">
+      <div class="container">
+        <div class="col-md-12 text-center">
+          
+        </div>
+      </div>
+    </div>
+    <!-- END FOOTER -->
+    
+  </body>
+</html>
