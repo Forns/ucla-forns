@@ -114,14 +114,169 @@
             <div id='review' class='scrollspy-element' scrollspy-title='Review'></div>
             <h1>Practice from Last Week</h1>
             <div>
-              <p class='example'>Provide two binary trees that could elicit the preorder traversal print out: <code class='prettyprint'>5, 3, 1, 2, 0</code></p>
+              <p class='example'>Starting off with some warmup... remind me what postorder traversal is again? What's the postorder traversal of this tree?</p>
+              <div class="text-center fit-pres">
+                <img src="../../../assets/images/winter-2014/cs-32/week-8/trees-7.PNG">
+              </div>
+              <p class='definition'>[!] Interesting property about postorder traversal... what happens when I remove each Node found in postorder traversal, in the order in which I visit them?</p>
+              
+              <br/>
               <p class='question' name='practice-q0'>Is it possible for a binary search tree to have the postorder traversal print out of: <code class='prettyprint'>12, 18, 14, 21, 20, 17</code></p>
               <p class='answer' name='practice-q0'>
                 No! The 18 wedged between the 12 and 14 implies that a number greater than the root (which we know must be 17 because it was printed last) existed on the side intended to be less than
                 the root.
               </p>
+              
+              <br/>
+              <p class='example'>Provide two binary trees that could elicit the preorder traversal print out: <code class='prettyprint'>5, 3, 1, 2, 0</code></p>
+              
+              <br/>
+              <p class='example'>What is the inorder traversal of this tree (replicated for you below):</p>
+              <div class="text-center fit-pres">
+                <img src="../../../assets/images/winter-2014/cs-32/week-8/trees-7.PNG">
+              </div>
+              <p class='definition'>[!] Interesting property about inorder traversal on a binary search tree... what is it?</p>
+              
+              <br/>
+              <p>
+                Now, we remember that binary search trees are great because, for some extra cost during their construction (average O(log(n)), worst O(n)), we can reduce search operations 
+                (in the average case) to about O(log(n)) time complexity.
+              </p>
+              <p class='example'>Say I'm inserting ints into a binary search tree. What property of this input list of ints will cause insertion to take O(n) time?</p>
+              <p class='definition'>You can test out insertion into a binary tree <a href='http://www.cs.jhu.edu/~goodrich/dsa/trees/btree.html' target='_blank'>here (click me)</a></p>
+              <p>Well, as it turned out, that worst case insertion was problematic... and the more linear, and less tree-like binary search trees became, the less efficient their search became too!</p>
+              <p>So the eggheads of yore considered making an algorithm that would keep the tree balanced such that any insertion won't make the tree become too linear.</p>
+              
+              <br/>
+              <h3>AVL Trees</h3>
+              <p class='definition'>AVL trees have 1 property in addition to those of binary search trees: the heights (depths) of any two of a given node's subtrees must differ by *at most* 1.</p>
+              <p>This enforced property makes sure that the depth of any subtree never becomes too linear, which would degrade the efficiency of search and further insertions.</p>
+              <p>This balancing act takes O(log(n)) time, which means that, upon insertion of any new value, we get O(log(n) + log(n)) = O(log(n)) time; a greater overhead, but same complexity class.</p>
+              <p>We'll go over this balancing act a bit more in discussion, though you're not meant to know it for this class.</p>
+              <p class='definition'>Let's examine a visualization <a href='http://www.cs.jhu.edu/~goodrich/dsa/trees/avltree.html' target='_blank'>here (click me)</a></p>
+              
+              <br/>
+              <h3>Red-Black Trees</h3>
+              <p>
+                So, the one problem with AVL trees is that with a lot of insertions, you'll have to keep performing the balancing overhead any time a branch becomes 2 depths or more greater than a parent.
+              </p>
+              <p>
+                Red-Black Trees said, &quot;Hey, let's not do all of this rebalancing nonsense all the time; everything's chill until the path from the root to the farthest leaf is no more than twice
+                the distance from the root to the closest leaf.&quot;
+              </p>
+              <p>So, without diving deep into how it rebalances when this distance is exceeded, let's just look at some properties of red-black trees lifted from wikipedia:</p>
+              <ul class='indent-1'>
+                <li><p>A node is &quot;painted&quot; either red or black</p></li>
+                <li><p>The root is black</p></li>
+                <li><p>All leaves are black</p></li>
+                <li><p>Every red node must have two black child nodes</p></li>
+                <li><p>Every path from a given node to any of its descendant leaves contains the same number of black nodes.</p></li>
+              </ul>
+              <p>What we end up with is a binary search tree that still ensures O(log(n)) search without the need to so frequently rebalance.</p>
+              <p class='definition'>Let's examine a visualization <a href='http://gauss.ececs.uc.edu/RedBlackTester/redblack.html' target='_blank'>here (click me)</a></p>
+              <p>Alright, we'll talk more about those in discussion...</p>
             </div>
             <hr/>
+              
+            
+            <br/>
+            <div id='project4' class='scrollspy-element' scrollspy-title='Project 4'></div>
+              <h1>Project 4</h1>
+            <div>
+              <p>Welcome to &quot;Project 4 in 60 seconds!&quot; (with unfortunately less Nicolas Cage)</p>
+              <p class='debug'>Warning! Do not trust anything in this guide more than the spec! It is meant as a brief overview!</p>
+              <p>What's project 4 in a nutshell you ask?</p>
+              <p>You're going to be creating your own database, complete with a MultiMap (that you make) in the form of a binary search tree! Yay!</p>
+              <p>Some definitions:</p>
+              <p class='definition'>A database is a piece of software that stores one or more data records</p>
+              <p class='definition'>A record (sometimes called a &quot;row&quot;) contains all of the data fields on a particular entry.</p>
+              <p>For example, a given Student table of a database might look like:</p>
+              <table class='table table-bordered'>
+                <thead>
+                  <tr>
+                    <th>firstName</th>
+                    <th>lastName</th>
+                    <th>studentID</th>
+                    <th>phoneNum</th>
+                    <th>GPA</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Yenrof</td>
+                    <td>Werdna</td>
+                    <td>555555555</td>
+                    <td>555-555-5555</td>
+                    <td>5.0</td>
+                  </tr>
+                  <tr>
+                    <td>Davie</td>
+                    <td>Nachensmall</td>
+                    <td>0020397722</td>
+                    <td>310-318-2020</td>
+                    <td>4.0</td>
+                  </tr>
+                  <tr>
+                    <td>Carie</td>
+                    <td>Bergberg</td>
+                    <td>0020397723</td>
+                    <td>310-318-2020</td>
+                    <td>4.0</td>
+                  </tr>
+                  <tr>
+                    <td>...</td>
+                    <td>...</td>
+                    <td>...</td>
+                    <td>...</td>
+                    <td>...</td>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+              <p>So above, you can see that each row consists of the firstName, lastName, studentID, phoneNum, and GPA fields of a particular entity (student) of the table</p>
+              <p>Notice we can have two fields be the same between two different rows (records).</p>
+              <p class='definition'>A schema defines what fields belong in a given table.</p>
+              <p class='definition'>A schema field can be indexed (in which case we will be able to efficiently search for matching entities of that field in the database) or not indexed.</p>
+              <p>A schema for our Student table might have looked like:</p>
+              <ul class='indent-1'>
+                <li><p>firstName: not indexed</p></li>
+                <li><p>lastName: indexed</p></li>
+                <li><p>studentID: not indexed</p></li>
+                <li><p>phoneNum: not indexed</p></li>
+                <li><p>GPA: indexed</p></li>
+              </ul>
+              <p>...giving us the ability to efficiently search for records by last name and GPA.</p>
+              <p>Queries can then be posed in terms of a given field value and then a given sort order for the returned results.</p>
+              <p>So, to help you store the records, let's examine a slightly new data structure: the MultiMap:</p>
+              
+              <br/>
+              <h3>MultiMaps</h3>
+              <p class='definition'>MultiMaps (in terms of this project) map strings to unsigned ints, which isn't different from a map except that MultiMaps allow for duplicate keys.</p>
+              <p>This means we can have two entries with the same keys but different values.</p>
+              <p class='definition'>Your MultiMap must define an iterator capable of traversing its elements.</p>
+              <p>To help you organize and efficiently search your keys, you will implement the MultiMap using a binary search tree.</p>
+              <p>You do not have to balance your binary search tree, but your keys in the binary search tree should abide by the property of: less than on the left and greater than on the right.</p>
+              <div class='example'>
+                <p>Create a binary search tree with key-value pairs:</p>
+                <ul class='indent-1'>
+                  <li><p>Andrew -&gt; 1</p></li>
+                  <li><p>Rocked -&gt; 5</p></li>
+                  <li><p>This -&gt; 22</p></li>
+                  <li><p>Example -&gt; 4</p></li>
+                  <li><p>Andrew -&gt; 2 // What happens here?! (you have to think about it... think about our traversals!)</p></li>
+                </ul>
+              </div>
+              <p>There are variety of other MultiMap constraints you'll need to follow in order to complete the assignment correctly... they are in the spec, and not here.</p>
+              
+              <br/>
+              <p class='debug'>The assignment is due Thursday, March 13.</p>
+              <p class='debug'>The spec is not yet complete, and the connection from Database to MultiMap is not quite clear yet--it will be in the coming days. Start on MultiMap in the meantime!</p>
+              
+              <br/>
+              <p class='definition'>If you have any final topics that you'd like me to focus on in an review, please email me as soon as possible; I will be compiling a problem set in the coming weeks.</p>
+            </div>
+            <hr/>
+            
               
             <a class='btn btn-default pull-right hidden-print' href='javascript:window.print();'>
               <span class='glyphicon glyphicon-print'></span>
