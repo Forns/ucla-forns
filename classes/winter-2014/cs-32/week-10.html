@@ -1,0 +1,184 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Andrew Forney - UCLA CS</title>
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/magic-bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/main.css" rel="stylesheet" type="text/css">
+    <script src="../../../js/lib/jquery-2.0.3.min.js"></script>
+    <script src="../../../js/lib/bootstrap.min.js"></script>
+    <script src="../../../js/lib/expanding.js"></script>
+    <script src="../../../js/lib/chart.min.js"></script>
+    <script src="../../../js/display/general/general-display.js"></script>
+    <script src="week-7-display.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+  </head>
+  
+  <body data-spy="scroll" data-target="#scrollspy">
+    
+    <!-- BEGIN WRAP -->
+    <div id="wrap">
+      
+      <!-- BEGIN NAVIGATION -->
+      <nav class='navbar navbar-default' role='navigation'>
+        <div class='nav-accent'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-12'>
+              <div class='navbar-header'>
+                <button class='navbar-toggle' type='button' data-toggle='collapse' data-target='.navbar-main-collapse'>
+                  <span class='sr-only'>Toggle Navigation</span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                </button>
+                <a class='navbar-brand' href='/~forns/'>
+                  <span id='brand-text'>
+                    Andrew Forney
+                  </span>
+                </a>
+              </div>
+              
+              <div id='nav-main' class='collapse navbar-collapse navbar-main-collapse'>
+                <ul class='nav navbar-nav navbar-right'>
+                  
+                  <li>
+                    <a href='/~forns/about.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-user'></span>
+                      </div>
+                      <p class='text-center'>About</p>
+                    </a>
+                  </li>
+                  
+                  <li class='active'>
+                    <a href='/~forns/classes.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-book'></span>
+                      </div>
+                      <p class='text-center'>Classes</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/contact.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-comment'></span>
+                      </div>
+                      <p class='text-center'>Contact</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/publications.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-file'></span>
+                      </div>
+                      <p class='text-center'>Publications</p>
+                    </a>
+                  </li>
+                  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <!-- END NAVIGATION -->
+      
+      <!-- BEGIN MAIN CONTENT -->
+      <div id="main-content" class="container">
+        <div class="row">
+          
+          <!-- BEGIN SCROLLSPY -->
+          <div class='col-md-2 hidden-sm hidden-xs'>
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+              <ul id='scrollspy' class="nav bs-sidenav">
+              </ul>
+            </div>
+          </div>
+          <!-- END SCROLLSPY -->
+          
+          <!-- BEGIN PRESENTATION CONTENT -->
+          <div class='col-md-10 presentation-content' role='main'>
+            
+            <ol class="breadcrumb hidden-print">
+              <li><a href="../../../classes.html">Classes</a></li>
+              <li><a href="./cs-32.html">Winter14 CS32</a></li>
+              <li class="active">Week 10</li>
+            </ol>
+            
+            
+            <div id='review' class='scrollspy-element' scrollspy-title='Review'></div>
+            <h1>Practice from Last Week</h1>
+            <div>
+            </div>
+            <hr/>
+            
+              
+            <a class='btn btn-default pull-right hidden-print' href='javascript:window.print();'>
+              <span class='glyphicon glyphicon-print'></span>
+              &nbsp; PDF / Print
+            </a>
+            
+          </div>
+          <!-- END PRESENTATION CONTENT -->
+          
+          <!-- MATERIALS FROM CLASS: -->
+          
+          <!-- TODO: Hash Tables -->
+            <!-- TODO: Way to enable fast lookups, insertions, and deletions by using random access -->
+            <!-- TODO: Need a contiguous subscriptable data structure -->
+            <!-- TODO: Every storage location is called a "bucket" -->
+              <!-- TODO: For every key, we need to know what "bucket" it goes into... -->
+                <!-- TODO: To make this determination, we use a hash function, which maps a key to a particular bucket -->
+                <!-- TODO: Hash functions should be cheap -->
+                <!-- TODO: Hash functions should be deterministic: called with the same argument, should return the same bucket -->
+              <!-- TODO: Say I had 40,000 items mapping the first 4 numbers of studentIDs to student objects (sorted by name) -->
+                <!-- TODO: If I had, say, 10,000 possible combinations of the first 4 numbers of a studentID (0000 - 9999), then I'd *expect* there to be around 4 students per bucket -->
+                  <!-- TODO: Problem: what if the numbers are not distributed uniformly? -->
+                  <!-- TODO: Then we're sorting a ton of items into a few buckets -->
+                  <!-- TODO: So, additional constraint on Hash functions is that they must uniformly distribute into buckets -->
+                  <!-- TODO: In our example, this might mean using the *last* 4 numbers of a studentId instead of the first 4 -->
+                <!-- TODO: What happens when I add more and more items to my hash table? Search within each bucket is actually linear because of each linked list per bucket growing to infinity -->
+                <!-- TODO: Even though this has linear behavior, the constant of proportionality hides an important improvement: the constant is extremely small: 1/b where b is the number of buckets -->
+                  <!-- TODO: Remember that big-O says nothing about small values of N -->
+                  <!-- TODO: Also, this is true for FIXED bucket amounts only -->
+              <!-- TODO: When two keys map to the same bucket, it's called a "collision" -->
+              <!-- TODO: Load factor of a hash table: the number of items divided by the number of buckets -- the average linked list length -->
+                <!-- TODO: Another tactic is to have a hash table with a maximum load factor such that we make more buckets as soon as we exceed that limit -->
+                <!-- TODO: Doing this, we guarantee that the size of our linked lists in buckets stay pretty small, so we end up with an average and worst case constant time O(1) lookup / insertion -->
+              <!-- TODO: What about sorting hash table elements? Difficult because our hash function has attempted to scatter the keys uniformly -->
+                <!-- TODO: Naive solution is to step through every bucket (order of O(b)) and then sort in each bucket; b > N -->
+                  <!-- TODO: Improvement: have pointers at the end of each bucket list item that point to the next in the sequence -->
+                    <!-- TODO: Greater insertion and deletion complexity, but trends the time of sorting to the size of input N rather buckets b -->
+                  <!-- TODO: Still, the items within each bucket are not necessarily sorted... -->
+                  <!-- TODO: Solution is to have another data structure with sorted pointers to the elements: n*log(n) time (we don't want to sort at insertion because then we might as well just use a BST) -->
+            <!-- TODO: Generating buckets -->
+              <!-- TODO: Have a prime number of buckets such that any hash function mapping keys to buckets will still be uniform despite patterns in input ints -->
+              <!-- TODO: What if key is a string, for example? -->
+              <!-- TODO: Our hash function can, say, just add up the ASCII values in the string to generate a number to map to -->
+          
+          
+        </div>
+      </div>
+      <!-- END MAIN CONTENT -->
+      
+          
+    </div>
+    <!-- END WRAPPER -->
+    
+    <!-- BEGIN FOOTER -->
+    <div id="footer">
+      <div class="container">
+        <div class="col-md-12 text-center">
+          
+        </div>
+      </div>
+    </div>
+    <!-- END FOOTER -->
+    
+  </body>
+</html>
