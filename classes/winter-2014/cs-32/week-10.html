@@ -163,6 +163,52 @@
                 <!-- TODO: Problem: non-unique mappings; so we should take character values AND position in the string into account -->
                 <!-- TODO: FMD Hash functions -->
           
+          <!-- TODO: Priority Queues -->
+            <!-- TODO: A collection of items where every item has a given priority -->
+            <!-- TODO: Whenever you want to take an item out, you take out the item with the highest priority -->
+            <!-- TODO: 
+              Misleading because we think of queues as just the FIFO data structure, but these queues are simply a special case of priority queues where the priority of each item is simply how
+              long it's been in the list
+             -->
+            <!-- TODO: How to store this notion of a priority queue? -->
+              <!-- TODO: Vectors -->
+                <!-- TODO: Simple to insert: just stick it at the end O(1) -->
+                <!-- TODO: Linear to pull out because we have to check each item for the highest priority O(n) -->
+              <!-- TODO: Sorted collection -->
+                <!-- TODO: Insertion: could do a binary search to determine where it goes on a vector, but insertion would be O(n) to shift; couldn't do binary search on a list, so also O(n) -->
+                <!-- TODO: Simple to pull out because the highest priority is always at the front -->
+              <!-- TODO: Binary search tree -->
+                <!-- TODO: Lower priority goes in left subtree; higher goes in right -->
+                <!-- TODO: Insertion and search are both log(n) time -->
+                <!-- TODO: Problem: items being removed will unbalance the tree and require upkeep -->
+            <!-- TODO: First, some definitions: -->
+              <!-- TODO: A complete binary tree is a binary tree where every level is full, except possibly the bottom level, which is filled left-to-right -->
+              <!-- TODO: As such, there is exactly 1 valid configuration for a complete binary tree with N nodes -->
+            <!-- TODO: Best data structure: the heap *data structure* is a complete binary tree with the following properties: -->
+              <!-- TODO: In a maxHeap, the value at every node is GREATER THAN OR EQUAL TO the value at all nodes in its subtrees -->
+                <!-- TODO: If people just say a "heap", they generally mean a maxTree -->
+              <!-- TODO: In a minHeap, the value at every node is LESS THAN OR EQUAL TO the value at all nodes in its subtrees -->
+              <!-- TODO: Ordering of children is irrelevant -->
+              <!-- TODO: In NO way is it related to the dynamic memory storage location, also called the heap -->
+            <!-- TODO: Properties of a heap: -->
+              <!-- TODO: Largest priority is always at the root -->
+              <!-- TODO: Insertion algorithm: -->
+                <!-- TODO: Create a complete binary tree with the new node in its proper location to make a complete binary tree (leafs filled from left to right) -->
+                <!-- TODO: Bubble up an item to its proper place -->
+                <!-- TODO: As soon as a parent is greater than the node we're bubbling, stop -->
+              <!-- TODO: Deletion algorithm: -->
+                <!-- TODO: Make a complete binary tree; remove target Node, and promote the bottom-right-most item to the root -->
+                <!-- TODO: Trickle down the promoted item -->
+                  <!-- TODO: Promote one of the children of whatever you just promoted; choose the largest of the children and promote that -->
+                  <!-- TODO: Continue doing this until none of the children are larger than the bubbling Node -->
+              <!-- TODO: Better constant of proportionality with binary search trees for insertion and deletion but still O(log(n)) -->
+              <!-- TODO: Another interesting property: number each Node in an inorder traversal starting with 0 at the root -->
+                <!-- TODO: The numbered parent of node i is the integer component of (i-1) / 2 -->
+                <!-- TODO: The numbered children of node i are the integer components of (i*2)+1 and (i*2)+2 (if they exist) -->
+                <!-- TODO: Notice, then, that we can access heap elements as an array where we always know what nodes are children of what other nodes -->
+                  <!-- TODO: Guaranteed because we know our heap is a complete binary tree -->
+                <!-- TODO: This gives us constant time access for any Node, especially because we don't need to traverse the tree to get to the bottom-right-most Node -->
+                
           
         </div>
       </div>

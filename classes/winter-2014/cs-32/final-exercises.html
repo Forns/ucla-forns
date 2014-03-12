@@ -149,16 +149,15 @@
                 <li><p>Identify the statements that rely on the size of the input</p></li>
                 <li><p>Of those that are reliant on the size of the input, which are dependent upon each other?</p></li>
                 <li><p>Remember that a single statement, particularly a function call, is not a guarantee for a constant time operation!</p></li>
-              </oL>
+              </ol>
               <p>You ready to do this? Let's start off with some non-programmatic analyses and then move to the hard stuff...</p>
               <br/>
+              <p>Andrew continually loses socks in his dryer... one day he discovers why: a quantum sock portal has opened up within the lint rack and has been sucking socks in; finally
+              it reaches critical mass, and then expodes into an (almost) infinite number of socks!</p>
+              <p>Rather than work on his research, Andrew decides to do something more exciting and starts sorting the socks into their respective pairs. Because he's particularly devoted to
+              procrastinating, he desides to pick up one sock, and then look at other socks in the pile until he finds a match.</p>
               <p class='example'>
-                Andrew continually loses socks in his dryer... one day he discovers why: a quantum sock portal has opened up within the lint rack and has been sucking socks in; finally
-                it reaches critical mass, and then expodes into an (almost) infinite number of socks!
-                <br/><br/>
-                Rather than work on his research, Andrew decides to do something more exciting and starts sorting the socks into their respective pairs. Because he's particularly devoted to
-                procrastinating, he desides to pick up one sock, and then look at other socks in the pile until he finds a match. If more socks continue to spill out of the quantum sock portal,
-                what is the time complexity growth of Andrew's sort algorithm?
+                If more socks continue to spill out of the quantum sock portal, what is the time complexity growth of Andrew's sort algorithm?
               </p>
               <p class='question' name='bigO-q0'>Click for solution</p>
               <p class='answer' name='bigO-q0'>
@@ -167,7 +166,30 @@
               </p>
               
               <br/>
-              <p class='example'></p>
+              <p>Well, it took awhile, but Andrew finally finished sorting all those damn socks. He decided he'd keep about a million socks just in case, but where to put all of them?</p>
+              <p>As it turns out, the sock pairs have a couple defining characteristics:</p>
+              <ul class='indent-1'>
+                <li><p>They have a color (every pair of socks falls, conveniently, evenly distributed across the hexadecimal color spectrum from #000000 (black) to #FFFFFF (white))</p></li>
+                <li><p>They have a shape-pattern of 1 of 3 shapes: squares, circles, and triangles. 1/3 of the socks have squares, 1/3 circles, and 1/3 triangles.</p></li>
+              </ul>
+              <p>Luckily, Ikea sells SOK, a drawer apparatus for storing millions of socks that lets you add an arbitrary number of drawers...</p>
+              <p>SOK also comes with a data pad that allows you to know exactly the drawer (note: not necessarily where in the drawer) that contains a given sock color OR a given shape, but not both.</p>
+              <p class='example'>
+                Would it be more efficient for Andrew to store his socks by shape or by color if, on any given day, he is interested in searching for a pair of socks with a given color AND shape pattern?
+              </p>
+              <p class='question' name='bigO-q1'>Click for solution</p>
+              <p class='answer' name='bigO-q1'>
+                It would be more efficient to keep drawers indexed by color, because the SOK data pad could thin the results to a more unique color, which would only have a few pairs with different shapes
+                within the drawer. If you indexed drawers by shape, then you'd only have 3 drawers with about 333,333 socks each, which would then need a linear search to find the right color!
+              </p>
+              
+              <br/>
+              <p>&quot;Andrew, what *were* those examples? Is this a creative writing class?&quot;</p>
+              <p>So I wanted to break the monotony a bit!</p>
+              <p>Fine, you want programmy stuff? Here you go:</p>
+              
+              <br/>
+              <p></p>
             </div>
             <hr/>
               
@@ -182,6 +204,8 @@
           <!-- TODO: Tree traversals -->
             <!-- TODO: Simple printout -->
             <!-- TODO: Possible / not possible? -->
+            <!-- TODO: binaryTree isHeap ??? -->
+          <!-- TODO: Complexity with some operation in the destructor -->
           <!-- TODO: http://cslibrary.stanford.edu/110/BinaryTrees.html -->
           
             
