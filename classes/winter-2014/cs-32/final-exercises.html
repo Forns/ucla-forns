@@ -126,7 +126,13 @@
                 <li><p>Recursion</p></li>
                 <li><p>Trees</p></li>
               </ul>
-              <p>This review will focus on the latter topics not covered on the previous midterms, but I'll attempt a breadth coverage!</p>
+              <p>This review will focus on the later topics not covered on the previous midterms, but I'll attempt a breadth coverage!</p>
+              <p>I suggest the following workflow:</p>
+              <ol class='indent-1'>
+                <li><p>Review your notes / mine, skimming through sections you know pretty well (maybe linked lists and stacks, for example)</p></li>
+                <li><p>Take my practice final (either by hand or by computer)</p></li>
+                <li><p>Take the practice final listed on the course site by hand (it's very good)</p></li>
+              </ol>
             </div>
             <hr/>
             
@@ -136,6 +142,305 @@
             <h1>Would It Be a Review Without NoisyClass?</h1>
             <div>
               <p>Well... maybe... but not a good one.</p>
+<pre class='prettyprint'>
+  class NoisyBase {
+      private:
+          string s;
+      public:
+          NoisyBase (string sBase) {
+              cout &lt;&lt; "[B] Base Constructor: " &lt;&lt; sBase &lt;&lt; endl;
+              s = sBase;
+          }
+          virtual ~NoisyBase () {
+              cout &lt;&lt; "[B] Base Destructor!" &lt;&lt; endl;
+          }
+          virtual string getS () {
+              return s;
+          }
+          void shout () {
+              cout &lt;&lt; "[B] LOUD BASE NOISES" &lt;&lt; endl;
+          }
+  };
+    
+  class NoisyDerived: public NoisyBase {
+      private:
+          string s;
+      public:
+          NoisyDerived (string sBase, string sDerived): NoisyBase(sBase) {
+              cout &lt;&lt; "[D] Derived Constructor: " &lt;&lt; sDerived &lt;&lt; endl;
+              s = sDerived;
+          }
+          ~NoisyDerived () {
+              cout &lt;&lt; "[D] Derived Destructor!" &lt;&lt; endl;
+          }
+          virtual string getS () {
+              return s;
+          }
+          void shout () {
+              cout &lt;&lt; "[D] LOUD DERIVED NOISES" &lt;&lt; endl;
+          }
+  };
+</pre>
+              <br/>
+              <p class='example'>Using the class definition for NoisyDerived and NoisyBase above, what will the following code print out?</p>
+<pre class='prettyprint'>
+  int main () {
+      NoisyBase b("base");
+      NoisyDerived d("base", "derived");
+      NoisyBase* bPtr = &amp;b;
+      NoisyDerived* dPtr = &amp;d;
+      
+      cout &lt;&lt; bPtr-&gt;getS() &lt;&lt; endl;
+      bPtr-&gt;shout();
+      bPtr = &amp;d;
+      cout &lt;&lt; bPtr-&gt;getS() &lt;&lt; endl;
+      bPtr-&gt;shout();
+  
+      cout &lt;&lt; dPtr-&gt;getS() &lt;&lt; endl;
+      dPtr-&gt;shout();
+  }
+</pre>
+
+              <br/>
+              <p class='example'>Using the class definition for NoisyDerived and NoisyBase above, what will the following code print out?</p>
+<pre class='prettyprint'>
+  int main () {
+      vector&lt;NoisyBase*&gt; noisyVector;
+      noisyVector.push_back(new NoisyDerived("base", "derived"));
+      noisyVector.push_back(new NoisyBase("base"));
+      
+      vector&lt;NoisyBase*&gt;::iterator it = noisyVector.begin();
+      while (it != noisyVector.end()) {
+          cout &lt;&lt; (*it)-&gt;getS() &lt;&lt; endl;
+          (*it)-&gt;shout();
+          delete (*it++);
+      }
+  }
+</pre>
+              <br/>
+              <p class='example'>One more for good measure, a templated version of NoisyClass; what will this print out?</p>
+<pre class='prettyprint'>
+  template &lt;typename T&gt;
+  class NoisyTemplate {
+      private:
+          T t;
+      public:
+          NoisyTemplate (T input) {
+              t = input;
+              cout &lt;&lt; "Constructor: " &lt;&lt; t + t &lt;&lt; endl;
+          }
+  };
+  
+  int main () {
+      NoisyTemplate&lt;int&gt; ni(5);
+      NoisyTemplate&lt;string&gt; ns("yo");
+  }
+</pre>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='binTree' class='scrollspy-element' scrollspy-title='Binary Tree Stuffs'></div>
+            <h1>Binary Tree Stuffs</h1>
+            <div>
+              <p>You're probably sick of these by now... why not a couple more?</p>
+              
+              <br/>
+              <h3>Questions</h3>
+              <p class='question' name='trees-ques0'>Is it possible for a binary search tree to have the preorder traversal: <code class='prettyprint'>16, 13, 12, 14, 20, 15, 21</code></p>
+              <p class='answer' name='trees-ques0'>
+                No! Assume to the contrary that it is a binary search tree... 
+                We know that 16 is the root, and in a preorder traversal, 14 must be the right-most item of the left subtree of the root... therefore, 20 must be the first item of the
+                right subtree of the root. Now we see the 15 value, which must come to the left of the 20. Contradiction: 15 is less than the root 16 and should have gone within the left subtree.
+                Therefore, this traversal could not have been elicited from a BST.
+              </p>
+              
+              <br/>
+              <p class='question' name='trees-ques1'>Consider a heap in a binary tree form; is it possible for some heap to have the inorder traversal: <code class='prettyprint'>30, 45, 20, 50, 29, 28</code></p>
+              <p class='answer' name='trees-ques1'>
+                Yes! Now draw it :)
+              </p>
+              
+              <br/>
+              <p class='example'>The following heap is given to you in array form; draw its corresponding binary tree representation: 
+                <code class='prettyprint'>100, 19, 36, 17, 3, 25, 1, 2, 7</code> (thanks wiki)
+              </p>
+              
+              <br/>
+              <h3>Exercises</h3>
+              <p>In week 9's discussion, we talked about the following, simple, BinaryTree struct:</p>
+<pre class='prettyprint'>
+  struct BinTree {
+      // BinTreeNode struct internal
+      // to the BinTree
+      struct BinTreeNode {
+          int data;
+          BinTreeNode* left;
+          BinTreeNode* right;
+          BinTreeNode(int d) {
+              data = d;
+              left = nullptr;
+              right = nullptr;
+          }
+      };
+  
+      // Root just points to a single
+      // BinTreeNode
+      BinTreeNode* root;
+  
+      BinTree() {
+          root = nullptr;
+      }
+      ~BinTree() {}; // TODO!
+      void insertAt (int i, string path);
+  };
+  
+  // Creates a new node with the given data member
+  // if input string p specifies a path in terms of
+  // L and R children to follow to an empty spot in
+  // the tree
+  // The path p will look like some string of "LRL"
+  void BinTree::insertAt (int data, string p) {
+      BinTreeNode* b = root;
+      BinTreeNode* last = nullptr;
+      int i = 0;
+  
+      while (i &lt; p.length()) {
+          if (b == nullptr) {
+              break;
+          }
+          last = b;
+          b = (p[i] == 'L') ? b-&gt;left : b-&gt;right;
+          i++;
+      }
+  
+      if (i == p.length()) {
+          if (b != nullptr) {
+              return;
+          }
+          b = new BinTreeNode(data);
+          if (root == nullptr) {
+              root = b;
+          }
+          if (last != nullptr) {
+              if (p[i - 1] == 'L') {
+                  last-&gt;left = b;
+              } else {
+                  last-&gt;right = b;
+              }
+          }
+      }
+  }
+</pre>
+              <br/>
+              <p>Using this class, let's go over a couple of algorithms, hmm?</p>
+              <p class='definition'>
+                There are some great tree example problems (some of which I shamelessly stole from) <a href='http://cslibrary.stanford.edu/110/BinaryTrees.html' target='_blank'>located here.</a>
+              </p>
+              <p class='example'>
+                Implement the doubleTree function, which modifies a binary tree by duplicating each node and placing that duplicate at the original's left-child pointer. Preserve the tree structure.
+              </p>
+              <p>(Example credit to the site mentioned above)</p>
+<pre class='prettyprint'>
+   This tree:
+    2 
+   / \ 
+  1   3
+  
+  Is changed to: 
+         2 
+        / \ 
+       2   3 
+      /   / 
+     1   3 
+    / 
+   1
+   
+  
+  void doubleTree (BinTreeNode* node) {
+      // ...
+  }
+</pre>
+              <br/>
+              <p class='question' name='trees-q0'>Click for a possible solution</p>
+              <div class='answer' name='trees-q0'>
+<pre class='prettyprint'>
+  void doubleTree(BinTree::BinTreeNode* node) { 
+      BinTree::BinTreeNode* oldLeft;
+    
+      if (node == nullptr) return;
+    
+      doubleTree(node-&gt;left); 
+      doubleTree(node-&gt;right);
+    
+      // Duplicate this node to its left 
+      oldLeft = node-&gt;left; 
+      node-&gt;left = new Node(node-&gt;data); 
+      node-&gt;left-&gt;left = oldLeft;
+  } 
+</pre>
+              </div>
+              <p class='question' name='trees-q1'>What traversal method did you use in your solution? Which does the given solution use?</p>
+              <p class='answer' name='trees-q1'>Yours: ???, The above solution: postorder</p>
+              
+              <br/>
+              <p class='example'>
+                Implement the sameTree function, which takes in pointers to two trees and determines if they are equivalent (same Nodes at each position and same values in each corresponding Node).
+              </p>
+              <p>(Example credit to the site mentioned above)</p>
+<pre class='prettyprint'>
+  bool sameTree(BinTree::BinTreeNode* b1, BinTree::BinTreeNode* b2) {
+      // ...
+  }
+  
+  int main () {
+      BinTree b1;
+      b1.insertAt(14, "");
+      b1.insertAt(10, "L");
+      b1.insertAt(8, "LL");
+      b1.insertAt(11, "LR");
+      b1.insertAt(15, "R");
+        
+      BinTree b2;
+      b2.insertAt(14, "");
+      b2.insertAt(10, "L");
+      b2.insertAt(8, "LL");
+      b2.insertAt(11, "LR");
+      b2.insertAt(15, "R");
+        
+      cout &lt;&lt; sameTree(b1.root, b2.root) &lt;&lt; endl; // true
+      
+      b2.insertAt(27, "LLR");
+      
+      cout &lt;&lt; sameTree(b1.root, b2.root) &lt;&lt; endl; // false
+  }
+</pre>
+              <br/>
+              <p class='question' name='trees-q2'>Click for example solution</p>
+              <div class='answer' name='trees-q2'>
+<pre class='prettyprint'>
+  bool sameTree(BinTree::BinTreeNode* b1, BinTree::BinTreeNode* b2) {
+      // Case where both nullptr
+      if (b1 == nullptr &amp;&amp; b2 == nullptr) {
+          return true;
+      }
+  
+      // Case where neither are nullptr
+      if (b1 != nullptr &amp;&amp; b2 != nullptr) {
+          return (
+              b1-&gt;data == b2-&gt;data &amp;&amp;
+              sameTree(b1-&gt;left, b2-&gt;left) &amp;&amp;
+              sameTree(b1-&gt;right, b2-&gt;right)
+          );
+      }
+  
+      // Otherwise one was nullptr and the other wasn't
+      return false;
+  }
+</pre>
+              </div>
+              
             </div>
             <hr/>
             
@@ -188,8 +493,350 @@
               <p>So I wanted to break the monotony a bit!</p>
               <p>Fine, you want programmy stuff? Here you go:</p>
               
+              
               <br/>
-              <p></p>
+              <p class='example'>What is the time complexity of the following function?</p>
+<pre class='prettyprint'>
+  void funkyFunc (int n) {
+      for (int i = 0; i &lt; n; i++) {
+          for (int j = 10; j &gt; 0; j--) {
+              cout &lt;&lt; j &lt;&lt; endl;
+          }
+      }
+  }
+</pre>
+              <p class='question' name='bigO-q2'>Click for solution</p>
+              <p class='answer' name='bigO-q2'>O(n) because the inner loop runs a constant number of times</p>
+              
+              
+              <br/>
+              <p class='example'>What is the time complexity of the following function?</p>
+<pre class='prettyprint'>
+  void funkyFunc (int n) {
+      for (int i = 0; i &lt; n * n; i++) {
+          for (int j = 0; j &lt; n; j++) {
+              cout &lt;&lt; i &lt;&lt; j &lt;&lt; endl;
+          }
+      }
+  }
+</pre>
+              <p class='question' name='bigO-q2'>Click for solution</p>
+              <p class='answer' name='bigO-q2'>O(n^3) because the outer loop relies on the size of the input squared, and the inner loop relies on the size of the input as many times as the outer loop. n * n^2</p>
+              
+              
+              <br/>
+              <p class='example'>What is the time complexity of the following function?</p>
+<pre class='prettyprint'>
+  void funkyFunc (int n) {
+      for (int i = 0; i &lt; n * n; i++) {
+          for (int j = 0; j &lt; i; j++) {
+              cout &lt;&lt; i &lt;&lt; j &lt;&lt; endl;
+          }
+      }
+  }
+</pre>
+              <p class='question' name='bigO-q3'>Click for solution</p>
+              <p class='answer' name='bigO-q3'>Still O(n^3). Remember our proof for the sum(i)_i=1 to n? Try it with sum(i)_i=1 to n^2</p>
+              
+              
+              <br/>
+              <p class='example'>
+                Say the following algorithm takes in a pointer to a Node in a linked list. Assume N to be the size of the linked list. What is the time complexity of the following function in terms of N?
+              </p>
+<pre class='prettyprint'>
+  void funkyFunc (Node* n) {
+      int i = 1;
+      while (true) {
+          int j = i;
+          while (j &gt; 0 &amp;&amp; n != nullptr) {
+              n = n-&gt;next;
+              cout &lt;&lt; n-&gt;data &lt;&lt; endl;
+              j--;
+          }
+          if (j != 0) {
+              return;
+          }
+          i *= 2;
+      }
+  }
+</pre>
+              <p class='question' name='bigO-q4'>Click for solution</p>
+              <p class='answer' name='bigO-q4'>
+                O(N); it might LOOK like we're reducing the size of our data set at every step by the i *= 2, but if you look at the innermost loop, we're actually visiting every Node once! 
+              </p>
+              
+              
+              <br/>
+              <p class='example'>What is the time complexity of the following function in terms of q and r?</p>
+<pre class='prettyprint'>
+  void funkyFunc (int q, int r) {
+      for (int i = q * r; i &gt; 0; i--) {
+          cout &lt;&lt; q &lt;&lt; r &lt;&lt; endl;
+      }
+      for (int i = q * r; i &gt; 0; i /= 2) {
+          cout &lt;&lt; r &lt;&lt; q &lt;&lt; endl;
+      }
+  }
+</pre>
+              <p class='question' name='bigO-q5'>Click for solution</p>
+              <p class='answer' name='bigO-q5'>
+                O(q*r); note that the second loop runs with O(log(q*r)), which is NOT dependent on the first loop and a lesser complexity than the colinear case in the first loop, so we reduce
+                from O(q*r + log(q*r)) to O(q*r).
+              </p>
+              
+              
+              <br/>
+              <p class='example'>What is the time complexity of the following function in terms of input n and size of input list, L?</p>
+<pre class='prettyprint'>
+  void funkyFunc (int n, list&lt;int&gt; listy) {
+      vector&lt;int&gt; victor;
+      for (int i = 0; i &lt; listy.size(); i++) {
+          victor.push_back(i * n);
+      }
+      vector&lt;int&gt;::iterator vit = victor.begin();
+      list&lt;int&gt;::iterator lit = listy.begin();
+      while (vit != victor.end()) {
+          lit = listy.insert(lit, *vit);
+          vit = victor.erase(vit);
+      }
+  }
+</pre>
+              <p class='question' name='bigO-q6'>Click for solution</p>
+              <div class='answer' name='bigO-q6'>
+<pre class='prettyprint'>
+  void funkyFunc (int n, list&lt;int&gt; listy) {
+      vector&lt;int&gt; victor;
+      // [!] Goes L times; n is irrelevant to steps
+      for (int i = 0; i &lt; listy.size(); i++) {
+          // [!] Push to back of vector O(1)
+          victor.push_back(i * n);
+      }
+      vector&lt;int&gt;::iterator vit = victor.begin();
+      list&lt;int&gt;::iterator lit = listy.begin();
+      
+      // [!] Goes L times because victor was constructed
+      // with all L elements
+      while (vit != victor.end()) {
+          // [!] Insertion into linked list constant time O(1)
+          lit = listy.insert(lit, *vit);
+          // [!] Deletion of front of vector requires re-ordering
+          // proportional to size of the vector, in this case, that size
+          // is L; so O(L)
+          vit = victor.erase(vit);
+      }
+      // [!] Therefore, above loop has complexity O(L^2)
+      
+      // [!] Total complexity: O(L + L^2), which reduces to
+      // O(L^2)
+  }
+</pre>
+              </div>
+              
+              
+              <br/>
+              <p class='example'>What is the time complexity of the following function in terms of the number of nodes in s1 (call that number S) and the number in s2 (call that number R)?</p>
+<pre class='prettyprint'>
+  void funkyFunc (set&lt;int&gt; s1, set&lt;int&gt; s2) {
+      set&lt;int&gt;::iterator sit = s1.begin();
+      while (sit != s1.end()) {
+          if (s2.find(*sit) != s2.end()) {
+              s2.insert(*sit);
+          }
+          sit++;
+      }
+  }
+</pre>
+              <p class='question' name='bigO-q7'>Click for solution</p>
+              <div class='answer' name='bigO-q7'>
+<pre class='prettyprint'>
+  void funkyFunc (set&lt;int&gt; s1, set&lt;int&gt; s2) {
+      set&lt;int&gt;::iterator sit = s1.begin();
+      // [!] Goes through all S elements of s1
+      while (sit != s1.end()) {
+          // [!] Find operation is binary search so log(R)
+          if (s2.find(*sit) != s2.end()) {
+              // [!] Insertion into BST take log(R)
+              s2.insert(*sit);
+          }
+          sit++;
+      }
+      // [!] Therefore, outer loop runs S times and with every loop
+      // we're performing O(log(R)), giving us total complexity:
+      // O(S*log(R))
+  }
+</pre>
+              </div>
+              
+              
+              <br/>
+              <p class='example'>What is the time complexity of the following function in terms of the size of the input stack (S) and the number of elements in the unordered_set (U)?</p>
+<pre class='prettyprint'>
+  void funkyFunc (stack&lt;int&gt; si, unordered_set&lt;int&gt; ui) {
+      while (!si.empty()) {
+          if (ui.find(si.top()) == ui.end()) {
+              ui.insert(si.top());
+          }
+          si.pop();
+      }
+  }
+</pre>
+              <p class='question' name='bigO-q8'>Click for solution</p>
+              <div class='answer' name='bigO-q8'>
+<pre class='prettyprint'>
+  void funkyFunc (stack&lt;int&gt; si, unordered_set&lt;int&gt; ui) {
+      // [!] Go through all S elements of the stack
+      while (!si.empty()) {
+          // [!] unordered_sets are hashes! Average case constant time lookup O(1)
+          if (ui.find(si.top()) == ui.end()) {
+              // [!] Same thing with hashes; average case constant time insertion O(1)
+              ui.insert(si.top());
+          }
+          // [!] Popping from stack is constant time
+          si.pop();
+      }
+      
+      // [!] Total time complexity: O(S)
+  }
+</pre>
+              </div>
+              
+              
+              <br/>
+              <p class='example'>What is the time complexity of the following function?</p>
+<pre class='prettyprint'>
+  void funkyFunc (int q, int r) {
+      map&lt;int, int&gt; mappy;
+      for (int i = 0; i &lt; q; i++) {
+          for (int j = r * r * i; j &gt; 0; j--) {
+              mappy[i] = j;
+          }
+      }
+  }
+</pre>
+              <p class='question' name='bigO-q9'>Click for solution</p>
+              <div class='answer' name='bigO-q9'>
+<pre class='prettyprint'>
+  void funkyFunc (int q, int r) {
+      map&lt;int, int&gt; mappy;
+      // [!] Go through q times in outer loop
+      for (int i = 0; i &lt; q; i++) {
+          // [!] Inner loop goes r^2 * i times, and i is dependent
+          // on q, so really this loop is proportional to O(r^2 * q)
+          for (int j = r * r * i; j &gt; 0; j--) {
+              // [!] Insertion into map takes a log time on the keys...
+              // since we're inserting into the map with keys related to
+              // i, and i is dependent on q, then our insertion time is
+              // proportional to O(log(q))
+              mappy[i] = j;
+          }
+      }
+      // [!] Total, then, we have complexities of:
+      // Outer loop: O(q)
+        // Inner loop: O(r^2 * q)
+          // Inner map assignment: O(log(q))
+      // Total: O(r^2 * q^2 * log(q))
+  }
+</pre>
+              </div>
+              
+              
+              <br/>
+              <p class='example'>What is the time complexity of funkyFunc below in terms of inputs q and r?</p>
+<pre class='prettyprint'>
+  struct Node {
+      Node* next;
+      int data;
+      Node (int d) {
+          data = d;
+          next = nullptr;
+      }
+  };
+  
+  struct Trickz {
+      Node* insertion;
+      Node* head;
+      Trickz () {
+          insertion = nullptr;
+          head = nullptr;
+      }
+      void push (int dat) {
+          Node* toInsert = new Node(dat);
+          if (head == nullptr) {
+              head = toInsert;
+          } else {
+              insertion-&gt;next = toInsert;
+          }
+          insertion = toInsert;
+      }
+      ~Trickz () {
+          insertion = head;
+          Node* comp1 = head;
+          Node* comp2 = head;
+          while (comp1 != nullptr) {
+              while (comp2 != nullptr) {
+                  if (comp1-&gt;data == comp2-&gt;data) {
+                      cout &lt;&lt; comp1-&gt;data &lt;&lt; endl;
+                  }
+                  comp2 = comp2-&gt;next;
+              }
+              comp1 = comp1-&gt;next;
+          }
+          while (insertion != nullptr) {
+              Node* temp = insertion;
+              insertion = temp-&gt;next;
+              delete temp;
+          }
+      }
+  };
+  
+  void funkyFunc (int q, int r) {
+      for (int i = q * r; i &gt; 0; i -= 2) {
+          Trickz t;
+          for (int j = 0; j &lt; i; j++) {
+              t.push(j);
+          }
+      }
+  }
+</pre>
+              <p class='question' name='bigO-q11'>...that escalated quickly... Click for solution</p>
+              <div class='answer' name='bigO-q11'>
+<pre class='prettyprint'>
+  void funkyFunc (int q, int r) {
+      // [!] Even though i -= 2 at ever loop, i is still
+      // linearly dependent on q * r, so we know this outer
+      // loop has a complexity of O(q * r)
+      for (int i = q * r; i &gt; 0; i -= 2) {
+          Trickz t;
+          // [!] Since j is dependent on i, then this inner
+          // loop will also run q * r times, so O(q * r)
+          for (int j = 0; j &lt; i; j++) {
+              // [!] Our Trickz' push is constant time
+              t.push(j);
+          }
+          // [!] But hark!
+          // Trickz t was local to each iteration of the outer loop!
+          // We call the destructor for t here... observe that the
+          // Trickz destructor actually iterates through the list
+          // multiple times... how many times? Well L^2 times if L is
+          // the size of the list...
+          
+          // [!] What is L if we want our complexity answer in terms of q and r?
+          // Well, L is dependent on how many times the inner loop runs, which is
+          // dependent on how many times the outer loop runs, so our list length L is
+          // also going to be proportional to q * r
+          
+          // [!] This gives us a total complexity of:
+          // Outer loop: O(q * r)
+            // Inner loop: O(q * r)
+              // Insertion: O(1)
+            // Destructor for Trickz O(L^2) = O((q * r) ^ 2)
+            
+          // [!] Total complexity: O((q * r) * (q * r) ^ 2) = O(q^3 * r^3)
+      }
+  }
+</pre>
+              </div>
+              
             </div>
             <hr/>
               
@@ -200,13 +847,6 @@
             
           </div>
           <!-- END PRESENTATION CONTENT -->
-          
-          <!-- TODO: Tree traversals -->
-            <!-- TODO: Simple printout -->
-            <!-- TODO: Possible / not possible? -->
-            <!-- TODO: binaryTree isHeap ??? -->
-          <!-- TODO: Complexity with some operation in the destructor -->
-          <!-- TODO: http://cslibrary.stanford.edu/110/BinaryTrees.html -->
           
             
         </div>
