@@ -132,10 +132,42 @@
             
             
             <br/>
-            <div id='noisyClass' class='scrollspy-element' scrollspy-title='NoisyClas'></div>
+            <div id='noisyClass' class='scrollspy-element' scrollspy-title='NoisyClass'></div>
             <h1>Would It Be a Review Without NoisyClass?</h1>
             <div>
               <p>Well... maybe... but not a good one.</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='bigO' class='scrollspy-element' scrollspy-title='Big-O'></div>
+            <h1>Big 'Ole Big-O Review</h1>
+            <div>
+              <p>Remember our guidelines for determining time complexity:</p>
+              <ol class='indent-1'>
+                <li><p>Identify the statements that rely on the size of the input</p></li>
+                <li><p>Of those that are reliant on the size of the input, which are dependent upon each other?</p></li>
+                <li><p>Remember that a single statement, particularly a function call, is not a guarantee for a constant time operation!</p></li>
+              </oL>
+              <p>You ready to do this? Let's start off with some non-programmatic analyses and then move to the hard stuff...</p>
+              <br/>
+              <p class='example'>
+                Andrew continually loses socks in his dryer... one day he discovers why: a quantum sock portal has opened up within the lint rack and has been sucking socks in; finally
+                it reaches critical mass, and then expodes into an (almost) infinite number of socks!
+                <br/><br/>
+                Rather than work on his research, Andrew decides to do something more exciting and starts sorting the socks into their respective pairs. Because he's particularly devoted to
+                procrastinating, he desides to pick up one sock, and then look at other socks in the pile until he finds a match. If more socks continue to spill out of the quantum sock portal,
+                what is the time complexity growth of Andrew's sort algorithm?
+              </p>
+              <p class='question' name='bigO-q0'>Click for solution</p>
+              <p class='answer' name='bigO-q0'>
+                Andrew, that was an *excessive* amount of setup for the answer of O(n^2); we see that the sort is much like bubble sort in that you're needing to take each sock and run it through
+                the rest of the &quot;input&quot; until we find a match.
+              </p>
+              
+              <br/>
+              <p class='example'></p>
             </div>
             <hr/>
               
