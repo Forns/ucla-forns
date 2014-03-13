@@ -125,6 +125,344 @@
               <p>If you're me and you're looking for something at a supermarket, you'll probably wander aimlessly, looking at each row until you find it.</p>
               <p>Yet, if you ask a store employee, you'll find that, for the most part, they'll know exactly which row your item is in without having to look!</p>
               <p>(I, of course, never ask because male ego, etc.)</p>
+              <p>Now to bring the analogy home, it'd be nice if we had some &quot;store employee&quot; with our data structure collections that could tell tell us where to look for a query.</p>
+              <p class='definition'>
+                A <strong>hash table</strong> provides us with a means of storing data structures into certain buckets such that we can consult a hash function to determine where a particular item
+                should go (for insertion) or where it might already live (for search).
+              </p>
+              <p class='definition'>For a given value to store or a query to a hash table, the <strong>hash function</strong> tells us which bucket to store it in / look in.</p>
+              <br/>
+              <p>So, to unpack those definitions a bit:</p>
+              <ul class='indent-1'>
+                <li><p>The hash table is like the grocery store in our analogy.</p></li>
+                <li><p>The hash function is like the employee that we ask which aisle a particular item is in that we're looking for.</p></li>
+                <li><p>The hash buckets are like the aisles of the grocery store.</p></li>
+              </ul>
+              <p>So why is this useful?</p>
+              <p>
+                Well, if we had about 1000 items we needed to store, and 1000 buckets in which to store them, then assuming we chose a good hash function to evenly divide up the items into buckets, we
+                could perform insertion and search in near constant time! O(1), wow!
+              </p>
+              <p>
+                This is because we reduce the possible set of matches down to only those contents of a particular bucket, which is, if the items are uniformly distributed, going to be very small
+                compared to the original collection.
+              </p>
+              <p>Constant time is the gold standard of data structures and you're saying it's possible?! Let us learn of these wonderous devices by building a simple one of our own.</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-10/hash-0.png' />
+              </div>
+              
+              <br/>
+              <h3>The Hash Table</h3>
+              <p>Let's begin by designing our hash table.</p>
+              <p class='definition'>A hash table needs buckets that are accessible by index.</p>
+              <br/>
+              <p class='question' name='hash-q0'>Why do our hash buckets need to be accessible by index, and what data structure what you suggest to use for our buckets?</p>
+              <p class='answer' name='hash-q0'>
+                If we want constant time lookup and search, we'll need random access or else we'd have to traverse some number of Node-like objects to reach our goal bucket. Also, it's convenient
+                for a hash function to only hash items to integer ids. So, for the purposes of this example, we'll use a vector.
+              </p>
+              <br/>
+              <p>OK, let's define our HashTable class below:</p>
+<pre class='prettyprint'>
+  template &lt;typename T&gt;
+  class HashTable {
+      private:
+          // LOL "BUCKET LIST"
+          vector&lt;list&lt;T&gt;&gt; buckets;
+  };
+</pre>
+              <br/>
+              <p>Well that's dull so far...</p>
+              <p>Note we use (for this example) a vector for the buckets (enable random access) and lists for the individual bucket contents.</p>
+              <p>We'll template our HashTable so we can store different stuff.</p>
+              <p>Now, for the constructor, how many buckets do we want to start it off with?</p>
+              <p class='question' name='hash-q1'>What is the tradeoff for having more or fewer buckets in our hash table?</p>
+              <p class='answer' name='hash-q1'>
+                More buckets means that fewer items will be in each bucket (if our hash function performs a uniform distribution of the items) at the cost of having to take up more space in memory.
+              </p>
+              <br/>
+              <p>So, let's start off at, say, 1,000 buckets.</p>
+<pre class='prettyprint'>
+  template &lt;typename T&gt;
+  class HashTable {
+      private:
+          int MAX_BUCKETS;
+          vector&lt;list&lt;T&gt;&gt; buckets;
+      public:
+          HashTable (): MAX_BUCKETS(1000) {
+              // Start off the buckets with MAX_BUCKETS
+              buckets.resize(MAX_BUCKETS);
+          }
+  };
+</pre>
+              <br/>
+              <p>Alright, the stage is set... let's talk about hash functions.</p>
+              
+              <br/>
+              <h3>Hash Functions</h3>
+              <p>Hash functions act as our &quot;oracles&quot; that tell us which bucket a particular item should go in.</p>
+              <p>They receive as input whatever item we're trying to store or lookup and output an int index somewhere between [0, b), where b is the number of buckets.</p>
+              <p>There are some properties of hash functions we need to satisfy...</p>
+              <p class='definition'>Hash functions need to be fast!</p>
+              <br/>
+              <p>
+                If our hash function crawls wikipedia for articles on obscure topics, converts every character in those articles to its character code equivalent, adds them, and then mods them by the biggest
+                prime number that will fit things neatly into our buckets... we're probably gonna have a bad time (literally).
+              </p>
+              <p>So, we want something that's simple, quick, and satisfies this other property:</p>
+              <p class='definition'>Hash functions need to evenly distribute our items into buckets.</p>
+              <br/>
+              <p>If our buckets start to hold too many items, then the hash table will be pretty useless... we'll just have a linear search internal to our lists!</p>
+              <p>So, we need to determine a way to, pretty uniquely, determine what item goes into what bucket!</p>
+              <p class='definition'>When a hash function maps inputs to the same bucket, we call that a <strong>collision</strong>.</p>
+              <br/>
+              <p>Generally, we want to avoid collisions because they hurt.</p>
+              <p>But seriously, the more collisions we have, the more our complexity suffers because it means we have to find values within our lists.</p>
+              <p>A last property our hash functions should have:</p>
+              <p class='definition'>
+                Hash functions should be <strong>deterministic</strong>, meaning that if value A maps to bucket B in one call to our hash function, then it should map to bucket B in future calls as well.
+              </p>
+              <br/>
+              <p>Keeping this in mind, let's propose a couple of hash functions for our HashTable.</p>
+              <br/>
+              <p class='example'>Judge whether or not the following is a good hash function:</p>
+<pre class='prettyprint'>
+  unsigned int hash (int toHash) {
+      return toHash % 2;
+  }
+</pre>
+              <br/>
+              <p class='example'>Judge whether or not the following is a good hash function:</p>
+<pre class='prettyprint'>
+  unsigned int hash (string toHash) {
+      unsigned int result = 0;
+      for (int i = 0; i &lt; toHash.length(); i++) {
+          result += toHash[i];
+      }
+      return result % rand();
+  }
+</pre>
+              <br/>
+              <p class='example'>Judge whether or not the following is a good hash function:</p>
+<pre class='prettyprint'>
+  unsigned int hash (string toHash) {
+      unsigned int result = 0;
+      for (int i = 0; i &lt; toHash.length(); i++) {
+          result = result * 101 + toHash[i];
+      }
+      return result % MAX_BUCKETS;
+  }
+</pre>
+              <br/>
+              <p>This last one isn't bad; it's deterministic, simple, and stays in the range of our max number of buckets.</p>
+              <p>Alright, so let's add that to our HashTable!</p>
+              <p>We'll make it private because for this example, only our HashTable functions will care about the hash.</p>
+<pre class='prettyprint'>
+  template &lt;typename T&gt;
+  class HashTable {
+      private:
+          int MAX_BUCKETS;
+          vector&lt;list&lt;T&gt;&gt; buckets;
+  
+          // NOTE: If we want to be able to handle other
+          // template types than strings for T, we'd need
+          // other, more generalized hash functions...
+          unsigned int hash (string toHash) {
+              unsigned int result = 0;
+              for (int i = 0; i &lt; toHash.length(); i++) {
+                  result = result * 101 + toHash[i];
+              }
+              return result % MAX_BUCKETS;
+          }
+  
+      public:
+          HashTable (): MAX_BUCKETS(1000) {
+              // Start off the buckets with MAX_BUCKETS
+              buckets.resize(MAX_BUCKETS);
+          }
+  };
+</pre>
+              <br/>
+              <p>It's coming along!</p>
+              <p>Let's examine inserting items into our HashTable.</p>
+              
+              <br/>
+              <h3>HashTable Insertion</h3>
+              <p>So now that we have our hash function and our buckets with their lists, let's define our insertion behavior.</p>
+              <p class='example'>Complete the HashTable's insertion function below:</p>
+<pre class='prettyprint'>
+  void insert (T toInsert) {
+    // [!] Push toInsert to the back of the list that the
+    // hash function gives you from input toInsert
+    buckets[ ??? ].push_back(toInsert);
+  }
+</pre>
+              <br/>
+              <p class='debug'>Warning! The above insert function is missing something? What is it?</p>
+              <p>OK we'll deal with that in a moment...</p>
+              <p>I'll provide you with a neat print function just to display some syntactic sugaring for a printout:</p>
+<pre class='prettyprint'>
+  void print () {
+      for (int i = 0; i &lt; buckets.size(); i++) {
+          list&lt;T&gt;::iterator it = buckets[i].begin();
+          if (buckets[i].empty()) {
+              continue;
+          }
+          cout &lt;&lt; "=== Bucket[ " &lt;&lt; i &lt;&lt; " ] ===" &lt;&lt; endl;
+          while (it != buckets[i].end()) {
+              cout &lt;&lt; *it++ &lt;&lt; endl;
+          }
+      }
+  }
+</pre>
+              <br/>
+              <p>OK, so now we have the following HashTable class and a nice little test script:</p>
+<pre class='prettyprint'>
+  template &lt;typename T&gt;
+  class HashTable {
+      private:
+          int MAX_BUCKETS;
+          vector&lt;list&lt;T&gt;&gt; buckets;
+  
+          unsigned int hash (string toHash) {
+              unsigned int result = 0;
+              for (int i = 0; i &lt; toHash.length(); i++) {
+                  result = result * 101 + toHash[i];
+              }
+              return result % MAX_BUCKETS;
+          }
+  
+      public:
+          HashTable (): MAX_BUCKETS(1000) {
+              buckets.resize(MAX_BUCKETS);
+          }
+          void insert (T toInsert) {
+              buckets[HashTable::hash(toInsert)].push_back(toInsert);
+          }
+          void print () {
+              for (int i = 0; i &lt; buckets.size(); i++) {
+                  list&lt;T&gt;::iterator it = buckets[i].begin();
+                  if (buckets[i].empty()) {
+                      continue;
+                  }
+                  cout &lt;&lt; "=== Bucket[ " &lt;&lt; i &lt;&lt; " ] ===" &lt;&lt; endl;
+                  while (it != buckets[i].end()) {
+                      cout &lt;&lt; *it++ &lt;&lt; endl;
+                  }
+              }
+          }
+  };
+  
+  int main () {
+      HashTable&lt;string&gt; hashy;
+      hashy.insert("To");
+      hashy.insert("Hash");
+      hashy.insert("Or");
+      hashy.insert("Not");
+      hashy.insert("To");
+      hashy.insert("Hash");
+      hashy.print();
+  }
+</pre>
+              <br/>
+              <p>
+                Now, the issue with our insert is that it currently allows for duplicate keys... we can't have this behavior in a hash table because it would be ambiguous to talk about a key (which is
+                meant to be unique) when there are multiple instances of that key.
+              </p>
+              <p>Let's implement our hasKey function below:</p>
+              <p class='debug'>
+                NOTE: If we were really designing a HashTable class, we'd probably want to implement a HashTable iterator, but since this is an intro example, we'll reduce the find functionality
+                to just a boolean return function.
+              </p>
+<pre class='prettyprint'>
+  bool hasKey (T query) {
+      // Store a pointer to the bucket's list
+      list&lt;T&gt;* lPtr = &amp;buckets[hash(query)];
+      // Start an iterator at it's beginning
+      list&lt;T&gt;::iterator it = lPtr-&gt;begin();
+      // Search linearly for the query item
+      while (it != lPtr-&gt;end()) {
+          if (*it == query) {
+              break;
+          }
+      }
+      // Return whether the iterator found a
+      // match or not
+      return it != lPtr-&gt;end();
+  }
+</pre>
+              <p>Now, we can fix our insertion function to not add duplicates!</p>
+<pre class='prettyprint'>
+  void insert (T toInsert) {
+      if (hasKey(toInsert)) {
+          return;
+      }
+      buckets[HashTable::hash(toInsert)].push_back(toInsert);
+  }
+</pre>
+              <p>Now if we run our previous test main function, we see that duplicate keys are not added, just as we'd like. Cool!</p>
+              
+              <br/>
+              <h3>Hash Table Complexities</h3>
+              <p>So it might be clear how we're able to find a bucket in constant time (random access of vector + hash function), but why is searching the bucket list considered average case constant?</p>
+              <p>Well let's look at a certain property of hash tables:</p>
+              <p class='definition'>The <strong>load factor</strong> of a hash table is the ratio of the number of items stored in total divided by the number of buckets.</p>
+              <br/>
+              <p>So, the lower the load factor, and assuming our hash function is doing a good job of evenly distributing keys across buckets, the faster our lookup in each list is going to be!</p>
+              <p>We see that a hash table with a ton of items and few buckets will have a large load factor and nearing linear lookup and insertion time.</p>
+              <p>The solution that modern hash tables use: create more buckets whenever the load factor gets too high!</p>
+              <p>Assuming that our hash function is uniformly distributing keys, this puts a *constant upper bound* on the number of items in any given bucket list. Thus the O(1).</p>
+              
+              <br/>
+              <h3>Hash Table Sorting</h3>
+              <p>With binary search trees, obtaining a sorted list of the items was trivial: an inorder traversal...</p>
+              <p>With hash tables, we don't have the same luxury of structure since our hash function threw keys all over the place.</p>
+              <p class='definition'>With hash tables, our concern is less about sorting values than it is about quickly storing and looking them up...</p>
+              <br/>
+              <p>Just like STL lists don't have a find function because it's a rather wonky operation taking O(n), so is a sort operation somewhat auxiliary to the hash table purpose.</p>
+              <p>So what's a viable work-around for implementing a hash table sort?</p>
+              <p class='question' name='hash-q2'>Assume we have iterators for our hash tables... how might we use these to sort our keys?</p>
+              <p class='answer' name='hash-q2'>
+                You could, upon a sort function call, simply create some other data structure (like a BST) comprised of pointers to the values in the hash table, which could then give a nice
+                ordering for the values currently in the hash table.
+              </p>
+              
+              <br/>
+              <h3>#include &lt;unordered_set&gt;</h3>
+              <p>The STL version of a hash table is an unordered_set. You can use it in the following way:</p>
+<pre class='prettyprint'>
+  int main () {
+      unordered_set&lt;int&gt; ui;
+      
+      // You can insert keys
+      ui.insert(1);
+      ui.insert(17);
+      ui.insert(12);
+      ui.insert(20);
+  
+      // You can define iterators and look for values
+      unordered_set&lt;int&gt;::iterator it = ui.find(1);
+  
+      // [!] WARNING: Will the following necessarily print
+      // out 1, 12, 17, 20 in order?
+      it = ui.begin();
+      while (it != ui.end()) {
+          cout &lt;&lt; *it++ &lt;&lt; endl;
+      }
+  
+      // You can even print out how many buckets it has!
+      cout &lt;&lt; "Buckets: " &lt;&lt; ui.bucket_count() &lt;&lt; endl;
+  
+      // And the load factor!
+      cout &lt;&lt; "Load factor: " &lt;&lt; ui.load_factor() &lt;&lt; endl;
+  
+      // And of course, clear it
+      ui.clear();
+  }
+</pre>
+              <br/>
+              <p>So those are hash tables!</p>
             </div>
             <hr/>
             
@@ -139,41 +477,6 @@
           
           <!-- MATERIALS FROM CLASS: -->
           
-          <!-- TODO: Hash Tables -->
-            <!-- TODO: Way to enable fast lookups, insertions, and deletions by using random access -->
-            <!-- TODO: Need a contiguous subscriptable data structure -->
-            <!-- TODO: Every storage location is called a "bucket" -->
-              <!-- TODO: For every key, we need to know what "bucket" it goes into... -->
-                <!-- TODO: To make this determination, we use a hash function, which maps a key to a particular bucket -->
-                <!-- TODO: Hash functions should be cheap -->
-                <!-- TODO: Hash functions should be deterministic: called with the same argument, should return the same bucket -->
-              <!-- TODO: Say I had 40,000 items mapping the first 4 numbers of studentIDs to student objects (sorted by name) -->
-                <!-- TODO: If I had, say, 10,000 possible combinations of the first 4 numbers of a studentID (0000 - 9999), then I'd *expect* there to be around 4 students per bucket -->
-                  <!-- TODO: Problem: what if the numbers are not distributed uniformly? -->
-                  <!-- TODO: Then we're sorting a ton of items into a few buckets -->
-                  <!-- TODO: So, additional constraint on Hash functions is that they must uniformly distribute into buckets -->
-                  <!-- TODO: In our example, this might mean using the *last* 4 numbers of a studentId instead of the first 4 -->
-                <!-- TODO: What happens when I add more and more items to my hash table? Search within each bucket is actually linear because of each linked list per bucket growing to infinity -->
-                <!-- TODO: Even though this has linear behavior, the constant of proportionality hides an important improvement: the constant is extremely small: 1/b where b is the number of buckets -->
-                  <!-- TODO: Remember that big-O says nothing about small values of N -->
-                  <!-- TODO: Also, this is true for FIXED bucket amounts only -->
-              <!-- TODO: When two keys map to the same bucket, it's called a "collision" -->
-              <!-- TODO: Load factor of a hash table: the number of items divided by the number of buckets -- the average linked list length -->
-                <!-- TODO: Another tactic is to have a hash table with a maximum load factor such that we make more buckets as soon as we exceed that limit -->
-                <!-- TODO: Doing this, we guarantee that the size of our linked lists in buckets stay pretty small, so we end up with an average and worst case constant time O(1) lookup / insertion -->
-              <!-- TODO: What about sorting hash table elements? Difficult because our hash function has attempted to scatter the keys uniformly -->
-                <!-- TODO: Naive solution is to step through every bucket (order of O(b)) and then sort in each bucket; b > N -->
-                  <!-- TODO: Improvement: have pointers at the end of each bucket list item that point to the next in the sequence -->
-                    <!-- TODO: Greater insertion and deletion complexity, but trends the time of sorting to the size of input N rather buckets b -->
-                  <!-- TODO: Still, the items within each bucket are not necessarily sorted... -->
-                  <!-- TODO: Solution is to have another data structure with sorted pointers to the elements: n*log(n) time (we don't want to sort at insertion because then we might as well just use a BST) -->
-            <!-- TODO: Generating buckets -->
-              <!-- TODO: Have a prime number of buckets such that any hash function mapping keys to buckets will still be uniform despite patterns in input ints -->
-              <!-- TODO: What if key is a string, for example? -->
-              <!-- TODO: Our hash function can, say, just add up the ASCII values in the string to generate a number to map to -->
-                <!-- TODO: Problem: non-unique mappings; so we should take character values AND position in the string into account -->
-                <!-- TODO: FMD Hash functions -->
-                
             <!-- TODO: Unordered Maps -->
               <!-- TODO: Maps implemented as hash tables -->
               <!-- TODO: NB: Each item referenced using the bracket operator is initialized to the default value of that type -->

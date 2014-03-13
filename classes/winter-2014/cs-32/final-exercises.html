@@ -236,6 +236,27 @@
       NoisyTemplate&lt;string&gt; ns("yo");
   }
 </pre>
+              <br/>
+              <p class='example'>OK I lied... uno mas.</p>
+<pre class='prettyprint'>
+  class NoisyClass {
+      private:
+          string s;
+      public:
+          NoisyClass () {
+              cout &lt;&lt; "DEFAULT" &lt;&lt; endl;
+          }
+          NoisyClass (const NoisyClass&amp; other) {
+              cout &lt;&lt; "COPY" &lt;&lt; endl;
+          }
+  };
+  
+  int main () {
+      vector&lt;NoisyClass&gt; nv;
+      NoisyClass n;
+      nv.push_back(n);
+  }
+</pre>
             </div>
             <hr/>
             
