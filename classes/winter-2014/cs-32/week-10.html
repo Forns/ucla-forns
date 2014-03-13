@@ -117,6 +117,17 @@
             </div>
             <hr/>
             
+            
+            <br/>
+            <div id='hash' class='scrollspy-element' scrollspy-title='Hash Tables'></div>
+            <h1>Hash Tables</h1>
+            <div>
+              <p>If you're me and you're looking for something at a supermarket, you'll probably wander aimlessly, looking at each row until you find it.</p>
+              <p>Yet, if you ask a store employee, you'll find that, for the most part, they'll know exactly which row your item is in without having to look!</p>
+              <p>(I, of course, never ask because male ego, etc.)</p>
+            </div>
+            <hr/>
+            
               
             <a class='btn btn-default pull-right hidden-print' href='javascript:window.print();'>
               <span class='glyphicon glyphicon-print'></span>
@@ -162,6 +173,11 @@
               <!-- TODO: Our hash function can, say, just add up the ASCII values in the string to generate a number to map to -->
                 <!-- TODO: Problem: non-unique mappings; so we should take character values AND position in the string into account -->
                 <!-- TODO: FMD Hash functions -->
+                
+            <!-- TODO: Unordered Maps -->
+              <!-- TODO: Maps implemented as hash tables -->
+              <!-- TODO: NB: Each item referenced using the bracket operator is initialized to the default value of that type -->
+              <!-- TODO: If you use an iterator, you won't necessarily know which order each item is visited -->
           
           <!-- TODO: Priority Queues -->
             <!-- TODO: A collection of items where every item has a given priority -->
@@ -208,7 +224,35 @@
                 <!-- TODO: Notice, then, that we can access heap elements as an array where we always know what nodes are children of what other nodes -->
                   <!-- TODO: Guaranteed because we know our heap is a complete binary tree -->
                 <!-- TODO: This gives us constant time access for any Node, especially because we don't need to traverse the tree to get to the bottom-right-most Node -->
+            <!-- TODO: HeapSort -->
+              <!-- TODO: Steps -->
+                <!-- TODO: 1) Make our data into a heap -->
+                <!-- TODO: 2) Swap the root with the farthest leaf to the right -->
+                <!-- TODO: 3) Now consider the array holding the elements to have 1 fewer item (effectively chopping off the sorted tail) -->
+                <!-- TODO: 4) Re-heapify -->
+              <!-- TODO: Complexity: average case log(n) ??? check that out... -->
                 
+          <!-- TODO: Graphs -->
+            <!-- TODO: Simply nodes connected by edges -->
+            <!-- TODO: Some graphs are undirected in which edges are just linked, but without any notion of beginning or end -->
+            <!-- TODO: Some graphs are directed in which edges have a beginning and a terminus -->
+            <!-- TODO: Some graphs can have cycles: cyclic graphs -->
+            <!-- TODO: DAGs are directed, acyclic graphs -->
+              <!-- TODO: Are all trees graphs and vice versa? -->
+              <!-- TODO: DAGs don't really have a root -->
+            <!-- TODO: Some algorithms: -->
+              <!-- TODO: Topological sort -->
+            <!-- TODO: Some representations: -->
+              <!-- TODO: Adjacency matrix: 2D array with nodes on each axis and 0s and 1s representing edges between them -->
+                <!-- TODO: Problem: lots of wasted space; grows quickly -->
+              <!-- TODO: Sparse matrix -->
+                <!-- TODO: Every node maps to a list of the other nodes that it connects to -->
+          
+          <!-- TODO: Review -->
+            <!-- TODO: Heapification -->
+            <!-- TODO: Heap Sort -->
+            <!-- TODO: Scenario based data structure choices and computational complexities -->
+          
           <!-- TODO: Summary table of data structures and their different complexities? -->
           
           
