@@ -410,7 +410,14 @@
               <p class='definition'>The <strong>load factor</strong> of a hash table is the ratio of the number of items stored in total divided by the number of buckets.</p>
               <br/>
               <p>So, the lower the load factor, and assuming our hash function is doing a good job of evenly distributing keys across buckets, the faster our lookup in each list is going to be!</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-10/hash-1.png' />
+              </div>
+              <hr/>
               <p>We see that a hash table with a ton of items and few buckets will have a large load factor and nearing linear lookup and insertion time.</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-10/hash-2.png' />
+              </div>
               <p>The solution that modern hash tables use: create more buckets whenever the load factor gets too high!</p>
               <p>Assuming that our hash function is uniformly distributing keys, this puts a *constant upper bound* on the number of items in any given bucket list. Thus the O(1).</p>
               
@@ -466,6 +473,66 @@
             </div>
             <hr/>
             
+            
+            <br/>
+            <div id='heaps' class='scrollspy-element' scrollspy-title='Heaps'></div>
+            <h1>Heaps</h1>
+            <div>
+              <p>Let's talk about a new tree data structure. The heap!</p>
+              <p class='debug'>WARNING: The heap data structure is on no way related to the heap where dynamically allocated variables are stored!</p>
+              <p>Such unfortunate naming schemas in computer science... it's not like humans have infinite generative language capacities or anything...</p>
+              <p>To break the ice, here's another topical XKCD because you guys seem to love these as much as I do:</p>
+              <a href='https://xkcd.com/835/' target='_blank'>
+                <div class='text-center fit-pres'>
+                  <img src='http://imgs.xkcd.com/comics/tree.png' />
+                </div>
+              </a>
+              <br/>
+              <p class='definition'>A <strong>heap</strong> (generally referring to a max heap) is a special type of tree where all subtrees of a given Node have values less than or equal to that Node's.</p>
+              <br/>
+              <p>In the above comic, we see that the heap of presents at the base has the largest at the top with children decreasing in size with greater depth.</p>
+              <p>Our discussion, however, will be restricted to binary heaps, which have some additional restrictions.</p>
+              <p class='definition'>A <strong>binary heap</strong> is a complete binary tree where all subtrees of a given Node have values less than or equal to that Node's.</p>
+              <br/>
+              <p>So we're restricting the number of children any Node can have to 2, AND requiring the binary tree be complete.</p>
+              <p class='definition'>
+                A <strong>complete</strong> binary tree is a binary tree with all full levels, except for possibly the last level, in which case it is required that the Nodes be filled from left to right without
+                any spaces.
+              </p>
+              <br/>
+              <p class='example'>Is the following binary tree complete? Is it a heap?</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-10/heap-0.png' />
+              </div>
+              <hr/>
+              <p class='example'>Is the following binary tree complete? Is it a heap?</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-10/heap-1.png' />
+              </div>
+              <hr/>
+              <p class='example'>Is the following binary tree complete? Is it a heap?</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-10/heap-2.png' />
+              </div>
+              <hr/>
+              <p class='example'>Is the following binary tree complete? Is it a heap?</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-10/heap-3.png' />
+              </div>
+              <br/>
+              <p class='question' name='heap-q0'>Is a single-node tree a heap?</p>
+              <p class='answer' name='heap-q0'>
+                Yes! It must be complete because the last (and only) level is full, and its value must be larger than its subtrees because it has no subtrees!
+              </p>
+              <br/>
+              <p class='question' name='heap-q1'>How many unique structural configurations (ignoring node values) are there for a complete binary tree with N nodes?</p>
+              <p class='answer' name='heap-q1'>
+                Just 1! If you were to change the position of any node in the structure, it would cease to be complete.
+              </p>
+              
+            </div>
+            <hr/>
+            
               
             <a class='btn btn-default pull-right hidden-print' href='javascript:window.print();'>
               <span class='glyphicon glyphicon-print'></span>
@@ -476,11 +543,6 @@
           <!-- END PRESENTATION CONTENT -->
           
           <!-- MATERIALS FROM CLASS: -->
-          
-            <!-- TODO: Unordered Maps -->
-              <!-- TODO: Maps implemented as hash tables -->
-              <!-- TODO: NB: Each item referenced using the bracket operator is initialized to the default value of that type -->
-              <!-- TODO: If you use an iterator, you won't necessarily know which order each item is visited -->
           
           <!-- TODO: Priority Queues -->
             <!-- TODO: A collection of items where every item has a given priority -->
@@ -500,15 +562,6 @@
                 <!-- TODO: Lower priority goes in left subtree; higher goes in right -->
                 <!-- TODO: Insertion and search are both log(n) time -->
                 <!-- TODO: Problem: items being removed will unbalance the tree and require upkeep -->
-            <!-- TODO: First, some definitions: -->
-              <!-- TODO: A complete binary tree is a binary tree where every level is full, except possibly the bottom level, which is filled left-to-right -->
-              <!-- TODO: As such, there is exactly 1 valid configuration for a complete binary tree with N nodes -->
-            <!-- TODO: Best data structure: the heap *data structure* is a complete binary tree with the following properties: -->
-              <!-- TODO: In a maxHeap, the value at every node is GREATER THAN OR EQUAL TO the value at all nodes in its subtrees -->
-                <!-- TODO: If people just say a "heap", they generally mean a maxTree -->
-              <!-- TODO: In a minHeap, the value at every node is LESS THAN OR EQUAL TO the value at all nodes in its subtrees -->
-              <!-- TODO: Ordering of children is irrelevant -->
-              <!-- TODO: In NO way is it related to the dynamic memory storage location, also called the heap -->
             <!-- TODO: Properties of a heap: -->
               <!-- TODO: Largest priority is always at the root -->
               <!-- TODO: Insertion algorithm: -->
@@ -552,6 +605,7 @@
                 <!-- TODO: Every node maps to a list of the other nodes that it connects to -->
           
           <!-- TODO: Review -->
+            <!-- TODO: Design a hash function that takes this input and sticks it in these buckets -->
             <!-- TODO: Heapification -->
             <!-- TODO: Heap Sort -->
             <!-- TODO: Scenario based data structure choices and computational complexities -->
