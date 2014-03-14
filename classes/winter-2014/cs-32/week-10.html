@@ -256,6 +256,11 @@
 </pre>
               <br/>
               <p>This last one isn't bad; it's deterministic, simple, and stays in the range of our max number of buckets.</p>
+              <p class='question' name='hash-q1-1'>Why did I choose to multiply by 101? What is special about the number 101 (or numbers like it)?</p>
+              <p class='answer' name='hash-q1-1'>
+                It's prime! When we multiply by a prime number, the chances of getting a unique result are higher because of the lack of factors. This helps us distribute keys to our buckets.
+              </p>
+              <br/>
               <p>Alright, so let's add that to our HashTable!</p>
               <p>We'll make it private because for this example, only our HashTable functions will care about the hash.</p>
 <pre class='prettyprint'>
@@ -537,14 +542,18 @@
               <br/>
               <p>One of the most useful aspects of heaps is that, because they are complete trees, we can represent them as arrays to enable random access!</p>
               <p>This is nice, as we'll see in a moment, because we can access any &quot;node&quot; in constant time, a distinct advantage over the traditionally linked Binary Tree Nodes.</p>
-              <!-- TODO: GRAPHIC OF THIS CONVERSION -->
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-10/heap-4.png' />
+              </div>
+              <br/>
+              <p>&quot;Nice colors in that graph, Andrew, do you also design children's play equipment?&quot;</p>
+              <p>Shhh! It was illustrative!</p>
               
               <br/>
               <p class='definition'>We know that in the array representation of a heap, the root must always be at index 0.</p>
               <br/>
               <p>But how do we determine the children and parent of any given index in an array?</p>
               <p>Well, since it's a complete tree, we have a simple computational way of finding these indexes...</p>
-              <!-- TODO: Heap to array and array to heap example -->
               <p class='question' name='heap-q2'>Given the index n of a &quot;Node&quot; in our conceptual tree structure, how can I get the index of the parent?</p>
               <p class='answer' name='heap-q2'>
                 Index of parent: (n - 1) / 2; (NOTE: this is integer division, so we ignore the decimal of the quotient)
@@ -569,7 +578,128 @@
   }
 </pre>
               <br/>
-              <p>Now that we have the basic tools</p>
+              <p class='example'>Draw the binary tree representation of the following heap:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-10/heap-5.png' />
+              </div>
+              <br/>
+              <p>Now that we have the basic tools down, we're ready to go over some heap algorithms!</p>
+              
+              <br/>
+              <h3>Insertion</h3>
+              <p>After every operation on a heap, we have some general steps: perform the operation and then &quot;reheapify&quot; the binary tree.</p>
+              <p>For insertion, that looks like this:</p>
+              <ol class='indent-1'>
+                <li><p>Create a complete binary tree with the newly inserted node in its proper location as the right-most vacant leaf position on the last level of the tree.</p></li>
+                <li><p>Starting at that newly inserted node, bubble upwards ensuring that each node is less than its parent.</p></li>
+                <li><p>As soon as a parent is greater than the node we're bubbling, stop--your array is now reheapified! (assuming it was a heap before the insertion).</p></li>
+              </ol>
+              <p>Let's try an example where we're inserting the node 50 into the heap below:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-10/heap-6.png' />
+              </div>
+              <hr/>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-10/heap-7.png' />
+              </div>
+              <hr/>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-10/heap-8.png' />
+              </div>
+              <hr/>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-10/heap-9.png' />
+              </div>
+              <br/>
+              <p>Got that?</p>
+              <p>Let's make a simple BinaryHeap class with this algorithm!</p>
+              <p>I'll start you off...</p>
+              <p class='example'>Complete the insert function and its helper, bubbleUp, in our BinaryHeap below:</p>
+              <br/>
+<pre class='prettyprint'>
+  template &lt;typename T&gt;
+  class BinaryHeap {
+      private:
+          vector&lt;T&gt; heap;
+  
+          // Traversal helpers
+          int getParent (int index) {
+              return (index - 1) / 2;
+          }
+          int getChild (int index, char child) {
+              int result = (index * 2) + 1;
+              if (child == 'R') {
+                  result++;
+              }
+              return result;
+          }
+  
+          // Continues to bubble values up the
+          // tree until we find a node that is
+          // greater than it
+          void bubbleUp (int index) {
+              // [!] If we're at the root, then
+              // we're done
+              if ( ??? ) {return;}
+  
+              // [!] Get parent index and store it
+              int parent = ???;
+  
+              // [!] If the parent's value is less than
+              // the current one's...
+              if ( ??? ) {
+                  // [!] ...then we swap them...
+                  ???
+  
+                  // [!] ...and recurse on the new parent!
+                  bubbleUp(parent);
+              }
+  
+          }
+  
+      public:
+          void print () {
+              for (int i = 0; i &lt; heap.size(); i++) {
+                  cout &lt;&lt; heap[i] &lt;&lt; endl;
+              }
+          }
+  
+          void insert (T toInsert) {
+              // [!] Add new element to next available
+              // slot in the binary tree
+              ???
+  
+              // [!] Start bubbling values up from
+              // the newly added value
+              ???
+          }
+  };
+</pre>
+              <br/>
+              <p>Now let's test it using our example from before!</p>
+              <br/>
+<pre class='prettyprint'>
+  int main () {
+      BinaryHeap&lt;int&gt; b;
+      b.insert(25);
+      b.insert(10);
+      b.insert(20);
+      b.insert(8);
+  
+      cout &lt;&lt; "BEFORE adding 50:" &lt;&lt; endl;
+      b.print();
+  
+      b.insert(50);
+      cout &lt;&lt; "AFTER adding 50:" &lt;&lt; endl;
+      b.print();
+  }
+</pre>
+              <br/>
+              <p>Great! On to deletion.</p>
+              
+              <br/>
+              <h3>Deletion</h3>
+              
             </div>
             <hr/>
             
@@ -603,23 +733,12 @@
                 <!-- TODO: Insertion and search are both log(n) time -->
                 <!-- TODO: Problem: items being removed will unbalance the tree and require upkeep -->
             <!-- TODO: Properties of a heap: -->
-              <!-- TODO: Largest priority is always at the root -->
-              <!-- TODO: Insertion algorithm: -->
-                <!-- TODO: Create a complete binary tree with the new node in its proper location to make a complete binary tree (leafs filled from left to right) -->
-                <!-- TODO: Bubble up an item to its proper place -->
-                <!-- TODO: As soon as a parent is greater than the node we're bubbling, stop -->
               <!-- TODO: Deletion algorithm: -->
                 <!-- TODO: Make a complete binary tree; remove target Node, and promote the bottom-right-most item to the root -->
                 <!-- TODO: Trickle down the promoted item -->
                   <!-- TODO: Promote one of the children of whatever you just promoted; choose the largest of the children and promote that -->
                   <!-- TODO: Continue doing this until none of the children are larger than the bubbling Node -->
               <!-- TODO: Better constant of proportionality with binary search trees for insertion and deletion but still O(log(n)) -->
-              <!-- TODO: Another interesting property: number each Node in an inorder traversal starting with 0 at the root -->
-                <!-- TODO: The numbered parent of node i is the integer component of (i-1) / 2 -->
-                <!-- TODO: The numbered children of node i are the integer components of (i*2)+1 and (i*2)+2 (if they exist) -->
-                <!-- TODO: Notice, then, that we can access heap elements as an array where we always know what nodes are children of what other nodes -->
-                  <!-- TODO: Guaranteed because we know our heap is a complete binary tree -->
-                <!-- TODO: This gives us constant time access for any Node, especially because we don't need to traverse the tree to get to the bottom-right-most Node -->
             <!-- TODO: HeapSort -->
               <!-- TODO: Steps -->
                 <!-- TODO: 1) Make our data into a heap -->

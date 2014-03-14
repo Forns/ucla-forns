@@ -541,8 +541,8 @@
       }
   }
 </pre>
-              <p class='question' name='bigO-q2'>Click for solution</p>
-              <p class='answer' name='bigO-q2'>O(n^3) because the outer loop relies on the size of the input squared, and the inner loop relies on the size of the input as many times as the outer loop. n * n^2</p>
+              <p class='question' name='bigO-q2-1'>Click for solution</p>
+              <p class='answer' name='bigO-q2-1'>O(n^3) because the outer loop relies on the size of the input squared, and the inner loop relies on the size of the input as many times as the outer loop. n * n^2</p>
               
               
               <br/>
@@ -557,7 +557,16 @@
   }
 </pre>
               <p class='question' name='bigO-q3'>Click for solution</p>
-              <p class='answer' name='bigO-q3'>Still O(n^3). Remember our proof for the sum(i)_i=1 to n? Try it with sum(i)_i=1 to n^2</p>
+              <div class='answer' name='bigO-q3'>
+<pre class='prettyprint'>
+  sum(i)_i=1 to n^2 
+  = 1 + 2 + 3 + ... + (n^2 - 2) + (n^2 - 1) + n^2
+  = (n^2 + 1) + (n^2 + 1) + ... + (n^2 + 1) // how many (n^2 + 1)'s?
+  = (n^2)/2 * (n^2 + 1) // (n^2)/2 of them!
+  = (n^4)/2 + (n^2)/2
+  => O(n^4)
+</pre>
+              </div>
               
               
               <br/>
