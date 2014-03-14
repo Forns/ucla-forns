@@ -530,6 +530,46 @@
                 Just 1! If you were to change the position of any node in the structure, it would cease to be complete.
               </p>
               
+              <br/>
+              <h3>Heap Properties</h3>
+              <p>Heaps have some nice properties, for example:</p>
+              <p class='definition'>The largest value of a (max)heap is always at the root, and therefore accessible with constant time!</p>
+              <br/>
+              <p>One of the most useful aspects of heaps is that, because they are complete trees, we can represent them as arrays to enable random access!</p>
+              <p>This is nice, as we'll see in a moment, because we can access any &quot;node&quot; in constant time, a distinct advantage over the traditionally linked Binary Tree Nodes.</p>
+              <!-- TODO: GRAPHIC OF THIS CONVERSION -->
+              
+              <br/>
+              <p class='definition'>We know that in the array representation of a heap, the root must always be at index 0.</p>
+              <br/>
+              <p>But how do we determine the children and parent of any given index in an array?</p>
+              <p>Well, since it's a complete tree, we have a simple computational way of finding these indexes...</p>
+              <!-- TODO: Heap to array and array to heap example -->
+              <p class='question' name='heap-q2'>Given the index n of a &quot;Node&quot; in our conceptual tree structure, how can I get the index of the parent?</p>
+              <p class='answer' name='heap-q2'>
+                Index of parent: (n - 1) / 2; (NOTE: this is integer division, so we ignore the decimal of the quotient)
+              </p>
+              <br/>
+              <p>So, we can define a simple functional mapping:</p>
+<pre class='prettyprint'>
+  int getParent (int index) {
+      return (index - 1) / 2;
+  }
+</pre>
+              <br/>
+              <p>Getting the left and right children is a similar mechanical exercise:</p>
+<pre class='prettyprint'>
+  // Child is either 'L' or 'R'
+  int getChild (int index, char child) {
+      int result = (index * 2) + 1;
+      if (child == 'R') {
+          result++;
+      }
+      return result;
+  }
+</pre>
+              <br/>
+              <p>Now that we have the basic tools</p>
             </div>
             <hr/>
             
