@@ -111,13 +111,6 @@
             </ol>
             
             
-            <div id='review' class='scrollspy-element' scrollspy-title='Review'></div>
-            <h1>Practice from Last Week</h1>
-            <div>
-            </div>
-            <hr/>
-            
-            
             <br/>
             <div id='hash' class='scrollspy-element' scrollspy-title='Hash Tables'></div>
             <h1>Hash Tables</h1>
@@ -699,7 +692,274 @@
               
               <br/>
               <h3>Deletion</h3>
+              <p>Nothing particularly surprising about deletion; it's essentially the same algorithm as insertion, in reverse!</p>
+              <ol class='indent-1'>
+                <li><p>Remove the target node from the heap</p></li>
+                <li><p>Promote the bottom-right-most leaf of the last level to the position of the removed node</p></li>
+                <li><p>Trickle down the promoted item such that if either of its two children are greater than it, then it trades places with the greatest of its children.</p></li>
+                <li><p>Continue trickling down until no child is greater than the trickling node.</p></li>
+              </ol>
+              <br/>
+              <p>Let's try removing the 50 node at the root from the heap below:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-10/heap-10.png' />
+              </div>
+              <hr/>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-10/heap-11.png' />
+              </div>
+              <hr/>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-10/heap-12.png' />
+              </div>
+              <hr/>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-10/heap-13.png' />
+              </div>
+              <br/>
+              <p class='example'>I shall leave it as an exercise to implement the deletion function into our BinaryHeap class!</p>
               
+              <br/>
+              <p class='definition'>As a quick, final note; insertion and deletion into a heap can be done with log(n) time complexity.</p>
+              
+              <br/>
+              <h3>Applications</h3>
+              <p>Heaps are nice for a variety of applications; we'll discuss two right now!</p>
+              <p class='definition'><strong>Priority queues</strong> are a data structure that use heaps for container with the restriction that removing elements from the heap can only be done at the root.</p>
+              <br/>
+              <p>Because we know the root of a heap is always the greatest element in that heap, we say that we're always removing the item with the highest priority before we get to the others.</p>
+              <p class='question' name='priQ-q0'>
+                Is the standard queue data structure that we know a special case of a priority queue? What property of items in a standard queue would cause them to behave like a priority queue?
+              </p>
+              <p class='answer' name='priQ-q0'>
+                Yes! Standard queue items are simply removed in the FIFO order of their insertion; we could mimic this behavior with a priority queue by simply time stamping the time of insertion and
+                always removing the one with the earliest time stamp first.
+              </p>
+              
+              <br/>
+              <p class='definition'><strong>Heap sort</strong> is a way to retrieve a sorted list of a heap's elements.</p>
+              <p>Its algorithm goes something like this:</p>
+<pre class='prettyprint'>
+  count = size of heap
+  while count > 1
+      heapify the heap
+      swap the root with the farthest leaf
+        to the right
+      count--
+</pre>
+              <br/>
+              <p>Let's do some heap sorting.</p>
+              <br/>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-10/heap-sort-0.png' />
+              </div>
+              <hr/>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-10/heap-sort-1.png' />
+              </div>
+              <hr/>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-10/heap-sort-2.png' />
+              </div>
+              <hr/>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-10/heap-sort-3.png' />
+              </div>
+              <hr/>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-10/heap-sort-4.png' />
+              </div>
+              <hr/>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-10/heap-sort-5.png' />
+              </div>
+              <br/>
+              <p class='definition'>Heap sort has time complexity O(n*log(n)), like most other gold standard sorts.</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='graphs' class='scrollspy-element' scrollspy-title='Graphs'></div>
+            <h1>Graphs</h1>
+            <div>
+              <p>Graphs are about as fun as a data structure can get (if you ask me).</p>
+              <p class='definition'>A <strong>graph</strong> is an abstract data type consisting of some number of Nodes connected by some number of edges, which may be directed or not.</p>
+              <br/>
+              <p>Such a loose definition! Let's look at a graph...</p>
+              <br/>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-10/graph-0.png' />
+              </div>
+              <br/>
+              <p>Seeing how a graph is just any collection of nodes and edges, let's think for a second...</p>
+              <p class='question' name='graph-q0'>Are all trees also graphs?</p>
+              <p class='answer' name='graph-q0'>Yes! Trees are just graphs with some additional constraints (which we'll see in a moment).</p>
+              <br/>
+              <p class='question' name='graph-q1'>Are all graphs also trees?</p>
+              <p class='answer' name='graph-q1'>No! Graphs can have a variety of properties that violate the constraints of trees; let's see those in the following table.</p>
+              <br/>
+              <table class='table table-bordered'>
+                <caption>Graphs vs. Trees</caption>
+                <thead>
+                  <th><p>Property</p></th>
+                  <th><p>Trees</p></th>
+                  <th><p>Graphs</p></th>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th><p>Notion of root</p></th>
+                    <td class='success'><p>Yes</p></td>
+                    <td class='danger'><p>Not necessarily</p></td>
+                  </tr>
+                  <tr>
+                    <th><p>One path from root to any node</p></th>
+                    <td class='success'><p>Yes</p></td>
+                    <td class='danger'><p>Not necessarily</p></td>
+                  </tr>
+                  <tr>
+                    <th><p>Can contain cycles</p></th>
+                    <td class='danger'><p>No</p></td>
+                    <td class='success'><p>Yes</p></td>
+                  </tr>
+                  <tr>
+                    <th><p>Nodes can have multiple inbound arrows</p></th>
+                    <td class='danger'><p>No</p></td>
+                    <td class='success'><p>Yes</p></td>
+                  </tr>
+                  <tr>
+                    <th><p>Have methods of traversing nodes</p></th>
+                    <td class='success'><p>Yes</p></td>
+                    <td class='success'><p>Yes*</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+              <p>
+                I put a star next to the graph capacity for traversal simply because, unlike with, say, a binary tree, in which we have defined traversal methods like left-to-right postorder, graphs
+                can be traversed starting at any node and following a variety of different traversal schemas.
+              </p>
+              <p>Additionally, we're not guaranteed that we could traverse all elements of a graph, even if we have a systematic algorithm for doing so. Take the following graph, for example:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-10/graph-1.png' />
+              </div>
+              <br/>
+              <p>Starting at any one of these nodes, we're not guaranteed that we'll visit every other node in the graph! (in fact, in this case it's not possible)</p>
+              <p>Long story short, there are a variety of niceties we had with trees that are lost with the loose constraints of graphs... but we also gain some cool stuff too.</p>
+              
+              <br/>
+              <h3>Graph Properties</h3>
+              <p class='definition'>A graph is said to be <strong>directed</strong> if every edge has at least one directed arrowhead.</p>
+              <p>This might even mean <strong>bidirected</strong> arrows with arrows on either end!</p>
+              <br/>
+              <p class='definition'>A graph is said to be <strong>acyclic</strong> if it contains no cycles.</p>
+              <p>A <strong>cycle</strong> exists in a graph whenever it is possible, by simply following some path of directed edges, to visit a node twice.</p>
+              <br/>
+              <p>A very common graph representation involves the case where both of these properties are combined:</p>
+              <p class='definition'>A <strong>directed, acyclic graph</strong> (also known as a DAG) is a directed graph with no directed cycles.</p>
+              <br/>
+              <p class='example'>Is the following graph a DAG?</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-10/graph-2.png' />
+              </div>
+              <br/>
+              <p class='example'>Is the following graph a DAG?</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-10/graph-0.png' />
+              </div>
+              
+              <br/>
+              <h3>Graph Algorithms</h3>
+              <p>There are a variety of graph algorithms for different applications, but for our introduction, let's just examine 1 or 2:</p>
+              <p class='definition'>
+                A <strong>depth-first traversal</strong> of a graph will visit every descendant of a given node, exploring the entirety of one outbound edge's subgraph before backtracking to explore another.
+              </p>
+              <p>A depth first traversal that remembers the nodes that it's already visited will not repeat them.</p>
+              <p>Depth first traversals are not necessarily unique!</p>
+              <p class='example'>Show a couple of depth-first traversals starting with node 1 in the following DAG:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-10/graph-3.png' />
+              </div>
+              <br/>
+              <p>Some viable depth-first traversals:</p>
+              <ul class='indent-1'>
+                <li><p>1, 2, 4, 64, 16, 8, 32</p></li>
+                <li><p>1, 16, 32, 8, 4, 64, 2</p></li>
+              </ul>
+              <br/>
+              <p class='debug'>The following are NOT viable depth-first traversals starting at node 1. Why?</p>
+              <ul class='indent-1'>
+                <li><p>1, 2, 16, 4, 8, 32, 64</p></li>
+                <li><p>1, 2, 4, 8, 64, 16, 32</p></li>
+              </ul>
+              
+              <br/>
+              <p class='indent-1'>A <strong>topological sort</strong> provides an ordering of nodes such that no node appears in the sequence before any of its parents.</p>
+              <p>This is useful for tracing dependencies where we have to resolve the parents before the children!</p>
+              <p class='example'>What are some viable topological sorts of the following graph?</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-10/graph-3.png' />
+              </div>
+              
+              <br/>
+              <p>OK cool, but how do we store these graphs?</p>
+              <p class='definition'>An <strong>adjacency matrix</strong> is a 2D array with a row / column for every node, and an indication at index [i][j] of whether node i is connected to node j.</p>
+              <p>Usually we indicate adjacencies with the number 1 to represent an edge going from node i to node j, and a 0 if there is no edge between them.</p>
+              <p>Problem: this matrix can have a lot of 0s and waste space.</p>
+              <p class='example'>Can you think of another data structure we've learned of to more efficiently store these associations?</p>
+            </div>
+            <hr/>
+              
+              
+            <br/>
+            <div id='theRightStuff' class='scrollspy-element' scrollspy-title='The Right Stuff'></div>
+            <h1>Having the Right Stuff</h1>
+            <div>
+              <p>The whole point about learning all of these different data structures and algorithms is so that we can choose the right candidate for the right job.</p>
+              <p>As we've seen, some data structures are better suited for some scenarios than others... let's examine a couple of those scenarios below.</p>
+              
+              <br/>
+              <h3>Sorts and Data Structures</h3>
+              <p><strong>Scenario 1:</strong>
+                You are in charge of the M.E.R.I.C.A-S.T.A.R-S.P.A.N.G.L.E missile defense system (no one knows what the acronym stands for) that must assess which, out of some
+                collection of missiles, is the closest, and target that first. Your simulations suggest that as long as you're able to sort the missile distances for destruction
+                in n*log(n) time or less, the nation will be safe.
+              </p>
+              <p class='example'>Of the O(n*log(n)) average case sorts, which would you *not* want to pick for this task? Why?</p>
+              
+              <br/>
+              <p><strong>Scenario 2:</strong>
+                In the year 3000 (following the fall of mankind to the great Forney Industries Fembot Malfunction), you (who have somehow survived until then) are tasked with
+                developing tracking chips to emplant in the loyal subjects of your dystopian hegemony (OK, so I might be writing a book on this). These tracking chips have very
+                little storage, and must be able to able to look for and possibly add a new contact for an individual in log(n) time.
+              </p>
+              <p class='example'>Can you suggest a data structure to be used for this purpose? Fun fact, the c++ STL collections made it to the year 3000, which of them might you employ?</p>
+              
+              <br/>
+              <p class='example'>Generate the heap that would be formed with the insertion ordering: <code class='prettyprint'>5, 22, 19, 10, 10, 10, 3, 2</code>. Express your final answer in array form.</p>
+              
+              <br/>
+              <p class='example'>Design a hash function that elicits the following behavior:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-10/hash-3.png' />
+              </div>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='final' class='scrollspy-element' scrollspy-title='Final'></div>
+            <h1>Final</h1>
+            <div>
+              <p class='definition'>Open notes! Open everything!</p>
+              <p>I suggest you bring along the following <a href='http://bigocheatsheet.com/' target='_blank'>computational complexity cheat sheet!</a></p>
+              <p>You're going to do fine, breathe deep, focus on your problems, and try not to look at the giant, ticking, countdown clock unless absolutely necessary.</p>
+              
+              <br/>
+              <h3>Goodbye but not Farewell</h3>
+              <p>I just wanted to make a special thank-you to all of you who made my first couple of quarters teaching so rewarding. It was an honor and a privilege to get to know you all.</p>
+              <p>Don't be a stranger; you'll probably see me in the office hours room for awhile to come!</p>
+              <p class='definition'>Now... have you filled out your TA evals yet? :)</p>
             </div>
             <hr/>
             
@@ -714,60 +974,9 @@
           
           <!-- MATERIALS FROM CLASS: -->
           
-          <!-- TODO: Priority Queues -->
-            <!-- TODO: A collection of items where every item has a given priority -->
-            <!-- TODO: Whenever you want to take an item out, you take out the item with the highest priority -->
-            <!-- TODO: 
-              Misleading because we think of queues as just the FIFO data structure, but these queues are simply a special case of priority queues where the priority of each item is simply how
-              long it's been in the list
-             -->
-            <!-- TODO: How to store this notion of a priority queue? -->
-              <!-- TODO: Vectors -->
-                <!-- TODO: Simple to insert: just stick it at the end O(1) -->
-                <!-- TODO: Linear to pull out because we have to check each item for the highest priority O(n) -->
-              <!-- TODO: Sorted collection -->
-                <!-- TODO: Insertion: could do a binary search to determine where it goes on a vector, but insertion would be O(n) to shift; couldn't do binary search on a list, so also O(n) -->
-                <!-- TODO: Simple to pull out because the highest priority is always at the front -->
-              <!-- TODO: Binary search tree -->
-                <!-- TODO: Lower priority goes in left subtree; higher goes in right -->
-                <!-- TODO: Insertion and search are both log(n) time -->
-                <!-- TODO: Problem: items being removed will unbalance the tree and require upkeep -->
-            <!-- TODO: Properties of a heap: -->
-              <!-- TODO: Deletion algorithm: -->
-                <!-- TODO: Make a complete binary tree; remove target Node, and promote the bottom-right-most item to the root -->
-                <!-- TODO: Trickle down the promoted item -->
-                  <!-- TODO: Promote one of the children of whatever you just promoted; choose the largest of the children and promote that -->
-                  <!-- TODO: Continue doing this until none of the children are larger than the bubbling Node -->
-              <!-- TODO: Better constant of proportionality with binary search trees for insertion and deletion but still O(log(n)) -->
-            <!-- TODO: HeapSort -->
-              <!-- TODO: Steps -->
-                <!-- TODO: 1) Make our data into a heap -->
-                <!-- TODO: 2) Swap the root with the farthest leaf to the right -->
-                <!-- TODO: 3) Now consider the array holding the elements to have 1 fewer item (effectively chopping off the sorted tail) -->
-                <!-- TODO: 4) Re-heapify -->
-              <!-- TODO: Complexity: average case log(n) ??? check that out... -->
-                
-          <!-- TODO: Graphs -->
-            <!-- TODO: Simply nodes connected by edges -->
-            <!-- TODO: Some graphs are undirected in which edges are just linked, but without any notion of beginning or end -->
-            <!-- TODO: Some graphs are directed in which edges have a beginning and a terminus -->
-            <!-- TODO: Some graphs can have cycles: cyclic graphs -->
-            <!-- TODO: DAGs are directed, acyclic graphs -->
-              <!-- TODO: Are all trees graphs and vice versa? -->
-              <!-- TODO: DAGs don't really have a root -->
-            <!-- TODO: Some algorithms: -->
-              <!-- TODO: Topological sort -->
-            <!-- TODO: Some representations: -->
-              <!-- TODO: Adjacency matrix: 2D array with nodes on each axis and 0s and 1s representing edges between them -->
-                <!-- TODO: Problem: lots of wasted space; grows quickly -->
-              <!-- TODO: Sparse matrix -->
-                <!-- TODO: Every node maps to a list of the other nodes that it connects to -->
-          
           <!-- TODO: Review -->
             <!-- TODO: Design a hash function that takes this input and sticks it in these buckets -->
             <!-- TODO: Heapification -->
-            <!-- TODO: Heap Sort -->
-            <!-- TODO: Scenario based data structure choices and computational complexities -->
           
           <!-- TODO: Summary table of data structures and their different complexities? -->
           
