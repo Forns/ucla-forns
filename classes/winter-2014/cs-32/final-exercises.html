@@ -213,7 +213,8 @@
       while (it != noisyVector.end()) {
           cout &lt;&lt; (*it)-&gt;getS() &lt;&lt; endl;
           (*it)-&gt;shout();
-          delete (*it++);
+          delete *it;
+          it++;
       }
   }
 </pre>
