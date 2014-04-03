@@ -124,10 +124,6 @@
                 <li><p>
                   My office hours are TBA in Boelter 2432. If you can't make those hours, email me to set up an appointment.
                 </p></li>
-                <li><p>
-                  I grade the *style and comments* of your assignments, but not the correctness... so if you have time, entertain me with fun comments... 
-                  but you know... focus on getting things right first...
-                </p></li>
               </ul>
               <p><strong>Site Features:</strong></p>
               <ul class='indent-1'>
@@ -140,6 +136,180 @@
                   The site has been optimized for printing, which includes the notes that you add, above. I've added a print button to the bottom of the site, but really it just 
                   calls your printer functionality, which typically includes the export to PDF.
                 </p></li>
+              </ul>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='ai-overview' class='scrollspy-element' scrollspy-title='AI Overview'></div>
+            <h1>A Glance at AI</h1>
+            <div>
+              <p>So you're in an AI class... what exactly is Artificial Intelligence, aside from what will ultimately replace the human race?</p>
+              <p>AI has many branches and facets, so a single definition is difficult; that said, we can say, generally, that:</p>
+              <p class='definition'><strong>Artificial Intelligence</strong> is the attempt to automate the intelligent processes we often attribute to biological organisms (usually humans).</p>
+              <br/>
+              <p>Tasks that humans perform daily are actually quite non-trivial for computers.</p>
+              <p class='question' name='intro-q0'>What are some tasks at which humans excel over computers?</p>
+              <div class='answer' name='intro-q0'>
+                <p>Here are some sub-fields of AI devoted to such tasks:</p>
+                <br/>
+                <ul class='indent-1'>
+                  <li><p><strong>Natural Language Processing (covered with some focus in this course):</strong> Emulating human communication</p></li>
+                  <li><p><strong>Computer Vision:</strong> Emulating human sight</p></li>
+                  <li><p><strong>Expert Systems / Expert Diagnosis:</strong> Emulating human reasoning from evidence and uncertainty</p></li>
+                  <li><p><strong>Game Playing / Planning:</strong> Emulating human planning</p></li>
+                  <li><p><strong>Robotics:</strong> Emulating human movement and physical interaction</p></li>
+                </ul>
+              </div>
+              <br/>
+              <p>...and these are just a few applications!</p>
+              <p>Indeed, AI need not be applied, necessarily; philosophers have long debated the nature of intelligence and whether or not man has the capacity to reproduce it artificially.</p>
+              <p>We'll leave most of that philosophy stuff to north campus, though... this class will deal primarily with the technical aspects of AI.</p>
+              
+              <br/>
+              <h3>Natural Language Processing (NLP)</h3>
+              <p>Because this course dives most heavily into NLP, it's fair to take a quick look at it now.</p>
+              <p class='definition'><strong>Natural Language Processing</strong> is a subfield of AI concerned with extracting meaning from text and speech.</p>
+              <p>Firstly, NLP in its entirety has not yet been solved; there are many nuances of language that computers just don't understand.</p>
+              <p>That said, history has provided us with a few main approaches to NLP, each with some strengths and weaknesses:</p>
+              <table class='table table-bordered table-striped'>
+                <thead>
+                  <th><p><strong>Approach</strong></p></th>
+                  <th><p><strong>Description</strong></p></th>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th><p>Symbolic</p></th>
+                    <td><p>[Top-down] Use known grammatical rules and structures to impose patterns on text and extract meaning by exploiting how humans typically format their text.</p></td>
+                  </tr>
+                  <tr>
+                    <th><p>Statistical / Empirical</p></th>
+                    <td><p>[Bottom-up] Use patterns found within text itself and try to generate rules from large corpuses of sentences.</p></td>
+                  </tr>
+                  <tr>
+                    <th><p>Both!</p></th>
+                    <td><p>Most modern systems will incorporate sentence structure and known rules into its probabilistic analyses, combining both of the above methodologies.</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+              <p>NLP is also one of the oldest problems in AI, so old, in fact, that one of the fathers of computer science (Alan Turing) described a metric for our language-processing automata:</p>
+              <p class='definition'>
+                The <strong>Turing Test</strong> is a game described by Alan Turing whereby human judges attempt to discern whether an unseen (text) conversational partner is a machine or another human.
+              </p>
+              <br/>
+              <p>The game, as Turing described it, goes something like this:</p>
+              <ul class='indent-1'>
+                <li><p>A human judge (the interlocutor) engages in conversation between two entities that are located in separate rooms.*</p></li>
+                <li><p>The judge spends 5 minutes (some historians argue it was 10) talking to each entity via text-message, knowing that one of the two must be a computer.</p></li>
+                <li><p>After talking to both entities, the judge must decide which conversational partner was the human, and which was the computer.</p></li>
+              </ul>
+              <br/>
+              <p>An intelligent agent is said to have &quot;passed&quot; the Turing test if it fools at least 30% of its human judges into thinking that it too is human.</p>
+              <p class='definition'>
+                * [Trivia] Turing, in the 1950 paper that introduced what is now considered the classic Turing test, noted that the separate rooms must be ESP-proof so that the judge could not deduce
+                which room held the computer by means of psychic prowess (hey, it was the 50s give him a break)
+              </p>
+              <br/>
+              <p>A variety of programs have claimed to have passed the Turing test, but many of these findings are dubious.</p>
+              <p>
+                Widely regarded as the gold standard of modern Turing Test evaluation, <a href='http://www.loebner.net/Prizef/loebner-prize.html' target='_blank'>the Loebner Prize</a>
+                is an annual competition where programmers submit their chatbots to vie for the $100,000 grand prize for being &quot;indistinguishable from a human.&quot;
+              </p>
+              <p>
+                The Loebner Prize competition is the formal Turing Test instantiation, and has not yet been passed (although its constraints are significantly more difficult: e.g., 25 minutes of conversation
+                as opposed to Turing's proposed 5 minutes)
+              </p>
+              <p>There are variants on the Turing Test as well:</p>
+              <br/>
+              <a href='http://www.smbc-comics.com/?id=3292#comic' target='_blank'>
+                <div class='text-center'>
+                  <img src="http://www.smbc-comics.com/comics/20140310.png" />
+                  <p>Credit to SMBC</p>
+                </div>
+              </a>
+              
+              <br/>
+              <h3>Modified Turing Tests</h3>
+              <p>Modern AI evaluators have claimed that the original Turing Test has too many constraints, including, but not limited to:</p>
+              <ul class='indent-1'>
+                <li><p>The fact that the human judge is aware that they may be interacting with a computer and take steps to fool it that would not normally follow in conversation.</p></li>
+                <li><p>
+                  The fact that the computer is often simply being asked questions with dialogue that has been initiated by the judge (why not give the computer a chance to ask a question / respond?)
+                </p></li>
+                <li><p>The fact that the Turing test does not take other human communicative mechanisms into account (e.g., body language, tone, cadence, etc.)</p></li>
+              </ul>
+              <br/>
+              <p>When some of these constraints are relaxed, even very simple chatbots have completed modified Turing tests...</p>
+              <p>(Shameless plug for my own undergrad chatbot, (Gilbert &amp; Forney, in press))</p>
+              
+              <br/>
+              <h3>Summary</h3>
+              <ul class='indent-1'>
+                <li><p>NLP is hard...</p></li>
+                <li><p>...so hard that a (version) of a test for computer intelligence proposed over 50 years ago still hasn't been satisfactorily met.</p></li>
+                <li><p>Some, constrained, versions of the Turing test have been passed, though those studies are generally not... generalizable.</p></li>
+                <li><p>There are a variety of different approaches to NLP each with their own strengths and weaknesses, some of which we'll discuss in this course</p></li>
+              </ul>
+              <br/>
+              <p>Then, of course, there's the end-all, be-all of Turing Tests:</p>
+              <a href='https://xkcd.com/329/' target='_blank'>
+                <div class='text-center'>
+                  <img src="http://imgs.xkcd.com/comics/turing_test.png" />
+                  <p>Credit to XKCD</p>
+                </div>
+              </a>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='lisp-intro' class='scrollspy-element' scrollspy-title='Intro to LISP'></div>
+            <h1>An Introduction to LISP</h1>
+            <div>
+              <p>For this course, we'll be using the LISP programming language.</p>
+              <p class='definition'><strong>LISP</strong> is a LISt Processing programming language, often mocked for its &quot;Lots of Insipid, Stupid Parentheses&quot;</p>
+              <br/>
+              <p>Why LISP for AI?</p>
+              <ul class='indent-1'>
+                <li><p>LISP syntax is tree-oriented (and therefore, recursion oriented), which is useful for NLP</p></li>
+                <li><p>Because of its tree-like properties, making proofs and algorithmic analysis is simplified</p></li>
+                <li><p>Interchangability of data and program code, which allows for ease of self-modifying behavior</p></li>
+              </ul>
+              <br/>
+              <p class='definition'><strong>There are a variety of different LISP implementations.</strong> This class, and guide, describes the Common LISP variant.</p>
+              
+              <br/>
+              <h3>Atom &amp; Eval</h3>
+              <p>Get it? Because we're starting with the basics? :/</p>
+              <p class='toolkit'><strong>Symbols / Atoms</strong> are simple data types in LISP such as numbers and strings.</p>
+              <p>Atoms can be used to name functions and variables within a program.</p>
+              <br/>
+              <p class='debug'>NOTE: Atoms are case-insensitive, which means that an atom representing some function called SYMBOL-ENOUGH is equivalent to referencing a function SyMbOl-EnOuGh</p>
+              <br/>
+              <p>If a symbol is defined, then it can be evaluated (like a function name used to evaluate its definition), otherwise, you'll get an error.</p>
+              <p class='toolkit'>A <strong>list</strong> is a sequence of atoms and other (recursively defined) lists.</p>
+              
+              
+              <br/>
+              <h3>Feeling LISPless?</h3>
+              <p>Let's start by getting you set up, hmm?</p>
+              <p class='debug'>This class will use the <strong>CLISP</strong> Common LISP interpreter, in both discussion and in grading your assignments!</p>
+              <br/>
+              <p>As such, it is highly recommended that you use CLISP for all of your development.</p>
+              <p class='toolkit'>
+                <a href='http://www.clisp.org/' target='_blank'>Pick up a copy of CLISP here</a>--it's cross-platform, so chances are good that it'll work on your Windows, Linux, or Mac machine!
+              </p>
+              <p>The guides on the linked site above will instruct you on how to install CLISP for your operating system.</p>
+              <p>If you're having any issues installing CLISP, let me know and I'll do my best to help!</p>
+              
+              <br/>
+              <h3>Other Tutorials</h3>
+              <p>Want more than this dinky guide can provide? Here are some really complete LISP tutorials, only some material of which we'll be using in this course:</p>
+              <ul class='indent-1'>
+                <li><p><a href='https://www.cs.cmu.edu/Groups/AI/html/cltl/clm/node1.html' target='_blank'>CMU's LISP Text</a></p></li>
+                <li><p><a href='http://www.gigamonkeys.com/book/' target='_blank'>Practical Common LISP</a></p></li>
               </ul>
             </div>
             <hr/>
