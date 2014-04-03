@@ -290,6 +290,22 @@
               <br/>
               <p>If a symbol is defined, then it can be evaluated (like a function name used to evaluate its definition), otherwise, you'll get an error.</p>
               <p class='toolkit'>A <strong>list</strong> is a sequence of atoms and other (recursively defined) lists.</p>
+              <br/>
+              <p>Because everything is a list in LISP, that means we can have two different list interpretations:</p>
+              <table class='table table-bordered table-striped'>
+                <thead>
+                  <tr>
+                    <th><p>Interpretation</p></th>
+                    <th><p>Syntax</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th><p>Lists as code</p></th>
+                    <td><p></p></td>
+                  </tr>
+                </tbody>
+              </table>
               
               
               <br/>
@@ -301,7 +317,48 @@
               <p class='toolkit'>
                 <a href='http://www.clisp.org/' target='_blank'>Pick up a copy of CLISP here</a>--it's cross-platform, so chances are good that it'll work on your Windows, Linux, or Mac machine!
               </p>
-              <p>The guides on the linked site above will instruct you on how to install CLISP for your operating system.</p>
+              <table class='table table-bordered table-striped'>
+                <thead>
+                  <tr>
+                    <th><p>Operating System</p></th>
+                    <th><p>Installation Steps</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th><p>Windows</p></th>
+                    <td><p>At the top of <a href='http://www.clisp.org/' target='_blank'>this page (linked above)</a>, simply click on the word CLISP in the title and download the executable.</p></td>
+                  </tr>
+                  <tr>
+                    <th><p>Mac OS X</p></th>
+                    <td>
+                      <ol class='indent-1'>
+                        <li><p>Install <a href='https://www.macports.org/install.php' target='_blank'>MacPorts using the instructions here</a></p></li>
+                        <li><p>Once MacPorts is installed, open a terminal and type:<br/>
+<pre class='prettyprint'>
+  sudo port install clisp
+</pre>
+                        </p></li>
+                        <li><p>You can now use your terminal to access the clisp interpreter as well as use the terminal to run your LISP code.</p></li>
+                      </ol>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th><p>Linux</p></th>
+                    <td>
+                      <ol class='indent-1'>
+                        <li><p>On the right of <a href='http://www.clisp.org/' target='_blank'>this page (linked above)</a>, find your flavor of Linux and check the package listing.</p></li>
+                        <li><p>Usually, you will then install the package of choice by opening a terminal and typing something like (depending on your Linux installation):<br/>
+<pre class='prettyprint'>
+  sudo apt-get install clisp
+</pre>
+                        </p></li>
+                        <li><p>You can now use your terminal to access the clisp interpreter as well as use the terminal to run your LISP code.</p></li>
+                      </ol>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
               <p>If you're having any issues installing CLISP, let me know and I'll do my best to help!</p>
               
               <br/>
@@ -364,6 +421,25 @@
               <!-- TODO: A goal state is one with objects in the environment that have particular sets of features (get better definition) -->
               <!-- TODO: Getting to a state with the shortest path / least cost will be discussed -->
             <!-- TODO: Architecture made up of components that are all implemented in different possible ways -->
+            <!-- TODO: Go over search spaces -->
+            <!-- TODO: Go over branching factor (max number of possible moves from a given state) -->
+            <!-- TODO: Search strategies -->
+              <!-- TODO: NOTE: Definition difference between "expanding" a Node and "generating" a Node -->
+                <!-- TODO: Expansion = generating a Node's children -->
+              <!-- TODO: Depth first -->
+                <!-- TODO: Not complete if the depth isn't limited -->
+                <!-- TODO: Not optimal if stopping after finding a goal state -->
+              <!-- TODO: Breadth first -->
+                <!-- TODO: Starting with the start state, expand level-by-level -->
+              <!-- TODO: Performance metrics -->
+                <!-- TODO: Time -->
+                <!-- TODO: Space -->
+                <!-- TODO: Completeness -->
+                <!-- TODO: Optimality -->
+            
+            <!-- TODO: NLP Project: HW1 -->
+              <!-- TODO: FIX: age range should be 19 not 18 for teens -->
+              <!-- TODO: Frames: attempt to break a sentence down into digestable, atomic semantic components -->
             
             
         </div>
