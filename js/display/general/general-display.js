@@ -71,7 +71,7 @@ $(function () {
         } else {
           // Soooo select all descendants of presentation content
           $(".presentation-content")
-            .find("p, pre")
+            .find("p, pre, h3")
             .addClass(presentationClass);
           $(".presentation-content")
             .removeClass("col-md-10")
