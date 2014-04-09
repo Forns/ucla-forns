@@ -163,6 +163,102 @@
               <p>Our search goal will be to determine if a path exists in the grid from the player's position to the goal state.</p>
               <p class='question' name='search-q0'>What will a state look like in this problem?</p>
               <p class='answer' name='search-q0'>Possibly just the position of the player stored as an (X, Y) tuple.</p>
+              <br/>
+              <p class='question' name='search-q1'>What will the initial state look like in our example of this problem?</p>
+              <p class='answer' name='search-q1'>The initial player position (1, 1)</p>
+              <br/>
+              <p class='question' name='search-q2'>What will the goal state look like in our example of this problem?</p>
+              <p class='answer' name='search-q2'>The goal position (1, 3)</p>
+              <br/>
+              <p class='question' name='search-q3'>What will actions look like in this problem?</p>
+              <p class='answer' name='search-q3'>Any movement from a given state's player position to an adjacent, open or goal tile. This gives us transitions of:<br/>
+                <code class='prettyprint'>Up: (0, +1), Down: (0, -1), Right: (+1, 0), Left: (-1, 0)</code>
+              </p>
+              
+              <br/>
+              <h3>Building a Search Tree</h3>
+              <p>So now that we have our concept of states and transitions in the maze pathfinding example, how do we go about searching for the answer?</p>
+              <p>In the <strong>classical search</strong> methodology, we want a systematic way of exploring states so that we can find an answer; to do this, we build a search tree:</p>
+              <p class='definition'>
+                A <strong>search tree</strong> is a tree with the initial state at the root, transitions along the edges, and nodes corresponding to states that can be reached from one action
+                applied from the parent.
+              </p>
+              <br/>
+              <p>So, here is a *non-systematic* (search strategy omitted) search path that corresponds to a successfully discovered goal from our previous problem:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-2/search-1.PNG' />
+              </div>
+              <br/>
+              <p>I say it's non-systematic because we didn't really apply any search-strategy; I just kinda picked a path that I saw was available!</p>
+              <p class='definition'>A <strong>search strategy</strong> is a systematic means of exploring a search tree, and decides which state we will expand next in the course of our search.</p>
+              <br/>
+              <p>In this conception, whenever we expand a node, we generate all of the possible moves from that node and then use our search strategy to choose which of the generated nodes to expand next.</p>
+              <p class='definition'><strong>Expanding</strong> a node is akin to visiting it on a search traversal, and generating all plausible child nodes.</p>
+              <p class='definition'>We <strong>generate</strong> nodes by first expanding a parent node, and then generating all child nodes that could be reached from the parent by taking a legal action.</p>
+              <br/>
+              <p>Here is a search tree where we expand the root, generating its children (assuming each movement is legal), and then expand the child node corresponding to a taken &quot;right&quot; action:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-2/search-2.PNG' />
+              </div>
+              <br/>
+              <p class='question' name='search-q4'>Will this be a valid expansion / generation structure for our maze example at the start of this section?</p>
+              <p class='answer' name='search-q4'>Well, no; we generated some children that were not valid nodes because the movements that got us there were invalid!</p>
+              <br/>
+              <p>So, to rectify this, we would clean the tree up as follows, generating only children who were the product of legal moves:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-2/search-3.PNG' />
+              </div>
+              <br/>
+              <p class='definition'>The set of all leaf nodes available for expansion at any given point of a search is called the <strong>frontier (AKA open-list)</strong></p>
+              <br/>
+              <p>Search strategies give us systematic means of exploring the frontier.</p>
+              <p>So, if we wanted some &quot;black-box&quot; (don't care how it's accomplished but know what it's accomplishing) pseudocode for the general idea of search, we might say:</p>
+<pre class='prettyprint'>
+  ; ...for some expand-node function defined
+  (defun BB-SEARCH (frontier)
+      (cond
+          ; Base case: ran out of nodes, return nil
+          ; (failed to find goal state)
+          ((null frontier) nil)
+          ; Otherwise, more nodes on frontier, so keep
+          ; expanding them
+          (t (expand-node frontier))
+      )
+  )
+  
+  ; ...for some goal-state check and
+  ; choose-node functions defined
+  (defun EXPAND-NODE (frontier)
+      (let* ((next (choose-node frontier)))
+          (cond
+              ; Base case: found goal; done!
+              ((goal-state next) next)
+              ; Otherwise, expand and continue
+              (t BB-SEARCH (append (remove next frontier))
+                                   (successors next)
+              )
+          )
+      )
+  )
+  ; Pseudo-code credit to Evan Lloyd
+</pre>
+              
+              <br/>
+              <h3>Search Strategies</h3>
+              <p>We'll start by going over two of the most commonly known search strategies that are known as uninformed searches.</p>
+              <p class='definition'>An <strong>uninformed search</strong> is a search strategy that *only* knows how to expand and generate nodes, and detect a goal state.</p>
+              <p class='definition'>Uninformed search strategies are therefore distinguished by the <strong>order</strong> in which nodes are expanded along the frontier.</p>
+              <br/>
+              <p>We'll begin by looking at breadth-first search.</p>
+              <p class='toolkit'><strong>Breadth-first search</strong> expands nodes level-by-level, always expanding nodes at depth D before expanding *any* nodes at depth (D + 1).</p>
+              <br/>
+              <p>So, take this partial search tree for example, and determine its breadth-first search expansion order:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-2/search-4.PNG' />
+              </div>
+              <br/>
+              <p class='question' name='search-q5'>What is the breadth-first expansion order for this search tree (assume a left-to-right preference per level)?</p>
+              <p class='answer' name='search-q5'>(1, 1), (2, 1), (3, 1), (1, 1), (2, 2), (2, 1), (3, 2), (2, 1), (2, 1), (3, 2), (2, 3)</p>
             </div>
             <hr/>
             
