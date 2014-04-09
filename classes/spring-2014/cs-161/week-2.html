@@ -1,0 +1,221 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Andrew Forney - UCLA CS</title>
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/magic-bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/main.css" rel="stylesheet" type="text/css">
+    <script src="../../../js/lib/jquery-2.0.3.min.js"></script>
+    <script src="../../../js/lib/bootstrap.min.js"></script>
+    <script src="../../../js/lib/expanding.js"></script>
+    <script src="../../../js/display/general/general-display.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+  </head>
+  
+  <body data-spy="scroll" data-target="#scrollspy">
+    
+    <!-- BEGIN WRAP -->
+    <div id="wrap">
+      
+      <!-- BEGIN NAVIGATION -->
+      <nav class='navbar navbar-default' role='navigation'>
+        <div class='nav-accent'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-12'>
+              <div class='navbar-header'>
+                <button class='navbar-toggle' type='button' data-toggle='collapse' data-target='.navbar-main-collapse'>
+                  <span class='sr-only'>Toggle Navigation</span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                </button>
+                <a class='navbar-brand' href='/~forns/'>
+                  <span id='brand-text'>
+                    Andrew Forney
+                  </span>
+                </a>
+              </div>
+              
+              <div id='nav-main' class='collapse navbar-collapse navbar-main-collapse'>
+                <ul class='nav navbar-nav navbar-right'>
+                  
+                  <li>
+                    <a href='/~forns/about.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-user'></span>
+                      </div>
+                      <p class='text-center'>About</p>
+                    </a>
+                  </li>
+                  
+                  <li class='active'>
+                    <a href='/~forns/classes.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-book'></span>
+                      </div>
+                      <p class='text-center'>Classes</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/contact.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-comment'></span>
+                      </div>
+                      <p class='text-center'>Contact</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/publications.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-file'></span>
+                      </div>
+                      <p class='text-center'>Publications</p>
+                    </a>
+                  </li>
+                  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <!-- END NAVIGATION -->
+      
+      <!-- BEGIN MAIN CONTENT -->
+      <div id="main-content" class="container">
+        <div class="row">
+          
+          <!-- BEGIN SCROLLSPY -->
+          <div class='col-md-2 hidden-sm hidden-xs'>
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+              <ul id='scrollspy' class="nav bs-sidenav">
+              </ul>
+            </div>
+          </div>
+          <!-- END SCROLLSPY -->
+          
+          <!-- BEGIN PRESENTATION CONTENT -->
+          <div class='col-md-10 presentation-content' role='main'>
+            
+            <ol class="breadcrumb hidden-print">
+              <li><a href="../../../classes.html">Classes</a></li>
+              <li><a href="./cs-161.html">Spring14 CS161</a></li>
+              <li class="active">Week 2</li>
+            </ol>
+            
+            <div id='states' class='scrollspy-element' scrollspy-title='States &amp; Search'></div>
+            <h1>Intro to States &amp; Search</h1>
+            <div>
+              <p>We perform search in our daily lives all the time...</p>
+              <p>We have <strong>problems</strong> that have a certain issue and resolution, and generally some <strong>strategies</strong> to use <strong>actions</strong> to resolve those problems.</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-2/waldo.jpg' />
+              </div>
+              <br/>
+              <p>The familar Where's Waldo is a classic visual search paradigm where we start in some <strong>state</strong> of not knowing where Waldo is, and perform serial search to try to find Waldo.</p>
+              <p class='definition'><strong>Search</strong> is exactly what it sounds like: the process of moving from a starting state of a problem to a goal state of that problem.</p>
+              <p class='definition'><strong>States</strong> are a given instantiation of a search problem's variables of interest (possibly an incomplete instantiation).</p>
+              <br/>
+              <p>Search is therefore problem dependent, such that we need some constraints upon the domain of what we're searching for.</p>
+              <p>
+                In the case of Where's Waldo, it might be difficult to quantify some notion of states (perhaps we start in the &quot;haven't found Waldo&quot; state and want to move to the 
+                &quot;found Waldo&quot; one)
+              </p>
+              <p class='definition'>A <strong>search domain</strong> is the set of all possible instantiation of variables of interest, i.e. all possible states, for a given problem.</p>
+              <br/>
+              <p>If we didn't have a search domain, then the concept of search is intractable for both humans and computers.</p>
+              <p>
+                For Where's Waldo, the search domain is simply a given picture that we know has Waldo somewhere inside of it; we don't go looking in a dictionary for Waldo (the dictionary is not in the 
+                search domain!), unless we're really bad at the game...
+              </p>
+              <p>So, to perform search, we have a couple of rules about states:</p>
+              <p class='definition'>An <strong>initial state</strong> is the state that you begin your search operation within.</p>
+              <p class='definition'>A <strong>goal state</strong> is a state that satisfies your search criteria, i.e., that completes your search from an initial to a goal state.</p>
+              <p class='definition'><strong>Actions</strong> are the legal manipulations of a current state that either (1) return us to the same state, or (2) transition to a new state.</p>
+              <br/>
+              <p>Actions can also have costs associated with them, e.g., the action of driving through a 10 mile road might have a higher cost than moving through a 1 mile road.</p>
+              <p class='definition'>Therefore, the <strong>score</strong> of a particular goal state might be a sum of the costs encountered on the path of actions from the initial to goal state.</p>
+              <p>So, in summary, search is the process of moving from some initial state to some goal state through successive applications of legal actions.</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='classicalSearch' class='scrollspy-element' scrollspy-title='Classical Search'></div>
+            <h1>Classical Search</h1>
+            <div>
+              <p>&quot;I found Beethoven!&quot; you exclaimed excitedly.</p>
+              <p>Not that kind of classical search, silly!</p>
+              <p class='definition'><strong>Classical search</strong> is the systematic, goal / test oriented search of moving from an initial state to a goal state.</p>
+              <br/>
+              <h3>Motivating Example</h3>
+              <p>Let's talk about the problem of maze pathfinding for our motivating example!</p>
+              <p>Here's the problem we're going to discuss:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-2/search-0.PNG' />
+              </div>
+              <br/>
+              <p>Our search goal will be to determine if a path exists in the grid from the player's position to the goal state.</p>
+              <p class='question' name='search-q0'>What will a state look like in this problem?</p>
+              <p class='answer' name='search-q0'>Possibly just the position of the player stored as an (X, Y) tuple.</p>
+            </div>
+            <hr/>
+            
+            
+            <a class='btn btn-default pull-right hidden-print' href='javascript:window.print();'>
+              <span class='glyphicon glyphicon-print'></span>
+              &nbsp; PDF / Print
+            </a>
+            
+          </div>
+          <!-- END PRESENTATION CONTENT -->
+          
+          <!-- MATERIALS FROM CLASS: -->
+          
+            <!-- TODO: State based knowledge and operations -->
+              <!-- TODO: A state is just a description of some objects in the environment -->
+              <!-- TODO: A goal state is one with objects in the environment that have particular sets of features (get better definition) -->
+              <!-- TODO: Getting to a state with the shortest path / least cost will be discussed -->
+            <!-- TODO: Architecture made up of components that are all implemented in different possible ways -->
+            <!-- TODO: Go over search spaces -->
+            <!-- TODO: Go over branching factor (max number of possible moves from a given state) -->
+            <!-- TODO: Search strategies -->
+              <!-- TODO: NOTE: Definition difference between "expanding" a Node and "generating" a Node -->
+                <!-- TODO: Expansion = generating a Node's children -->
+              <!-- TODO: Depth first -->
+                <!-- TODO: Not complete if the depth isn't limited -->
+                <!-- TODO: Not optimal if stopping after finding a goal state -->
+              <!-- TODO: Breadth first -->
+                <!-- TODO: Starting with the start state, expand level-by-level -->
+              <!-- TODO: Performance metrics -->
+                <!-- TODO: Time -->
+                <!-- TODO: Space -->
+                <!-- TODO: Completeness -->
+                <!-- TODO: Optimality -->
+            
+            
+        </div>
+      </div>
+      <!-- END MAIN CONTENT -->
+      
+      
+    </div>
+    <!-- END WRAPPER -->
+    
+    <!-- BEGIN FOOTER -->
+    <div id="footer">
+      <div class="container">
+        <div class="col-md-12 text-center">
+          
+        </div>
+      </div>
+    </div>
+    <!-- END FOOTER -->
+    
+  </body>
+</html>
