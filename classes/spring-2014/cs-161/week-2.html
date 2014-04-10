@@ -333,7 +333,64 @@
                 <img src='../../../assets/images/spring-2014/cs-161/week-2/search-7.PNG' />
               </div>
               <br/>
-              <p>...errr, that's kind of an issue...</p>
+              <p>...errr, that's kind of an issue... and rather useless in most cases!</p>
+              <p>We could keep a list of our repeated states and then remember not to repeat them, but that would grow quickly for large search problems...</p>
+              <p class='question' name='search-q11'>What constaint could we place on our depth-first search such that it won't have the infinite expansion?</p>
+              <p class='answer' name='search-q11'>Limit the depth that it could go to some level, say, m</p>
+              <br/>
+              <p>Using this strategy, consider our abstract limited-depth-first search tree representation again:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-2/search-8.PNG' />
+              </div>
+              <br/>
+              <p>What is the value of m in this tree?</p>
+              <p>What are the number of nodes expanded at depth 0?</p>
+              <p>What are the number of nodes expanded at depth 1?</p>
+              <p>What are the number of nodes expanded at depth 2?</p>
+              <p>What are the number of nodes expanded at depth m?</p>
+              <p class='question' name='search-q12'>What is the time complexity for limited-depth-first search in terms of b and m?</p>
+              <p class='answer' name='search-q12'>O(1 + b + b^2 + ... + b^m) = O(b^m)</p>
+              <br/>
+              <p>Now, let's examine the space complexity...</p>
+              <p>With breadth-first search, we needed to keep our frontier in memory because we were expanding level-by-level... is the same true for depth-first search?</p>
+              <p class='example'>What happens when we perform expansion #6 in our tree below?</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-2/search-9.PNG' />
+              </div>
+              <br/>
+              <p>Ah, so as soon as we've hit our depth limit m (a leaf) we needn't remember the branch that got us there!</p>
+              <p>So, let's think about an upper-bound for the number of nodes we'd need to keep in memory for any depth-first expansion:</p>
+              <p class='question' name='search-q13'>What is the space complexity for limited-depth-first search in terms of b and m?</p>
+              <p class='answer' name='search-q13'>O(max(1, 3, 6, 12, ..., b*m)) = O(b*m)</p>
+              <br/>
+              <p>So we actually save space by using depth-first search (compared to breadth-first)!</p>
+              <br/>
+              <p class='debug'>What happens when we don't know the depth (m) to limit our search to?</p>
+              <p>What if we chose to limit our search to depth 3 and a goal was at depth 4?</p>
+              <p class='question' name='search-q14'>Are either depth-first or limited-depth-first search complete?</p>
+              <p class='answer' name='search-q14'>No! If we always knew the value of m, then yes, but that's not true in general / reality.</p>
+              <br/>
+              <p>Is there a variant of depth-first search to make it complete?</p>
+              <p>As it turns out, there is! It was even discovered by our own Dr. Richard Korf!</p>
+              <p class='definition'><strong>Iterative-deepening depth-first search</strong> is simply repeated application limited-depth-first search where m = 1, then 2, then 3, etc. etc.</p>
+              <br/>
+              <p>Pictorially, then, we can think of iterative-deepening depth-first search as looking like the following, with the current depth-limit (l) starting at 1 and incrementing each time:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-2/search-10.PNG' />
+              </div>
+              <br/>
+              <p class='question' name='search-q15'>If L is the current maximum depth of an IDDFS iteration, then what are its time and space complexities?</p>
+              <p class='answer' name='search-q15'>Time complexity: O(b^L)<br/>Space complexity: O(b*L)<br/>(for same reasons as DFS)</p>
+              <br/>
+              <p>As it turns out, there isn't a whole lot of overhead for using IDDFS over breadth-first, though there is a bit.</p>
+              <p>Notice that the two strategies are assymptotically equivalent in time complexity!</p>
+              <p class='question' name='search-q16'>Why would you bother ever using IDDFS over BFS?</p>
+              <p class='answer' name='search-q16'>The space complexity of IDDFS is still less than BFS, so if space is a concern, then maybe IDDFS is right for you!</p>
+              <br/>
+              <p>So now that we see how IDDFS works, we can answer the following question:</p>
+              <p class='question' name='search-q17'>Is IDDFS complete?</p>
+              <p class='answer' name='search-q17'>Yes!</p>
+              
             </div>
             <hr/>
             
