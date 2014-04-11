@@ -637,6 +637,93 @@
             <hr/>
             
             
+            <br/>
+            <div id='localSearch' class='scrollspy-element' scrollspy-title='Local Search'></div>
+            <h1>Local Search</h1>
+            <div>
+              <p>Sometimes, our search space is just too massive to tractably search exhaustively using classical search methods.</p>
+              <p>So, we can try something akin to intelligent dart-throwing that just kinda gives up on definitely finding an answer.</p>
+              <p>Like a lazy mechanic, local search says, &quot;I'll try a few things, but no guarantees.&quot;</p>
+              <p class='definition'>
+                <strong>Local search</strong> is a search strategy that attempts to guess a correct answer from a random initial state and then movements that attempt to find a goal from that start.
+              </p>
+              <br/>
+              <p>With Local Search, you need to have a few definitions for your problem:</p>
+              <ul class='indent-1'>
+                <li><p>A <strong>neighborhood</strong> of a state is a set of all states that can be reached from performing one action on the current state.</p></li>
+                <li><p>A <strong>state score</strong> is a function that evaluates how close a given state is to a goal state.</p></li>
+              </ul>
+              <br/>
+              <p>With these two elements defined, we'll try to move around from neighbor to neighbor until we find the state with the best score (if we don't need to be perfect) or meeting some threshold.</p>
+              <p>Local search, dependent upon the particular implementation, usually has the following general steps:</p>
+              <ol class='indent-1'>
+                <li><p>Try a random state (variables of interest randomly assigned values inside the search space)</p></li>
+                <li><p>Is it the goal state (or does it meet some threshold)? If yes, done!</p></li>
+                <li><p>Otherwise, try to massage that random starting position into the goal state.</p></li>
+                <li><p>Repeat step 3 some N number of times (don't want to keep going forever), and if you still haven't found a goal, we'll try some other things (discussed later)</p></li>
+              </ol>
+              <br/>
+              <p class='example'>The N-Queens (typically, the 8-Queens) problem asks for an instantiation of some N queens on a chessboard such that no queen is in position to capture another.</p>
+              <br/>
+              <p>For those unfamiliar with chess, queens can move in any straight-line direction for as many spaces as they want (horizontally, vertically, or diagonally).</p>
+              <p>Here's a solution to the 5-queens problem:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-2/search-19.PNG' />
+              </div>
+              <br/>
+              <p>These problems aren't so bad for low N, but what about the 100-Queens problem? Ugh...</p>
+              <p>So, why don't we try using this example for local search?</p>
+              <p>Let's make one improvement at the start and place the restriction that 1 column (or row) has to hold a single queen (or else we're immediately in trouble!)</p>
+              <p class='question' name='local-q0'>For our N-Queens local search, what will a state, neighborhood, and score look like?</p>
+              <p class='answer' name='local-q0'>
+                <strong>State:</strong> instantiation of N queens on an N x N chessboard<br/>
+                <strong>Neighborhood:</strong> a set of all states reachable from the current one by moving the ith queen to some other position in column i<br/>
+                <strong>Score:</strong> the number of queens that can possibly capture one another (lower is better)
+              </p>
+              <br/>
+              <p>So with those definitions in mind, we could go column by column and determine the number of queens that would be capturable by moving any queen within a given column to some other position.</p>
+              <p>
+                For example if, in my 5-Queens problem, I got the following random assignment of queens to column positions, then I could view the scores of each neighbor state by determining how many
+                queens would be capturable if I decided to move one into a given slot.
+              </p>
+              <p>Then, we just try to minimize the cost until we (hopefully) find a solution!</p>
+              <p class='definition'>This sort of cost optimization local search is called <strong>hill-climbing</strong>, which attempts to find peak solutions.</p>
+              <p class='definition'><strong>Peaks</strong> are a term in local search meaning that a solution with cost C has been found but for which all neighbors have some cost greater than C.</p>
+              <br/>
+              <p>So, if we found a peak, then we might not be able to do better in that particular local exploration, and we don't want to get stuck!</p>
+              <p class='question' name='local-q2'>What are some strategies to avoid getting stuck with a bad random initial guess?</p>
+              <p class='answer' name='local-q2'>Some of the most common strategies include:<br/><br/>
+                <strong>Random Restart:</strong> after some N bad iterations, just call a mulligan and take a new initial state<br/><br/>
+                <strong>Sideways Moves:</strong> allow some movements to neighbors that do not strictly have a lesser cost but that might also have an equal cost<br/><br/>
+                <strong>Simulated Annealing:</strong> allow local search to move to a bad neighbor (lol) with some percentage of the time that increases the more you fail with your current search<br/><br/>
+                <strong>Beam search:</strong> run multiple searches in parallel, exploring the top k new steps from all current points considered simultaneously<br/>
+              </p>
+              <br/>
+              <p>Some of these improvements may seem to be minor but can have a huge impact.</p>
+              <p>For example, allowing sideways movements in the 8-queens problem can change success rate from a lousy 14% to a respectable 94%!</p>
+              <br/>
+              <p class='debug'>Warning: Local search is not appropriate for all problems. Ask your doctor if local search is right for you.</p>
+              <p class='question' name='local-q1'>For example, would local search be appropriate for our maze pathfinder?</p>
+              <p class='answer' name='local-q1'>No! Local search is not used when we care about the &quot;path&quot; to a solution, since the initial state is random.</p><br/>
+              <p class='question' name='local-q3'>Is local search complete? Optimal?</p>
+              <p class='answer' name='local-q3'>Not by a long shot... we may not even find a solution if one exists, and if we do, it might just be some lousy one that we stumbled upon!</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='homework1' class='scrollspy-element' scrollspy-title='Homework 1'></div>
+            <h1>Homework 1 Questions</h1>
+            <div>
+              <p>If you have any HW1 questions, now's the time to ask them!</p>
+              <p>Just to reiterate a forum post, let's look at how to picture frames from a tree perspective:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-2/hw1-tree.PNG' />
+              </div>
+            </div>
+            <hr/>
+            
+            
             <a class='btn btn-default pull-right hidden-print' href='javascript:window.print();'>
               <span class='glyphicon glyphicon-print'></span>
               &nbsp; PDF / Print
