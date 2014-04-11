@@ -146,11 +146,11 @@
             
             
             <br/>
-            <div id='classicalSearch' class='scrollspy-element' scrollspy-title='Classical Search'></div>
+            <div id='uninformedSearch' class='scrollspy-element' scrollspy-title='Uninformed Search'></div>
             <h1>Classical Search</h1>
             <div>
               <p>&quot;I found Beethoven!&quot; you exclaimed excitedly.</p>
-              <p>Not that kind of classical search, silly!</p>
+              <p>Not that kind of classical search!</p>
               <p class='definition'><strong>Classical search</strong> is the systematic, goal / test oriented search of moving from an initial state to a goal state.</p>
               <br/>
               <h3>Motivating Example</h3>
@@ -361,7 +361,7 @@
               <p>Ah, so as soon as we've hit our depth limit m (a leaf) we needn't remember the branch that got us there!</p>
               <p>So, let's think about an upper-bound for the number of nodes we'd need to keep in memory for any depth-first expansion:</p>
               <p class='question' name='search-q13'>What is the space complexity for limited-depth-first search in terms of b and m?</p>
-              <p class='answer' name='search-q13'>O(max(1, 3, 6, 12, ..., b*m)) = O(b*m)</p>
+              <p class='answer' name='search-q13'>E.g., with b = 3, O(1 + 3 + 6 + ... + b*m) = O(b*m), the general solution</p>
               <br/>
               <p>So we actually save space by using depth-first search (compared to breadth-first)!</p>
               <br/>
@@ -372,7 +372,7 @@
               <br/>
               <p>Is there a variant of depth-first search to make it complete?</p>
               <p>As it turns out, there is! It was even discovered by our own Dr. Richard Korf!</p>
-              <p class='definition'><strong>Iterative-deepening depth-first search</strong> is simply repeated application limited-depth-first search where m = 1, then 2, then 3, etc. etc.</p>
+              <p class='definition'><strong>Iterative-deepening depth-first search</strong> is simply repeated application limited-depth-first search where m = 0, then 1, then 2, etc. etc.</p>
               <br/>
               <p>Pictorially, then, we can think of iterative-deepening depth-first search as looking like the following, with the current depth-limit (l) starting at 1 and incrementing each time:</p>
               <div class='text-center fit-pres'>
@@ -389,8 +389,125 @@
               <br/>
               <p>So now that we see how IDDFS works, we can answer the following question:</p>
               <p class='question' name='search-q17'>Is IDDFS complete?</p>
-              <p class='answer' name='search-q17'>Yes!</p>
+              <p class='answer' name='search-q17'>Yes! Why? Consider it in comparison to how BFS operates... see the similarity?</p>
               
+              <br/>
+              <h3>Cost &amp; Optimality</h3>
+              <p>Did you know that there's a difference between the words &quot;optimal&quot; and &quot;optimum?&quot;</p>
+              <p class='definition'>An <strong>optimal</strong> goal state is one with the lowest cost, that might not be the only best solution.</p>
+              <br/>
+              <p>For example, observe below that our two goal states have the same distance from the initial state, so their cost is the same; they are both optimal.</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-2/search-11.PNG' />
+              </div>
+              <br/>
+              <p>Contrast this with the following situation where we have 3 goal states, but only one of them can be reached with the lowest cost.</p>
+              <p class='definition'>An <strong>optimum</strong> goal state is *the* one with the lowest cost; it may have no peer goal states with an equal or lower cost.</p>
+              <br/>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-2/search-12.PNG' />
+              </div>
+              <br/>
+              <p>Let's consider a maze where we're interested in reaching an optimum goal; we'll consider the cost incurred during movement as 1 unit per move.</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-2/search-15.PNG' />
+              </div>
+              <br/>
+              <p>So, this example allows us to ask a few questions about search strategy optimality (is a search strategy guaranteed to return the optimal / optimum solution):</p>
+              <p class='question' name='search-q18'>Is DFS optimal? Is BFS? IDDFS?</p>
+              <p class='answer' name='search-q18'>DFS is NOT optimal! Observe the goal state it finds in the example above. BFS and IDDFS are, however.</p>
+              <br/>
+              <p>That said, this whole time we've considered each of our movements in our maze pathfinder to have an equal cost, and so total cost is simply the sum of the number of movements we make.</p>
+              <p>But what if we modified our costs by introducing a new element into our mazes?</p>
+              <p>Let's consider clear tiles to have a travel cost of 1, and tiles with 'M' (mud) to have a movement cost of 3.</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-2/search-13.PNG' />
+              </div>
+              <br/>
+              <p>The search tree for this scenario will look like the following, with costs along the edges:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-2/search-14.PNG' />
+              </div>
+              <br/>
+              <p>A couple of observations to make here:</p>
+              <ul class='indent-1'>
+                <li><p>Is the optimal / optimum solution always just the most shallow in the search tree? When is or isn't it?</p></li>
+                <li><p>Will DFS find the optimum solution? Will BFS? IDDFS?</p></li>
+              </ul>
+              <br/>
+              <p>Hmm, so it looks like our uninformed searches aren't sufficiently empowered for optimality when we don't have uniform cost.</p>
+              <p>Let's look at some ways to empower our searches!</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='informedSearch' class='scrollspy-element' scrollspy-title='Informed Search'></div>
+            <h1>Informed / Heuristic Search</h1>
+            <div>
+              <p>
+                As we saw with our uninformed search strategies, we don't know about any descendants of a particular state (states reachable through some number of legal movements) without first expanding
+                the states in between.
+              </p>
+              <p>But, just because we don't <em>know</em> what states might be along a certain path, doesn't mean we can't make educated <em>guesses</em>.</p>
+              <p class='definition'>A <strong>heuristic</strong> is essentially an estimate of the cost that we might encounter expanding a search tree along a certain path.</p>
+              <br/>
+              <p>The goal of heuristic search is to look at every node along the frontier, and then expand the one that it thinks will lead to an optimal goal.</p>
+              <p>
+                To do this, we'll construct an evaluation function, <em>f(n)</em> that takes as input a node in our search tree (a state) and computes an estimated cost of reaching a goal state
+                <em>IF we decide to expand that node and follow a path from it.</em>
+              </p>
+              <p class='definition'><strong>Greedy / Best-first</strong> search is a heuristic search strategy that, instead of having a fixed exploration order, will choose an evaluation function that 
+                *only* attempts to minimize cost to a goal.
+              </p>
+              <br/>
+              <p>In this way, we can think of greedy search as ONLY using a heuristic, h(n), where h(n) = the estimated cost of a goal state along the path of node n.</p>
+              <p>In other words, for greedy search, our evaluation function f(n) = h(n)</p>
+              <p class='question' name='heuristic-q0'>What would be a good heuristic choice for our maze pathfinding example?</p>
+              <p class='answer' name='heuristic-q0'>Let's start by considering the <strong>Manhattan distance</strong> between a node and the closest goal.</p>
+              <br/>
+              <p>So, we might say:</p>
+<pre class='prettyprint'>
+  Mazefinding Manhattan Distance Heuristic:
+  f(n) = h(n)
+       = argmin( abs(nX - iGoalX) + abs(nY - iGoalY) )
+            i
+            
+  (where n is the player position in a node in the search tree,
+  and i represents one of each goal tile in the maze) 
+</pre>
+              <br/>
+              <p>So, seeing that in action:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-2/search-16.PNG' />
+              </div>
+              <br/>
+              <p>Notice, using best-first search, now we found not only the optimum solution, but also didn't bother expanding the left branch, and saved a lot of searching!</p>
+              <p>But now, let's throw in our Mud tiles and see how it does:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-2/search-17.PNG' />
+              </div>
+              <br/>
+              <p>Why didn't greedy work for us there?</p>
+              <p>It didn't remember its history! It stepped on a mud tile (+3 cost) but was only interested in Manhattan distance.</p>
+              <p>So how do we remember our choices as well?</p>
+              
+              <br/>
+              <h3>A* Search</h3>
+              <p>Greedy may have minimized our heuristic function but it didn't succeed with minimizing the *total* cost.</p>
+              <p class='definition'><strong>A* search</strong> defines its evaluation function as a sum of a heuristic function and a &quot;history&quot; function, g(n).<br/>f(n) = g(n) + h(n)</p>
+              <br/>
+              <p>The history function g(n) keeps a total of the *actual* cost we've encountered along our path so far, and then adds it to our heuristic cost for what's to come.</p>
+              <p>This means that we now choose to expand the node on the frontier with the smallest cost that we've already encountered, and also the smallest cost of what's yet to come!</p>
+              <p>So, if we maintain our Manhattan distance heuristic from before, we see that A* now successfully navigates our maze into the optimum goal.</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-2/search-18.PNG' />
+              </div>
+              <br/>
+              <p class='question' name='heuristic-q1'>In what order will A* expand nodes in the above example (assume a left-to-right child preference for equal cost evaluations)?</p>
+              <p class='answer' name='heuristic-q1'>(1, 1), (2, 1), (1, 2), (2, 2), (3, 2)</p>
+              <br/>
+              <p>Nice! And we managed to cut off a bunch of branches from our search tree!</p>
             </div>
             <hr/>
             
