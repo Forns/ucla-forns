@@ -295,10 +295,10 @@
               <p class='definition'><strong>Space complexity</strong> is a measure of how many states we need to keep in memory at any given time for our search strategy.</p>
               <br/>
               <p>So, if we look at our abstract breadth-first search representation again, are we allowed to delete any states / branches from memory while we're exploring the frontier?</p>
-              <p>How many nodes have to be generated at depth 0?</p>
-              <p>How many nodes have to be generated at depth 1?</p>
-              <p>How many nodes have to be generated at depth 2?</p>
-              <p>How many nodes have to be generated at depth d?</p>
+              <p>How many nodes have to be kept in memory at depth 0?</p>
+              <p>How many nodes have to be kept in memory at depth 1?</p>
+              <p>How many nodes have to be kept in memory at depth 2?</p>
+              <p>How many nodes have to be kept in memory at depth d?</p>
               <p class='question' name='search-q8'>What is the space complexity for breadth first search in big-O notation?</p>
               <p class='answer' name='search-q8'>O(b + b^2 + b^3 + ... + b^d) = O(b^d) because b^d is the highest degree in the polynomial</p>
               <br/>
@@ -327,7 +327,7 @@
               <p class='answer' name='search-q10'>(1, 1), (2, 1), (3, 1), (2, 1), (3, 2), (1, 1), (2, 1), (2, 2), (3, 2), (2, 1), (2, 3)</p>
               <br/>
               <p>Let's return to our maze pathfinding example...</p>
-              <p class='debug'>What will happen with standard breadth-first search in our partial search tree, pictured below?</p>
+              <p class='debug'>What will happen with standard depth-first search in our partial search tree, pictured below?</p>
               <br/>
               <div class='text-center fit-pres'>
                 <img src='../../../assets/images/spring-2014/cs-161/week-2/search-7.PNG' />
