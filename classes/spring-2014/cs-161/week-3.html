@@ -164,6 +164,8 @@
               <p>So, instead of using member's default test, we can instead define our own test using the equal function that we know and love!</p>
               <p>The second statement says, &quot;See if our item is a member of the given list *using the test comparator of the equal function*&quot;</p>
               <br/>
+              <p class='definition'>HINT! You can use the :test parameter in your unit tests to compare membership of frames (using #'same-sf) and membership of lexicon entries (using #'equal).</p>
+              <br/>
               <p class='question' name='lisp-q0'>So, what's the main difference between a symbol and a function reference?</p>
               <p class='answer' name='lisp-q0'>A symbol can change the function it refers to whereas a function reference cannot.</p>
               <br/>
@@ -450,7 +452,243 @@
               
               <br/>
               <h3>Function-specific Hints</h3>
+              <table class='table table-striped table-bordered'>
+                <thead>
+                  <tr>
+                    <th><p>Function</p></th>
+                    <th><p>Hints</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th><p>ADD-LEX</p></th>
+                    <td><p>One line. Just make sure you modify the global variable with the proper order of inputs.</p></td>
+                  </tr>
+                  <tr>
+                    <th><p>NEXT-PH</p></th>
+                    <td>
+                      <p>Non-trivial, you might consider the following:</p>
+                      <ul class='indent-1'>
+                        <li><p>Consider making a helper function that determines the length of a match between the front of the input sentence and an entry in the input lexicon.</p></li>
+                        <li><p>
+                          You'll only ever have to compare two matches at a time: the current best that you've found and then a contender. Replace the current best if the length is greater in the contender.
+                        </p></li>
+                      </ul>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th><p>NEWATM</p></th>
+                    <td><p>Trivial, just make sure you read the description and put the (literally) two pieces together.</p></td>
+                  </tr>
+                  <tr>
+                    <th><p>UNIQUE-GAPS</p></th>
+                    <td><p>Big hint: the format of this one will look very similar to that of HW1's UNGAP.</p></td>
+                  </tr>
+                  <tr>
+                    <th><p>INSTAN-CON</p></th>
+                    <td><p>You'll have to think about which version of set (set vs setq) to use for the different requirements of this problem. Nonetheless, it isn't long.</p></td>
+                  </tr>
+                  <tr>
+                    <th><p>SPAWN</p></th>
+                    <td><p>Remember to modify the DEMEM global with completed demon instances!</p></td>
+                  </tr>
+                  <tr>
+                    <th><p>SRCH</p></th>
+                    <td>
+                      <p>One of the least trivial; here are some hints:</p>
+                      <ul class='indent-1'>
+                        <li><p>
+                          Consider making a helper function that breaks the search space down into only the valid locations for a match to be within. For example, if your dir = AFT, only consider
+                          the sub-list from the matched starting atom to the end of the atmlst.
+                        </p></li>
+                        <li><p>Using a particular list manipulator, consider how we might turn directione BEF and IM-BEF into their AFT and IM-AFT counterparts, for simplicity.</p></li>
+                        <li><p>You might consider using an optional parameter to help you solve this problem!</p></li>
+                      </ul>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th><p>BIND</p></th>
+                    <td><p>Fairly trivial, just remember the distinction between set and setq.</p></td>
+                  </tr>
+                  <tr>
+                    <th><p>DM-EXP</p></th>
+                    <td><p>Not horrible, just uses the SRCH and BIND functions and connects them.</p></td>
+                  </tr>
+                  <tr>
+                    <th><p>POLL-DEMS</p></th>
+                    <td>
+                      <p>Not particularly long but the pieces will have to fit together properly using some of the new tricks about calling functions you found today:</p>
+                      <ul class='indent-1'>
+                        <li><p>Consider the proper function call form that you'll use to execute each demons in the DEMEM.</p></li>
+                        <li><p>This function might be another candidate for an optional parameter!</p></li>
+                        <li><p>You may find an iteration technique useful for executing each demon instance.</p></li>
+                      </ul>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th><p>TOP-CON</p></th>
+                    <td><p>Trivial, there's one function we covered today that will do the job for you.</p></td>
+                  </tr>
+                  <tr>
+                    <th><p>C-ANALYZER</p></th>
+                    <td><p>Once all of the other functions are completed, C-ANALYZER will simply tie everything together. It probably won't be long, but you might find some loop mechanics useful...</p></td>
+                  </tr>
+                </tbody>
+              </table>
               
+              <br/>
+              <p class='definition'>Since we didn't get to it from last lecture, a review of local search will be done in discussion at this point. If you're reading along at home, continue!</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='adversarialSearch' class='scrollspy-element' scrollspy-title='Adversarial Search'></div>
+            <h1>Adversarial Search</h1>
+            <div>
+              <p class='definition'><strong>Adversarial Search</strong> is a game-theoretical search strategy where we have one agent competing against another in order to maximize utility.</p>
+              <br/>
+              <p>What a perfectly academic and boring definition.</p>
+              <p>Let's start with some definitions...</p>
+              <p class='definition'>An <strong>agent</strong> can be a human, a computer, or some sort of interacting entity within our search problem.</p>
+              <br/>
+              <p>When we're talking about adversarial search, usually we have two or more agents that are competitors on opposing sides of a game or conflict.</p>
+              <p>So, for example, if a human was playing tic-tac-toe against a computer, we would have two agents: the human player and the computer player, each trying to win.</p>
+              <p>
+                In the case of a game like tic-tac-toe, each agent is attempting to &quot;maximize&quot; their utility, meaning they have the goal of winning and want to make moves that 
+                increase their odds of doing so.
+              </p>
+              <p class='definition'><strong>Utility</strong> is therefore the score of a particular game outcome / conclusion state within our adversarial search space.</p>
+              <br/>
+              <p>Hence, each agent will want to maximize its utility at the game's conclusion and make moves that take them to a state of maximal utility.</p>
+              <p>So, let's use tic-tac-toe as our motivating example for this section.</p>
+              <p>The game consists of the following attributes:</p>
+              <ul class='indent-1'>
+                <li><p>Two players (agents) each attempting to win the game</p></li>
+                <li><p>A board with 9 tiles</p></li>
+                <li><p>A victory condition of one player connecting 3 of their symbols in a row horizontally, vertically, or diagonally.</p></li>
+                <li><p>A tie condition of all 9 tiles being filled before either player reached a victory condition</p></li>
+                <li><p>A turn where each player places one of their symbols on a vacant board slot</p></li>
+              </ul>
+              <br/>
+              <p>So, if one of our players is an intelligent agent that we're programming, then we can model the game (i.e., attempting to win it) as an adversarial search problem!</p>
+              <p class='question' name='advsearch-q0'>What will a state look like in our tic-tac-toe search problem?</p>
+              <p class='answer' name='advsearch-q0'>A game board (grid representation) with cells that hold nothing (a blank), an X, or an O</p>
+              <br/>
+              <p class='question' name='advsearch-q1'>A terminal state is one in which the game ends. What will terminal states look like in our problem?</p>
+              <p class='answer' name='advsearch-q1'>Either 3 X's or 3 O's are in a row somewhere on the game board, or all 9 tiles are filled with X's and O's with none 3 in a row.</p>
+              <br/>
+              <p class='question' name='advsearch-q3'>Will a terminal state always have all squares filled in?</p>
+              <p class='answer' name='advsearch-q3'>No, though the minimum number of filled in slots for a tic-tac-toe game with 2 players is 5 squares.</p>
+              <br/>
+              <p class='question' name='advsearch-q2'>What will an action look like in our search?</p>
+              <p class='answer' name='advsearch-q2'>A placement of a symbol (based on which player's turn it is) into a blank square.</p>
+              <br/>
+              <p>Now that we have the components of our search defined, the real difference between search and adversarial search will be in the format of the search tree.</p>
+              <p class='definition'>
+                The <strong>game tree</strong> is the theoretical complete instantiation of all states and the actions that were used to move between them, starting with the initial state at the root.
+              </p>
+              <br/>
+              <p>The game tree for tic-tac-toe, then, consists of all of the possible states starting with the initial, blank board and leading to all terminal states at the leaves.</p>
+              <p>So, part of our game tree might look like the following:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-3/advsearch-0.PNG' />
+              </div>
+              <br/>
+              <p>
+                Now, the search tree that we'll ultimately use to explore possible moves will be some subset of nodes from the game tree because as the game progresses, we will end up trimming branches
+                based upon the move that our opponent makes.
+              </p>
+              <p>Like we said, the objective of our intelligent agent will be to maximize its utility; we can therefore evaluate the utility of our terminal states using a utility function, U(s, p).</p>
+              <p class='definition'>A <strong>utility function</strong> U(s, p) is a function that scores a terminal state s based on how favorable it is to player p.</p>
+              <br/>
+              <p>So, for example, in tic-tac-toe, we might say that U(s, p) = 1 when player p wins in state s, 1/2 when state s is a tie, and 0 when state s is a loss for player p.</p>
+              <p>This gives us some example terminal states:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-3/advsearch-1.PNG' />
+              </div>
+              <br/>
+              <p>Thus, if we're X, then we want our agent to choose a path (given O's moves) that maximizes its chances of winning the game, or at the very least, tying it.</p>
+              <p>Our agent would then need some sort of strategy to search for the best chance of winning, which might mean using an evaluation function at every node along its frontier.</p>
+              <br/>
+              <p class='question' name='advsearch-q4'>If we had the full game tree at our disposal, what would be a good evaluation function for a node to maximize the agent's chances of winning?</p>
+              <p class='answer' name='advsearch-q4'>Perhaps the sum of all utility scores (at terminal nodes) that could be reached from that particular subtree!</p>
+              <br/>
+              <p>
+                Thus, if a node had a high evaluation function, that meant that there were many states along that path that could lead to a victory, and so, we would choose the move with the highest score.
+              </p>
+              <br/>
+              <p class='question' name='advsearch-q5'>What are two problems with this strategy and evaluation function?</p>
+              <p class='answer' name='advsearch-q5'>
+                1) The classical search paradigm doesn't work because we have an oponent who is also attempting to win, and so is precluding some of the best movement choices<br/>
+                2) Although it might be tractable for tic-tac-toe, for larger problems and search spaces we almost never have the full game tree at our disposal.
+              </p>
+              <br/>
+              <p>Let's address issue #1 first:</p>
+              
+              <br/>
+              <h3>Minimax Search</h3>
+              <p>Like we said, one of the issues with our traditional search is that it operates under the idea that the best solution can be found without the impedence of another agent.</p>
+              <p>With adversarial search, we have two or more agents fighting against one another.</p>
+              <p>For the purposes of the search strategy we're about to discuss, let's consider two agents named MAX and MIN, and the following abstract problem specifications:</p>
+              <ul class='indent-1'>
+                <li><p>At every move, either MAX or MIN can make one of three choices, starting with MAX and alternating.</p></li>
+                <li><p>Terminal nodes have a utility function that returns a positive integer score.</p></li>
+              </ul>
+              <br/>
+              <p>
+                So, in summary, for our arbitrary game, at each turn, MAX tries to maximize the utility it could possibly reach by pursuing a branch, and MIN tries to minimize the utility MAX could get
+                by pursuing a branch.
+              </p>
+              <p>We also make one key assumption about our agents: They are infallible, meaning that if a best move exists, they will make it (so we always prepare for the worst)</p>
+              <p>This means we can model our problem with a game tree that looks like the following (modified from book example):</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-3/advsearch-2.PNG' />
+              </div>
+              <br/>
+              <p class='question' name='advsearch-q6'>Assuming MAX started by making move max1, what move would MIN make from B?</p>
+              <p class='answer' name='advsearch-q6'>min1</p>
+              <br/>
+              <p class='question' name='advsearch-q7'>Assuming MAX started by making move max2, what move would MIN make from C?</p>
+              <p class='answer' name='advsearch-q7'>min4 OR min6</p>
+              <br/>
+              <p class='question' name='advsearch-q8'>Assuming MAX started by making move max3, what move would MIN make from D?</p>
+              <p class='answer' name='advsearch-q8'>min9</p>
+              <br/>
+              <p class='question' name='advsearch-q9'>What, then, is MAX's best starting move?</p>
+              <p class='answer' name='advsearch-q9'>max2, because max1 would have a utility of 5, max2 a utility of 6, and max3 a utility of 4, due to MIN's choices at B, C, and D, respectively.</p>
+              <br/>
+              <p>So nothing particularly astounding about minimax search! Some stats about it:</p>
+              <ul class='indent-1'>
+                <li><p>
+                  We perform depth-first search on the minimax tree, giving us both of the time and space complexities associated with depth-first with some max depth m [O(b^m) and O(b*m), respectively]
+                </p></li>
+                <li><p>Optimal assuming we have the game tree.</p></li>
+                <li><p>Complete unless the problem specification allows for a potentially infinite loop.</p></li>
+              </ul>
+              <br/>
+              <p class='definition'>
+                <strong>Alpha-Beta</strong> pruning is a simple tactic used to reduce the number of nodes expanded by minimax search, and says: &quot;I won't even bother exploring a subtree that I know
+                will be worse than what I've already explored.&quot;
+              </p>
+              <br/>
+              <p>This is accomplished by placing bounds of what the min and max value could be at a given node based on what we've already explored.</p>
+              <p>If a new node we then later explore is less than the established min or greater than the established max of its parent node's range, then we don't bother exploring it.</p>
+              <p class='example'>Try alpha-beta pruning with our example tree above. What moves would get trimmed from consideration?</p>
+              <br/>
+              <p>We still have an exponential time complexity, but at least the constant of proportionality is approximately halved.</p>
+              <p>Now we need to address the second issue from before; what if we don't have the full game tree with huge search spaces like Chess?</p>
+              
+              <br/>
+              <h3>Imperfect Real-time Heuristics</h3>
+              <p>When game trees are massive, and we can't generate the entire tree, we'll instead use an evaluation function that scores states up until a certain depth cut-off.</p>
+              <p>These will represent our best guess using a heuristic scoring function of those states, and then treat the reduced sub-tree as a minimax search.</p>
+              <p>While not necessarily optimal, the farther the depth cut-off, the better our chances of reaching a victory state.</p>
+              <br/>
+              <p class='definition'>
+                <strong>Fun factoid:</strong> studies have illustrated that grand-master chess players use some flavor of this technique, with some able to accurately foresee the search tree
+                up to about 10 levels down from the current state!  
+              </p>
             </div>
             <hr/>
             
