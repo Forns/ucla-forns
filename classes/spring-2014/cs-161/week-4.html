@@ -165,7 +165,8 @@
                 </tbody>
               </table>
               <br/>
-              <p>Let's look at some simple examples.</p>
+              <p>So, the motto of CSP might be, &quot;I don't know what I'm looking for, but I'll know it when I see it! ...oh and I don't care about how I got there.&quot;</p>
+              <p>Let's look at some simple examples using numerical variables and algebraic constriants.</p>
               <p class='example'>Consider the following constraint satisfaction problem specifications and find a solution for each.</p>
 <pre class='prettyprint'>
   X = {A, B}
@@ -181,7 +182,8 @@
   C = { A &gt; 0 }
   
   
-  OK... are you ready for this one?
+  
+  OK... Now that we're done with the warmups...
   
   #4
   X = {A, B, C, D, E, F, G, H, I, J, K, L, M, N}
@@ -212,7 +214,55 @@
               <br/>
               <h3>Formulating CSP as Search</h3>
               <p>&quot;Oh... we're back to search, Andrew?&quot;</p>
-              <p>Yes, now stop complaining!</p>
+              <p>Yes, stop complaining!</p>
+              <p>As it turns out, we can formulate our CSPs as search problems (using a search tree) using the following tactic:</p>
+              <p class='definition'>A CSP Search Tree <strong>state</strong> is either a partial or complete instantiation of variables.</p>
+              <p class='definition'>A CSP Search Tree <strong>leaf state</strong> is therefore a complete instantiation.</p>
+              <p class='definition'>The <strong>initial state</strong> is therefore &quot;no assignment&quot; and each <strong>action</strong> assigns one variable to a value.</p>
+              <p class='definition'>A <strong>goal state</strong> is then any complete assignment such that all constraints are satisfied.</p>
+              <br/>
+              <p>So, let's return to our simple example using numerical variables and algebraic constraints:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-4/csp-0.PNG' />
+              </div>
+              <br/>
+              <p class='question' name='csp-q0'>What is the depth of this type of CSP tree?</p>
+              <p class='answer' name='csp-q0'>Simply the number of variables because it will take |V| actions to reach a complete instantiation!</p>
+              
+              <br/>
+              <h3>Map Coloring Problem</h3>
+              <p>Perhaps the most widely used example for CSPs is the map coloring problem.</p>
+              <p class='definition'>
+                The <strong>map coloring problem</strong> asks if, given a map consisting of a set of states, with some adjacent to others, can you assign one of N colors to each state such that no two
+                adjacent states have the same color? (NB: here state means the type you'd find in a country, like California)
+              </p>
+              <br/>
+              <br/>
+              <p>Some map coloring solvers will go a step further and ask: &quot;If so, what is the minimum number of colors required to complete this task?&quot;</p>
+              <p>Let's formulate this as a constraint satisfaction problem!</p>
+              <p class='question' name='csp-q1'>What will a state (here, state means the state in our search tree) look like in our map coloring CSP?</p>
+              <p class='answer' name='csp-q1'>The assignment of one of the N colors to each of the variables (representing the map states).</p>
+              <br/>
+              <p class='question' name='csp-q2'>What will our constraints look like?</p>
+              <p class='answer' name='csp-q2'>A set of map-state adjacencies such that no adjacency pair may ever be assigned the same color.</p>
+              <br/>
+              <p class='example'>What is the minimum N (where N is the number of colors) you could use to color the great Republic of Forns, below?</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-4/csp-1.PNG' />
+              </div>
+              <br/>
+              <p class='example'>Sketch a search tree for the CSP above, given the minimum N you decided for the map coloring.</p>
+              <br/>
+              <p class='question' name='csp-q3'>What do we notice about CSP node expansion that will save us some work?</p>
+              <p class='answer' name='csp-q3'>As soon as we discover an inconsistency, we need not continue to explore down that path!</p>
+              
+              <br/>
+              <h3>CSP as Local Search</h3>
+              <p>Now... what would happen if the proud people of The Republic of Forns all declared independence and separated the states into millions of sovereign bodies?</p>
+              <p>Would our CSP search tree be tractable?</p>
+              
+              <!-- TODO: Map coloring -->
+              <!-- TODO: CSP as local search -->
               
             </div>
             <hr/>
