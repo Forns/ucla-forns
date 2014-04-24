@@ -259,14 +259,167 @@
               <br/>
               <h3>CSP as Local Search</h3>
               <p>Now... what would happen if the proud people of The Republic of Forns all declared independence and separated the states into millions of sovereign bodies?</p>
-              <p>Would our CSP search tree be tractable?</p>
-              
-              <!-- TODO: Map coloring -->
-              <!-- TODO: CSP as local search -->
-              
+              <p>Would our CSP search tree for the map coloring problem be tractable?</p>
+              <p>Errr... no... millions of variables? Not gonna work...</p>
+              <p class='definition'>
+                <strong>CSP Local Search</strong> operates under the same principles of classical local search: start off with a random complete instantiation, and then try to tweak erroneous
+                assignments into a constraint-consistent solution
+              </p>
+              <br/>
+              <p>So, just as an example using our 5-state map from before, we could arrive at the following partial instantiation for, say, N = 3 colors:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-4/csp-2.PNG' />
+              </div>
+              <br/>
+              <p class='question' name='csp-q4'>How should we choose which, amongst these adjacent possible solutions, to move to next?</p>
+              <p class='answer' name='csp-q4'>
+                Define a scoring function that assigns a higher cost to adjacent instantiations that violate more constraints! The lower the cost, the fewer constraints that are violated.
+              </p>
+              <br/>
+              <p class='question' name='csp-q5'>What were some of the improvements we talked about with classical local search that might apply to CSP local search?</p>
+              <div class='answer' name='csp-q5'>
+                <ul class='indent-1'>
+                  <li><p><strong>Random restarts:</strong> if we go too many iterations without finding a solution, just start from scratch with a new starting instantiation.</p></li>
+                  <li><p><strong>Sideways movements:</strong> allow movements to instantiations that have the same cost score as the one we're currently investigating.</p></li>
+                  <li><p><strong>Downward movements:</strong> 
+                    for example, simulated annealing allows some movements to instantiations with *worse* scores than the one we're currently looking at, but is only likely to try one if we've
+                    been through many failed iterations prior to the downward movement (i.e., we're more likely to take a downward movement the longer we've been searching)
+                  </p></li>
+                </ul>
+              </div>
+              <br/>
+              <p>So far, with our search strategies, we've begun our problems under the assumption that we don't know anything about a possible solution...</p>
+              <p>In classical search, all we could do was guess with some amount of confidence where in the search tree a solution was likely to be found relative to our initial state...</p>
+              <p>With CSPs, we started with blank variable instantiations and tried to find one that satisfied all of our constraints.</p>
+              <p>What if we knew some evidence that could direct our search in a more intelligent manner? (FOREBODING!!!)</p>
             </div>
             <hr/>
             
+            <br/>
+            <div id='propLogic' class='scrollspy-element' scrollspy-title='Propositional Logic'></div>
+            <h1>Propositional Logic</h1>
+            <div>
+              <blockquote class='text-center'>
+                <p>&quot;Humans, it seems, know things; and what they know helps them do things.&quot;</p>
+                <footer>Our Textbook's Start to Chapter 7</footer>
+              </blockquote>
+              <br/>
+              <p>Some humans really know how to start a textbook chapter!</p>
+              <p>What the quote means to express is that human cognition has two important qualities that would be nice to recreate:</p>
+              <ul class='indent-1'>
+                <li><p>Humans have some sort of <strong>knowledge</strong> representation that spans the breadth of human experience from episodic (event-related) to semantic (factual) memory.</p></li>
+                <li><p>Using this knowledge, humans rationalize and perform <strong>inference</strong> from the facts that they know and extrapolate unto the facts that they don't.</p></li>
+              </ul>
+              <br/>
+              <p>For example, if I told you that &quot;If it is raining, then the pavement will be wet. Oh, by the way, it's raining.&quot; What might you infer about the pavement?</p>
+              <p>Hopefully, you infer that the pavement is wet! (and that I'm bad at concisely relaying information)</p>
+              <p>This is a small gap that humans bridge very easily using reasoning about what they know and what they can infer from what they know.</p>
+              <p>Computers, however, need a lot of help with this task; to start our quest to implement a reasoning engine, we'll talk about some definitions:</p>
+              <p class='definition'>An intelligent system's <strong>knowledge base (KB)</strong> consists of a set of logical <strong>sentences</strong> that represent some assertions of the world.</p>
+              <p class='definition'>A KB's <strong>sentences</strong> are not English sentences so much as they are logical expressions relating some properties of the environment.</p>
+              <br/>
+              <p>In <strong>Propositional Logic</strong>, a KB's sentences are combinations of boolean variables that express our knowledge about the world.</p>
+              <p>So pictorially, our task will be to design an inference engine that takes what we know, questions about what we know, and produce an answer:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-4/propLog-0.PNG' />
+              </div>
+              <br/>
+              <p>Above, we say that the items that we start off with in our KB are axioms, and the facts that we derived from them are inferred.</p>
+              <p class='definition'><strong>Axioms</strong> are the &quot;given&quot; elements of the KB that we assume are true before reasoning; they represent our background knowledge.</p>
+              <p class='definition'><strong>Inferred</strong> terms are derived from those initial axioms to extend our knowledge base and answer queries.</p>
+              <br/>
+              <p class='question' name='propLog-q0'>What are the axioms and derived terms from our example above about whether the sidwalk is wet when it's raining?</p>
+              <p class='answer' name='propLog-q0'>
+                The axioms are that: (1) If it is raining, then the sidwalk will be wet and (2) it is raining. There is a single derived term: (3) The side walk is wet.
+              </p>
+              <br/>
+              <p>So, we begin to see how to fit the pieces together for our inference engine, but we need a formalization.</p>
+              
+              <br/>
+              <h3>Propositional Syntax</h3>
+              <p class='definition'>In propositional logic, we'll represent our knowledge with Boolean variables called <strong>propositions</strong>, i.e., variables that can either be true or false.</p>
+<pre class='prettyprint'>
+  Boolean variable examples:
+  
+  Let S = whether or not Andrew's socks are matching today
+      H = whether or not it is over 80 degrees out today
+      R = whether or not it is raining
+      W = whether or not the sidewalk is wet
+</pre>
+              <br/>
+              <p>Thus, every proposition can attain either the value True or False, or T and F as you'll often see them displayed.</p>
+              <p>Now, we can build logical sentences comprised of our propositions and logical connectives.</p>
+              <p class='definition'>A <strong>logical operator</strong> simply defines some relationship between some number of propositions.</p>
+              <div class='definition'><p>Our knowledge representation is therefore composed of:</p>
+                <ul class='indent-1'>
+                  <li><p><strong>Atoms:</strong> T, F, Prop, &not;Prop, where Prop is some propositional variable.</p></li>
+                  <li><p><strong>Sentences:</strong> atoms or atoms used with logical operators: &not;, &or;, &and;, &rArr;</p></li>
+                </ul>
+              </div>
+              <br/>
+              <p>Logical operators are defined as follows:</p>
+              <p class='toolkit'><strong>Negation (&not;)</strong> is a unary logical operator that flips the Boolean value of a sentence from T to F or from F to T.</p>
+<pre class='prettyprint'>
+  ; Definition:
+  &not;(sentence)
+  
+  ; Examples:
+  &not;T = F
+  &not;F = T
+  
+  ; If Prop = T, then:
+  &not;Prop = F
+</pre>
+              <br/>
+              <p class='toolkit'><strong>Conjunction (&and;)</strong> AKA &quot;and&quot; is a binary operator that returns T only if the sentence on its left AND right are T.</p>
+<pre class='prettyprint'>
+  ; Definition:
+  (sentence1) &and; (sentence2)
+  
+  ; Examples:
+  T &and; F = F
+  T &and; T = T
+  (T &and; F) &and; T = F
+  Prop1 &and; Prop2 &and; Prop3
+</pre>
+              <br/>
+              <p class='toolkit'><strong>Disjunction (&or;)</strong> AKA &quot;or&quot; is a binary operator that returns T if at least one of the sentences on its left OR right is T.</p>
+<pre class='prettyprint'>
+  ; Definition:
+  (sentence1) &or; (sentence2)
+  
+  ; Examples:
+  T &or; F = T
+  T &or; T = T
+  (T &or; F) &or; F = T
+  F &or; F = F
+  Prop1 &or; Prop2 &or; Prop3
+</pre>
+              <br/>
+              <p class='toolkit'><strong>Implication (&rArr;)</strong> is a logical shorthand indicating an if-then relationship between sentences.</p>
+<pre class='prettyprint'>
+  ; Definition:
+  (sentence1) &rArr; (sentence2)
+  ; ...is shorthand for:
+  &not;(sentence1) &or; (sentence2)
+  
+  ; Examples:
+  F &rArr; F
+    = &not;F &or; F
+    = T &or; F
+    = T
+</pre>
+              <br/>
+              <p class='toolkit'><strong>If-and-only-if (&hArr;)</strong> is a logical shorthand indicating if-then relationships of the format: (if A then B) AND (if B then A).</p>
+<pre class='prettyprint'>
+  ; Definition:
+  (sentence1) &hArr; (sentence2)
+  ; ...is shorthand for:
+  ((sentence1) &rArr; (sentence2)) &and; ((sentence2) &rArr; (sentence1))
+</pre>
+              <br/>
+            </div>
+            <hr/>
             
             <a class='btn btn-default pull-right hidden-print' href='javascript:window.print();'>
               <span class='glyphicon glyphicon-print'></span>
