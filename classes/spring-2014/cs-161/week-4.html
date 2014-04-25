@@ -688,21 +688,6 @@
   KB = The conjunction of all of our sentences
      = sent1 &and; sent2 &and; sent3
 </pre>
-              <br/>
-              <p>OK, now that we have our knowledge base, the goal of the system is to prove certain facts about what we know.</p>
-              <p>We'll do this by illustrating that for some query sentence &alpha;, we will determine whether or not our KB &#8872; &alpha;</p>
-              <p>However, since it is difficult to show that, for all worlds a KB satisfies, &alpha; is also satisfied, we'll use a clever trick:</p>
-              <p class='definition'>
-                <strong>Refutation</strong> AKA proof by contradiction, is an inference strategy whereby for query sentence &alpha;, we say KB &#8872; &alpha; IFF M(KB &and; &not;&alpha;) = &empty;
-              </p>
-              <br/>
-              <p>&quot;Ugh... maths...&quot; you might remark.</p>
-              <p>But it's really quite intuitive! Let's translate refutation inference into English:</p>
-              <p class='toolkit'>
-                Refutation says, &quot;Add the *opposite* of my query to the Knowledge Base, and if it makes the KB inconsistent, then I know my query had to have been entailed in the first place!&quot;
-              </p>
-              <br/>
-              <p>Before we can use refutation, we first need to learn some inference rules.</p>
               
               <br/>
               <h3>Inference Rules</h3>
@@ -729,36 +714,270 @@
   
   ;; #1
   sent1 = (R &rArr; S)
-        = (&not; R &or; S)
   sent2 = R
   
   ; Since, in our definition for Modus Ponens,
   ; &alpha; = R and &beta; = S, then I can infer:
-  sent 3 = S
+  sent3 = S
   
   
   ;; #2
-  sent1 = ((R &rArr; S) &rArr; &not;R)
-  sent2 = (R &rArr; S)
+  sent1 = X
+  sent2 = (Y &or; &not;X)
   
-  ; Since, in our definition for Modus Ponens,
-  ; &alpha; = (R &rArr; S) and &beta; = &not;R, then I can infer:
-  sent3 = &not;R
+  sent3 = ???
 </pre>
               <br/>
               <p>The second inference rule is called Resolution:</p>
               <div class='definition'><p><strong>Resolution</strong> is an inference rule defined as:</p>
-                <p>For any two sentences X and Y with propositions x_i and y_i of the format: X = x1 &or; x2 &or; ... &or; xn; Y = y1 &or; y2 &or; ... &or; yn</p>
+                <p>For any two sentences X and Y in our KB with propositions x_i and y_i of the format: X = x1 &or; x2 &or; ... &or; xn; Y = y1 &or; y2 &or; ... &or; yn</p>
                 <p>If X and Y contain some propositional variable Z such that Z &isin; X AND &not;Z &isin; Y, then we can combine the two sentences on everything except the disagreement on Z such that:</p>
                 <div class='row'>
                   <div class='col-md-10 text-center'>
-                    <h3>x1 &or; x2 &or; Z &or; ... &or; xn; y1 &or; y2 &or; &not;Z &or; ... &or; yn</h3>
+                    <h3>x1 &or; x2 &or; Z &or; ... &or; xn;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; y1 &or; y2 &or; &not;Z &or; ... &or; yn</h3>
                     <hr>
                     <h3>x1 &or; x2 &or; ... &or; xn &or; y1 &or; y2 &or; ... &or; yn</h3>
                   </div>
                 </div>
                 <p>In other words, we're allowed to infer the sentence composed of all disjoined propositions of X and Y *except* for element Z.</p>
               </div>
+              <br/>
+              <p>Given sentences sent1 and sent2 in my KB, I can use resolution to infer sent3:</p>
+<pre class='prettyprint'>
+  ;; Assume sent1 and sent2 are in KB
+  
+  ;; #1
+  sent1 = (X &or; Y &or; &not;Z)
+  sent2 = (M &or; N &or; Z)
+  
+  ; Since sent1 and sent2 disagree on proposition Z
+  ; we can resolve the two into the third sentence:
+  sent3 = (X &or; Y &or; M &or; N)
+  
+  ;; #2
+  sent1 = (X &or; Y &or; &not;Z)
+  sent2 = Z
+  sent3 = (X &or; Y)
+  
+  ;; #3
+  sent1 = ((X &rArr; Y) &or; Z)
+  sent2 = (&not;X &rArr; Y)
+  sent3 = ???
+</pre>
+              <br/>
+              <p>There are a couple things to note about resolution:</p>
+              <p class='definition'>Resolution expects our sentences to be in the form of <strong>clauses</strong>, which are sentences composed only of disjunction between propositions.</p>
+              <p class='example'>Are the following sentences clauses? Can they be converted to clauses?</p>
+<pre class='prettyprint'>
+  ;; #1
+  (X &or; Y &or; Z)
+  
+  ;; #2
+  (X &and; Y &or; Z)
+  
+  ;; #3
+  ((X &and; Y) &rArr; Z)
+</pre>
+              <br/>
+              <p>Because we want to reason using resolution (which we've just seen operates on cluases), it would be nice to have our knowledge base in a format that consisted ONLY of clauses!</p>
+              <p class='definition'><strong>Conjunctive Normal Form (CNF)</strong> is a sentence format consisting solely of a conjunction of clauses. This is the format we'd like to have our KB in!</p>
+              <p class='example'>Are the following sentences in CNF?</p>
+<pre class='prettyprint'>
+  ;; #1
+  (X &or; Y) &and; (Z &or; X) &and; (&not;W &or; D)
+  
+  ;; #2
+  (X &rArr; Y) &and; (Z &rArr; X)
+  
+  ;; #3
+  &not;(X &and; Y) &or; Z
+</pre>
+              <br/>
+              <p class='toolkit'>Fortunately, we can convert any arbitrary knowledge base in CNF; the procedure on page 253 of the textbook describes this.</p>
+              <br/>
+              <p>Because of the assumption that our KB is in CNF, we often simply list a KB's sentences like:</p>
+<pre class='prettyprint'>
+  KB = (X &or; Y &or; Z) &and; (W &or; M) &and; (&not;X &or; W)
+  
+  ; Notationally represented as:
+  KB =
+     1. (X &or; Y &or; Z)
+     2. (W &or; M)
+     3. (&not;X &or; W)
+</pre>
+              <br/>
+              <h3>Inference Using Refutation</h3>
+              <p>OK, now that we have our knowledge base, the goal of the system is to prove certain facts about what we know.</p>
+              <p>We'll do this by illustrating that for some query sentence &alpha;, we will determine whether or not our KB &#8872; &alpha;</p>
+              <p>However, since it is difficult to show that, for all worlds a KB satisfies, &alpha; is also satisfied, we'll use a clever trick:</p>
+              <p class='definition'>
+                <strong>Refutation</strong> AKA proof by contradiction, is an inference strategy whereby for query sentence &alpha;, we say KB &#8872; &alpha; IFF M(KB &and; &not;&alpha;) = &empty;
+              </p>
+              <br/>
+              <p>&quot;Ugh... maths...&quot; you might remark.</p>
+              <p>But it's really quite intuitive! Let's translate refutation inference into English:</p>
+              <p class='toolkit'>
+                Refutation says, &quot;Add the *opposite* of my query to the Knowledge Base, and if it makes the KB inconsistent, then I know my query had to have been entailed in the first place!&quot;
+              </p>
+              <p class='example'>Are the following KB's inconsistent?</p>
+<pre class='prettyprint'>
+  ;; #1
+  KB =
+     1. &not;A
+     2. (A &or; B)
+     3. A
+     
+  ;; #2
+  KB =
+     1. &not;A
+     2. (A &or; B)
+     3. &not;B
+</pre>
+              <br/>
+              <p>Let's try a simple example with our previous raining and sidwalk-wetness stuff:</p>
+<pre class='prettyprint'>
+  Let R = whether or not it's raining
+      S = whether or not the sidewalk is wet
+      L = whether or not the sunlight is shining
+  
+  KB =
+     ; The sidewalk is wet IFF it is raining
+     1. (R &rArr; S)
+     2. (S &rArr; R)
+     
+     ; If the sun is shining, then it is not raining
+     3. (L &rArr; &not;R)
+      = (&not;L &or; &not;R)
+     
+     ; The sun is shining
+     4. L
+     
+  ; ---------------------------------------------------
+  ; KB sentences 1 - 4 represent our axioms.
+  ; Now, let's ask our query: Is the sidewalk dry?
+  ; &alpha; = &not;S
+  ; Therefore, we add &not;&alpha; = S to our KB:
+  
+     5. S
+  
+  ; ---------------------------------------------------
+  ; Now we use resolution to see if a contradiction
+  ; exists in our KB! If it does, then KB &#8872; &alpha;
+  
+     6. R [Modus Ponens: #2 and #5]
+     7. &not;L [Resolution: #3 and #6]
+     8. &empty; [Resolution: #4 and #7]
+     
+  &rarr; &larr; Contradiction: We had both L and &not;L in
+      the KB, which derived &empty;
+     
+  &there4; KB &#8872; &alpha;
+</pre>
+              <br/>
+              <p>So, since we reached a contradiction, we conclude that KB &#8872; &alpha; since we added &not;&alpha; and made it inconsistent.</p>
+              <p class='debug'>Note: We can make this assumption BECAUSE we assume the KB is consistent to begin with.</p>
+              <br/>
+              <p>That said... what does it mean if we fail to reach a contradiction using resolution and we've exhausted all of our resolution possibilities in the KB?</p>
+              <p>Well, we know nothing! We can't conclude that our KB *doesn't* entail &alpha;, we just know that resolution didn't find the answer.</p>
+              <p class='definition'>
+                For this reason, we say that resolution is <strong>refutation complete</strong>, meaning that if a contradiction exists in the KB from addition of our query &not;&alpha;, then
+                resolution will find it... but if it doesn't find a contradiction, then we've learned nothing. 
+              </p>
+              <br/>
+              <p>The other property of resolution is that it is sound:</p>
+              <p class='definition'>
+                <strong>Soundness</strong> is a resolution strategy property meaning that only entailed sentences are ever derived during use of that algorithm; i.e., no sentences are ever made up.
+              </p>
+              <br/>
+              <p>We don't want our reasoning system just making things up!</p>
+              <p>So that's resolution in a nutshell!</p>
+              
+              <br/>
+              <h3>Other Sentence Formats</h3>
+              <p>As an appendix to this section, I wanted to mention two special logical sentence formats that have special meaning for inference:</p>
+              <p class='definition'>A <strong>positive literal</strong> is any non-negated proposition in a sentence.</p>
+              <p class='definition'><strong>Horn Clauses</strong> are still clauses (disjunction of propositions) that have the additional constraint of allowing *at most* one positive literal.</p>
+              <p class='example'>Which of the following are Horn clauses?</p>
+<pre class='prettyprint'>
+  ;; #1
+  (&not;X &or; Y &or; &not;Z)
+  
+  ;; #2
+  (X &rArr; Y)
+  
+  ;; #3
+  (&not;X)
+  
+  ;; #4
+  (X &or; Y &or; Z)
+</pre>
+              <br/>
+              <p class='definition'>A <strong>definite clause</strong> has *exactly* one positive literal.</p>
+              <p class='example'>Which of the following are definite clauses?</p>
+<pre class='prettyprint'>
+  ;; #1
+  (&not;X &or; Y &or; &not;Z)
+  
+  ;; #2
+  (X &rArr; Y)
+  
+  ;; #3
+  (&not;X)
+  
+  ;; #4
+  (X &or; Y &or; Z)
+</pre>
+              <br/>
+              <p>The significance of these forms are discussed on page 256 of the book and can be used for efficient inference algorithms.</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='homework2' class='scrollspy-element' scrollspy-title='Homework 2'></div>
+            <h1>Homework 2</h1>
+            <div>
+              <p>We'll save the last 5 - 10 minutes of discussion going over HW2 here!</p>
+              <p>Any time left will be devoted to practice, below.</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='practice' class='scrollspy-element' scrollspy-title='Practice'></div>
+            <h1>Practice</h1>
+            <div>
+              <p>Let's try out some of the propositional logic stuff we learned today!</p>
+              <br/>
+              <p class='example'>For variables P and Q, show, using truth tables, that the following sentences are equivalent:</p>
+<pre class='prettyprint'>
+  P &rArr; &not;Q
+  Q &rArr; &not;P
+</pre>
+              <br/>
+              <p class='example'>Use Boolean logic properties to convert the following sentence into CNF:</p>
+<pre class='prettyprint'>
+  ;; #1
+  &not;(X &or; Y) &and; Z
+  
+  ;; #2
+  (X &and; Y) &rArr; Z
+  
+  ;; #3
+  (X &or; Y) &rArr; Z
+</pre>
+              <br/>
+              <p class='example'>Perform resolution on the following KB to answer the question as to whether KB &#8872; &alpha;</p>
+<pre class='prettyprint'>
+  &alpha; = &not;X &and; Y
+  &not;&alpha; = X &or; &not;Y
+  
+  KB =
+     1. X &or; Z &or; Y
+     2. &not;Z &or; W &or; X
+     3. &not;X &or; W
+     4. &not;W
+</pre>
             </div>
             <hr/>
             
