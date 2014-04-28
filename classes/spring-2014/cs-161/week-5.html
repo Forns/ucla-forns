@@ -1,0 +1,1031 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Andrew Forney - UCLA CS</title>
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/magic-bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/main.css" rel="stylesheet" type="text/css">
+    <script src="../../../js/lib/jquery-2.0.3.min.js"></script>
+    <script src="../../../js/lib/bootstrap.min.js"></script>
+    <script src="../../../js/lib/expanding.js"></script>
+    <script src="../../../js/display/general/general-display.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+  </head>
+  
+  <body data-spy="scroll" data-target="#scrollspy">
+    
+    <!-- BEGIN WRAP -->
+    <div id="wrap">
+      
+      <!-- BEGIN NAVIGATION -->
+      <nav class='navbar navbar-default' role='navigation'>
+        <div class='nav-accent'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-12'>
+              <div class='navbar-header'>
+                <button class='navbar-toggle' type='button' data-toggle='collapse' data-target='.navbar-main-collapse'>
+                  <span class='sr-only'>Toggle Navigation</span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                </button>
+                <a class='navbar-brand' href='/~forns/'>
+                  <span id='brand-text'>
+                    Andrew Forney
+                  </span>
+                </a>
+              </div>
+              
+              <div id='nav-main' class='collapse navbar-collapse navbar-main-collapse'>
+                <ul class='nav navbar-nav navbar-right'>
+                  
+                  <li>
+                    <a href='/~forns/about.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-user'></span>
+                      </div>
+                      <p class='text-center'>About</p>
+                    </a>
+                  </li>
+                  
+                  <li class='active'>
+                    <a href='/~forns/classes.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-book'></span>
+                      </div>
+                      <p class='text-center'>Classes</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/contact.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-comment'></span>
+                      </div>
+                      <p class='text-center'>Contact</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/publications.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-file'></span>
+                      </div>
+                      <p class='text-center'>Publications</p>
+                    </a>
+                  </li>
+                  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <!-- END NAVIGATION -->
+      
+      <!-- BEGIN MAIN CONTENT -->
+      <div id="main-content" class="container">
+        <div class="row">
+          
+          <!-- BEGIN SCROLLSPY -->
+          <div class='col-md-2 hidden-sm hidden-xs'>
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+              <ul id='scrollspy' class="nav bs-sidenav">
+              </ul>
+            </div>
+          </div>
+          <!-- END SCROLLSPY -->
+          
+          <!-- BEGIN PRESENTATION CONTENT -->
+          <div class='col-md-10 presentation-content' role='main'>
+            
+            <ol class="breadcrumb hidden-print">
+              <li><a href="../../../classes.html">Classes</a></li>
+              <li><a href="./cs-161.html">Spring14 CS161</a></li>
+              <li class="active">Week 5</li>
+            </ol>
+            
+            <div id='firstOrderLogic' class='scrollspy-element' scrollspy-title='First Order Logic'></div>
+            <h1>First Order Logic</h1>
+            <div>
+              <p>Last week we looked at Propositional Logic and the knowledge bases (KBs) we used to reason about our intelligent agents' environments.</p>
+              <p>These KBs expressed its knowledge of facts using propositional, Boolean variables and logical operators that connected them to make sentences.</p>
+              <p>Whenever we wanted to express a fact or atom of knowledge, we would then create a new propositional variable:</p>
+<pre class='prettyprint'>
+  ; Propositional Variables:
+  Let R = Whether or not it is raining,
+      L = Whether or not the sun is shining,
+      S = Whether or not the sidewalk is wet,
+  ...
+</pre>
+              <br/>
+              <p>Once we had expressed some relationships between our variables (e.g., "if it is raining, then the sidewalk will be wet": R &rArr; S) we were allowed us to ask simple questions of our KB.</p>
+              <p>These questions were still propositional sentences like: &alpha; = &quot;Is the sidewalk wet?&quot;</p>
+              <p>Seemed pretty nifty! So what does First Order Logic do for us? Well consider the following facts we might want to express in our KB:</p>
+<pre class='prettyprint'>
+  Let P = Whether or not Andrew likes Pasta,
+      F = Whether or not Andrew likes Firefly,
+      R = Whether or not the class likes Andrew's references,
+  ...
+</pre>
+              <p class='question' name='fol-q0'>What do we notice about the format of these propositional variables?</p>
+              <p class='answer' name='fol-q0'>They all have the same format of X likes Y!</p>
+              <br/>
+              <p>The idea of abstraction is difficult for propositional logic because with each new fact (even of a similar format to others), I need to create a new variable!</p>
+              <p>The other issue with propositional variables is with handling facts I need to model that I don't necessarily know at &quot;compile time&quot; (i.e., when I'm making my variables).</p>
+              <p>So, First Order Logic offers some solutions to these horrible quandries!</p>
+              
+              <br/>
+              <h3>First Order Logic Syntax</h3>
+              <p>Just as propositional logic had syntax and semantics, so does First Order Logic build upon them.</p>
+              <p class='definition'><strong>Objects</strong> are simply nouns and noun phrases that refer to... well... pretty much any noun our KB wants to talk about.</p>
+<pre class='prettyprint'>
+  ; Object Examples:
+  People
+  Places
+  The Republic of Forns
+  The Wet Sidewalk
+  Rain
+  Numbers
+  ...
+</pre>
+              <br/>
+              <p class='definition'><strong>Relations</strong> are simply verbs and verb phrases that establish descriptions of (unary relations) or relationships between (n-ary relations) objects.</p>
+<pre class='prettyprint'>
+  ; Unary Relations in format:
+  ; relation (object)
+  ; AKA predicates / properties
+  primeNumber(3)
+  red(balloon)
+  utopia(The Republic of Forns)
+  usesOverheadProjector(Dyer)
+  
+  ; Binary Relations in format:
+  ; relation(obj1, obj2)
+  greaterThan(5, 3)
+  teaches(Andrew, CS161)
+  likes(Andrew, pasta)
+</pre>
+              <br/>
+              <p>Relations like the above are called <strong>atomic sentences</strong> because they express a single truth in our KB.</p>
+              <p class='definition'>We hold that atomic sentences in the KB are <strong>true</strong> and are used as axioms for the objects on which they establish relationships.</p>
+              <p class='definition'>Some relations have a unique output for a given input, and are termed <strong>functions</strong></p>
+<pre class='prettyprint'>
+  ; Functions are relations that map
+  ; inputs to unique output
+  fatherOf(Andrew) ; I have one father
+  firstWordOf("This sentence") ; One first word
+  rulerOfAndDuring(England, 1200) ; King John
+</pre>
+              <br/>
+              <p class='definition'><strong>Connectives</strong> are the same logical operators we used in propositional logic and are used to create FOL sentences.</p>
+<pre class='prettyprint'>
+  ; Connectives (&and;, &or;, &not;, &rArr;)
+  &not;hasSiblings(Andrew)
+  &not;isFatherOf(Sean Connery, Andrew) ;_;
+  greaterThan(5, 3) &and; greaterThan(3, 1)
+  isRoyal(Queen Elizabeth) &or; &not;isRoyal(Lorde)
+</pre>
+              <br/>
+              <p class='definition'><strong>Complex Sentences</strong> are any FOL sentence that uses logical connectives or requires a function evaluation to ground an object.</p>
+<pre class='prettyprint'>
+  ; Complex Sentences
+  (any of the above examples)
+  &not;adjacentTo(49thState(USA), Russia)
+</pre>
+              <p>But now comes the truly expressive power of First Order Logic: the capacity to have relations with variable placeholders for objects.</p>
+              <p class='definition'><strong>Variables</strong> are placeholders for objects in a given relation that can be bound during inference. They are used to establish general facts and rules.</p>
+              <br/>
+              <p>However, since FOL deals with objects, we want some means of expressing the notion of object collections (rather than listing individual objects and combining by some operator)!</p>
+              <p>For this reason, we never use variables on their own, but instead always accompany them with a quantifier.</p>
+              <p class='definition'>A <strong>quantifier</strong> determines the truth-scope of one of our FOL sentences and its variables.</p>
+              <p class='definition'>The <strong>universal quantifier (&forall;)</strong> says that a given sentence it precedes is true &quot;for all cases in which a matching object can be found&quot;.</p>
+<pre class='prettyprint'>
+  ; Philosophy 101
+  ; For variable x:
+  &forall;x person(x) &rArr; mortal(x)
+  person(Socrates)
+  
+  ; ... you know the rest :)
+</pre>
+              <br/>
+              <p>So, the above quantification reads, &quot;For all x, if x is a person, then x is mortal.&quot;</p>
+              <p>You can think of universal quantifiers as being used to express a conjunction of sentences such that:</p>
+<pre class='prettyprint'>
+  &forall;x relation(...x...) &rarr; relation(...term1...) &and; relation(...term2...) &and; relation(...term3...) &and; ...
+</pre>
+              <br/>
+              <p class='definition'>Because we'll often mingle objects and variables, a term that has ONLY objects (and no variables) is called a <strong>ground term</strong>.</p>
+<pre class='prettyprint'>
+  ; Ground vs. Not Ground
+  person(Socrates) ; is a ground term
+  &exist;x brother(John Snow, x) ; is NOT a ground term (variable x)
+</pre>
+              <p class='definition'>The <strong>existential quantifier (&exist;)</strong> says that a given sentence it precedes is true &quot;for at least one applicable object&quot; (not necessarily all).</p>
+<pre class='prettyprint'>
+  ; For variable x:
+  &exist;x likes(x, Nickelback)
+  ; "There exists an x such that x likes Nickelback"
+  ; (well... maybe)
+</pre>
+              <br/>
+              <p>You can think of existential quantifiers as being used to express a disjunction of sentences such that:</p>
+<pre class='prettyprint'>
+  &exist;x relation(...x...) &rarr; relation(...term1...) &or; relation(...term2...) &or; relation(...term3...) &or; ...
+</pre>
+              <br/>
+              <p class='definition'><strong>Nested quantifiers</strong> can quantify multiple variables, and can either be homogenous (same quantifer) or heterogenous (different quantifiers).</p>
+<pre class='prettyprint'>
+  ; Homogenous nested quantifier
+  &exist;x, y marriedTo(x, y)
+  = &exist;x &exist;y marriedTo(x, y)
+  ; "There exist an x and a y such that x is married to y"
+  
+  ; Heterogenous nested quantifier examples:
+  &forall;x &exist;y loves(x, y)
+  ; "Everybody loves somebody"
+  
+  &forall;y &exist;x loves(x, y)
+  ; "There is someone who is loved by everyone"
+</pre>
+              <br/>
+              <p>One important thing to note is that ORDER MATTERS with nested quantification!</p>
+              <p>Furthermore, we observe that position within a relation is relevant as well! Just as a function expects arguments input in a certain order, so do relations.</p>
+              <p class='definition'>The notion of <strong>duality</strong> gives us rules for negating sentences with quantification such that:</p>
+<pre class='prettyprint'>
+  ; For variable x and relation R:
+  
+  &exist;x R &hArr; &not;&forall;x &not;R  &equiv;  &forall;x R &hArr; &not;&exist;x &not;R
+</pre>
+              <br/>
+              <p>
+                One way to think about duality is that if we're negating the universal quantifier, we're saying, &quot;Not all x have relation R,&quot; which is equivalent to saying, 
+                &quot;At least some x have relation R.&quot; (the first of the two expressions above)
+              </p>
+              <p>
+                Similarly, by negating the existential quantifier, we're saying &quot;There isn't even one x without relation R,&quot; which is equivalent to saying,
+                &quot;All x have relation R.&quot; (the second of the two expressions above)
+              </p>
+              <p class='example'>Express the following sentence as an existential quantification.</p>
+<pre class='prettyprint'>
+  &not; &forall;x, y (friends(x, y) &rArr; knows(x, y))
+</pre>
+              <br/>
+              <p class='definition'>The <strong>equality</strong> symbol signifies that two terms refer to the same object.</p>
+<pre class='prettyprint'>
+  Father(Andrew) = Mark
+  
+  ; Can even use to denote uniqueness
+  Father(Andrew) = &not;Father(Bob)
+  ; Meaning that Andrew and Bob are not siblings
+  ; (they don't have the same father)
+</pre>
+              
+              <br/>
+              <h3>First Order Logic Semantics</h3>
+              <p>Now that we know the syntax of FOL, we want to again move towards the goal of creating KBs with FOL sentences, and then perform inference using our new tricks!</p>
+              <p>The first issue we have to deal with is our use of variables in FOL relations, which exibit &quot;templates&quot; to ground objects within.</p>
+              <p>For example, we may have the template for knowledge that:</p>
+<pre class='prettyprint'>
+  &forall;x, y (friends(x, y) &rArr; knows(x, y))
+</pre>
+              <br/>
+              <p>...but if we want to express that Andrew and Bob are friends, we need a way to <strong>ground</strong> our values for x and y.</p>
+              <div class='definition'><p><strong>Unification</strong> is the process of binding variables to values such that for two sentences &alpha; and &beta; and unifier &Theta;, we have:</p><br/>
+                <h3>&alpha;&Theta; = &beta;&Theta;</h3>
+              </div>
+              <br/>
+              <p>Unifying variables to values allows us to perform inference on ground terms and take our general knowledge rules and apply them to our intelligent agent's environment.</p>
+              <p>The gist being that we want to make &quot;different&quot; logical expressions look equivalent when we want to move from general statements to specific ones.</p>
+              <p>The syntax for unification is as follows (NB: sometimes commas and semicolons are used to separate clauses in a CNF KB (as seen below)):</p>
+<pre class='prettyprint'>
+  ; Unification syntax:
+  &Theta; = { var1/object1, var2/object2, ... }
+  ; Which says, "var1 is unified to object1, var2 is unified to object2, ..."
+  
+  ; Example 1:
+  &forall;x person(x) &rArr; mortal(x); person(Socrates)
+  &Theta; = { x/Socrates }
+  
+  ; Example 2:
+  &forall;x, y parent(x, fatherOf(y)) &rArr; grandparent(x, y); &exist;z parent(Carter, z)
+  ; "For all x and y, if x is the parent of the father of y, then x is the grandparent of y."
+  ; "Also, there exists some z such that Carter is the parent of z."
+  &Theta; = { x/Carter, z/motherOf(Stewie) }
+  
+  ; Example 3:
+  Knows(John, x); Knows(y, Bill)
+  &Theta; = { x/Bill, y/John }
+  
+  ; Example 4:
+  Knows(John, x); Knows(x, Bill)
+  &Theta; = CANNOT UNIFY
+  ; (x would need to be 2 different values to work)
+  ; Solution: give one of the x's a unique name (see below)
+</pre>
+              <br/>
+              <p>That said, the rules for unifying universally quantified sentences are different than unifying those of existentially quantified sentences.</p>
+              <p>Because universal quantification describes a general rule true for all variables is lists, existential quantification needs but one instantiation of its variables.</p>
+              <p>So, let's start by looking at universal instantiation and then compare it to existential.</p>
+              <div class='definition'><p><strong>Universal Instantiation</strong> says we can infer any sentence obtained by substituting a ground term for a variable in the sentence, expressed:</p>
+                <div class='row'>
+                  <div class='col-md-3 text-center'>
+                    <h3>&forall;v &alpha;</h3>
+                    <hr>
+                    <h3>SUBST( { v/g }, &alpha; )</h3>
+                  </div>
+                </div>
+                <br/>
+                <p>...which simply reads, &quot;For all instantiations of some variable v in &alpha;, unify v on some ground term g in &alpha; and add that to the Knowledge Base.&quot;</p>
+              </div>
+              <p class='debug'>NOTE: If we perform a substitution specified above, we remove the quantifier from the sentence, because it now represents a ground term.</p>
+              <p class='debug'>
+                Furthermore, because our KBs are in CNF, we can list clauses in our KBs with universal quantifiers dropped BUT NOT with existential quantifiers dropped, simply
+                because universal quantification is assumed in clauses (i.e., our clauses are general truths).
+              </p>
+              <br/>
+              <p>Instantiation for existentially quantified sentences is slightly more involved, but also somewhat intuitive.</p>
+              <p>We add the constraint that unified existentially quantified variables must be uniquely named (i.e., appearing nowhere else in the KB).</p>
+              <p class='definition'>The process of unifying on an existentially quantified variable is a special case of a process known as <strong>Skolemization.</strong></p>
+              <p class='definition'>A <strong>Skolem constant</strong> is a new, unique name given to our term that appears no where else in the KB.</p>
+              <br/>
+              <p>Why do we care that existential quantification has to unify on a Skolem constant? The book puts it nicely when it says:</p>
+              <blockquote>
+                Whereas Universal Instantiation can be applied many times to produce many different consequences, Existential Instantiation can be applied once, and then the existentially quantified
+                sentence can be discarded. For example, we no longer need &exist;x Kill(x, Victim) once we have added the sentence Kill(Murderer, Victim).
+              </blockquote>
+              <br/>
+              <p>An example Skolemization might use the functional notation such that:</p>
+<pre class='prettyprint'>
+  ; Example 1:
+  
+  &forall;x English(x) &rArr; &exist;y [Tea(y) &and; Likes(x, y)]
+  
+  ; Since &forall;x applies to the entire sentence, and we need a
+  ; unique name for y (an existentially quantified variable), we
+  ; simply replace all instances of y with a Skolem *function*, F(x):
+  
+  English(x) &rArr; [Tea(F(x)) &and; Likes(x, F(x))]
+  ; Remember to drop the quantifiers after!
+
+  
+  ; Example 2:
+  
+  &exist;y Dog(y) &and; Owns(Jack, y)
+  
+  ; Since we DO NOT have a universal quantifier that applies to the
+  ; whole sentence, we need not Skolemize as a function of some
+  ; other variable. So instead, we'll replace y above with some Skolem
+  ; *constant* name that appears nowhere else in the KB, let's say D:
+  
+  Dog(D) &and; Owns(Jack, D)
+  ; Remember to drop the quantifiers after!
+</pre>
+              <br/>
+              <p>As such, our new unification rule for existentially quantified sentences is:</p>
+              <div class='definition'><p><strong>Existential Instantiation</strong> says we can infer any sentence obtained by substituting a Skolem constant for a variable in the sentence, expressed:</p>
+                <div class='row'>
+                  <div class='col-md-3 text-center'>
+                    <h3>&exist;v &alpha;</h3>
+                    <hr>
+                    <h3>SUBST( { v/k }, &alpha; )</h3>
+                  </div>
+                </div>
+                <br/>
+                <p>...where k is a Skolem constant that appears no where else in the KB.</p>
+                <p>The rule simply reads, &quot;There exists some variable v in &alpha;, such that k satisfies v's place in &alpha;; now add that to the Knowledge Base.&quot;</p>
+              </div>
+              <br/>
+              <p class='definition'>The process by which we turn our templated FOL KB into ground terms using unification and instantiation is known as <strong>propositionalization.</strong></p>
+              <br/>
+              <p>This is an intuitive definition because we see that by providing concrete instantiations of our general rules, we're essentially transforming our FOL KB into a grounded propositional one!</p>
+              <p>This process of propositionalization is powerful because the FOL KB (with infinite generative capacity) can now benefit from the inference capacities we talked about for propositional KBs.</p>
+<pre class='prettyprint'>
+  ; Example KB
+  KB =
+     1. (King(x) &and; Greedy(x)) &rArr; Evil(x)
+     2. King(John)
+     3. Greedy(John)
+     
+  ; Then, using universal instantiation (assumed due to clauses),
+  ; we can add the following sentence:
+     4. (King(John) &and; Greedy(John)) &rArr; Evil(John) [&Theta; = x/John] 
+</pre>
+              <br/>
+              <p>Notice how examples like the above turn our FOL KB into what is essentially a propositional one (I could have just had propositional variables like K = Whether or not John is a king...)</p>
+              <p>There's one problem though...</p>
+              <p class='definition'>Every statement entailed by a FOL KB is entailed by (a finite subset of) the PL KB that is the result of propositionalizing the FOL one.</p>
+              <p class='definition'><strong>Decidability</strong> is a property of reasoning systems that asks if any arbitrary sentence can be shown to be entailed by the KB or not.</p>
+              <br/>
+              <p>This concept is nice and an expected application, but throws one wrench in the gears: how do we know how many nested terms were used to propositionalize a sentence from our FOL KB?</p>
+              <p>What if I had a bunch of generated sentences such that:</p>
+<pre class='prettyprint'>
+  &forall;x Father(x) &rArr; ...
+  Father(John)
+  
+  ; Then I could generate symbols:
+  Father(Father(John)) &rArr; ...
+  Father(Father(Father(John))) &rArr; ...
+  Father(Father(Father(Father(John)))) &rArr; ...
+  ...
+  ; Where do I stop?!
+</pre>
+              <p>If our FOL KB has a finite propositionalization (i.e., it propositionalizes to a finite number of unified sentences), then entailment is decidable.</p>
+              <p>
+                However, due to the infinite generative capacity of FOL, we might not be capable of propositionalizing to some finite number of unified sentences, so entailment is said to be
+                <strong>semi-decidable</strong>
+              </p>
+              <p class='definition'>
+                The property of <strong>semidecidability</strong> says that our FOL inference algorithms can determine whether a sentence is entailed by our FOL KB, but it cannot also say that 
+                every non-entailed sentence it encounters is not entailed by the KB.
+              </p>
+              <p class='example'>
+                There's a way to get around this possible infinite symbol generation (although the algorithm will still be semi-decidable) 
+                that is akin to a tactic we used for limiting DFS. Can you think of it?
+              </p>
+              <br/>
+              <p>That said, let's look at our refutation strategy from PL KBs and see how they work with FOL KBs.</p>
+              
+              <br/>
+              <h3>First Order Inference</h3>
+              <p>The rules of FOL inference are not very different from those of propositional logic (due to our propositionalization of a FOL KB).</p>
+              <p>We'll cover our two favorites from PL now:</p>
+              <div class='definition'><p><strong>Generalized Modus Ponens</strong> is an inference rule defined as:</p>
+                <p>For any clauses in the KB p1', p2', ..., pn' and conjoined variable clauses (p1 &and; p2 &and; p3 &and; ...) matching the first set of clauses, then:</p>
+                <div class='row'>
+                  <div class='col-md-10 text-center'>
+                    <h3>p1' &and; p2' &and; ... &and; pn'; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (p1 &and; p2 &and; ... &and; pn) &rArr; q</h3>
+                    <hr>
+                    <h3>SUBST(&Theta;, q)</h3>
+                  </div>
+                </div>
+                <p>In other words, we're allowed to infer q if we can find a unification &Theta; that matches each pn in the implication's conditional to a term pn'.</p>
+              </div>
+              <br/>
+              <p>Generalized Modus Ponens provides a means of propositionalizing the conditions with matching terms in order to infer q.</p>
+<pre class='prettyprint'>
+  ; Example KB 1
+  KB =
+     1. &forall;x (King(x) &and; Greedy(x)) &rArr; Evil(x)
+     2. King(John)
+     3. Greedy(John)
+  
+  ; Generalized Modus Ponens allows us to infer:
+     4. Evil(John) [1, 2, 3; &Theta; = { x/John }]
+  ; Hidden propositionalization using unifier &Theta;:
+  ; (King(John) &and; Greedy(John)) &rArr; Evil(John)
+     
+  ; Example KB 2
+  KB =
+     1. &forall;x (King(x) &and; Greedy(x)) &rArr; Evil(x)
+     2. King(John)
+     3. &forall;y Greedy(y)
+     
+  ; Generalized Modus Ponens allows us to infer:
+     4. Evil(John) [1, 2, 3; &Theta; = { x/John, y/John }]
+  ; Hidden propositionalization using unifier &Theta;:
+  ; Greedy(John)
+  ; (King(John) &and; Greedy(John)) &rArr; Evil(John)
+</pre>
+              <br/>
+              <p>
+                We say that Generalized Modus Ponens is <strong>lifted</strong> because it takes Modus Ponens (like in Propositional Logic), which consists solely of ground terms, and &quot;lifts&quot;
+                it up to FOL whereby we need only make unifications where necessary for inference.
+              </p>
+              <br/>
+              <p>So far, we haven't touched upon the format of our FOL KB clauses, but ideally, for resolution, we'd like to keep our KB in conjunctive normal form.</p>
+              <p>As such, it pays to know how to turn any arbitrary sentence into one that can be expressed in CNF.</p>
+              <p>For FOL, this is a bit trickier than the few logical operator manipulations we saw for PL, and consists of the steps on page 346 of your text (which you should review!)</p>
+              <p>The general steps are:</p>
+              <ol class='indent-1'>
+                <li><p>Remove implications (get sentences with only &not;, &and;, and &or;)</p></li>
+                <li><p>Push negations in using DeMorgan's law and quantifier duality</p></li>
+                <li><p>Remove quantifiers, remembering to use Skolemization where appropriate:<br/>&forall;x (&exist;y foo(y) &or; bar(x, y)) &rarr; &forall;x foo(F(X)) &or; bar(x, F(x))</p></li>
+                <li><p>Drop universal quantifiers</p></li>
+              </ol>
+              
+              <br/>
+              <div class='definition'><p><strong>FOL Resolution</strong> is only different from PL resolution such that we unify the resultant clause added to the KB:</p>
+                <p>For any two sentences X and Y in our KB with objects and relations x_i and y_i of the format: X = x1 &or; x2 &or; ... &or; xn; Y = y1 &or; y2 &or; ... &or; yn</p>
+                <p>If X and Y contain some relation Z such that Z &isin; X AND &not;Z &isin; Y, then we can combine the two sentences on everything except the disagreement on Z such that:</p>
+                <div class='row'>
+                  <div class='col-md-10 text-center'>
+                    <h3>x1 &or; x2 &or; Z &or; ... &or; xn;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; y1 &or; y2 &or; &not;Z &or; ... &or; yn</h3>
+                    <hr>
+                    <h3>SUBST(&Theta;, x1 &or; x2 &or; ... &or; xn &or; y1 &or; y2 &or; ... &or; yn)</h3>
+                  </div>
+                </div>
+                <p>In other words, we're allowed to infer the sentence composed of all disjoined relations in X and Y *except* for element Z (and unify that result on &Theta;).</p>
+              </div>
+<pre class='prettyprint'>
+  ; Example resolution:
+  KB =
+     1. &not;Owns(x, D) &or; AnimalLover(x)
+     2. Owns(Jack, D)
+     3. Dog(D)
+     
+  ; Using resolution I can infer:
+     4. AnimalLover(Jack) [1, 2, &Theta; = { x/Jack }]
+</pre>
+              <br/>
+              <h3>First Order Resolution Inference</h3>
+              <p>So now that we have the components, let's get back to our objective: running inference on our KB!</p>
+              <p>FOL resolution is similar to PL (requires a CNF KB) (PS. I've been wanting to get all of those initialisms in one sentence since I started writing this article; maximum confusion: success!)</p>
+              <p class='definition'>
+                FOL resolution is sound (guarantees any derived clause is entailed by KB) and refutation complete (if a contradiction is to exist in the KB, it will find it), though semi-decidable.
+              </p>
+              <br/>
+              <p>We'll perform the same steps that we used for PL inference proofs: proof by contradiction / refutation!</p>
+              <ol class='indent-1'>
+                <li><p>Convert KB to CNF if it isn't already.</p></li>
+                <li><p>Negate the query sentence, &alpha;, and add that negation to the KB.</p></li>
+                <li><p>Apply resolution to pairs of (unifiable) clauses, and add those resultant clauses to the KB</p></li>
+                <li><p>Repeat until either a contradiction is reached, or we're out of clauses to resolve!</p></li>
+              </ol>
+              <br/>
+              <p>Let's do one giant example where we start from the very start and end with a query answered!</p>
+              <div class='example'><p>Read the following story and perform the following steps:</p>
+                <ol class='indent-1'>
+                  <li><p>Convert the story into FOL sentences.</p></li>
+                  <li><p>Convert the KB into CNF.</p></li>
+                  <li><p>Use lifted inference tactics to answer the scandalous query question: Did curiosity kill the cat?</p></li>
+                </ol>
+              </div>
+              <ol class='indent-1'>
+                <li><p>There exists a dog that Jack owns.</p></li>
+                <li><p>It is well known that if anyone owns some dog, then they are an animal lover.</p></li>
+                <li><p>It is also known that if anyone is an animal lover, then if that person ever encounters any animal, they would not kill that animal.</p></li>
+                <li><p>Either Jack killed Tuna or Curiosity killed Tuna.</p></li>
+                <li><p>Oh yeah... and Tuna is a cat.</p></li>
+                <li><p>Clearly for all entities that are cats, those entities are also animals.</p></li>
+              </ol>
+              <p>&alpha; = Did Curiosity kill the cat?</p>
+              <br/>
+<pre class='prettyprint'>
+  ; We'll start by converting the sentences from English to FOL
+  ; HINT: Focus on quantifier-denoting words like "any," "exist,"
+  ; "some," and "all"
+  
+  ; (1) There exists a dog that Jack owns.
+  1. &exist;x Dog(x) &and; Owns(Jack, x)
+  
+  ; (2) It is well known that if anyone owns some dog, then they are an animal lover.
+  2. &forall;x [&exist;y Owns(x, y) &and; Dog(y)] &rArr; AnimalLover(x)
+  
+  ; (3) It is also known that if anyone is an animal lover, 
+  ; then if that person ever encounters any animal, they would not kill that animal.
+  3. &forall;x AnimalLover(x) &rArr; [&forall;y Animal(y) &rArr; &not;Kills(x, y)]
+  
+  ; (4) Either Jack killed Tuna or Curiosity killed Tuna.
+  4. Kills(Jack, Tuna) &or; Kills(Curiosity, Tuna)
+  
+  ; (5) Oh yeah... and Tuna is a cat.
+  5. Cat(Tuna)
+  
+  ; (6) Clearly for all entities that are cats, those entities are also animals
+  6. &forall;x Cat(x) &rArr; Animal(x)
+  
+  ; &alpha; = Did Curiosity kill the cat?
+  &alpha; = Kills(Curiosity, Tuna)
+</pre>
+              <br/>
+              <p>Great! Now we've got our FOL sentences, but our KB isn't in CNF yet... let's convert our sentences to a usable CNF now!</p>
+<pre class='prettyprint'>
+  1. &exist;x Dog(x) &and; Owns(Jack, x)
+  ; Firstly, we notice that we have an existential quantifier, so to
+  ; get rid of it, we'll Skolemize and choose the unique symbol D
+    
+    Dog(D) &and; Owns(Jack, D)
+  
+  ; Next, we notice this actually consists of two clauses conjoined
+  ; so we'll split it into two sentences in our KB
+  
+    KB1. Dog(D)
+    KB2. Owns(Jack, D)
+    
+</pre>
+<pre class='prettyprint'>  
+  2. &forall;x [&exist;y Owns(x, y) &and; Dog(y)] &rArr; AnimalLover(x)
+  ; Firstly, we'll get rid of that pesky implication arrow and convert
+  ; everything into &and; and &or; statements:
+    
+    &forall;x &not;[&exist;y Owns(x, y) &and; Dog(y)] &or; AnimalLover(x)
+  = &forall;x &forall;y &not;Owns(x, y) &or; &not;Dog(y) &or; AnimalLover(x)
+  
+  ; Since the existential quantification on y got negated to a universal
+  ; quantification, we don't have to Skolemize. Furthermore, we now have
+  ; a clause! So we can just drop the universal quantification, giving us:
+  
+    KB3. &not;Owns(x, y) &or; &not;Dog(y) &or; AnimalLover(x)
+    
+</pre>
+<pre class='prettyprint'>  
+  3. &forall;x AnimalLover(x) &rArr; [&forall;y Animal(y) &rArr; &not;Kills(x, y)]
+  ; Let's start off by unpacking those implication arrows!
+  
+    &forall;x AnimalLover(x) &rArr; [&forall;y &not;Animal(y) &or; &not;Kills(x, y)]
+  = &forall;x &not;AnimalLover(x) &or; [&forall;y &not;Animal(y) &or; &not;Kills(x, y)]
+  = &forall;x &forall;y &not;AnimalLover(x) &or; &not;Animal(y) &or; &not;Kills(x, y)
+  
+  ; We've got ourselves a clause! Let's drop those universal quantifiers to get:
+  
+    KB4. &not;AnimalLover(x) &or; &not;Animal(y) &or; &not;Kills(x, y)
+    
+</pre>
+<pre class='prettyprint'>    
+  4. Kills(Jack, Tuna) &or; Kills(Curiosity, Tuna)
+  ; That's already a clause! Nice!
+  
+    KB5. Kills(Jack, Tuna) &or; Kills(Curiosity, Tuna)
+    
+</pre>
+<pre class='prettyprint'>    
+  5. Cat(Tuna)
+  ; Also already a clause! Go Tuna!
+  
+    KB6. Cat(Tuna)
+    
+</pre>
+<pre class='prettyprint'>    
+  6. &forall;x Cat(x) &rArr; Animal(x)
+  ; Get rid of that implication arrow!
+  
+    &forall;x &not;Cat(x) &or; Animal(x)
+  
+  ; Drop the universal quantifier, and we have our clause!
+  
+    KB7. &not;Cat(x) &or; Animal(x)
+    
+</pre>
+<pre class='prettyprint'>  
+  &alpha; = Kills(Curiosity, Tuna)
+  ; For our query, we'll need to add &not;&alpha; to the KB, so:
+  &not;&alpha; = &not;Kills(Curiosity, Tuna)
+  ; ...which is also a clause! Add it in!
+  
+    KB8. &not;Kills(Curiosity, Tuna)
+    
+</pre>
+              <br/>
+              <p>Now that we have our KB in CNF, we can start performing resolution!</p>
+              <p>Let's gather all of our KB clauses and start:</p>
+<pre class='prettyprint'>
+  KB =
+     1. Dog(D)
+     2. Owns(Jack, D)
+     3. &not;Owns(x, y) &or; &not;Dog(y) &or; AnimalLover(x)
+     4. &not;AnimalLover(x) &or; &not;Animal(y) &or; &not;Kills(x, y)
+     5. Kills(Jack, Tuna) &or; Kills(Curiosity, Tuna)
+     6. Cat(Tuna)
+     7. &not;Cat(x) &or; Animal(x)
+     8. &not;Kills(Curiosity, Tuna)
+     
+  ; Begin inference!
+  
+     9.  &not;Owns(x, D) &or; AnimalLover(x) [1, 3, &Theta; = { x/D }]
+     10. AnimalLover(Jack) [2, 9, &Theta; = { x/Jack }]
+     11. Animal(Tuna) [6, 7, &Theta; = { x/Tuna }]
+     12. &not;AnimalLover(x) &or; &not;Kills(x, Tuna) [4, 11, &Theta; = { y/Tuna }]
+     13. &not;Kills(Jack, Tuna) [10, 12, &Theta; = { x/Jack }]
+     14. Kills(Curiosity, Tuna) [5, 8]
+     &rarr; &larr; Contradiction! [8, 14]
+     
+  &there4; KB &#8872; &alpha;
+  
+</pre>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='inferenceStrats' class='scrollspy-element' scrollspy-title='Inference Strategies'></div>
+            <h1>Inference Strategies</h1>
+            <div>
+              <p>Remember when we talked about definite clauses with propositional logic?</p>
+              <p>Well, let's dive into why they're neat (for both propositional and FOL)!</p>
+              <p>As a reminder:</p>
+              <p class='definition'><strong>Definite clauses</strong> are clauses with *exactly* one positive literal.</p>
+              <br/>
+              <p>Here are two really cool properties about definite clauses:</p>
+              <p class='definition'>Any definite clause can be turned into an implication statement:</p>
+<pre class='prettyprint'>
+  ; #1
+  (&not;X &or; Y)
+  = (X &rArr; Y)
+  
+  ; #2
+  (&not;Owns(x, y) &or; &not;Dog(y) &or; AnimalLover(x))
+  = ((Owns(x, y) &and; Dog(y)) &rArr; AnimalLover(x))
+</pre>
+              <br/>
+              <p>So, naturally, this means that if our entire KB consisted of definite clauses, then we could perform Modus Ponens over and over for our inference strategy!</p>
+              <p class='definition'>Resolving on two definite clauses always produces another definite clause:</p>
+<pre class='prettyprint'>
+  ; #1
+  sent1 = (&not;X &or; Y)
+  sent2 = (&not;Z &or; X)
+  ; Allows us to infer:
+  sent3 = (&not;Z &or; Y)
+  
+  ; #2
+  sent1 = (Y)
+  sent2 = (&not;Y &or; X)
+  ; Allows us to infer:
+  sent3 = (X)
+</pre>
+              <br/>
+              <p>So, if our KB consists solely of definite clauses, then we gain two powerful inference techniques: backwards and forwards chaining.</p>
+              <p class='definition'><strong>Chaining</strong> algorithms use KBs with only definite clauses to achieve efficient inference.</p>
+              <p class='definition'><strong>Forward Chaining</strong> starts with the base facts and applies generalized Modus Ponens recursively until no clauses can be added. We succeed if we infer our query.</p>
+              <p class='definition'><strong>Backward Chaining</strong> starts with our query sentence as the goal, and recursively adds sub-goals which, if proven, would prove our current target goals.</p>
+              <br/>
+              <p>Meh, those are just high-level descriptions... let's look at an example and the steps that each tactic takes.</p>
+              <p>Let's start by defining a KB with only definite clauses (from the book):</p>
+              <blockquote>
+                The law says that it is a crime for an American to sell weapons to hostile nations. The country Nono, an enemy of America, has some missiles, and all of its missiles were sold to it by
+                Colonel West, who is an American. Is Colonel West a criminal in the eyes of America?
+              </blockquote>
+<pre class='prettyprint'>
+  KB =
+     1. (American(x) &and; Weapon(y) &and; Sells(x, y, z) &and; Hostile(z)) &rArr; Criminal(x)
+     2. Owns(Nono, M1)
+     3. Missile(M1)
+     4. (Missile(x) &and; Owns(Nono, x)) &rArr; Sells(West, x, Nono)
+     5. Missile(x) &rArr; Weapon(x)
+     6. Enemy(x, America) &rArr; Hostile(x)
+     7. American(West)
+     8. Enemy(Nono, America)
+     
+  &alpha; = Criminal(West)
+</pre>
+              <br/>
+              <p>Forward chaining begins by separating our FOL KB into two categories:</p>
+              <ul class='indent-1'>
+                <li><p><strong>Rules:</strong> statements that have an implication to be used by Generalized Modus Ponens</p></li>
+                <li><p><strong>Facts:</strong> atomic statements that establish our system's knowledge of the environment</p></li>
+              </ul>
+              <br/>
+              <p>As such, we divide the above KB into:</p>
+<pre class='prettyprint'>
+  KB =
+     ; Rules:
+     1. (American(x) &and; Weapon(y) &and; Sells(x, y, z) &and; Hostile(z)) &rArr; Criminal(x)
+     4. (Missile(x) &and; Owns(Nono, x)) &rArr; Sells(West, x, Nono)
+     5. Missile(x) &rArr; Weapon(x)
+     6. Enemy(x, America) &rArr; Hostile(x)
+     
+     ; Facts:
+     2. Owns(Nono, M1)
+     3. Missile(M1)
+     7. American(West)
+     8. Enemy(Nono, America)
+</pre>
+              <br/>
+              <p>Now, since our KB consists only of definite clauses, forward chaining does the following:</p>
+              <ol class='indent-1'>
+                <li><p>Starting with your facts, unify over any rule that you can match completely and add those unified ground terms to your forward-chaining &quot;proof tree&quot;</p></li>
+                <li><p>Once you've unified all the rules you can using just your starting facts, take the new ground terms you found in step 1, add them to your facts, and try again.</p></li>
+                <li><p>Stop when you reach one of two conditions: (a) you derive the ground term equal to your query, or (b) you generate no new terms between iterations.</p></li>
+              </ol>
+              <br/>
+              <p>So, let's try this out on our example above!</p>
+<pre class='prettyprint'>
+  ; Forward Chaining Iteration 1
+  
+  KB =
+     ; Rules:
+     1. (American(x) &and; Weapon(y) &and; Sells(x, y, z) &and; Hostile(z)) &rArr; Criminal(x)
+     4. (Missile(x) &and; Owns(Nono, x)) &rArr; Sells(West, x, Nono)
+     5. Missile(x) &rArr; Weapon(x)
+     6. Enemy(x, America) &rArr; Hostile(x)
+     
+     ; Facts:
+     2. Owns(Nono, M1)
+     3. Missile(M1)
+     7. American(West)
+     8. Enemy(Nono, America)
+  
+  ; New facts discovered on iteration 1:
+     9.  Weapon(M1) [Rule 3, Fact 5, &Theta; = { x/M1 }]
+     10. Sells(West, M1, Nono) [Rule 4, Fact 2, Fact 3, &Theta; = { x/M1 }]
+     11. Hostile(Nono) [Rule 6, Fact 8, &Theta; = { x/Nono }]
+</pre>
+              <br/>
+              <p>Notice that on our current iteration, we don't yet use any of the new facts we discover; these will be used in the next iteration.</p>
+              <p>Now, we start iteration 2 with the new facts that we got from last time!</p>
+<pre class='prettyprint'>
+  ; Forward Chaining Iteration 2
+  
+  KB =
+     ; Rules:
+     1. (American(x) &and; Weapon(y) &and; Sells(x, y, z) &and; Hostile(z)) &rArr; Criminal(x)
+     4. (Missile(x) &and; Owns(Nono, x)) &rArr; Sells(West, x, Nono)
+     5. Missile(x) &rArr; Weapon(x)
+     6. Enemy(x, America) &rArr; Hostile(x)
+     
+     ; Facts:
+     2.  Owns(Nono, M1)
+     3.  Missile(M1)
+     7.  American(West)
+     8.  Enemy(Nono, America)
+     9.  Weapon(M1) [Rule 3, Fact 5, &Theta; = { x/M1 }]
+     10. Sells(West, M1, Nono) [Rule 4, Fact 2, Fact 3, &Theta; = { x/M1 }]
+     11. Hostile(Nono) [Rule 6, Fact 8, &Theta; = { x/Nono }]
+  
+  ; New facts discovered on iteration 2:
+     12. Criminal(West) [Rule 1, Fact 7, Fact 9, Fact 10, Fact 11, &Theta; = { x/West, y/M1, z/Nono }]
+     ; STOP - Found our query!
+     
+  &there4; KB &#8872; &alpha;
+</pre>
+              <p>So, we terminate here since we found our query, meaning that KB &#8872; &alpha;</p>
+              <p>Pictorially, we might think of this forward chaining taking the steps:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-5/fol-1.PNG' />
+              </div>
+              <br/>
+              <p>Above, the depth of our <strong>proof tree</strong> corresponds to the iteration level in our algorithm's steps, with depth = 1 at the top and nodes processed left-to-right.</p>
+              <p>Notice that at depth d, our gathered facts include all facts at depth &lt; d</p>
+              <p>Arcs (as poorly illustrated as they may be) illustrate AND relationships between bindings.</p>
+              <hr/>
+              <p>Now, let's try to do the same problem over using backward chaining!</p>
+              <p>The steps of backward chaining are as follows:</p>
+              <ol class='indent-1'>
+                <li><p>Start with JUST our query as a goal.</p></li>
+                <li><p>Now, find rules in our KB whose implication's RHS contain our goals' relations.</p></li>
+                <li><p>Treat the LHS of any found rules' implication as our new sub-goals.</p></li>
+                <li><p>Recurse on our sub-goals to try and unify them to fact.</p></li>
+                <li><p>Any time a unification is performed for some variable, that unification holds for all other references to that variable.</p></li>
+                <li><p>We have succeeded to illustrate entailment of our query if all goals have been unified to ground terms.</p></li>
+              </ol>
+              <br/>
+              <p>Let's try it!</p>
+<pre class='prettyprint'>
+  KB =
+     1. (American(x) &and; Weapon(y) &and; Sells(x, y, z) &and; Hostile(z)) &rArr; Criminal(x)
+     2. Owns(Nono, M1)
+     3. Missile(M1)
+     4. (Missile(x) &and; Owns(Nono, x)) &rArr; Sells(West, x, Nono)
+     5. Missile(x) &rArr; Weapon(x)
+     6. Enemy(x, America) &rArr; Hostile(x)
+     7. American(West)
+     8. Enemy(Nono, America)
+     
+  &alpha; = Criminal(West)
+  
+  ; ==========================================================================================
+  ; Recursive Level 1 Goals:
+  { Criminal(West) } ; Start with just the query
+  Target goal: Criminal(West)
+  
+  ; Rules that contain our target goals' relations on RHS OR facts containing our goals:
+     1. (American(x) &and; Weapon(y) &and; Sells(x, y, z) &and; Hostile(z)) &rArr; Criminal(x)
+        [&Theta; = { x/West }]
+  
+  ; NOTE: Unification performed above; now x/West in subsequent goal resolution
+  
+  ; Recurse on new goals
+     New Goals: American(West), Weapon(y), Sells(West, y, z), Hostile(z)
+
+  ; ==========================================================================================
+  ; Recursive Level 2 Goals:
+  { American(West), Weapon(y), Sells(West, y, z), Hostile(z) }
+  Target goal: American(West)
+  
+  ; Rules that contain our target goals' relations on RHS OR facts containing our goals:
+     7. American(West) [&Theta; = {}] ; Done! Satisfied this goal! Remove it.
+     
+  ; ==========================================================================================
+  ; Recursive Level 2 Goals:
+  { Weapon(y), Sells(West, y, z), Hostile(z) }
+  Target goal: Weapon(y)
+  
+  ; Rules that contain our target goals' relations on RHS OR facts containing our goals:
+     5. Missile(x) &rArr; Weapon(x) [&Theta; = { x/y }]
+  
+  ; Recurse on new goals
+     New Goals: Missile(y)
+  
+  ; ==========================================================================================
+  ; Recursive Level 3 Goals:
+  { Missile(y) }
+  Target goal: Missile(y)
+  
+  ; Rules that contain our target goals' relations on RHS OR facts containing our goals:
+     3. Missile(M1) [&Theta; = { y/M1 }] ; Done! Satisfied this goal! Remove it
+  
+  ; NOTE: Unification performed above; now y/M1 in subsequent goal resolution
+  
+  ; Out of goals for this level, so return success to previous level!
+  
+  ; ==========================================================================================
+  ; Recursive Level 2 Goals:
+  { Sells(West, M1, z), Hostile(z) }
+  Target goal: Sells(West, M1, z)
+  
+  ; Rules that contain our target goals' relations on RHS OR facts containing our goals:
+     5. (Missile(M1) &and; Owns(Nono, M1)) &rArr; Sells(West, M1, Nono) [&Theta; = { z/Nono }]
+  
+  ; NOTE: Unification performed above; now z/Nono in subsequent goal resolution
+  
+  ; Recurse on new goals
+     New Goals: Missile(M1), Owns(Nono, M1)
+     
+  ; ==========================================================================================
+  ; Recursive Level 3 Goals:
+  { Missile(M1), Owns(Nono, M1) }
+  Target goal: Missile(M1)
+  
+  ; Rules that contain our target goals' relations on RHS OR facts containing our goals:
+     3. Missile(M1) [&Theta; = {}] ; Done! Satisfied this goal! Remove it
+     
+  ; ==========================================================================================
+  ; Recursive Level 3 Goals:
+  { Owns(Nono, M1) }
+  Target goal: Owns(Nono, M1)
+  
+  ; Rules that contain our target goals' relations on RHS OR facts containing our goals:
+     2. Owns(Nono, M1) [&Theta; = {}] ; Done! Satisfied this goal! Remove it
+     
+  ; Out of goals for this level, so return success to previous level!
+  
+  ; ==========================================================================================
+  ; Recursive Level 2 Goals:
+  { Hostile(Nono) }
+  Target goal: Hostile(Nono)
+  
+  ; Rules that contain our target goals' relations on RHS OR facts containing our goals:
+     6. Enemy(Nono, America) &rArr; Hostile(Nono)
+  
+  ; Recurse on new goals
+     New Goals: Enemy(Nono, America)
+     
+  ; ==========================================================================================
+  ; Recursive Level 3 Goals:
+  { Enemy(Nono, America) }
+  Target goal: Enemy(Nono, America)
+  
+  ; Rules that contain our target goals' relations on RHS OR facts containing our goals:
+     8. Enemy(Nono, America) ; Done! Satisfied this goal! Remove it
+     
+  ; Out of goals for this level, so return success to previous level!
+  
+  ; ==========================================================================================
+  ; Recursive Level 2 Goals:
+  { }
+  ; Out of goals for this level, so return success to previous level!
+  
+  ; ==========================================================================================
+  ; Recursive Level 1 Goals:
+  { }
+  ; Out of goals for this level, so return success to previous level!
+  
+  ; [!] There is no previous level, so we return success! Our KB DOES entail &alpha;
+</pre>
+              <br/>
+              <p>If, at any step above we failed to unify our goal, then we would return failure!</p>
+              <p>Looks complicated, but why don't we see it pictorially?</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-5/fol-0.PNG' />
+              </div>
+              <br/>
+              <p>Above, the depth of our <strong>proof tree</strong> corresponds to the recursive level in our algorithm's steps, with depth = 1 at the top and nodes processed left-to-right.</p>
+              <p>Bindings and their locations are illustrated in brackets where they occur.</p>
+              <p>Arcs (as poorly illustrated as they may be) illustrate AND relationships between bindings.</p>
+            </div>
+            <hr/>
+            
+            <a class='btn btn-default pull-right hidden-print' href='javascript:window.print();'>
+              <span class='glyphicon glyphicon-print'></span>
+              &nbsp; PDF / Print
+            </a>
+            
+          </div>
+          <!-- END PRESENTATION CONTENT -->
+          
+          <!-- MATERIALS FROM CLASS: -->
+          
+            
+        </div>
+      </div>
+      <!-- END MAIN CONTENT -->
+      
+      
+    </div>
+    <!-- END WRAPPER -->
+    
+    <!-- BEGIN FOOTER -->
+    <div id="footer">
+      <div class="container">
+        <div class="col-md-12 text-center">
+          
+        </div>
+      </div>
+    </div>
+    <!-- END FOOTER -->
+    
+  </body>
+</html>

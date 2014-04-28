@@ -90,7 +90,11 @@ $(function () {
   for (var elements in styleMap) {
     $(elements)
       .addClass(styleMap[elements].classes)
-      .prepend("<span class='glyphicon " + styleMap[elements].glyphicon + "'></span>&nbsp");
+      .each(function () {
+        var target = ($(this).prop("tagName") === "DIV") ? $(this).find("p:first") : $(this);
+        target
+          .prepend("<span class='glyphicon " + styleMap[elements].glyphicon + "'></span>&nbsp");
+      });
   }
   
   $(".example")
