@@ -42,17 +42,6 @@ $(function () {
         });
       };
   
-  // Set up ScrollSpy elements
-  $(".scrollspy-element")
-    .each(function () {
-      scrollspy.append(
-        "<li><a href='#" + $(this).attr("id") + "'>" + $(this).attr("scrollspy-title") + "</a></li>"
-      );
-    });
-    
-  // Refresh scrollspy
-  refreshScrollspy();
-  
   // Set up presentation mode
   $(document)
     .on("keypress", function (e) {
@@ -196,5 +185,20 @@ $(function () {
         }
       }
     });
+    
+  // Set up ScrollSpy elements
+  $(".scrollspy-element")
+    .each(function () {
+      scrollspy.append(
+        "<li><a href='#" + $(this).attr("id") + "'>" + $(this).attr("scrollspy-title") + "</a></li>"
+      );
+    });
+  
+  // Refresh scrollspy
+  refreshScrollspy();
+  
+  setTimeout(function () {
+    refreshScrollspy();
+  }, 1000);
     
 });
