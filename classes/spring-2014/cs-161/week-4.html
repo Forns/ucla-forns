@@ -230,6 +230,229 @@
               <p class='answer' name='csp-q0'>Simply the number of variables because it will take |V| actions to reach a complete instantiation!</p>
               
               <br/>
+              <h3>Constraint Propagation</h3>
+              <p>As we've seen with CSP search, the more possible variable assignments in our search tree, the larger it becomes and longer it takes to search.</p>
+              <p>So, in order to improve our efficiency, we attempt to reduce the domains of our variables to those assignment combinations that are possible.</p>
+              <p>For example, if one of our variables had the domain of integers from 1 to 10, and a constraint said that variable couldn't be 5, then it would be wasteful to keep 5 within the domain!</p>
+              <p class='definition'>
+                <strong>Constraint propagation</strong> provides a means of reducing our variable domains by considering the constraints that a domain element has the possibility of satisfying. If a domain
+                element has *no* possibility of satisfying a constraint, we simply prune it from the domain!
+              </p>
+              <p class='definition'><strong>Node consistency</strong> determines if any unary constraints on a variable are met by each element of that variable's domain.</p>
+              <br/>
+<pre class='prettyprint'>
+  ; In the following example, A &amp; B are Node Consistent:
+  X = { A, B }
+  D = { {1, 2}, {3, 4} }
+  C = {
+        A != 3
+        B != 5
+      }
+      
+  ; In the following example, A &amp; B are NOT Node Consistent:
+  X = { A, B }
+  D = { {1, 2}, {3, 4} }
+  C = {
+        A != 2
+        B != 3
+      }
+      
+  ; To resolve the above node inconsistency, we
+  ; amend the domains of A and B to be:
+  X = { A, B }
+  D = { {1}, {3} }
+  C = {
+        A != 2
+        B != 3
+      }
+</pre>
+              <br/>
+              <p class='definition'><strong>Arc consistency</strong> determines if any binary constraints between two variables can be met by all elements in their domains.</p>
+              <br/>
+              <p>
+                In other words, we want to verify that for two variables X and Y that both appear within a constraint (e.g. X &lt; Y), all values in the domain of X can satisfy the constraint if at least
+                one value in the domain of Y can be paired with that value in the domain of X.
+              </p>
+<pre class='prettyprint'>
+  ; In the following example, A &amp; B are Arc Consistent:
+  X = { A, B }
+  D = { {1, 2}, {3, 4} }
+  C = {
+        A &lt; B
+        B &gt;= 2 * A
+      }
+      
+  ; In the following example, A &amp; B are NOT Arc Consistent:
+  X = { A, B }
+  D = { {1, 2}, {3, 4} }
+  C = {
+        A &lt; B
+        B &gt; 2 * A
+      }
+      
+  ; To resolve the above arc inconsistency, we
+  ; amend the domains of A and B to be:
+  X = { A, B }
+  D = { {1}, {3, 4} } OR { {1, 2}, {3} }
+  C = {
+        A &lt; B
+        B &gt; 2 * A
+      }
+</pre>
+              <p>To automate arc consistency fixes, we can use an algorithm called AC-3. (page 209 of your book)</p>
+              <p>To picture how AC-3 works, you can imagine our CSP as a graph with nodes as the variables, and edges between any two variables that are found in the same constraint.</p>
+              <p>Let's see an example CSP and arc consistency graph.</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-4/csp-3.PNG' />
+              </div>
+              <br/>
+              <p>
+                Now, we see that our arcs happen to involve binary constraints between all three of our variables, so we want to assess each of these arcs and determine whether or not there are
+                elements to remove from any of the domains.
+              </p>
+              <p>Each arc can be considered a tuple (A, B) where A is the node/variable from which an arc originates and B is the terminal node.</p>
+              <p>This gives us 6 arcs in our problem: (W, X), (X, W), (W, Y), (Y, W), (X, Y), and (Y, X)</p>
+              <p>We begin AC-3 with all of our arcs to be assessed, and proceed as follows:</p>
+<pre class='prettyprint'>
+  ; Reduced AC-3 Pseudocode
+  enqueue all arcs in your CSP
+  while that queue is not empty
+      check if current arc (A, B) is consistent
+      ; i.e., there is at least 1 variable in B satisfying
+      ; the constraint for every variable in A
+      
+      if a value in the domain of A is unsatisfiable, remove that val
+      if any value was removed from A then do:
+          if the domain of A is reduced to &empty;, return false
+          enque all arcs from C_i to A (C_i, A) where C_i = all neighbor nodes of X except B
+          
+  return true (if your queue is empty and you've made all domains arc consistent)
+</pre>
+              <br/>
+              <p>Let's try it with our example!</p>
+<pre class='prettyprint'>
+  Vars: {W, X, Y}
+  Domains (for each): {0, 1, 2}
+  Constraints:
+  {
+    W != X,
+    W = floor(Y/2),
+    X &lt; Y
+  }
+  
+  ; Step 1: Queue up those arcs!
+  Q = { (W, X), (X, W), (W, Y), (Y, W), (X, Y), (Y, X) }
+  
+  ; ----------------------------------------------------
+  ; While Q is not empty...
+  ; Step 2: Choose an arc from the queue
+  
+  chosenArc = (W, X)
+  DomainW = {0, 1, 2}
+  DomainX = {0, 1, 2}
+  constraint = W != X
+  
+  ; Arc is consistent! Remove this arc from queue!
+  
+  ; ----------------------------------------------------
+  Q = { (X, W), (W, Y), (Y, W), (X, Y), (Y, X) }
+  
+  chosenArc = (X, W)
+  DomainW = {0, 1, 2}
+  DomainX = {0, 1, 2}
+  constraint = W != X
+  
+  ; Arc is consistent! Remove this arc from queue!
+  
+  ; ----------------------------------------------------
+  Q = { (W, Y), (Y, W), (X, Y), (Y, X) }
+  
+  chosenArc = (W, Y)
+  DomainW = {0, 1, 2}
+  DomainY = {0, 1, 2}
+  constraint = W = floor(Y/2)
+  
+  ; Arc is inconsistent! W can never be 2, so prune it,
+  ; and add neighbors of W (X, W) to queue
+  DomainW = {0, 1}
+  
+  ; ----------------------------------------------------
+  Q = { (Y, W), (X, Y), (Y, X), (X, W) }
+  
+  chosenArc = (W, Y)
+  DomainW = {0, 1}
+  DomainY = {0, 1, 2}
+  constraint = W = floor(Y/2)
+  
+  ; Arc is consistent! Remove this arc from queue!
+  
+  ; ----------------------------------------------------
+  Q = { (X, Y), (Y, X), (X, W) }
+  
+  chosenArc = (X, Y)
+  DomainX = {0, 1, 2}
+  DomainY = {0, 1, 2}
+  constraint = X &lt; Y
+  
+  ; Arc is inconsistent! X can never be 2, so prune it,
+  ; and add neighbors of X (W, X) to queue
+  DomainX = {0, 1}
+  
+  ; ----------------------------------------------------
+  Q = { (Y, X), (X, W), (W, X) }
+  
+  chosenArc = (Y, X)
+  DomainX = {0, 1}
+  DomainY = {0, 1, 2}
+  constraint = X &lt; Y
+  
+  ; Arc is inconsistent! Y can never be 0, so prune it,
+  ; and add neighbors of Y (W, Y) to queue
+  DomainY = {1, 2}
+  
+  ; ----------------------------------------------------
+  Q = { (X, W), (W, X), (W, Y) }
+  
+  chosenArc = (X, W)
+  DomainX = {0, 1}
+  DomainW = {0, 1}
+  constraint = W != X
+  
+  ; Arc is consistent! Remove this arc from queue!
+  
+  ; ----------------------------------------------------
+  Q = { (W, X), (W, Y) }
+  
+  chosenArc = (W, X)
+  DomainX = {0, 1}
+  DomainW = {0, 1}
+  constraint = W != X
+  
+  ; Arc is consistent! Remove this arc from queue!
+  
+  ; ----------------------------------------------------
+  Q = { (W, Y) }
+  
+  chosenArc = (W, Y)
+  DomainW = {0, 1}
+  DomainY = {1, 2}
+  constraint = W = floor(Y/2)
+  
+  ; Arc is consistent! Remove this arc from queue!
+  
+  ; ----------------------------------------------------
+  Q = { }
+  
+  ; Queue is empty! We're done, return true!
+  ; Our domains were therefore modified to:
+  DomainW = {0, 1}
+  DomainX = {0, 1}
+  DomainX = {1, 2}
+  
+  ; Reducing the size of our search space substantively!
+</pre>
+              
+              <br/>
               <h3>Map Coloring Problem</h3>
               <p>Perhaps the most widely used example for CSPs is the map coloring problem.</p>
               <p class='definition'>
@@ -287,6 +510,7 @@
                   </p></li>
                 </ul>
               </div>
+              
               <br/>
               <p>So far, with our search strategies, we've begun our problems under the assumption that we don't know anything about a possible solution...</p>
               <p>In classical search, all we could do was guess with some amount of confidence where in the search tree a solution was likely to be found relative to our initial state...</p>
