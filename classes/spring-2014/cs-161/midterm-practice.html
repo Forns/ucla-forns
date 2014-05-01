@@ -181,8 +181,7 @@
                 <li><p>d = depth of shallowest solution</p></li>
                 <li><p>b = branching factor</p></li>
                 <li><p>b* = effective branching factor</p></li>
-                <li><p>m = depth limit</p></li>
-                <li><p>L = iteration depth *limit* of goal state</p></li>
+                <li><p>L = depth limit</p></li>
               </ul>
               <br/>
               <table class='table table-bordered table-striped'>
@@ -251,15 +250,15 @@
                       <th><p>Depth-(limited)-first</p></th>
                       <td><p>No</p></td>
                       <td><p>No</p></td>
-                      <td><p>Exponential:<br/>O(b^m)</p></td>
-                      <td><p>Linear:<br/>O(bm)</p></td>
+                      <td><p>Exponential:<br/>O(b^L)</p></td>
+                      <td><p>Linear:<br/>O(b*L)</p></td>
                     </tr>
                     <tr>
                       <th><p>Iterative-Deepening-Depth-first</p></th>
                       <td><p>Yes</p></td>
                       <td><p>Yes (for uniform cost)</p></td>
-                      <td><p>Exponential:<br/>O(b^L)</p></td>
-                      <td><p>Linear:<br/>O(bL)</p></td>
+                      <td><p>Exponential:<br/>O(b^d)</p></td>
+                      <td><p>Linear:<br/>O(b*d)</p></td>
                     </tr>
                     <tr>
                       <th><p>A*</p></th>
@@ -539,7 +538,7 @@
   
   4. &not;Eats(x, y) &or; Kills(y, x) &or; Food(y)
   
-  5. &not;Kills(x, y) &or; &not;Alive(v)
+  5. &not;Kills(x, y) &or; &not; Alive(y)
   
   6a. Eats(Bill, Peanuts)
   6b. Alive(Bill)
