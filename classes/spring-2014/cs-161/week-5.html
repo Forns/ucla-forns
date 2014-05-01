@@ -314,9 +314,9 @@
   &Theta; = { x/Socrates }
   
   ; Example 2:
-  &forall;x, y parent(x, fatherOf(y)) &rArr; grandparent(x, y); &exist;z parent(Carter, z)
-  ; "For all x and y, if x is the parent of the father of y, then x is the grandparent of y."
-  ; "Also, there exists some z such that Carter is the parent of z."
+  &forall;x, y parent(x, motherOf(y)) &rArr; grandparent(x, y); parent(Carter, z)
+  ; "For all x and y, if x is the parent of the mother of y, then x is the grandparent of y."
+  ; "Also, Carter is the parent of some child z."
   &Theta; = { x/Carter, z/motherOf(Stewie) }
   
   ; Example 3:
