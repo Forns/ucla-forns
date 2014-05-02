@@ -744,6 +744,7 @@
               <p class='definition'><strong>Chaining</strong> algorithms use KBs with only definite clauses to achieve efficient inference.</p>
               <p class='definition'><strong>Forward Chaining</strong> starts with the base facts and applies generalized Modus Ponens recursively until no clauses can be added. We succeed if we infer our query.</p>
               <p class='definition'><strong>Backward Chaining</strong> starts with our query sentence as the goal, and recursively adds sub-goals which, if proven, would prove our current target goals.</p>
+              <p class='definition'>Both forward chaining and backward chaining are complete for definite clause KBs!.</p>
               <br/>
               <p>Meh, those are just high-level descriptions... let's look at an example and the steps that each tactic takes.</p>
               <p>Let's start by defining a KB with only definite clauses (from the book):</p>
@@ -768,7 +769,7 @@
               <p>Forward chaining begins by separating our FOL KB into two categories:</p>
               <ul class='indent-1'>
                 <li><p><strong>Rules:</strong> statements that have an implication to be used by Generalized Modus Ponens</p></li>
-                <li><p><strong>Facts:</strong> atomic statements that establish our system's knowledge of the environment</p></li>
+                <li><p><strong>Facts / Axioms:</strong> atomic statements that establish our system's knowledge of the environment</p></li>
               </ul>
               <br/>
               <p>As such, we divide the above KB into:</p>
@@ -998,6 +999,39 @@
               <p>Above, the depth of our <strong>proof tree</strong> corresponds to the recursive level in our algorithm's steps, with depth = 1 at the top and nodes processed left-to-right.</p>
               <p>Bindings and their locations are illustrated in brackets where they occur.</p>
               <p>Arcs (as poorly illustrated as they may be) illustrate AND relationships between bindings.</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='practice' class='scrollspy-element' scrollspy-title='Practice'></div>
+            <h1>Practice</h1>
+            <div>
+              <p>Since forward and backward chaining are a bit of a big deal... let's run through an example together...</p>
+              <p class='example'>Using the following knowledge and query (&alpha;), perform forward and backward chaining to illustrate that KB &#8872; &alpha;</p>
+<pre class='prettyprint'>
+  KB =
+     ; Axioms:
+     1. Queen(Liz)
+     2. English(Liz)
+     
+     ; Rules:
+     3. Queen(x) &rArr; Royal(x)
+     4. (Royal(x) &and; Likes(x, y) &and; Shortage(y)) &rArr; &not;Amused(x)
+     5. English(x) &rArr; &exist;y [Tea(y) &and; Likes(x, y)]
+     6. Tea(x) &rArr; Shortage(x)
+     
+  &alpha; = Amused(Liz)
+</pre>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='hw3' class='scrollspy-element' scrollspy-title='Homework 3'></div>
+            <h1>Homework 3</h1>
+            <div>
+              <p>At this point in discussion we'll review the newly posted homework 3!</p>
             </div>
             <hr/>
             
