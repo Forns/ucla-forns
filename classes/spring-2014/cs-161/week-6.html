@@ -318,8 +318,14 @@
               
               <br/>
               <h3>Relevant State-space Search</h3>
-              <p class='definition'><strong>Backward / Relevant States Search</strong> starts with our goal and attempts to derive the initial state from relevant actions.</p>
-              <p class='definition'>A <strong>relevant action</strong> is one that mentions at least one goal / subgoal fluent (either positive or negative) in its effects.</p>
+              <p class='definition'><strong>Backward / Relevant States Search</strong> starts with our goal and attempts to derive the initial state (or a subset of it) from relevant actions.</p>
+              <p class='definition'>
+                A <strong>relevant action</strong> is one that unifies on at least one goal / subgoal fluent (either positive or negative) in its effects AND that does not contradict any goal fluents.
+              </p>
+              <p class='question' name='backsearch-q0'>Why is it sufficient to derive a subset of the initial state's positive fluents rather than the initial state in its entirety?</p>
+              <p class='answer' name='backsearch-q1'>
+                Because for initial state S composed of positive fluents (and under the closed world assumption), any S' &sube; S means that M(S) &sube; M(S') and therefore, by definition, S &#8872; S'.
+              </p>
               <br/>
               <p>
                 The gist is the same as for backward chaining: starting with the goal, look for actions that could be relevant for deriving the initial state and then generate sub-goals to satisfy relevant
@@ -342,8 +348,9 @@
               <p>The process, then, is as follows:</p>
               <ol class='indent-1'>
                 <li><p>Start with your query as the goal</p></li>
-                <li><p>Explore relevant actions from the goal specification hoping to derive the initial state</p></li>
-                <li><p>For each relevant action, search for groundings in our KB state that will derive the initial state</p></li>
+                <li><p>Explore relevant actions starting from the goal specification hoping to derive the initial state (or a subset of it)</p></li>
+                <li><p>For each relevant action, search for groundings in our KB state that will derive the initial state (or a subset of it)</p></li>
+                <li><p>Return your plan if you derive some grounded subset of the initial set, or return failure if you have no relevant actions remaining</p></li>
               </ol>
               <p>So, let's try using relevant state search on a fantastic example planning problem:</p>
               <br/>
@@ -362,7 +369,7 @@
        3. ContainsLiquid(Cup2)
        4. Has(Partier2, Cup1)
   Action(Drink(agent, cup)
-    Precondition: Has(agent, cup) &and; ContainsLiquid(cup) &and; Thirsty(agent)
+    Precondition: Has(agent, cup) &and; ContainsLiquid(cup)
     Effect: &not;Thirsty(agent) &and; &not;ContainsLiquid(cup)
   )
   Action(Fetch(commander, object, recip)
@@ -380,19 +387,21 @@
   
   ; Relevant actions:
   Action(Drink(agent, cup)
-    Precondition: Has(agent, cup) &and; ContainsLiquid(cup) &and; Thirsty(agent)
+    Precondition: Has(agent, cup) &and; ContainsLiquid(cup)
     Effect: &not;Thirsty(agent) &and; &not;ContainsLiquid(cup)
   )
   
   ; Groundings available
   ; Since we know our goal was to quench Partier2's thirst,
   ; then they must be our agent for the Drink action
+  ; i.e. we choose a relevant action that can unify to our
+  ; goal
+  &Theta; = { agent/Partier2 }
   
   ; Gives us KB g':
   g' =
      1. Has(Partier2, cup')
      2. ContainsLiquid(cup')
-     3. Thirsty(Partier2)
 </pre>
               <br/>
               <p>Notice that we have multiple possible cups that we could unify our KB g' on, so we'll keep these partial instantiations and try to unify them later.</p>
@@ -418,34 +427,23 @@
   g'' =
       1. Has(Partier2, cup'')
       2. ContainsLiquid(cup')
-      3. Thirsty(Partier2)
-      4. BotOwner(commander')
+      3. BotOwner(commander')
       
   ; In our initial state, we might have 2 different cups, but
   ; since there are 2 different cups in our partially uninstantiated
   ; state, there are really only 2 possibilities to try.
   
-  ; [!] As it turns out, one of them is sufficient for replicating our
-  ; initial state:
+  ; [!] As it turns out, one of them is sufficient for deriving a subset
+  ; of our initial state:
   &Theta; = {cup'/Cup2, cup''/Cup1, commander'/Andrew}
   KB =
      1. Has(Partier2, Cup1)
      2. ContainsLiquid(Cup2)
-     3. Thirsty(Partier2)
-     4. BotOwner(Andrew)
+     3. BotOwner(Andrew)
      
  ; So, we return our successful action sequence:
  Fetch(Andrew, Cup2, Partier2) &rarr; Drink(Partier2, Cup2)
 </pre>
-              <div class='example'><p>Would we have been successful in our backward planning if the Drink action was replaced by:</p>
-<pre class='prettyprint'>
-  Action(Drink(agent, cup)
-    ; Missing the Thirsty(agent) precondition from before
-    Precondition: Has(agent, cup) &and; ContainsLiquid(cup)
-    Effect: &not;Thirsty(agent) &and; &not;ContainsLiquid(cup)
-  )
-</pre>
-              </div>
               
               <br/>
               <h3>Forward State-space Search</h3>
@@ -467,7 +465,7 @@
        3. ContainsLiquid(Cup2)
        4. Has(Partier2, Cup1)
   Action(Drink(agent, cup)
-    Precondition: Has(agent, cup) &and; ContainsLiquid(cup) &and; Thirsty(agent)
+    Precondition: Has(agent, cup) &and; ContainsLiquid(cup)
     Effect: &not;Thirsty(agent) &and; &not;ContainsLiquid(cup)
   )
   Action(Fetch(commander, object, recip)
@@ -521,15 +519,19 @@
   ; return the action sequence:
   Fetch(Andrew, Cup2, Partier2) &rarr; Drink(Partier2, Cup2)
 </pre>
-            <br/>
-            <p class='example'>
-              Note the additional exploration options we would have had to consider if we added the following to our initial state:<br/>
-              (5) Thirsty(Andrew)<br/>
-              (6) ContainsLiquid(Cup3)
-            </p>
-            <br/>
-            <p>So, the trick, it would seem, is in choosing a good heuristic to avoid unnecessary action explorations. Enter the planning graph...</p>
-            </div>
+              <br/>
+              <p class='example'>
+                Note the additional exploration options we would have had to consider if we added the following to our initial state:<br/>
+                (5) Thirsty(Andrew)<br/>
+                (6) ContainsLiquid(Cup3)
+              </p>
+              <br/>
+              <p class='definition'>
+                Note that both forward and backward state-space searches are <strong>sound and complete</strong> for the same reasons that forward and backward chaining were: they derive only those fluents
+                that are entailed by allowable actions from the initial state.
+              </p>
+              <p>So, the trick, it would seem, is in choosing a good heuristic to avoid unnecessary action explorations. Enter the planning graph...</p>
+              </div>
             <hr/>
             
             
@@ -537,6 +539,115 @@
             <div id='planningGraphs' class='scrollspy-element' scrollspy-title='Planning Graphs'></div>
             <h1>Planning Graphs</h1>
             <div>
+              <p>Clearly the choice of a good heuristic is necessary to adequately navigate a planning search space, especially if the number of constants and fluents is very large.</p>
+              <p>As it turns out, however, the fact that backward search employs state sets to navigate its planning, finding good heuristics is generally quite difficult.</p>
+              <p>For this reason, forward state-space search is largely the preferred method, and planning graphs represent a useful heuristic for reducing the search space.</p>
+              <p class='definition'>A <strong>planning graph</strong> is a directed graph organized into levels that alternate between state and action levels.</p>
+              <br/>
+              <p>So, we have the following decomposition of entities at each level where S_i represents the state levels and A_i the action levels:</p>
+              <ul class='indent-1'>
+                <li><p>At level S_i, all fluents that <strong>might possibly</strong> be accessible (from some sequence of actions) in i steps appear (NOTE: we never list a fluent that might not possibly
+                  exist at level i)</p></li>
+                <li><p>At level A_i, all actions that <strong>might possibly</strong> have their preconditions met given the previous state possibilities S_i appear (NOTE: we never list an action that
+                  might not possibly exist at level i)</p></li>
+                <li><p><strong>Mutex</strong> links illustrate mutually exclusive actions and fluents (i.e., if we were to choose one action / arrive at one fluent, 
+                  then we necessarily could not have chosen any to which a mutex link exists)</p></li>
+              </ul>
+              <br/>
+              <p>The whole point of planning graphs is to prevent us from having to combinitorically choose one action after another and see if our effort reaches fruition.</p>
+              <p>Although imperfect (e.g., a fluent will never appear too late, but it might show up too early than actually possible), remember that planning graphs are a heuristic strategy...</p>
+              <p>This means that they're meant to give us an estimate of how hard it is to attain a literal from the initial state.</p>
+              
+              <br/>
+              <h3>How to Have a Planning Graph and Eat it Too</h3>
+              <p>...oh wait, I think something got switched there... we're going to dissect the book's example of having your cake and eating it too, as follows:</p>
+<pre class='prettyprint'>
+  Constants: Cake
+  Goals: (Have(Cake) &and; Eaten(Cake))
+  KB =
+    1. Have(Cake)
+    (2. &not;Eaten(Cake))*
+    
+  ; * Notice that we still illustrate negative fluents in our
+  ; planning graphs explicitly, even though they might be
+  ; generated from the closed-world assumption
+  
+  Action(Eat(Cake)
+    Precondition:
+      Have(Cake)
+    Effect:
+      &not;Have(Cake) &and; Eaten(Cake))
+      
+  Action(Bake(Cake)
+    Precondition:
+      &not;Have(Cake)
+    Effect: 
+      Have(Cake))
+</pre>
+              <br/>
+              <p class='toolkit'><strong>Setup:</strong> add your initial state to S_0, the first state level, making a node for each fluent.</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-6/planningGraph-0.PNG' />
+              </div>
+              <br/>
+              <p class='toolkit'><strong>Creating Action Levels:</strong> for action level i, (1) add a persistence action (small box) for each fluent in S_i, and (2) add any actions
+                that can be performed using any combo of fluents from S_i.
+              </p>
+              <br/>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-6/planningGraph-1.PNG' />
+              </div>
+              <br/>
+              <p class='toolkit'><strong>Adding Action Mutex Links:</strong> there are three criteria for adding a mutex (mutual exclusivity) between actions:</p>
+              <ul class='indent-1'>
+                <li><p><strong>Inconsistent effects:</strong> action1 sets X and action2 sets &not;X are mutually exclusive.</p></li>
+                <li><p><strong>Interference:</strong> an effect of action1 is the negation of a precondition for action2</p></li>
+                <li><p><strong>Competing needs:</strong> a precondition of action1 is mutex with a precondition of action2</p></li>
+              </ul>
+              <br/>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-6/planningGraph-2.PNG' />
+              </div>
+              <br/>
+              <p class='question' name='planningGraph-q2'>What mutex rule is represented in our addition of the two mutex additions above?</p>
+              <p class='answer' name='planningGraph-q2'>
+                Interference, because the action of Eating your cake is mutually exclusive with both having your cake (persist) and not having eaten your cake (persist).
+              </p>
+              <br/>
+              <p class='toolkit'><strong>Creating State Levels:</strong> add fluents resulting from each action (including persistence actions) at the previous action level.</p>
+              <br/>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-6/planningGraph-3.PNG' />
+              </div>
+              <br/>
+              <p class='toolkit'><strong>Adding Fluent Mutex Links:</strong> there are two criteria for adding a mutex (mutual exclusivity) between fluents:</p>
+              <ul class='indent-1'>
+                <li><p>If the two fluents are contradictory (e.g., X and &not;X)</p></li>
+                <li><p>If <strong>every</strong> pair of actions that could produce them is also mutex</p></li>
+              </ul>
+              <br/>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-6/planningGraph-4.PNG' />
+              </div>
+              <br/>
+              <p class='question' name='planningGraph-q3'>Why were each of the above 4 fluent mutexes added?</p>
+              <p class='answer' name='planningGraph-q3'>
+                The smaller ones because the fluents were mutually exclusive, the larger ones because every pair of actions that could produce them were also mutex (Eat(Cake) and persistence actions).
+              </p>
+              <br/>
+              <p class='toolkit'>We stop generating new levels when we have <strong>leveled off</strong>, meaning that two consecutive state levels (S_i and S_(i+1)) are identical.</p>
+              <br/>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-6/planningGraph-5.PNG' />
+              </div>
+              <br/>
+              <p>We observe that S_1 and S_2 are identical, so we've leveled off and do not continue generating levels.</p>
+              
+              <br/>
+              <h3>Using the Planning Graph</h3>
+              <p>Alright, so we've generated our planning graph, have all of our mutexes in place... now what? ...what were we trying to do again?</p>
+              <p>Oh, right... reduce the number of action explorations our forward state space search will have to check to derive a plan if it exists.</p>
+              <p class='definition'>The <strong>set-level</strong> heuristic </p>
             </div>
             <hr/>
             
