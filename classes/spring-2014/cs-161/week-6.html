@@ -421,25 +421,25 @@
   
   ; Groundings available
   ; Since we know that our Partier2 has to have some cup, we'll
-  ; bind them as the recipient and then try to unify
+  ; bind them as the recipient and object and then try to unify
+  &Theta; = { recip/Partier2, object/cup' }
   
   ; Gives us KB g'':
   g'' =
-      1. Has(Partier2, cup'')
-      2. ContainsLiquid(cup')
-      3. BotOwner(commander')
+      1. ContainsLiquid(cup')
+      2. BotOwner(commander')
       
-  ; In our initial state, we might have 2 different cups, but
-  ; since there are 2 different cups in our partially uninstantiated
-  ; state, there are really only 2 possibilities to try.
+  ; Since we have constants Cup1 and Cup2 eligible for binding to the
+  ; cup' placeholder, we can try each and find that Cup2 matches
+  ; the fact in our initial state; similarly, we have only one choice
+  ; for matching commander' with Andrew in our initial state
   
-  ; [!] As it turns out, one of them is sufficient for deriving a subset
+  ; [!] As it turns out, this binidng is sufficient for deriving a subset
   ; of our initial state:
-  &Theta; = {cup'/Cup2, cup''/Cup1, commander'/Andrew}
+  &Theta; = {cup'/Cup2, commander'/Andrew}
   KB =
-     1. Has(Partier2, Cup1)
-     2. ContainsLiquid(Cup2)
-     3. BotOwner(Andrew)
+     1. ContainsLiquid(Cup2)
+     2. BotOwner(Andrew)
      
  ; So, we return our successful action sequence:
  Fetch(Andrew, Cup2, Partier2) &rarr; Drink(Partier2, Cup2)
@@ -611,7 +611,7 @@
               <br/>
               <p class='question' name='planningGraph-q2'>What mutex rule is represented in our addition of the two mutex additions above?</p>
               <p class='answer' name='planningGraph-q2'>
-                Interference, because the action of Eating your cake is mutually exclusive with both having your cake (persist) and not having eaten your cake (persist).
+                Interference, because the action of Eating your cake is mutually exclusive with both having your cake (persist) and not having eaten your cake (persist). OR inconsistent effects.
               </p>
               <br/>
               <p class='toolkit'><strong>Creating State Levels:</strong> add fluents resulting from each action (including persistence actions) at the previous action level.</p>
