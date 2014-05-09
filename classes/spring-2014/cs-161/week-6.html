@@ -798,7 +798,8 @@
     if ContainsLiquid(Cup1)
     then Drink(Partier2, Cup1)
     else [Observe(Cup2)
-           if ContainsLiquid(Cup2) then Fetch...
+           if ContainsLiquid(Cup2)
+           then Fetch... ; too lazy to fill out
            else [Explode(ForneyBot3000)] ; still some kinks to work out...
          ]
   ]
