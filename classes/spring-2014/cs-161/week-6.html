@@ -647,7 +647,162 @@
               <h3>Using the Planning Graph</h3>
               <p>Alright, so we've generated our planning graph, have all of our mutexes in place... now what? ...what were we trying to do again?</p>
               <p>Oh, right... reduce the number of action explorations our forward state space search will have to check to derive a plan if it exists.</p>
-              <p class='definition'>The <strong>set-level</strong> heuristic </p>
+              <p class='definition'>
+                The <strong>set-level</strong> heuristic finds the level at which all the literals in the conjunctive goal appear in the planning graph without any pair of them being mutex.
+              </p>
+              <br/>
+              <p>So, once we have our planning graph, we can use set-level to give us the following:</p>
+              <ul class='indent-1'>
+                <li><p>We are guaranteed that if we <strong>never</strong> derive the goal state's literals before we level off that there exists no solution plan.</p></li>
+                <li><p>We are NOT guaranteed that if we derive the goal state's literals that a plan certainly exists; only that it might!*</p></li>
+                <li><p>
+                  Lemma: We only compare mutual exclusions between two actions / fluents at a time, leaving more complex exclusions between 3 or more actions / fluents an unaccounted-for possibility.
+                </p></li>
+              </ul>
+              <br/>
+              <p class='question' name='planningGraph-q4'>So why don't we check for 3-consistency, 4-consistency, etc. in our planning graph actions / fluents?</p>
+              <p class='answer' name='planningGraph-q4'>
+                Remember that heuristics are designed to give us hints of where to explore next, and inexpensively so! Adding checks for anything more than 2-consistency mutex is expensive, and so our
+                heuristic loses its edge over classical search.
+              </p>
+              <br/>
+              <p>The same reason explains our persistence actions in planning graphs--they might not be completely accurate, but they simplify the heuristic by making sure it doesn't become too expensive.</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='hierarchicalPlanning' class='scrollspy-element' scrollspy-title='Hierarchichal Planning'></div>
+            <h1>Hierarchical Planning</h1>
+            <div>
+              <p>Our previous discussion of planning gave us the basic elements to enact a plan, but with very low-level action effects that were atomic and did little abstraction.</p>
+              <p>It would be nice, then, if we were capable of programming our intelligent systems to have some level of action abstraction so that we don't have to spell every little thing out.</p>
+              <p class='definition'>A <strong>hierarchical decomposition</strong> of actions attempts to group small actions into larger, more abstract ones to make large planning problems tractable.</p>
+              <p class='definition'>
+                <strong>High-level actions (HLAs)</strong> are defined as 1 or more refinements that consist of some number of preconditions and then some number of steps to satisfy that refinement. 
+              </p>
+              <p class='definition'>A refinement <strong>step</strong> may be either another (recursively defined) HLA or a primitive action.</p>
+              <p class='definition'>A <strong>primitive action</strong> is an atomic action instruction like we've dealt with previously (Chapter 10).</p>
+              <br/>
+<pre class='prettyprint'>
+  ; Example of HLA:
+  Refinement(Go(Home, SFO)
+    Preconditions:
+      Fueled(Car)
+    Steps:
+      [Drive(Car, Home, SFOLongTermParking),
+       Shuttle(SFOLongTermParking, SFO)]
+  )
+</pre>
+              <br/>
+              <p>Notice that our steps are primitive actions in the above case that are performed in sequence.</p>
+              <p class='definition'>A list of steps containing only primitive actions is called an <strong>implementation</strong>.</p>
+              <br/>
+              <p>So, in order to use HLA to find plans from an initial state to a goal, we search for an implementation that obeys all preconditions and leads to the goal state.</p>
+              <br/>
+              <p class='example'>Find an implementation using the following HLAs that allow us to make tea!</p>
+<pre class='prettyprint'>
+  Constants = { Water, Tea }
+  KB =
+     1. IsLiquid(Water)
+     2. Temperature(Water, 68) ; Farenheit, room temp
+  
+  g = Steep(Tea, Water)
+  
+  ; HLAs:
+  Refinement(Brew(tea, water)
+    Steps:
+      [Boil(water), Steep(tea, water)])
+  
+  Refinement(Boil(liquid)
+    Precondition:
+      IsLiquid(liquid) &and; Temperature(liquid, 100)
+    Steps: [])
+    
+  Refinement(Boil(liquid)
+    Precondition:
+      IsLiquid(liquid)
+    Steps:
+      [ApplyHeat(liquid), Boil(liquid)])
+      
+  Refinement(ApplyHeat(object)
+    Precondition:
+      Temperature(object, x)
+    Steps:
+      [Temperature(object, x+1)])
+</pre>
+<p class='text-center'><small>(example credit to Evan Lloyd)</small></p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='nondeterministicPlans' class='scrollspy-element' scrollspy-title='Nondeterministic Planning'></div>
+            <h1>Nondeterministic Planning</h1>
+            <div>
+              <p>Previously, our knowledge bases have operated under the closed world assumption because we assumed that we had full percept of our intelligent agent's environment...</p>
+              <p>Of course, in practice, this might not always be the case, and we should treat <strong>uncertainty</strong> with special deference in our reasoning system.</p>
+              <p>We can divide this process into three primary diversions from our traditional Action representations:</p>
+              <p class='toolkit'>Fluents can be true, false, or unknown (we remove the closed world assumption in favor of the open world one in which uncertainty is possible)</p>
+              <br/>
+              <p>Now, our state semantics have been modified such that we no longer know that a missing fluent is automatically false.</p>
+              <p>So, we need to add mechanisms to reduce uncertainty:</p>
+              <p class='toolkit'>Add actions that do nothing except learn the values of unknown fluents. We'll call these actions <strong>Percepts</strong>.</p>
+              <br/>
+<pre class='prettyprint'>
+  ; Example percepts
+  Percept(Color(x, c)
+    Precondition:
+      Object(x) &and; InView(x))
+  Percept(ContainsLiquid(x, liquid)
+    Precondition:
+      Cup(x) &and; InView(x))
+      
+  ; Might also need a mechanism for causing
+  ; an object to come into view (one object
+  ; at a time)
+  Action(LookAt(x),
+    Precondition:
+      InView(y) &and; (x &ne; y)
+    Effect:
+      InView(x) &and; &not;InView(y))
+</pre>
+              <br/>
+              <p>By adding percepts, we assume that our agent has sensors to set the proper parameters from the perception findings, and thus give us more information about our environment's objects.</p>
+              <p>Finally, by using these percepts, we can approach our planning problem to react to different scenarios with appropriate actions.</p>
+              <p>We can react to unknown values and randomness using contingent plans, which are really just if-then-else actions based on the knowledge from our percepts.</p>
+<pre class='prettyprint'>
+  ; Contingent Planning
+  Constants: Andrew, Partier2, Cup1, Cup2, ForneyBot3000
+  ; [!] No longer closed world assumption!
+  KB =
+     1. Thirsty(Partier2)
+     2. BotOwner(Andrew)
+     3. ContainsLiquid(Cup2)
+     4. Has(Partier2, Cup1)
+     
+  Action(LookAt(x),
+    Precondition:
+      InView(y) &and; (x &ne; y)
+    Effect:
+      InView(x) &and; &not;InView(y))
+      
+  Percept(ContainsLiquid(x, liquid)
+    Precondition:
+      Cup(x) &and; InView(x))
+      
+  ; ...other actions from example omitted
+  
+  ; Contingent plan:
+  [Observe(Cup1)
+    if ContainsLiquid(Cup1)
+    then Drink(Partier2, Cup1)
+    else [Observe(Cup2)
+           if ContainsLiquid(Cup2) then Fetch...
+           else [Explode(ForneyBot3000)] ; still some kinks to work out...
+         ]
+  ]
+</pre>
             </div>
             <hr/>
             
