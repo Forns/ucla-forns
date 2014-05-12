@@ -268,7 +268,7 @@
   (loop for v in '(1 2 3 4) do (if (evenp v) (return v) (print 'ODD)))
 </pre>
               <br/>
-              <p>There are a *bunch* of variants on the loop syntax that each do slightly different things, two of which are listed below:</p>
+              <p>There are a *bunch* of variants on the loop syntax that each do slightly different things, three of which are listed below:</p>
               <ul class='indent-1'>
                 <li><p><strong>(loop for v <u>on</u> list do)</strong><br/>Same as with using &quot;in&quot; list loop format except each iteration sets v = (rest list)</p></li>
                 <li><p><strong>(loop for v <u>while</u> (condition) do (expr))</strong><br/>Keep iterating with v = 0, 1, 2, ... until condition returns nil.</p></li>
