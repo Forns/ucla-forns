@@ -112,6 +112,196 @@
             <div id='knowledge' class='scrollspy-element' scrollspy-title='Knowledge Representation'></div>
             <h1>Knowledge Representation</h1>
             <div>
+              <p>So you know stuff... big whoop, I know stuff too, and even our computers know some stuff!</p>
+              <p>But knowledge is useless for communication if we're not speaking the same language... and if our computer knows stuff, we want to know it too!</p>
+              <p class='definition'><strong>Knowledge representation</strong> attempts to coerce facts about the world into first order logic so that we can perform automated reasoning on it to discover
+                new facts.
+              </p>
+              <br/>
+              <p>Because after all, isn't that the whole purpose of computers? To munch away at data and spit back some interesting findings?!&lt;/controversialComments&gt;&lt;/unmatchedTags&gt;</p>
+              <p class='example'>
+                Some common uses of knowledge representation systems: medical databases linking diseases with symptoms, epidemics, etc.; drug interactions and pharmacological research; NLP and semantic webs.
+              </p>
+              <br/>
+              <p>So, naturally, we want the information that our computer spits back to be... well... natural, and readable to a human!</p>
+              <p>Before we do that, though, we want to organize our knowledge into an objective, unified representation such that communication is seemless and cross-domain integration is possible.</p>
+              <p class='definition'>
+                An <strong>ontology</strong> is a classification system (usually organized into Knowledge Bases) such that we establish membership of specific world entities into 
+              </p>
+              <br/>
+              <p>Here's a sample <strong>upper ontology</strong> for general classification, where parents of nodes are more general than their children.</p>
+              <p>NB, a node can have multiple parents in the case where it is correctly classified under multiple generalizations.</p>
+              <br/>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-7/knowledgeRep-0.PNG' />
+              </div>
+              <br/>
+              <p>In practice, as you might've expected, creating and then deciding upon a unified ontology has been empirically difficult.</p>
+              <p>There have been a variety of efforts to produce unified ontologies, including:</p>
+              <ul class='indent-1'>
+                <li><p><a href='http://www.cyc.com/' target='_blank'>CYC</a> develops semantic technologies for inference and data alignment.</p></li>
+                <li><p><a href='http://openmind.media.mit.edu/' target='_blank'>Openmind</a> was an MIT project to crowd-source commonsense knowledge, which resulted in ConceptNet, useful for NLP.</p></li>
+                <li><p>
+                  <a href='http://www.w3.org/TR/owl-features/' target='_blank'>OWL (Web Ontology Language)</a> was developed to interface with ontological databases in a way such that concepts are not
+                   simply stored but also assigned meaning in the DB.
+                </p></li>
+              </ul>
+              <br/>
+              <p>In the end, however, no one implementation emerged a victor over the others, and the world is still at large for a universal ontology.</p>
+              <p>Most modern applications will employ domain-specific ontologies, like the following one for neurological diseases:</p>
+              <a href='https://code.google.com/p/neurological-disease-ontology/' target='_blank'>
+                <div class='fit-pres text-center'>
+                  <img src='../../../assets/images/spring-2014/cs-161/week-7/NDontology.jpg' />
+                </div>
+              </a>
+              <br/>
+              <p class='question' name='knowledgeRep-q0'>So where do we get ontologies to begin with?</p>
+              <p class='answer' name='knowledgeRep-q0'>
+                Somewhat unromantically, most are constructed by humans from domain experts (or crowdsourced as with Openmind), though others are mined from texts and the web
+              </p>
+              <br/>
+              <p>
+                Ontologies are nice because they allow us to reason away from specifics and talk instead about <strong>categories</strong>, which doesn't limit our search for an item of interest
+                until necessary.
+              </p>
+              <p>If we want to make inferences about knowledge at the category level, then we typically want to enforce some notion of inheritance and classes.</p>
+              <p class='definition'>
+                A <strong>class</strong> is simply a categorization that establishes a set relationship of inheritance; all subclasses of a class &quot;inherit&quot; their ancestors'
+                categorizations.
+              </p>
+              <p class='definition'>A <strong>taxonomy</strong> is an ontology where classes and subclasses organize categories hierarchically.</p>
+<pre class='prettyprint'>
+  ; We can represent classes in FOL under
+  ; the assumption of set mechanics
+  Mammals &sube; Animals &rarr; Subset(Mammals, Animals)
+  Dogs &sube; Mammals &rarr; Subset(Dogs, Mammals)
+  
+  ; Since we have a taxonomy class structure like the
+  ; above, we can infer the following predicates:
+  Member(Dogs, Mammals) ; true because Dogs &sube; Mammals
+  Member(Dogs, Animals) ; true because Dogs &sube; Mammals &sube; Animals
+</pre>
+              <br/>
+              <p>Nothing surprising there!</p>
+              <p>This is simple class inheritance like I'm sure you did in some intro programming class... just... for knowledge now!</p>
+              <p>The real power is when we start exploiting FOL operations, such as implication, which can allow us to extract new facts from our ontologies.</p>
+<pre class='prettyprint'>
+  ; We can use quantification to talk about members of
+  ; our categories
+  &forall;x (x &in; Dogs) &rArr; CanBark(x)
+  
+  ; Saying the above without using set notation, but instead
+  ; FOL:
+  Member(x, Dogs) &rArr; CanBark(x)
+</pre>
+              <br/>
+              <p>We also define some rules to talk about relationships between classes in our ontologies.</p>
+              <p class='toolkit'>Two or more categories are <strong>disjoint</strong> if they have no members in common.</p>
+              <br/>
+<pre class='prettyprint'>
+  ; Examples of disjoint property:
+  Disjoint({Animals, Rocks}) ; sorry, no pet rocks
+  Disjoint({Cats, Dogs, Humans}) ; counterexample: Catdog?
+</pre>
+              <br/>
+              <p>Some class sets have a special property that they cover the entire field of membership possibilities.</p>
+              <p>
+                I.e., if you're a member of class A, and there is an exhaustive decomposition of class A into 3 subclasses B, C, and D, then belonging to A means you *must* belong to one of 
+                B, C, or D (or multiple)
+              </p>
+              <p class='toolkit'>An <strong>exhaustive decomposition</strong> defines a set of subclasses that, together, exhaustively compose some other class.</p>
+              <p class='toolkit'>A <strong>partition</strong> is an exhaustive decomposition where the subclasses are also disjoint.</p>
+<pre class='prettyprint'>
+  ; Exhaustive decompositions:
+  ExDec({Americans, Canadians, Mexicans}, NorthAmericans)
+  
+  ; i.e., if you're a NorthAmerican, then you must be at least
+  ; an American, Canadian, or Mexican (or multiples!)
+  
+  
+  ; Partitions:
+  Partition({Even, Odd}, Numbers)
+  
+  ; i.e., if you're a number, then you're either even or odd,
+  ; but cannot be both even and odd!
+</pre>
+              <br/>
+              <p>There are a number of other cool FOL tricks we can do with ontologies to represent different human-parsable concepts (even the abstract ones), including the following:</p>
+<pre class='prettyprint'>
+  ; Physical Parts:
+  PartOf(California, USA)
+  PartOf(Hawaii, USA)
+  
+  ; Properties of membership
+  PartOf(x, USA) &rArr; MURICAN(x)
+  
+  ; Generic aggregations to denote collections
+  BunchOf({Apple1, Apple2, Apple3})
+  &forall;x x &in; s &rArr; PartOf(x, BunchOf(s))
+  
+  ; Measurements
+  Temperature(LA, Today) = Farenheit(100)
+  ; Measurement Identities
+  d &in; Days &rArr; Duration(d) = Hours(24)
+  
+  ; Mental Events / Knowledge Transfer
+  Knows(Descartes, Exists(Descartes)) ; philosophy jokes?
+  Knows(Andrew, &not;CanFly(Pigs))
+  ; Useful for programming our agents with what they
+  ; think that others think 0_o
+  
+  ; Semantic implications
+  Member(John, OneLeggedPersons)
+  &forall; x x &in; Persons &and; (x &ne; John) &rArr; Legs(x, 2)
+  ; Useful for NLP systems to unpack sentences
+</pre>
+              <br/>
+              <p>And that's pretty much Knowledge Representation in a nutshell!</p>
+              <p>The book has some more examples and details but the gist is captured above... nothing really surprising!</p>
+            </div>
+            <hr/>
+            
+            
+            <div id='uncertainty' class='scrollspy-element' scrollspy-title='Quantifying Uncertainty'></div>
+            <h1>Quantifying Uncertainty</h1>
+            <div>
+              <p>Yes, I know, I'm excited too! Finally some probability stuff!</p>
+              <p>...and of course there's a relevant XKCD, thanks for asking!</p>
+              <a href='http://xkcd.com/1236/' target='_blank'>
+                <div class='fit-pres text-center'>
+                  <img src='http://imgs.xkcd.com/comics/seashell.png' />
+                </div>
+              </a>
+              <br/>
+              <p>Someone made a very astute observation when we were discussing our propositional logic example with rain making the sidewalk wet:</p>
+              <p>They asked, &quot;We have these general rules that the sidewalk will always be wet if it's raining, but what if the sidewalk is covered by a tree during the storm?&quot;</p>
+              <p>Clearly there are exceptions to our general rules, and it's often difficult to represent the infinite number of exceptions that could happen with FOL:</p>
+<pre class='prettyprint'>
+  ; The naive reasoner about a wet sidewalk:
+  KB =
+     1. Weather(Rain)
+     2. Weather(Rain) &rArr; Wet(Sidewalk)
+     
+  ; Handling exceptions:
+  KB =
+     1. Weather(Rain)
+     2. (Weather(Rain) &and; &not;Covered(Sidewalk) &and; &not;WaterResistant(Sidewalk) &and; ...) &rArr; Wet(Sidewalk)
+  
+  ; Very difficult and impractical to cover all the possible
+  ; Cases where it's raining and the sidewalk isn't necessarily wet!
+  
+  ; Also, our intelligent agent just might not *know* whether the
+  ; sidewalk is covered
+</pre>
+              <br/>
+              <p>Another issue is the following: viewing our KB as stated above, does knowing anything about whether or not the sidewalk is wet tell us whether or not it's raining?</p>
+              <p>No! We don't have any rules to infer about observing the sidewalk whether it's raining or not, but certainly a wet sidewalk *suggests* that it might be raining.</p>
+              <p>In comes <strong>probabilistic reasoning</strong>, which attempts to model <strong>uncertainty</strong> about our environment in a parsimonious, statistical representation.</p>
+              <p class='definition'>
+                <strong>Uncertainty</strong> about an environment arises when our agent has partial sensor information, any sort of ignorance, or the problem is nondeterministic, but we still must make a
+                rational decision.
+              </p>
+              <br/>
               
             </div>
             <hr/>
