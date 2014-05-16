@@ -865,13 +865,13 @@
 <pre class='prettyprint'>
   ; Let's pretend we had a different joint distribution than our
   ; one listed above such that we *only* knew the following:
-  Pr(S = wet) = 0.40
-  Pr(W = rainy) = 0.60
+  Pr(S = wet) = 0.60
+  Pr(W = rainy) = 0.40
   Pr(S = wet | W = rainy) = 0.75
   
   ; What if my new question is: what is the probability
   ; that it's raining, given that the sidewalk is wet?
-  Pr(W = rainy | S = wet) = (Pr(S = Wet | W = rainy) * Pr(S = Wet)) / Pr(W = rainy)
+  Pr(W = rainy | S = wet) = (Pr(S = Wet | W = rainy) * Pr(W = rainy)) / Pr(S = wet)
                           = (0.75 * 0.40) / 0.60
                           = 0.50
 </pre>
