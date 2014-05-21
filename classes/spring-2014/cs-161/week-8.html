@@ -281,8 +281,8 @@
               </p>
               <br/>
               <p>
-                Less formally, for example, if we wanted to sum out X in the above distribution, leaving a joint on Y and Z, we simply look for every row where Y and Z *agree* and then sum over the possible
-                values for X
+                Less formally, for example, if we wanted to sum out X in the above distribution, leaving a joint <strong>marginal</strong> on Y and Z, 
+                we simply look for every row where Y and Z *agree* and then sum over the possible values for X
               </p>
               <p>Let's look at that in action; take a look at the following two pairs of rows, color-coded for your convenience:</p>
               <table class='table table-bordered'>
@@ -349,7 +349,10 @@
               <p>(the individual colors don't mean anything but observe the corresponding rows)</p>
               <p>These corresponding rows are where Y and Z agree (i.e., in both rows 1 and 4 Y has value y and Z has value z)</p>
               <p>So, to sum out X, we simply collapse across the two rows! It's as though X were removed entirely from the equation, just leaving us with a distribution over Y and Z.</p>
-              <p>This amounts to the following joint on Y and Z with X summed out (typically written: <code class='prettyprint'>&Sigma;_X Pr(Y, Z)</code>):</p>
+              <p class='definition'>The distribution that results from summing out a variable from a joint is called a <strong>joint marginal</strong> distribution, to illustrate that a variable was
+                summed out of the original joint.</p>
+              <br/>
+              <p>This amounts to the following joint marginal on Y and Z with X summed out (typically written: <code class='prettyprint'>&Sigma;_X Pr(Y, Z)</code>):</p>
               <table class='table table-bordered'>
                 <thead>
                   <tr>
@@ -494,6 +497,97 @@
                   </tr>
                 </tbody>
               </table>
+              <br/>
+              <p>So you might be curious... what's an intuitive interpretation of conditional independence?</p>
+              <p>Here are some good good scenarios that explain it, using dice, because every statistician loves dice for some reason:</p>
+              <table class='table table-bordered table-striped'>
+                <thead>
+                  <tr>
+                    <th><p>Concept</p></th>
+                    <th><p>Description</p></th>
+                    <th class='col-md-3'><p>Written</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><p>Independent</p></td>
+                    <td>You roll two dice: A and B. Knowing the outcome of A tells you nothing about the outcome of B.</td>
+                    <td>A &perp; B</td>
+                  </tr>
+                  <tr>
+                    <td><p>Independent, but Conditionally Dependent</p></td>
+                    <td><p>You roll two dice: A and B. If I tell you that the sum (S) of the two dice's totals is even, then knowing the value of either A or B actually *does* tell me something about the other,
+                      even though A and B are independent on their own.</p></td>
+                    <td><p>A /&perp; B | S<br/>(that's meant to be a little line through the &perp; symbol but I can't find that in unicode so... use your imagination)</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>Independent, and Conditionally Independent</p></td>
+                    <td><p>You roll two dice: A and B. If I tell you that the result (R) of A is not 3 and the result of B is not 2, I learn new information about each, but nothing that connects the
+                      two outcomes. So, the dice rolls are independent AND conditionally independent based on the new information.</p></td>
+                    <td><p>A &perp; B<br/>A &perp; B | R</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+              <p class='definition'>Two other, equivalent, ways to think about conditional independence are that:<br/><code class='prettyprint'>Pr(X | Y, Z) = Pr(X | Z)</code> if X &perp; Y | Z<br/><br/>
+                <code class='prettyprint'>Pr(X, Y | Z) = Pr(X | Z) * Pr(Y | Z)</code> if X &perp; Y | Z
+              </p>
+              <br/>
+              <p>So, let's take a look at a probability distribution that might elicit conditional independence relationships.</p>
+              
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='homework4' class='scrollspy-element' scrollspy-title='Homework 4'></div>
+            <h1>Homework 4</h1>
+            <div>
+              <p>Now that I've had a chance to look through the homework and do some solutions, I have a few hints that might be helpful in crafting your own!</p>
+              <table class='table table-striped table-bordered'>
+                <thead>
+                  <tr>
+                    <th><p>Problem</p></th>
+                    <th><p>Tip</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><p>1. SF-UNIFY</p></td>
+                    <td><p>Remember, to watch out for ordering in frames and lists of frames! The book algorithm attempts to unify slots in frames, and frames in lists, *in the same order*, but
+                      our frames don't care about that!</p><br/><br/><p>As such, you might find it useful to have multiple helper functions to handle the cases mentioned by the book, accounting
+                      for frames that might successfully unify but that simply aren't ordered the same.</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>2. SF-SUBST</p></td>
+                    <td><p>As you might have already seen, the solution to this one looks a lot like a couple of other functions we've done in the past that have to replace fillers with other values...</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>3. SF-INFER</p></td>
+                    <td><p>Fairly straightforward once you have SF-UNIFY working, since it does most of the heavy lifting...</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>4. FORWARD1</p></td>
+                    <td><p>Be careful to avoid infinite loops with the facts that you learn! Hmm, how to screen the results of SF-INFER?</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>5. BACKWARD1</p></td>
+                    <td><p>Now much easier since we're only doing the first step of backward chaining, this one too is reduced to a search problem on the first consequent that successfully unifies to the
+                      query.</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>6. C-GEN</p></td>
+                    <td><p>Deceptively intricate; make sure you read through the examples and piece together a plan of attack. I suggest dividing the algorithm into several steps: (1) isoltaing the
+                      pattern to use, (2) picking apart each pattern component, and (3) recursing as necessary.</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>7. C-GENS</p></td>
+                    <td><p>Trivial once Problem 6 is solved.</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+              <p>Hope those tips help a bit!</p>
             </div>
             <hr/>
             
