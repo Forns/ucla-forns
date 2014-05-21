@@ -1,0 +1,531 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Andrew Forney - UCLA CS</title>
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/magic-bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/main.css" rel="stylesheet" type="text/css">
+    <script src="../../../js/lib/jquery-2.0.3.min.js"></script>
+    <script src="../../../js/lib/bootstrap.min.js"></script>
+    <script src="../../../js/lib/expanding.js"></script>
+    <script src="../../../js/display/general/general-display.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+  </head>
+  
+  <body data-spy="scroll" data-target="#scrollspy">
+    
+    <!-- BEGIN WRAP -->
+    <div id="wrap">
+      
+      <!-- BEGIN NAVIGATION -->
+      <nav class='navbar navbar-default' role='navigation'>
+        <div class='nav-accent'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-12'>
+              <div class='navbar-header'>
+                <button class='navbar-toggle' type='button' data-toggle='collapse' data-target='.navbar-main-collapse'>
+                  <span class='sr-only'>Toggle Navigation</span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                </button>
+                <a class='navbar-brand' href='/~forns/'>
+                  <span id='brand-text'>
+                    Andrew Forney
+                  </span>
+                </a>
+              </div>
+              
+              <div id='nav-main' class='collapse navbar-collapse navbar-main-collapse'>
+                <ul class='nav navbar-nav navbar-right'>
+                  
+                  <li>
+                    <a href='/~forns/about.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-user'></span>
+                      </div>
+                      <p class='text-center'>About</p>
+                    </a>
+                  </li>
+                  
+                  <li class='active'>
+                    <a href='/~forns/classes.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-book'></span>
+                      </div>
+                      <p class='text-center'>Classes</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/contact.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-comment'></span>
+                      </div>
+                      <p class='text-center'>Contact</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/publications.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-file'></span>
+                      </div>
+                      <p class='text-center'>Publications</p>
+                    </a>
+                  </li>
+                  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <!-- END NAVIGATION -->
+      
+      <!-- BEGIN MAIN CONTENT -->
+      <div id="main-content" class="container">
+        <div class="row">
+          
+          <!-- BEGIN SCROLLSPY -->
+          <div class='col-md-2 hidden-sm hidden-xs'>
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+              <ul id='scrollspy' class="nav bs-sidenav">
+              </ul>
+            </div>
+          </div>
+          <!-- END SCROLLSPY -->
+          
+          <!-- BEGIN PRESENTATION CONTENT -->
+          <div class='col-md-10 presentation-content' role='main'>
+            
+            <ol class="breadcrumb hidden-print">
+              <li><a href="../../../classes.html">Classes</a></li>
+              <li><a href="./cs-161.html">Spring14 CS161</a></li>
+              <li class="active">Week 8</li>
+            </ol>
+            
+            
+            <div id='bayesTheorem' class='scrollspy-element' scrollspy-title='Applying Bayes&#39; Theorem'></div>
+            <h1>Applying Bayes' Theorem</h1>
+            <div>
+              <p>Last week we just saw the tip of the iceberg as far as what Bayes' Theorem can accomplish for us.</p>
+              <p>We've learned the probabilistic mechanisms that we'll use in the following lecture, so let's see how it all fits together.</p>
+              <p>Shall we start with a motivating example? Don't feel bad if you don't get this at first, about 85% of medical doctors asked the same question get it wrong.</p>
+              <br/>
+              <p class='example'>Read the following problem description, and for each probability mentioned, formalize it into a Pr(x | y) statement (for example) and then solve for the correct quantity.
+                Assume two binary variables: Test and Disease, as described by the problem.</p>
+              <blockquote>
+                A very rare condition, Schistosoforneymiosis, is found in about 1/1000 of those tested for it; sufferers experience a consistently wet left foot and sentient freckles.<br/><br/>
+                The test is an elaborate procedure involving multiple probes, and returns an end result that is either positive (Test) or negative (&not;Test). The problem is that the tests are not perfect, but 
+                95% of people who have the disease will test positive, and 2% of people who do *not* have the disease will test positive.<br/><br/>
+                <strong>If a patient tests positive, what is the probability that they have the disease?</strong>
+              </blockquote>
+              <br/>
+              <p>Let's dissect this problem and determine the proper quantities for each component to lead to our solution.</p>
+              <br/>
+              <p class='question' name='bayes-q0'>Translate the sentence into a Pr statement: &quot;A very rare condition, Schistosoforneymiosis, is found in about 1/1000 of those tested for it.&quot;</p>
+              <p class='answer' name='bayes-q0'>Pr(Disease) = 0.001</p>
+              <br/>
+              <p>The above represents the <strong>prior</strong> probability that we discussed from last time, i.e., the chance that someone has the condition before accounting for any evidence.</p>
+              <br/>
+              <p class='question' name='bayes-q1'>Translate the sentence into a Pr statement: &quot;95% of people who have the disease will test positive.&quot;</p>
+              <p class='answer' name='bayes-q1'>Pr(Test | Disease) = 0.95</p>
+              <br/>
+              <p>This value represents the case of a <strong>true positive</strong> since the test is positive and so is the disease.</p>
+              <br/>
+              <p class='question' name='bayes-q2'>Translate the sentence into a Pr statement: &quot;2% of people who do *not* have the disease will test positive.&quot;</p>
+              <p class='answer' name='bayes-q2'>Pr(Test | &not;Disease) = 0.02</p>
+              <br/>
+              <p>This value represents the case of a <strong>false positive</strong> since the test is positive but the disease is not.</p>
+              <br/>
+              <p class='question' name='bayes-q3'>Translate the sentence into a Pr statement: &quot;If a patient tests positive, what is the probability that they have the disease?&quot;</p>
+              <p class='answer' name='bayes-q3'>Pr(Disease | Test) = ??? (this is what we're trying to find out!)</p>
+              <br/>
+              <p>Alright, off to a good start! Let's write out everything that we have so far:</p>
+<pre class='prettyprint'>
+  Pr(Disease) = 0.001
+  Pr(Test | Disease) = 0.95
+  Pr(Test | &not;Disease) = 0.02
+  
+  Pr(Disease | Test) = ???
+</pre>
+              <br/>
+              <p>So, if it wasn't obvious before, we need to use Bayes' Theorem in order to solve for our target quantity! Let's write out what we'll need for that:</p>
+<pre class='prettyprint'>
+  Pr(Disease | Test) = (Pr(Test | Disease) * Pr(Disease)) / Pr(Test)
+</pre>
+              <br/>
+              <p>Do we have everything that we need to solve for Pr(Disease | Test)?</p>
+              <p>Well, yes and no; we have everything we need to calculate what we need, explicitly. In particular, we have everything on the RHS but Pr(Test).</p>
+              <p>Do we have a means of calculating the Pr(Test)?</p>
+              <br/>
+              <p class='question' name='bayes-q4'>Click here if you need a hint on how to calculate Pr(Test)...</p>
+              <p class='answer' name='bayes-q4'>Why, the Law of Total Probability of course!<br/><code class='prettyprint'>Pr(&alpha;) = &Sigma;_i Pr(&alpha;, &beta;_i)</code>, for mutually exclusive &beta;_i</p>
+              <br/>
+              <p>&quot;But Andrew, we don't have things in terms of Pr(&alpha;, &beta;), only <strong>conditions</strong>!&quot;</p>
+              <p>You're correct! You even said the strategy we need to use! Let's take a look:</p>
+<pre class='prettyprint'>
+  ; I claim that the choice for &beta; is a partition
+  ; in which each &beta;_i is mutually exclusive, do you agree?
+  &beta; = {{Disease}, {&not;Disease}}
+  
+  ; So, by the Law of Total Probability:
+  Pr(&alpha;) = &Sigma;_i Pr(&alpha;, &beta;_i)
+  
+  Pr(Test) = &Sigma;_i Pr(Test, &beta;_i)
+           = Pr(Test, Disease) + Pr(Test, &not;Disease)
+  
+  ; Now, we can condition in order to get:
+  Pr(Test) = Pr(Test | Disease) * Pr(Disease) +
+             Pr(Test | &not;Disease) * Pr(&not;Disease)
+             
+  ; We do not *explicitly* have one of these quantities above,
+  ; BUT, obvserve:
+  Pr(&not;Disease) = 1 - Pr(Disease)
+               = 1 - 0.001
+               = 0.999
+               
+  ; Therefore:
+  Pr(Test) = 0.95 * 0.001 + 0.02 * 0.999
+           = 0.02093
+           
+  ; And now, plugging back into our original:
+  Pr(Disease | Test) = (Pr(Test | Disease) * Pr(Disease)) / Pr(Test)
+                     = (0.95 * 0.001) / 0.02093
+                     = 0.045
+</pre>
+              <br/>
+              <p>Wow! That's a really small chance given that our incredibly accurate test was still positive!</p>
+              <p>Understanding Bayes' Theorem gives us a lot of power to detect non-obvious consequences like the above.</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='multivariate' class='scrollspy-element' scrollspy-title='Multivariate Distributions'></div>
+            <h1>Multivariate Distributions</h1>
+            <div>
+              <p>In the previous lecture, we dealt only with two variables, even though one of them was not binary.</p>
+              <p>Let's take a look at a multi-variate distribution taking a (not large) step to three variables.</p>
+              <p>For this example, let's just assume we have 3 binary variables X, Y, and Z, with a joint probability table that looks like:</p>
+              <table class='table table-bordered table-striped'>
+                <thead>
+                  <tr>
+                    <th><p>X</p></th>
+                    <th><p>Y</p></th>
+                    <th><p>Z</p></th>
+                    <th><p>Pr(X, Y, Z)</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><p>0</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0.2</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>0</p></td>
+                    <td><p>0</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0.2</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>0</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0.05</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>0</p></td>
+                    <td><p>1</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0.05</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>1</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0.05</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>1</p></td>
+                    <td><p>0</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0.05</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>1</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0.2</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>1</p></td>
+                    <td><p>1</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0.2</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+              <p>Well that's... err... pretty perfect... such neat probabilities! (we'd never get something so clean in the real world, of course, but play along for now...)</p>
+              <p>Let's talk about a couple of observations we can make on multivariate distributions.</p>
+              <p class='definition'>We can <strong>sum out (marginalize)</strong> a variable by &quot;collapsing&quot; the distribution on the remaining variables we're not summing out.
+                This is formally defined as:<br/>
+                P(Y) = &Sigma;_z&in;Z P(Y, z)
+              </p>
+              <br/>
+              <p>
+                Less formally, for example, if we wanted to sum out X in the above distribution, leaving a joint on Y and Z, we simply look for every row where Y and Z *agree* and then sum over the possible
+                values for X
+              </p>
+              <p>Let's look at that in action; take a look at the following two pairs of rows, color-coded for your convenience:</p>
+              <table class='table table-bordered'>
+                <thead>
+                  <tr>
+                    <th><p>X</p></th>
+                    <th><p>Y</p></th>
+                    <th><p>Z</p></th>
+                    <th><p>Pr(X, Y, Z)</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class='danger'>
+                    <td><p>0</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0.2</p></td>
+                  </tr>
+                  <tr class='warning'>
+                    <td><p>0</p></td>
+                    <td><p>0</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0.2</p></td>
+                  </tr>
+                  <tr class='success'>
+                    <td><p>0</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0.05</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>0</p></td>
+                    <td><p>1</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0.05</p></td>
+                  </tr>
+                  <tr class='danger'>
+                    <td><p>1</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0.05</p></td>
+                  </tr>
+                  <tr class='warning'>
+                    <td><p>1</p></td>
+                    <td><p>0</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0.05</p></td>
+                  </tr>
+                  <tr class='success'>
+                    <td><p>1</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0.2</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>1</p></td>
+                    <td><p>1</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0.2</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+              <p>(the individual colors don't mean anything but observe the corresponding rows)</p>
+              <p>These corresponding rows are where Y and Z agree (i.e., in both rows 1 and 4 Y has value y and Z has value z)</p>
+              <p>So, to sum out X, we simply collapse across the two rows! It's as though X were removed entirely from the equation, just leaving us with a distribution over Y and Z.</p>
+              <p>This amounts to the following joint on Y and Z with X summed out (typically written: <code class='prettyprint'>&Sigma;_X Pr(Y, Z)</code>):</p>
+              <table class='table table-bordered'>
+                <thead>
+                  <tr>
+                    <th><p>Y</p></th>
+                    <th><p>Z</p></th>
+                    <th><p>&Sigma;_X Pr(Y, Z)</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class='danger'>
+                    <td><p>0</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0.25</p></td>
+                  </tr>
+                  <tr class='warning'>
+                    <td><p>0</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0.25</p></td>
+                  </tr>
+                  <tr class='success'>
+                    <td><p>1</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0.25</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>1</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0.25</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+              <p>(Aside: that table looks really rasta)</p>
+              <p>Any who, observe how we now have a joint distribution on Y and Z.</p>
+              
+              <br/>
+              <h3>Independence</h3>
+              <p>Let's turn our attention to independence relationships, remembering that our definition of independence was that:</p>
+<pre class='prettyprint'>
+  ; If Y is independent from Z, written:
+  ; Y &perp; Z
+  ; ...then:
+  
+  Pr(Y | Z) = Pr(Y)
+  
+  ; ...&forall; y, z
+</pre>
+              <br/>
+              <p>So let's assess that above (if it isn't obvious)...</p>
+              <p>Using Bayes' Conditioning, we see that:</p>
+<pre class='prettyprint'>
+  Pr(Y | Z) = Pr(Y, Z) / Pr(Z)
+  
+  ; Using our new joint on Y and Z, it is
+  ; easy to see that:
+  Pr(Y = 1, Z = 1) = 0.25
+  Pr(Y = 1, Z = 0) = 0.25
+  Pr(Z = 1) = Pr(Z = 0) = 0.5
+  
+  ; ...so:
+  Pr(Y = 1 | Z = 1) = 0.25 / 0.5
+                    = 0.5
+                    = Pr(Y = 1)
+  
+  ; ...and we can also show that:
+  Pr(Y = 1 | Z = 0) = Pr(Y = 1 | Z = 1)
+                    = Pr(Y = 1)
+  
+  &there4; Y &perp; Z
+</pre>
+              <br/>
+              <p>Neat! So this means that knowing something about Z tells me nothing about the state of Y...</p>
+              <p>E.g., knowing that it's Tuesday tells me nothing about my chances of winning the lottery.</p>
+              <br/>
+              <p>If we were so inclined, we could repeat the process of summing out Z from the original joint distribution to get:</p>
+              <table class='table table-bordered'>
+                <thead>
+                  <tr>
+                    <th><p>X</p></th>
+                    <th><p>Y</p></th>
+                    <th><p>&Sigma;_Z Pr(X, Y)</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><p>0</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0.4</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>0</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0.1</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>1</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0.1</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>1</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0.4</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+              <p>Performing the same test for independence, we would find that:</p>
+<pre class='prettyprint'>
+  Pr(Y | X) = Pr(Y, X) / Pr(X)
+  
+  Pr(Y = 1 | X = 1) = 0.8
+                    &ne; Pr(Y = 1)
+                    
+  &there4; Y is dependent on X
+</pre>
+              
+              <br/>
+              <h3>Conditional Independence</h3>
+              <p>A topic we haven't talked about yet is a peculiar phenomenon known as conditional independence.</p>
+              <p>As it turns out, it's possible for two variables X and Y to be independent ONLY after we've observed (conditioned upon) some other variable(s) Z.</p>
+              <p>To compare:</p>
+              <table class='table table-bordered table-striped'>
+                <thead>
+                  <tr>
+                    <th><p>Relationship</p></th>
+                    <th><p>Description</p></th>
+                    <th><p>Written</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th><p>Independence</p></th>
+                    <td><p>If we have knowledge that X occurred, and that tells us nothing about whether or not Y occured, then X is independent of Y and vice versa.</p></td>
+                    <td><p>X &perp; Y</p></td>
+                  </tr>
+                  <tr>
+                    <th><p>Conditional Independence</p></th>
+                    <td><p>X and Y are conditionally independent if and only if, given information about Z, having knowledge about X tells us nothing about whether or not Y occured; i.e., X and Y may
+                      not be independent until *after* conditioning on a third variable / set of variables Z.</p></td>
+                    <td class='col-md-2'><p>X &perp; Y | Z</p></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <hr/>
+            
+            
+            <a class='btn btn-default pull-right hidden-print' href='javascript:window.print();'>
+              <span class='glyphicon glyphicon-print'></span>
+              &nbsp; PDF / Print
+            </a>
+            
+          </div>
+          <!-- END PRESENTATION CONTENT -->
+          
+          <!-- MATERIALS FROM CLASS: -->
+          
+            
+        </div>
+      </div>
+      <!-- END MAIN CONTENT -->
+      
+      
+    </div>
+    <!-- END WRAPPER -->
+    
+    <!-- BEGIN FOOTER -->
+    <div id="footer">
+      <div class="container">
+        <div class="col-md-12 text-center">
+          
+        </div>
+      </div>
+    </div>
+    <!-- END FOOTER -->
+    
+  </body>
+</html>
