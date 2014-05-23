@@ -534,7 +534,589 @@
               </p>
               <br/>
               <p>So, let's take a look at a probability distribution that might elicit conditional independence relationships.</p>
+              <p>In the book, the example given is for observing relationships between three dental-exam variables:</p>
+              <ul class='indent-1'>
+                <li><p><strong>Toothache:</strong> subjective patient reported tooth pain; typically a sign of a cavity</p></li>
+                <li><p><strong>Cavity:</strong> whether the dentist found a cavity</p></li>
+                <li><p><strong>Catch:</strong> whether the dentist felt their metal teeth cleaner get caught on a tooth of interest; typically a sign of a cavity</p></li>
+              </ul>
+              <br/>
+              <p>...an example, which, frankly sounds a bit odd, but we'll run with it because it's the numbers we're interested in.</p>
+              <p>Let's look at that distribution:</p>
+              <table class='table table-bordered table-striped'>
+                <thead>
+                  <tr>
+                    <th><p>Toothache</p></th>
+                    <th><p>Cavity</p></th>
+                    <th><p>Catch</p></th>
+                    <th><p>Pr(Toothache, Cavity, Catch)</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><p>0</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0.576</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>0</p></td>
+                    <td><p>0</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0.144</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>0</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0.008</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>0</p></td>
+                    <td><p>1</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0.072</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>1</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0.064</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>1</p></td>
+                    <td><p>0</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0.016</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>1</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0.012</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>1</p></td>
+                    <td><p>1</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0.108</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+              <p>We can see that the instances of toothache are usually indicative of a cavity, which is also a cause of catches.</p>
+              <p>Now, the example makes the following observations (by example design, of course):</p>
+              <ul class='indent-1'>
+                <li><p>We hypothesize that cavities cause toothaches and catches.</p></li>
+                <li><p>If this is the case, then knowing that someone has a cavity immediately tells us that they are likely to have a toothache and catch.</p></li>
+                <li><p>Furthermore, if we knew someone had a cavity, does knowing that they also have a toothache tell us more than we already know? No!</p></li>
+              </ul>
+              <br/>
+              <p class='question' name='condind-q0'>What conditional independence relationship are the above observations making?</p>
+              <p class='answer' name='condind-q0'>That a toothaches and catches are independent once we know whether or not a tooth has a cavity!</p>
+              <br/>
+              <p class='question' name='condind-q1'>Rationalize: why is this a conditional independence relationship and not an absolute independence relationship?</p>
+              <p class='answer' name='condind-q1'>Because *without* knowing whether or not there is a cavity, we *do* know more about the probability of a catch given that there is a toothache, and vice versa;
+                we say that <strong>information flows</strong> from one variable to the other without the conditioning on Cavity.</p>
+              <br/>
+              <p class='question' name='condind-q2'>Express this conditional independence in probability notation; how will we go about illustrating this independence relationship from the distribution?</p>
+              <p class='answer' name='condind-q2'>Pr(Toothache | Catch, Cavity) = Pr(Toothache | Cavity); we'll solve this below!</p>
+              <br/>
+              <p>Alright, now that we have our query in mind, let's observe the following:</p>
+<pre class='prettyprint'>
+  ; Goal:
+  Pr(Toothache | Catch, Cavity) = Pr(Toothache | Cavity)
+  
+  ; We have neither of those tables, but we can compute them!
+  ; Let's use Bayes' Conditioning and marginalization!
+    Pr(Toothache | Catch, Cavity)
+  = Pr(Toothache, Catch, Cavity) / Pr(Catch, Cavity)
+  
+    Pr(Toothache | Cavity)
+  = Pr(Toothache, Cavity) / Pr(Cavity)
+</pre>
+              <br/>
+              <p>Marginalizing from the joint distribution, we can get our two joint-marginals on Pr(Catch, Cavity) and Pr(Toothache, Cavity):</p>
+              <div class='row'>
+                <div class='col-md-6'>
+                  <table class='table table-bordered table-striped'>
+                    <thead>
+                      <tr>
+                        <th><p>Cavity</p></th>
+                        <th><p>Catch</p></th>
+                        <th><p>Pr(Cavity, Catch)</p></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><p>0</p></td>
+                        <td><p>0</p></td>
+                        <td><p>0.64</p></td>
+                      </tr>
+                      <tr>
+                        <td><p>0</p></td>
+                        <td><p>1</p></td>
+                        <td><p>0.16</p></td>
+                      </tr>
+                      <tr>
+                        <td><p>1</p></td>
+                        <td><p>0</p></td>
+                        <td><p>0.02</p></td>
+                      </tr>
+                      <tr>
+                        <td><p>1</p></td>
+                        <td><p>1</p></td>
+                        <td><p>0.18</p></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class='col-md-6'>
+                  <table class='table table-bordered table-striped'>
+                    <thead>
+                      <tr>
+                        <th><p>Toothache</p></th>
+                        <th><p>Cavity</p></th>
+                        <th><p>Pr(Toothache, Cavity)</p></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><p>0</p></td>
+                        <td><p>0</p></td>
+                        <td><p>0.72</p></td>
+                      </tr>
+                      <tr>
+                        <td><p>0</p></td>
+                        <td><p>1</p></td>
+                        <td><p>0.08</p></td>
+                      </tr>
+                      <tr>
+                        <td><p>1</p></td>
+                        <td><p>0</p></td>
+                        <td><p>0.08</p></td>
+                      </tr>
+                      <tr>
+                        <td><p>1</p></td>
+                        <td><p>1</p></td>
+                        <td><p>0.12</p></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <br/>
+              <p>As a final ingredient for our proof of conditional independence, I'll save you the meager effort and tell you that: Pr(Cavity) = 0.2</p>
+              <p>Now, we just need to compute the two conditional distributions; we'll start with the Pr(Toothache | Catch, Cavity) from the joint:</p>
+              <table class='table table-bordered table-striped'>
+                <thead>
+                  <tr>
+                    <th><p>Toothache</p></th>
+                    <th><p>Cavity</p></th>
+                    <th><p>Catch</p></th>
+                    <th><p>Pr(Toothache, Cavity, Catch)</p></th>
+                    <th><p>Pr(Toothache | Cavity, Catch)</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><p>0</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0.576</p></td>
+                    <td><p>0.9</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>0</p></td>
+                    <td><p>0</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0.144</p></td>
+                    <td><p>0.9</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>0</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0.008</p></td>
+                    <td><p>0.4</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>0</p></td>
+                    <td><p>1</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0.072</p></td>
+                    <td><p>0.4</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>1</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0.064</p></td>
+                    <td><p>0.1</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>1</p></td>
+                    <td><p>0</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0.016</p></td>
+                    <td><p>0.1</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>1</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0.012</p></td>
+                    <td><p>0.6</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>1</p></td>
+                    <td><p>1</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0.108</p></td>
+                    <td><p>0.6</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+              <p>Interesting, looks like we have some flavor of uniformity going on here... hmmm... Let's compute Pr(Toothache | Cavity):</p>
+              <table class='table table-bordered table-striped'>
+                <thead>
+                  <tr>
+                    <th><p>Toothache</p></th>
+                    <th><p>Cavity</p></th>
+                    <th><p>Pr(Toothache | Cavity)</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><p>0</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0.9</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>0</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0.4</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>1</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0.1</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>1</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0.6</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+              <p>Aha! We see that the two are in fact equivalent, regardless of what we know about a Catch! Taking a closer look:</p>
+<pre class='prettyprint'>
+    Pr(&not;Toothache | &not;Catch, &not;Cavity)
+  = Pr(&not;Toothache | Catch, &not;Cavity)
+  = Pr(&not;Toothache | &not;Cavity)
+  = 0.9
+  
+    Pr(&not;Toothache | &not;Catch, Cavity)
+  = Pr(&not;Toothache | Catch, Cavity)
+  = Pr(&not;Toothache | Cavity)
+  = 0.4
+  
+    Pr(Toothache | &not;Catch, &not;Cavity)
+  = Pr(Toothache | Catch, &not;Cavity)
+  = Pr(Toothache | &not;Cavity)
+  = 0.1
+  
+    Pr(Toothache | &not;Catch, Cavity)
+  = Pr(Toothache | Catch, Cavity)
+  = Pr(Toothache | Cavity)
+  = 0.6
+  
+  &there4; Pr(Toothache | Catch, Cavity) = Pr(Toothache | Cavity)
+  &there4; Toothache &perp; Catch | Cavity
+</pre>
+              <br/>
+              <p>Whew! That was a lot of work! But we'll see in a moment that this is all worth it...</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='bayesnet' class='scrollspy-element' scrollspy-title='Bayesian Networks'></div>
+            <h1>Bayesian Networks</h1>
+            <div>
+              <p>Finally, we get to Bayesian Networks! I know you paid for your whole seat this discussion but you're only going to need the edge!</p>
+              <p>To commemorate the occasion, I've created an image deserving of the day's grandeur that I've wanted to make for some time now.</p>
+              <br/>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayeswatch.png' />
+              </div>
+              <br/>
+              <p>That, of course, is a picture of Father Thomas Bayes, the one responsible for the eponymous theorem, photoshopped onto David Hasselhoff's body from the hit drama series Baywatch from 1989.</p>
+              <p>I haven't had any means of working this joke into conversation, and the previous part of this lecture's been dull, so here we are...</p>
+              <br/>
+              <p>You awake again? OK...</p>
+              <p>In the last section we derived that <code class='prettyprint'>Toothache &perp; Catch | Cavity</code> from our dentist example.</p>
+              <p>Let's look at an interesting consequence:</p>
+              <p class='question' name='bayesnet-q0'>Give the chain-rule factorization of the joint probability table: <code class='prettyprint'>Pr(Toothache, Catch, Cavity)</code></p>
+              <p class='answer' name='bayesnet-q0'>Pr(Toothache, Catch, Cavity) = Pr(Toothache | Catch, Cavity) * Pr(Catch | Cavity) * Pr(Cavity)</p>
+              <br/>
+              <p>OK, and based on our conditional independence relation found from the previous section, can we reduce this to anything simpler?</p>
+              <br/>
+<pre class='prettyprint'>
+  ; Yes! Since:
+  Toothache &perp; Catch | Cavity
+  
+  ; Then:
+    Pr(Toothache | Catch, Cavity)
+  = Pr(Toothache | Cavity)
+  
+  ; And so our factorization:
+    Pr(Toothache, Catch, Cavity)
+  = Pr(Toothache | Catch, Cavity) * Pr(Catch | Cavity) * Pr(Cavity)
+  = Pr(Toothache | Cavity) * Pr(Catch | Cavity) * Pr(Cavity)
+</pre>
+              <br/>
+              <p>Hmm, interesting... so we took a big joint probability table (Pr(Toothache, Catch, Cavity)) and broke it down into 3 smaller tables!</p>
+              <p>There's something else interesting about our factorization...</p>
+              <p>Remembering that we presumed that both toothaches and catches were indicators of cavities:</p>
+              <p class='question' name='bayesnet-q1'>Thinking about cause-effect relationships, what's interesting about the tables: Pr(Toothache | Cavity) and Pr(Catch | Cavity)</p>
+              <p class='answer' name='bayesnet-q1'>They are tables structured according to a possible effect *given* that effect's possible causes!</p>
+              <br/>
+              <p>Alright, we're almost ready to hit the punchline... one final example.</p>
+              <p class='example'>Using the following distribution properties, compare the full joint probability distribution's size (over all 5 variables) to its chain-rule factorization:</p>
+<pre class='prettyprint'>
+  ; Say we have 5 binary variables:
+  A, B, C, D, E
+  
+  ; They elicit a joint probability distrbution:
+  Pr(A, B, C, D, E)
+  
+  ; [?] How many rows are in this table?
+  
+  ; Now, say we had independence relationships
+  ; that allowed us to factor that joint distribution
+  ; into the following:
+    Pr(A, B, C, D, E)
+  = Pr(A) * Pr(B) * Pr(C) * Pr(D) * Pr(E)
+  
+  ; [?] How many rows are in each of these smaller
+  ; tables?
+  
+  ; [?] Do we witness a difference between the number
+  ; of rows in the full joint vs. the factorization?
+</pre>
+              <br/>
+              <p>Yes! Big savings, in fact!</p>
+              <p>There are 32 rows in the full joint, but only 10 rows in the individual, factored tables!</p>
+              <p class='definition'><strong>Bayesian Networks</strong> attempt to exploit independence relationships to reduce massive joint probability distributions to smaller tables, all while
+                capturing the intuitive notions of cause and effect to structure the independences.</p>
+              <br/>
+              <p>In the words of the great Judea Pearl, who was instrumental in their development, Bayesian networks are, &quot;A parsimonious representation&quot; of the joint distribution.</p>
+              <p>They're just really intuitive data structures!</p>
+              <p>Here's a simple Bayesian network representing our dentist's problem:</p>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-0.png' />
+              </div>
+              <br/>
+              <p>There's a lot to note about Bayesian networks:</p>
+              <p class='definition'>Bayesian networks are a class of graphs called <strong>directed, acyclic graphs (DAGs)</strong>, meaning that the edges between nodes are directed and they form 
+                no cycles (derp).</p>
+              <p class='definition'>The network's <strong>nodes</strong> are the variables in our distributions.</p>
+              <p class='definition'>The network's <strong>edges</strong> represent <strong>dependence</strong> relationships, i.e., two connected nodes are dependent upon one another.</p>
+              <p class='definition'>Edges illustrate only a dependence; effects can have multiple causes and causes can have multiple effects, any one of which illustrates an influence that may be negative 
+                OR positive (correlationally).</p>
+              <p class='definition'>The <strong>edge directions</strong> are merely tools to represent the independence relationships, but are structured with potential causes pointing to potential effects.</p>
+              <br/>
+              <p>Why do we say &quot;potential causes&quot; and &quot;potential effects?&quot;</p>
+              <p>Because our data is correlational!</p>
+              <a href='http://gizmodo.com/5977989/internet-explorer-vs-murder-rate-will-be-your-favorite-chart-today' target='_blank'>
+                <div class='fit-pres text-center'>
+                  <img src='../../../assets/images/spring-2014/cs-161/week-8/correlation.jpg' />
+                </div>
+              </a>
+              <br/>
+              <p>We would need stronger tools to claim confidence in a true causal relation, but for the purposes of Bayesian networks, it is convenient and intuitive to draw arrows from causes to effects.</p>
+              <p>The reason being the same as in our dentist example: if we know that someone has a cavity (the cause), then knowing that they also have a toothache doesn't tell us more about their chance
+                of having a catch.</p>
+              <p>That is, as soon as we know the state of the causes, we don't get any new information about the effects!</p>
+              <p>Thus, we glean some notion of the <strong>semantics / meaning</strong> implicit within Bayesian networks:</p>
+              <div class='definition'>
+<pre class='prettyprint'>
+  ; The joint distribution:
+    Pr(X1, X2, ..., Xn)
+  
+  ; ...can be factored using independence
+  ; relationships to:
+  = Pr(X1 | Parents(X1)) * Pr(X2 | Parents(X2)) * ...
+  
+  ; ...which semantically represents the putative
+  ; relationship between causes and effects:
+  = Pr(Effect1 | Causes(Effect1)) * (Effect2 | Causes(Effect2)) * ...
+  
+  = &Pi;_X&in;Vars Pr(X | Parents(X))
+</pre>
+              </div>
+              <br/>
+              <p class='definition'>This factorization allows us to express the large joint distribution in terms of <strong>conditional probability tables (CPTs)</strong> of an effect given its parents.</p>
+              <br/>
+              <p>For our dentist example, the CPTs would look like:</p>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-1.png' />
+              </div>
+              <br/>
+              <p class='question' name='bayesnet-q2'>Using the above CPTs, compute: Pr(Cavity = 0, Toothache = 1, Catch = 0)</p>
+              <div class='answer' name='bayesnet-q2'>
+<pre class='prettyprint'>
+    Pr(Cavity = 0, Toothache = 1, Catch = 0)
+  = Pr(Toothache = 1 | Cavity = 0) * Pr(Catch = 0 | Cavity = 0) * Pr(Cavity = 0)
+  = 0.1 * 0.8 * 0.8
+  = 0.064
+</pre>
+              </div>
+              <br/>
+              <p>Since our CPTs describe a world in which the effects can be screened off from other portions of the network by knowing about their causes, we say that Bayesian networks make the
+                Markovian assumption:</p>
+              <p class='definition'>The <strong>Markovian assumption</strong> states that every node is independent of its non-descendents given its parents.</p>
+              <br/>
+              <p>(non-descendents of node X are defined as any node that you could not reach taking a directed path starting at X)</p>
+              <p>You should repeat that a couple times... make it your mantra.</p>
+              <p class='example'>What are the Markovian assumptions implicit in the following Bayesian network?</p>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-2.png' />
+              </div>
+              <p class='question' name='bayesnet-q3'>Click for answer.</p>
+              <div class='answer' name='bayesnet-q3'>
+<pre class='prettyprint'>
+  Earthquake &perp; Burglary
+  
+  Radio &perp; Alarm | Earthquake
+  Radio &perp; Call | Earthquake
+  Radio &perp; Burglary | Earthquake
+  
+  Burglary &perp; Radio
+  
+  Alarm &perp; Radio | Earthquake, Burglary
+  
+  Call &perp; Radio | Alarm
+  Call &perp; Earthquake | Alarm
+  Call &perp; Burglary | Alarm
+</pre>
+              </div>
+              <br/>
+              <p>We notice a couple things about our Markovian assumptions:</p>
+              <ol class='indent-1'>
+                <li><p>There are some redundancies (e.g., Burglary &perp; Radio, but we also have that Radio &perp; Burglary | Earthquake)</p></li>
+                <li><p>There are some independence relations that they miss...</p></li>
+              </ol>
+              <br/>
+              <p>Let's look at a formalization of independences implicit within our Bayesian Network next.</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='dsep' class='scrollspy-element' scrollspy-title='D-Separation'></div>
+            <h1>D-Separation</h1>
+            <div>
+              <p>Let's start off by considering 3 different simple Bayesian networks and observe how we can generalize their characteristics.</p>
+              <p>We'll examine Bayesian networks as a plumbing network where:</p>
+              <ol class='indent-1'>
+                <li><p>Nodes are &quot;valves&quot; that allow water (information) to flow through</p></li>
+                <li><p>Edges are &quot;pipes&quot; that connect the valves</p></li>
+                <li><p>Dependence is the process of determining whether water (information) could flow from some set of valves (variables) X to some other set of valves Y, accounting for whether or not
+                  any valves along any pipe-path are closed or not (our evidence, some set of variables Z)</p></li>
+              </ol>
+              <br/>
+              <p>We'll start with a familar problem:</p>
+              <p class='definition'>A valve Z is <strong>divergent / a fork</strong> along some path if it is a common cause of two effects, X and Y.<br/>
+                <code class='prettyprint'>X &larr; Z &rarr; Y</code></p>
+              <br/>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-0.png' />
+              </div>
+              <br/>
+              <p>Divergent nodes are sometimes referred to as common causes. Here, we see that if we know whether or not someone has a cavity, then information does NOT flow from toothache to catch.</p>
+              <p>So, the rule for divergent valves along some path is that when we have a triplet X &larr; Z &rarr; Y, given Z blocks information flow from X to Y.</p>
+              <br/>
+              <p class='definition'>A valve Z is <strong>sequential / a chain</strong> along some path if some other variable X is its cause and Z has some effect Y.<br/>
+                <code class='prettyprint'>X &rarr; Z &rarr; Y</code> OR <code class='prettyprint'>Y &larr; Z &larr; X</code></p>
+              <br/>
+              <p>Here's an example path of a chain:</p>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-3.png' />
+              </div>
+              <br/>
+              <p>Here, knowing that someone has tar in their lungs means that we no longer get information flowing from any knowledge that the person smoked to whether they'll have lung cancer.</p>
+              <p>So, the rule for chain valves along some path is that for triple X &rarr; Z &rarr; Y, given Z blocks information flow from X to Y.</p>
+              <br/>
+              <p class='definition'>A valve Z is <strong>convergent / a sink</strong> along some path if it is the common effect of two causes, X and Y.<br/>
+                <code class='prettyprint'>X &rarr; Z &larr; Y</code>
+              </p>
+              <br/>
+              <p>Convergent nodes are a special beast, so let's look at the following scenario:</p>
+              <blockquote>
+                Consider the scenario where a bell rings if and only if the outcome of two coin flips (from two separate coins) are identical (i.e., both heads or both tails).
+              </blockquote>
+              <br/>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-4.png' />
+              </div>
+              <br/>
+              <p class='question' name='bayesnet-q4'>If I know whether or not the bell rings, does information flow from coinflip 1 to coinflip 2?</p>
+              <p class='answer' name='bayesnet-q4'>Yes! If I know the bell rang, then knowing that coinflip 1 came up heads tells me exactly that coinflip 2 must have been heads!</p>
+              <br/>
+              <p class='question' name='bayesnet-q5'>If I DO NOT know whether or not the bell rang, does information flow from coinflip 1 to coinflip 2?</p>
+              <p class='answer' name='bayesnet-q4'>No! Just by knowing that coinflip 1 came up heads tells me nothing about coinflip 2.</p>
+              <br/>
+              <p>Now consider the following scenario:</p>
+              <blockquote>
+                A bell rings if and only if the outcome of two coin flips (from two separate coins) are identical (i.e., both heads or both tails). Additionally, if the bell rings, our elderly butler,
+                Jeeves, has an 80% chance of bringing tea to our room.
+              </blockquote>
+              <br/>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-5.png' />
+              </div>
+              <br/>
+              <p class='question' name='bayesnet-q5'>If I know whether or not Jeeves brings tea, does information flow from coinflip 1 to coinflip 2?</p>
+              <p class='answer' name='bayesnet-q5'>Yes! If I know that Jeeves brought tea, then I know that the bell *probably* rang! As such, I gain information about coinflip 2 based on whatever coinflip 1 was.</p>
+              <br/>
+              <p class='question' name='bayesnet-q6'>If I DO NOT know whether or not the bell rang AND I DO NOT know whether Jeeves brought tea, does information flow from coinflip 1 to coinflip 2?</p>
+              <p class='answer' name='bayesnet-q6'>No!</p>
+              <br/>
+              <p>So, the rule for convergent valves is the following: for common effect Z in configuration: X &rarr; Z &larr; Y, then Z is blocked if neither it NOR any of its descendants are given!</p>
               
+              <br/>
+              <h3>d-Separation</h3>
+              <p>Now, we can think about these three cases of valves as being elements along a path in a Bayesian network.</p>
+              <p class='definition'><strong>d-separation</strong> (directional separation) allows us to determine all independence relations implicit from the graph just by looking at its structure.</p>
+              <br/>
+              <p>The rules of d-separation are as follows:</p>
+<pre class='prettyprint'>
+  ; To determine if some set of nodes X is
+  ; d-separated from some set of nodes Y by
+  ; some (possibly empty) set of nodes Z:
+  
+  trace ALL undirected paths from each X to each Y
+      for each valve V on the current path
+          if V is a fork and given (i.e., V&in;Z)
+              then this path is blocked
+          if V is a chain and given
+              then this path is blocked
+          if V is a sink and neither it NOR its
+            descendents are given
+              then this path is blocked
+      
+  if ALL paths blocked from each X to each Y given Z
+      then X is d-separated from Y given Z
+  else there was an open path
+      then X is NOT d-separated from Y given Z
+</pre>
+              <br/>
+              <p>It might look complicated, but the fact that it's a strictly graphical criterion for independence makes it easy to trace.</p>
+              <p>Let's do a bunch of examples:</p>
             </div>
             <hr/>
             
@@ -555,7 +1137,7 @@
                   <tr>
                     <td><p>1. SF-UNIFY</p></td>
                     <td><p>Remember, to watch out for ordering in frames and lists of frames! The book algorithm attempts to unify slots in frames, and frames in lists, *in the same order*, but
-                      our frames don't care about that!</p><br/><br/><p>As such, you might find it useful to have multiple helper functions to handle the cases mentioned by the book, accounting
+                      our frames don't care about that!</p><br/><p>As such, you might find it useful to have multiple helper functions to handle the cases mentioned by the book, accounting
                       for frames that might successfully unify but that simply aren't ordered the same.</p></td>
                   </tr>
                   <tr>
