@@ -918,7 +918,7 @@
               <p>They're just really intuitive data structures!</p>
               <p>Here's a simple Bayesian network representing our dentist's problem:</p>
               <div class='fit-pres text-center'>
-                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-0.png' />
+                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-0.PNG' />
               </div>
               <br/>
               <p>There's a lot to note about Bayesian networks:</p>
@@ -964,7 +964,7 @@
               <br/>
               <p>For our dentist example, the CPTs would look like:</p>
               <div class='fit-pres text-center'>
-                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-1.png' />
+                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-1.PNG' />
               </div>
               <br/>
               <p class='question' name='bayesnet-q2'>Using the above CPTs, compute: Pr(Cavity = 0, Toothache = 1, Catch = 0)</p>
@@ -985,7 +985,7 @@
               <p>You should repeat that a couple times... make it your mantra.</p>
               <p class='example'>What are the Markovian assumptions implicit in the following Bayesian network?</p>
               <div class='fit-pres text-center'>
-                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-2.png' />
+                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-2.PNG' />
               </div>
               <p class='question' name='bayesnet-q3'>Click for answer.</p>
               <div class='answer' name='bayesnet-q3'>
@@ -1035,7 +1035,7 @@
                 <code class='prettyprint'>X &larr; Z &rarr; Y</code></p>
               <br/>
               <div class='fit-pres text-center'>
-                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-0.png' />
+                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-0.PNG' />
               </div>
               <br/>
               <p>Divergent nodes are sometimes referred to as common causes. Here, we see that if we know whether or not someone has a cavity, then information does NOT flow from toothache to catch.</p>
@@ -1046,7 +1046,7 @@
               <br/>
               <p>Here's an example path of a chain:</p>
               <div class='fit-pres text-center'>
-                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-3.png' />
+                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-3.PNG' />
               </div>
               <br/>
               <p>Here, knowing that someone has tar in their lungs means that we no longer get information flowing from any knowledge that the person smoked to whether they'll have lung cancer.</p>
@@ -1062,7 +1062,7 @@
               </blockquote>
               <br/>
               <div class='fit-pres text-center'>
-                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-4.png' />
+                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-4.PNG' />
               </div>
               <br/>
               <p class='question' name='bayesnet-q4'>If I know whether or not the bell rings, does information flow from coinflip 1 to coinflip 2?</p>
@@ -1078,7 +1078,7 @@
               </blockquote>
               <br/>
               <div class='fit-pres text-center'>
-                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-5.png' />
+                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-5.PNG' />
               </div>
               <br/>
               <p class='question' name='bayesnet-q5'>If I know whether or not Jeeves brings tea, does information flow from coinflip 1 to coinflip 2?</p>
@@ -1124,7 +1124,7 @@
               <br/>
               <p class='example'>Use the following Bayesian network to determine if each variable set X is separated from Y given Z. If it is not, show the open path.</p>
               <div class='fit-pres text-center'>
-                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-6.png' />
+                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-6.PNG' />
               </div>
               <br/>
               <p class='question' name='bayesnet-q7'>Is <code class='prettyprint'>d-sep( {V}, {}, {T} )</code></p>
@@ -1172,12 +1172,12 @@
               <p>Above, Q = {Smoking} and e = {Smoking = true}</p>
               <p>Let's use this as our example! (example credit to Dr. Darwiche, and my notebook for surviving this long to be useful)</p>
               <div class='fit-pres text-center'>
-                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-7.png' />
+                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-7.PNG' />
               </div>
               <br/>
               <p><strong>Step One:</strong> Zero out CPT rows that are inconsistent with the evidence (these inconsistent rows are often just omitted entirely)</p>
               <div class='fit-pres text-center'>
-                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-8.png' />
+                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-8.PNG' />
               </div>
               <p><strong>Step Two:</strong> Choose an &quot;elimination order&quot;</p>
               <p>Our goal is to get ONE CPT at the end that only mentions variables in Q; we do this by successively multiplying table values and summing out irrelevant variables.</p>
@@ -1193,22 +1193,22 @@
               <p>Factors are NOT distributions, but simply the intermediary computational elements of variable elimination.</p>
               <p>So, the two CPTs mentioning A in our example are: Pr(A) and Pr(B | A) so:</p>
               <div class='fit-pres text-center'>
-                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-9.png' />
+                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-9.PNG' />
               </div>
               <br/>
               <p>Since we've now dealt with all of the tables mentioning A, we can <strong>eliminate</strong> it by summing out, giving us:</p>
               <div class='fit-pres text-center'>
-                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-10.png' />
+                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-10.PNG' />
               </div>
               <br/>
               <p>Our next variable to eliminate is B, which is mentioned in both our current factor (&Sigma;_A Pr(B | A) * Pr(A)) and Pr(C | B), so do the same thing there!</p>
               <div class='fit-pres text-center'>
-                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-11.png' />
+                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-11.PNG' />
               </div>
               <br/>
               <p>Almost there! But now B is irrelevant, so we can sum it out to get:</p>
               <div class='fit-pres text-center'>
-                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-12.png' />
+                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-12.PNG' />
               </div>
               <br/>
               <p>So close! But let's look at what we have so far:</p>
