@@ -1169,7 +1169,7 @@
               <br/>
               <p>The idea of variable elimination is that, with some query and evidence variables, we want to find Pr(Q | e).</p>
               <p>For example, we might be interested in Pr(Cancer | Smoking = true)</p>
-              <p>Above, Q = {Smoking} and e = {Smoking = true}</p>
+              <p>Above, Q = {Cancer} and e = {Smoking = true}</p>
               <p>Let's use this as our example! (example credit to Dr. Darwiche, and my notebook for surviving this long to be useful)</p>
               <div class='fit-pres text-center'>
                 <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-7.PNG' />
@@ -1214,12 +1214,12 @@
               <p>So close! But let's look at what we have so far:</p>
 <pre class='prettyprint'>
   ; The term currently in our table:
-  &Sigma;_B Pr(B | C) * &Sigma;_A Pr(B | A) * Pr(A)
+  &Sigma;_B Pr(C | B) * &Sigma;_A Pr(B | A) * Pr(A)
   
   ; ...is really just the joint with B and A summed out!
   ; (after accounting for evidence A = true, of course)
   
-  = &Sigma;_B &Sigma;_A Pr(B | C) * Pr(B | A) * Pr(A)
+  = &Sigma;_B &Sigma;_A Pr(C | B) * Pr(B | A) * Pr(A)
   = &Sigma;_B &Sigma;_A Pr(A, B, C)
 </pre>
               <br/>
