@@ -1116,7 +1116,137 @@
 </pre>
               <br/>
               <p>It might look complicated, but the fact that it's a strictly graphical criterion for independence makes it easy to trace.</p>
+              <p class='definition'>We use the following notation to establish d-separation relationships: 
+                <code class='prettyprint'>d-sep(X, Z, Y) &equiv; X &perp; Y | Z</code></p>
+              <br/>
               <p>Let's do a bunch of examples:</p>
+              <br/>
+              <p class='example'>Use the following Bayesian network to determine if each variable set X is separated from Y given Z. If it is not, show the open path.</p>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-6.png' />
+              </div>
+              <br/>
+              <p class='question' name='bayesnet-q7'>Is <code class='prettyprint'>d-sep( {V}, {}, {T} )</code></p>
+              <p class='answer' name='bayesnet-q7'>No! They're directly connected ya dingus! The open path is simply: V &rarr; T</p>
+              <br/>
+              <p class='question' name='bayesnet-q8'>Is <code class='prettyprint'>d-sep( {V}, {T}, {O} )</code></p>
+              <p class='answer' name='bayesnet-q8'>Yes! The only path between V and O is: V &rarr; T &rarr; O, in which T is a chain that is given, so that path is blocked.</p>
+              <br/>
+              <p class='question' name='bayesnet-q9'>Is <code class='prettyprint'>d-sep( {T}, {O}, {S} )</code></p>
+              <p class='answer' name='bayesnet-q9'>No! There are two paths from T to S: one that goes through O to D (and is blocked), but the other which goes through O and up to C (which is open because
+                O is a sink and is given). So, the open path is: T &rarr; O &larr; C &larr; S</p>
+              <br/>
+              <p class='question' name='bayesnet-q10'>Is <code class='prettyprint'>d-sep( {T}, {D}, {S} )</code></p>
+              <p class='answer' name='bayesnet-q10'>No! In fact, now *both* paths from T to S are open. They are: <br/>T &rarr; O &larr; C &larr; S and additionally,<br/>T &rarr; O &rarr; D &larr; B &larr; S</p>
+              <br/>
+              <p class='question' name='bayesnet-q11'>Is <code class='prettyprint'>d-sep( {T}, {}, {S} )</code></p>
+              <p class='answer' name='bayesnet-q11'>Yes! Now all paths are blocked</p>
+              <br/>
+              <p class='question' name='bayesnet-q12'>Is <code class='prettyprint'>d-sep( {T, X}, {B}, {S} )</code></p>
+              <p class='answer' name='bayesnet-q12'>No! A path is open from: X &larr; O &larr; C &larr; S</p>
+              <br/>
+              <p>And now, one final, conceptual question:</p>
+              <p class='question' name='bayesnet-q13'>Are the independence relationships given by the Markovian assumptions implied by d-separation? Is the reverse true?</p>
+              <p class='answer' name='bayesnet-q13'>The Markovian independence relationships are implied by d-separation.</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='inference' class='scrollspy-element' scrollspy-title='Inference'></div>
+            <h1>Inference</h1>
+            <div>
+              <p>So now that we have our Bayesian networks defined and we know what independence relationships they claim... what do we do with them?</p>
+              <p>Well, we can ask them questions of course!</p>
+              <p>For our networks, those questions will be of the form: &quot;What's the probability of witnessing events Q given that I've seen evidence e?&quot; (where Q is a set of variables and e is an
+                instantiation of evidence)</p>
+              <br/>
+              <p>This problem would be pretty easy if we had our joint distribution... but we don't with Bayesian networks! We just have CPTs.</p>
+              <p>Furthermore, we want to avoid reconstructing the joint because it might be massive!</p>
+              <p class='definition'><strong>Variable elimination</strong> is an inference strategy designed to use only our CPTs to pose queries on our network.</p>
+              <p class='debug'>WARNING: The topic of Bayesian network inference is massive (there's a whole class on it, 262a, which I genuinely suggest taking!) and so this section is very hand-wavy.</p>
+              <br/>
+              <p>The idea of variable elimination is that, with some query and evidence variables, we want to find Pr(Q | e).</p>
+              <p>For example, we might be interested in Pr(Cancer | Smoking = true)</p>
+              <p>Above, Q = {Smoking} and e = {Smoking = true}</p>
+              <p>Let's use this as our example! (example credit to Dr. Darwiche, and my notebook for surviving this long to be useful)</p>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-7.png' />
+              </div>
+              <br/>
+              <p><strong>Step One:</strong> Zero out CPT rows that are inconsistent with the evidence (these inconsistent rows are often just omitted entirely)</p>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-8.png' />
+              </div>
+              <p><strong>Step Two:</strong> Choose an &quot;elimination order&quot;</p>
+              <p>Our goal is to get ONE CPT at the end that only mentions variables in Q; we do this by successively multiplying table values and summing out irrelevant variables.</p>
+              <p>The order in which you do this matters greatly for computational complexity, but that discussion is omitted herein; for now, let's just choose an order:</p>
+<pre class='prettyprint'>
+  ; &Pi; is used to designate an ordering
+  &Pi; = {A, B, C}
+  
+  ; Meaning A first, then B, etc.
+</pre>
+              <br/>
+              <p>Since A is up first, this means we multiply all the CPTs mentioning A and get back a <strong>factor</strong>, which is simply some function mapping variables to some positive numbers.</p>
+              <p>Factors are NOT distributions, but simply the intermediary computational elements of variable elimination.</p>
+              <p>So, the two CPTs mentioning A in our example are: Pr(A) and Pr(B | A) so:</p>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-9.png' />
+              </div>
+              <br/>
+              <p>Since we've now dealt with all of the tables mentioning A, we can <strong>eliminate</strong> it by summing out, giving us:</p>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-10.png' />
+              </div>
+              <br/>
+              <p>Our next variable to eliminate is B, which is mentioned in both our current factor (&Sigma;_A Pr(B | A) * Pr(A)) and Pr(C | B), so do the same thing there!</p>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-11.png' />
+              </div>
+              <br/>
+              <p>Almost there! But now B is irrelevant, so we can sum it out to get:</p>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-12.png' />
+              </div>
+              <br/>
+              <p>So close! But let's look at what we have so far:</p>
+<pre class='prettyprint'>
+  ; The term currently in our table:
+  &Sigma;_B Pr(B | C) * &Sigma;_A Pr(B | A) * Pr(A)
+  
+  ; ...is really just the joint with B and A summed out!
+  ; (after accounting for evidence A = true, of course)
+  
+  = &Sigma;_B &Sigma;_A Pr(B | C) * Pr(B | A) * Pr(A)
+  = &Sigma;_B &Sigma;_A Pr(A, B, C)
+</pre>
+              <br/>
+              <p>So, since our final factor has only C remaining, and accounted for A = true, the values it represents are a marginal on C and A = true!</p>
+<pre class='prettyprint'>
+  ; So, from our final factor:
+  Pr(C = true, A = true) = 0.192
+  Pr(C = false, A = true) = 0.408
+  
+  &there4; Pr(A = true) = 0.600
+  
+  ; Now we have everything we need to compute
+  ; our query:
+  ; Pr(Q | e) = Pr(C | A = true)
+  
+  ; ...using Bayes conditioning:
+  Pr(C = true | A = true) = Pr(C = true, A = true) / Pr(A = true)
+                          = 0.192 / 0.600
+                          = 0.32
+                          
+  Pr(C = false | A = true) = Pr(C = false, A = true) / Pr(A = true)
+                           = 0.408 / 0.600
+                           = 0.68
+</pre>
+              <br/>
+              <p>And that's that!</p>
+              <p>Like I say, there's a whole class on Bayesian network inference, so this is but a small example and one strategy that can be used for such.</p>
+              <p>Thus concludes our brief tour of Bayesian networks... hope you enjoyed the ride!</p>
             </div>
             <hr/>
             
