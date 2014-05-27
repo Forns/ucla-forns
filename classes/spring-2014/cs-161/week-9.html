@@ -1,0 +1,457 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Andrew Forney - UCLA CS</title>
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/magic-bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/main.css" rel="stylesheet" type="text/css">
+    <script src="../../../js/lib/jquery-2.0.3.min.js"></script>
+    <script src="../../../js/lib/bootstrap.min.js"></script>
+    <script src="../../../js/lib/expanding.js"></script>
+    <script src="../../../js/display/general/general-display.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+  </head>
+  
+  <body data-spy="scroll" data-target="#scrollspy">
+    
+    <!-- BEGIN WRAP -->
+    <div id="wrap">
+      
+      <!-- BEGIN NAVIGATION -->
+      <nav class='navbar navbar-default' role='navigation'>
+        <div class='nav-accent'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-12'>
+              <div class='navbar-header'>
+                <button class='navbar-toggle' type='button' data-toggle='collapse' data-target='.navbar-main-collapse'>
+                  <span class='sr-only'>Toggle Navigation</span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                </button>
+                <a class='navbar-brand' href='/~forns/'>
+                  <span id='brand-text'>
+                    Andrew Forney
+                  </span>
+                </a>
+              </div>
+              
+              <div id='nav-main' class='collapse navbar-collapse navbar-main-collapse'>
+                <ul class='nav navbar-nav navbar-right'>
+                  
+                  <li>
+                    <a href='/~forns/about.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-user'></span>
+                      </div>
+                      <p class='text-center'>About</p>
+                    </a>
+                  </li>
+                  
+                  <li class='active'>
+                    <a href='/~forns/classes.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-book'></span>
+                      </div>
+                      <p class='text-center'>Classes</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/contact.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-comment'></span>
+                      </div>
+                      <p class='text-center'>Contact</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/publications.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-file'></span>
+                      </div>
+                      <p class='text-center'>Publications</p>
+                    </a>
+                  </li>
+                  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <!-- END NAVIGATION -->
+      
+      <!-- BEGIN MAIN CONTENT -->
+      <div id="main-content" class="container">
+        <div class="row">
+          
+          <!-- BEGIN SCROLLSPY -->
+          <div class='col-md-2 hidden-sm hidden-xs'>
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+              <ul id='scrollspy' class="nav bs-sidenav">
+              </ul>
+            </div>
+          </div>
+          <!-- END SCROLLSPY -->
+          
+          <!-- BEGIN PRESENTATION CONTENT -->
+          <div class='col-md-10 presentation-content' role='main'>
+            
+            <ol class="breadcrumb hidden-print">
+              <li><a href="../../../classes.html">Classes</a></li>
+              <li><a href="./cs-161.html">Spring14 CS161</a></li>
+              <li class="active">Week 9</li>
+            </ol>
+            
+            
+            <div id='decision' class='scrollspy-element' scrollspy-title='Decision Theory'></div>
+            <h1>Decision Theory</h1>
+            <div>
+              <p>We all take actions to accomplish our goals, and it's our *preferences* that have set those goals to begin with.</p>
+              <p>There are a variety of stepping stones that we take on the journey towards our goals, some that are more instrumental to accomplishing our task than others.</p>
+              <p class='definition'><strong>Decision theory</strong> is the art of designing rational agents that act based on their utility-based preferences and their perception of the world.</p>
+              <br/>
+              <p>However, as opposed to some strong assumptions with planning that we made in past chapters, the consequences of our actions might not always be known.</p>
+              <p>In this case, where we're dealing with incomplete knowledge or stochastic outcomes, we have to take probabilities into account.</p>
+<pre class='prettyprint'>
+  ; In first order logic planning:
+  Action(Eat(Cake)
+      Preconditions: Have(Cake)
+      Effect: &not;Have(Cake) &and; Eaten(Cake))
+  
+  ; ...where states:
+  s0 = Have(Cake)
+  s1 = &not;Have(Cake) &and; Eaten(Cake)
+  
+  ; ...and so:
+  Result(s0, Eat(Cake)) = s1
+  ; i.e., the result of being in state s0
+  ; and eating your cake is that you *definitely*
+  ; arrive in state s1
+</pre>
+              <br/>
+              <p>BUT... what if our cake is a Forney Industries Self-Replicating Cake, such that while eating it, it actually has a chance to make a copy of itself!</p>
+              <p>This means that eating it does *not* necessarily imply: &not;Have(Cake)</p>
+              <p>(OK, you can make the examples if you don't like that one)</p>
+              <p class='toolkit'>Instead of representing our action as a definite input-output function <code class='prettyprint'>Result(s0, a) = s1</code>, we'll instead represent it as a random variable:
+                <code class='prettyprint'>Result(a) = s1</code> that has the *possibility* of arriving at some state s1 given an action we take and the evidence we observe about our environment.</p>
+<pre class='prettyprint'>
+  ; So now, instead of:
+  Result(s0, a) = s1
+  
+  ; ...we have:
+  Pr(Result(a) = s1 | a, e)
+  
+  ; ...where:
+  ;   a  = the action we are taking (given because
+  ;        we are interested in the posterior Pr that
+  ;        we did indeed accomplish action a)
+  ;   e  = the evidence about the environment
+  ;        that we currently know about
+  ;   s1 = state we are interested in the
+  ;        *probability* of reaching given a, e
+  
+  ; [!] NOTE: In this new notation, the current state
+  ; we are in, s0, is implicit, but could be made
+  ; explicit by writing:
+    Pr(Result(a) = s1 | a, e)
+  = &Sigma;_s Pr(Result(s, a) = s1 | a) * Pr(s0 = s | e)
+  
+  ; i.e., the sum over all states of the probabilty of being
+  ; in the initial state given the evidence (Pr(s0 = s | e))
+  ; times the probability of reaching state s1 with action a
+</pre>
+              <br/>
+              <p>So now we have some notion of a distribution over possible states that we can reach from taking an action under the current evidence, we need to know *which* action we should take!</p>
+              <p>We do this by defining our agent's Utility function.</p>
+              <p class='definition'>A <strong>Utility Function</strong> U(s) assigns a single number to express the desirability of a state (the higher the number, the more desirable).</p>
+              <p class='definition'>The <strong>Expected Utility</strong> of an action given the evidence e, <code class='prettyprint'>EU(a | e)</code> is simply the average utility value of the
+                outcomes weighted by the probability that the outcome occurs.</p>
+<pre class='prettyprint'>
+  EU(a | e)
+    = &Sigma;_s Pr(Result(a) = s | a, e) * U(s)
+    
+  ; i.e., the expected utility of taking action a
+  ; is the chance that action a will land us in state
+  ; s with desirability of that state U(s)
+</pre>
+              <br/>
+              <p>Once we know the expected utility of taking some action, if we have multiple actions to consider, we simply take the one with the highest expected utility!</p>
+              <p>Wasn't it The Rolling Stones who said, &quot;You can't always get what you want, but if you try sometimes you might find... maximizing your expected utility to be sufficient?&quot;</p>
+              <p class='definition'>The <strong>maximum expected utility (MEU)</strong> criterion simply stipulates that an agent will choose an action (amongst all those that are possible) that has the
+                highest expected utility of the choices.</p>
+<pre class='prettyprint'>
+  action_choice = argmax EU(a | e)
+                    a
+  
+  ; i.e., for all action choices a, choose
+  ; the one who has the highest expected
+  ; utility given evidence e
+</pre>
+              <br/>
+              <p class='example'>In the following examples, determine which action will be taken based on the maximum expected utility principle.</p>
+              <blockquote>
+                <strong>Problem 1:</strong> Andrew is deciding if he should use his day off to go to the beach, or stay inside and watch reruns of Golden Girls, because nothing else good is on TV...
+                Going to the beach would be a lot of fun and staying in would just be OK, but forecasts gave a 60% chance of rain for the day, which would spoil a trip to the beach. Observe the
+                following utility / probability table and decide what Andrew should do.
+              </blockquote>
+              <table class='table table-striped table-bordered'>
+                <thead>
+                  <tr>
+                    <th><p>Action</p></th>
+                    <th><p>Weather</p></th>
+                    <th><p>U(Action, Weather)</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><p>AtHome</p></td>
+                    <td><p>clear</p></td>
+                    <td><p>2</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>AtHome</p></td>
+                    <td><p>raining</p></td>
+                    <td><p>3</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>AtBeach</p></td>
+                    <td><p>clear</p></td>
+                    <td><p>4</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>AtBeach</p></td>
+                    <td><p>raining</p></td>
+                    <td><p>1</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+              <p class='question' name='dec-q0'>Click for solution.</p>
+              <div class='answer' name='dec-q0'>
+<pre class='prettyprint'>
+  ; First, determine the expected utility
+  ; of each action:
+  EU(AtHome)
+    = Pr(AtHome, clear | AtHome) * U(AtHome, clear) +
+      Pr(AtHome, raining | AtHome) * U(AtHome, raining)
+    = 0.4 * 2 + 0.6 * 3
+    = 2.6
+    
+  EU(AtBeach)
+    = Pr(AtBeach, clear | AtBeach) * U(AtBeach, clear) +
+      Pr(AtBeach, raining | AtBeach) * U(AtBeach, raining)
+    = 0.4 * 4 + 0.6 * 1
+    = 2.2
+    
+  ; Next, using MEU criteria:
+  action_chosen = argmax EU(a | e)
+                    a
+  
+                = argmax ({AtHome: 2.6, AtBeach: 2.2})
+                = AtHome
+                
+  ; Golden Girls it is :(
+</pre>
+              </div>
+              <br/>
+              <p class='example'>Recompute the previous example given that we observed Weather = clear outside.</p>
+              <p class='question' name='dec-q1'>Click for solution.</p>
+              <div class='answer' name='dec-q1'>
+<pre class='prettyprint'>
+  ; Our evidence:
+  e = {Weather = clear}
+  
+  ; First, determine the expected utility
+  ; of each action with the evidence:
+  EU(AtHome | e)
+    = Pr(AtHome, clear | AtHome, e) * U(AtHome, clear) +
+      Pr(AtHome, raining | AtHome, e) * U(AtHome, raining)
+    = 0.4 * 2 + 0 * 3
+    = 0.8
+    
+  EU(AtBeach)
+    = Pr(AtBeach, clear | AtBeach) * U(AtBeach, clear) +
+      Pr(AtBeach, raining | AtBeach) * U(AtBeach, raining)
+    = 0.4 * 4 + 0 * 1
+    = 1.6
+    
+  ; Next, using MEU criteria:
+  action_chosen = argmax EU(a | e)
+                    a
+  
+                = argmax ({AtHome: 0.8, AtBeach: 1.6})
+                = AtBeach
+                
+  ; Beach time!
+</pre>
+              </div>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='preferences' class='scrollspy-element' scrollspy-title='Preferences'></div>
+            <h1>Preferences</h1>
+            <div>
+              <p>So the next question you might be asking is: where do we get these utility values?</p>
+              <p>Do we need to have explicit numerical values mapped to states as indications of their desirability or can these numbers simply be relative and derived?</p>
+              <p class='definition'><strong>Preferences</strong> are our agent's rankings of desirable states having considered their relative likelihoods of being reached.</p>
+              <br/>
+              <p>We can use preference orderings to recover utility functions...</p>
+              <p>...but we also have to consider how desirable the state is *in concert with* the probability of reaching it.</p>
+              <p>In other words, two actions A1 and A2 might both be capable of reaching a desirable state, but if one of those two actions is more *likely* to reach that state, we will want to choose
+                it over the other.</p>
+              <p>First, to formalize the possible outcomes of an action, we turn to the notion of a lottery:</p>
+              <br/>
+              <p class='definition'>A <strong>lottery</strong> is a representation of the possible outcome states from taking some action with the probabilities of reaching each outcome.</p>
+              <p class='definition'>An <strong>outcome</strong> is either a primitive state or, recursively, another lottery</p>
+<pre class='prettyprint'>
+  ; For some action, a lottery L
+  ; might look like:
+  L = [p1, S1; p2, S2; ...; pn Sn]
+  
+  ; ...where each:
+  ;   p_i = the probability of reaching
+  ;         S_i by taking that action
+  ;   S_i = a possible state outcome OR
+  ;         recursively, another lottery
+  
+  ; Example:
+  L1 = [0.5, S1; 0.25, S2; 0.25, L2]
+  L2 = [0.3, S3; 0.6, S1; 0.1, S5]
+</pre>
+              <br/>
+              <p class='definition'>A lottery is called <strong>complex</strong> if it includes an outcome that is itself another lottery.</p>
+              <p>The term &quot;lottery&quot; is intuitive because taking an action associated with a lottery is like buying a Lotto ticket, and hoping that you &quot;win&quot; the state you desired.</p>
+              <p>Now that we know how we can model outcomes of taking a particular action, let's talk about preferences.</p>
+              <p>For any two lotteries A and B, we can use the following notation to describe preferences:</p>
+              <br/>
+              <ul class='indent-1'>
+                <li><p>A > B &nbsp;&nbsp;&nbsp; the agent prefers A over B</p></li>
+                <li><p>A ~ B &nbsp;&nbsp;&nbsp; the agent is indifferent between A and B</p></li>
+                <li><p>A &ge; B &nbsp;&nbsp;&nbsp; the agent prefers A over B or is indifferent between them</p></li>
+              </ul>
+              <br/>
+              <p>The primary goal of utility theory is to determine how preferences between complex lotteries are related to preferences on the primitive states that compose them.</p>
+              <p>To do this, we can define some axioms on lotteries that, if violated by our intelligent systems, would lead to irrational behavior.</p>
+              <br/>
+              <table class='table table-striped table-bordered'>
+                <thead>
+                  <tr>
+                    <th><p>Axiom</p></th>
+                    <th><p>Interpretation</p></th>
+                    <th><p>Formalism</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th><p>Orderability</p></th>
+                    <td><p>An agent cannot avoid deciding between two actions (i.e., either one is preferred or they are equally preferable) 
+                      and must assign one of the following relationships to lotteries A and B.</p></td>
+                    <td class='col-md-4'><p>(A &gt; B), (B &gt; A), or (A ~ B)</p></td>
+                  </tr>
+                  <tr>
+                    <th><p>Transitivity</p></th>
+                    <td><p>If an agent prefers lottery A to lottery B, and also prefers lottery B to lottery C, then it also prefers lottery A to lottery C.</p></td>
+                    <td><p>(A &gt; B) &and; (B &gt; C) &rArr; (A &gt; C)</p></td>
+                  </tr>
+                  <tr>
+                    <th><p>Continuity</p></th>
+                    <td><p>If A &gt; B &gt; C (i.e., some lottery B is between A and C in preference), then there is some probability p that we could find such that a certain outcome of B would
+                      be equally preferrable to an outcome of A with probability p or of C with probability (1 - p)</p></td>
+                    <td><p>A &gt; B &gt; C &rArr;<br/> &exist;p [p, A; 1 - p, C] ~ [1, B]</p></td>
+                  </tr>
+                  <tr>
+                    <th><p>Substitutability</p></th>
+                    <td><p>If two lotteries are equally preferrable, then you may substitute one in for the other in some other complex lottery.</p></td>
+                    <td><p>A ~ B &rArr;<br/>[p A; 1 - p, C] ~ [p, B; 1 - p, C]</p></td>
+                  </tr>
+                  <tr>
+                    <th><p>Monotonicity</p></th>
+                    <td><p>If we prefer outcome A to outcome B, then we must also prefer lotteries that have a higher probability to reach A than B.</p></td>
+                    <td><p>A &gt; B &rArr;<br/>(p &gt; q &hArr;<br/>&nbsp;&nbsp;[p, A; 1 - p, B] &gt; [q, A; 1 - q, B]<br/>)</p></td>
+                  </tr>
+                  <tr>
+                    <th><p>Decomposability</p></th>
+                    <td><p>We can reduce any number of complex lotteries down to a simpler one simply by the laws of probability.</p></td>
+                    <td><p>L1 = [p, A; 1 - p, L2]<br/>L2 = [q, B; 1 - q, C]<br/>L1 ~ [p, A; (1 - p)q, B; (1 - p)(1 - q), C]</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+              <p class='question' name='pref-q0'>Substitutability tells us that two equally preferrable lotteries can be substituted for one another in some other complex lottery. Does the following also
+                hold?<br/>
+                <code class='prettyprint'>(A &gt; B) &rArr; [p, A; 1 - p, C] &gt; [p, B; 1 - p, C]</code>
+              </p>
+              <p class='answer' name='pref-q0'>Yes! We can think of this as the case of &quot;All other considerations constant,&quot; complex lotteries containing A will be preferrable to those containing B.</p>
+              <br/>
+              <p>Alright, so we have lotteries that abide by these axioms... what were we trying to do again?</p>
+              <p>Oh yeah... get some notion of what to use for utility functions...</p>
+              <p>Well, we have the following two consequences of preferential axioms that can allow us to solve for some (non-unique) utility function:</p>
+              <br/>
+              <table class='table table-striped table-bordered'>
+                <thead>
+                  <tr>
+                    <th><p>Consequence</p></th>
+                    <th><p>Interpretation</p></th>
+                    <th><p>Formalism</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th><p>Existence of Utility Function</p></th>
+                    <td><p>If an agent's preferences abide by the above axioms, then there exists a utility function such that: <code class='prettyprint'>U(A) &gt; U(B)</code> if and only if
+                      A is preferred to B, and <code class='prettyprint'>U(A) = U(B)</code> if and only if the agent is indifferent between A and B.</p></td>
+                    <td class='col-md-4'><p>U(A) &gt; U(B) &hArr; A &gt; B<br/>U(A) = U(B) &hArr; A ~ B</p></td>
+                  </tr>
+                  <tr>
+                    <th><p>Expected Utility</p></th>
+                    <td><p>The utility of a lottery is the sum of the probability of each outcome times the utility of that outcome.</p></td>
+                    <td><p>U([p1, S1; ...; pn, Sn]) =<br/>&Sigma;_i p_i * U(S_i)</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+              <p>From these two consequences, we see that it doesn't matter what numbers we choose for our utility functions so long as the ranking order of our preferences are respected.</p>
+              <p>You can use any technique you want to respect these preferences, including linear programming techniques.</p>
+            </div>
+            <hr/>
+            
+            
+            <a class='btn btn-default pull-right hidden-print' href='javascript:window.print();'>
+              <span class='glyphicon glyphicon-print'></span>
+              &nbsp; PDF / Print
+            </a>
+            
+          </div>
+          <!-- END PRESENTATION CONTENT -->
+          
+          <!-- MATERIALS FROM CLASS: -->
+          
+            
+        </div>
+      </div>
+      <!-- END MAIN CONTENT -->
+      
+      
+    </div>
+    <!-- END WRAPPER -->
+    
+    <!-- BEGIN FOOTER -->
+    <div id="footer">
+      <div class="container">
+        <div class="col-md-12 text-center">
+          
+        </div>
+      </div>
+    </div>
+    <!-- END FOOTER -->
+    
+  </body>
+</html>
