@@ -670,7 +670,571 @@
               <p>So, the first task of machine learning is to choose a model class that best fits the data that we have available.</p>
               <p>What exactly constitutes our definition of &quot;best&quot; depends on the task at hand...</p>
               <p>Two tools we'll discuss for some applications are decision trees and Bayesian networks.</p>
+              
               <br/>
+              <h3>Classification</h3>
+              <p>One of those most common machine learning tasks involves classifying different items evaluated on their variable settings and sorting them into the proper group.</p>
+              <p class='definition'><strong>Classification</strong> attempts to learn a <strong>model</strong> from a collection of examples that will predict a classification given the observable attributes.</p>
+              <br/>
+              <p>Just what model we should use is dependent on the question we're asking, i.e., the classification we're trying to make, and the data that we have available.</p>
+              <p>So, let's look at some example classification problems, and the models appropriate for them!</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='dtree' class='scrollspy-element' scrollspy-title='Decision Trees'></div>
+            <h1>Decision Trees</h1>
+            <div>
+              <p>One type of classification is making a decision:</p>
+              <p>Given some input features about a situation, we have to evaluate whether to make one decision or another.</p>
+              <p>To model this task, we might consider a decision tree... but first...</p>
+              <br/>
+              <p>Looking at a simplified version of the book's example:</p>
+              <p class='example'>Dining Dilemma</p>
+              <blockquote>
+                Forney Industries has <span class='strike'>recently contracted with the NSA</span> decided to branch out into the phone app business, and is debuting with its first app that learns your
+                dining habits and can predict whether or not you will wait for a seat at a restaurant based on a number of attributes. The app will therefore generate a &quot;yes&quot; or &quot;no&quot;
+                conclusion of whether or not you are going to wait based on the following inputs:
+              </blockquote>
+              <ul class='indent-1'>
+                <li><p><strong>Patrons?</strong> A measure of how many diners are currently at the restaurant, can be: {none, some, many}</p></li>
+                <li><p><strong>Hungry?</strong> Whether or not you are currently on the brink of starvation (ok, maybe that's too dramatic... you just haven't eaten since lunch), and can be: {yes, no}</p></li>
+                <li><p><strong>Type?</strong> The type of food the restaurant serves, which can be: {French, Italian, Thai, or Burgers} (you know... from the country of Burger?)</p></li>
+                <li><p><strong>Fri / Sat?</strong> Whether or not it is a peek-serving day of Friday or Saturday, can be: {yes, no}.</p></li>
+              </ul>
+              <br/>
+              <p>Our app has been learning your habits for awhile now and made the following determinations (expressed here just semantically):</p>
+              <ul class='indent-1'>
+                <li><p>If there are no patrons you don't trust the restaurant quality and so will not wait, but if it's full, you'll only wait based on other attributes:</p></li>
+                <li><p>If you're not really hungry, you're not going to wait, otherwise:</p></li>
+                <li><p>You love French food and Burgers, so you'll wait at this point if it's either of those... but if it's Thai...</p></li>
+                <li><p>You'll only wait if it's not a peek dining day of Friday or Saturday.</p></li>
+              </ul>
+              <br/>
+              <p>So if that's the plain-English description of our habits, how does an intelligent system predict whether or not we'll wait?</p>
+              <p class='definition'>A <strong>decision tree (d-tree)</strong> is a tree structure with nodes as attributes and leaves as deterministic classification outcomes.</p>
+              <br/>
+              <p>The d-tree of our above observations might look like:</p>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-9/decision-2.PNG' />
+              </div>
+              <br/>
+              <p>It's easy to see what a decision tree will classify for our decision; we simply start at the root and trace the edges until we end up at a leaf!</p>
+              <p class='example'>What will our above decision tree give us for the following samples?</p>
+              <table class='table table-bordered table-striped'>
+                <thead>
+                  <tr>
+                    <th><p>Patrons?</p></th>
+                    <th><p>Hungry?</p></th>
+                    <th><p>Type?</p></th>
+                    <th><p>Cost?</p></th>
+                    <th><p>Fri / Sat?</p></th>
+                    <th><p>Wait?</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><p>some</p></td>
+                    <td><p>yes</p></td>
+                    <td><p>burgers</p></td>
+                    <td><p>$$</p></td>
+                    <td><p>yes</p></td>
+                    <td><p>???</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>full</p></td>
+                    <td><p>yes</p></td>
+                    <td><p>italian</p></td>
+                    <td><p>$$$</p></td>
+                    <td><p>no</p></td>
+                    <td><p>???</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>full</p></td>
+                    <td><p>yes</p></td>
+                    <td><p>thai</p></td>
+                    <td><p>$</p></td>
+                    <td><p>yes</p></td>
+                    <td><p>???</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+              <p>You might notice: there was another attribute included in our sample data (Cost?) that was never used by our d-tree. That's fine, and sometimes preferrable, as we'll soon find out...</p>
+              <p>So now that we see how a d-tree works... let's talk about how to learn them in the first place!</p>
+              
+              <br/>
+              <h3>Learning a D-Tree</h3>
+              <p>To talk about learning d-trees, we imagine we have some large amount of data on which we can extract patterns to perform the learning aspect.</p>
+              <p class='definition'>A <strong>training set</strong> is a list of input / output pairings where, given the input characteristics of a particular sample, we tell our learning system what the
+                expected outcome should be (under the assumption that it will be able to formulate a classification function from lots of examples).</p>
+              <br/>
+              <p>So let's take a look at an arbitrary training set (Example credit to Evan Lloyd; it was too beautiful not to use)</p>
+              <p>Imagine that we have arbitrary attributes A, B, C, and D. We must make a yes / no decision for some classification X.</p>
+              <br/>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-9/decision-3.PNG' />
+              </div>
+              <br/>
+              <p class='question' name='dec-q3'>What form of learning is this? Unsupervised, semi-supervised, or supervised?</p>
+              <p class='answer' name='dec-q3'>Supervised since we're telling our system what classification outcome should be expected for X and have labeled data.</p>
+              <br/>
+              <p>Now, we want to find some decision tree that accurately gives the correct classification based on attributes A, B, C, and D.</p>
+              <p>But which one do we choose?</p>
+              <p class='toolkit'>A <strong>single-node split</strong> on a training set tries to maximize the classification accuracy based on a single attribute's values.</p>
+              <br/>
+              <p>When we split on a value of a variable, e.g., A = red, we look at how many samples got classified to X = yes and X = no in the training set and try to make the classification that is most
+                accurate based only on A = red.</p>
+              <p>So... let's try splitting on A first. This would give us:</p>
+              <table class='table table-striped table-bordered'>
+                <thead>
+                  <tr>
+                    <th><p></p></th>
+                    <th><p>A = red</p></th>
+                    <th><p>A = blu</p></th>
+                    <th><p>A = grn</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th><p>X = yes</p></th>
+                    <td><p>7</p></td>
+                    <td><p>0</p></td>
+                    <td><p>8</p></td>
+                  </tr>
+                  <tr>
+                    <th><p>X = no</p></th>
+                    <td><p>0</p></td>
+                    <td><p>9</p></td>
+                    <td><p>6</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+              <p class='question' name='dtree-q0'>Given this break down, what would be the most accurate classification to give the cases where A = red?</p>
+              <p class='answer' name='dtree-q0'>X = yes! It would be a perfect fit, in fact, 100% accurate!</p>
+              <br/>
+              <p class='question' name='dtree-q1'>Given this break down, what would be the most accurate classification to give the cases where A = blu?</p>
+              <p class='answer' name='dtree-q1'>X = no! It would be a perfect fit, in fact, 100% accurate!</p>
+              <br/>
+              <p class='question' name='dtree-q2'>Given this break down, what would be the most accurate classification to give the cases where A = grn?</p>
+              <p class='answer' name='dtree-q2'>X = yes! It would not be a clean fit however...</p>
+              <br/>
+              <p>This would give us a single node d-tree looking like:</p>
+              <br/>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-9/decision-5.PNG' />
+              </div>
+              <br/>
+              <p>So, using this single node split, we would achieve an 80% accuracy since 6 / 30 samples are misclassified by saying that X = yes whenever A = grn</p>
+              <br/>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-9/decision-4.PNG' />
+              </div>
+              <br/>
+              <p>Alright, so let's see if doing a single node split on another attribute can do better than 80%.</p>
+              <p>Shall we try to split on B?</p>
+              <table class='table table-striped table-bordered'>
+                <thead>
+                  <tr>
+                    <th><p></p></th>
+                    <th><p>B = sml</p></th>
+                    <th><p>B = med</p></th>
+                    <th><p>B = lrg</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th><p>X = yes</p></th>
+                    <td><p>6</p></td>
+                    <td><p>2</p></td>
+                    <td><p>7</p></td>
+                  </tr>
+                  <tr>
+                    <th><p>X = no</p></th>
+                    <td><p>1</p></td>
+                    <td><p>12</p></td>
+                    <td><p>2</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+              <p>We actually do a bit better with the single var split on B if we choose to again use the plurality rule of classification, giving us only 5 / 30 misclassifications:</p>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-9/decision-6.PNG' />
+              </div>
+              <br/>
+              <p>But, as we've seen with our restaurant waiting example, we're not always interested in a single-node split on an attribute, but a multi-node one... why waste all that extra info?!</p>
+              <p>Now, of course, we have the question of which node to split on first... it's clear that order matters in deciding the most accurate classification!</p>
+              <p class='definition'><strong>Entropy</strong> is a measure of uncertainty of a random variable and is the fundamental unit of information theory.</p>
+              <br/>
+              <p>Some things to note about entropy:</p>
+              <ul class='indent-1'>
+                <li><p>It's measured in the bits it would require in order to represent all possible equally likely outcomes (manifest in the log_2 in the equation, to follow)</p></li>
+                <li><p>A higher entropy means it's closer in value to a uniform distribution, like a coin flip (i.e., the higher the value, the more random)</p></li>
+                <li><p>The lower the entropy, the more certain the outcome is.</p></li>
+              </ul>
+              <br/>
+<pre class='prettyprint'>
+  ; The equation for entropy is given by:
+  H(V) = - &Sigma; Pr(v_k) * log_2 [Pr(v_k)]
+           k
+           
+ ; In other words, it's the sum, for all values
+ ; v &in; V, of the probability of seeing value
+ ; v_k times log_2 of that probability
+</pre>
+              <br/>
+              <p class='question' name='ent-q0'>What is the entropy of a coin flip?</p>
+              <div class='answer' name='ent-q0'>
+<pre class='prettyprint'>
+  ; For variable C = coin flip
+  ;                = {heads, tails}
+  H(C) = - &Sigma; Pr(c_k) * log_2 [Pr(c_k)]
+           k
+           
+       = - [Pr(heads) * log_2[Pr(heads)] +
+            Pr(tails) * log_2[Pr(tails)]]
+       = - [0.5 * log_2(0.5) + 0.5 * log_2(0.5)]
+       = 1
+</pre>
+              </div>
+              <br/>
+              <p>So, we see that a coin flip has 1 bit of entropy, since it only takes 1 bit (i.e., a 0 or 1 outcome uniformly distributed) to model the uncertainty.</p>
+              <p>Our goal in building decision trees, however, is to MINIMIZE uncertainty.</p>
+              <p>Minimizing the remaining uncertainty after a split is equivalent to maximizing <strong>information gained</strong> from that split.</p>
+              <p class='definition'><strong>Information gain</strong> is the expected reduction in entropy from splitting on some attribute.</p>
+              <br/>
+              <p>We can model this in terms of <strong>expected entropy,</strong> which provides a metric for the entropy reducing contributions of each variable value.</p>
+<pre class='prettyprint'>
+  ; For value v of variable V, the
+  ; positive classification cases p for that
+  ; value v, as well as the negative classification
+  ; cases n, then:
+  
+  E_v(p, n) = -[p / (p + n)] * log_2[p / (p + n)]
+            + -[n / (p + n)] * log_2[n / (p + n)]
+            
+  ; And the expected entropy is defined as:
+  &Sigma; Pr(v) * E_v(p, n)
+  v &in; V
+  
+  ; For all variable values v in variable V, sum
+  ; up their entropies split on positive and negative
+  ; classifications 
+</pre>
+              <br/>
+              <p class='example'>Compute the expected entropy of splitting on variable A in our example from before (table replicated below for ease):</p>
+              <table class='table table-striped table-bordered'>
+                <thead>
+                  <tr>
+                    <th><p>n = 30</p></th>
+                    <th><p>A = red</p></th>
+                    <th><p>A = blu</p></th>
+                    <th><p>A = grn</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th><p>X = yes</p></th>
+                    <td><p>7</p></td>
+                    <td><p>0</p></td>
+                    <td><p>8</p></td>
+                  </tr>
+                  <tr>
+                    <th><p>X = no</p></th>
+                    <td><p>0</p></td>
+                    <td><p>9</p></td>
+                    <td><p>6</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+<pre class='prettyprint'>
+  ; Expected entropy of A is:
+    &Sigma; Pr(a) * E_a(p, n)
+    a &in; A
+  
+  = Pr(A = red) * E_red(p, n) +
+    Pr(A = blu) * E_blu(p, n) +
+    Pr(A = grn) * E_grn(p, n)
+  
+  ; Step One:
+  ; We know from the table that there are 30
+  ; samples, so we can find the probabilities:
+  
+  Pr(A = red) = 7 / 30
+  Pr(A = blu) = 9 / 30
+  Pr(A = grn) = 14 / 30
+</pre>
+  
+<pre class='prettyprint'>
+  ; Step Two:
+  ; We can compute each of the intermediary
+  ; values next:
+  
+  E_red(p, n) = E_red(7, 0)
+              = -[7 / (7 + 0)] * log_2[7 / (7 + 0)]
+              + -[0 / (7 + 0)] * log_2[0 / (7 + 0)]
+              = 0
+  
+  E_blu(p, n) = E_blu(0, 9)
+              = -[0 / (0 + 9)] * log_2[0 / (0 + 9)]
+              + -[9 / (0 + 9)] * log_2[9 / (0 + 9)]
+              = 0
+              
+  E_grn(p, n) = E_grn(8, 6)
+              = -[8 / (8 + 6)] * log_2[8 / (8 + 6)]
+              + -[6 / (8 + 6)] * log_2[6 / (8 + 6)]
+              = 0.9852
+</pre>
+  
+<pre class='prettyprint'>
+  ; Step Three
+  ; Now, to find expected entropy, we plug back in:
+    Pr(A = red) * E_red(p, n) +
+    Pr(A = blu) * E_blu(p, n) +
+    Pr(A = grn) * E_grn(p, n)
+  
+  = (7 / 30) * 0 +
+    (9 / 30) * 0 +
+    (14 / 30) * 0.9852
+    
+  = 0.4598 bits
+</pre>
+              <br/>
+              <p>Whew! What a pain! I hope I never have to do that again...</p>
+              <br/>
+              <p class='example'>What is the expected entropy for splitting on attribute B in our example? Table replicated below for convenience.</p>
+              <table class='table table-striped table-bordered'>
+                <thead>
+                  <tr>
+                    <th><p>n = 30</p></th>
+                    <th><p>B = sml</p></th>
+                    <th><p>B = med</p></th>
+                    <th><p>B = lrg</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th><p>X = yes</p></th>
+                    <td><p>6</p></td>
+                    <td><p>2</p></td>
+                    <td><p>7</p></td>
+                  </tr>
+                  <tr>
+                    <th><p>X = no</p></th>
+                    <td><p>1</p></td>
+                    <td><p>12</p></td>
+                    <td><p>2</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+              <p class='question' name='ent-q1'>Click for brief solution</p>
+              <div class='answer' name='ent-q1'>
+<pre class='prettyprint'>
+  ; Expected entropy of splitting on B:
+    Pr(B = sml) * E_sml(p, n) +
+    Pr(B = med) * E_med(p, n) +
+    Pr(B = lrg) * E_lrg(p, n)
+    
+  = (7 / 30) * E_sml(6, 1) +
+    (14 / 30) * E_med(2, 12) +
+    (9 / 30) * E_lrg(7, 2)
+    
+  = 0.6434 bits
+</pre>
+              </div>
+              <br/>
+              <p>SO, we see that the expected entropy of splitting on A is actually *less than* that of splitting on A, even though it's the less accurate choice by itself...</p>
+              <p>BUT, what if we then split its innacurate component (i.e., A = grn) on B? How would we decide to do that?</p>
+              <p class='toolkit'>The <strong>decision tree algorithm</strong> provides us a mean of automating the attribute splitting to minimize expected entropy.</p>
+              <br/>
+              <p>Its basic steps are as follows:</p>
+              <ol class='indent-1'>
+                <li><p>Pick an attribute A (via the expected entropy, like we did above), and set that as the root</p></li>
+                <li><p>For each <strong>value</strong> of A, if there are attributes remaining on which to split, and classification is not perfect, then recurse on the subtree with A removed.</p></li>
+                <li><p>Otherwise, there were no more attributes on which to split, so simply maximize your accuracy by classifying with a plurality vote (i.e., satisfy the most positives or negatives
+                  even though you won't be perfect).</p></li>
+              </ol>
+              <br/>
+              <p>Applying this algorithm to our example, we would set variable A as the root.</p>
+              <p>We note that A = red and A = blu are perfect accuracy, but A = grn is NOT.</p>
+              <p>So, we can recurse on the A = grn subtree (i.e., the cases in our sample in which A = grn) and try splitting on another attribute in the same manner... let's try B:</p>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-9/decision-7.PNG' />
+              </div>
+              <br/>
+              <p>On the 14 remaining cases where A = grn, splitting on B actually gives us a perfect fit! Let's see the decision tree that results:</p>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-9/decision-8.PNG' />
+              </div>
+              <br/>
+              <p>And that's how you do decision trees!</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='pac' class='scrollspy-element' scrollspy-title='PAC'></div>
+            <h1>PAC</h1>
+            <div>
+              <p>Sometimes, answers are not so clean-cut, and a descent down a decision tree is insufficient for classification.</p>
+              <p>So, we'll return to our old friend the Bayesian network in order to help with classification; let's look at our motivating example:</p>
+              <br/>
+              <p class='example'>GreeterBot 4000</p>
+              <blockquote>
+                Forney Industries is developing its most ambitious robotic project yet: GreeterBot 4000. GreeterBot 4000 needs to be able to walk around department stores greeting and answering
+                questions of the customers. You've been tasked with programming GreeterBot 4000's <span class='strike'>KillAllHumans</span> IdentifyHuman protocol, which must determine if some object
+                in its environment is a human or not.<br/><br/>The main issue is that there are a variety of mannequins throughout the store that, although resembling humans, should not be greeted.<br/><br/>
+                That said, GreeterBot 4000 is already equipped with input sensors that can assess the following attributes:
+              </blockquote>
+              <br/>
+              <ul class='indent-1'>
+                <li><p><strong>Movement (M):</strong> we can assess whether an object is moving at, say, 3 discrete velocities: {not, slow, fast}</p></li>
+                <li><p><strong>Height (H):</strong> we can assess the height of an object at, say, 3 discrete heights relative to humans: {sml, med, lrg}</p></li>
+                <li><p><strong>Speaking (S):</strong> we have audio sensors capable of determining if some object is speaking a language: {0, 1}</p></li>
+                <li><p><strong>Form (F):</strong> we have some scoring algorithm that returns a score from 0 - 5 based on whether an object has human parts like a head, torso, arms, etc.</p></li>
+              </ul>
+              <br/>
+              <p>The goal, then, is to determine for each object we encounter assessed with the above 4 attributes, whether or not that object is a human.</p>
+              <p>(ignoring, of course, that this is just a re-labelling of the previous example with different semantics...)</p>
+              <p>The problem is that our classification might not be so simple as splitting on a single attribute, some confounding cases might be:</p>
+              <ul class='indent-1'>
+                <li><p>A loudspeaker might announce the latest deals and be perceived as &quot;speaking&quot; even though it's not a human.</p></li>
+                <li><p>A mannequin might have a good human form, and the right height, even though it's not human.</p></li>
+                <li><p>A true human might be any height, have good human form (if our visual sensors aren't occluded), and simply not be speaking at a given moment.</p></li>
+              </ul>
+              <br/>
+              <p>So, needless to say, there are a variety of different cases that need to be handled, but different attributes confer some amount of human-ness.</p>
+              <p>Because of the amount of noise implicit in this problem, however, we may not be able to get away with clean classification divisions like with decision trees.</p>
+              <p class='definition'><strong>Probably Approximately Correct (PAC)</strong> classification strategies are those that, given a sufficiently large training set, can make a decision based on the
+                most likely outcome of any witnessed evidence.</p>
+              <br/>
+              <p>Frankly, I think the term &quot;Probably Approximately Correct&quot; sounds like a rationalizing scientist who isn't quite sure of his invention...</p>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-9/profFrink.png' />
+              </div>
+              <br/>
+              <p>PAC strategies are good when we don't need a completely accurate answer where all cases are considered, but we have a good gist for when to say &quot;Yes&quot; and when to say &quot;No&quot;</p>
+              <p class='definition'>The <strong>Naive Bayes Classifier</strong> is a PAC classification structure where we consider some class C to be the cause of witnessing some number of identifiers, F_i.</p>
+              <br/>
+              <p>The Naive Bayes Classifier is a Bayesian network where we have a single cause (the class) being the reason for certain indications of that class.</p>
+              <p>It's called &quot;Naive&quot; because given the class, we assume that all of the indicators are conditionally independent.</p>
+              <p>For our example, the Naive Bayes structure might look like this:</p>
+              <br/>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-9/decision-1.PNG' />
+              </div>
+              <br/>
+              <p>This classifier says, &quot;If you are a human, then you'll probably exibit some movement, a certain height distribution, the propensity for speech, and some amount of human form.&quot;</p>
+              <p>Furthermore, if we know you're human, then the indicators are all conditionally independent of one another because knowing that a human can speak tells us nothing more about a human's ability
+                to move.</p>
+              <p>Being a Bayesian network, these indicating propensities are all implicit within the network's conditional probability tables.</p>
+              <p class='toolkit'>Naive Bayes classification then simply asks: having observed some object with indicators F1, F2, ..., Fn, which classification is most likely?</p>
+              <br/>
+              <p>Let's look at the probability statements of interest:</p>
+<pre class='prettyprint'>
+  ; We are interested in determining which
+  ; classification in some set of class
+  ; variable (C) values is most likely, having
+  ; witnessed some object with indicators F
+  
+  ; So, we are interested in the table:
+  Pr(C | f1, f2, ..., fn)
+  
+  ; ...to see which value of C is most probable.
+</pre>
+              <br/>
+              <p>So, for our example, let's say we encountered an object exibiting the following:</p>
+              <table class='table table-striped table-bordered'>
+                <thead>
+                  <tr>
+                    <th><p>Movement</p></th>
+                    <th><p>Height</p></th>
+                    <th><p>Speaking</p></th>
+                    <th><p>Form</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><p>slow</p></td>
+                    <td><p>med</p></td>
+                    <td><p>1</p></td>
+                    <td><p>4</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+              <p>Here we have some object that is moving slowly, of moderate height, that's speaking, and closely resembles the human form.</p>
+              <p>Chances are good that it's a human!</p>
+              <br/>
+<pre class='prettyprint'>
+  ; In this sense, f1, f2, ..., fn is our evidence
+  ; so we can simply use a familiar theorem to
+  ; find our answer:
+  
+    Pr(C | f1, f2, ..., fn)
+  = [Pr(f1, f2, ..., fn | C) * Pr(C)] / Pr(f1, f2, ..., fn)
+  
+  ; Notice that Pr(C) is the prior on C, and since
+  ; our evidence is conditionally independent given C,
+  ; we can write
+  
+  = [Pr(f1 | C) * Pr(f2 | C) * ... * Pr(fn | C) * Pr(C)]
+    / Pr(f1, f2, ..., fn)
+</pre>
+              <br/>
+              <p>So, in our example, we would have each indicator f_i be a different attribute about our witnessed object, so our quantity of interest is:</p>
+              <br/>
+<pre class='prettyprint'>
+    Pr(Human? | Movement = slow,
+                Height = med,
+                Speech = 1,
+                Form = 4)
+  
+  = [Pr(Movement = slow | Human?) *
+     Pr(Height = med | Human?) *
+     Pr(Speech = 1 | Human?) *
+     Pr(Form = 4 | Human?) *
+     Pr(Human?)]
+   / Pr(Movement = slow, Height = med, Speech = 1, Form = 4)
+</pre>
+              <br/>
+              <p>Almost there! Now we just need one more element to complete our classification:</p>
+              <br/>
+<pre class='prettyprint'>
+  ; Now all we need to find out is the Pr(f1, f2, ..., fn)
+  ; We have a strategy to do this: Case analysis!
+  
+  Pr(f1, f2, ..., fn) 
+    = &Sigma;_c&in;C Pr(f1, f2, ..., fn | c) * Pr(c)
+    = &Sigma;_c&in;C Pr(f1 | c) * Pr(f2 | c) * ... * Pr(fn | c) * Pr(c)
+    
+  ; And so, substituting back into our original equation:
+  [Pr(f1 | c) * Pr(f2 | c) * ... * Pr(fn | c) * Pr(C)]
+    / Pr(f1, f2, ..., fn)
+    
+  = [Pr(f1 | C) * Pr(f2 | C) * ... * Pr(fn | C) * Pr(C)]
+    / [&Sigma;_c&in;C Pr(f1 | c) * Pr(f2 | c) * ... * Pr(fn | c) * Pr(c)]
+</pre>
+              <br/>
+              <p>Notice: This gives us a *table* since we have the class variable C in the numerator; we really want to determine *which* value of C is most likely.</p>
+              <p>So, we simply compare the different values of C and classify based on whichever is most probable.</p>
+              <p>This outcome is defined by:</p>
+<pre class='prettyprint'>
+  ; The most likely class for all classes in C will
+  ; be represented by:
+  argmax [Pr(f1 | c_i) * Pr(f2 | c_i) * ... * Pr(fn | c_i) * Pr(c_i)]
+  c_i&in;C   / [&Sigma;_c&in;C Pr(f1 | c) * Pr(f2 | c) * ... * Pr(fn | c) * Pr(c)] 
+</pre>
+              <br/>
+              <p>...which looks intimidating, but just says, &quot;Choose the value of class variable C that has the highest probability given the witnessed indicator values for the object&quot;</p>
+              <p>In our example, we would be choosing between: C = Human? = {yes, no}</p>
+              
+              <!-- TODO: Example -->
               
             </div>
             <hr/>
