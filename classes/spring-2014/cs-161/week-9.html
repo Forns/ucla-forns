@@ -272,20 +272,20 @@
   EU(AtHome | e)
     = Pr(AtHome, clear | AtHome, e) * U(AtHome, clear) +
       Pr(AtHome, raining | AtHome, e) * U(AtHome, raining)
-    = 0.4 * 2 + 0 * 3
-    = 0.8
+    = 1 * 2 + 0 * 3
+    = 2
     
   EU(AtBeach)
-    = Pr(AtBeach, clear | AtBeach) * U(AtBeach, clear) +
-      Pr(AtBeach, raining | AtBeach) * U(AtBeach, raining)
-    = 0.4 * 4 + 0 * 1
-    = 1.6
+    = Pr(AtBeach, clear | AtBeach, e) * U(AtBeach, clear) +
+      Pr(AtBeach, raining | AtBeach, e) * U(AtBeach, raining)
+    = 1 * 4 + 0 * 1
+    = 4
     
   ; Next, using MEU criteria:
   action_chosen = argmax EU(a | e)
                     a
   
-                = argmax ({AtHome: 0.8, AtBeach: 1.6})
+                = argmax ({AtHome: 2, AtBeach: 4})
                 = AtBeach
                 
   ; Beach time!
@@ -585,15 +585,46 @@
                 <img src='../../../assets/images/spring-2014/cs-161/week-9/decision-0.PNG' />
               </div>
               <br/>
+              <p>BUT, that example uses continuous variables, which we're not used to seeing... let's look at a quick example using discrete variables:</p>
+              <p>(here our decision node might have some nondeterministic action consequence)</p>
+              <br/>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-9/decision-9.PNG' />
+              </div>
+              <br/>
+              <p>So, we can ask what the utility of a given action is by setting the action, which causes the decision node to act like a &quot;given&quot; chance node:</p>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-9/decision-10.PNG' />
+              </div>
+              <br/>
+              <p class='question' name='d-net-q0'>What is the expected utility of A1 as listed above? (click for solution)</p>
+              <div class='answer' name='d-net-q0'>
+<pre class='prettyprint'>
+  EU(A1) = Pr(X = 0, Y = 0 | D = A1) * Pr(X = 0) * U(Y = 0) +
+           Pr(X = 0, Y = 1 | D = A1) * Pr(X = 0) * U(Y = 1) +
+           Pr(X = 1, Y = 0 | D = A1) * Pr(X = 1) * U(Y = 0) +
+           Pr(X = 1, Y = 1 | D = A1) * Pr(X = 1) * U(Y = 1)
+         
+         = 0.2 * 0.4 * 3 +
+           0.8 * 0.4 * 1 +
+           0.7 * 0.6 * 3 +
+           0.3 * 0.6 * 1
+           
+         = 2
+</pre>
+              </div>
+              <br/>
+              <p class='example'>Compute the EU(A2) using the above example.</p>
+              <br/>
               <p>So here are some observations to make:</p>
               <ul class='indent-1'>
                 <li><p><strong>Purpose of decision networks:</strong> judge which actions from our decision (rectangle) nodes produce the highest utility.</p></li>
                 <li><p><strong>Data formats:</strong>
                   <ul class='indent-1'>
                     <li><p>Chance nodes are CPTs just like in Bayesian networks, except parents of chance nodes can be decision nodes as well (which are always given because
-                  we're evaluating between action choices)</p></li>
+                      we're evaluating between action choices)</p></li>
                     <li><p>
-                      Decision nodes are simply a setting of variables to values within a state that a given action would result in. (e.g., choosing Site1 sets cost to the given value of $10,000,000)
+                      Decision nodes for a given action simply become given chance nodes.
                     </p></li>
                     <li><p>Utility nodes are an evaluation of its direct causes (parents) based on supplied value functions. In our example above, U = F(f_death(Deaths), f_noise(Noise), f_cost(Cost))</p></li>
                   </ul>
@@ -1228,7 +1259,11 @@
   ; The most likely class for all classes in C will
   ; be represented by:
   argmax [Pr(f1 | c_i) * Pr(f2 | c_i) * ... * Pr(fn | c_i) * Pr(c_i)]
-  c_i&in;C   / [&Sigma;_c&in;C Pr(f1 | c) * Pr(f2 | c) * ... * Pr(fn | c) * Pr(c)] 
+  c_i&in;C   / [&Sigma;_c&in;C Pr(f1 | c) * Pr(f2 | c) * ... * Pr(fn | c) * Pr(c)]
+  
+  ; Noting that the division is simply the normalizing constant:
+  &prop; argmax [Pr(f1 | c_i) * Pr(f2 | c_i) * ... * Pr(fn | c_i) * Pr(c_i)]
+     c_i&in;C
 </pre>
               <br/>
               <p>...which looks intimidating, but just says, &quot;Choose the value of class variable C that has the highest probability given the witnessed indicator values for the object&quot;</p>
