@@ -1,0 +1,347 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Andrew Forney - UCLA CS</title>
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/magic-bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/main.css" rel="stylesheet" type="text/css">
+    <script src="../../../js/lib/jquery-2.0.3.min.js"></script>
+    <script src="../../../js/lib/bootstrap.min.js"></script>
+    <script src="../../../js/lib/expanding.js"></script>
+    <script src="../../../js/display/general/general-display.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+  </head>
+  
+  <body data-spy="scroll" data-target="#scrollspy">
+    
+    <!-- BEGIN WRAP -->
+    <div id="wrap">
+      
+      <!-- BEGIN NAVIGATION -->
+      <nav class='navbar navbar-default' role='navigation'>
+        <div class='nav-accent'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-12'>
+              <div class='navbar-header'>
+                <button class='navbar-toggle' type='button' data-toggle='collapse' data-target='.navbar-main-collapse'>
+                  <span class='sr-only'>Toggle Navigation</span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                </button>
+                <a class='navbar-brand' href='/~forns/'>
+                  <span id='brand-text'>
+                    Andrew Forney
+                  </span>
+                </a>
+              </div>
+              
+              <div id='nav-main' class='collapse navbar-collapse navbar-main-collapse'>
+                <ul class='nav navbar-nav navbar-right'>
+                  
+                  <li>
+                    <a href='/~forns/about.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-user'></span>
+                      </div>
+                      <p class='text-center'>About</p>
+                    </a>
+                  </li>
+                  
+                  <li class='active'>
+                    <a href='/~forns/classes.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-book'></span>
+                      </div>
+                      <p class='text-center'>Classes</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/contact.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-comment'></span>
+                      </div>
+                      <p class='text-center'>Contact</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/publications.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-file'></span>
+                      </div>
+                      <p class='text-center'>Publications</p>
+                    </a>
+                  </li>
+                  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <!-- END NAVIGATION -->
+      
+      <!-- BEGIN MAIN CONTENT -->
+      <div id="main-content" class="container">
+        <div class="row">
+          
+          <!-- BEGIN SCROLLSPY -->
+          <div class='col-md-2 hidden-sm hidden-xs'>
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+              <ul id='scrollspy' class="nav bs-sidenav">
+              </ul>
+            </div>
+          </div>
+          <!-- END SCROLLSPY -->
+          
+          <!-- BEGIN PRESENTATION CONTENT -->
+          <div class='col-md-10 presentation-content' role='main'>
+            
+            <ol class="breadcrumb hidden-print">
+              <li><a href="../../../classes.html">Classes</a></li>
+              <li><a href="./cs-161.html">Spring14 CS161</a></li>
+              <li class="active">Final Practice</li>
+            </ol>
+            
+            <div id='final' class='scrollspy-element' scrollspy-title='Final Practice'></div>
+            <h1>Practice Problems</h1>
+            <div>
+              <p class='debug'><strong>Disclaimer</strong><br/>These practice problems are for your practice alone; I make no claims of their representation on the exam, or their relevance to exam material.
+                Any and all exercises listed herein are simply my best guess of the type of problems you'll encounter and what you should be expected to perform on a test. They may or may not represent the
+                difficulty of any question encountered on the exam.
+              </p>
+              <br/>
+              <p>Here's a smattering of problems I think might be on the exam. Have at it, and let me know if you have any questions!</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='planning' class='scrollspy-element' scrollspy-title='Planning'></div>
+            <h1>Planning Problems</h1>
+            <div>
+              <p class='example'>[BLOCKS 1] Try the following variant of the block-moving problem from the book, (page 371); determine what sequence of actions reaches the goal state from the initial state.</p>
+              <br/>
+              <p>As a reminder, this problem has blocks resting on a table surface, or on top of one another; the goal is to stack them in a particular order.</p>
+              <p>In particular, we have the following FOL predicates:</p>
+              <ul class='indent-1'>
+                <li><p>Block(x): indicates that argument x is a block</p></li>
+                <li><p>Clear(x): indicates that argument x can have something stacked on top of it</p></li>
+                <li><p>On(b, x): indicates that argument x is stacked on top of argument b</p></li>
+              </ul>
+              <br/>
+<pre class='prettyprint'>
+  ; Move block b from x to y
+  Action(Move(b, x, y)
+    Preconditions:
+      On(b, x) &and; Clear(b) &and; Clear(y) &and; 
+      Block(b) &and; Block(y) &and;
+      (b &ne; x) &and; (b &ne; y) &and; (x &ne; y)
+    
+    Effect:
+      On(b, y) &and; Clear(x) &and; &not;On(b, x) &and; &not;Clear(y)
+  )
+  
+  
+  ; Move block b onto the table from x
+  Action(MoveToTable(b, x)
+    Predonditions:
+      On(b, x) &and; Clear(b) &and; Block(b) &and; (b &ne; x)
+      
+    Effect:
+      On(b, Table) &and; Clear(x) &and; &not;On(b, x)
+  )
+</pre>
+              <br/>
+              <p>Using the above actions, find an action sequence starting at the following initial state to the goal state:</p>
+<pre class='prettyprint'>
+  ; Constants:
+  A, B, C, Table
+  
+  Init(
+    On(A, Table) &and; On(B, Table) &and; On(C, A) &and;
+    Block(A) &and; Block(B) &and; Block(C) &and; Clear(B) &and; Clear(C)
+  )
+  
+  Goal(
+    On(A, Table) &and; On(B, A) &and; On(C, B)
+  )
+</pre>
+              <br/>
+              <p class='question' name='planning-q0'>Click for solution.</p>
+              <div class='answer' name='planning-q0'>
+<pre class='prettyprint'>
+  1. MoveToTable(C, A)
+  2. Move(B, A)
+  3. Move(C, B)
+</pre>
+              </div>
+              <br/>
+              <p>OK hotshot, that was too easy... but now that you're warmed up...</p>
+              <br/>
+              <p class='example'>[BLOCKS 2] Let's try the block moving problem, but add a degree of difficulty: now, there is only room on the table to hold 3 stacks of blocks, designated table spots T1, T2, T3. 
+                We will also have to modify the actions:</p>
+              <br/>
+<pre class='prettyprint'>
+  ; Move block b from x to y
+  ; [!] NOTE: x and y may now be table slots, which
+  ; also have Clear predicate designators if a block
+  ; may be placed upon them
+  Action(Move(b, x, y)
+    Preconditions:
+      On(b, x) &and; Clear(b) &and; Clear(y) &and; 
+      Block(b) &and;
+      (b &ne; x) &and; (b &ne; y) &and; (x &ne; y)
+    
+    Effect:
+      On(b, y) &and; Clear(x) &and; &not;On(b, x) &and; &not;Clear(y)
+  )
+</pre>
+              <p>Using the above action and initial state:</p>
+<pre class='prettyprint'>
+  ; Constants:
+  A, B, C, D, E, T1, T2, T3
+  
+  Init(
+    On(A, T1) &and; On(E, A) &and; On(C, T2) &and; On(B, C) &and; On(D, B) &and;
+    Block(A) &and; Block(B) &and; Block(C) &and; Block(D) &and; Block(E) &and;
+    Clear(D) &and; Clear(E)
+  )
+  
+  Goal(
+    On(A, T3) &and; On(B, A) &and; On(C, B) &and; On(D, C) &and; On(E, D)
+  )
+</pre>
+              <br/>
+              <p class='question' name='planning-q1'>Click for solution.</p>
+              <div class='answer' name='planning-q1'>
+<pre class='prettyprint'>
+  1. Move(E, D)
+  2. Move(A, T3)
+  3. Move(E, T1)
+  4. Move(D, E)
+  5. Move(B, A)
+  6. Move(C, B)
+  7. Move(D, C)
+  8. Move(E, D)
+  
+  ; ...great, I invented the Blocks of Hanoi...
+</pre>
+              </div>
+              <br/>
+              <p>Alright that was a little obnoxious and grueling... so why not aim for more obnoxious and grueling with a planning graph?</p>
+              <p>Your book starts the planning graph for the Tire Changing problem, so why don't we finish it?</p>
+              <br/>
+              <p class='example'>Complete the planning graph associated with the tire-changing problem:</p>
+<pre class='prettyprint'>
+  ; Constants:
+  Flat, Spare, Axle, Trunk, Ground
+  
+  Init(Tire(Flat) &and; Tire(Spare) &and; At(Flat, Axle) &and; At(Spare, Trunk))
+  Goal(At(Spare, Axle))
+  
+  Action(Remove(obj, loc),
+    Preconditions:
+      At(obj, loc)
+    Effect:
+      &not;At(obj, loc) &and; At(obj, Ground)
+  )
+  
+  Action(PutOn(t, Axle),
+    Preconditions:
+      Tire(t) &and; At(t, Ground) &and; &not;At(Flat, Axle)
+    Effect:
+      &not;At(t, Ground) &and; At(t, Axle)
+  )
+      
+  Action(LeaveOvernight(),
+    Preconditions:
+    Effect: &not;At(Spare, Ground) &and; &not;At(Spare, Axle) &and; &not;At(Spare, Trunk) &and;
+            &not;At(Flat, Ground) &and; &not;At(Flat, Axle) &and; &not;At(Flat, Trunk)
+  )
+</pre>
+              <br/>
+              <p class='example'>[TIRE 1] Step One: diagram the planning graph's initial state (HINT: remember to explicitly list the closed world assumptions!)</p>
+              <p class='debug'>NOTE: For simplicity's sake, we will not model the Tire(x) predicates, since those have no chance of changing.</p>
+              <br/>
+              <p class='question' name='planning-q2'>Click for solution.</p>
+              <div class='answer' name='planning-q2'>
+                <div class='fit-pres text-center'>
+                  <img src='../../../assets/images/spring-2014/cs-161/final/final-0.PNG' />
+                </div>
+              </div>
+              <br/>
+              <p class='example'>[TIRE 2] Step Two: diagram the planning graph's first Action level, A0 (without mutex links, for now):</p>
+              <br/>
+              <p class='question' name='planning-q3'>Click for solution.</p>
+              <div class='answer' name='planning-q3'>
+                <div class='fit-pres text-center'>
+                  <img src='../../../assets/images/spring-2014/cs-161/final/final-1.PNG' />
+                </div>
+              </div>
+              <br/>
+              <p class='example'>[TIRE 3] Step Three: add mutex links between actions in A0:</p>
+              <br/>
+              <p class='question' name='planning-q4'>Click for solution.</p>
+              <div class='answer' name='planning-q4'>
+                <div class='fit-pres text-center'>
+                  <img src='../../../assets/images/spring-2014/cs-161/final/final-2.PNG' />
+                </div>
+              </div>
+              <br/>
+              <p class='example'>[TIRE 4] Step Four: diagram the second state level S1:</p>
+              <br/>
+              <p class='question' name='planning-q5'>Click for solution.</p>
+              <div class='answer' name='planning-q5'>
+                <div class='fit-pres text-center'>
+                  <img src='../../../assets/images/spring-2014/cs-161/final/final-3.PNG' />
+                </div>
+              </div>
+              <br/>
+              <p class='example'>[TIRE 5] Step Five: add mutex links between fluents of state S1:</p>
+              <br/>
+              <p class='question' name='planning-q6'>Click for solution.</p>
+              <div class='answer' name='planning-q6'>
+                <div class='fit-pres text-center'>
+                  <img src='../../../assets/images/spring-2014/cs-161/final/final-4.PNG' />
+                </div>
+              </div>
+            </div>
+            <hr/>
+            
+            <a class='btn btn-default pull-right hidden-print' href='javascript:window.print();'>
+              <span class='glyphicon glyphicon-print'></span>
+              &nbsp; PDF / Print
+            </a>
+            
+          </div>
+          <!-- END PRESENTATION CONTENT -->
+          
+          <!-- MATERIALS FROM CLASS: -->
+          
+            
+        </div>
+      </div>
+      <!-- END MAIN CONTENT -->
+      
+      
+    </div>
+    <!-- END WRAPPER -->
+    
+    <!-- BEGIN FOOTER -->
+    <div id="footer">
+      <div class="container">
+        <div class="col-md-12 text-center">
+          
+        </div>
+      </div>
+    </div>
+    <!-- END FOOTER -->
+    
+  </body>
+</html>
