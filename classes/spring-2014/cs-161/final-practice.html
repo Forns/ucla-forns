@@ -329,8 +329,27 @@
             <h1>Probability Calculus</h1>
             <div>
               <p>Get your theorems and rules ready kids, it's probability time!</p>
+              <p>Why don't we start with a cheat sheet on stuff you're going to need:</p>
+<pre class='prettyprint'>
+  ; Product Rule:
+  Pr(A, B) = Pr(A | B) * Pr(B)
+           = Pr(B | A) * Pr(A)
+  
+  ; Chain Rule:
+  Pr(A, B, C) = Pr(A | B, C) * Pr(B | C) * Pr(C)
+  
+  ; Law of Total Probability
+  Pr(A) = &Sigma; Pr(A | b) * Pr(b)
+        &forall;b&in;B
+           
+  ; Bayes Conditioning
+  Pr(A | B) = Pr(A, B) / Pr(B)
+  
+  ; Bayes Rule
+  Pr(A | B) = [Pr(B | A) * Pr(A)] / Pr(B)
+</pre>
               <br/>
-              <p class='question' name='prob-q0'>If <strong>conditioning</strong> tells us that <code class='prettyprint'>Pr(A, B) = Pr(A | B) * Pr(B)</code>, then in the general case accounting for
+              <p class='question' name='prob-q0'>If <strong>the product rule</strong> tells us that <code class='prettyprint'>Pr(A, B) = Pr(A | B) * Pr(B)</code>, then in the general case accounting for
                 evidence E, can we say that <code class='prettyprint'>Pr(A, B | E) = Pr(A | B, E) * Pr(B | E)</code>?</p>
               <p class='answer' name='prob-q0'>Yes! The property <code class='prettyprint'>Pr(A, B | E) = Pr(A | B, E) * Pr(B | E)</code> is called <strong>the generalized product rule</strong> and is
                 simply an application of the product rule (which is a special case of the chain rule).</p>
@@ -357,7 +376,403 @@
               </div>
               
               <br/>
+              <p class='example'>Read the following problem description, and for each probability mentioned, formalize it into a Pr(x | y) statement (for example) and then solve for the correct quantity.
+                Assume two binary variables: Test and Disease, as described by the problem.</p>
+              <blockquote>
+                A rare disease is found in about 2% of those tested for it. The test returns an end result that is either positive (Test) or negative (&not;Test). The problem is that the tests are not
+                perfect such that 3% of people without the disease will test positive and 1% of people with the disease will test negative.<br/><br/>
+                <strong>If a patient tests negative, what is the probability that they *DO NOT* have the disease?</strong>
+              </blockquote>
+              <br/>
+              <p class='question' name='prob-q2'>Click for solution.</p>
+              <div class='answer' name='prob-q2'>
+<pre class='prettyprint'>
+  ; Let D = Disease
+  ;     T = Positive test
+  
+  Pr(D) = 0.02
+  Pr(&not;D) = 0.98
+  
+  Pr(T | &not;D) = 0.03
+  Pr(&not;T | &not;D) = 0.97
+  
+  Pr(&not;T | D) = 0.01
+  Pr(T | D) = 0.99
+  
+  ; Law of Total Probability
+  Pr(T) = &Sigma; Pr(T | d) * Pr(d)
+        &forall;d&in;D
+        = Pr(T | D) * Pr(D) + Pr(T | &not;D) * Pr(&not;D)
+        = 0.99 * 0.02 + 0.03 * 0.98
+        = 0.0492
+  
+  Pr(&not;T) = 1 - Pr(T)
+         = 0.9508
+  
+  ; ------------------------------------------------
+  
+  ; Query:
+  Pr(&not;D | &not;T)
+  
+  ; Bayes Theorem
+  = [Pr(&not;T | &not;D) * Pr(&not;D)] / Pr(&not;T)
+  = [0.97 * 0.98] / 0.9508
+  = 0.99978965082
+  
+  ; Pretty good chance you do not have the disease
+  ; if your test comes back negative!
+</pre>
+              </div>
               
+              <br/>
+              <p class='example'>Use the following joint probability distribution to compute the requested quantities.</p>
+              <br/>
+              <table class='table table-bordered table-striped'>
+                <thead>
+                  <tr>
+                    <th><p>X</p></th>
+                    <th><p>Y</p></th>
+                    <th><p>Z</p></th>
+                    <th><p>Pr(X, Y, Z)</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><p>0</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0.10</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>0</p></td>
+                    <td><p>0</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0.12</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>0</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0.25</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>0</p></td>
+                    <td><p>1</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0.15</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>1</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0.18</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>1</p></td>
+                    <td><p>0</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0.05</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>1</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0.13</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>1</p></td>
+                    <td><p>1</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0.02</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+              <p class='question' name='prob-q3'>What is Pr(X = 1)?</p>
+              <div class='answer' name='prob-q3'>
+<pre class='prettyprint'>
+  Pr(X = 1) = 0.18 + 0.05 + 0.13 + 0.02
+            = 0.38
+</pre>
+              </div>
+              <br/>
+              <p class='question' name='prob-q4'>What is Pr(X = 0, Y = 0)?</p>
+              <div class='answer' name='prob-q4'>
+<pre class='prettyprint'>
+  Pr(X = 0, Y = 0) = 0.10 + 0.12
+                   = 0.22
+</pre>
+              </div>
+              <br/>
+              <p class='question' name='prob-q5'>What is Pr(Z = 0, Y = 1 | X = 0)?</p>
+              <div class='answer' name='prob-q5'>
+                <table class='table table-bordered'>
+                  <thead>
+                    <tr>
+                      <th><p>X</p></th>
+                      <th><p>Y</p></th>
+                      <th><p>Z</p></th>
+                      <th><p>Pr(X, Y, Z)</p></th>
+                      <th><p>Pr(Y, Z | X = 0)</p></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><p>0</p></td>
+                      <td><p>0</p></td>
+                      <td><p>0</p></td>
+                      <td><p>0.10</p></td>
+                      <td><p>0.10 / Pr(X = 0) = 0.10 / 0.62 = 0.161</p></td>
+                    </tr>
+                    <tr>
+                      <td><p>0</p></td>
+                      <td><p>0</p></td>
+                      <td><p>1</p></td>
+                      <td><p>0.12</p></td>
+                      <td><p>0.12 / Pr(X = 0) = 0.194</p></td>
+                    </tr>
+                    <tr>
+                      <td><p>0</p></td>
+                      <td><p>1</p></td>
+                      <td><p>0</p></td>
+                      <td><p>0.25</p></td>
+                      <td><p>0.25 / Pr(X = 0) = 0.403</p></td>
+                    </tr>
+                    <tr>
+                      <td><p>0</p></td>
+                      <td><p>1</p></td>
+                      <td><p>1</p></td>
+                      <td><p>0.15</p></td>
+                      <td><p>0.15 / Pr(X = 0) = 0.242</p></td>
+                    </tr>
+                    <tr>
+                      <td><p>1</p></td>
+                      <td><p>0</p></td>
+                      <td><p>0</p></td>
+                      <td><p>0.18</p></td>
+                      <td><p>0</p></td>
+                    </tr>
+                    <tr>
+                      <td><p>1</p></td>
+                      <td><p>0</p></td>
+                      <td><p>1</p></td>
+                      <td><p>0.05</p></td>
+                      <td><p>0</p></td>
+                    </tr>
+                    <tr>
+                      <td><p>1</p></td>
+                      <td><p>1</p></td>
+                      <td><p>0</p></td>
+                      <td><p>0.13</p></td>
+                      <td><p>0</p></td>
+                    </tr>
+                    <tr>
+                      <td><p>1</p></td>
+                      <td><p>1</p></td>
+                      <td><p>1</p></td>
+                      <td><p>0.02</p></td>
+                      <td><p>0</p></td>
+                    </tr>
+                  </tbody>
+                </table>
+<pre class='prettyprint'>
+  Pr(Z = 0, Y = 1 | X = 0) = 0.403
+</pre>
+              </div>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='bayesnet' class='scrollspy-element' scrollspy-title='Bayesian Networks'></div>
+            <h1>Bayesian Networks</h1>
+            <div>
+              <p>Observe the structure of the following Bayesian Network and use it to answer the following questions about independence relations.</p>
+              <br/>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/final/final-5.PNG' />
+              </div>
+              <br/>
+              <p class='example'>[BN 1] List the Markovian assumptions implicit within the network.</p>
+              <p class='question' name='bn-q0'>Click for solution.</p>
+              <div class='answer' name='bn-q0'>
+<pre class='prettyprint'>
+  V &perp; S
+  V &perp; B
+  
+  S &perp; V
+  S &perp; T
+  
+  T &perp; C | V
+  T &perp; S | V
+  T &perp; B | V
+  
+  C &perp; T | V, S
+  C &perp; B | V, S
+  
+  B &perp; V | S
+  B &perp; T | S
+  B &perp; C | S
+  B &perp; O | S
+  B &perp; X | S
+  
+  O &perp; V | T, C
+  O &perp; S | T, C
+  O &perp; B | T, C
+  
+  X &perp; V | O
+  X &perp; S | O
+  X &perp; T | O
+  X &perp; C | O
+  X &perp; B | O
+  X &perp; D | O
+  
+  D &perp; V | O, B
+  D &perp; S | O, B
+  D &perp; T | O, B
+  D &perp; C | O, B
+  D &perp; X | O, B
+</pre>
+              </div>
+              
+              <br/>
+              <p class='example'>[BN 2] Use the same Bayesian Network (replicated below for your scrolling convenience) to answer the following d-separation questions.</p>
+              <br/>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/final/final-5.PNG' />
+              </div>
+              <br/>
+              <table class='table table-bordered'>
+                <thead>
+                  <tr>
+                    <th><p>X</p></th>
+                    <th><p>Z</p></th>
+                    <th><p>Y</p></th>
+                    <th><p>d-sep(X, Z, Y)?</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><p>V</p></td>
+                    <td><p>&empty;</p></td>
+                    <td><p>S</p></td>
+                    <td class='warning'><p>???</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>V</p></td>
+                    <td><p>D</p></td>
+                    <td><p>S</p></td>
+                    <td class='warning'><p>???</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>T</p></td>
+                    <td class='warning'><p>???</p></td>
+                    <td><p>B</p></td>
+                    <td><p>Yes!</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>T</p></td>
+                    <td><p>C, S</p></td>
+                    <td><p>B</p></td>
+                    <td class='warning'><p>???</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>X</p></td>
+                    <td><p>C</p></td>
+                    <td><p>B</p></td>
+                    <td class='warning'><p>???</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>V, B</p></td>
+                    <td><p>T, C</p></td>
+                    <td><p>X</p></td>
+                    <td class='warning'><p>???</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>V</p></td>
+                    <td class='warning'><p>T, C, ???</p></td>
+                    <td><p>O</p></td>
+                    <td><p>No!</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+              <p class='question' name='bn-q1'>Click for solution.</p>
+              <div class='answer' name='bn-q1'>
+                <p>* = multiple answers possible</p>
+                <br/>
+                <table class='table table-bordered'>
+                  <thead>
+                    <tr>
+                      <th><p>X</p></th>
+                      <th><p>Z</p></th>
+                      <th><p>Y</p></th>
+                      <th><p>d-sep(X, Z, Y)?</p></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><p>V</p></td>
+                      <td><p>&empty;</p></td>
+                      <td><p>S</p></td>
+                      <td><p>Yes!</p></td>
+                    </tr>
+                    <tr>
+                      <td><p>V</p></td>
+                      <td><p>D</p></td>
+                      <td><p>S</p></td>
+                      <td><p>No! <code class='prettyprint'>V &rarr; C &larr; S</code></p></td>
+                    </tr>
+                    <tr>
+                      <td><p>T</p></td>
+                      <td><p>&empty;*</p></td>
+                      <td><p>B</p></td>
+                      <td><p>Yes!</p></td>
+                    </tr>
+                    <tr>
+                      <td><p>T</p></td>
+                      <td><p>C, S</p></td>
+                      <td><p>B</p></td>
+                      <td><p>Yes!</p></td>
+                    </tr>
+                    <tr>
+                      <td><p>X</p></td>
+                      <td><p>C</p></td>
+                      <td><p>B</p></td>
+                      <td><p>No! <code class='prettyprint'>X &larr; O &larr; T &larr; V &rarr; C &larr; S &rarr; B</code></p></td>
+                    </tr>
+                    <tr>
+                      <td><p>V, B</p></td>
+                      <td><p>T, C</p></td>
+                      <td><p>X</p></td>
+                      <td><p>Yes!</p></td>
+                    </tr>
+                    <tr>
+                      <td><p>V</p></td>
+                      <td><p>T, C, D</p></td>
+                      <td><p>O</p></td>
+                      <td><p>No! <code class='prettyprint'>V &rarr; C &larr; S &rarr; B &rarr; D &larr; O</code></p></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <br/>
+              <p class='definition'>Two Bayesian Networks are said to be <strong>observationally equivalent</strong> if they exhibit the same independence and conditional independence
+                relationships between variables.</p>
+              <p class='example'>[BN 3] Are the following two models observationally equivalent?</p>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/final/final-6.PNG' />
+              </div>
+              <p class='question' name='bn-q6'>Are the two models observationally equivalent?</p>
+              <p class='answer' name='bn-q6'>Yes! A quick trick to decide if two models are observationally equivalent is to see if any colliders are created or destroyed by an edge inversion; if they *are*
+                created or destroyed (at least one) then the two models will NOT be observationally equivalent.</p>
+              <br/>
+              <p class='example'>[BN 4] Are the following two models observationally equivalent?</p>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/final/final-7.PNG' />
+              </div>
+              <p class='question' name='bn-q7'>Are the two models observationally equivalent?</p>
+              <p class='answer' name='bn-q7'>No! See how we destroyed a collider at B &rarr; D &larr; C from the first model to the second?</p>
             </div>
             <hr/>
             
