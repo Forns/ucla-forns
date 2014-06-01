@@ -235,9 +235,9 @@
               </div>
               <br/>
               <p>Alright that was a little obnoxious and grueling... so why not aim for more obnoxious and grueling with a planning graph?</p>
-              <p>Your book starts the planning graph for the Tire Changing problem, so why don't we finish it?</p>
+              <p>Your book starts the planning graph for the Tire Changing problem, but doesn't show some mutex connections... why don't we complete them?</p>
               <br/>
-              <p class='example'>Complete the planning graph associated with the tire-changing problem:</p>
+              <p class='example'>Follow the planning graph for the tire changing problem up to State level S1:</p>
 <pre class='prettyprint'>
   ; Constants:
   Flat, Spare, Axle, Trunk, Ground
@@ -311,8 +311,56 @@
                   <img src='../../../assets/images/spring-2014/cs-161/final/final-4.PNG' />
                 </div>
               </div>
+              
+              <br/>
+              <p>How about a couple of nice, easy, conceptual questions after that?</p>
+              <p class='question' name='planning-q7'>Under what condition does the planning graph stop generating new levels?</p>
+              <p class='answer' name='planning-q7'>Two consecutive, identical state levels.</p>
+              <br/>
+              <p class='question' name='planning-q8'>If the planning graph &quot;levels off,&quot; the goal state's fluents exist in the final state level, and they are not mutex, are we guaranteed that a
+                solution exists to the planning problem?</p>
+              <p class='answer' name='planning-q8'>No! We are only guaranteed that a solution does *not* exist if our final state level does *not* contain the goal fluents.</p>
             </div>
             <hr/>
+            
+            
+            <br/>
+            <div id='prob' class='scrollspy-element' scrollspy-title='Probability Calculus'></div>
+            <h1>Probability Calculus</h1>
+            <div>
+              <p>Get your theorems and rules ready kids, it's probability time!</p>
+              <br/>
+              <p class='question' name='prob-q0'>If <strong>conditioning</strong> tells us that <code class='prettyprint'>Pr(A, B) = Pr(A | B) * Pr(B)</code>, then in the general case accounting for
+                evidence E, can we say that <code class='prettyprint'>Pr(A, B | E) = Pr(A | B, E) * Pr(B | E)</code>?</p>
+              <p class='answer' name='prob-q0'>Yes! The property <code class='prettyprint'>Pr(A, B | E) = Pr(A | B, E) * Pr(B | E)</code> is called <strong>the generalized product rule</strong> and is
+                simply an application of the product rule (which is a special case of the chain rule).</p>
+              <br/>
+              <p class='question' name='prob-q1'>Prove the <strong>generalized Bayes Rule</strong> stating: <code class='prettyprint'>[Pr(A | B, E) = Pr(B | A, E) * Pr(A | E)] / Pr(B | E)</code></p>
+              <div class='answer' name='prob-q1'>
+<pre class='prettyprint'>
+    Pr(A | B, E)
+  
+  ; Bayes Conditioning
+  = Pr(A, B, E) / Pr(B, E)
+  
+  ; Re-arranging for clarity
+  = Pr(B, A, E) / Pr(B, E)
+  
+  ; Chain Rule
+  = [Pr(B | A, E) * Pr(A | E) * Pr(E)] / [Pr(B | E) * Pr(E)]
+  
+  ; Pr(E)s cancel out
+  = [Pr(B | A, E) * Pr(A | E)] / [Pr(B | E)]
+  
+  ; QED
+</pre>
+              </div>
+              
+              <br/>
+              
+            </div>
+            <hr/>
+            
             
             <a class='btn btn-default pull-right hidden-print' href='javascript:window.print();'>
               <span class='glyphicon glyphicon-print'></span>
