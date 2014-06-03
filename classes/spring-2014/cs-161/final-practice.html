@@ -763,7 +763,7 @@
               <div class='fit-pres text-center'>
                 <img src='../../../assets/images/spring-2014/cs-161/final/final-6.PNG' />
               </div>
-              <p class='question' name='bn-q6'>Are the two models observationally equivalent?</p>
+              <p class='question' name='bn-q6'>Click for solution.</p>
               <p class='answer' name='bn-q6'>Yes! A quick trick to decide if two models are observationally equivalent is to see if any colliders are created or destroyed by an edge inversion; if they *are*
                 created or destroyed (at least one) then the two models will NOT be observationally equivalent.</p>
               <br/>
@@ -771,8 +771,176 @@
               <div class='fit-pres text-center'>
                 <img src='../../../assets/images/spring-2014/cs-161/final/final-7.PNG' />
               </div>
-              <p class='question' name='bn-q7'>Are the two models observationally equivalent?</p>
+              <p class='question' name='bn-q7'>Click for solution.</p>
               <p class='answer' name='bn-q7'>No! See how we destroyed a collider at B &rarr; D &larr; C from the first model to the second?</p>
+              
+              <br/>
+              <p class='example'>Compute Pr(S = 1 | A = 1) using the Bayesian Network and CPTs below.</p>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/final/final-8.PNG' />
+              </div>
+              <br/>
+              <p class='question' name='bn-q8'>Click for solution.</p>
+              <p class='answer' name='bn-q8'>By d-separation, we know that S &perp; A since C is not given, so:<br/>Pr(S = 1 | A = 1) = Pr(S = 1) = 0.3</p>
+              
+              <br/>
+              <p class='example'>Use variable elimination to compute Pr(A = 1 | B = 0) with elimination order &Pi; = C, B, A. DO NOT construct the joint distribution.</p>
+              <br/>
+              <p>As a reminder, here are some &quot;at a glance&quot; steps to variable elimination:</p>
+              <ol class='indent-1'>
+                <li><p>Choose an elimination order (too complicated for CS161 -- we'll give you one)</p></li>
+                <li><p>Trim all nodes that are d-separated from the query.</p></li>
+                <li><p>Zero-out CPT rows inconsistent with the evidence.</p></li>
+                <li><p>Let's say variable C is first in the elimination order (and hasn't been trimmed by #2), then we multiply all tables / factors mentioning C into one giant factor, and then sum out C.</p></li>
+                <li><p>Repeat above step until we're only left with our query variables. <strong>THEN, MAKE SURE YOUR REMAINING FACTOR *IS* YOUR QUERY.</strong> Otherwise, you might need extra steps.</p></li>
+              </ol>
+              <br/>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/final/final-9.PNG' />
+              </div>
+              <p class='question' name='bn-q9'>Click for solution.</p>
+              <div class='answer' name='bn-q9'>
+                <p><strong>Step 1 (Done):</strong> &Pi; = C, B, A</p>
+                <p><strong>Step 2:</strong> Trim node C from the network since A &perp; C | B</p>
+                <p><strong>Step 3:</strong> Zero out the following rows inconsistent with evidence:</p>
+                <div class='fit-pres text-center'>
+                  <img src='../../../assets/images/spring-2014/cs-161/final/final-10.PNG' />
+                </div>
+                <br/>
+                <p><strong>Step 4a:</strong> Since C was trimmed, B is next in the elimination order, so multiply together all tables mentioning B (just the one) and sum it out.</p>
+                <div class='fit-pres text-center'>
+                  <img src='../../../assets/images/spring-2014/cs-161/final/final-11.PNG' />
+                </div>
+                <br/>
+                <p>Remember, this term represents a <strong>factor</strong> so we do not normalize it yet.</p>
+                <br/>
+                <p><strong>Step 4b:</strong> A is next in the order, so multiply all the tables and factors mentioning A. Since it's our query, however, we do not sum it out.</p>
+                <div class='fit-pres text-center'>
+                  <img src='../../../assets/images/spring-2014/cs-161/final/final-12.PNG' />
+                </div>
+                <br/>
+                <p><strong>Step 5:</strong> At this point we're left with a factor in terms of our query variables having accounted for evidence B = 0, but look at the quantity in our factor:</p>
+<pre class='prettyprint'>
+  &Sigma; Pr(B | A) * Pr(A)
+  B
+  
+  ; Observe that this is equal to:
+  = Pr(A, B)
+  
+  ; The joint marginal!
+  ; So we still need to find
+  Pr(A = 1 | B = 0) = ???
+  
+  ; But hark! We also know Pr(B = 0):
+  Pr(B = 0) = Pr(A = 1, B = 0) + Pr(A = 0, B = 0)
+            = 0.38
+  
+  ; Therefore:
+  Pr(A = 1 | B = 0) = Pr(A = 1, B = 0) / Pr(B = 0)
+                    = 0.06 / 0.38
+                    = 0.1578
+</pre>
+                <br/>
+                <p>We could verify this using the joint if we wanted to...</p>
+              </div>
+              <br/>
+              <p>Whew! That one was intricate! But now that you know what you're doing... care to try it again? :)</p>
+              <br/>
+              <p class='example'>Read the following problem description and then compute the following quantity using variable elimination: Pr(C1 = 1 | J = 1, C2 = 1)</p>
+              <blockquote>
+                Remember our example about a bell ringing whenever 2 coins both came up the same (both heads or both tails)? Well, let's introduce a little noise into the system: Now, whenever both coin
+                flips are the same, there is a 95% chance that the bell will ring, and a 5% chance that it will ring under all other scenarios. Furthermore, our butler, Jeeves, who is still hard of hearing,
+                will come serve us tea 70% of the time the bell rings, and 10% of the time that it does not (&quot;Was that the bell I heard?! Maybe...&quot;). This scenario is represented by the Bayesian
+                network and CPTs below.<br/><br/>
+                <p><strong>
+                  Given that Jeeves did indeed bring us tea (J = 1) and coin 2 came up heads (C2 = 1), what is the probability that coin 1 also came up heads?<br/><br/>
+                  Choose Elimination order: C2, J, B, C1
+                </strong></p>
+              </blockquote>
+              <br/>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/final/final-13.PNG' />
+              </div>
+              <br/>
+              <p class='question' name='bn-q10'>Click for solution.</p>
+              <div class='answer' name='bn-q10'>
+                <p><strong>Step 1 (Done):</strong> &Pi; = C2, J, B, C1</p>
+                <p><strong>Step 2:</strong> No nodes to trim; all are dependent with the given evidence!</p>
+                <p><strong>Step 3:</strong> Zero out the following rows inconsistent with evidence:</p>
+                <div class='fit-pres text-center'>
+                  <img src='../../../assets/images/spring-2014/cs-161/final/final-14.PNG' />
+                </div>
+                <br/>
+                <p><strong>Step 4a:</strong> Variable C2 on the chopping block first, so multiply all tables and factors mentioning it:</p>
+                <div class='fit-pres text-center'>
+                  <img src='../../../assets/images/spring-2014/cs-161/final/final-15.PNG' />
+                </div>
+                <br/>
+                <p>...then, of course, sum out C2, giving us:</p>
+                <div class='fit-pres text-center'>
+                  <img src='../../../assets/images/spring-2014/cs-161/final/final-16.PNG' />
+                </div>
+                <br/>
+                <p><strong>Step 4b:</strong> Variable J next on the chopping block, so multiply all tables and factors mentioning it. There's only one, so no multiplication, but then sum it out giving us:</p>
+                <div class='fit-pres text-center'>
+                  <img src='../../../assets/images/spring-2014/cs-161/final/final-17.PNG' />
+                </div>
+                <br/>
+                <p><strong>Step 4c:</strong> Variable B next on the chopping block, so multiply all tables and factors mentioning it:</p>
+                <div class='fit-pres text-center'>
+                  <img src='../../../assets/images/spring-2014/cs-161/final/final-18.PNG' />
+                </div>
+                <br/>
+                <p>...then, summing B out:</p>
+                <div class='fit-pres text-center'>
+                  <img src='../../../assets/images/spring-2014/cs-161/final/final-19.PNG' />
+                </div>
+                <br/>
+                <p><strong>Step 4d:</strong> Almost there! Last up: multiply factors and tables containing C1:</p>
+                <div class='fit-pres text-center'>
+                  <img src='../../../assets/images/spring-2014/cs-161/final/final-20.PNG' />
+                </div>
+                <br/>
+                <p>Alright... let's look at what we have here:</p>
+<pre class='prettyprint'>
+  ; Rearranging, our last factor is:
+  &Sigma;  &Sigma;  &Sigma; Pr(B | C1, C2) * Pr(C2) * Pr(C1) * Pr(J | B)
+  B  C2 J
+  
+  ; ...meaning our last factor is equivalent to:
+  Pr(C1, J = 1, C2 = 1)
+  
+  ; ...well crap... that doesn't look like what I want
+  
+  ; Relax! We've already accounted for all of the evidence, and
+  ; summed out everything irrelevant; to get our query quantity,
+  ; we simply:
+  Pr(C1 | J = 1, C2 = 1) = Pr(C1, J = 1, C2 = 1) / Pr(J = 1, C2 = 1)
+  
+  ; But what is Pr(J = 1, C2 = 1)?!
+  ; Right there in our table, silly!
+  Pr(J = 1, C2 = 1) = Pr(C1 = 1, J = 1, C2 = 1) + Pr(C1 = 0, J = 1, C2 = 1)
+                    = 0.1675 + 0.0325
+                    = 0.2
+                    
+  ; Therefore:
+  Pr(C1 | J = 1, C2 = 1) = Pr(C1, J = 1, C2 = 1) / Pr(J = 1, C2 = 1)
+                         = 0.1675 / 0.2
+                         = 0.8375
+</pre>
+              </div>
+              <br/>
+              <p>If you weren't able to do that one, don't fret too much... I'm banking it's harder than what you'll see on the final but who knows!</p>
+              <p>If you did get it, then high five! (yourself, since I'm not there, but picture that I am)</p>
+              <p>For your hard work so far, here's something Bayesian related from Saturday Morning Breakfast Cereal:</p>
+              <br/>
+              <a href='http://www.smbc-comics.com/?id=3366#comic' target='_blank'>
+                <div class='fit-pres text-center'>
+                  <img src='../../../assets/images/spring-2014/cs-161/final/smbc-bayes.png' />
+                </div>
+              </a>
+              <!-- TODO: Add hr separators between questions for clarity -->
+              
             </div>
             <hr/>
             
