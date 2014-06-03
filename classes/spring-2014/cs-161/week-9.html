@@ -600,10 +600,10 @@
               <p class='question' name='d-net-q0'>What is the expected utility of A1 as listed above? (click for solution)</p>
               <div class='answer' name='d-net-q0'>
 <pre class='prettyprint'>
-  EU(A1) = Pr(X = 0, Y = 0 | D = A1) * Pr(X = 0) * U(Y = 0) +
-           Pr(X = 0, Y = 1 | D = A1) * Pr(X = 0) * U(Y = 1) +
-           Pr(X = 1, Y = 0 | D = A1) * Pr(X = 1) * U(Y = 0) +
-           Pr(X = 1, Y = 1 | D = A1) * Pr(X = 1) * U(Y = 1)
+  EU(A1) = Pr(Y = 0 | X = 0, D = A1) * Pr(X = 0) * U(Y = 0) +
+           Pr(Y = 1 | X = 0, D = A1) * Pr(X = 0) * U(Y = 1) +
+           Pr(Y = 0 | X = 1, D = A1) * Pr(X = 1) * U(Y = 0) +
+           Pr(Y = 1 | X = 1, D = A1) * Pr(X = 1) * U(Y = 1)
          
          = 0.2 * 0.4 * 3 +
            0.8 * 0.4 * 1 +
