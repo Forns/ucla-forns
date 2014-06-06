@@ -777,6 +777,22 @@
               <p class='answer' name='bn-q7'>No! See how we destroyed a collider at B &rarr; D &larr; C from the first model to the second?</p>
               
               <br/>
+              <p class='definition'>A <strong>Markov Blanket</strong> for a node in a Bayesian Network (indicated BM(A) for node A) is the set of all nodes that, if given, render A independent from ALL other
+                nodes in the network. A Markov Blanket consists of a node's parents, children, and spouses.</p>
+              <br/>
+              <p class='example'>Observe the following Bayesian Network and answer the following questions about Markov Blankets:</p>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/final/final-24.PNG' />
+              </div>
+              <br/>
+              <p class='question' name='mb-q1'>[BN 5] What is the Markov Blanket for Node C?</p>
+              <p class='answer' name='mb-q1'>{V, S, O, T}</p>
+              <br/>
+              <p class='question' name='mb-q1'>[BN 6] What is the Markov Blanket for Node O?</p>
+              <p class='answer' name='mb-q1'>{T, C, X, D, B}</p>
+              
+              <hr/>
+              <br/>
               <p class='example'>Compute Pr(S = 1 | A = 1) using the Bayesian Network and CPTs below.</p>
               <div class='fit-pres text-center'>
                 <img src='../../../assets/images/spring-2014/cs-161/final/final-8.PNG' />
