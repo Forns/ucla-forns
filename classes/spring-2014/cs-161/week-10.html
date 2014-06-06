@@ -124,7 +124,8 @@
               <br/>
               <p>Let's root neural networks in a familiar problem: classification.</p>
               <p>Remember that classification is the task of deciding whether our input attributes is indicative of a particular class, and returns a yes / no answer.</p>
-              <p class='example'>Take, for example, a very simple neuron which (through some process irrelevant to us) gets activated whenever someone sees the color red:</p>
+              <p class='example'>Take, for example, a very simple neuron which (through some process irrelevant to us) gets activated whenever you're looking at Jennifer Aniston (this was a real study, look
+                it up):</p>
               <br/>
               <p>This might look like the following:</p>
               <br/>
@@ -133,29 +134,178 @@
               </div>
               <br/>
               <p>(somewhere, someone who actually studies neuroscience is reading this and cringing)</p>
-              <p>However, if that same neuron were to see the color &quot;blue&quot; it might not activate!</p>
+              <p>However, if that same neuron were to respond to input of seeing Julia Roberts instead (which is, I believe, what they did in the study) it might not activate!</p>
               <br/>
               <div class='fit-pres text-center'>
                 <img src='../../../assets/images/spring-2014/cs-161/week-10/neural-3.PNG' />
               </div>
               <br/>
               <p>It would be nice, then, if we could take a bunch of neurons with certain activation patterns, and combine their outputs to serve our computation interests.</p>
-              <p>For example, if I had one neuron that activates when it sees red, and another that activates when it sees something circular, we might have them both connected to a third neuron that 
-                acts as a classifier for seeing a &quote;ball&quot; (like the toy... because all toy balls are red... /shrug)</p>
-              <p>This might look like:</p>
-              <br/>
-              <div class='fit-pres text-center'>
-                <img src='../../../assets/images/spring-2014/cs-161/week-10/neural-4.PNG' />
-              </div>
+              <p>Let's look at the basic case first...</p>
               <br/>
               
               <p>The anology to our neural networks is as follows:</p>
               <p class='definition'>Artificial neural networks have <strong>input</strong> elements representing our attributes of interest (like the dendrites).</p>
               <p class='definition'>Artificial neurons have <strong>activation functions</strong> that determine whether or not, based on the input, they will fire.</p>
-              <p class='definition'>Artificial neural networks have <strong>output</strong> elements that can be used for classification or simply returning results of the internal computations.</p>
+              <p class='definition'>Artificial neural networks have <strong>output</strong> elements that can be used for classification or simply returning results of the internal computations...</p>
               <br/>
+              <p>Let's look at a very simple artificial neuron and then look at how to use it.</p>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-10/neural-4.PNG' />
+              </div>
+              <br/>
+              <p>What you choose for the activation function is up to you, but typical choices are the following:</p>
+              <p class='definition'>An activation function that is a <strong>step / threshold function</strong> will only produce an output when some minimum value is reached for its sum of weighted inputs.</p>
+              <br/>
+              <p>Typically, step functions output 0 if we haven't reached some threshold yet, or 1 otherwise.</p>
+              <p>These bear a close semblance to how actual neurons operate.</p>
+              <br/>
+              <p class='definition'>An activation function that is a <strong>logistic function</strong> (the inverse of the natural logit function) produces an s-curve used to convert the logarithm of
+                odds into a probability (positive inputs approach a ceiling of 1, negative inputs approach a floor of -1).</p>
+              
+              <br/>
+              <p>Why don't we look at a single node neuron and see how this all fits together.</p>
+              <p>Here are the steps for computation at a single neuron:</p>
+<pre class='prettyprint'>
+  ; Step One: Sum weighted inputs
+  ; for n input links
+    
+         n
+  in_j = &Sigma; w_i * a_i
+       i = 0
+       
+  ; Step Two: Apply g(in_j)
+  ; where g is the activation function
+  
+  a_j = g(in_j)
+  
+  ; Step Three: Propagate the output
+  ; a_j to any output links
+</pre>
+              <br/>
+              <p class='example'>What will the following neuron output for the given inputs, weights, and activation function?</p>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-10/neural-5.PNG' />
+              </div>
+              <br/>
+              <p class='definition'>The above neuron, which is a single unit whose activation function is a step function, is called a <strong>perceptron</strong>.</p>
+              <br/>
+              <p>Some things to notice:</p>
+              <ul class='indent-1'>
+                <li><p>Weights can be negative (to immitate an inhibitory effect like our own neurons have)</p></li>
+                <li><p>Weights can be 0</p></li>
+                <li><p>(not shown) Weights can be any real number, not necessarily percentage values</p></li>
+                <li><p>The bias input value is always 1 though its weight can be modified</p></li>
+                <li><p>Other input values can be whatever you'd like to suit the problem at hand</p></li>
+              </ul>
+              <br/>
+              <p class='example'>What will the following neuron output for the given inputs, weights, and activation function?</p>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-10/neural-6.PNG' />
+              </div>
+              <br/>
+              <p class='definition'>The above neuron, which is a single unit whose activation function is a logistic function, is called a <strong>sigmoid perceptron</strong>, sometimes used as a probability
+                calculator.</p>
+              <br/>
+              <p class='definition'>The <strong>bias</strong> input is simply a means of shifting our sigmoid curve left and right by manipulating its weight.</p>
+              <br/>
+              <p>Observe how the output of a sigmoid perceptron changes by manipulating the bias input:</p>
+<pre class='prettyprint'>
+  ; Say for perceptron n with 2 inputs
+  ; and 1 bias input:
+  
+  ; (where sig() is the sigmoid logistic function)
+  a_n = sig(w_i * a_i +
+            w_j * a_j +
+            w_0 * a_0)  ; Here's the bias term
+        
+  a_n = sig(0.3 * 1 +
+            0.2 * 1 +
+            0.0 * 1)
+      = 0.62
+  
+  ; Change w_0 to 0.5 shifts right
+  a_n = sig(0.3 * 1 +
+            0.2 * 1 +
+            0.5 * 1)
+      = 0.73
+      
+  ; Change w_0 to -0.5 shifts left
+  a_n = sig(0.3 * 1 +
+            0.2 * 1 +
+            -0.5 * 1)
+      = 0.5
+</pre>
+              <br/>
+              <p>Visually, we can see the shift as the following (depicted below: only one input and taken from a really good SO article on Bias inputs, linked):</p>
+              <a href='http://stackoverflow.com/questions/2480650/role-of-bias-in-neural-networks' target='_blank'>
+                <div class='fit-pres text-center'>
+                  <img src='../../../assets/images/spring-2014/cs-161/week-10/neural-7.PNG' />
+                </div>
+              </a>
+              <br/>
+              <p>Typically you will have one bias input connected to all non-input neurons, though you can have one per level as well.</p>
+              <br/>
+              <p>So, we see that our artificial neurons are really just <strong>non-linear integrators</strong> (since we sum the inputs and then apply non-linear functions to that sum).</p>
+              <p>Succinctly, the output of some neuron n is given by:</p>
+<pre class='prettyprint'>
+  ; For i input links:
+  
+  a_n = g (&Sigma; (w_i * x_i))
+           i
+</pre>
+              <br/>
+              <p>Now there is one problem to discuss with perceptrons. Let's condider the perceptron that performs a logical OR, i.e., outputs 1 if either of its inputs are 1:</p>
+              <br/>
+              
+              <br/>
+              <p class='example'>Consider the following perceptron (step activation function) that implements the <strong>majority function</strong>, outputting 1 whenever the majority (MORE than half)
+                of its inputs are also 1. Determine the weight of the bias input for m inputs (each with weight and activation values of 1).</p>
+              <br/>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-10/neural-8.PNG' />
+              </div>
+              <br/>
+              <p>Need a hint? Consider m = 10 with 2 separate cases: in Case 1, 5 of those inputs are 1 and the others 0; in Case 2, 6 of those inputs are 1 and the others 0.</p>
+              <p class='question' name='neuro-q0'>Click for solution.</p>
+              <p class='answer' name='neuro-q0'><code class='prettyprint'>w_0 = - m / 2</code> since, for even m, you need to exclude the m / 2 case from activating the neuron</p>
+
+              <br/>
+              <h3>Feed-Forward Networks</h3>
+              <p>Now that we have some concept of the individual perceptrons, we can talk about tying them together to handle interesting tasks!</p>
+              <p class='definition'>A <strong>feed-forward neural network</strong> is one with some number of input and output nodes with edges that form a directed, acyclic graph.</p>
+              <br/>
+              <p>In other words, our feed-forward networks only propagate their outputs towards the output nodes.</p>
+              <p>As such, we can connect layer after layer of neuron to one another with the outputs of neurons at level i serving as inputs to neurons at level i+1.</p>
+              <p class='definition'>A network's <strong>input layer</strong> for some vector of inputs X = (x1, x2, ...) sets each neuron's output in the input layer to its corresponding input value.<br/><br/>
+                So, for input neurons 1, 2, ..., the outputs of each is: (a1, a2, ..., an) = (x1, x2, ..., xn)
+              </p>
+              <p class='definition'>A network's <strong>hidden layer</strong> performs the internal computation for our network's task and are all neurons between the input and output layers.</p>
+              <br/>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-10/neural-9.PNG' />
+              </div>
+              <p>Here's an example:</p>
+              <p class='example'>Say we had a simple, 3 layer network with 2 inputs, A and B, and then 4 perceptrons (each with activation function g, which is a step function) with various output weights.
+                What is the output, C and D, when A = 1 and B = 2? Assume a 0 weight for the bias input.</p>
+              <br/>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-10/neural-9.PNG' />
+              </div>
+              <br/>
+              <p>NOTE: In the above, our input layer still consists of neurons who just happen to be set to our input</p>
             </div>
             <hr/>
+            
+            <!-- TODO: PLAN: Complexities -->
+            <!-- TODO: BAYES: Complexities, exact inference -->
+            
+            <!-- TODO: NN: feed-forward network -->
+            <!-- TODO: NN: issues with linear separation -->
+            <!-- TODO: NN: hidden layer -->
+            <!-- TODO: NN: multiple outputs -->
+            <!-- TODO: NN: classification -->
+            <!-- TODO: NN: learning / loss minimization -->
             
             
             <a class='btn btn-default pull-right hidden-print' href='javascript:window.print();'>
