@@ -1116,6 +1116,34 @@
       then X is NOT d-separated from Y given Z
 </pre>
               <br/>
+              <p>Here's that algorithm at-a-glance:</p>
+              <table class='table table-bordered table-striped'>
+                <thead>
+                  <tr>
+                    <th><p>Valve Type</p></th>
+                    <th><p>Example (Z is the valve)</p></th>
+                    <th><p>Rule for being blocked</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th><p>Fork</p></th>
+                    <td><p>X &larr; Z &rarr; Y</p></td>
+                    <td><p>Path is blocked if Z is <strong>given</strong></p></td>
+                  </tr>
+                  <tr>
+                    <th><p>Sequence</p></th>
+                    <td><p>X &rarr; Z &rarr; Y</p></td>
+                    <td><p>Path is blocked if Z is <strong>given</strong></p></td>
+                  </tr>
+                  <tr>
+                    <th><p>Collider</p></th>
+                    <td><p>X &rarr; Z &larr; Y</p></td>
+                    <td><p>Path is blocked if <strong>NEITHER Z NOR ANY OF ITS DESCENDANTS</strong> are given</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
               <p>It might look complicated, but the fact that it's a strictly graphical criterion for independence makes it easy to trace.</p>
               <p class='definition'>We use the following notation to establish d-separation relationships: 
                 <code class='prettyprint'>d-sep(X, Z, Y) &equiv; X &perp; Y | Z</code></p>

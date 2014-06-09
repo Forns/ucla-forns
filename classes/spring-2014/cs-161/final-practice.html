@@ -268,7 +268,7 @@
 </pre>
               <br/>
               <p class='example'>[TIRE 1] Step One: diagram the planning graph's initial state (HINT: remember to explicitly list the closed world assumptions!)</p>
-              <p class='debug'>NOTE: For simplicity's sake, we will not model the Tire(x) predicates, since those have no chance of changing.</p>
+              <p class='debug'>NOTE: For simplicity's sake, we will not model the Tire(x) nor the &not;At(Flat, Trunk) fluents, since those have no chance of changing.</p>
               <br/>
               <p class='question' name='planning-q2'>Click for solution.</p>
               <div class='answer' name='planning-q2'>
@@ -321,6 +321,107 @@
               <p class='question' name='planning-q8'>If the planning graph &quot;levels off,&quot; the goal state's fluents exist in the final state level, and they are not mutex, are we guaranteed that a
                 solution exists to the planning problem?</p>
               <p class='answer' name='planning-q8'>No! We are only guaranteed that a solution does *not* exist if our final state level does *not* contain the goal fluents.</p>
+              
+              <br/>
+              <p class='example'>[REGRESSION 1] Use regression planning to derive an action sequence that will attain the given goal state from the given initial state.</p>
+              <br/>
+              <p><strong>Remember!</strong> <code class='prettyprint'>g' = (g - ADD(a)) &cup; Preconditions(a)</code></p>
+              <br/>
+<pre class='prettyprint'>
+  ; Constants:
+  Andrew, Dyer, Charlotte
+  
+  ; Predicates:
+  X(arg), Y(arg), Z(arg)
+  
+  ; Actions:
+  Action(A(arg1, arg2, arg3)
+    Pre:
+      &not;X(arg1) &and; Y(arg2) &and; Z(arg3)
+    Effect:
+      Z(arg1)
+  )
+  
+  Action(B(arg1)
+    Pre:
+      Z(arg1) &and; X(arg1)
+    Effect:
+      &not;Z(arg1) &and; Y(arg1)
+  )
+  
+  Action(C(arg1)
+    Pre:
+      &not;X(arg1)
+    Effect:
+      X(arg1)
+  )
+
+  ; Initial state:
+  Y(Andrew) &and; Z(Charlotte)
+  
+  ; Goal:
+  Y(Dyer)
+</pre>
+              <br/>
+              <p>You might find it convenient to fill out the following table to track your solution steps:</p>
+              <table class='table table-striped table-bordered'>
+                <thead>
+                  <tr>
+                    <th><p>g</p></th>
+                    <th><p>Action</p></th>
+                    <th><p>g'</p></th>
+                    <th><p>Bindings &Theta;</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><p>(e.g.) &empty;</p></td>
+                    <td><p>(e.g.) Test(Dyer)</p></td>
+                    <td><p>(e.g.) Y(Andrew) &and; X(Charlotte)</p></td>
+                    <td><p>(e.g.) {arg1 / Dyer}</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+              <p class='question' name='planning-q9'>Click for solution</p>
+              <div class='answer' name='planning-q9'>
+                <table class='table table-bordered'>
+                  <thead>
+                    <tr>
+                      <th><p>g</p></th>
+                      <th><p>Action</p></th>
+                      <th><p>g'</p></th>
+                      <th><p>Bindings &Theta;</p></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><p>&empty;</p></td>
+                      <td><p>B(Dyer)</p></td>
+                      <td><p>Z(Dyer) &and; X(Dyer)</p></td>
+                      <td><p>{arg1 / Dyer}</p></td>
+                    </tr>
+                    <tr>
+                      <td><p>Z(Dyer) &and; X(Dyer)</p></td>
+                      <td><p>C(Dyer)</p></td>
+                      <td><p>Z(Dyer)</p></td>
+                      <td><p>{arg1 / Dyer}</p></td>
+                    </tr>
+                    <tr>
+                      <td><p>Z(Dyer)</p></td>
+                      <td><p>A(Dyer, Actor1, Actor2)</p></td>
+                      <td><p>&not;X(Dyer) &and; Y(Actor1) &and; Z(Actor2)</p></td>
+                      <td><p>{arg1 / Dyer}</p></td>
+                    </tr>
+                    <tr>
+                      <td><p>&not;X(Dyer) &and; Y(Actor1) &and; Z(Actor2)</p></td>
+                      <td><p>STOP: Found subset of initial state</p></td>
+                      <td><p>Y(Andrew) &and; Z(Charlotte)</p></td>
+                      <td><p>{Actor1 / Andrew,<br/> Actor2 / Charlotte}</p></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
             <hr/>
             
