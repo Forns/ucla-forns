@@ -1253,6 +1253,93 @@
             
             
             <br/>
+            <div id='enumeration' class='scrollspy-element' scrollspy-title='Enumeration Inference'></div>
+            <h1>Enumeration Inference</h1>
+            <div>
+              <p>Another approach to inference is given by the text under the Enumeration Inference algorithm.</p>
+              <p>Although it and variable-elimination perform the same task, it is explained herein for completeness.</p>
+              <p>Here is the algorithm replicated for reference and annotated for clarity (with specifics given for discrete variables):</p>
+              <br/>
+<pre class='prettyprint'>
+  ; Returns the *distribution* of Pr(X | e)
+  ; which is a table (distirbution) on X
+  ; [INPUTS]
+  ;   X  - query variable
+  ;   e  - observed evidence variable values
+  ;   bn - network composed of {X} &cup; E &cup; Y
+  ;        where Y is simply every network variable
+  ;        not in {X} or E
+  ; [OUTPUT]
+  ;   A distribution (table) on X
+  
+  function Enumeration-Ask (X, e, bn)
+      Q(X) &larr; a distribution (table) on X, empty at start
+      
+      ; Try to populate each row of Q(X)
+      for each value x_i in X do
+          Q(x_i) &larr; Enumerate-All(bn.Vars, e &cup; {x_i})
+      
+      return Normalize(Q(X))
+      
+  ; Enumerate-All is a helper that fills out a single
+  ; row in Q(X) above by returning Pr(x_i | e &cup; {x_i})
+  function Enumerate-All(vars, e)
+      if Empty?(vars) then return 1.0
+      Y &larr; First(vars)
+      if Y has value y in e
+          then return Pr(y | Parents(Y)) * Enumerate-All(Rest(vars), e)
+          else return &Sigma; Pr(y | Parents(Y)) * Enumerate-All(Rest(vars), e &cup; {y})
+</pre>
+              <br/>
+              <p class='example'>Use the enumeration inference algorithm to answer the query Pr(A | C = 1), (i.e., X = A and e = {C = 1}) in the following Bayesian network:</p>
+              <br/>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-7.PNG' />
+              </div>
+              <br/>
+              <p>Observe a trace (for our example) the above Enumeration-Ask algorithm with recursive calls represented in blue and real number returns represented in orange.</p>
+              <br/>
+              <hr/>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-8/enum-0.PNG' />
+              </div>
+              <br/>
+              <p>Things to notice:</p>
+              <ul class='indent-1'>
+                <li><p>I'm representing the Enumerate-All(vars, e) in a probability format: Enumerate-All(vars | e)</p></li>
+                <li><p>At each recursive call, the variable we're looking at, Y, is set to First(vars)</p></li>
+                <li><p>In the case where we need Enumerate-All(B, C | A = 0, C = 1), and B is NOT in the evidence, we split on all possible values for b, and add those to the evidence in each branch.</p></li>
+              </ul>
+              <br/>
+              <p>Simplifying the expressions we returned while accounting for parents that are in our evidence vars:</p>
+              <hr/>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-8/enum-1.PNG' />
+              </div>
+              <br/>
+              <p>Now, simply gathering the real-numbers returned (highlighted in orange in the derivation) from our CPTs above, we can find the first row of our query table.</p>
+              <hr/>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-8/enum-2.PNG' />
+              </div>
+              <br/>
+              <p>Repeating the same process as before for our second row (I've saved you the effort):</p>
+              <hr/>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-8/enum-3.PNG' />
+              </div>
+              <p>And finally, remembering to normalize the result as indicated by our algorithm (which is simply dividing by the sum of both rows before normalization):</p>
+              <hr/>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-8/enum-4.PNG' />
+              </div>
+              <br/>
+              <p>And there you have it!</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
             <div id='homework4' class='scrollspy-element' scrollspy-title='Homework 4'></div>
             <h1>Homework 4</h1>
             <div>
