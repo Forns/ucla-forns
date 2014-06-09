@@ -614,10 +614,10 @@
               ; Here we try to perform generalization on h,
               ; which must satisfy not only ex but all
               ; previous examples
-              try to generalize h, or return fail
+              try to specialize h, or return fail
                 if we cannot
           else ex false negative for h
-              try to specialize h, or return fail
+              try to generalize h, or return fail
                 if we cannot
 </pre>
               <br/>
