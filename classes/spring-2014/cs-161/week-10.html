@@ -536,6 +536,292 @@
             
             
             <br/>
+            <div id='knowledgeInLearning' class='scrollspy-element' scrollspy-title='Knowledge in Learning'></div>
+            <h1>Knowledge in Learning</h1>
+            <div>
+              <p>Our previous efforts to tackle learning problems has been data-driven and simply formulated around the examples in our training sets themselves.</p>
+              <p>However, what we haven't previously asserted is any knowledge that we might have a priori of seeing the data and converting our problems into FOL formulations.</p>
+              <p class='definition'>A <strong>hypothesis</strong> is a FOL description of the set of attributes that satisfy a positive classification on some learning task.</p>
+              <br/>
+              <p>For example, remember our Dining Dillema example with decision trees as to whether or not one would wait for a seat?</p>
+              <p>Consider the following conversion from decision tree to FOL hypothesis:</p>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-10/hypothesis-0.PNG' />
+              </div>
+              <br/>
+              <p>Here, in our FOL predicates, r represents a sample from the training set, and the predicates indicate whether or not that sample r has the attribute in question.</p>
+              <p>So, in general, our hypotheses are in the form:</p>
+<pre class='prettyprint'>
+  Classification(r) &hArr; CNF
+  
+  ; ...for some CNF that might look like:
+  
+  Classification(r) &hArr; Pred1(r) &and; Pred2(r) &and; ... &or;
+                       Pred1(r) &and; Pred3(r) &and; ... &or;
+                       ...
+</pre>
+              <br/>
+              <p class='definition'>The clauses of the CNF sentence that compose the hypothesis are called the hypothesis' <strong>extensions</strong>, which each cover the positive classifications 
+                of some number of disjoint sample examples.</p>
+              <br/>
+              <p>As such, two hypotheses with at least one different extension will be inconsistent since they must disagree on the classification of at least one sample element.</p>
+              <br/>
+              <p class='example'>Generate a FOL hypothesis representation of the following decision tree for some classification predicate X and trinary attributes A and B.</p>
+              <br/>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-9/decision-8.PNG' />
+              </div>
+              <br/>
+              <p class='question' name='hypothesis-q0'>Click for solution.</p>
+              <div class='answer' name='hypothesis-q0'>
+<pre class='prettyprint'>
+  X(r) &hArr; A(r, red) &or;
+          A(r, grn) &and; B(r, sml) &or;
+          A(r, grn) &and; B(r, lrg)
+</pre>
+              </div>
+              <br/>
+              <p>As we iterate through training set examples, we can modify our hypotheses in one of two ways:</p>
+              <p class='toolkit'><strong>Generalization</strong> extends the number of positive classifications to samples by dropping a condition from an extension.</p>
+<pre class='prettyprint'>
+  ; Initial hypothesis:
+  X(r) &hArr; A(r, red) &and; B(r, sml)
+  
+  ; Generalization: drop condition:
+  X(r) &hArr; A(r, red)
+</pre>
+              <br/>
+              <p class='toolkit'><strong>Specialization</strong> reduces the number of positive classifications to samples by adding a condition to an extension.</p>
+<pre class='prettyprint'>
+  ; Initial hypothesis:
+  X(r) &hArr; Patrons?(r, full)
+  
+  ; Specialization: add condition:
+  X(r) &hArr; Patrons(r, full) &and; Hungry?(r)
+</pre>
+              <br/>
+              <p>Therefore, if we're interested in finding a hypothesis that suits our training set, we can iterate through each sample and attempt to modify our best hypothesis to do the job.</p>
+              <p class='definition'>The <strong>current best hypothesis</strong> tries to maintain a single hypothesis by adjusting for inconsistent classifications that might arise with each sample element.</p>
+              <br/>
+              <p>A crude outline of the algorithm goes something like:</p>
+              <br/>
+<pre class='prettyprint'>
+  function Current-Best-Learning(examples, h)
+      for each ex in examples
+          if ex consistent with h
+              continue
+          else ex false positive for h
+              ; Here we try to perform generalization on h,
+              ; which must satisfy not only ex but all
+              ; previous examples
+              try to generalize h, or return fail
+                if we cannot
+          else ex false negative for h
+              try to specialize h, or return fail
+                if we cannot
+</pre>
+              <br/>
+              <p>Some things to note:</p>
+              <ul class='indent-1'>
+                <li><p>Very computationally expensive to not only specialize and generalize according to a new inconsistent sample, but also to double check that a modification correctly works for all
+                  previous examples</p></li>
+                <li><p>Might have to back-track to a choice point to generalize / specialize since there are often multiple plausible attribute splits that might satisfy an example</p></li>
+                <li><p>In light of multiple-viable attribute splits, we would simply choose one non-deterministically and hope that we chose correctly for future examples</p></li>
+              </ul>
+              <br/>
+              <p>Let's try it once on a very simple example:</p>
+              <p class='example'>Find a hypothesis that meets the following example training set for classification task X. Use the current best hypothesis algorithm.</p>
+              <br/>
+              <table class='table table-bordered table-striped'>
+                <thead>
+                  <tr>
+                    <th><p>A</p></th>
+                    <th><p>B</p></th>
+                    <th><p>C</p></th>
+                    <th><p>X?</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><p>red</p></td>
+                    <td><p>sml</p></td>
+                    <td><p>0</p></td>
+                    <td><p>Yes</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>red</p></td>
+                    <td><p>med</p></td>
+                    <td><p>1</p></td>
+                    <td><p>No</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>grn</p></td>
+                    <td><p>sml</p></td>
+                    <td><p>0</p></td>
+                    <td><p>No</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>red</p></td>
+                    <td><p>med</p></td>
+                    <td><p>0</p></td>
+                    <td><p>Yes</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+              <p>Now we go example by example attempting to generate a hypothesis:</p>
+              <table class='table table-bordered table-striped'>
+                <caption>Example 1</caption>
+                <thead>
+                  <tr>
+                    <th><p>A</p></th>
+                    <th><p>B</p></th>
+                    <th><p>C</p></th>
+                    <th><p>X?</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><p>red</p></td>
+                    <td><p>sml</p></td>
+                    <td><p>0</p></td>
+                    <td><p>Yes</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+<pre class='prettyprint'>
+  ; Choose our first hypothesis to rely solely
+  ; on attribute A such that:
+  h1:
+      X(r) &hArr; A(r, red)
+</pre>
+              <br/>
+              <p>Now continue to next example:</p>
+              <table class='table table-bordered table-striped'>
+                <caption>Example 2</caption>
+                <thead>
+                  <tr>
+                    <th><p>A</p></th>
+                    <th><p>B</p></th>
+                    <th><p>C</p></th>
+                    <th><p>X?</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><p>red</p></td>
+                    <td><p>med</p></td>
+                    <td><p>1</p></td>
+                    <td><p>No</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+<pre class='prettyprint'>
+  ; Issue: h1 fails on this example (since we have
+  ; A = red but X = no), indicating a false
+  ; positive, so try to specialize
+  h2:
+      X(r) &hArr; A(r, red) &and; B(r, sml)
+</pre>
+              <br/>
+              <p>So far so good, demonstrably h2 now satisfies the classification outcome of examples 1 and 2... let's keep going...</p>
+              <br/>
+              <table class='table table-bordered table-striped'>
+                <caption>Example 3</caption>
+                <thead>
+                  <tr>
+                    <th><p>A</p></th>
+                    <th><p>B</p></th>
+                    <th><p>C</p></th>
+                    <th><p>X?</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><p>grn</p></td>
+                    <td><p>sml</p></td>
+                    <td><p>0</p></td>
+                    <td><p>No</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+              <p>Looks OK, so far h2 seems alright, let's keep going...</p>
+              <br/>
+              <table class='table table-bordered table-striped'>
+                <caption>Example 4</caption>
+                <thead>
+                  <tr>
+                    <th><p>A</p></th>
+                    <th><p>B</p></th>
+                    <th><p>C</p></th>
+                    <th><p>X?</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><p>red</p></td>
+                    <td><p>med</p></td>
+                    <td><p>0</p></td>
+                    <td><p>Yes</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+              <p>Uh oh, now h2 doesn't cut it: we have A = red but B &ne; sml and yet X = yes...</p>
+              <br/>
+<pre class='prettyprint'>
+  ; This means h2 represents a false negative
+  ; for example 4, and so we must generalize
+  ; ...perhaps a disjunction is in order?
+  h3:
+      X(r) &hArr; A(r, red) &and; B(r, sml) &or;
+              A(r, red) &and; C(r, 0)
+</pre>
+              <br/>
+              <p>That looks like it fits! Notice, however, that only the latter extension is required to match all of our classifications... so current-best will detect that on a recursive call (see book
+                pg. 771) and reduce to:</p>
+<pre class='prettyprint'>
+  h4:
+      X(r) &hArr; A(r, red) &and; C(r, 0)
+</pre>
+              <br/>
+              <p>Looks good!</p>
+              <p>Like we said, however, there are many efficiency concerns with this nondeterministic attribute selection, since *many* different hypotheses might satisfy the sample that we have.</p>
+              
+              <br/>
+              <h3>Using Relevance Information</h3>
+              <p>Now comes the part where we can actually assert some knowledge on our hypothesis search by limiting the attributes that might contribute to predicting a classification:</p>
+              <p class='definition'><strong>Determinations</strong> assert which attributes are truly predictive of what other attributes or classifications.</p>
+              <br/>
+              <p>Sometimes these are called <strong>functional dependencies</strong> since they assert that classifications are simply a &quot;function&quot; of a set of attribute settings.</p>
+<pre class='prettyprint'>
+  ; We denote a determination by the syntax:
+  Predictor1 &and; Predictor2 &and; ... &and; PredictorN &gt; Classification
+  
+  ; For example, we know that Conductance of
+  ; a particular material is a function of its
+  ; Material type and Temperature:
+  
+  Material(x, m) &and; Temperature(x, l) &gt; Conductance(x, &rho;)
+  
+  ; In our last example:
+  
+  A(r, a) &and; C(r, c) &gt; X(r)
+</pre>
+              <br/>
+              <p>As such, we'd be interested in, given some training set over some number of attributes, which attributes are determinations of the classification.</p>
+              <p>Furthermore, if there does exist some set of attributes that are determinations for the classification, which has the fewest attributes?</p>
+              <p>The brute-force approach, described in the book on page 786, is simply to attempt to assemble sets of attributes that correctly predict the classification, starting with sets of size 1
+                and working up from there.</p>
+              <p>Naturally, this algorithm's complexity is a function of the size of the minimal determination (the number of attributes in it, let's say p) and n, the total number of attributes: O(n^p)</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
             <div id='oddsAndEnds' class='scrollspy-element' scrollspy-title='Odds &amp; Ends'></div>
             <h1>Odds &amp; Ends</h1>
             <div>
