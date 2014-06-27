@@ -104,277 +104,238 @@
             
             <ol class="breadcrumb hidden-print">
               <li><a href="../../../classes.html">Classes</a></li>
-              <li><a href="./cs-32.html">Winter14 CS32</a></li>
-              <li class="active">Week 3</li>
+              <li><a href="./cs-32.html">Summer14 CS32</a></li>
+              <li class="active">Week 2</li>
             </ol>
             
-            <div id='intro' class='scrollspy-element' scrollspy-title='Welcome Back'></div>
-            <h1>Welcome Back to the Discussion!</h1>
+            <div id='functionTrickz' class='scrollspy-element' scrollspy-title='Function Stuff'></div>
+            <h1>A Few Notes on Functions</h1>
             <div>
-              <p>First off, welcome back to the discussion section!</p>
-              <p>Just a few notes before we start:</p>
-              <ul class='indent-1'>
-                <li><p>
-                  New note feature on the site (that I've barely tested)! Type <code class='prettyprint'>SHIFT + N</code> and click on any paragraph to add an editable notes section to it. 
-                  Use it, or don't! If you do, tell me if you have any feedback.
-                </p></li>
-                <li><p>Discussion section is meant to be just that: a discussion. Feel free to interrupt at any time with questions or comments (especially if you see a mistake).</p></li>
-                <li><p>If, at any time during the week, you have topics you'd like me to cover during discussion, please email me!</p></li>
-                <li><p>If, at any time during discussion, I call on you and don't know your name, please tell it to me!</p></li>
-              </ul>
-              <br/>
-              <p>That said, here's my agenda for today, which focuses on Linked Lists for Project 2 and the Midterm:</p>
-              <ul class='indent-1'>
-                <li><p>Review of some midterm-relevant material</p></li>
-                <li><p>Quick review of Linked List basics</p></li>
-                <li><p>Looking at Linked Lists in a slightly different data structure</p></li>
-                <li><p>A tour of Doubly Linked Lists, and overview of their common operations</p></li>
-                <li><p>Debugger and Testing</p></li>
-                <li><p>Homework and Midterm Advice</p></li>
-              </ul>
-              <br/>
-              <p>What an unusually full plate for our first lecture! I hope you're hungry...</p>
-            </div>
-            <hr/>
-            
-            
-            <br/>
-            <div id='review' class='scrollspy-element' scrollspy-title='Resource Management'></div>
-            <h1>Review of Resource Management</h1>
-            <div>
-              <p>We should take a quick look back at where different variables live in memory, because it's particularly important for constructing and destruct...ing objects.</p>
-              <p>For starters, say I make variable declarations like the following:</p>
-<pre class='prettyprint'>
-  string theory = &quot;woah&quot;;
-  int* i;
-</pre>
-              <p class='question' name='resource-q0'>With regards to scope and memory access, what do we call these variables? In what partition of memory are these variables stored?</p>
-              <p class='answer' name='resource-q0'>These are <strong>local variables</strong>; they live in the partition of memory known as the <strong>stack</strong>.</p>
-              <br/>
-              <p>Is it all coming back, like riding a bike? (fun fact: I'm terrified of bicycles)</p>
-              <p>If so, say I have the following variables:</p>
-<pre class='prettyprint'>
-  string* getThePoint = new string(&quot;point taken&quot;);
-  int* redundantExample = new int(5);
-</pre>
-              <p class='question' name='resource-q1'>Question 1: the dynamic allocation of memory like <code class='prettyprint'>new int(5);</code> is stored in what partition of memory?</p>
-              <p class='answer' name='resource-q1'>
-                The <strong>heap!</strong> This is where dynamically allocated variables live; it is kept distinct from the stack because variables 
-                in the heap are not deallocated upon exit from scope.
-              </p>
-              <br/>
-              <p class='question' name='resource-q2'>
-                Question 2: the pointer that refers to the dynamically allocated memory ( e.g., <code class='prettyprint'>getThePoint</code> in 
-                <code class='prettyprint'>string* getThePoint = new string(&quot;point taken&quot;);</code> ) lives in what partition of memory? 
-              </p>
-              <p class='answer' name='resource-q2'>
-                The <strong>stack!</strong> Even though the memory that the pointer *points to* is dynamically allocated to the heap, the pointer itself lives in the stack 
-                and will disappear when it falls out of scope.
-              </p>
-              <br/>
-              <p>
-                This is the very reason we have memory leaks: dynamically allocated objects persist in the heap even though we lose the capacity to point to, and then delete,  
-                them when the pointer falls out of scope.
-              </p>
-              <p>In summary:</p>
-              <table class='table table-striped table-bordered'>
-                <thead>
-                  <tr>
-                    <th></th>
-                    <th><p>Stack</p></th>
-                    <th><p>Heap</p></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <th><p>What variables live here?</p></th>
-                    <td>
-                      <p>Local variables, functions, function arguments, etc.</p>
-                    </td>
-                    <td>
-                      <p>Dynamically allocated memory reserved by the programmer</p>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th><p>How can variables be accessed?</p></th>
-                    <td>
-                      <p>By any type of identifier defined in scope</p>
-                    </td>
-                    <td>
-                      <p>Only through pointers!</p>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th><p>Memory is allocated:</p></th>
-                    <td>
-                      <p>Whenever a variable is declared in scope</p>
-                    </td>
-                    <td>
-                      <p>Whenever the <code class='prettyprint'>new</code> keyword is used to initialize a variable and call a constructor</p>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th><p>Memory is freed / deallocated:</p></th>
-                    <td>
-                      <p>Whenever a variable disappears from scope (e.g., local variables in a function after returning from that function)</p>
-                    </td>
-                    <td>
-                      <p>Only after the delete keyword is used!</p>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-              <br/>
-              <p>Why am I re-telling this to you?</p>
-              <p>Maybe I deleted my memory of the first time...</p>
-              <p>The real reason is because it helps us dissect our class definitions, and in particular, the data members that make them up, how to construct them, and how to DESTROY them.</p>
-              <p>To do so, we need to know when certain class object events happen. Let's fill in this table:</p>
-              <table class='table table-striped table-bordered'>
-                <thead>
-                  <tr>
-                    <th><p>Event</p></th>
-                    <th><p>Stack</p></th>
-                    <th><p>Heap</p></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <th><p>Construction</p></th>
-                    <td>
-                      <p class='question' name='stack-q0'>When does it happen?</p>
-                      <div class='answer' name='stack-q0'><p>Local variable declarations such as:</p>
-<pre class='prettyprint'>
-  // Called 1 time
-  string s = "hi!";
-  
-  // Called 3 times!
-  LinkedList LLCoolJ[3];
-</pre>
-                      </div>
-                    </td>
-                    <td>
-                      <p class='question' name='heap-q0'>When does it happen?</p>
-                      <div class='answer' name='heap-q0'><p>Dynamic variable declarations such as:</p>
-<pre class='prettyprint'>
-  // Called 1 time
-  string* s 
-    = new string("neat!");
-  
-  // Called 3 times!
-  LinkedList* lists 
-    = new LinkedList[3];
-</pre>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th><p>Deallocation</p></th>
-                    <td>
-                      <p class='question' name='stack-q1'>When does it happen?</p>
-                      <div class='answer' name='stack-q1'><p>Local variable leaves scope:</p>
-<pre class='prettyprint'>
-  // Called 3 times!
-  for (int i = 0; i &lt; 3; i++) {
-    LinkedList LLama;
-  }
-</pre>
-                      </div>
-                    </td>
-                    <td>
-                      <p class='question' name='heap-q1'>When does it happen?</p>
-                      <div class='answer' name='heap-q1'><p>delete or delete[] called on dynamically allocated object:</p>
-<pre class='prettyprint'>
-  LinkedList* linky 
-    = new LinkedList();
-  // Called 1 time
-  delete linky;
-  
-  LinkedList* links 
-    = new LinkedList[4];
-  // Called 4 times!
-  delete[] links;
-</pre>
-                      </div>
-                  </tr>
-                </tbody>
-              </table>
-              <br/>
-              <p>Just to be sure we understand, let's use NoisyClass from a week ago because I'm lazy:</p>
+              <p>I didn't know where else to put this section, so why not here?</p>
+              <p>Say I had a function with which I wanted to give the user some parameter flexibility.</p>
+              <p>If my function could take in 3 arguments, but I only *needed* the user to specify 2 of those, I could use default parameter values:</p>
+              <p class='definition'><strong>Default parameters</strong> specify the value for a function parameter if it is not included as an argument from the user's function call.</p>
+              <p>Take a look:</p>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
   #include &lt;string&gt;
   using namespace std;
   
-  class NoisyClass {
-      private:
-          string s;
-  
-      public:
-          NoisyClass () {
-              cout &lt;&lt; "[C] Default constructor" &lt;&lt; endl;
-          }
-  
-          NoisyClass (string stuff) {
-              s = stuff;
-              cout &lt;&lt; "[P] Parameterized constructor" &lt;&lt; endl;
-          }
-  
-          NoisyClass (const NoisyClass&amp; other) {
-              s = other.s;
-              cout &lt;&lt; "[~] Copy constructor" &lt;&lt; endl;
-          }
-  
-          ~NoisyClass () {
-              cout &lt;&lt; "[D] Destructor" &lt;&lt; endl;
-          }
-  
-          NoisyClass&amp; operator= (const NoisyClass&amp; other) {
-              s = other.s;
-              cout &lt;&lt; "[=] Assignment" &lt;&lt; endl;
-              return *this;
-          }
-  };
-</pre>
-              <p class='example'>With the NoisyClass definition from above, what will the following code print out?</p>
-<pre class='prettyprint'>
-  // [C] Default constructor
-  // [P] Parameterized constructor
-  // [~] Copy constructor
-  // [D] Destructor
-  // [=] Assignment
-  int main () {
-      NoisyClass* heapsOfNoise;
-  
-      for (int i = 0; i &lt; 2; i++) {
-          NoisyClass n[2];
+  // hippyFunc will like... take whatever arguments
+  // you want to give, man
+  double hippyFunc (int i, double d = 1.0, string s = "cool man") {
+      for (int n = 0; n &lt; i; n++) {
+          cout &lt;&lt; s &lt;&lt; endl;
       }
+      return i * d;
+  }
   
-      heapsOfNoise = new NoisyClass[2];
-      delete[] heapsOfNoise;
+  int main () {
+      // Not specifying d or s parameters
+      cout &lt;&lt; hippyFunc(1) &lt;&lt; endl;
+      // Not specifying s parameter
+      cout &lt;&lt; hippyFunc(1, 2.3) &lt;&lt; endl;
+      // Specifying all parameters
+      cout &lt;&lt; hippyFunc(2, 4.5, "GET A JOB!") &lt;&lt; endl;
+  }
+</pre>
+              <p>Yeah, that's about the quality of examples you can expect from this set of notes... it's been a long week.</p>
+              <p>Warning! Once you decide that, say, parameter #2 (in the parameter list of a function) can have a default value, all parameters following it must also have a default value.</p>
+              <p class='debug'>Will the following code compile?</p>
+<pre class='prettyprint'>
+  double hippyFunc (int i, double d = 1.0, string s) {
+      for (int n = 0; n &lt; i; n++) {
+          cout &lt;&lt; s &lt;&lt; endl;
+      }
+      return i * d;
+  }
+</pre>
+              <p>Notice how the parameter s followed a parameter with a default value while lacking one of its own.</p>
+              <p>Any who, why might this be useful?</p>
+              <ul class='indent-1'>
+                <li><p>We can give users of our functions some flexibility with the function interface, especially when some values can be specified that aren't usually cared about.</p></li>
+                <li><p>We can specify logical default values for class object constructors that reduce the amount of code we have to write.</p></li>
+              </ul>
+              <p>Here's an example for condensing two constructors using parameter defaults:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  class LazyConstructors {
+      private:
+          int i;
+          string s;
+      public:
+          // One default constructor...
+          LazyConstructors () {
+              i = 0;
+          }
+          
+          // Another taking two parameters
+          LazyConstructors (int j, string t) {
+              i = j;
+              s = t;
+          }
+  
+          // ...
+  
+          // Getters
+          int getI () {return i;}
+          string getS () {return s;}
+  };
+  
+  int main () {
+      LazyConstructors lame;
+      LazyConstructors alsoLame(3, "-_-");
+  
+      cout &lt;&lt; lame.getI() &lt;&lt; endl;
+      cout &lt;&lt; alsoLame.getS() &lt;&lt; endl;
   }
 </pre>
               <br/>
-              <p class='example'>With the NoisyClass definition from above, what will the following code print out?</p>
+              <p>Wow... that example was really boring... let's at least improve it before we forget it ever happened:</p>
 <pre class='prettyprint'>
-  // [C] Default constructor
-  // [P] Parameterized constructor
-  // [~] Copy constructor
-  // [D] Destructor
-  // [=] Assignment
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  class LazyConstructors {
+      private:
+          int i;
+          string s;
+      public:
+          // Now with fewer constructors!
+          LazyConstructors (int j = 0, string t = "") {
+              i = j;
+              s = t;
+          }
+  
+          // ...
+  
+          // Getters
+          int getI () {return i;}
+          string getS () {return s;}
+  };
+  
   int main () {
-      NoisyClass* heapsOfNoise = new NoisyClass[2];
-      NoisyClass echo = heapsOfNoise[1];
-      heapsOfNoise[0] = echo;
-      delete[] heapsOfNoise;
+      LazyConstructors lame;
+      LazyConstructors alsoLame(3, "-_-");
+  
+      cout &lt;&lt; lame.getI() &lt;&lt; endl;
+      cout &lt;&lt; alsoLame.getS() &lt;&lt; endl;
   }
 </pre>
+              <br/>
+              <p>Neat, right? We combined our two constructors into one with the same behavior.</p>
+              <p class='question' name='funcs-q0'>There *is* however, one difference between what our second default-parameter constructor allows and the two it replaced. What is it?</p>
+              <p class='answer' name='funcs-q0'>
+                Our second implementation allows us to construct a LazyConstructors object with just the i parameter defined, which would not similarly work for the first 
+                implementation... we won't worry about it in this case, though, because we'll just pretend that our spec didn't care.
+              </p>
+              <br/>
+              <p>One final note for default parameters: where am I meant to specify them? The signatures (typically in header files) or the implementations (typically in .cpp files)?</p>
+              <p>Convention says to place the default parameter values in the header files because users who are interested in how functions / classes operate will look there first.</p>
+              <p class='debug'>WARNING: Necessity says to NOT put the default parameter values in BOTH the function signature and implementation, as this will cause a compile error.</p>
+              <p>For example, with our hippyFunc from earlier:</p>
+<pre class='prettyprint'>
+  // In a header file somewhere...
+  double hippyFunc (int i, double d  = 1.0, string s = "cool man");
+  
+  // ...
+  
+  // In a .cpp file somewhere...
+  double hippyFunc (int i, double d, string s) {
+      for (int n = 0; n &lt; i; n++) {
+          cout &lt;&lt; s &lt;&lt; endl;
+      }
+      return i * d;
+  }
+</pre>
+              <p class='debug'>BUT, *this* will not compile. Why?</p>
+<pre class='prettyprint'>
+  // In a header file somewhere...
+  double hippyFunc (int i, double d = 1.0, string s = "cool man");
+  
+  // ...
+  
+  // In a .cpp file somewhere...
+  double hippyFunc (int i, double d = 1.0, string s = "cool man") {
+      for (int n = 0; n &lt; i; n++) {
+          cout &lt;&lt; s &lt;&lt; endl;
+      }
+      return i * d;
+  }
+</pre>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='delete' class='scrollspy-element' scrollspy-title='Delete Operator'></div>
+            <h1>Review of the Delete Operator</h1>
+            <div>
+              <p>Just a brief note to remind us of what the delete keyword does.</p>
+              <p>If you're a bit hazy, I suggest you review my 
+                <a href='http://cs.ucla.edu/~forns/classes/fall-2013/cs-31/cs-31-week-10.html#dynamicMem' target='_blank'>notes on dynamic memory from CS 31, located here!</a>
+              </p>
+              <p>We need to say one more thing that we only touched upon in CS 31:</p>
+              <p class='toolkit'>
+                Note that we have two forms of the delete operator:<br/><br/>
+                <code class='prettyprint'>delete dynamicObject; // used ONLY when dynamicObject was allocated with the new syntax</code><br/>
+                <code class='prettyprint'>delete[] dynamicArray; // used ONLY when dynamicArray was allocated with the new[] syntax</code>
+              </p>
+              <p>In CS 31, we only used the delete keyword but never the delete[] one.</p>
+              <p>
+                We use the delete keyword whenever the target object of our deletion was a pointer to a *single* object, whereas we use the delete[] keyword whenever the target object was a pointer to 
+                a dynamically allocated *array* of objects.
+              </p>
+              <p>Here's a nice example:</p>
+<pre class='prettyprint'>
+  int main () {
+      int* i = new int(3);
+      int* arr = new int[3];
+  
+      // OK!
+      delete i;
+      // BAD:
+      // delete[] i;
+  
+      // OK!
+      delete[] arr;
+      // BAD:
+      // delete arr[0];
+  }
+</pre>
+              <p>The first pointer, i, just sticks an int on the heap. The second pointer, arr, allows us to dynamically allocate an array of the size of our choosing (also on the heap).</p>
+              <p>We delete them in different ways, though, as you see above.</p>
+              <p>I think that's as much of a review as I'd like to go over right now... so onwards!</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='resources' class='scrollspy-element' scrollspy-title='Resource Management'></div>
+            <h1>Introduction to Resource Management</h1>
+            <div>
+              <p>
+                As you might have already seen in class, one of the interesting aspects of programming is that different problem solutions (although eliciting the same correct behavior), 
+                may go about finding the solution in wildly different ways.
+              </p>
+              <p>The next thing you'll notice is that not all solutions are the same quality!</p>
+              <p>What I mean by this is that what one solution takes 2 minutes to solve, another takes 2 days...</p>
+              <p>Just because they arrive at the same answer, doesn't mean that one of them wasn't incredibly stupid in doing it.</p>
+              <p class='definition'><strong>Resource management</strong> involves the ability to effectively, efficiently, and economically use data structures to accomplish your program's goals.</p>
+              <br/>
+              <p>That sounded more like a business slogan than a definition, but the idea is that you want to use the right tool for the right job, and then effectively clean up after ourselves.</p>
+              <p>So, let's examine how to engineer the right tools so we won't be sad.</p>
             </div>
             <hr/>
             
             
             <br/>
             <div id='LL-basics' class='scrollspy-element' scrollspy-title='Singly Linked Lists'></div>
-            <h1>Review of Singly Linked Lists</h1>
+            <h1>Singly Linked Lists</h1>
             <div>
               <p>Here's what we've said so far about Singly Linked Lists...</p>
               <p class='definition'>They are an abstract data type consisting of Nodes with data elements and a pointer to each successive Node:</p>
@@ -565,6 +526,7 @@
       delete head;
   }
 </pre>
+              <br/>
               <p class='debug'>
                 Then, your illustrious TA suggested it would be cute to solve the above problem by doing the following; why is he a lamo?:
               </p>
@@ -586,6 +548,7 @@
       return iterator != nullptr;
   }
 </pre>
+              <br/>
               <p>He then tested it on this main function and concluded success:</p>
 <pre class='prettyprint'>
   #include "LinkedList.h"
@@ -781,13 +744,13 @@
             
             <br/>
             <div id='double-LL' class='scrollspy-element' scrollspy-title='Doubly Linked Lists'></div>
-            <h1>Doubly Linked Lists (or: Give Me Homework Answers)</h1>
+            <h1>Doubly Linked Lists</h1>
             <div>
-              <p>Hey guys! He's finally talking about the important stuff!</p>
               <p>Wake up your neighbors folks, let's talk Doubly Linked Lists.</p>
               <p class='definition'>
                 A <strong>doubly linked list</strong> is just like a regular linked list, except each Node has a pointer to the previous Node in the sequence along with a pointer to the next Node.
               </p>
+              <br/>
               <p>What's this look like you ask?</p>
               <div class='text-center fit-pres'>
                 <img src='../../../assets/images/winter-2014/cs-32/week-3/linkedLists-7.PNG' />
@@ -905,136 +868,209 @@
               <div class='text-center fit-pres'>
                 <img src='../../../assets/images/winter-2014/cs-32/week-3/linkedLists-10.PNG' />
               </div>
-              <p>There are a couple other cases for you to isolate and handle... we'll cover them in the next section, but won't diagram them here.</p>
             </div>
             <hr/>
             
             
             <br/>
-            <div id='project2' class='scrollspy-element' scrollspy-title='Project 2'></div>
-            <h1>Project 2: Testing and Advice</h1>
+            <div id='stacks' class='scrollspy-element' scrollspy-title='Stacks'></div>
+            <h1>Stacks on Stacks</h1>
             <div>
-              <p>Write tests for your functions... lots of tests...</p>
-              <p>Here are the minimum, but probably sufficient, tests you should make for your functions:</p>
-              <ul class='indent-1'>
-                <li><p>Handling for Nodes in the middle of the list</p></li>
-                <li><p>Handling for Nodes at the beginning of the list</p></li>
-                <li><p>Handling for Nodes at the end of the list</p></li>
-                <li><p>Handling for the empty list</p></li>
-                <li><p>Handling for a one-element list</p></li>
-              </ul>
-              <p class='debug'>
-                WARNING: You're required to implement two *non-member* functions of your Map. This means you don't have access to their private members and must instead 
-                rely on the public interface. Don't make the mistake of making these functions a part of the Map class.
+              <p>Although we went over the basics of stacks last week, we uhh... didn't cover much more in class this week, so we'll dive a little deeper today.</p>
+              <p>First, a little review... remember we implemented a stack using a linked list design:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-3/linkedLists-6.PNG' />
+              </div>
+              <p class='question' name='stacks-q0'>Are stacks designed for the "Last in, first out" (LIFO) or "First in, first out" (FIFO) behavior of insertion / retrieval?</p>
+              <p class='answer' name='stacks-q0'>
+                <strong>LIFO:</strong> The last items (of a sequence of items) we push onto the stack are at the top, and therefore the first to be retrieved (popped).
               </p>
-              <p class='debug'>
-                Remember to implement the copy constructors, assignment overloading, and destructors for your Map!
+              <br/>
+              <p>We also discussed a variety of benefits for using stacks:</p>
+              <p class='question' name='stacks-q1'>Name a couple benefits of using stacks over Lists, which allow access to all elements, rather than just the top.</p>
+              <div class='answer' name='stacks-q1'>
+                <p>Although there a variety of situational reasons to use stacks, in general, they are superior to Lists when:</p>
+                <ul class='indent-1'>
+                  <li><p>We don't want users of the interface to be able to see what's below the top of the stack (information hiding)</p></li>
+                  <li><p>We want to enforce efficient insertion (push) and retrieval (pop) behavior (always at top of stack)</p></li>
+                  <li><p>We want to enforce the LIFO behavior</p></li>
+                </ul>
+              </div>
+              <br/>
+              <p>We'll look at a few more applications with stacks later.</p>
+              <p>First, let's take a quick look at the stack interface we have available through the C++ standard library.</p>
+              <p><strong>Aside:</strong> I should note that stacks are a member of a classification of data structures called abstract data types:</p>
+              <p class='definition'>
+                An <strong>abstract data type (ADT)</strong> is a model for a certain class of data structures with similar behaviors. Just as the notion of a &quot;stack&quot; is an 
+                abstract data type describing a list with the LIFO constraint, the C++ standard library stack is an implementation of that ADT.
               </p>
-            </div>
-            <hr/>
-            
-            
-            <br/>
-            <div id='debugging' class='scrollspy-element' scrollspy-title='Debugging'></div>
-            <h1>The Debugger</h1>
-            <div>
-              <p>Consider the following implementation of count:</p>
-              <p class='debug'>Use the debugger to find the problem with this function (if it's obvious, don't say anything!)</p>
+              <p>Here is the interface for the standard library stack</p>
+              <p>We begin by using the necessary STL inclusion: <code class='prettyprint'>#include &lt;stack&gt;</code></p>
+              <p>Now, if we want to define a new stack we have to use some notation we haven't seen before.</p>
+              <div class='toolkit'>
+                <p>To define a stack, we must specify the type of objects that we wish to stack; we do this via a <strong>template:</strong></p><br/>
 <pre class='prettyprint'>
-  // Returns a count of how many times
-  // s appears in the LinkedList
-  int LinkedList::count (std::string s) {
-      Node* n = head;
-      int count = 0;
-      
-      // Go through all size Nodes
-      // in the List and compare to s
-      for (int i = 0; i &lt; size; i++) {
-          if (n-&gt;m_data == s) {
-              count++;
-          }
-      }
-      return count;
+  // Where classT is the template
+  // for the declared stack
+  stack&lt;classT&gt; stacky;
+</pre>
+              </div>
+              <br/>
+              <p class='question' name='stacks-q2'>Why do we have to provide a type template to our stacks?</p>
+              <p class='answer' name='stacks-q2'>The compiler will want to know the size of the objects we're stacking, as well as what operations are legal on its elements.</p>
+              <br/>
+              <h3>STL Stack Interface</h3>
+              <p>Let's look at the public interface for our stacks.</p>
+              <p class='definition'>
+                As we've seen, we need to specify a template type for our stacks; for the purposes of the following function signatures, we'll assume that type is the generic &lt;classT&gt;
+              </p>
+              
+              <br/>
+              <h4>Construction</h4>
+<pre class='prettyprint'>
+  int main () {
+      stack&lt;string&gt; stringStack;
+      stack&lt;int&gt;* intStack = new stack&lt;int&gt;;
+      delete intStack;
   }
 </pre>
-              <p>Steps for debugging:</p>
-              <ol class='indent-1'>
-                <li><p>Set breakpoints</p></li>
-                <li><p>Open debugger</p></li>
-                <li><p>Step through your code, stopping at each breakpoint</p></li>
-                <li><p>Conquer your bugs</p></li>
-              </ol>
-            </div>
-            <hr/>
-            
-            
-            <br/>
-            <div id='midterm' class='scrollspy-element' scrollspy-title='Midterm'></div>
-            <h1>Midterm</h1>
-            <div>
-              <p class='definition'>Your first Midterm will be on January 29!</p>
-              <p>There are two midterm sections for you to sign up for, so watch on the course page; the two time slots are:</p>
-              <ul class='indent-1'>
-                <li><p>5:00 - 6:05pm, location TBA</p></li>
-                <li><p>5:45 - 6:50pm, location TBA</p></li>
-              </ul>
-              <p class='definition'>Please send me a list of items you'd like on a practice midterm by tonight, or tell me now! I'll try to make a few extra questions...</p>
-              <p>Good luck!</p>
-            </div>
-            <hr/>
-            
-            <br/>
-            <div id='challenges' class='scrollspy-element' scrollspy-title='Challenges'></div>
-            <h1>Challenges</h1>
-            <div>
-              <p>So you think you've got LinkedLists down eh? Try out this weird example:</p>
-              <p class='example'>Implement the humanCentiCircle function, which returns a boolean as to whether or not a cycle exists in the set of linked People:</p>
+              <p>Note the syntax for dynamically allocating a stack with a template type. We must also specify the type in our <code class='prettyprint'>new</code> operator usage.</p>
+              
+              <br/>
+              <h4>void push(const &lt;classT&gt; value)</h4>
 <pre class='prettyprint'>
-  #include "HumanCentipede.h"
-  using namespace std;
+  // Making stack examples always reminds me
+  // of someone because of the backwards
+  // order of words...
+  int main () {
+      stack&lt;string&gt; stringStack;
+      stringStack.push("-Yoda");
+      stringStack.push("stack");
+      stringStack.push("this");
+      stringStack.push("is");
+      stringStack.push("Lame");
+  }
+</pre>
+
+              <br/>
+              <h4>void pop()</h4>
+              <p class='debug'>Warning: Notice that this particular implementation of a stack chooses a void return, and so the pop does not also return the object just popped.</p>
+              <p>
+                This is why we call stacks an abstract data type--it's abstract because different implementations can decide certain behavioral nuances (non essential to the key properties
+                of a stack) differently.
+              </p>
+<pre class='prettyprint'>
+  // [!] WARNING: will not compile
+  int main () {
+      stack&lt;string&gt; stringStack;
+      string derp = stringStack.pop(":(");
+  }
+</pre>
+              
+              <br/>
+              <h4>&lt;classT&gt;&amp; top()</h4>
+              <p>Returns a <strong>*reference*</strong> to the item on the top of the stack. Sometimes called &quot;peeking&quot; at the top.</p>
+<pre class='prettyprint'>
+  int main () {
+      // Is fabric technically a stack of
+      // string? Kinda not... oh well, I
+      // already typed it, so...
+      stack&lt;string&gt; fabric;
+      fabric.push("sheet");
+      fabric.push("is the");
+      fabric.push("This linen");
   
-  struct Person {
-      std::string m_data;
-      Person* m_front;
-      Person (std::string s) {
-          m_data = s;
-          m_front = nullptr;
-      }
-  };
-  
-  // Returns true iff a cycle exists in the links
-  bool humanCentiCircle (const Person* first) {
-      // TODO
-      return false;
+      fabric.top() = "This satin";
+      cout &lt;&lt; fabric.top() &lt;&lt; endl;
+  }
+</pre>
+              <p>Wow that... that example was beyond bad... I'm even sorry...</p>
+              
+              <br/>
+              <h3>Other Functions:</h3>
+              <p>Read: I'm too lazy to give each of these their own section:</p>
+              <ul class='indent-1'>
+                <li><p><strong>empty()</strong> returns a boolean designating whether or not the stack has any elements.</p></li>
+                <li><p><strong>size()</strong> returns a count of the number of elements currently in the stack.</p></li>
+              </ul>
+              
+              <br/>
+              <h3>Stacks as Parameters:</h3>
+              <p class='example'>Implement the printStack function signature designated below:</p>
+<pre class='prettyprint'>
+  // Returns a string representation of the given
+  // stack of strings, added from top to bottom
+  string printStringStack (stack&lt;string&gt; stacky) {
+      // ...
   }
   
   int main () {
-      Person p1("P1");
-      Person p2("P2");
-      Person p3("P3");
-      Person p4("P4");
-      p1.m_front = &amp;p2;
-      p2.m_front = &amp;p3;
-      p3.m_front = &amp;p4;
-      p4.m_front = &amp;p1;
+      stack&lt;string&gt; loudStack;
+      loudStack.push("BRO");
+      loudStack.push("STRINGS");
+      loudStack.push("COOL");
+      cout &lt;&lt; printStringStack(loudStack) &lt;&lt; endl;
+  }
+</pre>
+              <p>We'll cover the way to accept generic stack / object template inputs in a later lecture.</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='queues' class='scrollspy-element' scrollspy-title='Queues'></div>
+            <h1>Queueueueueues</h1>
+            <div>
+              <p>Queues aren't a whole lot different from stacks, except that instead of pushing to and popping from the top, we queue to the back of the queue and dequeue from the front.</p>
+              <p class='definition'>A <strong>queue</strong> is another abstract data type that maintains the FIFO (first in, first out) behavior of insertion and retrieval of its elements.</p>
+              <p>Here's what that might look like as a singly linked list:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-4/stacks-2.PNG' />
+              </div>
+              <p>Again, though, you should be aware that a queue is an abstract data type, and that some implementations WILL allow you to access the intermediary nodes behind the front.</p>
+              <p>That, however, is not true of the C++ STL queue, which only has access to the front and back element.</p>
+              <p>Because the STL queue and stack have such a similar interface, let's race through this real quick!</p>
+              <h3>Construction</h3>
+<pre class='prettyprint'>
+  #include &lt;queue&gt;
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
   
-      // True
-      std::cout &lt;&lt; humanCentiCircle(&amp;p1) &lt;&lt; std::endl;
-  
-      Person p5("P5");
-      Person p6("P6");
-      Person p7("P7");
-      p5.m_front = &amp;p6;
-      p6.m_front = &amp;p7;
-  
-      // False
-      std::cout &lt;&lt; humanCentiCircle(&amp;p5) &lt;&lt; std::endl;
+  int main () {
+      queue&lt;string&gt; q; // ;_;
+      queue&lt;int&gt;* qi = new queue&lt;int&gt;;
+      delete qi;
   }
 </pre>
               <br/>
-              <p class='example'>Figured it out? OK... now, is there a solution you can think of where you don't end up comparing each individual to every other one multiple times?</p>
+              <h3>Push, pop, front, back</h3>
+              <p>Cha cha real smooth.</p>
+              <p>We can enqueue elements to the back of queues using the push function, and dequeue those from the front via pop:</p>
+<pre class='prettyprint'>
+  int main () {
+      queue&lt;string&gt; q;
+      q.push("Is");
+      q.push("this");
+      q.push("class");
+      q.push("like...");
+      q.push("5 hours?");
+  
+      for (int i = 0; i &lt; 5; i++) {
+          cout &lt;&lt; q.front() &lt;&lt; endl;
+          q.pop();
+      }
+  }
+</pre>
+              <h3>Other functions</h3>
+              <ul class='indent-1'>
+                <li><p><strong>back()</strong> returns a reference to the element at the back of the queue (most recently added)</p></li>
+                <li><p><strong>empty()</strong> returns true if the queue has no elements, false otherwise</p></li>
+                <li><p><strong>size()</strong> returns a count of the number of elements in the queue</p></li>
+              </ul>
             </div>
             <hr/>
+            
             
             <a class='btn btn-default pull-right hidden-print' href='javascript:window.print();'>
               <span class='glyphicon glyphicon-print'></span>
@@ -1045,7 +1081,7 @@
           <!-- END PRESENTATION CONTENT -->
           
           <!-- MATERIALS FROM CLASS: -->
-            
+          
         </div>
       </div>
       <!-- END MAIN CONTENT -->
