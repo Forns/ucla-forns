@@ -786,7 +786,7 @@
           Weapon m_gun;
   
       public:
-          Survivor::Survivor ();
+          Survivor ();
           std::string getName ();
           bool isInfected ();
           int getHealth ();
@@ -801,7 +801,7 @@
   using namespace std;
   
   // Initialization list style
-  Survivor::Survivor ():
+  Survivor ():
       m_name("Rick Grimes"),
       m_infected(false),
       m_health(100),
@@ -871,7 +871,7 @@
           Weapon m_gun;
   
       public:
-          Survivor::Survivor();
+          Survivor();
           std::string getName ();
           bool isInfected ();
           int getHealth ();
@@ -1086,7 +1086,7 @@
           Weapon m_gun;
   
       public:
-          Survivor::Survivor();
+          Survivor();
           std::string getName ();
           bool isInfected ();
           int getHealth ();
@@ -1188,10 +1188,9 @@
 <pre class='prettyprint'>
   int main () {
       Kinkos inWestwood;
-      inWestwood
-          .addOrder("Don't")
-          .addOrder("sue me...")
-          .addOrder("FedEx");
+      inWestwood.addOrder("Don't")
+      inWestwood.addOrder("sue me...")
+      inWestwood.addOrder("FedEx");
       
       // A copy constructor called using the source
       // Kinkos object, inWestwood, creating a new
