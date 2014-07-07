@@ -1,0 +1,1146 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Andrew Forney - UCLA CS</title>
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/magic-bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/main.css" rel="stylesheet" type="text/css">
+    <script src="../../../js/lib/jquery-2.0.3.min.js"></script>
+    <script src="../../../js/lib/bootstrap.min.js"></script>
+    <script src="../../../js/lib/expanding.js"></script>
+    <script src="../../../js/display/general/general-display.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+  </head>
+  
+  <body data-spy="scroll" data-target="#scrollspy">
+    
+    <!-- BEGIN WRAP -->
+    <div id="wrap">
+      
+      <!-- BEGIN NAVIGATION -->
+      <nav class='navbar navbar-default' role='navigation'>
+        <div class='nav-accent'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-12'>
+              <div class='navbar-header'>
+                <button class='navbar-toggle' type='button' data-toggle='collapse' data-target='.navbar-main-collapse'>
+                  <span class='sr-only'>Toggle Navigation</span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                </button>
+                <a class='navbar-brand' href='/~forns/'>
+                  <span id='brand-text'>
+                    Andrew Forney
+                  </span>
+                </a>
+              </div>
+              
+              <div id='nav-main' class='collapse navbar-collapse navbar-main-collapse'>
+                <ul class='nav navbar-nav navbar-right'>
+                  
+                  <li>
+                    <a href='/~forns/about.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-user'></span>
+                      </div>
+                      <p class='text-center'>About</p>
+                    </a>
+                  </li>
+                  
+                  <li class='active'>
+                    <a href='/~forns/classes.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-book'></span>
+                      </div>
+                      <p class='text-center'>Classes</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/contact.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-comment'></span>
+                      </div>
+                      <p class='text-center'>Contact</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/publications.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-file'></span>
+                      </div>
+                      <p class='text-center'>Publications</p>
+                    </a>
+                  </li>
+                  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <!-- END NAVIGATION -->
+      
+      <!-- BEGIN MAIN CONTENT -->
+      <div id="main-content" class="container">
+        <div class="row">
+          
+          <!-- BEGIN SCROLLSPY -->
+          <div class='col-md-2 hidden-sm hidden-xs'>
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+              <ul id='scrollspy' class="nav bs-sidenav">
+              </ul>
+            </div>
+          </div>
+          <!-- END SCROLLSPY -->
+          
+          <!-- BEGIN PRESENTATION CONTENT -->
+          <div class='col-md-10 presentation-content' role='main'>
+            
+            <ol class="breadcrumb hidden-print">
+              <li><a href="../../../classes.html">Classes</a></li>
+              <li><a href="./cs-32.html">Winter14 CS32</a></li>
+              <li class="active">Midterm I Exercises</li>
+            </ol>
+            
+            <div id='review' class='scrollspy-element' scrollspy-title='Midterm'></div>
+            <h1>Midterm Review</h1>
+            <div>
+              <p>The following practice problems are meant to be supplemental to the lecture notes, and give some extra practice for problem types you might encounter on the midterm.</p>
+              <p>Topics that are fair game include, but are not limited to, the following:</p>
+              <ul class='indent-1'>
+                <li><p>Data abstraction</p></li>
+                <li><p>Classes &amp; Structs</p></li>
+                <li><p>Pointers</p></li>
+                <li><p>Dynamic memory</p></li>
+                <li><p>Dynamic arrays</p></li>
+                <li><p>Constructors, initialization lists, copy constructors, assignment overloading, and destructors</p></li>
+                <li><p>Linked Lists</p></li>
+                <li><p>Stacks and Queues</p></li>
+                <li><p>Inheritance</p></li>
+                <li><p>Polymorphism</p></li>
+                <li><p>Recursion</p></li>
+              </ul>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='Warm Up' class='scrollspy-element' scrollspy-title='Practice'></div>
+            <h1>Practice Problems</h1>
+            <div>
+              <p>Why not start with a little practice with our old friend NoisyClass?</p>
+<pre class='prettyprint'>
+  class NoisyClass {
+      private:
+          string s;
+    
+      public:
+          NoisyClass () {
+              cout &lt;&lt; "[C] Default constructor" &lt;&lt; endl;
+          }
+    
+          NoisyClass (string stuff) {
+              s = stuff;
+              cout &lt;&lt; "[P] Parameterized constructor" &lt;&lt; endl;
+          }
+    
+          NoisyClass (const NoisyClass&amp; other) {
+              s = other.s;
+              cout &lt;&lt; "[~] Copy constructor" &lt;&lt; endl;
+          }
+    
+          ~NoisyClass () {
+              cout &lt;&lt; "[D] Destructor" &lt;&lt; endl;
+          }
+    
+          NoisyClass&amp; operator= (const NoisyClass&amp; other) {
+              s = other.s;
+              cout &lt;&lt; "[=] Assignment" &lt;&lt; endl;
+              return *this;
+          }
+  };
+</pre>
+              <br/>
+              <p class='example'>Using the NoisyClass definition from above, what will the following functions print out?</p>
+<pre class='prettyprint'>
+  // Start with a warmup...
+  struct SoMeta {
+      NoisyClass n[2];
+      NoisyClass* ptr[2];
+  };
+  
+  int main () {
+      SoMeta s;
+      SoMeta* ptr;
+      SoMeta* dynamicYo = new SoMeta();
+      delete dynamicYo;
+  }
+</pre>
+              <br/>
+              <p class='example'>Using the NoisyClass definition from above, what will the following functions print out?</p>
+<pre class='prettyprint'>
+  // [!] Remember what it means for a function to pass
+  // by value, and subsequently, what it means to have
+  // a local parameter!
+  void whatsAllThisNoise (NoisyClass n) {
+      NoisyClass* copier = new NoisyClass();
+      n = *copier;
+      delete copier;
+  }
+  
+  int main () {
+      NoisyClass n;
+      whatsAllThisNoise(n);
+  }
+</pre>
+              <br/>
+              <p class='example'>Using the NoisyClass definition from above, what will the following functions print out?</p>
+<pre class='prettyprint'>
+  // [!] Remember what it means for a function to take a
+  // pointer parameter; also, remember what it means to
+  // return by value
+  NoisyClass whatsAllThisNoise (NoisyClass* n) {
+      if (n != nullptr) {
+          NoisyClass copier("test");
+          return copier;
+      } else {
+          return NoisyClass();
+      }
+  }
+  
+  int main () {
+      NoisyClass n;
+      whatsAllThisNoise(&amp;n);
+  }
+</pre>
+              <hr/>
+              <p class='example'>What will the following snippet print out?</p>
+<pre class='prettyprint'>
+  struct InitOrNot {
+      int i;
+      string s;
+      bool b;
+  
+      InitOrNot ():
+        i(5), s("lame")
+      {
+          i = 2;
+          s = "example";
+          b = true;
+      }
+  
+      void print () {
+          cout &lt;&lt; i &lt;&lt; " " &lt;&lt; s &lt;&lt; " " &lt;&lt; b &lt;&lt; endl;
+      }
+  };
+  
+  int main () {
+      InitOrNot suspense;
+      suspense.print();
+  }
+</pre>
+              <br/>
+              <p class='example'>What will the following snippet print out?</p>
+<pre class='prettyprint'>
+  struct InitOrNot {
+      int i;
+      string s;
+      bool b;
+  
+      InitOrNot (int iParam, string sParam = "TWIST!", bool bParam = false):
+        i(5), b(true)
+      {
+          i = iParam;
+          b = bParam;
+      }
+  
+      void print () {
+          cout &lt;&lt; i &lt;&lt; " " &lt;&lt; s &lt;&lt; " " &lt;&lt; b &lt;&lt; endl;
+      }
+  };
+  
+  int main () {
+      InitOrNot suspense(22);
+      suspense.print();
+  }
+</pre>
+              <br/>
+              <div class='question' name='review-q0'>
+                <p>
+                  Using the LinkedList class from Week 2 (and assuming a working erase function, which deletes the first Node with the input parameter value), what would the following code output?<br/>
+                  (also assume a get function that simply returns the string at the ith position of the List).
+                </p>
+<pre class='prettyprint'>
+  string s[] = {"a", "b", "c", "d", "e"};
+  LinkedList linky;
+  for (int i = 0; i &lt; 5; i++) {
+    linky.insert(s[i]);
+  }
+  for (int i = 0; i &lt; 2; i++) {
+    linky.erase(s[i]);
+    cout &lt;&lt; linky.get(i) &lt;&lt; endl;
+  }
+</pre>
+              </div>
+              <p class='answer' name='review-q0'>Output: b d<br/>...because the index for the call to get returns a letter farther down the List after erase shifts the indicies.</p>
+              <br/>
+              <p class='debug'>There are just like... a ton of issues with the following DeadHorse class... can you find them all? (PS. It's meant to be a basic dynamic int array)</p>
+<pre class='prettyprint'>
+  // Because you're not sick of dynamic memory
+  // arrays, and copy constructors, this example
+  // will beat a...
+  struct DeadHorse {
+      private:
+          int* i;
+          int capacity;
+          int size;
+  
+      public:
+          DeadHorse () {
+              size = 0;
+              capacity = 2;
+              i = new int[2];
+          }
+  
+          DeadHorse (const DeadHorse other) {
+              i = other.i;
+              capacity = other.capacity;
+              size = other.size;
+          }
+  
+          ~DeadHorse () {
+              delete i;
+          }
+  
+          // Andrew's example levels reaching
+          // critical!
+          void addSomething (int toAdd) {
+              if (capacity == size) {
+                  int* temp = i;
+                  int newCap = capacity * 5;
+                  delete[] i;
+                  i = new int[newCap];
+                  for (int j = 0; j &lt; capacity; j++) {
+                      i[j] = temp[j];
+                  }
+                  capacity = newCap;
+              }
+              i[size] = toAdd;
+              size++;
+          }
+  
+          void print () {
+              for (int j = 0; j &lt; size; j++) {
+                  cout &lt;&lt; i[j] &lt;&lt; " ";
+              }
+              cout &lt;&lt; endl;
+          }
+  };
+  
+  int main () {
+      DeadHorse d1;
+      d1.addSomething(1);
+      d1.addSomething(2);
+      d1.print();
+  
+      DeadHorse d2 = d1;
+      d2.addSomething(3);
+      d1.print();
+      d2.print();
+  }
+</pre>
+              <p class='question' name='review-q1'>Here are just a few that I remember adding... probably more:</p>
+              <div class='answer' name='review-q1'>
+                <ul class='indent-1'>
+                  <li><p>Copy constructor param other not passed by reference!</p></li>
+                  <li><p>Copy constructor copies the pointer to the int array, but does not create a new list for the copied object.</p></li>
+                  <li><p>Destructor calls the wrong form of delete; should be delete[]</p></li>
+                  <li><p>The array-expanding attempt of addSomething tries to save the values of the array in temp, but then frees the memory, thus flooding the array with junk.</p></li>
+                </ul>
+              </div>
+              <h3>Hand Coding</h3>
+              <p class='example'>
+                Using the Stack class from Week 2, implement the popUntil member function, which returns an array of all the string elements popped from the Stack until the input argument is found, 
+                or the end of the Stack is reached.
+              </p>
+<pre class='prettyprint'>
+  Stack smoke;
+  stack.push("Poppin");
+  stack.push("All");
+  stack.push("These");
+  stack.push("Damn");
+  stack.push("Nodes!");
+  
+  // s will -> {"Nodes!", "Damn", "These", "All"}
+  // smoke would only have the "Poppin" Node left
+  string* s = stack.popUntil("All");
+</pre>
+              <br/>
+              <p class='example'>
+                Using the LinkedList class from Week 2 (or your own Doubly Linked list from Homework 2), implement the reverse member function, which 
+                takes the given LinkedList and reverses the order of its Nodes.
+              </p>
+<pre class='prettyprint'>
+  LinkedList linky;
+  linky.insert("LEAVE");
+  linky.insert("BIEBER");
+  linky.insert("ALONE");
+  linky.reverse();
+  
+  // Prints ALONE BIEBER LEAVE
+  // ...I can do pop culture!
+  linky.print()
+</pre>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='inheritanceAndPolymorphism' class='scrollspy-element' scrollspy-title='Inheritance and Polymorphism'></div>
+            <h1>NoisyClass? Again? Really?</h1>
+            <div>
+              <p>Yes really!</p>
+              <p>You'll thank me later...</p>
+              <p>Here's the latest inheritance and polymorphism version:</p>
+<pre class='prettyprint'>
+  class NoisyBase {
+      private:
+          string s;
+      public:
+          NoisyBase (string sBase) {
+              cout &lt;&lt; "[B] Base Constructor: " &lt;&lt; sBase &lt;&lt; endl;
+              s = sBase;
+          }
+          virtual ~NoisyBase () {
+              cout &lt;&lt; "[B] Base Destructor!" &lt;&lt; endl;
+          }
+          virtual string getS () {
+              return s;
+          }
+  };
+  
+  class NoisyDerived: public NoisyBase {
+      private:
+          string s;
+      public:
+          NoisyDerived (string sBase, string sDerived): NoisyBase(sBase) {
+              cout &lt;&lt; "[D] Derived Constructor: " &lt;&lt; sDerived &lt;&lt; endl;
+              s = sDerived;
+          }
+          ~NoisyDerived () {
+              cout &lt;&lt; "[D] Derived Destructor!" &lt;&lt; endl;
+          }
+          virtual string getS () {
+              return s;
+          }
+  };
+</pre>
+              <br/>
+              <p>So, let's start off with the simple stuff and then ramp it up. Make sure you remember the order of construction and destruction!</p>
+              
+              <br/>
+              <p class='example'>Using the NoisyBase and NoisyDerived implementations above, what will the following code print out?</p>
+<pre class='prettyprint'>
+  int main() {
+      NoisyBase b("base!");
+      NoisyDerived d("base!", "derived!");
+  }
+</pre>
+
+              <br/>
+              <p class='example'>Using the NoisyBase and NoisyDerived implementations above, what will the following code print out?</p>
+<pre class='prettyprint'>
+  int main() {
+      NoisyDerived d("base!", "derived!");
+      NoisyBase* bPtr = &amp;d;
+      cout &lt;&lt; bPtr-&gt;getS() &lt;&lt; endl;
+  }
+</pre>
+
+              <br/>
+              <p class='example'>Using the NoisyBase and NoisyDerived implementations above, what will the following code print out?</p>
+<pre class='prettyprint'>
+  // [!] Note: no noisy copy constructor defined, but
+  // b is still passed by value... so what happens
+  // at the end of this function?
+  void NoisyFunc (NoisyBase b) {
+      cout &lt;&lt; b.getS() &lt;&lt; endl;
+  }
+  
+  int main() {
+      NoisyDerived d("base!", "derived!");
+      NoisyFunc(d);
+  }
+</pre>
+
+              <br/>
+              <p class='example'>Using the NoisyBase and NoisyDerived implementations above, what will the following code print out?</p>
+<pre class='prettyprint'>
+  int main() {
+      NoisyBase* bPtr0 = new NoisyBase("base!");
+      NoisyBase* bPtr1 = new NoisyDerived("base!", "derived!");
+      delete bPtr0;
+      // [!] Remember your order of destruction!
+      delete bPtr1;
+  }
+</pre>
+              <br/>
+              
+              <p class='example'>Using the NoisyBase and NoisyDerived implementations above, what will the following code print out?</p>
+<pre class='prettyprint'>
+  void f(int n) {
+      NoisyDerived* d = new NoisyDerived("base!", "derived!");
+      if (n &lt;= 0) {
+          delete d;
+          return;
+      } else {
+          f(n - 1);
+      }
+      delete d;
+  }
+  
+  int main() {
+      f(1);
+  }
+</pre>
+              <br/>
+              <p>OK, I think that's enough of that...</p>
+              
+              <br/>
+              <h3>ForneyMon Revisited</h3>
+              <p>Just when you thought we were done with ForneyMon, let's take a look at a modified version, with changes marked by [!]:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+    
+  class DampyMon;
+  
+  class ForneyMon {
+      private:
+          string m_name;
+          int m_health;
+      public:
+          ForneyMon (string n, int h);
+          virtual int takeDamage (int dam, string type);
+          // [!] dealDamage no longer takes a type, but instead deals the
+          // damage type of the attacking ForneyMon (burny for BurnyMon, etc.)
+          virtual void dealDamage (ForneyMon* other, int dam) = 0;
+          // [!] Added virtual destructor, just in case
+          virtual ~ForneyMon () {};
+  };
+  
+  class BurnyMon : public ForneyMon {
+      public:
+          BurnyMon (string name);
+          void dealDamage (ForneyMon* other, int dam);
+  };
+  
+  class DampyMon : public ForneyMon {
+      public:
+          DampyMon (string name);
+          int takeDamage (int dam, string type);
+          void dealDamage (ForneyMon* other, int dam);
+  };
+  
+  ForneyMon::ForneyMon (string n, int h) {
+      m_name = n;
+      m_health = h;
+  }
+  
+  BurnyMon::BurnyMon (string n) : ForneyMon(n, 10) {}
+  DampyMon::DampyMon (string n) : ForneyMon(n, 15) {}
+  
+  // (General) Take damage regardless of the type of attack
+  int ForneyMon::takeDamage (int dam, string type) {
+      // Reduce the current health by dam amount
+      m_health -= dam;
+      // [!] Added more readable damage text
+      cout &lt;&lt; m_name &lt;&lt; " took [" &lt;&lt; type &lt;&lt; "] Damage: -" &lt;&lt; dam &lt;&lt; endl;
+      return m_health;
+  }
+  
+  // (DampyMon) Take damage equal to dam UNLESS the type
+  // of the attack was burny, in which case take 1 extra
+  int DampyMon::takeDamage (int dam, string type) {
+      if (type == "burny") {
+          dam += 1;
+      }
+      return ForneyMon::takeDamage(dam, type);
+  }
+  
+  void BurnyMon::dealDamage (ForneyMon* other, int dam) {
+      other-&gt;takeDamage(dam, "burny");
+  }
+  void DampyMon::dealDamage (ForneyMon* other, int dam) {
+      other-&gt;takeDamage(dam, "dampy");
+  }
+</pre>
+              <br/>
+              <p>Let's play around with a few features to get some practice with inheritance and polymorphism:</p>
+              <br/>
+              <p class='example'>Implement the following new &quot;block&quot; game component that completes this specification:</p>
+              <ul class='indent-1'>
+                <li><p>All ForneyMon can now initiate a block, which, after blocking, will prevent them from taking any damage from an attack.</p></li>
+                <li><p>A ForneyMon is no longer blocking after it has blocked an attack or initiated an attack.</p></li>
+                <li><p>(Overblocking) If a ForneyMon blocks, but wasn't attacked before their next move, then their next move (whether it be another block or an attack) causes them to take 1 damage.</p></li>
+                <li><p>Successful blocking should print &quot;&lt;nameOfForneyMon&gt; blocked the attack!&quot;</p></li>
+                <li><p>Initiating a block should print &quot;&lt;nameOfForneyMon&gt; started blocking!&quot;</p></li>
+                <li><p>Overblocking should print &quot;&lt;nameOfForneyMon&gt; took [overblock] Damage: -1&quot;</p></li>
+                <li><p>
+                  You may add a private variable to the ForneyMon class indicating whether or not the ForneyMon is blocking, a public getter for that variable, and a void function to set blocking status.
+                </p></li>
+              </ul>
+              <p>Here's how that behavior plays out:</p>
+<pre class='prettyprint'>
+  int main () {
+      DampyMon d("Pewpewtortoise");
+      BurnyMon b("Singelizard");
+  
+      cout &lt;&lt; "Turn 1:" &lt;&lt; endl;
+      d.block(true);
+      b.dealDamage(&amp;d, 2);
+  
+      cout &lt;&lt; endl &lt;&lt; "Turn 2:" &lt;&lt; endl;
+      d.dealDamage(&amp;b, 2);
+      b.block(true);
+  
+      cout &lt;&lt; endl &lt;&lt; "Turn 3:" &lt;&lt; endl;
+      d.block(true);
+      b.dealDamage(&amp;d, 2);
+  
+      cout &lt;&lt; endl &lt;&lt; "Turn 4:" &lt;&lt; endl;
+      d.block(true);
+      b.block(true);
+  
+      cout &lt;&lt; endl &lt;&lt; "Turn 5:" &lt;&lt; endl;
+      d.block(true);
+      b.dealDamage(&amp;d, 2);
+  }  
+</pre>
+              <p>...will print out:</p>
+<pre class='prettyprint'>
+  Turn 1:
+  Pewpewtortoise started blocking!
+  Pewpewtortoise blocked the attack!
+  
+  Turn 2:
+  Singelizard took [dampy] Damage: -2
+  Singelizard started blocking!
+  
+  Turn 3:
+  Pewpewtortoise started blocking!
+  Singelizard took [overblock] Damage: -1
+  Pewpewtortoise blocked the attack!
+  
+  Turn 4:
+  Pewpewtortoise started blocking!
+  Singelizard started blocking!
+  
+  Turn 5:
+  Pewpewtortoise took [overblock] Damage: -1
+  Pewpewtortoise started blocking!
+  Singelizard took [overblock] Damage: -1
+  Pewpewtortoise blocked the attack!
+</pre>
+              <br/>
+              <p class='question' name='forneymon-q0'>Once you've given it a shot, you can look at my sloppy solution here, with notes on the changes I made.</p>
+              <div class='answer' name='forneymon-q0'>
+<pre class='prettyprint'>
+  class DampyMon;
+  
+  class ForneyMon {
+      private:
+          string m_name;
+          int m_health;
+          // [!] Private member added
+          bool m_blocking;
+      public:
+          ForneyMon (string n, int h);
+          virtual int takeDamage (int dam, string type);
+          virtual void dealDamage (ForneyMon* other, int dam) = 0;
+          // [!] New member functions
+          bool isBlocking ();
+          void block (bool blocking);
+          virtual ~ForneyMon () {};
+  };
+  
+  class BurnyMon : public ForneyMon {
+      public:
+          BurnyMon (string name);
+          void dealDamage (ForneyMon* other, int dam);
+  };
+  
+  class DampyMon : public ForneyMon {
+      public:
+          DampyMon (string name);
+          int takeDamage (int dam, string type);
+          void dealDamage (ForneyMon* other, int dam);
+  };
+  
+  ForneyMon::ForneyMon (string n, int h) {
+      m_name = n;
+      m_health = h;
+      // [!] Initializing new private member
+      m_blocking = false;
+  }
+  
+  // [!] New member function definitions
+  bool ForneyMon::isBlocking () {return m_blocking;}
+  void ForneyMon::block (bool blocking) {
+      if (isBlocking()) {
+          m_blocking = false;
+          this-&gt;takeDamage(1, "overblock");
+      }
+      if (blocking) {
+          cout &lt;&lt; m_name &lt;&lt; " started blocking!" &lt;&lt; endl;
+      }
+      m_blocking = blocking;
+  }
+  
+  BurnyMon::BurnyMon (string n) : ForneyMon(n, 10) {}
+  DampyMon::DampyMon (string n) : ForneyMon(n, 15) {}
+  
+  // (General) Take damage regardless of the type of attack
+  int ForneyMon::takeDamage (int dam, string type) {
+      // Reduce the current health by dam amount if not blocking
+      // [!] New blocking logic
+      if (!m_blocking) {
+          m_health -= dam;
+          cout &lt;&lt; m_name &lt;&lt; " took [" &lt;&lt; type &lt;&lt; "] Damage: -" &lt;&lt; dam &lt;&lt; endl;
+      } else {
+          cout &lt;&lt; m_name &lt;&lt; " blocked the attack!" &lt;&lt; endl;
+          this-&gt;m_blocking = false;
+      }
+      return m_health;
+  }
+  
+  // (DampyMon) Take damage equal to dam UNLESS the type
+  // of the attack was burny, in which case take 1 extra
+  int DampyMon::takeDamage (int dam, string type) {
+      if (type == "burny") {
+          dam += 1;
+      }
+      return ForneyMon::takeDamage(dam, type);
+  }
+  
+  void BurnyMon::dealDamage (ForneyMon* other, int dam) {
+      // [!] Added check for blocking
+      if (this-&gt;isBlocking()) {
+          this-&gt;block(false);
+      }
+      other-&gt;takeDamage(dam, "burny");
+  }
+  void DampyMon::dealDamage (ForneyMon* other, int dam) {
+      // [!] Added check for blocking
+      if (this-&gt;isBlocking()) {
+          this-&gt;block(false);
+      }
+      other-&gt;takeDamage(dam, "dampy");
+  }
+</pre>
+              </div>
+              <br/>
+              <p>Well that was certainly ellaborate... did you get some semblance of practice dealing with inheritance and polymorphism?</p>
+              <p>Oh well, whatever... let's move on to the easy stuff: recursion.</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='recursion' class='scrollspy-element' scrollspy-title='Recursion'></div>
+            <h1>Recursion Examples</h1>
+            <div>
+              <p>More recursion than one person can handle! Before we start, keep the following tips in mind:</p>
+              <p><strong>Q: Is there a general strategy to approaching a recursion problem?</strong></p>
+              <p>General? Well, not really, but there are some guidelines that might help you to think recursively:</p>
+              <ul class='indent-1'>
+                <li>
+                  <p>Start with the very simplest case of the problem that you know how to solve.</p>
+                  <ul class='indent-1'>
+                    <li><p>Write down the steps that you use to solve it</p></li>
+                    <li><p>See if you can reduce those steps to recursive ones</p></li>
+                  </ul>
+                </li>
+                <li>
+                  <p>Once you see the very simple case, try applying the same strategy to a more difficult case</p>
+                  <ul class='indent-1'>
+                    <li><p>If that works, then cool! You're done!</p></li>
+                    <li><p>If that *doesn't* work, see if you can split the data in a meaningful way that reduces it to the simple case that you know how to solve.</p></li>
+                  </ul>
+                </li>
+                <li>
+                  <p>It also helps to think about base cases and the conditions of termination</p>
+                  <ul class='indent-1'>
+                    <li><p>
+                      Problems involving arrays usually have to look out for index out of bound problems, for example, and how the &quot;end index&quot; relates to where the current recursive
+                      call pointer is to an element in that array
+                    </p></li>
+                  </ul>
+                </li>
+                <li>
+                  <p>Remember the tools available to you in your problem's scenario:</p>
+                  <ul class='indent-1'>
+                    <li><p>
+                      If it's an array input, remember that the elements are indexed; this means that if I have a pointer to the &quot;first&quot; element 
+                      (I put &quot;first&quot; in quotes because that might be the first element of a recursive call, but not necessarily the true first element of the array) 
+                      and also the length of that array, then I know I have access to that first element and any offset up to the length - 1.
+                    </p></li>
+                    <li><p>
+                      Remember that you can add to and chain recursive calls, for example some function f taking in a pointer to some array element and the remaining length, 
+                      I can do: return f(a1 + 1, n1 - 1) + f(a2, n2 - 1); (just an example, not a real answer to anything)
+                    </p></li>
+                    <li><p>
+                      If your function isn't void, try to put your recursive cases into return statements (like above) and plan around that mechanic.
+                    </p></li>
+                  </ul>
+                </li>
+              </ul>
+              <p>
+                The most fruitful experience I have is to do problems by hand, see how I solve it mentally, and then try to abstract those steps to an algorithm--after 
+                that, I'll try to make that algorithm recursive!
+              </p>
+              <p>That said, let's start off with some warm up problems and then ramp up to that heavy ish.</p>
+              
+              <p class='example'>Implement the cliche recursion problem factorial, which takes in <code class='prettyprint'>int n</code> and returns the value n!.</p>
+<pre class='prettyprint'>
+  int factorial(int n) {
+      // ...
+  }
+</pre>
+<pre class='prettyprint'>
+  int main () {
+      // Prints 1 (0! is defined as 1)
+      cout &lt;&lt; factorial(0) &lt;&lt; endl;
+      // Prints 1
+      cout &lt;&lt; factorial(1) &lt;&lt; endl;
+      // Prints 2 = 2 * 1
+      cout &lt;&lt; factorial(2) &lt;&lt; endl;
+      // Prints 6 = 3 * 2 * 1
+      cout &lt;&lt; factorial(3) &lt;&lt; endl;
+      // Prints 24 = 4 * 3 * 2 * 1
+      cout &lt;&lt; factorial(4) &lt;&lt; endl;
+  }
+</pre>
+              <p class='question' name='recursion-q0'>Click here for a sample solution.</p>
+              <div class='answer' name='recursion-q0'>
+<pre class='prettyprint'>
+  int factorial(int n) {
+      return (n == 1 || n == 0) ? 1 : factorial(n - 1) * n;
+  }
+</pre>
+              </div>
+              <br/>
+              
+              <p class='example'>
+                Implement the isPalindrome function recursively, which determines whether or not the input array of chars is a palindrome (the same forward as backward). If the input 
+                has spaces, ignore them.
+              </p>
+<pre class='prettyprint'>
+  bool isPalindrome(char* c, int len) {
+      // ...
+  }
+</pre>
+<pre class='prettyprint'>
+  int main () {
+      char p0[] = " a ";
+      char p1[] = "racecar";
+      char p2[] = "I R PALINDROME?";
+      char p3[] = "nurses run";
+      char p4[] = " ";
+      char p5[] = "ra ce ca r";
+      
+      // All tests except for p2 return true
+      cout &lt;&lt; isPalindrome(p0, 3) &lt;&lt; endl;
+      cout &lt;&lt; isPalindrome(p1, 7) &lt;&lt; endl;
+      cout &lt;&lt; isPalindrome(p2, 15) &lt;&lt; endl;
+      cout &lt;&lt; isPalindrome(p3, 10) &lt;&lt; endl;
+      cout &lt;&lt; isPalindrome(p4, 1) &lt;&lt; endl;
+      cout &lt;&lt; isPalindrome(p5, 10) &lt;&lt; endl;
+  }
+</pre>
+              <p class='question' name='recursion-q1'>Click here for a sample solution.</p>
+              <div class='answer' name='recursion-q1'>
+<pre class='prettyprint'>
+  bool isPalindrome(char* c, int len) {
+      if (c[0] == ' ') {
+          return isPalindrome(&amp;c[1], len - 1);
+      }
+      if (c[len - 1] == ' ') {
+          return isPalindrome(&amp;c[0], len - 1);
+      }
+      if(len &lt; 2) {
+          return true;
+      } else {
+          return c[0] == c[len-1] &amp;&amp; isPalindrome(&amp;c[1], len - 2);
+      }
+  }
+</pre>
+              </div>
+              <br/>
+              
+              <p class='example'>
+                Implement the lengthInClosure function recursively, which prints out how many non-parenthesis characters (whitespace included) are within AND on either side of a set of parentheses in an input
+                cstring ('\0' terminated array of characters).<br/>
+                If no characters appear on a side of a parenthesis, print nothing (i.e., do not print anything, do not print '0').<br/>
+                You may assume all input is syntactically valid (no mismatched parens) and that all expressions begin with an open parenthesis.
+              </p>
+<pre class='prettyprint'>
+  void lengthInClosure (char* c, int n = 0)
+      // ...
+  }
+</pre>
+<pre class='prettyprint'>
+  int main () {
+      char c1[] = "(testing(stuff) now)";
+      char c2[] = "(testing() now)(wow(yo))";
+      char c3[] = "(((stuff)))";
+  
+      // Prints (7(5)4)
+      lengthInClosure(c1);
+  
+      // Prints (7()4)(3(2))
+      lengthInClosure(c2);
+  
+      // Prints (((5)))
+      lengthInClosure(c3);
+  }
+</pre>
+              <p class='question' name='recursion-q2'>Click here for a sample solution.</p>
+              <div class='answer' name='recursion-q2'>
+<pre class='prettyprint'>
+  void lengthInClosure (char* c, int n = 0) {
+      switch (*c) {
+          case '\0':
+              cout &lt;&lt; endl;
+              return;
+          case '(':
+          case ')':
+              if (n != 0) {
+                  cout &lt;&lt; n;
+              }
+              cout &lt;&lt; *c;
+              lengthInClosure(c + 1, 0);
+              break;
+          default:
+              lengthInClosure(c + 1, n + 1);
+      }
+  }
+</pre>
+              </div>
+              <br/>
+              
+              
+              <p class='example'>
+                Implement the countDigit function recursively, which takes in an input int n and then an input digit (int from 0 - 9) and returns how many times the given digit appears within n. Assume only 
+                input n > 0.
+                <br/>
+                [!] Hint: The input int n is a *deci*mal number. Do we have integer arithmetic that could perform a first-and-rest split on n? Maybe a last-and-rest split even?
+              </p>
+<pre class='prettyprint'>
+  int countDigit(int n, int digit) {
+      // ...
+  }
+</pre>
+<pre class='prettyprint'>
+  int main () {
+      int n1 = 1000,
+          n2 = 10101;
+  
+      // Prints 3
+      cout &lt;&lt; countDigit(n1, 0) &lt;&lt; endl;
+  
+      // Prints 1
+      cout &lt;&lt; countDigit(n1, 1) &lt;&lt; endl;
+  
+      // Prints 0
+      cout &lt;&lt; countDigit(n1, 2) &lt;&lt; endl;
+  
+      // Prints 3
+      cout &lt;&lt; countDigit(n2, 1) &lt;&lt; endl;
+  }
+</pre>
+              <p class='question' name='recursion-q3'>Click here for a sample solution.</p>
+              <div class='answer' name='recursion-q3'>
+  <p class='question' name='recursion-q4'>Seriously though, did you try it or did you think about it for a second and then be like, "well, I'll just take a peek at what he did..."?</p>
+  <div class='answer' name='recursion-q4'>
+<pre class='prettyprint'>
+  int countDigit(int n, int digit) {
+      int count;
+      if (n == 0) {
+          return 0;
+      }
+      
+      if (n % 10 == digit) {
+          return 1 + countDigit(n / 10, digit);
+      } else {
+          return countDigit(n / 10, digit);
+      }
+  }
+</pre>
+  </div>
+              </div>
+              <br/>
+              
+              <p>Are you guys ready for this one? This is a fantastic recursion problem, I got really happy when I thought of it.</p>
+              <p class='example'>
+                Implement the maxPath function recursively, which takes in a Maze that is an array of strings with 'X' characters for walls and '.' characters for corridors,
+                and returns the longest path one could walk starting at the given start row and start column. (include the starting tile in the count if it is a corridor '.')<br/>
+                Maze grid tiles are indexed by row and column starting at 0 (r, c), meaning that position (3, 1) refers to the 4th row, 2nd column tile.
+                <br/>
+                [!] Hint: You might want to use the cmath max(int1, int2); function, which returns the maximum of its two arguments.
+                <br/>
+                [!] Hint: You may modify the maze corridors ('.' spaces) to reach a solution
+              </p>
+<pre class='prettyprint'>
+  int maxPath(string maze[], int nRows, int nCols, int sr, int sc) {
+      // ...
+  }
+</pre>
+<pre class='prettyprint'>
+  int main () {
+      string maze0[] = {
+        "XXXXX",
+        "XX.XX",
+        "XX..X",
+        "X..XX",
+        "XXXXX"
+    };
+    string maze0Copy[] = {
+        "XXXXX",
+        "XX.XX",
+        "XX..X",
+        "X..XX",
+        "XXXXX"
+    };
+    string maze1[] = {
+        "XXXXX",
+        "XX.XX",
+        "XX..X",
+        "X.XXX",
+        "XXXXX"
+    };
+    string maze1Copy[] = {
+        "XXXXX",
+        "XX.XX",
+        "XX..X",
+        "X.XXX",
+        "XXXXX"
+    };
+    string maze2[] = {
+        "XXXXX",
+        "X...X",
+        "X...X",
+        "X...X",
+        "XXXXX"
+    };
+    
+    // Prints 4
+    cout &lt;&lt; maxPath(maze0, 5,5, 3,1) &lt;&lt; endl;
+    // Prints 3
+    cout &lt;&lt; maxPath(maze0Copy, 5,5, 3,2) &lt;&lt; endl;
+    // Prints 1
+    cout &lt;&lt; maxPath(maze1, 5,5, 3,1) &lt;&lt; endl;
+    // Prints 0
+    cout &lt;&lt; maxPath(maze1Copy, 5,5, 3,2) &lt;&lt; endl;
+    // Prints 9
+    // (observe the "serpentine" path we can take)
+    cout &lt;&lt; maxPath(maze2, 5,5, 3,1) &lt;&lt; endl;
+  }
+</pre>
+              <p class='question' name='recursion-q5'>Click here for a sample solution.</p>
+              <div class='answer' name='recursion-q5'>
+  <p class='question' name='recursion-q6'>OK, don't try to pull a fast one on me... you gotta try this yourself first...</p>
+  <div class='answer' name='recursion-q6'>
+    <p class='question' name='recursion-q7'>I know you haven't tried it yet! No easy answers here!</p>
+    <div class='answer' name='recursion-q7'>
+<pre class='prettyprint'>
+  int maxPath(string maze[], int nRows, int nCols, int sr, int sc) {
+      if (maze[sr][sc] != '.') {
+          return 0;
+      }
+      
+      // Can use whatever non-period character you want to indicate an explored space
+      maze[sr][sc] = '@';
+      int currentMax = 0;
+      currentMax = max(1 + maxPath(maze, nRows, nCols, sr - 1, sc), currentMax);
+      currentMax = max(1 + maxPath(maze, nRows, nCols, sr, sc + 1), currentMax);
+      currentMax = max(1 + maxPath(maze, nRows, nCols, sr + 1, sc), currentMax);
+      currentMax = max(1 + maxPath(maze, nRows, nCols, sr, sc - 1), currentMax);
+  
+      return currentMax;
+  }
+</pre>
+    </div>
+  </div>
+              </div>
+              <br/>
+              
+              
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='triage' class='scrollspy-element' scrollspy-title='Code Triage'></div>
+            <h1>Code Triage</h1>
+            <div>
+              <p class='debug'>Someone tried to solve the isPalindrome function above with the following implementation. What is the error and show a test case on which it will break.</p>
+<pre class='prettyprint'>
+  bool isPalindrome(char* c, int len) {
+      if (c[0] == ' ') {
+          c++; // THAT'S THIS LANGUAGE! :DDD
+          len--;
+      }
+      if (c[len - 1] == ' ') {
+          len--;
+      }
+      if(len &lt; 2) {
+          return true;
+      } else {
+          return c[0] == c[len-1] &amp;&amp; isPalindrome(&amp;c[1], len - 2);
+      }
+  }
+</pre>
+              <br/>
+              
+              <p>...maybe more to come... I just got really lazy... congrats on finishing the practice midterm!</p>
+            </div>
+            <hr/>
+            
+            
+            <a class='btn btn-default pull-right hidden-print' href='javascript:window.print();'>
+              <span class='glyphicon glyphicon-print'></span>
+              &nbsp; PDF / Print
+            </a>
+            
+          </div>
+          <!-- END PRESENTATION CONTENT -->
+          
+            
+        </div>
+      </div>
+      <!-- END MAIN CONTENT -->
+      
+      
+    </div>
+    <!-- END WRAPPER -->
+    
+    <!-- BEGIN FOOTER -->
+    <div id="footer">
+      <div class="container">
+        <div class="col-md-12 text-center">
+          
+        </div>
+      </div>
+    </div>
+    <!-- END FOOTER -->
+    
+  </body>
+</html>
