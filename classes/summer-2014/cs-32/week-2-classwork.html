@@ -104,9 +104,269 @@
             
             <ol class="breadcrumb hidden-print">
               <li><a href="../../../classes.html">Classes</a></li>
-              <li><a href="./cs-32.html">Winter14 CS32</a></li>
-              <li class="active">Week 5 - Classwork</li>
+              <li><a href="./cs-32.html">Summer CS32</a></li>
+              <li class="active">Week 2 - Classwork</li>
             </ol>
+            
+            <div id='linkedlist' class='scrollspy-element' scrollspy-title='Linked List'></div>
+            <h1>LinkedList Classwork</h1>
+            <div>
+              <p class='definition'>During class, you came up with the following LinkedList implementation. Here it is!</p>
+              <br/>
+<pre class='prettyprint'>
+  // LinkedList.h
+  #ifndef LINKED_LIST_INCLUDED
+  #define LINKED_LIST_INCLUDED
+  #include &lt;string&gt;
+  #include &lt;iostream&gt;
+  
+  class LinkedList {
+      private:
+          struct Node {
+              std::string m_data;
+              Node* m_next;
+              Node (std::string s);
+          };
+  
+          Node* head;
+          Node* tail;
+          int size;
+  
+      public:
+          LinkedList();
+          ~LinkedList();
+          void insert(std::string);
+          bool erase(std::string);
+          bool contains(std::string s);
+          int count(std::string s);
+          void print();
+  };
+  
+  #endif
+</pre>
+              <br/>
+<pre class='prettyprint'>
+  // LinkedList.cpp
+  #include "LinkedList.h"
+  
+  // Default LinkedList constructor
+  LinkedList::LinkedList () {
+      head = nullptr;
+      tail = nullptr;
+      size = 0;
+  }
+  
+  // Destructor
+  LinkedList::~LinkedList () {
+      // TODO
+  }
+  
+  LinkedList::Node::Node (std::string s) {
+      m_data = s;
+      m_next = nullptr;
+  }
+  
+  // Insert a new Node at the end of the List
+  // with the given string data
+  void LinkedList::insert (std::string s) {
+      // 1) Dynamically allocate a Node
+      Node* toAdd = new Node(s);
+    
+      // 2) Update the head if first insertion
+      if (head == nullptr) {
+          head = toAdd;
+      }
+  
+      // 3) Make last node point to toAdd
+      // if it exists
+      if (tail != nullptr) {
+          tail-&gt;m_next = toAdd;
+      }
+  
+      // 4) Tail now points to toAdd
+      tail = toAdd;
+  
+      // 5) Add one to the size
+      size++;
+  }
+  
+  void LinkedList::print () {
+      if (head == nullptr) {
+          return;
+      }
+      
+      for (Node* pointy = head; pointy != nullptr; pointy = pointy-&gt;m_next) {
+          std::cout &lt;&lt; pointy-&gt;m_data &lt;&lt; " ";
+      }
+      std::cout &lt;&lt; std::endl;
+  }
+  
+  // [!] Warning! This function has
+  // a bug in it
+  bool LinkedList::contains (std::string s) {
+      Node* iterator = head;
+      while (iterator-&gt;m_data != s &amp;&amp; iterator != nullptr) {
+          iterator = iterator-&gt;m_next;
+      }
+      return iterator != nullptr;
+  }
+  
+  // [!] Warning! This function has
+  // a bug in it
+  bool LinkedList::erase (std::string s) {
+      Node* iterator = head;
+      Node* prev = nullptr;
+      bool erased = false;
+  
+      while (iterator != nullptr) {
+          if (iterator-&gt;m_data != s) {
+              prev = iterator;
+              iterator = iterator-&gt;m_next;
+          } else {
+              prev-&gt;m_next = iterator-&gt;m_next;
+              delete iterator;
+              erased = true;
+              break;
+          }
+      }
+      return erased;
+  }
+  
+  // Returns a count of how many times
+  // s appears in the LinkedList
+  int LinkedList::count (std::string s) {
+      Node* n = head;
+      int count = 0;
+      
+      // Go through all size Nodes
+      // in the List and compare to s
+      for (int i = 0; i &lt; size; i++) {
+          if (n-&gt;m_data == s) {
+              count++;
+          }
+          n = n-&gt;m_next;
+      }
+      return count;
+    }
+</pre>
+            </div>
+            <hr/>
+            
+            <br/>
+            <div id='stack' class='scrollspy-element' scrollspy-title='Stack'></div>
+            <h1>Stack Classwork</h1>
+            <div>
+              <p class='definition'>During class, you came up with the following Stack implementation. Here it is!</p>
+              <br/>
+<pre class='prettyprint'>
+  // Stack.h
+  #ifndef STACK_INCLUDED
+  #define STACK_INCLUDED
+  #include &lt;string&gt;
+  #include &lt;iostream&gt;
+  
+  class Stack {
+      private:
+          struct Node {
+              std::string m_data;
+              Node* m_next;
+              Node (std::string s);
+          };
+  
+          Node* head;
+          int size;
+  
+      public:
+          Stack();
+          ~Stack();
+          void push(std::string s);
+          std::string pop();
+          void print();
+  };
+  
+  #endif
+</pre>
+              <br/>
+<pre class='prettyprint'>
+  // LinkedList.cpp
+  #include "Stack.h"
+  
+  // Default Stack constructor
+  Stack::Stack () {
+      head = nullptr;
+      size = 0;
+  }
+  
+  // Destructor
+  Stack::~Stack () {
+      // TODO
+  }
+  
+  Stack::Node::Node(std::string s) {
+      m_data = s;
+      m_next = nullptr;
+  }
+  
+  // Pushes a new Node with data string s
+  // to the top of the stack!
+  void Stack::push (std::string s) {
+      // 1) Dynamically allocate a new Node
+      Node* toAdd = new Node(s);
+  
+      // 2) If it's not the first to be added,
+      // we need to have it point to the current
+      // head
+      toAdd-&gt;m_next = head;
+  
+      // 3) Whether it's first or not, have the head point
+      // to it
+      head = toAdd;
+  
+      // 4) Bump the size
+      size++;
+  }
+  
+  // Pops the top Node on the stack off,
+  // returning its data member and removing
+  // itself from the top (making the one beneath
+  // it the new top)
+  std::string Stack::pop () {
+      // 1) Return the empty string if empty
+      if (head == nullptr) {
+          return "";
+      }
+  
+      // 2) Set a pointer to the top node
+      Node* ptr = head;
+  
+      // 3) Save the top Node's data
+      std::string result = head-&gt;m_data;
+  
+      // 4) Adjust head accordingly
+      head = head-&gt;m_next;
+  
+      // 5) ...take care of the top Node... quietly...
+      delete ptr;
+  
+      // 6) Reduce size
+      size--;
+  
+      return result;
+  }
+  
+  void Stack::print () {
+      if (head == nullptr) {
+          return;
+      }
+      
+      for (Node* pointy = head; pointy != nullptr; pointy = pointy-&gt;m_next) {
+          std::cout &lt;&lt; pointy-&gt;m_data &lt;&lt; " ";
+      }
+      std::cout &lt;&lt; std::endl;
+  }
+</pre>
+            </div>
+            
             
             <div id='ForneyMon' class='scrollspy-element' scrollspy-title='ForneyMon'></div>
             <h1>ForneyMon Classwork</h1>
@@ -183,177 +443,6 @@
             <hr/>
             
             
-            <div id='sum' class='scrollspy-element' scrollspy-title='Recursive Sum'></div>
-            <h1>Recursive Sum</h1>
-            <div>
-<pre class='prettyprint'>
-  int sum (const int arr[], int size, int total) {
-      // Base case check
-      if (size &lt;= 0) {
-          // Return running total if end
-          return total;
-      }
-      // Recursive case; go to next element, dec size,
-      // and then add the current front to total
-      return sum(arr + 1, size - 1, total + *(arr));
-  }
-</pre>
-            </div>
-            <hr/>
-            
-            
-            <div id='maze' class='scrollspy-element' scrollspy-title='Maze'></div>
-            <h1>Recursive Maze Solver</h1>
-            <div>
-              <p>Since we didn't get to go over the example in class, let's look at the algorithm steps by hand on this maze:</p>
-              <div class='text-center fit-pres'>
-                <img src='../../../assets/images/winter-2014/cs-32/week-4/stacks-1.PNG' />
-              </div>
-              <p>Here's the new recursive algorithm:</p>
-<pre class='prettyprint'>
-  If the start location is equal to the ending location, then we've
-      solved the maze, so return true.
-  Mark the start location as visted.
-  For each of the four directions,
-      If the location one step in that direction (from the start
-    location) is unvisited,
-        then call pathExists starting from that location (and
-        ending at the same ending location as in the
-        current call).
-       If that returned true,
-           then return true.
-  Return false.
-</pre>
-              <p>It helps if you pretend I'm asking you these questions as you read through... you can respond to them vocally if that helps.</p>
-              <p>The symbols &gt;&gt;&gt; will indicate the push of a new stack frame, and likewise, &lt;&lt;&lt; the pop of one.</p>
-<pre class='prettyprint'>
-    0 1 2 3 4
-  0 X X X X X
-  1 X X . X X
-  2 X X . . X
-  3 X . . X X
-  4 X X X X X
-  
-  &gt;&gt;&gt; PUSH Stack frame
-  Destination at (row = 2, col = 3)
-  Start at (row = 3, col = 1)
-  Mark that location as visited:
-    0 1 2 3 4
-  0 X X X X X
-  1 X X . X X
-  2 X X . . X
-  3 X O . X X
-  4 X X X X X
-  Is start the destination? NO.
-  Can I move North? NO.
-  Can I move East? Yes!
-  
-  &gt;&gt;&gt; PUSH Stack frame
-  Destination at (row = 2, col = 3)
-  Start at (row = 3, col = 2)
-  Mark that location as visited:
-    0 1 2 3 4
-  0 X X X X X
-  1 X X . X X
-  2 X X . . X
-  3 X O O X X
-  4 X X X X X
-  Is start the destination? NO.
-  Can I move North? Yes!
-  
-  &gt;&gt;&gt; PUSH Stack frame
-  Destination at (row = 2, col = 3)
-  Start at (row = 2, col = 2)
-  Mark that location as visited:
-    0 1 2 3 4
-  0 X X X X X
-  1 X X . X X
-  2 X X O . X
-  3 X O O X X
-  4 X X X X X
-  Is start the destination? NO.
-  Can I move North? Yes!
-  
-  &gt;&gt;&gt; PUSH Stack frame
-  Destination at (row = 2, col = 3)
-  Start at (row = 1, col = 2)
-  Mark that location as visited:
-    0 1 2 3 4
-  0 X X X X X
-  1 X X O X X
-  2 X X O . X
-  3 X O O X X
-  4 X X X X X
-  Is start the destination? NO.
-  Can I move North? NO.
-  Can I move East? NO.
-  Can I move South? NO.
-  Can I move West? NO.
-  Return false
-  
-  &lt;&lt;&lt; POP Stack frame
-  // [!] Remember, we've now popped back
-  // onto the previous stack frame!
-  // Check out our start and destination
-  
-  // Destination at (row = 2, col = 3)
-  // Start at (row = 2, col = 2)
-    0 1 2 3 4
-  0 X X X X X
-  1 X X O X X
-  2 X X O . X
-  3 X O O X X
-  4 X X X X X
-  // (I've already moved North)
-  Was North the destination (i.e. did my call return true?)? NO.
-  Can I move East? YES!
-  
-  &gt;&gt;&gt; PUSH Stack frame
-  Destination at (row = 2, col = 3)
-  Start at (row = 2, col = 3)
-  Mark that location as visited:
-    0 1 2 3 4
-  0 X X X X X
-  1 X X O X X
-  2 X X O O X
-  3 X O O X X
-  4 X X X X X
-  Is start the destination? YES!
-  return true
-  
-  &lt;&lt;&lt; POP Stack frame
-  Did my call find the destination? YES!
-  return true
-  
-  &lt;&lt;&lt; POP Stack frame
-  Did my call find the destination? YES!
-  return true
-  
-  &lt;&lt;&lt; POP Stack frame
-  Did my call find the destination? YES!
-  return true
-  
-  &lt;&lt;&lt; POP Stack frame
-  Did my call find the destination? YES!
-  return true
-</pre>
-            </div>
-            <hr/>
-            
-            
-            <div id='recursion' class='scrollspy-element' scrollspy-title='Recursion Chaining'></div>
-            <h1>Simple Recursion &quot;Chaining&quot;</h1>
-            <div>
-              <p>And no, that's not a real name for something in recursion, I just think it sounds cool and describes this type of process.</p>
-              <p class='example'>Determine what this dumb little function returns. Notice how I'm able to &quot;chain&quot; the results together. Pay attention to the stack frames!</p>
-<pre class='prettyprint'>
-  int coolRecursion (int n) {
-      return (n &lt;= 0) ? 0 : 1 + coolRecursion(n - 1);
-  }
-</pre>
-            </div>
-            <hr/>
-            
             <a class='btn btn-default pull-right hidden-print' href='javascript:window.print();'>
               <span class='glyphicon glyphicon-print'></span>
               &nbsp; PDF / Print
@@ -363,19 +452,6 @@
           <!-- END PRESENTATION CONTENT -->
           
           <!-- MATERIALS FROM CLASS: -->
-          
-          <!-- TODO: NoisyClass example, revisited -->
-            <!-- TODO: Review of memory leaks, stack, heap, etc. -->
-          <!-- TODO: Linked lists: a different perspective (Stacks) -->
-            <!-- TODO: Push -->
-            <!-- TODO: Pop -->
-          <!-- TODO: Doubly linked lists -->
-            <!-- TODO: Insert -->
-            <!-- TODO: Reverse ? -->
-          <!-- TODO: Brief tour of debugger -->
-          <!-- TODO: How to test Linked Lists (following pointers in different cases) -->
-          <!-- TODO: Homework advice -->
-          <!-- TODO: Midterm Wednesday -->
             
         </div>
       </div>
