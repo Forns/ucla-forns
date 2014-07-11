@@ -366,20 +366,20 @@
               </div>
               <h3>Hand Coding</h3>
               <p class='example'>
-                Using the Stack class from Week 2, implement the popUntil member function, which returns an array of all the string elements popped from the Stack until the input argument is found, 
+                Using the Stack class from Week 2, implement the popUntil member function, which returns string of all the string elements popped from the Stack until the input argument is found (each comma + space separated), 
                 or the end of the Stack is reached.
               </p>
 <pre class='prettyprint'>
   Stack smoke;
-  stack.push("Poppin");
-  stack.push("All");
-  stack.push("These");
-  stack.push("Damn");
-  stack.push("Nodes!");
+  smoke.push("Poppin");
+  smoke.push("All");
+  smoke.push("These");
+  smoke.push("Damn");
+  smoke.push("Nodes!");
   
-  // s will -> {"Nodes!", "Damn", "These", "All"}
+  // s will = "Nodes!", "Damn", "These", "All"
   // smoke would only have the "Poppin" Node left
-  string* s = stack.popUntil("All");
+  string s = smoke.popUntil("All");
 </pre>
               <br/>
               <p class='example'>
