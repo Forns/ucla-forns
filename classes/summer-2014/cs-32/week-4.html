@@ -571,10 +571,10 @@
       // We'll narrow down the possible indexes of
       // our vector by shifting the minIndex right
       // and the maxIndex left, when appropriate
-      vector&lt;T&gt;::iterator minIndex = v.begin();
-      vector&lt;T&gt;::iterator maxIndex = v.end();
-      vector&lt;T&gt;::iterator mid;
-    
+      typename vector&lt;T&gt;::iterator minIndex = v.begin(),
+               maxIndex = v.end(),
+               mid;
+  
       // Keep looking as long as we haven't narrowed
       // down the results to nothing (hint: think
       // in terms of our iterators)
@@ -583,13 +583,13 @@
           // minIndex and the maxIndex (remember, it's
           // an iterator on a vector!
           mid = minIndex + ???;
-    
+  
           // Is the element at mid our query? If so,
           // return true
           if ( ??? ) {
               return true;
           }
-    
+  
           // Otherwise, we can narrow our search; only look
           // to the left of the midpoint if our query is smaller
           // than the mid, and vice versa if query is larger
@@ -600,7 +600,7 @@
               maxIndex = ???;
           }
       }
-    
+  
       // If we make it here, we never found the query
       return false;
   }
@@ -636,21 +636,16 @@
               <p class='example'>Try repeating the above binary search algorithm recursively using the code skeleton below:</p>
               <br/>
 <pre class='prettyprint'>
-  template&lt;typename T&gt;
-  bool binarySearchRecursive(vector&lt;T&gt; v, T query) {
-      return binarySearchExec(v, query, v.begin(), v.end());
-  }
-  
   template&lt;typename T, typename Iter&gt;
-  bool binarySearchExec(vector&lt;T&gt;&amp; v, T&amp; query,
-                        Iter&amp; minIndex, Iter&amp; maxIndex) {
-                          
+  bool binarySearchExec(vector&lt;T&gt; v, T&amp; query,
+                        Iter minIndex, Iter maxIndex) {
+  
       // Base case: the end iterator is before the begin
       // iterator
       if ( ??? ) {
           return false;
       }
-      
+  
       // Otherwise, find the midpoint:
       Iter mid = minIndex + ((maxIndex - minIndex) / 2);
   
@@ -663,13 +658,18 @@
       // Otherwise, we need to keep "squeezing" our iterator
       // bounds:
   
-      // If our query is greater than the mid, recusively 
+      // If our query is greater than the mid, recusively
       // squeeze our min index
       if (query &gt; *mid) {
-          return ???
+          return ???;
       } else {
-          return ???
+          return ???;
       }
+  }
+  
+  template&lt;typename T&gt;
+  bool binarySearchRecursive(vector&lt;T&gt; v, T query) {
+      return binarySearchExec(v, query, v.begin(), v.end());
   }
 </pre>
               <br/>
