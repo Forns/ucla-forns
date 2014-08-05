@@ -1136,7 +1136,7 @@
       list&lt;T&gt;::iterator it = lPtr-&gt;begin();
       // Search linearly for the query item
       while (it != lPtr-&gt;end()) {
-          if (*it == query) {
+          if (*it++ == query) {
               break;
           }
       }
