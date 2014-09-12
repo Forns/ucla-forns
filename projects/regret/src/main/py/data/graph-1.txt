@@ -1,0 +1,37 @@
+{
+    "V": ["X", "Z", "Y"],
+    "E": [["X", "Y"],
+        ["Z", "Y"],
+        ["Z", "X"]],
+    "Vdata": {
+        "Z": {
+            "numoutcomes": 2,
+            "vals": ["false", "true"],
+            "parents": [],
+            "children": ["X", "Y"],
+            "cprob": [0.3, 0.7]
+        },
+        "X": {
+            "numoutcomes": 2,
+            "vals": ["false", "true"],
+            "parents": ["Z"],
+            "children": ["Y"],
+            "cprob": {
+                "['false']": [0.2, 0.8],
+                "['true']": [0.6, 0.4]
+            }
+        },
+        "Y": {
+            "numoutcomes": 2,
+            "vals": ["false", "true"],
+            "parents": ["X", "Z"],
+            "children": [],
+            "cprob": {
+                "['false', 'false']": [0.25, 0.75],
+                "['false', 'true']": [0.9, 0.1],
+                "['true', 'false']": [0.5, 0.5],
+                "['true', 'true']": [0.6, 0.4]
+            }
+        }
+    }
+}
