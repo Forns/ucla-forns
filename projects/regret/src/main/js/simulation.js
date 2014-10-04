@@ -222,6 +222,9 @@ var ProbNecessity = function (exposure, outcome, obsDist, expDist) {
       lowerBound = Math.min(1, Math.max(0, (P_Y - P_YdoXp)/P_XY));
       upperBound = Math.max(0, Math.min(1, (P_YpdoXp - P_XpYp)/P_XY));
       
+      lowerBound = (isNaN(lowerBound)) ? 0 : lowerBound;
+      upperBound = (isNaN(upperBound)) ? 1 : upperBound;
+      
       return {lowerBound: lowerBound, upperBound: upperBound};
   },
   
@@ -268,6 +271,9 @@ var ProbNecessity = function (exposure, outcome, obsDist, expDist) {
       
       lowerBound = Math.min(1, Math.max(0, (P_YdoX - P_Y)/P_XpYp));
       upperBound = Math.max(0, Math.min(1, (P_YdoX - P_XY)/P_XpYp));
+      
+      lowerBound = (isNaN(lowerBound)) ? 0 : lowerBound;
+      upperBound = (isNaN(upperBound)) ? 1 : upperBound;
       
       return {lowerBound: lowerBound, upperBound: upperBound};
     },
@@ -371,6 +377,9 @@ var ProbNecessity = function (exposure, outcome, obsDist, expDist) {
         P_YdoX - P_YdoXp + P_XYp + P_XpY
       ]));
       
+      lowerBound = (isNaN(lowerBound)) ? 0 : lowerBound;
+      upperBound = (isNaN(upperBound)) ? 1 : upperBound;
+      
       return {lowerBound: lowerBound, upperBound: upperBound};
     };
 
@@ -380,8 +389,105 @@ var ProbNecessity = function (exposure, outcome, obsDist, expDist) {
  * =========================================================
  */
 
-var obsDist = new Distribution(["X", "Y"]),
-    expDist = new Distribution(["X", "Y"]),
+var obsDist_COND_OBS = new Distribution(["X", "Y"]),
+    obsDist_COND_COM = new Distribution(["X", "Y"]),
+    obsDist_COND_EPS = new Distribution(["X", "Y"]),
+    expDist_COND_EXP = new Distribution(["X", "Y"]),
+    expDist_COND_COM = new Distribution(["X", "Y"]),
+    
+    f_Y = function (params) {
+      var outcome = Math.random();
+      if (params["U"]) {
+        return (params["X"]) ? ((outcome < 0.4) ? 1 : 0) : ((outcome < 0.6) ? 1 : 0);
+      } else {
+        return (params["X"]) ? ((outcome < 0.6) ? 1 : 0) : ((outcome < 0.4) ? 1 : 0);
+      }
+    },
+    
+    f_U = function (params) {
+      return (Math.random() < 0.5) ? 0 : 1;
+    },
+    
+    f_X_COND_OBS = function (params) {
+      return params["U"];
+    },
+    
+    f_X_COND_OBS = function (params) {
+      return params["U"];
+    },
+    
+    f_X_COND_EXP = function (params) {
+      return (Math.random() < 0.5) ? 0 : 1;
+    },
+    
+    // Flag for whether the decision was an act or an action
+    COND_COM_exp_act = false,
+    
+    // Decides exploration tendency
+    EPSILON = 0.15,
+    time = 1,
+    f_X_COND_COM = function (params) {
+      // Here, X will be chosen based on the PN and PS lower bounds
+      
+      // The original choice is what the agent would have chosen
+      // by Nature's system
+      var originalChoice = params["U"],
+          
+          // We'll assess whether or not that original choice should
+          // be kept!
+          pOrig = obsDist_COND_COM.query({"Y":1}, []);
+          pAlt = expDist_COND_COM.query({"Y":1}, {"X": 1 - originalChoice});
+          PN0 = ProbNecessity({"X": originalChoice}, {"Y": 1}, obsDist_COND_COM, expDist_COND_COM),
+          PN1 = ProbNecessity({"X": 1 - originalChoice}, {"Y": 1}, obsDist_COND_COM, expDist_COND_COM),
+          PS0 = ProbSufficiency({"X": originalChoice}, {"Y": 1}, obsDist_COND_COM, expDist_COND_COM),
+          PS1 = ProbSufficiency({"X": 1 - originalChoice}, {"Y": 1}, obsDist_COND_COM, expDist_COND_COM),
+          PNS0 = ProbNeccSuff({"X": originalChoice}, {"Y": 1}, obsDist_COND_COM, expDist_COND_COM),
+          PNS1 = ProbNeccSuff({"X": 1 - originalChoice}, {"Y": 1}, obsDist_COND_COM, expDist_COND_COM);
+          
+      // We'll weight early trials by exploring, and later ones with
+      // exploitation
+      if (Math.random() < EPSILON) {
+        COND_COM_exp_act = true;
+        return (Math.random() < 0.5) ? 0 : 1;
+        
+      // Here we're exploiting by examining 
+      } else {
+        if ((pOrig - pAlt) > 0) {
+          COND_COM_exp_act = true;
+          return originalChoice;
+          
+        } else {
+          COND_COM_exp_act = true;
+          return 1 - originalChoice;
+        }
+      }
+    },
+    
+    sim_orig = new Simulation(
+      // Variables:
+      ["U", "X", "Y"],
+      
+      // Structural Eqs:
+      [
+        // f_U
+        {
+          dependencies: [],
+          eq: f_U
+        },
+        
+        // f_X = U
+        {
+          dependencies: ["U"],
+          eq: f_X_COND_OBS
+        },
+        
+        // f_Y = XOR(U, X)
+        {
+          dependencies: ["U", "X"],
+          eq: f_Y
+        }
+      ]
+    ),
     
     sim = new Simulation(
       // Variables:
@@ -392,25 +498,19 @@ var obsDist = new Distribution(["X", "Y"]),
         // f_U
         {
           dependencies: [],
-          eq: function () {
-            return (Math.random() < 0.5) ? 0 : 1;
-          }
+          eq: f_U
         },
         
         // f_X = U
         {
           dependencies: ["U"],
-          eq: function (params) {
-            return params["U"];
-          }
+          eq: f_X_COND_OBS
         },
         
         // f_Y = XOR(U, X)
         {
           dependencies: ["U", "X"],
-          eq: function (params) {
-            return params["U"] ^ params["X"];
-          }
+          eq: f_Y
         }
       ]
     ),
@@ -424,37 +524,149 @@ var obsDist = new Distribution(["X", "Y"]),
         // f_U
         {
           dependencies: [],
-          eq: function () {
-            return (Math.random() < 0.5) ? 0 : 1;
-          }
+          eq: f_U
         },
         
         // f_X
         {
           dependencies: [],
-          eq: function (params) {
-            return (Math.random() < 0.5) ? 0 : 1;
-          }
+          eq: f_X_COND_EXP
         },
         
         // f_Y = XOR(U, X)
         {
           dependencies: ["U", "X"],
-          eq: function (params) {
-            return params["U"] ^ params["X"];
-          }
+          eq: f_Y
         }
       ]
     ),
     
-    samples = sim.generateSamples(1000),
-    expSamples = expSim.generateSamples(1000);
+    combinedSim = new Simulation(
+      // Variables:
+      ["U", "X", "Y"],
+      
+      // Structural Eqs:
+      [
+        // f_U
+        {
+          dependencies: [],
+          eq: f_U
+        },
+        
+        // f_X
+        {
+          dependencies: ["U"],
+          eq: f_X_COND_COM
+        },
+        
+        // f_Y = XOR(U, X)
+        {
+          dependencies: ["U", "X"],
+          eq: f_Y
+        }
+      ]
+    ),
     
-obsDist.addItems(samples);
-obsDist.addItems(expSamples);
-expDist.addItems(expSamples);
+    // Number of trials to run
+    T = 1000,
+    TESTS = 10,
+    
+    samples,
+    
+    LRwinsObs = 0,
+    winsObs = 0,
+    recordObs = [],
+    LRwinsExp = 0,
+    winsExp = 0,
+    recordExp = [],
+    LRwinsCom = 0,
+    winsCom = 0,
+    recordCombined = [];
+    
+/*
+ * =========================================================
+ * BANDITS EXPERIMENT
+ * =========================================================
+ */
 
-console.log("================================");
-console.log(ProbNecessity({"X":1}, {"Y":1}, obsDist, expDist));
-console.log(ProbSufficiency({"X":1}, {"Y":1}, obsDist, expDist));
-console.log(ProbNeccSuff({"X":1}, {"Y":1}, obsDist, expDist));
+// TODO: Simulation is wrong:
+// - Combined algorithm logs both observational and
+//   experimental at each step, though it chooses only one
+// - Issue of not just using observational distribution at the
+//   get-go for forward decision-making
+
+for (var tests = 0; tests < TESTS; tests++) {
+  obsDist_COND_OBS = new Distribution(["X", "Y"]);
+  obsDist_COND_COM = new Distribution(["X", "Y"]);
+  expDist_COND_EXP = new Distribution(["X", "Y"]);
+  expDist_COND_COM = new Distribution(["X", "Y"]);
+  samples = sim.generateSamples(T);
+  obsDist_COND_OBS.addItems(samples);
+  obsDist_COND_COM.addItems(samples);
+  
+  for (var t = 0; t < T; t++) {
+    var obsOutcome = sim.generateSamples(1)[0],
+        expOutcome = expSim.generateSamples(1)[0],
+        comOutcome = combinedSim.generateSamples(1)[0];
+        
+    recordObs.push(obsOutcome["Y"]);
+    winsObs += obsOutcome["Y"];
+    recordExp.push(expOutcome["Y"]);
+    winsExp += expOutcome["Y"];
+    recordCombined.push(comOutcome["Y"]);
+    winsCom += comOutcome["Y"];
+    
+    obsDist_COND_OBS.addItems([obsOutcome]);
+    expDist_COND_EXP.addItems([expOutcome]);
+    
+    // We'll only update the experimental distribution in cases
+    // where the agent did not operate according to nature
+    if (COND_COM_exp_act) {
+      expDist_COND_COM.addItems([comOutcome]);
+    }
+    obsDist_COND_COM.addItems([comOutcome]);
+    
+    time++;
+  }
+  
+  LRwinsObs += winsObs;
+  winsObs = 0;
+  LRwinsExp += winsExp;
+  winsExp = 0;
+  LRwinsCom += winsCom;
+  winsCom = 0;
+  time = 1;
+}
+
+console.log("STATS   ===========================");
+console.log("PN:");
+console.log(ProbNecessity({"X":1}, {"Y":1}, obsDist_COND_COM, expDist_COND_COM));
+console.log(ProbNecessity({"X":0}, {"Y":1}, obsDist_COND_COM, expDist_COND_COM));
+console.log("PS:");
+console.log(ProbSufficiency({"X":1}, {"Y":1}, obsDist_COND_COM, expDist_COND_COM));
+console.log(ProbSufficiency({"X":0}, {"Y":1}, obsDist_COND_COM, expDist_COND_COM));
+console.log("PNS:");
+console.log(ProbNeccSuff({"X":1}, {"Y":1}, obsDist_COND_COM, expDist_COND_COM));
+console.log();
+
+console.log("RESULTS ===========================");
+console.log("OBSERVATIONAL:");
+console.log(winsObs);
+console.log();
+console.log("EXPERIMENTAL:");
+console.log(winsExp);
+console.log();
+console.log("COMBINED:");
+console.log(winsCom);
+console.log();
+
+console.log("LR RES ============================");
+console.log("OBSERVATIONAL:");
+console.log(parseFloat(LRwinsObs) / TESTS);
+console.log();
+console.log("EXPERIMENTAL:");
+console.log(parseFloat(LRwinsExp) / TESTS);
+console.log();
+console.log("COMBINED:");
+console.log(parseFloat(LRwinsCom) / TESTS);
+console.log();
