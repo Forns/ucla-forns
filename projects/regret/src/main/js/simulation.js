@@ -424,7 +424,8 @@ var obsDist_COND_OBS = new Distribution(["X", "Y"]),
     COND_COM_exp_act = false,
     
     // Decides exploration tendency
-    EPSILON = 0.15,
+    EPS_ORIG = 0.15,
+    EPSILON = EPS_ORIG,
     time = 1,
     f_X_COND_COM = function (params) {
       // Here, X will be chosen based on the PN and PS lower bounds
@@ -609,7 +610,7 @@ var obsDist_COND_OBS = new Distribution(["X", "Y"]),
     
     // Number of trials to run
     T = 1000,
-    TESTS = 20,
+    TESTS = 1000,
     
     samples,
     
@@ -644,9 +645,11 @@ for (var tests = 0; tests < TESTS; tests++) {
   obsDist_COND_EPS = new Distribution(["X", "Y"]);
   expDist_COND_EXP = new Distribution(["X", "Y"]);
   expDist_COND_COM = new Distribution(["X", "Y"]);
-  samples = sim.generateSamples(T);
-  obsDist_COND_OBS.addItems(samples);
+  
+  samples = sim.generateSamples(1000);
   obsDist_COND_COM.addItems(samples);
+  obsDist_COND_EPS.addItems(samples);
+  obsDist_COND_OBS.addItems(samples);
   
   for (var t = 0; t < T; t++) {
     var obsOutcome = sim.generateSamples(1)[0],
@@ -654,6 +657,7 @@ for (var tests = 0; tests < TESTS; tests++) {
         epsOutcome = epsSim.generateSamples(1)[0],
         comOutcome = combinedSim.generateSamples(1)[0];
         
+    
     recordObs.push(obsOutcome["Y"]);
     winsObs += obsOutcome["Y"];
     recordExp.push(expOutcome["Y"]);
