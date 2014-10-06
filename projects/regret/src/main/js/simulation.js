@@ -398,9 +398,9 @@ var obsDist_COND_OBS = new Distribution(["X", "Y"]),
     f_Y = function (params) {
       var outcome = Math.random();
       if (params["U"]) {
-        return (params["X"]) ? ((outcome < 0.4) ? 1 : 0) : ((outcome < 0.6) ? 1 : 0);
+        return (params["X"]) ? ((outcome < 0.3) ? 1 : 0) : ((outcome < 0.5) ? 1 : 0);
       } else {
-        return (params["X"]) ? ((outcome < 0.6) ? 1 : 0) : ((outcome < 0.4) ? 1 : 0);
+        return (params["X"]) ? ((outcome < 0.5) ? 1 : 0) : ((outcome < 0.3) ? 1 : 0);
       }
     },
     
@@ -460,6 +460,20 @@ var obsDist_COND_OBS = new Distribution(["X", "Y"]),
           COND_COM_exp_act = true;
           return 1 - originalChoice;
         }
+      }
+    },
+    
+    f_X_COND_EPS = function (params) {
+      // Here, X will be chosen based on the epsilon-greedy
+      // algorithm
+      
+      // Explore with probability epsilon
+      if (Math.random() < EPSILON) {
+        return (Math.random() < 0.5) ? 0 : 1;
+        
+      // Here we're exploiting by choosing the current best
+      } else {
+        return (obsDist_COND_EPS.query({"Y":1}, {"X":0}) > obsDist_COND_EPS.query({"Y":1}, {"X":1})) ? 0 : 1;
       }
     },
     
@@ -541,6 +555,32 @@ var obsDist_COND_OBS = new Distribution(["X", "Y"]),
       ]
     ),
     
+    epsSim = new Simulation(
+      // Variables:
+      ["U", "X", "Y"],
+      
+      // Structural Eqs:
+      [
+        // f_U
+        {
+          dependencies: [],
+          eq: function () {return 0;}
+        },
+        
+        // f_X
+        {
+          dependencies: [],
+          eq: f_X_COND_EPS
+        },
+        
+        // f_Y = XOR(U, X)
+        {
+          dependencies: ["U", "X"],
+          eq: f_Y
+        }
+      ]
+    ),
+    
     combinedSim = new Simulation(
       // Variables:
       ["U", "X", "Y"],
@@ -550,7 +590,7 @@ var obsDist_COND_OBS = new Distribution(["X", "Y"]),
         // f_U
         {
           dependencies: [],
-          eq: f_U
+          eq: function () {return 0;}
         },
         
         // f_X
@@ -569,7 +609,7 @@ var obsDist_COND_OBS = new Distribution(["X", "Y"]),
     
     // Number of trials to run
     T = 1000,
-    TESTS = 10,
+    TESTS = 20,
     
     samples,
     
@@ -579,6 +619,9 @@ var obsDist_COND_OBS = new Distribution(["X", "Y"]),
     LRwinsExp = 0,
     winsExp = 0,
     recordExp = [],
+    LRwinsEps = 0,
+    winsEps = 0,
+    recordEps = [],
     LRwinsCom = 0,
     winsCom = 0,
     recordCombined = [];
@@ -598,6 +641,7 @@ var obsDist_COND_OBS = new Distribution(["X", "Y"]),
 for (var tests = 0; tests < TESTS; tests++) {
   obsDist_COND_OBS = new Distribution(["X", "Y"]);
   obsDist_COND_COM = new Distribution(["X", "Y"]);
+  obsDist_COND_EPS = new Distribution(["X", "Y"]);
   expDist_COND_EXP = new Distribution(["X", "Y"]);
   expDist_COND_COM = new Distribution(["X", "Y"]);
   samples = sim.generateSamples(T);
@@ -607,17 +651,21 @@ for (var tests = 0; tests < TESTS; tests++) {
   for (var t = 0; t < T; t++) {
     var obsOutcome = sim.generateSamples(1)[0],
         expOutcome = expSim.generateSamples(1)[0],
+        epsOutcome = epsSim.generateSamples(1)[0],
         comOutcome = combinedSim.generateSamples(1)[0];
         
     recordObs.push(obsOutcome["Y"]);
     winsObs += obsOutcome["Y"];
     recordExp.push(expOutcome["Y"]);
     winsExp += expOutcome["Y"];
+    recordEps.push(epsOutcome["Y"]);
+    winsEps += epsOutcome["Y"];
     recordCombined.push(comOutcome["Y"]);
     winsCom += comOutcome["Y"];
     
     obsDist_COND_OBS.addItems([obsOutcome]);
     expDist_COND_EXP.addItems([expOutcome]);
+    obsDist_COND_EPS.addItems([epsOutcome]);
     
     // We'll only update the experimental distribution in cases
     // where the agent did not operate according to nature
@@ -633,6 +681,8 @@ for (var tests = 0; tests < TESTS; tests++) {
   winsObs = 0;
   LRwinsExp += winsExp;
   winsExp = 0;
+  LRwinsEps += winsEps;
+  winsEps = 0;
   LRwinsCom += winsCom;
   winsCom = 0;
   time = 1;
@@ -656,6 +706,9 @@ console.log();
 console.log("EXPERIMENTAL:");
 console.log(winsExp);
 console.log();
+console.log("EPSILON-GREEDY:");
+console.log(winsEps);
+console.log();
 console.log("COMBINED:");
 console.log(winsCom);
 console.log();
@@ -666,6 +719,9 @@ console.log(parseFloat(LRwinsObs) / TESTS);
 console.log();
 console.log("EXPERIMENTAL:");
 console.log(parseFloat(LRwinsExp) / TESTS);
+console.log();
+console.log("EPSILON-GREEDY:");
+console.log(parseFloat(LRwinsEps) / TESTS);
 console.log();
 console.log("COMBINED:");
 console.log(parseFloat(LRwinsCom) / TESTS);
