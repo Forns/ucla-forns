@@ -565,7 +565,7 @@ var obsDist_COND_OBS = new Distribution(["X", "Y"]),
         // f_U
         {
           dependencies: [],
-          eq: function () {return 0;}
+          eq: f_U
         },
         
         // f_X
@@ -591,7 +591,7 @@ var obsDist_COND_OBS = new Distribution(["X", "Y"]),
         // f_U
         {
           dependencies: [],
-          eq: function () {return 0;}
+          eq: f_U
         },
         
         // f_X
