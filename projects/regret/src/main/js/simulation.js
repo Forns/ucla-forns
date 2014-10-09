@@ -392,6 +392,7 @@ var ProbNecessity = function (exposure, outcome, obsDist, expDist) {
 var obsDist_COND_OBS = new Distribution(["X", "Y"]),
     obsDist_COND_COM = new Distribution(["X", "Y"]),
     obsDist_COND_EPS = new Distribution(["X", "Y"]),
+    obsDist_COND_EPS_PROP = new Distribution(["Z", "X", "Y"]),
     expDist_COND_EXP = new Distribution(["X", "Y"]),
     expDist_COND_COM = new Distribution(["X", "Y"]),
     
@@ -475,6 +476,21 @@ var obsDist_COND_OBS = new Distribution(["X", "Y"]),
       // Here we're exploiting by choosing the current best
       } else {
         return (obsDist_COND_EPS.query({"Y":1}, {"X":0}) > obsDist_COND_EPS.query({"Y":1}, {"X":1})) ? 0 : 1;
+      }
+    },
+    
+    f_X_COND_EPS_PROP = function (params) {
+      // Here, X will be chosen based on the epsilon-greedy
+      // algorithm accounting for initial choice
+      var originalChoice = params["U"];
+      
+      // Explore with probability epsilon
+      if (Math.random() < EPSILON) {
+        return (Math.random() < 0.5) ? 0 : 1;
+        
+      // Here we're exploiting by choosing the current best
+      } else {
+        return (obsDist_COND_EPS.query({"Y":1}, {"X":0, "Z": originalChoice}) > obsDist_COND_EPS.query({"Y":1}, {"X":1, "Z": originalChoice})) ? 0 : 1;
       }
     },
     
@@ -582,6 +598,40 @@ var obsDist_COND_OBS = new Distribution(["X", "Y"]),
       ]
     ),
     
+    epsPropSim = new Simulation(
+      // Variables:
+      ["U", "Z", "X", "Y"],
+      
+      // Structural Eqs:
+      [
+        // f_U
+        {
+          dependencies: [],
+          eq: f_U
+        },
+        
+        // f_Z
+        {
+          dependencies: ["U"],
+          eq: function (params) {
+            return params["U"];
+          }
+        },
+        
+        // f_X
+        {
+          dependencies: ["U"],
+          eq: f_X_COND_EPS_PROP
+        },
+        
+        // f_Y = XOR(U, X)
+        {
+          dependencies: ["U", "X"],
+          eq: f_Y
+        }
+      ]
+    ),
+    
     combinedSim = new Simulation(
       // Variables:
       ["U", "X", "Y"],
@@ -623,6 +673,9 @@ var obsDist_COND_OBS = new Distribution(["X", "Y"]),
     LRwinsEps = 0,
     winsEps = 0,
     recordEps = [],
+    LRwinsEpsProp = 0,
+    winsEpsProp = 0,
+    recordEpsProp = [],
     LRwinsCom = 0,
     winsCom = 0,
     recordCombined = [];
@@ -633,28 +686,33 @@ var obsDist_COND_OBS = new Distribution(["X", "Y"]),
  * =========================================================
  */
 
-// TODO: Simulation is wrong:
-// - Combined algorithm logs both observational and
-//   experimental at each step, though it chooses only one
-// - Issue of not just using observational distribution at the
-//   get-go for forward decision-making
-
 for (var tests = 0; tests < TESTS; tests++) {
   obsDist_COND_OBS = new Distribution(["X", "Y"]);
   obsDist_COND_COM = new Distribution(["X", "Y"]);
   obsDist_COND_EPS = new Distribution(["X", "Y"]);
+  obsDist_COND_EPS_PROP = new Distribution(["Z", "X", "Y"]);
   expDist_COND_EXP = new Distribution(["X", "Y"]);
   expDist_COND_COM = new Distribution(["X", "Y"]);
   
   samples = sim.generateSamples(1000);
   obsDist_COND_COM.addItems(samples);
-  obsDist_COND_EPS.addItems(samples);
   obsDist_COND_OBS.addItems(samples);
+  
+  /*
+  var epsPropSamples = [];
+  for (var s in samples) {
+    var currentSample = samples[s];
+    currentSample["Z"] = currentSample["U"];
+    epsPropSamples.push(currentSample)
+  }
+  obsDist_COND_EPS_PROP.addItems(epsPropSamples);
+  */
   
   for (var t = 0; t < T; t++) {
     var obsOutcome = sim.generateSamples(1)[0],
         expOutcome = expSim.generateSamples(1)[0],
         epsOutcome = epsSim.generateSamples(1)[0],
+        epsPropOutcome = epsPropSim.generateSamples(1)[0],
         comOutcome = combinedSim.generateSamples(1)[0];
         
     
@@ -664,12 +722,15 @@ for (var tests = 0; tests < TESTS; tests++) {
     winsExp += expOutcome["Y"];
     recordEps.push(epsOutcome["Y"]);
     winsEps += epsOutcome["Y"];
+    recordEpsProp.push(epsPropOutcome["Y"]);
+    winsEpsProp += epsPropOutcome["Y"];
     recordCombined.push(comOutcome["Y"]);
     winsCom += comOutcome["Y"];
     
     obsDist_COND_OBS.addItems([obsOutcome]);
     expDist_COND_EXP.addItems([expOutcome]);
     obsDist_COND_EPS.addItems([epsOutcome]);
+    obsDist_COND_EPS_PROP.addItems([epsPropOutcome]);
     
     // We'll only update the experimental distribution in cases
     // where the agent did not operate according to nature
@@ -687,6 +748,8 @@ for (var tests = 0; tests < TESTS; tests++) {
   winsExp = 0;
   LRwinsEps += winsEps;
   winsEps = 0;
+  LRwinsEpsProp += winsEpsProp;
+  winsEpsProp = 0;
   LRwinsCom += winsCom;
   winsCom = 0;
   time = 1;
@@ -726,6 +789,9 @@ console.log(parseFloat(LRwinsExp) / TESTS);
 console.log();
 console.log("EPSILON-GREEDY:");
 console.log(parseFloat(LRwinsEps) / TESTS);
+console.log();
+console.log("EPSILON-GREEDY-PROPENSITY:");
+console.log(parseFloat(LRwinsEpsProp) / TESTS);
 console.log();
 console.log("COMBINED:");
 console.log(parseFloat(LRwinsCom) / TESTS);
