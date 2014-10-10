@@ -482,7 +482,7 @@ var obsDist_COND_OBS = new Distribution(["X", "Y"]),
     f_X_COND_EPS_PROP = function (params) {
       // Here, X will be chosen based on the epsilon-greedy
       // algorithm accounting for initial choice
-      var originalChoice = params["U"];
+      var originalChoice = params["Z"];
       
       // Explore with probability epsilon
       if (Math.random() < EPSILON) {
@@ -620,7 +620,7 @@ var obsDist_COND_OBS = new Distribution(["X", "Y"]),
         
         // f_X
         {
-          dependencies: ["U"],
+          dependencies: ["U", "Z"],
           eq: f_X_COND_EPS_PROP
         },
         
