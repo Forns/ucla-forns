@@ -490,6 +490,10 @@ var obsDist_COND_OBS = new Distribution(["X", "Y"]),
         
       // Here we're exploiting by choosing the current best
       } else {
+        console.log("==============================");
+        console.log("Z: " + originalChoice);
+        console.log(obsDist_COND_EPS.query({"Y":1}, {"X":0, "Z": originalChoice}));
+        console.log(obsDist_COND_EPS.query({"Y":1}, {"X":1, "Z": originalChoice}));
         return (obsDist_COND_EPS.query({"Y":1}, {"X":0, "Z": originalChoice}) > obsDist_COND_EPS.query({"Y":1}, {"X":1, "Z": originalChoice})) ? 0 : 1;
       }
     },
