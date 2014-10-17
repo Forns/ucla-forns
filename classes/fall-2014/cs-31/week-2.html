@@ -111,8 +111,8 @@
             <div id='introduction' class='scrollspy-element' scrollspy-title='Review'></div>
             <h1>Questions from Week 1</h1>
             
-            <p><strong>Q: On XCode, the text &quot;Running&quot; is displayed after the program printout, and on VS, the text "Press any button". Is this just a quirk of the debug console in XCode?</strong></p>
-            <p>A: Yes. If you run the same code segment in, say, Visual C++ 2012, you will not see the same behavior.</p>
+            <p><strong>Q: On XCode, the text &quot;Running&quot; is displayed after the program printout, and on VS, the text "Press any button to continue...". Is this just a quirk of the debug console in each IDE?</strong></p>
+            <p>A: Yes. No need to worry about it confounding your answers.</p>
             <br/>
             
             <p><strong>Q: What happens when we try to overload a variable defined in the std namespace?</strong></p>
@@ -121,26 +121,30 @@
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
   using namespace std;
-
+  
   int main () {
       int cin = 5,
           test;
-          
+            
       cout &lt;&lt; cin &lt;&lt; endl;
-      
+        
+      cout &lt;&lt; "Enter a number: ";
       // What will be in test after this line?
       cin &gt;&gt; test;
-      cout &lt;&lt; test;
+      cout &lt;&lt; test &lt;&lt; endl;
   }
 </pre>
             
-            <p class='question' name='compiler-q1'>Will I get different outcomes from compiling the above program via Visual C++ 2012 vs g++?</p>
-            <div class='answer' name='compiler-q1'>Possibly! g++ might compile and run fine (though with junk in variable test), but Visual C++ can give you:<br/>
-              <div class='text-center'>
-                <img src='../../../assets/images/fall-2013/cs-31/week-2/visual_2012_error.png' />
-              </div>
+              <p class='question' name='compiler-q1'>Will I get different outcomes from compiling the above program via Visual C++ 2012 vs g++?</p>
+              <div class='answer' name='compiler-q1'>Possibly! g++ might compile and run fine (though with junk in variable test), but Visual C++ can give you:<br/>
+                <div class='text-center'>
+                  <img src='../../../assets/images/fall-2013/cs-31/week-2/visual_2012_error.png' />
+                </div>
+              <br/>
+              <p class='example'>Fix the above code segment to avoid an error (aside from [properly] renaming the cin local variable); you may only make an addition to the code.</p>
             </div>
             <hr/>
+            <br/>
 
             
             <div id='operators' class='scrollspy-element' scrollspy-title='Operators'></div>
@@ -462,7 +466,7 @@
       cout &lt;&lt; b &lt;&lt; endl;
   }
 </pre>
-
+            <br/>
             <p class='debug'>Will the following code compile? If so, what will it print out?<br/>Note precedence levels: (=, 15), (+, -, 6), (*, 5)</p>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
@@ -477,6 +481,7 @@
       cout &lt;&lt; z &lt;&lt; endl;
   }
 </pre>
+            <br/>
             <p class='example'>Remember, we said there will be exceptions to precedence level... What will the following code print out?<br/>Note precedence levels: (=, 15), (+, -, 6), (++, 2 (postfix) or 3 (prefix))</p>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
@@ -500,6 +505,7 @@
   }
 </pre>
             <hr/>
+            <br/>
             
             <div id='strings' class='scrollspy-element' scrollspy-title='Strings'></div>
             <h1>Strings</h1>
@@ -508,7 +514,7 @@
               <p>We use strings to hold text data. Unlike types int and double, which are native to the C++ language, strings are a std library feature class.</p>
               <p>Here are some example strings:</p>
 <pre class='prettyprint'>
-  #include &lt;iostream&gt;
+  #include &lt;string&gt;
   using namespace std;
   
   int main () {
@@ -562,6 +568,7 @@
       cout &lt;&lt; test &lt;&lt; five &lt;&lt; endl;
   }
 </pre>
+            <br/>
             <p class='debug'>Will the following code compile? If so, what will it output?</p>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
@@ -575,6 +582,7 @@
       cout &lt;&lt; test &lt;&lt; endl;
   }
 </pre>
+            <br/>
             <p class='debug'>Will the following code compile? If so, what will it output?</p>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
@@ -588,8 +596,10 @@
       cout &lt;&lt; awkwardExchange &lt;&lt; endl;
   }
 </pre>
+            <br/>
             <p>There are some cool properties that we can use with strings, like find out their length and determine individual letters.</p>
             <p class='toolkit'><strong>String Length:</strong> We can determine how many characters are in a string by using its .length() method.</p>
+            <br/>
             <p class='example'>What will the following code segment output?</p>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
@@ -610,6 +620,7 @@
       cout &lt;&lt; "result" &lt;&lt; ": " &lt;&lt; result.length() &lt;&lt; endl;
   }
 </pre>
+            <br/>
             <p class='toolkit'><strong>Character Access:</strong> We can retrieve the ith character of a string via the syntax: stringName[i]</p>
             <p class='example'>What will the following code segment output?</p>
 <pre class='prettyprint'>
@@ -627,6 +638,9 @@
 </pre>
             </div>
             <hr/>
+            <br/>
+            
+            
             <div id='streams' class='scrollspy-element' scrollspy-title='Streams'></div>
             <h1>Streams</h1>
             <div>
@@ -652,79 +666,104 @@
               <p>So, just as we might build dams and other means of controlling water flow, so might we modify the way that our cout stream behaves.</p>
               <div class='toolkit'><p><strong>Manipulating cout Display:</strong></p>
                 <ul class='indent-1'>
-                  <li><p><strong>cout.setf(ios::fixed)</strong> tells the cout stream to format numbers with fixed number of digits.</p></li>
-                  <li><p><strong>cout.setf(ios::scientific)</strong> tells the cout stream to format numbers with scientific notation.</p></li>
-                  <li><p><strong>cout.precision(n)</strong> tells the cout stream to only display n digits and round appropriately.</p></li>
+                  <li><p><strong>cout &lt;&lt; std::fixed;</strong> tells the cout stream to format numbers with fixed number of digits.</p></li>
+                  <li><p><strong>cout &lt;&lt; std::scientific;</strong> tells the cout stream to format numbers with scientific notation.</p></li>
+                  <li><p><strong>cout.precision(n)</strong> tells the cout stream to only display n digits and round appropriately (if in default formatting), or the number of digits past the decimal if in fixed / scientific notation.</p></li>
                 </ul>
               </div>
-              <p>Note that these options are flags that affect *only the behavior of cout following them.*</p>
+              <p class='debug'>Note that these options are flags that affect *only the behavior of cout following them* and override any flags set beforehand.</p>
               <br/>
               <p class='example'>What does the following code segment output?</p>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
   using namespace std;
-  
+    
   int main () {
       double x = 10.123456789;
       
-      cout &lt;&lt; x &lt;&lt; endl;
-      
-      cout.setf(ios::scientific);
+      cout &lt;&lt; "Default: " &lt;&lt; x &lt;&lt; endl;
+  
       cout.precision(2);
-      cout &lt;&lt; x &lt;&lt; endl;
+      cout &lt;&lt; "Prec(2): " &lt;&lt; x &lt;&lt; endl;
       
-      cout.setf(ios::fixed);
+      // [!] Scientific notation
+      cout &lt;&lt; scientific;
+      cout &lt;&lt; "Scie(2): " &lt;&lt; x &lt;&lt; endl;
+  
+      // [!] Fixed floating point
+      cout &lt;&lt; fixed;
+      cout &lt;&lt; "Fixd(2): " &lt;&lt; x &lt;&lt; endl;
+      
       cout.precision(5);
-      cout &lt;&lt; x &lt;&lt; endl;
+      cout &lt;&lt; "Fixd(5): " &lt;&lt; x &lt;&lt; endl;
+      
+      cout.precision(15);
+      cout &lt;&lt; "Fix(15): " &lt;&lt; x &lt;&lt; endl;
   }
 </pre>
               <br/>
-              <h2>cin Formatting</h2>
+              <h2>Input Formatting</h2>
               <p>Returning to our water stream example, just as we may use different lures while fishing to get different fish out of a stream, so do we need different tools to extract different data from the input.</p>
-              <div class='toolkit'><p><strong>Manipulating cin Behavior:</strong></p>
-                <ul class='indent-1'>
-                  <li><p><strong>cin.ignore(n, pattern)</strong> ignores n characters or until the first encountered instance of pattern from the input stream. DOES NOT CONSUME NEWLINE IN INPUT.</p></li>
-                  <li><p><strong>getline(cin, storageVar)</strong> stores the entire line of input into storageVar and DOES consume the newline in the input.</p></li>
-                </ul>
-              </div>
-              <p class='debug'>NOTE: We ONLY use cin.ignore(n, pattern) when we've used cin and then directly after use getline! What happens below?</p>
+              <p>There are a number of different tools we can access the standard input stream. The following are the two we'll use in this class:</p>
+              <p class='toolkit'>The <strong>cin &gt;&gt; var;</strong> command accesses input characters, ignores whitespace, and ignores the newline at the end of the user's input. We use this for gathering 
+                <strong>numerical</strong> input, and storing it in variable &quot;var&quot;.</p>
+              <p class='toolkit'>The <strong>getline(cin, s);</strong> command consumes all characters up to, and including, the new line character. It then throws away the new-line, and stores the resulting string in s.
+                We use this for gathering string inputs. [Requires the string library]</p>
+              <br/>
+              <p>Although the two different input gathering tactics seem pretty straightforward, there's one issue with using cin &gt;&gt; var; and then after using getline(cin, s);</p>
+              <p class='debug'>Since cin &gt;&gt; var; leaves a newline, and getline(cin, s) consumes all characters up to and including a new line, using the first before the second will cause the leftover
+                newline character to be interpretted as hitting enter without any text on the second.</p>
+              <br/>
+              <p>To illustrate this problem, see the following example:</p>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
+  #include &lt;string&gt;
   using namespace std;
-  
+    
   int main () {
       string inputString;
       int inputInt;
       
+      cout &lt;&lt; "Enter a number: ";
       cin &gt;&gt; inputInt;
       cout &lt;&lt; "Input was: "
            &lt;&lt; inputInt &lt;&lt; endl;
       
+      cout &lt;&lt; "Enter a string: ";
       getline(cin, inputString);
-      cout &lt;&lt; "Input was: "
-           &lt;&lt; inputString &lt;&lt; endl;
-      
-      cin &gt;&gt; inputString;
       cout &lt;&lt; "Input was: "
            &lt;&lt; inputString &lt;&lt; endl;
   }
 </pre>
+              <br/>
+              <p>To fix this, we want to consume the extra newline left behind by our numerical input technique.</p>
+              <div class='toolkit'><p><strong>cin.ignore(n, pattern)</strong> ignores n characters or until the first encountered instance of pattern from the input stream.</p>
+              </div>
+              <p class='debug'>NOTE: We ONLY use cin.ignore(n, pattern) when we've used cin and then directly after use getline!</p>
+              <p class='example'>Fix the input gathering code from above.</p>
             </div>
             <hr/>
+            <br/>
             
             
             <div id='conditionals' class='scrollspy-element' scrollspy-title='Conditionals'></div>
             <h1>Conditionals</h1>
+            <div>
               <p class='toolkit'><strong>Conditionals</strong> direct the flow of our programs by evaluating a statement as either true or false, and then taking appropriate action.</p>
               <br/>
               <p>Below, you'll find the anatomy of the if statement:</p>
 <pre class='prettyprint'>
+  if (conditional)
+    statement;
+</pre>
+              <p>This simply says, &quot;Determine whether or not the expression in the condition is true or false, then execute the statement if it is true.&quot;</p>
+              <p>Since statements can also be blocks of code, we can execute multiple statements in the if-block via the syntax:</p>
+<pre class='prettyprint'>
   if (conditional) {
-    // Execute everything in here if
-    // conditional was evaluated to true
+    statement;
   }
 </pre>
-              <p>This simply says, &quot;Determine whether or not the statement in the condition is true or false, then execute the code block if it is true.&quot;</p>
+              <br/>
               <p>You can also create a branch via the &quot;else&quot; keyword.</p>
 <pre class='prettyprint'>
   if (conditional) {
@@ -750,6 +789,7 @@
     // conditional2 was evaluated to false
   }
 </pre>
+              <br/>
               <p>But what does a conditional look like?</p>
               <p>Almost any expression can be a conditional, but we'll start by looking at comparisons like &quot;greater than,&quot; &quot;less than,&quot; and &quot;equal to.&quot;</p>
               <p>If you're ready, let's do some examples... which is to say that if you're not ready, we will not do some examples:</p>
@@ -768,6 +808,7 @@
       }
   }
 </pre>
+              <br/>
               <p class='definition'><strong>return</strong><br/>Although we'll talk more about the return statement later, just know that when used in the main method, it will terminate the program. When used in int main() we typically return 1; when the program exited in error.</p>
               <p class='example'>What will the following code segment output?</p>
 <pre class='prettyprint'>
@@ -800,9 +841,12 @@
   }
 </pre>
               <br/>
+              <p class='debug'>The above example is why I suggest to *always* use the bracketed syntax for your if-statements, even if it is only a single line.</p>
+              <br/>
               <p class='definition'><strong>Compound Conditions</strong><br/>We can evaluate multiple conditions using the and ( &amp;&amp; ) and or ( || ) operators.</p>
               <p class='definition'><strong>Logical And ( &amp;&amp; )</strong><br/>If the lvalue and rvalue of the &amp;&amp; are BOTH true, then the logical And evalues to true.</p>
               <p class='definition'><strong>Logical Or ( || )</strong><br/>If EITHER the lvalue OR rvalue of the || is true, then the logical Or evalues to true.</p>
+              <br/>
               <p class='example'>What will the following code segment output?</p>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
@@ -826,6 +870,10 @@
       }
   }
 </pre>
+              <br/>
+              <p class='definition'>We can also compare strings using the ==, !=, &lt;, &gt;, etc. operators.</p>
+              <p class='definition'>To test if a string is empty, we can compare it to the empty string (s == "") or see if its <code class='prettyprint'>.length()</code> == 0.</p>
+              <br/>
               <p class='definition'><strong>Ternary Conditional</strong><br/>We can perform conditional evaluations inline with the code without using the if block. The syntax is (conditional) ? statement_if_true : statement_if_false;</p>
               <p class='example'>What will the following code segment output?</p>
 <pre class='prettyprint'>
@@ -840,7 +888,6 @@
       cout &lt;&lt; result &lt;&lt; endl;
   }
 </pre>
-            <div>
             </div>
             <hr/>
             
@@ -867,9 +914,11 @@
       cout &lt;&lt; x++ &lt;&lt; endl;
   }
 </pre>
+              <br/>
               <p>Nobody got time to repeat all that!</p>
               <p>Often times, we want to repeat some segment of code a certain number of times without physically writing out each iteration.</p>
               <p class='toolkit'><strong>while (condition) {...}</strong><br/>The while loop executes its code block over and over until its condition is false.</p>
+              <br/>
               <p class='example'>What does the following code segment output?</p>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
@@ -884,6 +933,7 @@
       }
   }
 </pre>
+              <br/>
               <p class='debug'>What does the following code segment output? Will it suffer from a runtime error?</p>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
@@ -899,6 +949,7 @@
       }
   }
 </pre>
+              <br/>
               <div class='toolkit'><strong>For Loop</strong> Just like a while loop, except we initialize the iterator, define the conditional, and define the post-iteration behavior all in the signature. The syntax is:<br/>
                 <div>
                   <br/>
@@ -921,10 +972,78 @@
       }
   }
 </pre>
-
-              <p class='example'>Design a function that prints out a plus sign that is 11 lines high and 11 lines wide.</p>
+              <br/>
+              <p class='example'>Design a function that prints out a plus sign composed of '+' characters that is n lines high and n lines wide. We'll have the user provide n via prompt, and output an error if n is even.
+                Fill out the code fragment below.</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  /*
+   * Gathers a dimension n from a user and prints
+   * an n x n plus sign composed of '+' characters; e.g.
+   * n = 5
+   *   +
+   *   +
+   * +++++
+   *   +
+   *   +
+   */
+  int main () {
+      int dimensions;
+  
+      cout &lt;&lt; "Input an odd dimension: ";
+      // [!] Get dimensions from user here
+      ???
+      
+      // [!] Error checking; input must be odd 
+      if ( ??? ) {
+          cout &lt;&lt; "Invalid dimensions!" &lt;&lt; endl;
+          
+          // [!] If it was even, should we continue?
+          ???
+      }
+      
+      // [!] Iterate through an n x n grid to print each
+      // character
+      for (int i = 0; ???; i++) {
+          for (int j = 0; ???; j++) {
+              // [!] The condition for printing a '+'
+              // Hint: we might have a compound logical statement
+              if ( ??? ) {
+                  cout &lt;&lt; "+";
+              
+              // Otherwise, we'll print a space ' '
+              } else {
+                  cout &lt;&lt; " ";
+              }
+          }
+          
+          // Print a new line for the next row
+          cout &lt;&lt; endl;
+      }
+  }
+</pre>
             </div>
             <hr/>
+            <br/>
+            
+            
+            <div id='proj2' class='scrollspy-element' scrollspy-title='Project 2'></div>
+            <h1>Project 2</h1>
+            <div>
+              <p>For Project 2, if you haven't yet looked at it, you'll be creating a phone-charge calculator for text message rates.</p>
+              <p>Some general hints:</p>
+              <ul class='indent-1'>
+                <li><p>Read the spec, and then read it again... especially if you think something isn't clear.</p></li>
+                <li><p>Develop incrementally! Test what you have before you proceed.</p></li>
+                <li><p>Note: the example calculator's error messages will differ from your own; make sure you do what the spec says!</p></li>
+              </ul>
+              <br/>
+              <p class='debug'>Beware! There is also a written, *homework 2* component of the project on the spec's page! Don't miss it!</p>
+            </div>
+            <br/>
               
             
           </div>
