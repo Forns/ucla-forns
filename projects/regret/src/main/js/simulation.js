@@ -406,7 +406,7 @@ var obsDist_COND_OBS = new Distribution(["X", "Y"]),
     },
     
     f_U = function (params) {
-      return (Math.random() < 0.5) ? 0 : 1;
+      return 1;
     },
     
     f_X_COND_OBS = function (params) {
@@ -439,27 +439,21 @@ var obsDist_COND_OBS = new Distribution(["X", "Y"]),
           // be kept!
           pOrig = obsDist_COND_COM.query({"Y":1}, []);
           pAlt = expDist_COND_COM.query({"Y":1}, {"X": 1 - originalChoice});
-          PN0 = ProbNecessity({"X": originalChoice}, {"Y": 1}, obsDist_COND_COM, expDist_COND_COM),
-          PN1 = ProbNecessity({"X": 1 - originalChoice}, {"Y": 1}, obsDist_COND_COM, expDist_COND_COM),
-          PS0 = ProbSufficiency({"X": originalChoice}, {"Y": 1}, obsDist_COND_COM, expDist_COND_COM),
-          PS1 = ProbSufficiency({"X": 1 - originalChoice}, {"Y": 1}, obsDist_COND_COM, expDist_COND_COM),
-          PNS0 = ProbNeccSuff({"X": originalChoice}, {"Y": 1}, obsDist_COND_COM, expDist_COND_COM),
-          PNS1 = ProbNeccSuff({"X": 1 - originalChoice}, {"Y": 1}, obsDist_COND_COM, expDist_COND_COM);
           
-      // We'll weight early trials by exploring, and later ones with
-      // exploitation
       if (Math.random() < EPSILON) {
         COND_COM_exp_act = true;
         return (Math.random() < 0.5) ? 0 : 1;
         
-      // Here we're exploiting by examining 
+      // Here we're exploiting by examining counterfactual regret
       } else {
+        exploitCom++;
         if ((pOrig - pAlt) > 0) {
           COND_COM_exp_act = true;
           return originalChoice;
           
         } else {
           COND_COM_exp_act = true;
+          correctChoicesCom++;
           return 1 - originalChoice;
         }
       }
@@ -475,7 +469,12 @@ var obsDist_COND_OBS = new Distribution(["X", "Y"]),
         
       // Here we're exploiting by choosing the current best
       } else {
-        return (obsDist_COND_EPS.query({"Y":1}, {"X":0}) > obsDist_COND_EPS.query({"Y":1}, {"X":1})) ? 0 : 1;
+        exploitEps++;
+        var result = (obsDist_COND_EPS.query({"Y":1}, {"X":0}) > obsDist_COND_EPS.query({"Y":1}, {"X":1})) ? 0 : 1;
+        if (result !== params["U"]) {
+          correctChoicesEps++;
+        }
+        return result;
       }
     },
     
@@ -490,10 +489,6 @@ var obsDist_COND_OBS = new Distribution(["X", "Y"]),
         
       // Here we're exploiting by choosing the current best
       } else {
-        console.log("==============================");
-        console.log("Z: " + originalChoice);
-        console.log(obsDist_COND_EPS.query({"Y":1}, {"X":0, "Z": originalChoice}));
-        console.log(obsDist_COND_EPS.query({"Y":1}, {"X":1, "Z": originalChoice}));
         return (obsDist_COND_EPS.query({"Y":1}, {"X":0, "Z": originalChoice}) > obsDist_COND_EPS.query({"Y":1}, {"X":1, "Z": originalChoice})) ? 0 : 1;
       }
     },
@@ -589,8 +584,9 @@ var obsDist_COND_OBS = new Distribution(["X", "Y"]),
         },
         
         // f_X
+        // U added as dependency for record-keeping only
         {
-          dependencies: [],
+          dependencies: ["U"],
           eq: f_X_COND_EPS
         },
         
@@ -682,7 +678,12 @@ var obsDist_COND_OBS = new Distribution(["X", "Y"]),
     recordEpsProp = [],
     LRwinsCom = 0,
     winsCom = 0,
-    recordCombined = [];
+    recordCombined = [],
+    
+    correctChoicesEps = 0,
+    exploitEps = 0,
+    correctChoicesCom = 0,
+    exploitCom = 0;
     
 /*
  * =========================================================
@@ -741,7 +742,6 @@ for (var tests = 0; tests < TESTS; tests++) {
     if (COND_COM_exp_act) {
       expDist_COND_COM.addItems([comOutcome]);
     }
-    obsDist_COND_COM.addItems([comOutcome]);
     
     time++;
   }
@@ -758,17 +758,6 @@ for (var tests = 0; tests < TESTS; tests++) {
   winsCom = 0;
   time = 1;
 }
-
-console.log("STATS   ===========================");
-console.log("PN:");
-console.log(ProbNecessity({"X":1}, {"Y":1}, obsDist_COND_COM, expDist_COND_COM));
-console.log(ProbNecessity({"X":0}, {"Y":1}, obsDist_COND_COM, expDist_COND_COM));
-console.log("PS:");
-console.log(ProbSufficiency({"X":1}, {"Y":1}, obsDist_COND_COM, expDist_COND_COM));
-console.log(ProbSufficiency({"X":0}, {"Y":1}, obsDist_COND_COM, expDist_COND_COM));
-console.log("PNS:");
-console.log(ProbNeccSuff({"X":1}, {"Y":1}, obsDist_COND_COM, expDist_COND_COM));
-console.log();
 
 console.log("RESULTS ===========================");
 console.log("OBSERVATIONAL:");
@@ -799,4 +788,12 @@ console.log(parseFloat(LRwinsEpsProp) / TESTS);
 console.log();
 console.log("COMBINED:");
 console.log(parseFloat(LRwinsCom) / TESTS);
+console.log();
+
+console.log("CORRECT CHOICES ===================");
+console.log("EPSILON-GREEDY:");
+console.log(parseFloat(correctChoicesEps) / exploitEps);
+console.log();
+console.log("COMBINED:");
+console.log(parseFloat(correctChoicesCom) / exploitCom);
 console.log();
