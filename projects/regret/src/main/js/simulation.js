@@ -493,7 +493,7 @@ var obsDist_COND_OBS = new Distribution(["X", "Y"]),
         
       // Here we're exploiting by choosing the current best
       } else {
-        return (obsDist_COND_EPS.query({"Y":1}, {"X":0, "Z": originalChoice}) > obsDist_COND_EPS.query({"Y":1}, {"X":1, "Z": originalChoice})) ? 0 : 1;
+        return (obsDist_COND_EPS_PROP.query({"Y":1}, {"X":0, "Z": originalChoice}) > obsDist_COND_EPS_PROP.query({"Y":1}, {"X":1, "Z": originalChoice})) ? 0 : 1;
       }
     },
     
@@ -691,7 +691,7 @@ var obsDist_COND_OBS = new Distribution(["X", "Y"]),
  * =========================================================
  */
 
-var FIXED_U = true,
+var FIXED_U = false,
     N_obs = 1000,
     N_t = 0,
     EPSILON = 0.15,
@@ -709,6 +709,13 @@ for (var tests = 0; tests < TESTS; tests++) {
     samples = sim.generateSamples(N_obs);
     obsDist_COND_COM.addItems(samples);
     obsDist_COND_EPS.addItems(samples);
+    var epsPropSamples = [];
+    for (var s in samples) {
+      var currentSample = samples[s];
+      currentSample["Z"] = currentSample["U"];
+      epsPropSamples.push(currentSample);
+    }
+    obsDist_COND_EPS_PROP.addItems(epsPropSamples);
   }
   
   for (var t = 0; t < T; t++) {
