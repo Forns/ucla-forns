@@ -9,15 +9,18 @@
     <link href="../../../css/main.css" rel="stylesheet" type="text/css">
     <script src="../../../js/lib/jquery-2.0.3.min.js"></script>
     <script src="../../../js/lib/bootstrap.min.js"></script>
+    <script src="../../../js/lib/expanding.js"></script>
+    <script src="../../../js/display/general/general-display.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
   </head>
   
-  <body>
+  <body data-spy="scroll" data-target="#scrollspy">
     
     <!-- BEGIN WRAP -->
     <div id="wrap">
       
       <!-- BEGIN NAVIGATION -->
-      <nav class='navbar navbar-default navbar-fixed-top' role='navigation'>
+      <nav class='navbar navbar-default' role='navigation'>
         <div class='nav-accent'></div>
         <div class='container'>
           <div class='row'>
@@ -84,61 +87,66 @@
       <!-- END NAVIGATION -->
       
       <!-- BEGIN MAIN CONTENT -->
-      <div class="main-spacer visible-desktop"></div>
       <div id="main-content" class="container">
         <div class="row">
-          <div class="jumbotron">
-            <div class="container">
-              <h1>CS 31 - Intro to Programming</h1>
-              <p>Fall 2014 - <a href='http://cs.ucla.edu/classes/fall14/cs31/' target='_blank'>Course Website Here</a></p>
+          
+          <!-- BEGIN SCROLLSPY -->
+          <div class='col-md-2'>
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+              <ul id='scrollspy' class="nav bs-sidenav">
+              </ul>
             </div>
           </div>
+          <!-- END SCROLLSPY -->
           
-            <table class='table table-striped'>
-              <caption>Lecture Notes</caption>
-              <thead>
-              </thead>
-                <tr>
-                  <th>Week</th>
-                  <th>Lecture Subject</th>
-                  <th>Lecture Notes</th>
-                </tr>
-              <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>Basics<br/><small>Introduction, Basic Architecture, Intro to C++, Variables, Types, Errors, and Style</small></td>
-                  <td><a href='/~forns/classes/fall-2014/cs-31/week-1.html'>Notes</a></td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>Strings, Streams, and other Things<br/><small>Review, Operators, Precedence, Strings, Streams, Conditionals, Iteration</small></td>
-                  <td><a href='/~forns/classes/fall-2014/cs-31/week-2.html'>Notes</a><hr/><a href='/~forns/classes/fall-2014/cs-31/week-2-classwork.html'>Classwork</a></td>
-                </tr>
-              </tbody>
-            </table>
+          <!-- BEGIN PRESENTATION CONTENT -->
+          <div class='col-md-10 presentation-content' role='main'>
             
-            <table class='table table-striped'>
-              <caption>Resources &amp; Practice</caption>
-              <thead>
-              </thead>
-                <tr>
-                  <th>Date Posted</th>
-                  <th>Resource</th>
-                  <th>Link</th>
-                </tr>
-              <tbody>
-                <tr>
-                  <td>10 / 7 / 14</td>
-                  <td>Free C++ Textbook: The Rook's Guide <br/><small>A free textbook all about intro to C++ if you didn't want to purchase the course-suggested one.</small></td>
-                  <td><a href='http://rooksguide.files.wordpress.com/2013/11/rooks-guide-to-c-proof.pdf' target='_blank'>Clicky</a></td>
-                </tr>
-              </tbody>
-            </table>
-            <br />
+            <ol class="breadcrumb">
+              <li><a href="../../../classes.html">Classes</a></li>
+              <li><a href="./cs-31.html">Fall14 CS31</a></li>
+              <li class="active">Week 2 Classwork</li>
+            </ol>
+            
+            <h1>Week 2 Classwork</h1>
+            
+            <div id='example1' class='scrollspy-element' scrollspy-title='Big N'></div>
+            <h1>Plus-sized Plus</h1>
+            <div>
+              <p class='example'>Design a function that prints out a plus sign composed of '+' characters that is n lines high and n lines wide. We'll have the user provide n via prompt, and output an error if n is even.
+              </p>
+              <br/>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      int dimensions;
+  
+      cout &lt;&lt; "Input an odd dimension: ";
+      cin &gt;&gt; dimensions;
+  
+      if (dimensions % 2 == 0) {
+          cout &lt;&lt; "Invalid dimensions!" &lt;&lt; endl;
+          return 1;
+      }
+  
+      for (int i = 0; i &lt; dimensions; i++) {
+          for (int j = 0; j &lt; dimensions; j++) {
+              if (j == dimensions / 2 || i == dimensions / 2) {
+                  cout &lt;&lt; "+";
+              } else {
+                  cout &lt;&lt; " ";
+              }
+          }
+          cout &lt;&lt; endl;
+      }
+  }
+</pre>
+            </div>
+          <!-- END PRESENTATION CONTENT -->
           
-            <h3>Welcome <small>10 / 7 / 14</small></h3>
-            <p>The course page is now active! I will upload weekly lecture notes below the page jumbotron, and update the page regularly with news, information, and exercises.</p>
-          </div>
         </div>
       </div>
       <!-- END MAIN CONTENT -->

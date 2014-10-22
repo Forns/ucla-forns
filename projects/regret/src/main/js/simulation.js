@@ -406,7 +406,11 @@ var obsDist_COND_OBS = new Distribution(["X", "Y"]),
     },
     
     f_U = function (params) {
-      return 1;
+      if (FIXED_U) {
+        return 0;
+      } else {
+        return (Math.random() < 0.5) ? 0 : 1;
+      }
     },
     
     f_X_COND_OBS = function (params) {
@@ -421,12 +425,6 @@ var obsDist_COND_OBS = new Distribution(["X", "Y"]),
       return (Math.random() < 0.5) ? 0 : 1;
     },
     
-    // Flag for whether the decision was an act or an action
-    COND_COM_exp_act = false,
-    
-    // Decides exploration tendency
-    EPS_ORIG = 0.15,
-    EPSILON = EPS_ORIG,
     time = 1,
     f_X_COND_COM = function (params) {
       // Here, X will be chosen based on the PN and PS lower bounds
@@ -438,21 +436,27 @@ var obsDist_COND_OBS = new Distribution(["X", "Y"]),
           // We'll assess whether or not that original choice should
           // be kept!
           pOrig = obsDist_COND_COM.query({"Y":1}, []);
-          pAlt = expDist_COND_COM.query({"Y":1}, {"X": 1 - originalChoice});
+          pAlt = expDist_COND_COM.query({"Y":1}, {"X": 1 - originalChoice}),
+          
+          pDiff = (obsDist_COND_COM.count) ? (Math.abs(obsDist_COND_COM.query({"Y": 1}, {"X": originalChoice}) - expDist_COND_COM.query({"Y": 1}, {"X": originalChoice}))) : TOLERANCE + 1;
           
       if (Math.random() < EPSILON) {
-        COND_COM_exp_act = true;
         return (Math.random() < 0.5) ? 0 : 1;
         
       // Here we're exploiting by examining counterfactual regret
       } else {
         exploitCom++;
-        if ((pOrig - pAlt) > 0) {
-          COND_COM_exp_act = true;
+        if (!obsDist_COND_COM.count || pDiff < TOLERANCE) {
+          var result = (expDist_COND_COM.query({"Y":1}, {"X":0}) > expDist_COND_COM.query({"Y":1}, {"X":1})) ? 0 : 1;
+          if (result != originalChoice) {
+            correctChoicesCom++;
+          }
+          return result;
+          
+        } else if ((pOrig - pAlt) > 0) {
           return originalChoice;
           
         } else {
-          COND_COM_exp_act = true;
           correctChoicesCom++;
           return 1 - originalChoice;
         }
@@ -658,10 +662,6 @@ var obsDist_COND_OBS = new Distribution(["X", "Y"]),
       ]
     ),
     
-    // Number of trials to run
-    T = 1000,
-    TESTS = 1000,
-    
     samples,
     
     LRwinsObs = 0,
@@ -691,40 +691,31 @@ var obsDist_COND_OBS = new Distribution(["X", "Y"]),
  * =========================================================
  */
 
+var FIXED_U = true,
+    N_obs = 1000,
+    N_t = 0,
+    EPSILON = 0.15,
+    TOLERANCE = 0.03,
+    T = 1000,
+    TESTS = 1000;
+
 for (var tests = 0; tests < TESTS; tests++) {
-  obsDist_COND_OBS = new Distribution(["X", "Y"]);
   obsDist_COND_COM = new Distribution(["X", "Y"]);
   obsDist_COND_EPS = new Distribution(["X", "Y"]);
   obsDist_COND_EPS_PROP = new Distribution(["Z", "X", "Y"]);
-  expDist_COND_EXP = new Distribution(["X", "Y"]);
   expDist_COND_COM = new Distribution(["X", "Y"]);
   
-  samples = sim.generateSamples(1000);
-  obsDist_COND_COM.addItems(samples);
-  obsDist_COND_OBS.addItems(samples);
-  
-  /*
-  var epsPropSamples = [];
-  for (var s in samples) {
-    var currentSample = samples[s];
-    currentSample["Z"] = currentSample["U"];
-    epsPropSamples.push(currentSample)
+  if (N_obs) {
+    samples = sim.generateSamples(N_obs);
+    obsDist_COND_COM.addItems(samples);
+    obsDist_COND_EPS.addItems(samples);
   }
-  obsDist_COND_EPS_PROP.addItems(epsPropSamples);
-  */
   
   for (var t = 0; t < T; t++) {
-    var obsOutcome = sim.generateSamples(1)[0],
-        expOutcome = expSim.generateSamples(1)[0],
-        epsOutcome = epsSim.generateSamples(1)[0],
+    var epsOutcome = epsSim.generateSamples(1)[0],
         epsPropOutcome = epsPropSim.generateSamples(1)[0],
         comOutcome = combinedSim.generateSamples(1)[0];
         
-    
-    recordObs.push(obsOutcome["Y"]);
-    winsObs += obsOutcome["Y"];
-    recordExp.push(expOutcome["Y"]);
-    winsExp += expOutcome["Y"];
     recordEps.push(epsOutcome["Y"]);
     winsEps += epsOutcome["Y"];
     recordEpsProp.push(epsPropOutcome["Y"]);
@@ -732,24 +723,19 @@ for (var tests = 0; tests < TESTS; tests++) {
     recordCombined.push(comOutcome["Y"]);
     winsCom += comOutcome["Y"];
     
-    obsDist_COND_OBS.addItems([obsOutcome]);
-    expDist_COND_EXP.addItems([expOutcome]);
+    if (N_t) {
+      obsDist_COND_EPS.addItems(epsSim.generateSamples(N_t));
+      obsDist_COND_COM.addItems(combinedSim.generateSamples(N_t));
+    }
+    
     obsDist_COND_EPS.addItems([epsOutcome]);
     obsDist_COND_EPS_PROP.addItems([epsPropOutcome]);
     
-    // We'll only update the experimental distribution in cases
-    // where the agent did not operate according to nature
-    if (COND_COM_exp_act) {
-      expDist_COND_COM.addItems([comOutcome]);
-    }
+    expDist_COND_COM.addItems([comOutcome]);
     
     time++;
   }
   
-  LRwinsObs += winsObs;
-  winsObs = 0;
-  LRwinsExp += winsExp;
-  winsExp = 0;
   LRwinsEps += winsEps;
   winsEps = 0;
   LRwinsEpsProp += winsEpsProp;
@@ -760,12 +746,6 @@ for (var tests = 0; tests < TESTS; tests++) {
 }
 
 console.log("RESULTS ===========================");
-console.log("OBSERVATIONAL:");
-console.log(winsObs);
-console.log();
-console.log("EXPERIMENTAL:");
-console.log(winsExp);
-console.log();
 console.log("EPSILON-GREEDY:");
 console.log(winsEps);
 console.log();
@@ -774,12 +754,6 @@ console.log(winsCom);
 console.log();
 
 console.log("LR RES ============================");
-console.log("OBSERVATIONAL:");
-console.log(parseFloat(LRwinsObs) / TESTS);
-console.log();
-console.log("EXPERIMENTAL:");
-console.log(parseFloat(LRwinsExp) / TESTS);
-console.log();
 console.log("EPSILON-GREEDY:");
 console.log(parseFloat(LRwinsEps) / TESTS);
 console.log();
