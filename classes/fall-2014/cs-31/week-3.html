@@ -108,41 +108,6 @@
               <li class="active">Week 3</li>
             </ol>
             
-            <div id='introduction' class='scrollspy-element' scrollspy-title='Review'></div>
-            <h1>Questions from Week 2</h1>
-            <div>
-              <p><strong>Q: What is cin.ignore actually doing when I input a decimal number?</strong></p>
-              <p>A: An example might help:</p>
-<pre class='prettyprint'>
-  #include &lt;iostream&gt;
-  #include &lt;string&gt;
-  using namespace std;
-  
-  int main () {
-      int interTheDragon;
-      string anotherInput;
-      
-      cout &lt;&lt; "Enter an int: " &lt;&lt; endl;
-      cin.ignore(1, '\n');
-      cin &gt;&gt; interTheDragon;
-      // Try entering 123
-      cout &lt;&lt; interTheDragon &lt;&lt; endl;
-      
-      cout &lt;&lt; "Enter a string: " &lt;&lt; endl;
-      cin.ignore(10000, 'a');
-      // Don't use cin for strings,
-      // but this is to show you what
-      // cin.ignore is doing
-      cin &gt;&gt; anotherInput;
-      // Try entering "sample"
-      cout &lt;&lt; anotherInput &lt;&lt; endl;
-  }
-</pre>
-            </div>
-            <hr/>
-            <br/>
-            
-            
             <div id='constants' class='scrollspy-element' scrollspy-title='Constants'></div>
             <h1>Symbolic Constants</h1>
             <div>
@@ -151,6 +116,7 @@
                 Constants are &quot;variables&quot; (in quotes because constants don't vary) that, once declared, cannot change value anywhere in the scope. They are declared as:<br/>
                 const &lt;type&gt; &lt;name&gt; = &lt;value&gt;;
               </p>
+              <br/>
               <p>Note, when we declare a constant variable, we name them (by convention) in ALL CAPITAL LETTERS, usually with words separated by underscores.</p>
               <p class='question' name='constants-q1'>Why might we use constants? Doesn't it seem like we're just putting restrictions on ourselves?</p>
               <p class='answer' name='constants-q1'>
@@ -213,9 +179,9 @@
 </pre>
             </div>
             <hr/>
-            
-            
             <br/>
+            
+            
             <div id='conditionals' class='scrollspy-element' scrollspy-title='More Conditionals'></div>
             <h1>Some More Notes on Conditionals</h1>
             <div>
@@ -410,9 +376,9 @@
               
             </div>
             <hr/>
-            
-            
             <br/>
+            
+            
             <div id='logic' class='scrollspy-element' scrollspy-title='Logic Notes'></div>
             <h1>Some Notes on Logic</h1>
             <div>
@@ -581,8 +547,51 @@
   }
 </pre>
               <br/>
-              <p class='example'>Design a program that writes an 11 by 11 capital letter N made up of the character 'N'.</p>
-              <div class='toolkit'><p><strong>Do-While Loop</strong> Just like a while loop, except we always execute the code block before checking the conditional.</p><br/>
+              <p class='example'>Complete the highly useful code fragment below that prints out a giant letter 'N' that is SIZE x SIZE in dimension.</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+    
+  /*
+   * Design a program that writes 
+   * a 5 by 5 capital letter N 
+   * made up of the character 'N'.
+   *
+   * Output should be:
+   * N   N
+   * NN  N
+   * N N N
+   * N  NN
+   * N   N
+  */
+  int main () {
+      // Assume SIZE must be odd
+      const int SIZE = 5;
+        
+      // For loop that goes through
+      // SIZE rows...
+      for (int i = 0; i &lt; SIZE; i++) {
+          // And loop that goes through
+          // SIZE columns
+          for (int j = 0; j &lt; SIZE; j++) {
+              // [!] Condition for printing 'N'
+              // HINT: 3 cases for printing one!
+              if ( ??? ) {
+                  cout &lt;&lt; "N";
+              
+              // Otherwise, print a space
+              } else {
+                  cout &lt;&lt; " ";
+              }
+          }
+            
+          cout &lt;&lt; endl;
+      }
+  }
+</pre>
+              <br/>
+              <div class='toolkit'><p><strong>Do-While Loop</strong> Just like a while loop, except we always execute the code block before checking the continuation condition.</p><br/>
 <pre class='prettyprint'>
   do {
       // Code block
@@ -592,12 +601,67 @@
               <br/>
               <p>The do-while loop follows these steps:<br/></p>
               <ol class='indent-1'>
-                <li><p><strong>Execute Code Block:</strong> Execute everything in the code block, and check the conditional at the end.</p></li>
+                <li><p><strong>Execute Code Block:</strong> Execute everything in the code block, and check the continuation condition at the end.</p></li>
                 <li><p><strong>Check Condition:</strong> If the conditional is true, we execute the code block again, otherwise, we break out of the loop.</p></li>
               </ol>
               <br/>
               <p>We'll do one practice problem with the do-while now and more iteration in the coming section.</p>
-              <p class='example'>Design a program that continues to ask the user for their name. Every time they give you the empty string, ask them more forcibly to provide an answer. If they don't answer 3 times, terminate with a an angry goodbye.</p>
+              <p class='example'>Complete the code fragment below for playing a number guessing game with your computer!</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cmath&gt;
+  #include &lt;time.h&gt;
+  using namespace std;
+  
+  /*
+   * Try to guess the number your computer is thinking of!
+   * We first generate a random number between 0 and MAX_CHOICES,
+   * prompt the user for a guess, and tell them if they win,
+   * are 1 away from the number, or are way off (2+ away).
+   * Players have only MAX_TRIES turns to guess the number.
+   */
+  int main () {
+      // Magic incantation: don't worry about for now
+      srand(time(NULL));
+      const int MAX_CHOICES = 5; // Guess 0 - 4
+      const int MAX_TRIES = 3;   // Get 3 tries
+      
+      // Target is the random number we're guessing
+      int target = rand() % MAX_CHOICES,
+          counter = 0,
+          guess,
+          difference;
+  
+      string hint;
+      
+      do {
+          cout &lt;&lt; "Guess a number! ";
+          // [!] Collect user's guess
+          ???
+          
+          // abs == absolute value
+          difference = abs(target - guess);
+          
+          // [!] Give the following hint for whatever
+          //     the value of difference is:
+          // 0:  "You win!" (and then return)
+          // 1:  "Off by 1!"
+          // 2+: "Way off... just give up."
+          ???
+  
+          cout &lt;&lt; hint &lt;&lt; endl;
+          counter++;
+      
+      // [!] Keep going as long as the user has more tries
+      } while ( ??? );
+      
+      // [!] When should we print out the loser message?
+      if ( ??? ) {
+          cout &lt;&lt; "YOU LOSE! YOU GET NOTHING! GOOD DAY SIR/MADAME!" &lt;&lt; endl;
+      }
+  }
+</pre>
             </div>
             <hr/>
             
@@ -627,6 +691,7 @@
       char know = 'a',
            your = 'b',
            abcs = 'c',
+           
            // Assign the char beanAt1 the
            // character located at index 1
            // in string bean
@@ -634,6 +699,37 @@
     
       cout &lt;&lt; know &lt;&lt; your &lt;&lt; abcs &lt;&lt; endl;
       cout &lt;&lt; beanAt1 &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p>It works the other way around too! You can assign characters to positions of a string <strong>that already have a character in them</strong>!</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      string s = "Andrew = Cool";
+  
+      s[9] = 'F';
+  
+      // :(
+      cout &lt;&lt; s &lt;&lt; endl;
+  }
+</pre>
+              <p class='debug'>Warning! Don't try to assign or access characters that are beyond a string's index!</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      string s = "Andrew = Cool";
+  
+      s[200] = 'F';
+  
+      // 0_o
+      cout &lt;&lt; s &lt;&lt; endl;
   }
 </pre>
               <br/>
@@ -719,7 +815,128 @@
                   <li><p><strong>toupper</strong> converts the given character to an uppercase version of itself.</p></li>
                 </ul>
               </div>
-              <p class='example'>Write a program that queries the user for a string, swaps all lowercase letters for uppercase ones, and then prints out the result.</p>
+              <p class='example'>Write a program that queries the user for a string, swaps all lowercase letters for uppercase ones (and vice-versa), and then prints out the result.</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cctype&gt;
+  using namespace std;
+    
+  /*
+  * Write a program that queries the user for a string,
+  * swaps all lowercase letters for uppercase ones (and 
+  * vice versa), and then prints out the result.
+  */
+  int main () {
+      string s;
+      char c;
+        
+      // Ask for a string
+      cout &lt;&lt; "Gimme dat string: ";
+      // [!] Collect user's input
+      ???
+      
+      // [!] Iterate through each string character
+      for (int i = 0; ???; i++) {
+          // [!] If it's uppercase, convert to lower, and vice versa
+          // We'll use the ternary conditional!
+          c = ( ??? ) ? ??? : ???;
+  
+          // Print out current value of c
+          cout &lt;&lt; c;
+      }
+      cout &lt;&lt; endl;
+  }
+</pre>
+            </div>
+            <hr/>
+            <br/>
+            
+            
+            <div id='practice' class='scrollspy-element' scrollspy-title='Practice'></div>
+            <h1>Practice</h1>
+            <div>
+              <p>Here are a few practice problems to get you exam-ready.</p>
+              <br/>
+              <p class='debug'>Will the following code compile? If so, what will it print out?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      int i = 0;
+  
+      if (i = 1) {
+          cout &lt;&lt; "i be truthy" &lt;&lt; endl;
+      } else {
+          cout &lt;&lt; "i be falsy" &lt;&lt; endl;
+      }
+  }
+</pre>
+              <br/>
+              <p class='debug'>Will the following code compile? If so, what will it print out?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      int i = 3;
+  
+      switch (i) {
+          case 1
+              cout &lt;&lt; "1" &lt;&lt; endl;
+          case 2
+              cout &lt;&lt; "2" &lt;&lt; endl;
+          case 3
+              cout &lt;&lt; "3" &lt;&lt; endl;
+          default
+              cout &lt;&lt; "DEFAULT!" &lt;&lt; endl;
+      }
+  }
+</pre>
+              <br/>
+              <p class='example'>OK OK... what about now?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      int i = 3;
+  
+      switch (i) {
+          case 3:
+              cout &lt;&lt; "3" &lt;&lt; endl;
+          case 2:
+              cout &lt;&lt; "2" &lt;&lt; endl;
+          case 1:
+              cout &lt;&lt; "1" &lt;&lt; endl;
+          default:
+              cout &lt;&lt; "DEFAULT!" &lt;&lt; endl;
+      }
+  }
+</pre>
+              <br/>
+              <p class='debug'>What could possibly go wrong in the following code?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      string s;
+      cout &lt;&lt; "Enter a string! ";
+      getline(cin, s);
+  
+      int i = 0;
+      do {
+          i += 2;
+          cout &lt;&lt; s[i] &lt;&lt; endl;
+      } while (i &lt; s.length());
+  }
+</pre>
             </div>
             <hr/>
             <br/>
@@ -729,12 +946,20 @@
             <h1>Midterm</h1>
             <div>
               <p>Note: although I've seen the format of the past midterms, that may or may not be indicative of future formats!</p>
+              <div class='debug'><p>Studying tips:</p>
+                <ul class='indent-1'>
+                  <li><p>Know your syntax, know your syntax, know your syntax. Can't write a for-loop or a switch from memory? Hit the books!</p></li>
+                  <li><p>Loops, conditionals, and switch statements are perhaps the largest portions of the exam.</p></li>
+                  <li><p>Try to do the practice examples by hand... you won't have an IDE to tell you that you missed a semi-colon!</p></li>
+                  <li><p>Be comfortable spotting bugs! Pay careful attention to uninitialized variables and syntax errors!</p></li>
+                </ul>
+              </div>
               <p class='debug'>You MUST sign up for a midterm time on the course website under "Announcements."</p>
               <p class='definition'>
                 The midterm covers everything in the past weeks up until strings and loops. Reviewing my lecture notes and doing the practice examples will set you on the right path.
               </p>
               <p class='definition'>
-                You are allowed to bring a single 8.5&quot; x 11&quot; sheet of notes, double sided, printed or hand-written into the midterm exam.
+                You are allowed to bring a single 8.5&quot; x 11&quot; sheet of notes, double sided, printed or hand-written into the midterm exam. (double check on this -- it's been true in previous years)
               </p>
               <p class='definition'>I will have office hours at the usual times the day of the exam, up until the actual exam! I will let you know which I'm proctoring for that exact OH end-time...</p>
               <p class='definition'>I will compose a practice exam with questions on all the big topics, plus any that you give me... now. I'll try to get this out by Tuesday at the latest.</p>

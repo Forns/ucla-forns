@@ -693,6 +693,7 @@ var obsDist_COND_OBS = new Distribution(["X", "Y"]),
 
 var FIXED_U = false,
     N_obs = 1000,
+    N_exp = 1000,
     N_t = 0,
     EPSILON = 0.15,
     TOLERANCE = 0.03,
@@ -704,6 +705,11 @@ for (var tests = 0; tests < TESTS; tests++) {
   obsDist_COND_EPS = new Distribution(["X", "Y"]);
   obsDist_COND_EPS_PROP = new Distribution(["Z", "X", "Y"]);
   expDist_COND_COM = new Distribution(["X", "Y"]);
+  
+  if (N_exp) {
+    samples = expSim.generateSamples(N_exp);
+    expDist_COND_COM.addItems(samples);
+  }
   
   if (N_obs) {
     samples = sim.generateSamples(N_obs);
