@@ -1,0 +1,765 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Andrew Forney - UCLA CS</title>
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/magic-bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/main.css" rel="stylesheet" type="text/css">
+    <script src="../../../js/lib/jquery-2.0.3.min.js"></script>
+    <script src="../../../js/lib/bootstrap.min.js"></script>
+    <script src="../../../js/lib/expanding.js"></script>
+    <script src="../../../js/display/general/general-display.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+  </head>
+  
+  <body data-spy="scroll" data-target="#scrollspy">
+    
+    <!-- BEGIN WRAP -->
+    <div id="wrap">
+      
+      <!-- BEGIN NAVIGATION -->
+      <nav class='navbar navbar-default' role='navigation'>
+        <div class='nav-accent'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-12'>
+              <div class='navbar-header'>
+                <button class='navbar-toggle' type='button' data-toggle='collapse' data-target='.navbar-main-collapse'>
+                  <span class='sr-only'>Toggle Navigation</span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                </button>
+                <a class='navbar-brand' href='/~forns/'>
+                  <span id='brand-text'>
+                    Andrew Forney
+                  </span>
+                </a>
+              </div>
+              
+              <div id='nav-main' class='collapse navbar-collapse navbar-main-collapse'>
+                <ul class='nav navbar-nav navbar-right'>
+                  
+                  <li>
+                    <a href='/~forns/about.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-user'></span>
+                      </div>
+                      <p class='text-center'>About</p>
+                    </a>
+                  </li>
+                  
+                  <li class='active'>
+                    <a href='/~forns/classes.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-book'></span>
+                      </div>
+                      <p class='text-center'>Classes</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/contact.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-comment'></span>
+                      </div>
+                      <p class='text-center'>Contact</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/publications.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-file'></span>
+                      </div>
+                      <p class='text-center'>Publications</p>
+                    </a>
+                  </li>
+                  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <!-- END NAVIGATION -->
+      
+      <!-- BEGIN MAIN CONTENT -->
+      <div id="main-content" class="container">
+        <div class="row">
+          
+          <!-- BEGIN SCROLLSPY -->
+          <div class='col-md-2'>
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+              <ul id='scrollspy' class="nav bs-sidenav">
+              </ul>
+            </div>
+          </div>
+          <!-- END SCROLLSPY -->
+          
+          <!-- BEGIN PRESENTATION CONTENT -->
+          <div class='col-md-10 presentation-content' role='main'>
+            
+            <ol class="breadcrumb">
+              <li><a href="../../../classes.html">Classes</a></li>
+              <li><a href="./cs-31.html">Fall14 CS31</a></li>
+              <li class="active">Week 3</li>
+            </ol>
+            
+            <div id='introduction' class='scrollspy-element' scrollspy-title='Review'></div>
+            <h1>Questions from Week 2</h1>
+            <div>
+              <p><strong>Q: What is cin.ignore actually doing when I input a decimal number?</strong></p>
+              <p>A: An example might help:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      int interTheDragon;
+      string anotherInput;
+      
+      cout &lt;&lt; "Enter an int: " &lt;&lt; endl;
+      cin.ignore(1, '\n');
+      cin &gt;&gt; interTheDragon;
+      // Try entering 123
+      cout &lt;&lt; interTheDragon &lt;&lt; endl;
+      
+      cout &lt;&lt; "Enter a string: " &lt;&lt; endl;
+      cin.ignore(10000, 'a');
+      // Don't use cin for strings,
+      // but this is to show you what
+      // cin.ignore is doing
+      cin &gt;&gt; anotherInput;
+      // Try entering "sample"
+      cout &lt;&lt; anotherInput &lt;&lt; endl;
+  }
+</pre>
+            </div>
+            <hr/>
+            <br/>
+            
+            
+            <div id='constants' class='scrollspy-element' scrollspy-title='Constants'></div>
+            <h1>Symbolic Constants</h1>
+            <div>
+              <p class='toolkit'>
+                <strong>Symbolic Constants:</strong> 
+                Constants are &quot;variables&quot; (in quotes because constants don't vary) that, once declared, cannot change value anywhere in the scope. They are declared as:<br/>
+                const &lt;type&gt; &lt;name&gt; = &lt;value&gt;;
+              </p>
+              <p>Note, when we declare a constant variable, we name them (by convention) in ALL CAPITAL LETTERS, usually with words separated by underscores.</p>
+              <p class='question' name='constants-q1'>Why might we use constants? Doesn't it seem like we're just putting restrictions on ourselves?</p>
+              <p class='answer' name='constants-q1'>
+                Remember the One Change, One Place philosophy whereby we need only change one variable when we want to replace a value throughout our code. 
+                Forcing constant variables to be unable to change protects us from committing errors by changing values that weren't meant to be changed.
+              </p>
+              <br/>
+              <p>Think of type and const declarations as a &quot;contract&quot; between you and the compiler or you and other programmers working on the same project.</p>
+              <p>You want the compiler to honor your wishes of keeping a const value static just as much as you want coworkers to not touch your damn constants.</p>
+              <p class='example'>Here is an example of some const variables:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      const int X = 6;
+      const double LAME_E = 2.718;
+      const string STUFF = "YELLING";
+      // const comment = good tea;
+  }
+</pre>
+              <br/>
+              <p class='debug'>Will the following code compile? If so, what will it print?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  using namespace std;
+  
+  int main () {
+      const int DER = 6;
+      DER = 5;
+  }
+</pre>
+              <br/>
+              <p class='debug'>Will the following code compile? If so, what will it print?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  using namespace std;
+  
+  int main () {
+      const int DER = 6;
+      // Assigning the SAME value, 
+      // i.e., value isn't changing
+      DER = 6;
+  }
+</pre>
+              <br/>
+              <p class='debug'>Will the following code compile? If so, what will it print?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  using namespace std;
+  
+  // All consts should be named this
+  const int CANT_TOUCH_THIS = 5;
+  
+  int main () {
+      int CANT_TOUCH_THIS = 6;
+      cout &lt;&lt; CANT_TOUCH_THIS &lt;&lt; endl;
+  }
+</pre>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='conditionals' class='scrollspy-element' scrollspy-title='More Conditionals'></div>
+            <h1>Some More Notes on Conditionals</h1>
+            <div>
+              <p class='definition'>
+                When dealing with conditionals, what we as humans know as &quot;true&quot; and &quot;false&quot; can be represented in a variety of C++ expressions.<br/>
+                We say that C++ expressions that evaluate to true are <strong>truthy</strong> and those that evaluate to false are <strong>falsy</strong>.
+              </p>
+              <br/>
+              <p>We've discussed that conditionals evaluate to 1 if they're true and 0 if they're false, but there's also another C++ built-in type that is very similar.</p>
+              <p class='toolkit'><strong>Type bool:</strong> Type bool, short for Boolean, are variables that hold only the value true or the value false. These are still represented as 1 and 0 respectively.</p>
+              <br/>
+              <p>Let's take a look at an example of bools:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  using namespace std;
+  
+  int main () {
+      bool b = false,
+           c = true,
+           d = b || c,
+           e = 1 == c;
+
+      cout &lt;&lt; true &lt;&lt; endl;
+      cout &lt;&lt; d &lt;&lt; endl;
+      cout &lt;&lt; e &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p>So why have bools at all if they're representing 0 and 1 still?</p>
+              <p>Well, maybe we want to make sure that something truthy is always equal to 1:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+    
+  int main () {
+      bool iLikeNums = 50 * 20,
+           iLikeStrings = "test";
+  
+      cout &lt;&lt; iLikeNums &lt;&lt; endl;
+      cout &lt;&lt; iLikeStrings &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p class='question' name='conditionals-q1'>What are some values (that we've discussed) that are truthy and what are some values that are falsy in C++?</p>
+              <div class='answer' name='conditionals-q1'>
+                <p>Truthy:</p>
+                <ul class='indent-1'>
+                  <li><p>Non-zero numbers</p></li>
+                  <li><p>true (technically still just 1)</p></li>
+                </ul>
+                <p>Falsy:</p>
+                <ul class='indent-1'>
+                  <li><p>Zero</p></li>
+                  <li><p>false (technically still just 0)</p></li>
+                </ul>
+              </div>
+              <br/>
+              
+              <p>Because 0 and 1 are the main truthy and falsy values, we know we can store comparison results in variables too:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  using namespace std;
+  
+  int main () {
+      int conditionOutcome,
+          e = 2,
+          n = 4;
+      
+      // Comparisons can be stored
+      // as ints
+      conditionOutcome = e &gt; n;
+      cout &lt;&lt; conditionOutcome &lt;&lt; endl;
+      conditionOutcome = e &lt; n;
+      cout &lt;&lt; conditionOutcome &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p class='example'>We can also use conditionals within assignments:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  using namespace std;
+  
+  int main () {
+      int x = 5,
+          y = (x &gt;= 5) * 6,
+          z = (x == 4) &lt; 1;
+      
+      cout &lt;&lt; y &lt;&lt; endl;
+      cout &lt;&lt; z &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p>Note: You can run into trouble when you compare two different types.</p>
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      int i = 5;
+      string kindaI = "5";
+      
+      if (i == kindaI) {
+          cout &lt;&lt; "Hey, we're equal." &lt;&lt; endl;
+      } else {
+          cout &lt;&lt; "Aww, unequal." &lt;&lt; endl;
+      }
+  }
+</pre>
+              <br/>
+              <p class='question' name='comparison-q1'>What are examples of different types that can be safely compared?</p>
+              <p class='answer' name='comparison-q1'>You can safely compare between doubles, ints, and bools, for example.</p>
+              <br/>
+              <h2>Switch Statements</h2>
+              <p>We use switch statements when we want to concisely compare equivalence cases of ints (only ints!).</p>
+              <div class='toolkit'>
+                <p><strong>Switch Statements</strong><br/>
+                The syntax for a switch statement goes something like this:<br/></p>
+<pre class='prettyprint'>
+  switch (intBeingCompared) {
+      case 1:
+          // Whatever you want to happen if
+          // intBeingCompared is equal to 1
+          break;
+          // Use break to end that case
+      case 42:
+          // Whatever you want to happen if
+          // intBeingCompared is equal to 42
+      case 2:
+          // I didn't include a break above,
+          // so whenever intBeingCompared is
+          // EITHER 2 or 42, this block will run
+          break;
+      default:
+          // This will run if intBeingCompared
+          // matches none of the cases above
+          break;
+  }
+</pre>
+              </div>
+              <br/>
+              <p class='example'>What will the following code output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  using namespace std;
+  
+  int main () {
+      int x = 5;
+      
+      switch (x) {
+          case 1:
+              cout &lt;&lt; "I'm the one" &lt;&lt; endl;
+              break;
+          case 5:
+              cout &lt;&lt; "I'm 5 years old";
+              break;
+          case 23:
+              cout &lt;&lt; endl &lt;&lt; "No... really.";
+              cout &lt;&lt; endl;
+              break;
+          default:
+              break;
+      }
+  }
+</pre>
+              <br/>
+              <p class='example'>What will the following code output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  using namespace std;
+  
+  int main () {
+      int x = 5;
+      
+      switch (x) {
+          case 1:
+              cout &lt;&lt; "I'm the one" &lt;&lt; endl;
+              break;
+          case 5:
+              cout &lt;&lt; "I'm 5 years old";
+          case 23:
+              cout &lt;&lt; endl &lt;&lt; "No... really.";
+              cout &lt;&lt; endl;
+              break;
+          default:
+              break;
+      }
+  }
+</pre>
+              
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='logic' class='scrollspy-element' scrollspy-title='Logic Notes'></div>
+            <h1>Some Notes on Logic</h1>
+            <div>
+              <div class='toolkit'>
+                <p>Rule of thumb: Unless you group conditionals (using parentheses), your code will evaluate conditionals in this order:</p>
+                <ul class='indent-1'>
+                  <li><p>Logical Binary Operators (e.g. &lt;, ==, etc.)</p></li>
+                  <li><p>Logical AND ( &amp;&amp; )</p></li>
+                  <li><p>Logical OR ( || )</p></li>
+                </ul>
+              </div>
+              <br/>
+              <p>Notice, logical AND will be evaluated before logical OR.</p>
+              <p class='example'>To what will the following conditional evaluate?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  using namespace std;
+  
+  int main () {
+      int x = 1,
+          y = 2,
+          z = 3;
+      
+      // NB: You'll usually want to use grouping
+      // to break apart a conditional of this
+      // complexity--even just for clarity's
+      // sake
+      if (x == y || x &lt; 3 &amp;&amp; z &lt; y || z != y) {
+          cout &lt;&lt; "You're in here!" &lt;&lt; endl;
+      } else {
+          cout &lt;&lt; "You're in there!" &lt;&lt; endl;
+      }
+  }
+</pre>
+            
+            <br/>
+            <h2>Reducing Conditionals</h2>
+              <p>Sometimes, our control flow gets complicated quickly, and we end up accidentally repeating ourselves unnecessarily.</p>
+              <p>There are a couple of quick tricks that might help you design your flow more... elegantly.</p>
+              <p class='definition'>
+                <strong>Tip 1: Keep Conditionals DRY (Don't Repeat Yourself):</strong><br/>
+                If you have some similar component between two or more conditions in an if-ladder, you might be able to condense them into a single parent condition.
+              </p>
+              <br/>
+              <p>Here's an example below where we see the condition i &gt; 5 listed in two of our if-ladder's rungs.</p>
+<pre class='prettyprint'>
+  if (i &gt; 5 &amp;&amp; j &lt; 10) {
+      // Action A
+  } else if (i &gt; 5 &amp;&amp; j &gt; 15) {
+      // Action B
+  }
+</pre>
+              <p class='question' name='conditional-red-q1'>How can we simplify the above conditional?</p>
+              <div class='answer' name='conditional-red-q1'>
+<pre class='prettyprint'>
+  if (i &gt; 5) {
+      // Everything inside here implies that
+      // i is greater than 5
+      if (j &lt; 10) {
+          // Action A
+      } else if (j &gt; 15) {
+          // Action B
+      }
+  }
+</pre>
+            <br/>
+            </div>
+              <p class='definition'>
+                <strong>Tip 2: Keep Actions DRY (Don't Repeat Yourself):</strong><br/>
+                If you have the same action as a result of two separate conditionals, you can condense them into a single conditional using the logical OR.
+              </p>
+              <p>Here's an example below where we see the same Action A repeated in two of our conditionals.</p>
+<pre class='prettyprint'>
+  if (i &gt; 5 &amp;&amp; j &lt; 10) {
+      // Action A
+  } else if (i &gt; 8 &amp;&amp; j &gt; 15) {
+      // Action A
+  }
+</pre>
+              <br/>
+              <p class='question' name='conditional-red-q2'>How can we simplify the above conditional?</p>
+              <div class='answer' name='conditional-red-q2'>
+<pre class='prettyprint'>
+  if ((i &gt; 5 &amp;&amp; j &lt; 10) || (i &gt; 8 &amp;&amp; j &gt; 15)) {
+      // Action A
+  }
+</pre>
+              </div>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='iteration' class='scrollspy-element' scrollspy-title='More on Iteration'></div>
+            <h1>More Notes on Iteration</h1>
+            <div>
+              <p>So far, we've discussed three main tools for iteration: the while loop, the for loop, and the do-while loop.</p>
+              <p>We'll begin with a review of their syntax:</p>
+              <div class='toolkit'><p><strong>While Loop</strong>The while loop executes its code block over and over until its condition is false.</p></br>
+<pre class='prettyprint'>
+  while (condition) {
+      // Code block
+  }
+</pre>
+              </div>
+              <p>The while loop follows these steps:<br/></p>
+              <ol class='indent-1'>
+                <li><p><strong>Check Condition:</strong> If the conditional is true, we execute the code block, otherwise, we break out of the loop.</p></li>
+                <li><p><strong>Execute Code Block:</strong> If the conditional was true in (1), we will execute everything in the code block, then go back to (1).</p></li>
+              </ol>
+              <br/>
+              <div class='toolkit'><p><strong>For Loop</strong> Just like a while loop, except we initialize the iterator, define the conditional, and define the post-iteration behavior all in the signature. The syntax is:</p><br/>
+<pre class='prettyprint'>
+  for (int i = value; conditional; post_loop_action) {
+      // Code block
+  }
+</pre>
+              </div>
+              <p>The for loop follows these steps:<br/></p>
+              <ol class='indent-1'>
+                <li><p><strong>Declare Iterator:</strong> Typically, we declare and initialize our iterator in the first part of the for syntax. This step is performed ONLY ONCE.</p></li>
+                <li><p><strong>Check Condition:</strong> If the conditional is true, we execute the code block, otherwise, we break out of the loop.</p></li>
+                <li><p><strong>Execute Code Block:</strong> If the conditional was true in (2), we will execute everything in the code block.</p></li>
+                <li><p><strong>Perform Post Loop Action:</strong> If we executed the code block in (3), we perform the post loop action, then go back to (2).</p></li>
+              </ol>
+              <br/>
+              <p>You should know: variables declared in the for loop declaration are defined within their closest scope.</p>
+              <p class='debug'>Will the following code compile? If so, what will it print out?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+    for (int i = 0; i &lt; 3; i++) {
+          cout &lt;&lt; "Outer i: "
+               &lt;&lt; i &lt;&lt; endl;
+               
+          // Don't ever name your nested
+          // iterator the same as
+          // another above it :(
+          for (int i = 3; i &gt; 0; i--) {
+              cout &lt;&lt; "Inner i: "
+                   &lt;&lt; i &lt;&lt; endl;
+          }
+      }
+  }
+</pre>
+              <br/>
+              <p class='debug'>NB for Masochists: You can omit any portion of the for syntax and it will still loop. Disclaimer: Please don't do this :(</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  using namespace std;
+    
+  int main () {
+      int i = 0;
+      // It looks like it's crying because
+      // it's so sad ;;
+      for (;;) {
+          if (i &gt;= 3) {
+              break;
+          }
+          cout &lt;&lt; i &lt;&lt; endl;
+          i++;
+      }
+  }
+</pre>
+              <br/>
+              <p class='example'>Design a program that writes an 11 by 11 capital letter N made up of the character 'N'.</p>
+              <div class='toolkit'><p><strong>Do-While Loop</strong> Just like a while loop, except we always execute the code block before checking the conditional.</p><br/>
+<pre class='prettyprint'>
+  do {
+      // Code block
+  } while (condition);
+</pre>
+              </div>
+              <br/>
+              <p>The do-while loop follows these steps:<br/></p>
+              <ol class='indent-1'>
+                <li><p><strong>Execute Code Block:</strong> Execute everything in the code block, and check the conditional at the end.</p></li>
+                <li><p><strong>Check Condition:</strong> If the conditional is true, we execute the code block again, otherwise, we break out of the loop.</p></li>
+              </ol>
+              <br/>
+              <p>We'll do one practice problem with the do-while now and more iteration in the coming section.</p>
+              <p class='example'>Design a program that continues to ask the user for their name. Every time they give you the empty string, ask them more forcibly to provide an answer. If they don't answer 3 times, terminate with a an angry goodbye.</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='strings' class='scrollspy-element' scrollspy-title='More Strings'></div>
+            <h1>More String Operations</h1>
+            <div>
+              <p>We begin our discussion of strings by clarifying an oft-confused difference between C++ strings and C strings.</p>
+              <p>Let's start by defining some of the words we've been slinging around.</p>
+              <p class='definition'><strong>Characters</strong> are single letters or symbols like 'a', or '|', and include special characters like the new line character '\n'. We use single quotes to designate characters.</p>
+              <p class='definition'><strong>Strings</strong> consist of some n characters that are &quot;strung&quot; together, where n >= 0. We use double quotes to designate strings.</p>
+              <p class='definition'><strong>C Strings</strong> are arrays of characters <strong>that possess a terminating 0 byte</strong> designating the end of the string.</p>
+              <p class='definition'><strong>C++ Strings</strong> are <strong>objects</strong> representing arrays of characters, and do NOT possess the terminating 0 byte.</p>
+              <br/>
+              <p>Because C++ strings are not 0-terminated, we know that we can access characters from a string's 0th to its (length - 1)th element.</p>
+              <p>Today, we'll dive more into C++ strings and characters, and talk about C strings in later lectures.</p>
+              <p>Characters are a native type in C++ that are defined by using the reserved word char.</p>
+              <p>Because strings are arrays of characters, we can store individual string characters into char variables.</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+    
+  int main () {
+      string bean = "bean";
+      char know = 'a',
+           your = 'b',
+           abcs = 'c',
+           // Assign the char beanAt1 the
+           // character located at index 1
+           // in string bean
+           beanAt1 = bean[1];
+    
+      cout &lt;&lt; know &lt;&lt; your &lt;&lt; abcs &lt;&lt; endl;
+      cout &lt;&lt; beanAt1 &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p>Characters are interesting because they are each represented by a unique integer value.</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      int iBeC = 'C',
+          iBec = 'c',
+          iBeNewline = '\n';
+      
+      char iBeT = 84;
+      
+      cout &lt;&lt; "C == " &lt;&lt; iBeC &lt;&lt; endl;
+      cout &lt;&lt; "c == " &lt;&lt; iBec &lt;&lt; endl;
+      cout &lt;&lt; "\\n == " &lt;&lt; iBeNewline &lt;&lt; endl;
+      cout &lt;&lt; "84 == " &lt;&lt; iBeT &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p>There are a variety of operations we can use with characters in the cctype library.</p>
+              <div class='toolkit'>
+                <p><strong>Character Classification:</strong></p>
+                <ul class='indent-1'>
+                  <li><p><strong>isalpha</strong> asks if this character is a letter.</p></li>
+                  <li><p><strong>isdigit</strong> asks if this character is a number.</p></li>
+                  <li><p><strong>isalnum</strong> asks if this character is alphanumeric. (is it a number or a letter?)</p></li>
+                  <li><p><strong>isupper</strong> asks if this character is an uppercase letter.</p></li>
+                  <li><p><strong>islower</strong> asks if this character is a lowercase letter.</p></li>
+                </ul>
+              </div>
+              <br/>
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cctype&gt;
+  using namespace std;
+    
+  int main () {
+    char numInChar = '5';
+  
+    cout &lt;&lt; isalnum(numInChar) &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cctype&gt;
+  using namespace std;
+    
+  int main () {
+    string stringyNum = 'hi5';
+  
+    cout &lt;&lt; isalnum(stringyNum[2]) &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cctype&gt;
+  using namespace std;
+    
+  int main () {
+    char numInChar = '5';
+  
+    cout &lt;&lt; isupper(numInChar) &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p>There are also character conversion functions that we now have at our disposal:</p>
+              <div class='toolkit'>
+                <p><strong>Character Conversions:</strong></p>
+                <ul class='indent-1'>
+                  <li><p><strong>tolower</strong> converts the given character to a lowercase version of itself.</p></li>
+                  <li><p><strong>toupper</strong> converts the given character to an uppercase version of itself.</p></li>
+                </ul>
+              </div>
+              <p class='example'>Write a program that queries the user for a string, swaps all lowercase letters for uppercase ones, and then prints out the result.</p>
+            </div>
+            <hr/>
+            <br/>
+
+              
+            <div id='midterm' class='scrollspy-element' scrollspy-title='Midterm'></div>
+            <h1>Midterm</h1>
+            <div>
+              <p>Note: although I've seen the format of the past midterms, that may or may not be indicative of future formats!</p>
+              <p class='debug'>You MUST sign up for a midterm time on the course website under "Announcements."</p>
+              <p class='definition'>
+                The midterm covers everything in the past weeks up until strings and loops. Reviewing my lecture notes and doing the practice examples will set you on the right path.
+              </p>
+              <p class='definition'>
+                You are allowed to bring a single 8.5&quot; x 11&quot; sheet of notes, double sided, printed or hand-written into the midterm exam.
+              </p>
+              <p class='definition'>I will have office hours at the usual times the day of the exam, up until the actual exam! I will let you know which I'm proctoring for that exact OH end-time...</p>
+              <p class='definition'>I will compose a practice exam with questions on all the big topics, plus any that you give me... now. I'll try to get this out by Tuesday at the latest.</p>
+            </div>
+            
+          </div>
+          <!-- END PRESENTATION CONTENT -->
+          
+        </div>
+      </div>
+      <!-- END MAIN CONTENT -->
+      
+      
+    </div>
+    <!-- END WRAPPER -->
+    
+    <!-- BEGIN FOOTER -->
+    <div id="footer">
+      <div class="container">
+        <div class="col-md-12 text-center">
+          
+        </div>
+      </div>
+    </div>
+    <!-- END FOOTER -->
+    
+  </body>
+</html>
