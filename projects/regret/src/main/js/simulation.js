@@ -396,13 +396,20 @@ var obsDist_COND_OBS = new Distribution(["X", "Y"]),
     expDist_COND_EXP = new Distribution(["X", "Y"]),
     expDist_COND_COM = new Distribution(["X", "Y"]),
     
+    // U, W, X
+    rewardDist = [
+      [ // U = 0
+        [0.1, 0.5], // W = 0, p = 0
+        [0.5, 0.1]  // W = 1, p = 1
+      ],
+      [ // U = 1
+        [0.4, 0.2], // W = 0, p = 1
+        [0.2, 0.4]  // W = 1, p = 0
+      ]
+    ],
     f_Y = function (params) {
       var outcome = Math.random();
-      if (params["U"]) {
-        return (params["X"]) ? ((outcome < 0.3) ? 1 : 0) : ((outcome < 0.5) ? 1 : 0);
-      } else {
-        return (params["X"]) ? ((outcome < 0.5) ? 1 : 0) : ((outcome < 0.3) ? 1 : 0);
-      }
+      return (outcome < rewardDist[params["U"]][params["W"]][params["X"]]) ? 1 : 0;
     },
     
     f_U = function (params) {
@@ -413,12 +420,16 @@ var obsDist_COND_OBS = new Distribution(["X", "Y"]),
       }
     },
     
-    f_X_COND_OBS = function (params) {
-      return params["U"];
+    f_W = function (params) {
+      if (FIXED_U) {
+        return 0;
+      } else {
+        return (Math.random() < 0.5) ? 0 : 1;
+      }
     },
     
     f_X_COND_OBS = function (params) {
-      return params["U"];
+      return Math.abs(params["U"] - params["W"]);
     },
     
     f_X_COND_EXP = function (params) {
@@ -431,7 +442,7 @@ var obsDist_COND_OBS = new Distribution(["X", "Y"]),
       
       // The original choice is what the agent would have chosen
       // by Nature's system
-      var originalChoice = params["U"],
+      var originalChoice = f_X_COND_OBS(params),
           
           // We'll assess whether or not that original choice should
           // be kept!
@@ -493,7 +504,12 @@ var obsDist_COND_OBS = new Distribution(["X", "Y"]),
         
       // Here we're exploiting by choosing the current best
       } else {
-        return (obsDist_COND_EPS_PROP.query({"Y":1}, {"X":0, "Z": originalChoice}) > obsDist_COND_EPS_PROP.query({"Y":1}, {"X":1, "Z": originalChoice})) ? 0 : 1;
+        var result = (obsDist_COND_EPS_PROP.query({"Y":1}, {"X":0, "Z": originalChoice}) > obsDist_COND_EPS_PROP.query({"Y":1}, {"X":1, "Z": originalChoice})) ? 0 : 1;
+        exploitEpsProp++;
+        if (result !== originalChoice) {
+          correctChoicesEpsProp++;
+        }
+        return result;
       }
     },
     
@@ -525,7 +541,7 @@ var obsDist_COND_OBS = new Distribution(["X", "Y"]),
     
     sim = new Simulation(
       // Variables:
-      ["U", "X", "Y"],
+      ["U", "W", "X", "Y"],
       
       // Structural Eqs:
       [
@@ -535,15 +551,21 @@ var obsDist_COND_OBS = new Distribution(["X", "Y"]),
           eq: f_U
         },
         
+        // f_W
+        {
+          dependencies: [],
+          eq: f_W
+        },
+        
         // f_X = U
         {
-          dependencies: ["U"],
+          dependencies: ["U", "W"],
           eq: f_X_COND_OBS
         },
         
-        // f_Y = XOR(U, X)
+        // f_Y
         {
-          dependencies: ["U", "X"],
+          dependencies: ["U", "W", "X"],
           eq: f_Y
         }
       ]
@@ -551,7 +573,7 @@ var obsDist_COND_OBS = new Distribution(["X", "Y"]),
     
     expSim = new Simulation(
       // Variables:
-      ["U", "X", "Y"],
+      ["U", "W", "X", "Y"],
       
       // Structural Eqs:
       [
@@ -559,6 +581,12 @@ var obsDist_COND_OBS = new Distribution(["X", "Y"]),
         {
           dependencies: [],
           eq: f_U
+        },
+        
+        // f_W
+        {
+          dependencies: [],
+          eq: f_W
         },
         
         // f_X
@@ -567,9 +595,9 @@ var obsDist_COND_OBS = new Distribution(["X", "Y"]),
           eq: f_X_COND_EXP
         },
         
-        // f_Y = XOR(U, X)
+        // f_Y
         {
-          dependencies: ["U", "X"],
+          dependencies: ["U", "W", "X"],
           eq: f_Y
         }
       ]
@@ -587,16 +615,22 @@ var obsDist_COND_OBS = new Distribution(["X", "Y"]),
           eq: f_U
         },
         
-        // f_X
-        // U added as dependency for record-keeping only
+        // f_W
         {
-          dependencies: ["U"],
+          dependencies: [],
+          eq: f_W
+        },
+        
+        // f_X
+        // U W added as dependency for record-keeping only
+        {
+          dependencies: ["U", "W"],
           eq: f_X_COND_EPS
         },
         
         // f_Y = XOR(U, X)
         {
-          dependencies: ["U", "X"],
+          dependencies: ["U", "W", "X"],
           eq: f_Y
         }
       ]
@@ -604,7 +638,7 @@ var obsDist_COND_OBS = new Distribution(["X", "Y"]),
     
     epsPropSim = new Simulation(
       // Variables:
-      ["U", "Z", "X", "Y"],
+      ["U", "W", "Z", "X", "Y"],
       
       // Structural Eqs:
       [
@@ -614,23 +648,29 @@ var obsDist_COND_OBS = new Distribution(["X", "Y"]),
           eq: f_U
         },
         
+        // f_W
+        {
+          dependencies: [],
+          eq: f_W
+        },
+        
         // f_Z
         {
-          dependencies: ["U"],
+          dependencies: ["U", "W"],
           eq: function (params) {
-            return params["U"];
+            return f_X_COND_OBS(params);
           }
         },
         
         // f_X
         {
-          dependencies: ["U", "Z"],
+          dependencies: ["U", "W", "Z"],
           eq: f_X_COND_EPS_PROP
         },
         
         // f_Y = XOR(U, X)
         {
-          dependencies: ["U", "X"],
+          dependencies: ["U", "W", "X"],
           eq: f_Y
         }
       ]
@@ -638,7 +678,7 @@ var obsDist_COND_OBS = new Distribution(["X", "Y"]),
     
     combinedSim = new Simulation(
       // Variables:
-      ["U", "X", "Y"],
+      ["U", "W", "X", "Y"],
       
       // Structural Eqs:
       [
@@ -648,15 +688,21 @@ var obsDist_COND_OBS = new Distribution(["X", "Y"]),
           eq: f_U
         },
         
+        // f_W
+        {
+          dependencies: [],
+          eq: f_W
+        },
+        
         // f_X
         {
-          dependencies: ["U"],
+          dependencies: ["U", "W"],
           eq: f_X_COND_COM
         },
         
         // f_Y = XOR(U, X)
         {
-          dependencies: ["U", "X"],
+          dependencies: ["U", "W", "X"],
           eq: f_Y
         }
       ]
@@ -682,6 +728,8 @@ var obsDist_COND_OBS = new Distribution(["X", "Y"]),
     
     correctChoicesEps = 0,
     exploitEps = 0,
+    correctChoicesEpsProp = 0,
+    exploitEpsProp = 0,
     correctChoicesCom = 0,
     exploitCom = 0;
     
@@ -693,7 +741,7 @@ var obsDist_COND_OBS = new Distribution(["X", "Y"]),
 
 var FIXED_U = false,
     N_obs = 1000,
-    N_exp = 1000,
+    N_exp = 0,
     N_t = 0,
     EPSILON = 0.15,
     TOLERANCE = 0.03,
@@ -726,9 +774,15 @@ for (var tests = 0; tests < TESTS; tests++) {
   
   for (var t = 0; t < T; t++) {
     var epsOutcome = epsSim.generateSamples(1)[0],
+        obsOutcome = sim.generateSamples(1)[0],
+        expOutcome = expSim.generateSamples(1)[0],
         epsPropOutcome = epsPropSim.generateSamples(1)[0],
         comOutcome = combinedSim.generateSamples(1)[0];
         
+    recordObs.push(obsOutcome["Y"]);
+    winsObs += obsOutcome["Y"];
+    recordExp.push(expOutcome["Y"]);
+    winsExp += expOutcome["Y"];
     recordEps.push(epsOutcome["Y"]);
     winsEps += epsOutcome["Y"];
     recordEpsProp.push(epsPropOutcome["Y"]);
@@ -741,14 +795,20 @@ for (var tests = 0; tests < TESTS; tests++) {
       obsDist_COND_COM.addItems(combinedSim.generateSamples(N_t));
     }
     
+    obsDist_COND_OBS.addItems([obsOutcome]);
     obsDist_COND_EPS.addItems([epsOutcome]);
     obsDist_COND_EPS_PROP.addItems([epsPropOutcome]);
     
+    expDist_COND_EXP.addItems([expOutcome]);
     expDist_COND_COM.addItems([comOutcome]);
     
     time++;
   }
   
+  LRwinsObs += winsObs;
+  winsObs = 0;
+  LRwinsExp += winsExp;
+  winsExp = 0;
   LRwinsEps += winsEps;
   winsEps = 0;
   LRwinsEpsProp += winsEpsProp;
@@ -759,27 +819,42 @@ for (var tests = 0; tests < TESTS; tests++) {
 }
 
 console.log("RESULTS ===========================");
-console.log("EPSILON-GREEDY:");
-console.log(winsEps);
+console.log("Obs P(y | X = 0):");
+console.log(obsDist_COND_OBS.query({"Y": 1}, {"X": 0}));
 console.log();
-console.log("COMBINED:");
-console.log(winsCom);
+console.log("Obs P(y | X = 1):");
+console.log(obsDist_COND_OBS.query({"Y": 1}, {"X": 1}));
+console.log();
+console.log("Exp P(y | do(X = 0)):");
+console.log(expDist_COND_EXP.query({"Y": 1}, {"X": 0}));
+console.log();
+console.log("Obs P(y | do(X = 1)):");
+console.log(expDist_COND_EXP.query({"Y": 1}, {"X": 1}));
 console.log();
 
 console.log("LR RES ============================");
+console.log("OBSERVATIONAL:");
+console.log(parseFloat(LRwinsObs) / (TESTS * T));
+console.log();
+console.log("EXPERIMENTAL:");
+console.log(parseFloat(LRwinsExp) / (TESTS * T));
+console.log();
 console.log("EPSILON-GREEDY:");
-console.log(parseFloat(LRwinsEps) / TESTS);
+console.log(parseFloat(LRwinsEps) / (TESTS * T));
 console.log();
 console.log("EPSILON-GREEDY-PROPENSITY:");
-console.log(parseFloat(LRwinsEpsProp) / TESTS);
+console.log(parseFloat(LRwinsEpsProp) / (TESTS * T));
 console.log();
 console.log("COMBINED:");
-console.log(parseFloat(LRwinsCom) / TESTS);
+console.log(parseFloat(LRwinsCom) / (TESTS * T));
 console.log();
 
 console.log("CORRECT CHOICES ===================");
 console.log("EPSILON-GREEDY:");
 console.log(parseFloat(correctChoicesEps) / exploitEps);
+console.log();
+console.log("EPSILON-GREEDY-PROP:");
+console.log(parseFloat(correctChoicesEpsProp) / exploitEps);
 console.log();
 console.log("COMBINED:");
 console.log(parseFloat(correctChoicesCom) / exploitCom);

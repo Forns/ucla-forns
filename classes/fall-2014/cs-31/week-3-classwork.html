@@ -1,0 +1,288 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Andrew Forney - UCLA CS</title>
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/magic-bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/main.css" rel="stylesheet" type="text/css">
+    <script src="../../../js/lib/jquery-2.0.3.min.js"></script>
+    <script src="../../../js/lib/bootstrap.min.js"></script>
+    <script src="../../../js/lib/expanding.js"></script>
+    <script src="../../../js/display/general/general-display.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+  </head>
+  
+  <body data-spy="scroll" data-target="#scrollspy">
+    
+    <!-- BEGIN WRAP -->
+    <div id="wrap">
+      
+      <!-- BEGIN NAVIGATION -->
+      <nav class='navbar navbar-default' role='navigation'>
+        <div class='nav-accent'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-12'>
+              <div class='navbar-header'>
+                <button class='navbar-toggle' type='button' data-toggle='collapse' data-target='.navbar-main-collapse'>
+                  <span class='sr-only'>Toggle Navigation</span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                </button>
+                <a class='navbar-brand' href='/~forns/'>
+                  <span id='brand-text'>
+                    Andrew Forney
+                  </span>
+                </a>
+              </div>
+              
+              <div id='nav-main' class='collapse navbar-collapse navbar-main-collapse'>
+                <ul class='nav navbar-nav navbar-right'>
+                  
+                  <li>
+                    <a href='/~forns/about.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-user'></span>
+                      </div>
+                      <p class='text-center'>About</p>
+                    </a>
+                  </li>
+                  
+                  <li class='active'>
+                    <a href='/~forns/classes.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-book'></span>
+                      </div>
+                      <p class='text-center'>Classes</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/contact.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-comment'></span>
+                      </div>
+                      <p class='text-center'>Contact</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/publications.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-file'></span>
+                      </div>
+                      <p class='text-center'>Publications</p>
+                    </a>
+                  </li>
+                  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <!-- END NAVIGATION -->
+      
+      <!-- BEGIN MAIN CONTENT -->
+      <div id="main-content" class="container">
+        <div class="row">
+          
+          <!-- BEGIN SCROLLSPY -->
+          <div class='col-md-2'>
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+              <ul id='scrollspy' class="nav bs-sidenav">
+              </ul>
+            </div>
+          </div>
+          <!-- END SCROLLSPY -->
+          
+          <!-- BEGIN PRESENTATION CONTENT -->
+          <div class='col-md-10 presentation-content' role='main'>
+            
+            <ol class="breadcrumb">
+              <li><a href="../../../classes.html">Classes</a></li>
+              <li><a href="./cs-31.html">Fall14 CS31</a></li>
+              <li class="active">Week 3 Classwork</li>
+            </ol>
+            
+            <h1>Week 3 Classwork</h1>
+            
+            <div id='example1' class='scrollspy-element' scrollspy-title='Big N'></div>
+            <h1>Big N</h1>
+            <div>
+              <p class='example'>Complete the highly useful code fragment below that prints out a giant letter 'N' that is SIZE x SIZE in dimension.</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+    
+  /*
+   * Design a program that writes 
+   * a 5 by 5 capital letter N 
+   * made up of the character 'N'.
+   *
+   * Output should be:
+   * N   N
+   * NN  N
+   * N N N
+   * N  NN
+   * N   N
+  */
+  int main () {
+      // Assume SIZE must be odd
+      const int SIZE = 5;
+        
+      // For loop that goes through
+      // SIZE rows...
+      for (int i = 0; i &lt; SIZE; i++) {
+          // And loop that goes through
+          // SIZE columns
+          for (int j = 0; j &lt; SIZE; j++) {
+              if (j == 0 || j == SIZE - 1 || j == i) {
+                  cout &lt;&lt; "N";
+              
+              // Otherwise, print a space
+              } else {
+                  cout &lt;&lt; " ";
+              }
+          }
+            
+          cout &lt;&lt; endl;
+      }
+  }
+</pre>
+            </div>
+            <hr/>
+            <br/>
+            
+            
+            <div id='example2' class='scrollspy-element' scrollspy-title='Guessing Game'></div>
+            <h1>Guessing Game</h1>
+            <div>
+              <p class='example'>Complete the code fragment below for playing a number guessing game with your computer!</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cmath&gt;
+  #include &lt;time.h&gt;
+  using namespace std;
+  
+  /*
+   * Try to guess the number your computer is thinking of!
+   * We first generate a random number between 0 and MAX_CHOICES,
+   * prompt the user for a guess, and tell them if they win,
+   * are 1 away from the number, or are way off (2+ away).
+   * Players have only MAX_TRIES turns to guess the number.
+   */
+  int main () {
+      // Magic incantation: don't worry about for now
+      srand(time(NULL));
+      const int MAX_CHOICES = 5; // Guess 0 - 4
+      const int MAX_TRIES = 3;   // Get 3 tries
+      
+      // Target is the random number we're guessing
+      int target = rand() % MAX_CHOICES,
+          counter = 0,
+          guess,
+          difference;
+  
+      string hint;
+      
+      do {
+          cout &lt;&lt; "Guess a number! ";
+          // [!] Collect user's guess
+          cin &gt;&gt; guess;
+          
+          // abs == absolute value
+          difference = abs(target - guess);
+          
+          switch (difference) {
+              case 0:
+                  cout &lt;&lt; "You win!" &lt;&lt; endl;
+                  return 0;
+              case 1:
+                  cout &lt;&lt; "Off by 1!" &lt;&lt; endl;
+                  break;
+              default:
+                  cout &lt;&lt; "Way off... just give up." &lt;&lt; endl;
+                  break;
+          }
+  
+          cout &lt;&lt; hint &lt;&lt; endl;
+          counter++;
+      
+      // [!] Keep going as long as the user has more tries
+      } while (counter &lt; MAX_TRIES);
+      
+      cout &lt;&lt; "YOU LOSE! YOU GET NOTHING! GOOD DAY SIR/MADAME!" &lt;&lt; endl;
+  }
+</pre>
+            </div>
+            <hr/>
+            <br/>
+            
+            
+            <div id='example3' class='scrollspy-element' scrollspy-title='Capsizer'></div>
+            <h1>Capsizer</h1>
+            <div>
+              <p class='example'>Design a program that asks the user for text input and then swaps all capital letters for their lowercase equivalents, and vice-versa.</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cctype&gt;
+  using namespace std;
+    
+  /*
+  * Write a program that queries the user for a string,
+  * swaps all lowercase letters for uppercase ones (and 
+  * vice versa), and then prints out the result.
+  */
+  int main () {
+      string s;
+      char c;
+        
+      // Ask for a string
+      cout &lt;&lt; "Gimme dat string: ";
+      // [!] Collect user's input
+      getline(cin, s);
+      
+      // [!] Iterate through each string character
+      for (int i = 0; i &lt; s.length(); i++) {
+          // [!] If it's uppercase, convert to lower, and vice versa
+          // We'll use the ternary conditional!
+          c = (isupper(s[i])) ? tolower(s[i]) : toupper(s[i]);
+  
+          // Print out current value of c
+          cout &lt;&lt; c;
+      }
+      cout &lt;&lt; endl;
+  }
+</pre>
+            </div>
+            <hr/>
+            <br/>
+          
+        <!-- END PRESENTATION CONTENT -->
+        </div>
+      </div>
+      <!-- END MAIN CONTENT -->
+      
+      
+    </div>
+    <!-- END WRAPPER -->
+    
+    <!-- BEGIN FOOTER -->
+    <div id="footer">
+      <div class="container">
+        <div class="col-md-12 text-center">
+          
+        </div>
+      </div>
+    </div>
+    <!-- END FOOTER -->
+    
+  </body>
+</html>

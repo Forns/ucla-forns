@@ -1,0 +1,975 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Andrew Forney - UCLA CS</title>
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/magic-bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/main.css" rel="stylesheet" type="text/css">
+    <script src="../../../js/lib/jquery-2.0.3.min.js"></script>
+    <script src="../../../js/lib/bootstrap.min.js"></script>
+    <script src="../../../js/lib/expanding.js"></script>
+    <script src="../../../js/display/general/general-display.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+  </head>
+  
+  <body data-spy="scroll" data-target="#scrollspy">
+    
+    <!-- BEGIN WRAP -->
+    <div id="wrap">
+      
+      <!-- BEGIN NAVIGATION -->
+      <nav class='navbar navbar-default' role='navigation'>
+        <div class='nav-accent'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-12'>
+              <div class='navbar-header'>
+                <button class='navbar-toggle' type='button' data-toggle='collapse' data-target='.navbar-main-collapse'>
+                  <span class='sr-only'>Toggle Navigation</span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                </button>
+                <a class='navbar-brand' href='/~forns/'>
+                  <span id='brand-text'>
+                    Andrew Forney
+                  </span>
+                </a>
+              </div>
+              
+              <div id='nav-main' class='collapse navbar-collapse navbar-main-collapse'>
+                <ul class='nav navbar-nav navbar-right'>
+                  
+                  <li>
+                    <a href='/~forns/about.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-user'></span>
+                      </div>
+                      <p class='text-center'>About</p>
+                    </a>
+                  </li>
+                  
+                  <li class='active'>
+                    <a href='/~forns/classes.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-book'></span>
+                      </div>
+                      <p class='text-center'>Classes</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/contact.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-comment'></span>
+                      </div>
+                      <p class='text-center'>Contact</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/publications.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-file'></span>
+                      </div>
+                      <p class='text-center'>Publications</p>
+                    </a>
+                  </li>
+                  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <!-- END NAVIGATION -->
+      
+      <!-- BEGIN MAIN CONTENT -->
+      <div id="main-content" class="container">
+        <div class="row">
+          
+          <!-- BEGIN SCROLLSPY -->
+          <div class='col-md-2'>
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+              <ul id='scrollspy' class="nav bs-sidenav">
+              </ul>
+            </div>
+          </div>
+          <!-- END SCROLLSPY -->
+          
+          <!-- BEGIN PRESENTATION CONTENT -->
+          <div class='col-md-10 presentation-content' role='main'>
+            <ol class="breadcrumb">
+              <li><a href="../../../classes.html">Classes</a></li>
+              <li><a href="./cs-31.html">Fall13 CS31</a></li>
+              <li class="active">Midterm Review</li>
+            </ol>
+            
+            <h1>Midterm I Review</h1>
+            <p>The following review covers the topics you asked me to review at the end of week 3's discussion, plus some other stuff.</p>
+            <p>By no means is it meant to serve as a comprehensive review (look through my other notes for greater detail), but will help you get some more practice as you frantically cram on Thursday at 4:49 pm.</p>
+            
+            
+            <br/>
+            <div id='typeConversion' class='scrollspy-element' scrollspy-title='Type Conversions'></div>
+            <h1>Type Conversions</h1>
+            <div>
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      int bass = 5.6,
+          c = 6.5;
+      double swim = c / bass;
+      
+      cout &lt;&lt; swim &lt;&lt; endl;
+  }
+</pre>
+              <p class='question' name='type-q1'>Click for answer.</p>
+              <p class='answer' name='type-q1'>swim = 1, which is what will be printed out. Integer division, despite being stored in a double is still an integer result.</p>
+              <br/>
+              
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      string test = 'c';
+      int i = test;
+      
+      cout &lt;&lt; i &lt;&lt; endl;
+  }
+</pre>
+              <p class='question' name='type-q2'>Click for answer.</p>
+              <p class='answer' name='type-q2'>Compilation Error; we're attempting to store a character literal into a string variable (note the single quote). Also, we can't convert from string to int, so storing test into i is also illegal.</p>
+              <br/>
+              
+              
+              <p class='debug'>Assuming the ASCII character coding schema, will the following code compile? If so, what will it output?<br/>
+                <strong>NB:</strong> Any questions asking for character codes will likely be given on the exam; in this case, the character code for '1' and '2' are 49 and 50, respectively.
+              </p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      char one = '1',
+           two = '2';
+      int i = one * two;
+      
+      cout &lt;&lt; i &lt;&lt; endl;
+  }
+</pre>
+              <p class='question' name='type-q3'>Click for answer.</p>
+              <p class='answer' name='type-q3'>Contrary to what you might think, the character codes for '1' and '2' are NOT 1 and 2, but are actually 49 and 50, respectively. Thus, i = 2450.</p>
+              <br/>
+              
+              <p class='debug'>Assuming the ASCII character coding schema, will the following code compile? If so, what will it output?<br/>
+                <strong>NB:</strong> Any questions asking for character codes will likely be given on the exam; in this case, the character code for '\0' is 0...<br/>
+              </p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      char nada = '\0',
+           tab = '\t';
+      
+      bool ean = nada &amp;&amp; tab;
+      
+      cout &lt;&lt; ean &lt;&lt; endl;
+  }
+</pre>
+              <p class='question' name='type-q4'>Click for answer.</p>
+              <p class='answer' name='type-q4'>nada holds the null character, with integer code = 0. bool ean consists of the logical AND between two chars (which compares their character codes), one of which is 0 (falsy in C++), and so ean = 0.</p>
+              <br/>
+
+              <p class='debug'>Assuming the ASCII character coding schema, will the following code compile? If so, what will it output?<br/><strong>Hint:</strong> You do NOT need to know what character is represented by 97 to solve this problem.</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cctype&gt;
+  using namespace std;
+  
+  /*
+   * MOTHER OF ALL TYPE QUESTIONS
+   */
+  int main () {
+      string cheese = "Gouda!";
+      // ^^^ bad even by my standards
+      
+      char a = 97,
+           excited = cheese[5];
+      
+      bool ean = isupper(toupper(excited)) &amp;&amp; a;
+      
+      cout &lt;&lt; ean &lt;&lt; endl;
+  }
+</pre>
+              <p class='question' name='type-q5'>Click for answer.</p>
+              <p class='answer' name='type-q5'>excited = cheese[5] = '!', which means that toupper(excited) = '!', which means isupper('!') = 0 (exclamation marks cannot be uppercase, and so also cannot be converted to uppercase). Therefore, ean = 0 &amp;&amp; a = 0.</p>
+            </div>
+            <hr/>
+            <br/>
+            
+            
+            <div id='precedence' class='scrollspy-element' scrollspy-title='Precedence'></div>
+            <h1>Precedence</h1>
+            <div>
+                <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      int x = 5;
+      double y = (x * x + x / x) % 2;
+      
+      cout &lt;&lt; y &lt;&lt; endl;
+  }
+</pre>
+              <p class='question' name='precedence-q1'>Click for answer.</p>
+              <p class='answer' name='precedence-q1'>
+                y = (5 * 5 + 5 / 5) % 2, evaluate parens first<br/>
+                y = (25 + 5 / 5) % 2, * and / have equal precedence, and left to right associativity, so evaluate * on left first<br/>
+                y = (25 + 1) % 2<br/>
+                y = (26) % 2<br/>
+                y = 0, because 26 / 2 = 13 remainder 0<br/>
+              </p>
+              <br/>
+              
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      int x = !(5 / 3 &gt; 2) * 3;
+      
+      cout &lt;&lt; x &lt;&lt; endl;
+  }
+</pre>
+              <p class='question' name='precedence-q1-1'>Click for answer.</p>
+              <p class='answer' name='precedence-q1-1'>
+                x = !(5 / 3 &gt; 2) * 3;<br/>
+                x = !(1 &gt; 2) * 3;<br/>
+                x = !(0) * 3;<br/>
+                x = 1 * 3;<br/>
+                x = 3;
+              </p>
+              <br/>
+              
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cctype&gt;
+  using namespace std;
+  
+  int main () {
+      // 0 = zero, O = oh... the letter
+      const string STRINGY = "0OO0O0O"; // lol
+      
+      int iHateThisTest = isupper(toupper(STRINGY[1])),
+          moreHate = isalpha(STRINGY[0]),
+          answer = !(moreHate) &amp;&amp; (iHateThisTest + moreHate);
+      
+      cout &lt;&lt; answer &lt;&lt; endl;
+  }
+</pre>
+              <p class='question' name='precedence-q2'>Click for answer.</p>
+              <p class='answer' name='precedence-q2'>
+                iHateThisTest = isupper(toupper(O))<br/>
+                iHateThisTest = isupper(O)<br/>
+                iHateThisTest = 1<br/><br/>
+                moreHate = isalpha(0)<br/>
+                moreHate = 0<br/><br/>
+                answer = !(moreHate) &amp;&amp; (iHateThisTest + moreHate)<br/>
+                answer = !(0) &amp;&amp; (1 + 0), substituting<br/>
+                answer = 1 &amp;&amp; 1, simplifying<br/>
+                answer = 1, rules of logical AND
+              </p>
+              <br/>
+              
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      string result;
+      int i = 5;
+      double sadPi = 3.14;
+      char c = 'c';
+      
+      if (i &gt; 5 || 0 || ((sadPi) == c) * 5 &lt; -(-10)) {
+          result = ":D";
+      } else {
+          result = ":(";
+      }
+      
+      cout &lt;&lt; result &lt;&lt; endl;
+  }
+</pre>
+              <p class='question' name='precedence-q3'>Click for answer.</p>
+              <p class='answer' name='precedence-q3'>
+                i &gt; 5 || 0 || ((sadPi) == c) * 5 &lt; -(-10)<br/>
+                = i &gt; 5 || 0 || ((sadPi) == c) * 5 &lt; 10<br/>
+                = i &gt; 5 || 0 || (0) * 5 &lt; 10<br/>
+                = i &gt; 5 || 0 || 0 &lt; 10<br/>
+                = 0 || 0 || 0 &lt; 10<br/>
+                = 0 || 0 || 1<br/>
+                = 0 || 1<br/>
+                = 1, so result = ":D", an emotion very different from what you're feeling after this problem.
+              </p>
+            </div>
+            <hr/>
+            <br/>
+            
+            
+            <div id='conditionals' class='scrollspy-element' scrollspy-title='Conditionals'></div>
+            <h1>Simplifying Conditionals</h1>
+            <div>
+              <p class='definition'>For use with lecture notes from <a href='/~forns/classes/fall-2014/cs-31/week-3.html#logic' target='_blank'>Week 3 on Simplifying Conditionals</a>.</p>
+              <p class='example'>Simplify the following if-ladder such that its behavior is the same as the original but makes as few comparisons as possible. Assume j is an <code class='prettyprint'>int</code></p>
+<pre class='prettyprint'>
+  if ((j == 1 || j == 2) &amp;&amp; j &gt; 5) {
+      cout &lt;&lt; ":O" &lt;&lt; endl;
+  } else if ((j == 5 || j == 6) &amp;&amp; j &gt; 5) {
+      cout &lt;&lt; ":O" &lt;&lt; endl;
+  } else {
+      cout &lt;&lt; "0_o" &lt;&lt; endl;
+  }
+</pre>
+              <p class='question' name='conditionals-q0'>Click for answer.</p>
+              <div class='answer' name='conditionals-q0'>
+                <p>Notice that the first if is a contradiction since both clauses cannot be true simultaneously. Furthermore, in the second if condition, 
+                  j &gt; 5 is rules out j == 5 since both cannot be true simultaneously, leaving us with:</p>
+<pre class='prettyprint'>
+  if (j == 6) {
+      cout &lt;&lt; ":O" &lt;&lt; endl;
+  } else {
+      cout &lt;&lt; "0_o" &lt;&lt; endl;
+  }
+</pre>
+              </div>
+              <br/>
+              
+              <p class='example'>Simplify the following if-ladder such that its behavior is the same as the original but makes as few comparisons as possible. Assume j is an <code class='prettyprint'>int</code></p>
+<pre class='prettyprint'>
+  if ((j == 1 || j == 2) &amp;&amp; j &lt; 5) {
+      cout &lt;&lt; ":O" &lt;&lt; endl;
+  } else if ((j == 3 || j == 4) &amp;&amp; j &lt; 5) {
+      cout &lt;&lt; ":O" &lt;&lt; endl;
+  } else {
+      cout &lt;&lt; "0_o" &lt;&lt; endl;
+  }
+</pre>
+              <p class='question' name='conditionals-q1'>Click for answer.</p>
+              <div class='answer' name='conditionals-q1'>
+                <p>We have repetition of actions and redundant conditions, so we can condense to:</p>
+<pre class='prettyprint'>
+  if (j &gt;= 1 &amp;&amp; j &lt; 5) {
+      cout &lt;&lt; ":O" &lt;&lt; endl;
+  } else {
+      cout &lt;&lt; "0_o" &lt;&lt; endl;
+  }
+</pre>
+              </div>
+              <br/>
+              
+              <p class='example'>How can we simplify this if-ladder (fewer comparisons) such that its behavior is exactly the same as below?</p>
+              <p><strong>HINT:</strong> I can get it down to a single if-else with 3 conditions in the if statement.</p>
+              <p>Also, probably good to note that this is a challenging problem unlikely to be as hard as those on the midterm.</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      string s = "test",
+             t = "TeSt",
+             test = "t";
+      
+      if (s == "test" &amp;&amp; t == "test" || test == "test") {
+          cout &lt;&lt; test &lt;&lt; endl;
+      } else if (s != "test") {
+          cout &lt;&lt; test &lt;&lt; endl;
+      } else if (test != "test") {
+          cout &lt;&lt; s &lt;&lt; endl;
+      } else {
+          cout &lt;&lt; t &lt;&lt; endl;
+      }
+  }
+</pre>
+              <p class='question' name='conditionals-q2'>Click for answer.</p>
+              <div class='answer' name='conditionals-q2'>
+                <p>Our first observation is that the first two conditionals share a common action, so we can condense them with a logical OR:</p>
+<pre class='prettyprint'>
+  if (s == "test" &amp;&amp; t == "test" || test == "test" || s != "test") {
+      cout &lt;&lt; test &lt;&lt; endl;
+  } else if (test != "test") {
+      cout &lt;&lt; s &lt;&lt; endl;
+  } else {
+      cout &lt;&lt; t &lt;&lt; endl;
+  }
+</pre>
+                <br/>
+                <p>Our second observation is that, in the first conditional, if s == &quot;test&quot; and t == &quot;test&quot;, we print the condition, but also if s != &quot;test&quot;.</p>
+                <p>
+                  Thus, if s == &quot;test&quot;, then the if evaluates to true whenever t == &quot;test&quot;, but also if s != &quot;test&quot;. 
+                  We know that for two boolean values A and B, <br/>!A || (A &amp;&amp; B) <br/>= (!A || A) &amp;&amp; (!A || B) <br/>= 1 &amp;&amp; (!A || B) <br/>= !A || B (by distributive property).
+                </p>
+                <p>In our example, A = (s == &quot;test&quot;) and B = (t == &quot;test&quot;) So, we can condense the first conditional down to:</p>
+<pre class='prettyprint'>
+  if (t == "test" || test == "test" || s != "test") {
+      cout &lt;&lt; test &lt;&lt; endl;
+  } else if (test != "test") {
+      cout &lt;&lt; s &lt;&lt; endl;
+  } else {
+      cout &lt;&lt; t &lt;&lt; endl;
+  }
+</pre>
+                <br/>
+                <p>Next, we notice that the first conditional has test == &quot;test&quot; and the second conditional has test != &quot;test&quot;, which are mutually exclusive (and so all possible combinations of s, t, and test will fall into one of the first two conditionals), so the final else would never be able to be reached.</p>
+<pre class='prettyprint'>
+  if (t == "test" || test == "test" || s != "test") {
+      cout &lt;&lt; test &lt;&lt; endl;
+  } else if (test != "test") {
+      cout &lt;&lt; s &lt;&lt; endl;
+  }
+</pre>
+                <br/>
+                <p>Finally, observe that if our first conditional evaluates to false, then we know that test != &quot;test&quot;, so we do not need to check for it again.</p>
+<pre class='prettyprint'>
+  if (t == "test" || test == "test" || s != "test") {
+      cout &lt;&lt; test &lt;&lt; endl;
+  } else {
+      cout &lt;&lt; s &lt;&lt; endl;
+  }
+</pre>
+                <p>Muuuch better... and also more complicated than you'll probably have to do on the midterm! Better to practice hard though.</p>
+              </div>
+            </div>
+            <hr/>
+            <br/>
+            
+            
+            <div id='io' class='scrollspy-element' scrollspy-title='I/O'></div>
+            <h1>Input / Output</h1>
+            <div>
+              <p class='example'>Examine the following program and answer the questions that follow.</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+    
+  int main () {
+      int erestingExample;
+      string stuff;
+  
+      cout &lt;&lt; "Enter an int: ";
+      cin.ignore(2, '\n');
+      cin &gt;&gt; erestingExample;
+      cout &lt;&lt; erestingExample &lt;&lt; endl;
+      // [?] Answer 1
+        
+      cout &lt;&lt; "Enter a string: ";
+      getline(cin, stuff);
+      cout &lt;&lt; stuff &lt;&lt; endl;
+      // [?] Answer 2
+  
+      cout &lt;&lt; "Enter another string: ";
+      getline(cin, stuff);
+      cout &lt;&lt; stuff &lt;&lt; endl;
+      // [?] Answer 3
+  }
+</pre>
+              <div class='question' name='io-q1'>
+                <p>Ignoring its many flaws, what values will get printed out if a user inputs the following values ([Enter] indicates the user hit enter on the keyboard):</p>
+                <p>555[Enter]<br/>stuff[Enter]</p>
+              </div>
+              <div class='answer' name='io-q1'>
+                <p>
+                  <br/>
+                  Answer 1: 5, because we ignored the first 2 characters of 555 before we hit a newline.<br/>
+                  Answer 2: Our first cin.ignore(2, '\n') fails to pick up the newline left by the cin, so our first getline(cin, stuff) sees it and assumes the user just hit enter; thus, the empty string is in variable stuff.<br/>
+                  Answer 3: The third getline properly picks up the text "stuff" entered by the user, thus printing "stuff" here.
+                </p>
+              </div>
+              <br/>
+              
+              
+              <p class='example'>Consider the following code segment and determine what its output will be for the indicated cout statements.</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      double test = 210.123456789;
+      int i = 54321;
+  
+      cout.precision(3);
+      cout &lt;&lt; test &lt;&lt; endl;
+      // [?] Answer 1
+      
+      cout.setf(ios::fixed);
+      cout.precision(3);
+      cout &lt;&lt; test &lt;&lt; endl;
+      // [?] Answer 2
+  
+      cout.precision(2);
+      cout &lt;&lt; i &lt;&lt; endl; // Answer 2?
+      // [?] Answer 3
+  }
+</pre>
+              <p class='question' name='io-q2'>What will get printed out at the two couts indicated above?</p>
+              <div class='answer' name='io-q2'>
+                <p>
+                  <br/>
+                  Answer 1: 210<br/>
+                  Answer 2: 210.123<br/>
+                  Answer 3: 54321
+                </p>
+              </div>
+              
+            </div>
+            <hr/>
+            <br/>
+            
+            
+            <div id='loops' class='scrollspy-element' scrollspy-title='Iteration'></div>
+            <h1>Iteration &amp; Nested Loops</h1>
+            <div>
+              <p class='definition'>If you haven't tried our class examples, you should do them (ignoring the answer at first) by the prompts <a href='/~forns/classes/fall-2014/cs-31/week-3-classwork.html' target='_blank'>in this link</a>.</p>
+              <br/>
+              
+              <p class='example'>What will the following code output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+    string racecar = "racecar";
+    int length = racecar.size();
+  
+    // I affectionately deem this the "echo" loop
+    for (int i = 0; i &lt; length; i++) {
+        for (int j = i; j &lt; length; j++) {
+            cout &lt;&lt; racecar[j];
+        }
+        cout &lt;&lt; endl;
+    }
+  }
+</pre>
+              <p class='question' name='iteration-q1'>Click for answer.</p>
+              <p class='answer' name='iteration-q1'><br/>
+                racecar<br/>
+                acecar<br/>
+                cecar<br/>
+                ecar<br/>
+                car<br/>
+                ar<br/>
+                r<br/>
+              </p>
+              <br/>
+              
+              
+              <p class='example'>What will the following code output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      int i = 1;
+  
+    // This outer loop is lame
+    while (i &lt; 8) {
+      do {
+        cout &lt;&lt; i &lt;&lt; endl;
+        i *= 2;
+      } while (i &lt;= 8);
+    }
+    cout &lt;&lt; "End value for i: " &lt;&lt; i &lt;&lt; endl;
+  }
+</pre>
+              <p class='question' name='iteration-q2'>Click for answer.</p>
+              <p class='answer' name='iteration-q2'><br/>
+                1<br/>
+                2<br/>
+                4<br/>
+                8<br/>
+                End value for i: 16<br/>
+              </p>
+              <br/>
+              
+              <p class='example'>In Week 3's class, we developed a program that used nested for-loops to created a giant N (<a href='/~forns/classes/fall-2014/cs-31/week-3-classwork.html' target='_blank'>your solution located here</a>).<br/>
+                Now, your task is to re-write that program (having it output the exact same giant N) using only a single for-loop.</p>
+              <div class='question' name='iteration-q3'>
+                <p>Click here to see a sample solution.</p>
+                <p><strong>HINT:</strong> Think of having to choose a character for each square of an SIZE x SIZE grid and remember the operators at your disposal.</p>
+              </div>
+              <div class='answer' name='iteration-q3'><br/>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      const int SIZE = 5;
+      int count = 0;
+      
+      // Loop that goes through
+      // SIZE rows x SIZE columns
+      for (int j = 0; j &lt; SIZE * SIZE; j++) {
+          // if j % SIZE == SIZE - 1, then we've
+          // hit the end of a row and should add an
+          // N and a newline
+          if (j % SIZE == SIZE - 1) {
+              cout &lt;&lt; "N" &lt;&lt; endl;
+  
+          // Otherwise, we add an N when we're at the
+          // start of a row, or when we're on the diagonal
+          } else if (j % SIZE == 0 || (j % (SIZE + 1)) == 0) {
+              cout &lt;&lt; "N";
+  
+          // Put spaces in all other cases
+          } else {
+              cout &lt;&lt; " ";
+          }
+      }
+  }
+</pre>
+              </div>
+            </div>
+            <hr/>
+            <br/>
+            
+            
+            <div id='triage' class='scrollspy-element' scrollspy-title='Code Triage'></div>
+            <h1>Code Triage</h1>
+            <div>
+              <p class='debug'>For each of the following code segments, find the syntax or logic errors specified by the questions following each snippet.</p>
+              <br/>
+              
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+    
+  int main () {
+      int j = 0;
+      while (j &lt; 3) {
+          for (int j = 0; j &lt; 3; j++) {
+              cout &lt;&lt; j &lt;&lt; endl;
+          }
+      }
+  }
+</pre>
+              <p class='question' name='debug-q0'>Find the logic error in the above code segment.</p>
+              <p class='answer' name='debug-q0'>Infinite loop! The outer loop's j never gets incremented.</p>
+              <br/>
+              
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+    
+  int main () {
+      int j = 0;
+      do {
+          for (int j = 0; j &lt; 3; j++) {
+              cout &lt;&lt; j &lt;&lt; endl;
+          }
+          j++;
+      } while(j &lt; 3)
+  }
+</pre>
+              <p class='question' name='debug-q1'>Find the syntax error in the above code segment.</p>
+              <p class='answer' name='debug-q1'>Missing semi-colon after the while condition of the do-while loop.</p>
+              <br/>
+              
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+    
+  int main () {
+      int j = 0;
+      do {
+          for (j = 0; j &lt; 3; j++) {
+              cout &lt;&lt; j &lt;&lt; endl;
+          }
+      } while(j &lt;= 3);
+  }
+</pre>
+              <p class='question' name='debug-q2'>Find the logic error in the above code segment.</p>
+              <p class='answer' name='debug-q2'>The inner loop does *not* declare a new variable j, it simply sets the current j to 0 for its pre-loop action. As such, we get an infinite loop!</p>
+              <br/>
+              
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+    
+  int main () {
+      double bill;
+      int tip;
+      
+      cout &lt;&lt; "Enter your bill amount: $";
+      cin &gt;&gt; bill;
+  
+      cout &lt;&lt; "Enter the tip percentage (e.g., for 15% enter 15): ";
+      cin &gt;&gt; tip;
+  
+      cout &lt;&lt; "---" &lt;&lt; endl;
+      cout.setf(ios::fixed);
+      cout.precision(2);
+      cout &lt;&lt; "Your total is: " &lt;&lt; (bill * (1 + tip / 100)) &lt;&lt; endl;
+  }
+</pre>
+              <p class='question' name='debug-q3'>Find the logic error in the above code segment, which is meant to print out a user's total bill after a tip.</p>
+              <p class='answer' name='debug-q3'>Integer division in the tip computation! The expression <code class='prettyprint'>tip / 100</code> will not provide the correct percentage.</p>
+              <p class='question' name='debug-q4'>BONUS: Fix it by adding a maximum 2 characters to the above code.</p>
+              <p class='answer' name='debug-q4'>Add a .0 to the 100 giving us: <code class='prettyprint'>tip / 100.0</code>, which is no longer integer division.</p>
+              <br/>
+              
+              <p class='example'>In the following code snippet, the programmer wanted to catch erroneous input whenever the user input anything that wasn't "yes" or "no"; is it correct?</p>
+<pre class='prettyprint'>
+  if (input != "yes" || input != "no") {
+      cout &lt;&lt; "[X] Answers must be either \"yes\" or \"no\"" &lt;&lt; endl;
+      return 1;
+  }
+</pre>
+              <p class='question' name='debug-q5'>Click for answer.</p>
+              <p class='answer' name='debug-q5'>No! If the user correctly answers "yes" then they still enter the error-catch since input = "yes" != "no".</p>
+            </div>
+            <hr/>
+            <br/>
+            
+            
+            <div id='practice' class='scrollspy-element' scrollspy-title='Practice'></div>
+            <h1>Practice</h1>
+            <div>
+              <p class='definition'>Try coding the following problems by hand!</p>
+              <br/>
+              
+              <p class='example'>Design a program that prints out a pyramid with base that is N characters wide comprised of the 'X' character. If N is odd, then each level must have an odd number of tiles, vice versa for even N.</p>
+              <p class='question' name='practice-q0'>Warning: Tricky problem! Want a hint? (click here if so)</p>
+              <p class='answer' name='practice-q0'>Consider having two loops nested inside an outer one.</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  /*
+   * For N = 5, output:
+   *   X
+   *  XXX
+   * XXXXX
+   *
+   * For N = 6, output:
+   *   XX
+   *  XXXX
+   * XXXXXX
+   *
+   * For N = 7, output:
+   *    X
+   *   XXX
+   *  XXXXX
+   * XXXXXXX
+   */
+  int main () {
+      const int N = 5;
+  
+      // [!] Your code here!
+  }
+</pre>
+              <p class='question' name='practice-q1'>Click for solution.</p>
+              <div class='answer' name='practice-q1'>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      const int N = 2;
+      int rows = (N + 1) / 2;
+  
+      // We'll need to ensure that we have an
+      // odd number of blocks when our N is odd
+      bool isOdd = (N % 2) == 1;
+  
+      // Print row-by-row
+      for (int i = 0; i &lt; rows; i++) {
+          // Begin by printing left-most spaces
+          for (int j = 0; j &lt; rows - i - 1; j++) {
+              cout &lt;&lt; " ";
+          }
+  
+          // Then print out the number of blocks
+          for (int k = 0; k &lt; 2 * (i + 1) - isOdd; k++) {
+              cout &lt;&lt; "X";
+          }
+          cout &lt;&lt; endl;
+      }
+  }
+</pre>
+              </div>
+              <br/>
+              
+              <p class='example'>Create a program that asks a user for a month number (1 - 12), whether or not it is a leapyear, and outputs the number of days in that month.</p>
+              <p>Thus, the order of operations is:</p>
+              <ul class='indent-1'>
+                <li><p>Ask user for a month number.</p></li>
+                <li><p>Verify that the number is between 1 - 12, otherwise print an error message.</p></li>
+                <li><p>Ask the user whether or not it's a leap year (acceptable answers are "y" or "n", and should be case-insensitive, i.e., capital or lowercase both work)</p></li>
+                <li><p>Verify that the leap year answer is either "y" or "n" (case insensitive), otherwise, print an error message.</p></li>
+                <li><p>If all input is valid, print the number of days in the given month.</p></li>
+              </ul>
+              <p>For reference:</p>
+              <ul class='indent-1'>
+                <li><p><strong>31 Days:</strong> 1, 3, 5, 7, 8, 10, 12</p></li>
+                <li><p><strong>30 Days:</strong> 4, 5, 9, 11</p></li>
+                <li><p><strong>29 Days (in a leap-year):</strong> 2</p></li>
+                <li><p><strong>28 Days (not a leap-year):</strong> 2</p></li>
+              </ul>
+              <p class='definition'><strong>A+</strong> answers will do it without listing every month...</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cctype&gt;
+  using namespace std;
+  
+  /*
+   * Gathers a month number from the user,
+   * asks them if it is a leapyear (y / n),
+   * and then outputs the number of days in that month.
+   */
+  int main () {
+      int days = 31,
+          month;
+      string leapYear;
+  
+      cout &lt;&lt; "Enter a month number: ";
+      // [!] Your code here:
+      ???
+      
+      
+      // [!] Your code here:
+      if ( ??? ) {
+          cout &lt;&lt; "[X] Months must be between 1 - 12!" &lt;&lt; endl;
+          ???
+      }
+  
+      cout &lt;&lt; "Is it a leap year? (y / n): ";
+      // [!] Your code here:
+      ???
+  
+      // [!] Your code here:
+      if (???) {
+          cout &lt;&lt; "[X] Answers must be either \"y\" or \"n\"" &lt;&lt; endl;
+          ???
+      }
+  
+      // [!] Your code here:
+      ???
+      
+      cout &lt;&lt; "There are " &lt;&lt; days &lt;&lt; " in this month." &lt;&lt; endl;
+  }
+</pre>
+              <p class='question' name='practice-q2'>Click for solution.</p>
+              <div class='answer' name='practice-q2'>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cctype&gt;
+  using namespace std;
+  
+  /*
+   * Gathers a month number from the user,
+   * asks them if it is a leapyear (yes / no),
+   * and then outputs the number of days in that month.
+   */
+  int main () {
+      int days = 31,
+          month;
+      string leapYear;
+  
+      cout &lt;&lt; "Enter a month number: ";
+      cin &gt;&gt; month;
+      cin.ignore(10000, '\n');
+  
+      if (month &lt; 1 || month &gt; 12) {
+          cout &lt;&lt; "[X] Months must be between 1 - 12!" &lt;&lt; endl;
+          return 1;
+      }
+  
+      cout &lt;&lt; "Is it a leap year? (y / n): ";
+      getline(cin, leapYear);
+  
+      if (leapYear.length() != 1 || (tolower(leapYear[0]) != 'y' &amp;&amp; tolower(leapYear[0]) != 'n')) {
+          cout &lt;&lt; "[X] Answers must be either \"y\" or \"n\"" &lt;&lt; endl;
+          return 1;
+      }
+  
+      switch (month) {
+          case 2:
+              days = (tolower(leapYear[0]) == 'y') ? 29 : 28;
+              break;
+          case 4:
+          case 5:
+          case 9:
+          case 11:
+              days = 30;
+              break;
+      }
+  
+      cout &lt;&lt; "There are " &lt;&lt; days &lt;&lt; " in this month." &lt;&lt; endl;
+  }
+</pre>
+              </div>
+              <br/>
+              
+            </div>
+            <hr/>
+            <br/>
+            
+          </div>
+          <!-- END PRESENTATION CONTENT -->
+          
+        </div>
+      </div>
+      <!-- END MAIN CONTENT -->
+      
+      
+    </div>
+    <!-- END WRAPPER -->
+    
+    <!-- BEGIN FOOTER -->
+    <div id="footer">
+      <div class="container">
+        <div class="col-md-12 text-center">
+          
+        </div>
+      </div>
+    </div>
+    <!-- END FOOTER -->
+    
+  </body>
+</html>
