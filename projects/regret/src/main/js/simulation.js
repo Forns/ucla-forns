@@ -464,7 +464,7 @@ var obsDist_COND_OBS = new Distribution(["X", "Y"]),
           }
           return result;
           
-        } else if ((pOrig - pAlt) > 0) {
+        } else if (pOrig > pAlt) {
           return originalChoice;
           
         } else {
@@ -486,7 +486,7 @@ var obsDist_COND_OBS = new Distribution(["X", "Y"]),
       } else {
         exploitEps++;
         var result = (obsDist_COND_EPS.query({"Y":1}, {"X":0}) > obsDist_COND_EPS.query({"Y":1}, {"X":1})) ? 0 : 1;
-        if (result !== params["U"]) {
+        if (result !== f_X_COND_OBS(params)) {
           correctChoicesEps++;
         }
         return result;
@@ -515,7 +515,7 @@ var obsDist_COND_OBS = new Distribution(["X", "Y"]),
     
     sim_orig = new Simulation(
       // Variables:
-      ["U", "X", "Y"],
+      ["U", "W", "X", "Y"],
       
       // Structural Eqs:
       [
@@ -605,7 +605,7 @@ var obsDist_COND_OBS = new Distribution(["X", "Y"]),
     
     epsSim = new Simulation(
       // Variables:
-      ["U", "X", "Y"],
+      ["U", "W", "X", "Y"],
       
       // Structural Eqs:
       [
@@ -744,7 +744,7 @@ var FIXED_U = false,
     N_exp = 0,
     N_t = 0,
     EPSILON = 0.15,
-    TOLERANCE = 0.03,
+    TOLERANCE = 0.015,
     T = 1000,
     TESTS = 1000;
 
@@ -828,7 +828,7 @@ console.log();
 console.log("Exp P(y | do(X = 0)):");
 console.log(expDist_COND_EXP.query({"Y": 1}, {"X": 0}));
 console.log();
-console.log("Obs P(y | do(X = 1)):");
+console.log("Exp P(y | do(X = 1)):");
 console.log(expDist_COND_EXP.query({"Y": 1}, {"X": 1}));
 console.log();
 
