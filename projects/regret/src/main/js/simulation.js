@@ -110,7 +110,7 @@ Distribution.prototype.query = function (query, evidence) {
   numCount = queryCountExec(numerator, this.table);
   eCount = queryCountExec(evidence, this.table);
   
-  return numCount / eCount;
+  return (eCount) ? numCount / eCount : 0;
 };
 
 
@@ -396,17 +396,14 @@ var obsDist_COND_OBS = new Distribution(["X", "Y"]),
     expDist_COND_EXP = new Distribution(["X", "Y"]),
     expDist_COND_COM = new Distribution(["X", "Y"]),
     
-    // U, W, X
-    rewardDist = [
-      [ // U = 0
-        [0.1, 0.5], // W = 0, p = 0
-        [0.5, 0.1]  // W = 1, p = 1
-      ],
-      [ // U = 1
-        [0.4, 0.2], // W = 0, p = 1
-        [0.2, 0.4]  // W = 1, p = 0
-      ]
-    ],
+    // Returns a boolean 
+    isCorrectChoice = function (choice, context) {
+      var w = context["W"],
+          u = context["U"];
+      
+      return (rewardDist[u][w][choice] > rewardDist[u][w][1 - choice]);
+    },
+    
     f_Y = function (params) {
       var outcome = Math.random();
       return (outcome < rewardDist[params["U"]][params["W"]][params["X"]]) ? 1 : 0;
@@ -457,20 +454,21 @@ var obsDist_COND_OBS = new Distribution(["X", "Y"]),
       // Here we're exploiting by examining counterfactual regret
       } else {
         exploitCom++;
+        var result;
         if (!obsDist_COND_COM.count || pDiff < TOLERANCE) {
-          var result = (expDist_COND_COM.query({"Y":1}, {"X":0}) > expDist_COND_COM.query({"Y":1}, {"X":1})) ? 0 : 1;
-          if (result != originalChoice) {
-            correctChoicesCom++;
-          }
-          return result;
+          result = (expDist_COND_COM.query({"Y":1}, {"X":0}) > expDist_COND_COM.query({"Y":1}, {"X":1})) ? 0 : 1;
           
         } else if (pOrig > pAlt) {
-          return originalChoice;
+          result = originalChoice;
           
         } else {
-          correctChoicesCom++;
-          return 1 - originalChoice;
+          result = 1 - originalChoice;
         }
+        
+        if (isCorrectChoice(result, params)) {
+          correctChoicesCom++;
+        }
+        return result;
       }
     },
     
@@ -486,7 +484,7 @@ var obsDist_COND_OBS = new Distribution(["X", "Y"]),
       } else {
         exploitEps++;
         var result = (obsDist_COND_EPS.query({"Y":1}, {"X":0}) > obsDist_COND_EPS.query({"Y":1}, {"X":1})) ? 0 : 1;
-        if (result !== f_X_COND_OBS(params)) {
+        if (isCorrectChoice(result, params)) {
           correctChoicesEps++;
         }
         return result;
@@ -506,7 +504,7 @@ var obsDist_COND_OBS = new Distribution(["X", "Y"]),
       } else {
         var result = (obsDist_COND_EPS_PROP.query({"Y":1}, {"X":0, "Z": originalChoice}) > obsDist_COND_EPS_PROP.query({"Y":1}, {"X":1, "Z": originalChoice})) ? 0 : 1;
         exploitEpsProp++;
-        if (result !== originalChoice) {
+        if (isCorrectChoice(result, params)) {
           correctChoicesEpsProp++;
         }
         return result;
@@ -740,15 +738,41 @@ var obsDist_COND_OBS = new Distribution(["X", "Y"]),
  */
 
 var FIXED_U = false,
+    RAND_PARAM = true,
     N_obs = 1000,
-    N_exp = 0,
-    N_t = 0,
+    N_exp = 1000,
     EPSILON = 0.15,
     TOLERANCE = 0.015,
     T = 1000,
-    TESTS = 1000;
+    TESTS = 1000,
+    
+    // U, W, X
+    rewardDist = [
+      [ // U = 0
+        [0.1, 0.5], // W = 0, p = 0
+        [0.5, 0.1]  // W = 1, p = 1
+      ],
+      [ // U = 1
+        [0.4, 0.2], // W = 0, p = 1
+        [0.2, 0.4]  // W = 1, p = 0
+      ]
+    ];
 
 for (var tests = 0; tests < TESTS; tests++) {
+  if (RAND_PARAM) {
+    // U, W, X
+    rewardDist = [
+      [ // U = 0
+        [Math.random(), Math.random()], // W = 0
+        [Math.random(), Math.random()]  // W = 1
+      ],
+      [ // U = 1
+        [Math.random(), Math.random()], // W = 0
+        [Math.random(), Math.random()]  // W = 1
+      ]
+    ];
+  }
+  
   obsDist_COND_COM = new Distribution(["X", "Y"]);
   obsDist_COND_EPS = new Distribution(["X", "Y"]);
   obsDist_COND_EPS_PROP = new Distribution(["Z", "X", "Y"]);
@@ -757,19 +781,12 @@ for (var tests = 0; tests < TESTS; tests++) {
   if (N_exp) {
     samples = expSim.generateSamples(N_exp);
     expDist_COND_COM.addItems(samples);
+    obsDist_COND_EPS.addItems(samples);
   }
   
   if (N_obs) {
     samples = sim.generateSamples(N_obs);
     obsDist_COND_COM.addItems(samples);
-    obsDist_COND_EPS.addItems(samples);
-    var epsPropSamples = [];
-    for (var s in samples) {
-      var currentSample = samples[s];
-      currentSample["Z"] = currentSample["U"];
-      epsPropSamples.push(currentSample);
-    }
-    obsDist_COND_EPS_PROP.addItems(epsPropSamples);
   }
   
   for (var t = 0; t < T; t++) {
@@ -789,11 +806,6 @@ for (var tests = 0; tests < TESTS; tests++) {
     winsEpsProp += epsPropOutcome["Y"];
     recordCombined.push(comOutcome["Y"]);
     winsCom += comOutcome["Y"];
-    
-    if (N_t) {
-      obsDist_COND_EPS.addItems(epsSim.generateSamples(N_t));
-      obsDist_COND_COM.addItems(combinedSim.generateSamples(N_t));
-    }
     
     obsDist_COND_OBS.addItems([obsOutcome]);
     obsDist_COND_EPS.addItems([epsOutcome]);
@@ -816,8 +828,23 @@ for (var tests = 0; tests < TESTS; tests++) {
   LRwinsCom += winsCom;
   winsCom = 0;
   time = 1;
+  
 }
 
+console.log("COND EPS PROP RESULTS =============");
+console.log("Obs P(y | X = 0):");
+console.log(obsDist_COND_EPS_PROP.query({"Y": 1}, {"X": 0, "Z": 0}));
+console.log();
+console.log("Obs P(y | X = 1):");
+console.log(obsDist_COND_EPS_PROP.query({"Y": 1}, {"X": 1, "Z": 0}));
+console.log();
+console.log("Obs P(y | X = 0):");
+console.log(obsDist_COND_EPS_PROP.query({"Y": 1}, {"X": 0, "Z": 1}));
+console.log();
+console.log("Obs P(y | X = 1):");
+console.log(obsDist_COND_EPS_PROP.query({"Y": 1}, {"X": 1, "Z": 1}));
+console.log();
+  
 console.log("RESULTS ===========================");
 console.log("Obs P(y | X = 0):");
 console.log(obsDist_COND_OBS.query({"Y": 1}, {"X": 0}));

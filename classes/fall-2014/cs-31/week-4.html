@@ -1,0 +1,859 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Andrew Forney - UCLA CS</title>
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/magic-bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/main.css" rel="stylesheet" type="text/css">
+    <script src="../../../js/lib/jquery-2.0.3.min.js"></script>
+    <script src="../../../js/lib/bootstrap.min.js"></script>
+    <script src="../../../js/lib/expanding.js"></script>
+    <script src="../../../js/display/general/general-display.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+  </head>
+  
+  <body data-spy="scroll" data-target="#scrollspy">
+    
+    <!-- BEGIN WRAP -->
+    <div id="wrap">
+      
+      <!-- BEGIN NAVIGATION -->
+      <nav class='navbar navbar-default' role='navigation'>
+        <div class='nav-accent'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-12'>
+              <div class='navbar-header'>
+                <button class='navbar-toggle' type='button' data-toggle='collapse' data-target='.navbar-main-collapse'>
+                  <span class='sr-only'>Toggle Navigation</span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                </button>
+                <a class='navbar-brand' href='/~forns/'>
+                  <span id='brand-text'>
+                    Andrew Forney
+                  </span>
+                </a>
+              </div>
+              
+              <div id='nav-main' class='collapse navbar-collapse navbar-main-collapse'>
+                <ul class='nav navbar-nav navbar-right'>
+                  
+                  <li>
+                    <a href='/~forns/about.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-user'></span>
+                      </div>
+                      <p class='text-center'>About</p>
+                    </a>
+                  </li>
+                  
+                  <li class='active'>
+                    <a href='/~forns/classes.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-book'></span>
+                      </div>
+                      <p class='text-center'>Classes</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/contact.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-comment'></span>
+                      </div>
+                      <p class='text-center'>Contact</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/publications.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-file'></span>
+                      </div>
+                      <p class='text-center'>Publications</p>
+                    </a>
+                  </li>
+                  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <!-- END NAVIGATION -->
+      
+      <!-- BEGIN MAIN CONTENT -->
+      <div id="main-content" class="container">
+        <div class="row">
+          
+          <!-- BEGIN SCROLLSPY -->
+          <div class='col-md-2'>
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+              <ul id='scrollspy' class="nav bs-sidenav">
+              </ul>
+            </div>
+          </div>
+          <!-- END SCROLLSPY -->
+          
+          <!-- BEGIN PRESENTATION CONTENT -->
+          <div class='col-md-10 presentation-content' role='main'>
+            <ol class="breadcrumb">
+              <li><a href="../../../classes.html">Classes</a></li>
+              <li><a href="./cs-31.html">Fall14 CS31</a></li>
+              <li class="active">Week 4</li>
+            </ol>
+            
+            <div id='functionIntro' class='scrollspy-element' scrollspy-title='Introduction'></div>
+            <h1>Introduction to Functions</h1>
+            <div>
+              <p>We know that functions in the most general sense are not unique to programming or C++. We see functions in a variety of disciplines.</p>
+              <p>The functions that we probably see first in life are of the mathematical variety.</p>
+              <p class='example'>
+                For example, I could create a function called f that takes in a value (we'll call that value x), and then returns another value based on my definition of f.<br/>
+                <code class='prettyprint'>f(x) = x + x^2</code>
+              </p>
+              <p>Notice I haven't used this function yet, I've just told it what I want it to do in case one day I decide my calculator is too far away and I want to just type f(5) or f(-3), depending on my needs.</p>
+              <p>So say that day does come along (spoiler: it will), I can pass in some number (I've used x as a placeholder to refer to it) and get out some result, that I expect to be a number.</p>
+              <p><code class='prettyprint'>f(5) = 5 + 5^2 = 5 + 25 = 30</code></p>
+              <p>So, above, I give my function f the value 5, and get the value 30 back.</p>
+              <p class='question' name='intro-q1'>What, then, is a general definition of a function?</p>
+              <p class='answer' name='intro-q1'>A function uses its definition to describe a relationship between its inputs and how they map to outputs.</p>
+              <p>Andrew, that definition is lame and isn't on the homework, teach me C++.</p>
+              <p>OK, fine. We must first remember that our computer is dumb, and needs us to tell it a lot about our function definitions.</p>
+              <p>Above, I said that I wanted a function called f (its name), which takes in a number called x (its parameter type and name) and spits back another number (its return type).</p>
+              <div class='toolkit'>
+                <p>A <strong>function</strong> definition in C++ has the following syntax:</p>
+<pre class='prettyprint'>
+  // The first line below is commonly called
+  // a "function signature"
+  return_type function_name (parameter1_type parameter1_name, parameter2_type parameter2_name, ...) {
+    // function definition
+  }
+</pre>
+              </div>
+              <p>Of course, the above contains placeholders, so let's start by defining some things:</p>
+              <p class='definition'><strong>Parameters</strong> are the ZERO or MORE inputs to your functions. Each has its type defined, and a placeholder name assigned to it.</p>
+              <p class='definition'><strong>Return type</strong> is the type of value I expect to receive back from a function (e.g. ints, doubles, strings, etc.)</p>
+              <p class='question' name='intro-q2'>So, how would I convert my simple mathematical function <code class='prettyprint'>f(x) = x + x^2</code> into a C++ function?</p>
+              <div class='answer' name='intro-q2'>
+<pre class='prettyprint'>
+  double f (double x) {
+    return x + x * x;
+  }
+</pre>
+              </div>
+              <p>Later, if I wanted to use this function, then I would just say <code class='prettyprint'>f(5.3)</code> or even pass in a variable that's a double like <code class='prettyprint'>f(someDoubleVar)</code>. We call this... &quot;calling&quot; the function.</p>
+              <p class='definition'><strong>Arguments</strong> are what you call the values you pass into a function when you're <strong>calling</strong> it</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='programmingFunctions' class='scrollspy-element' scrollspy-title='C++ Functions'></div>
+            <h1>Functions in C++</h1>
+            <div>
+              <p>Our analogy with <code class='prettyprint'>f(x) = x + x^2</code> can take us far with C++ functions, but not all the way.</p>
+              <p>Let's look at a complete program with our running example:</p>
+              <div class='question' name='functions-q1'>
+                <p>Will the following code compile? If so, what will it print out?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      double x = f(5.0);
+      
+      cout &lt;&lt; x &lt;&lt; endl;
+  }
+  
+  double f (double x) {
+      return x + x * x;
+  }
+</pre>
+              </div>
+              <p class='answer' name='functions-q1'>No! I run my program from the first line of code down to the last. When I hit the line saying <code class='prettyprint'>double x = f(5.0);</code> f has yet to be defined!</p>
+              <p>So how do we get around that? I want to put my main function first because it makes sense for the first thing I run to be up towards the top.</p>
+              <p class='definition'><strong>Function Prototypes</strong> are hints to the compiler that say, &quot;Hey, here's a function with a name, a return type, and some parameters... I'm not going to define it now, but if you use it, I promise I'll have it defined later!&quot;</p>
+              <p>Please, Compiler? I promise I'm good for my function definition!</p>
+              <p>OK, fine, this time kid.</p>
+              <p>So we do this:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  // Function prototype for f
+  double f (double x);
+  
+  int main () {
+      double x = f(5.0);
+      
+      cout &lt;&lt; x &lt;&lt; endl;
+  }
+  
+  double f (double x) {
+      return x + x * x;
+  }
+</pre>
+              <p>So, now we get to the line in main <code class='prettyprint'>double x = f(5.0);</code> and although f is not yet defined, I see a function prototype (later defined after main) and so my code compiles.</p>
+              <div class='question' name='functions-q3'>
+                <p>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  // Function prototype for f
+  double f (double x);
+  
+  int main () {
+      double x = f(5.0);
+      
+      cout &lt;&lt; x &lt;&lt; endl;
+  }
+</pre>
+              </div>
+              <p class='answer' name='functions-q3'>No! We broke our promise to the compiler that we'd define f later, so now we have to leave town or it will break our legs.</p>
+              <p>Now, as another note, there are certain things I can put into a function that just don't make sense.</p>
+              <p>If I tried to give my function <code class='prettyprint'>f(&quot;functionsSuck&quot;) = x + x^2</code>, it would neither be well defined nor very nice. My function f expects a number and outputs one as well.</p>
+              <p>Similarly, if I put in <code class='prettyprint'>f(5.3)</code> and got <code class='prettyprint'>f(5.3) = &quot;No you do!&quot;</code> in return, I would be both surprised and offended.</p>
+              <p class='definition'>Just as implicit type conversions occur when I try to store a value of type A into a variable of type B, so do conversions happen with parameters and return types. Not all such conversions are legal.</p>
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+    
+  // Function prototype for f
+  double f (double x);
+    
+  int main () {
+      string derp = "you wanted a string?";
+      double x = f(derp);
+        
+      cout &lt;&lt; x &lt;&lt; endl;
+  }
+  
+  double f (double x) {
+      return x + x * x;
+  }
+</pre>
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+    
+  // Function prototype for f
+  double f (double x);
+    
+  int main () {
+      // Function expects double parameter 0_o
+      int i = 5;
+      double x = f(i);
+        
+      cout &lt;&lt; x &lt;&lt; endl;
+  }
+  
+  double f (double x) {
+      return x + x * x;
+  }
+</pre>
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+    
+  // Function prototype for f
+  double f (double x);
+    
+  int main () {
+      double x = f(5.5);
+        
+      cout &lt;&lt; x &lt;&lt; endl;
+  }
+  
+  double f (double x) {
+      // Function returns type double! 0_o
+      bool result = x + x * x;
+      return result;
+  }
+</pre>
+              <p>Although it might be obvious, whenever I call a function, once I return from that function, I resume my program from the point at which I called it.</p>
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+      
+  // Function prototype for g
+  int g (int x);
+      
+  int main () {
+      cout &lt;&lt; g(5) &lt;&lt; endl;
+      cout &lt;&lt; g(-3.2) &lt;&lt; endl;
+      cout &lt;&lt; g('c') &lt;&lt; endl;
+  }
+    
+  int g (int x) {
+      return x + x * x;
+  }
+</pre>
+              <p>Above, whenever I called g from main, I return to the point in the main from which I called it after g returned an int.</p>
+              <p>So, this means I can also call functions from other functions, so I can function while I function.</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  double f (double x);
+  void update();
+  
+  int main () {
+      cout &lt;&lt; f(2.0) &lt;&lt; endl;
+      cout &lt;&lt; f(5.0) &lt;&lt; endl;
+  }
+  
+  double f (double x) {
+      update();
+      return x + x * x;
+  }
+  
+  // Return type void means
+  // I do NOT need to return
+  // anything!
+  void update () {
+      cout &lt;&lt; "hi :)" &lt;&lt; endl;
+  }
+</pre>
+              
+              <p>Lastly, if I promise my compiler that my function is going to return something of a certain type, I better deliver... or else...</p>
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+    
+  string deliverGoods (string s);
+    
+  int main () {
+      cout &lt;&lt; deliverGoods("My goods, please.") &lt;&lt; endl;
+  }
+  
+  string deliverGoods (string s) {
+      if (s == "Got the goods?") {
+          return "Yeah I got the goods.";
+      }
+      // Uhh... err...
+  }
+</pre>
+              
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='scope' class='scrollspy-element' scrollspy-title='Scope'></div>
+            <h1>Scope &amp; Functional Scope</h1>
+            <div>
+              <p>The long awaited lecture on scope has finally arrived, you may now stop holding your breath.</p>
+              <p class='definition'><strong>Scope</strong> refers to the names of variables, functions, identifiers, and other objects that are visible to your program in a particular region (block) of the code.</p>
+              <p>What do I mean by &quot;a particular region of the code?&quot;</p>
+              <p class='definition'><strong>Blocks</strong> are any regions of code enclosed by the curly brackets {...}. Each block contains its own scope.</p>
+              <p>Some examples:</p>
+<pre class='prettyprint'>
+  if (conditional) {
+    // Everything in here is part of
+    // the "if block"
+  } else {
+    // Everything in here is part of
+    // the "else block"
+  }
+</pre>
+<pre class='prettyprint'>
+  while (conditional) {
+    // Everything in here is part of
+    // the "while block"
+  }
+</pre>
+<pre class='prettyprint'>
+  int main () {
+    // Everything in here is part of
+    // the "main block," which is really
+    // just a "function block"
+  }
+</pre>
+<pre class='prettyprint'>
+  {
+    // This is just a plain ole block!
+  }
+  
+  // This is a chip off the ole block
+  string chip = "-_-";
+</pre>
+              <p>So what do blocks mean and what do they do for us? Well, first we need to know what identifiers are:</p>
+              <p class='definition'><strong>Identifiers</strong> are just the names we assign to variables, functions, templates, classes, namespaces, etc. E.g., int x = 5; x is an identifier.</p>
+              <p>Blocks allow us to keep identifiers in a &quot;container&quot; so that we can reuse them in different parts of the code and always know what identifier we're referring to when we use one.</p>
+              <p>Blocks act like envelopes such that blocks inside of other blocks will have access to their ancestors' identifiers.</p>
+              <div class='example'>
+                <p>So, let's take the below code and display how the blocks are nested:</p>
+              </div>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+    
+  int main () {
+      string s = "I'm in the main block!";
+      cout &lt;&lt; "main s: " &lt;&lt; s &lt;&lt; endl;
+    
+      if (s != "") {
+          string s = "I'm in the if :(";
+          cout &lt;&lt; "if s: " &lt;&lt; s &lt;&lt; endl;
+      }
+    
+      for (int i = 0; i &lt; 3; i++) {
+          string s = "I'm in the loop!";
+          cout &lt;&lt; "for s: " &lt;&lt; s &lt;&lt; endl;
+          
+          if (i == 2) {
+              string s = "I'm special :)";
+              cout &lt;&lt; "for-if s: " &lt;&lt; s &lt;&lt; endl;
+          }
+      }
+  }
+</pre>
+              <p>Here's a graphical representation of the blocks above:</p>
+              <div class='thumbnail'>
+                <p><strong>Global Space</strong></p>
+                <div class='thumbnail alert alert-info'>
+                  <p><strong>Main Block</strong></p>
+                  <p>s = "I'm in the main block!"</p>
+                  <br/>
+                  <div class='thumbnail alert alert-warning'>
+                    <p><strong>if Block</strong></p>
+                    <p>s = "I'm in the if :("</p>
+                  </div>
+                  <div class='thumbnail alert alert-warning'>
+                    <p><strong>for Block</strong></p>
+                    <p>s = "I'm in the loop!"</p>
+                    <br/>
+                    <div class='thumbnail alert alert-danger'>
+                      <p><strong>for-if Block</strong></p>
+                      <p>s = "I'm special :)"</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <br/>
+              <p>So taking variables for example, how do I know which variable name is in scope?</p>
+              <p>The general idea <strong>in C++</strong> is this:</p>
+              <ol class='indent-1'>
+                <li><p>First, look in the current block and see if that identifier is defined. If it is, use that definition, otherwise...</p></li>
+                <li><p>Look for a definition of that identifier in the <strong>next block up</strong>. If it is defined there, then use that definition. Keep looking in the next enclosing block, and if I don't find it in the global space...</p></li>
+                <li><p>I get a compile error, because that identifier isn't defined anywhere in the code.</p></li>
+              </ol>
+              <p class='debug'><strong>NOTE:</strong> I say this is how scope works in C++ (and a variety of other languages), but not all languages in general!</p>
+              <p>Alright, let's look at some examples and trace the blocks and scopes.</p>
+              <div class='question' name='scope-q1'>
+                <p>Will the following code compile? If so, draw the block nesting and say what it will output?</p><br/>
+<pre class='prettyprint'>
+  /*
+   * I call this example:
+   * "Snakes on a Main"
+   */
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  bool snake = true;
+  
+  int main () {
+      string samuel = "I'm tired of these darn snakes. ";
+  
+      if (samuel != "") {
+          cout &lt;&lt; samuel &lt;&lt; snake &lt;&lt; endl;
+      }
+      
+      {
+        string snake = "I hope there are no snakes in here...";
+        cout &lt;&lt; snake &lt;&lt; endl;
+      }
+  }
+</pre>
+              </div>
+              <div class='answer' name='scope-q1'>
+                <div class='thumbnail'>
+                  <p><strong>Global Space</strong></p>
+                  <p>snake = true;</p>
+                  <div class='thumbnail alert alert-info'>
+                    <p><strong>Main Block</strong></p>
+                    <p>samuel = &quot;I'm tired of these darn snakes. &quot;</p><br/>
+                    <div class='thumbnail alert alert-warning'>
+                      <p><strong>if Block</strong></p>
+                      <p>
+                        // variables samuel and snake referenced, but<br/>
+                        // not in block... look back
+                      </p>
+                    </div>
+                    <div class='thumbnail alert alert-warning'>
+                      <p><strong>Plain Block</strong></p>
+                      <p>
+                        snake = "I hope there are no snakes in here..."<br/>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <p>One important note: although a variable may eventually live in a particular block, if it is referenced <strong>before</strong> it's defined, then we'll get a compile error.</p>
+              <div class='question' name='scope-q2'>
+                <p>Will the following code compile? If so, draw the block nesting and say what it will output?</p><br/>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  bool snake = true;
+  
+  int main () {
+      if (samuel != "") {
+          cout &lt;&lt; samuel &lt;&lt; snake &lt;&lt; endl;
+      }
+      
+      // I'm down here now!
+      string samuel = "I'm tired of these darn snakes. ";
+      
+      {
+        string snake = "I hope there are no snakes in here...";
+        cout &lt;&lt; snake &lt;&lt; endl;
+      }
+  }
+</pre>
+              </div>
+              <div class='answer' name='scope-q2'>
+                <div class='thumbnail'>
+                  <p><strong>Global Space</strong></p>
+                  <p>snake = true;</p>
+                  <div class='thumbnail alert alert-info'>
+                    <p><strong>Main Block</strong></p>
+                    <div class='thumbnail alert alert-warning'>
+                      <p><strong>if Block</strong></p>
+                      <p>
+                        // variables samuel and snake referenced, but<br/>
+                        // not in block... look back
+                      </p>
+                    </div>
+                    <p>samuel = &quot;I'm tired of these darn snakes. &quot;</p><br/>
+                    <div class='thumbnail alert alert-warning'>
+                      <p><strong>Plain Block</strong></p>
+                      <p>
+                        snake = "I hope there are no snakes in here..."<br/>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <br/>
+                <p>No! Doesn't compile; even though samuel is technically defined in the main function, by the time I want to use it, it hasn't been defined yet.</p>
+              </div>
+              
+              <p>So how does all of this jazz about scope work with functions? Well, pretty much exactly how you'd expect.</p>
+              <div class='question' name='scope-q3'>
+                <p>What will the output be of the following code?</p><br/>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+    
+  bool snakesHere (string s);
+  string snakes = "No Snakes";
+  
+  int main () {
+      cout &lt;&lt; snakesHere(snakes) &lt;&lt; endl;
+      string snakes = "SNAAAKES!";
+      cout &lt;&lt; snakesHere(snakes) &lt;&lt; endl;
+  }
+  
+  bool snakesHere (string snakes) {
+      return snakes == "SNAAAKES!";
+  }
+</pre>
+              </div>
+              <div class='answer' name='scope-q3'>
+                <div class='thumbnail'>
+                  <p><strong>Global Space</strong></p>
+                  <p>snakes = "No Snakes"</p>
+                  <div class='thumbnail alert alert-info'>
+                    <p><strong>Main Block</strong></p>
+                    <p>snakes = "SNAAAKES!"</p>
+                  </div>
+                  <div class='thumbnail alert alert-info'>
+                    <p><strong>snakesHere Block</strong></p>
+                    <p>// Designates that snakes is defined as a parameter<br/>@param snakes</p>
+                  </div>
+                </div>
+                <br/>
+                <p>So, we get 0 and 1 output, respectively.</p>
+              </div>
+              <p>As a final note, we should talk about how to override scope, viz. what to do in the following scenario:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int getMe = 0;
+  
+  int main () {
+      bool getMe = 1;
+      // How do I print out the int getMe
+      // that's in the global namespace?
+      cout &lt;&lt; getMe &lt;&lt; endl;
+  }
+</pre>
+              <p>How do I print out the global getMe? Well, the easiest way would be to rename one of the variables...</p>
+              <p>But say I insisted upon it being called getMe.</p>
+              <p class='toolkit'><strong>Scope access</strong> is done using the :: operator.</p>
+              <p>If I wanted to access a variable named x in the imANamespace namespace, I would say imANamespace::x</p>
+              <p>If I wanted to access a variable named x in the global namespace (and x was already defined in my scope), I would say ::x</p>
+              <div class='example'>
+                <p>
+                  Design a function called presetSubstring that takes in a string s, and an int i, and then returns a 
+                  string of all characters starting at the index of s designated by a global namespace constant int START 
+                  up until index START + i. You may not use the builtin .substr(...) function!<hr/>
+                  <p>
+                    <strong>Test Cases:</strong><br/>
+                    ...<br/>
+                    const int START = 1;<br/>
+                    ...<br/>
+                    presetSubstring(&quot;test&quot;, 3); // Returns &quot;est&quot;<br/>
+                    presetSubstring(&quot;testing&quot;, 3); // Returns &quot;est&quot;<br/>
+                    presetSubstring(&quot;&quot;, 5); // Returns &quot;&quot;<br/>
+                    presetSubstring(&quot;testing&quot;, -1); // Returns &quot;&quot;<br/>
+                    presetSubstring(&quot;testing&quot;, 5000); // Returns &quot;esting&quot;
+                  </p>
+                </p>
+              </div>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='references' class='scrollspy-element' scrollspy-title='References'></div>
+            <h1>References</h1>
+            <div>
+              <p>We all make &quot;references&quot; in English all the time. &quot;The Golden State&quot; is a reference to California. &quot;Nick&quot; is a reference to some guy named Nickolas.</p>
+              <p>References are just different names for the same objects.</p>
+              <p class='definition'>In C++, <strong>references</strong> are aliases for an object, in that they can be treated as actually being the object they're referencing. The syntax for a reference is:<br/>&lt;type&gt; &amp; &lt;name&gt;</p>
+              <p>Here's a simple example:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+    
+  int main () {
+    double trouble = 123.45;
+    double&amp; issue = trouble;
+  
+    cout &lt;&lt; "issue is: " &lt;&lt; issue &lt;&lt; endl;
+  
+    // Now, change issue...
+    issue = 0.0;
+    // ...and see what happens to trouble
+    cout &lt;&lt; "trouble is: " &lt;&lt; trouble &lt;&lt; endl;
+    cout &lt;&lt; "issue is: " &lt;&lt; issue &lt;&lt; endl;
+  }
+</pre>
+              <p>So, when I change issue above, trouble changes also... which isn't surprising because issue is just another name for trouble.</p>
+              <p>So why have references? Well, one illustration is how function parameters work in C++.</p>
+              <p>By default, function parameters are taken in what is known as &quot;pass by value.&quot;</p>
+              <!-- TODO -->
+              <p class='definition'><strong>Pass by value</strong> means that parameter values are copied whenever a function is called, and do not refer to the argument variables.</p>
+              <p class='example'>What are the values of x and result that get printed?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  double f (double x);
+  
+  int main () {
+      double x = 5.0,
+             result = f(x);
+      
+      cout &lt;&lt; result &lt;&lt; endl;
+      cout &lt;&lt; x &lt;&lt; endl;
+  }
+  
+  // Receiving x by value
+  double f (double x) {
+      x = x + x * x;
+      return x;
+  }
+</pre>
+              <p>Notice how I passed in x (by value) in main, but x in main did not get modified after I called f(x).</p>
+              <p class='definition'><strong>Pass by reference</strong> means that parameters are references (aliases, nicknames, etc.) to the arguments; they are essentially the same variable.</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  // Note, I also had to put
+  // the &amp; after double in the
+  // function prototype
+  double f (double&amp; x);
+  
+  int main () {
+      double x = 5.0,
+             result = f(x);
+      
+      cout &lt;&lt; result &lt;&lt; endl;
+      cout &lt;&lt; x &lt;&lt; endl;
+  }
+  
+  // Receiving x by reference
+  // Note the &amp; after double
+  double f (double&amp; x) {
+      x = x + x * x;
+      return x;
+  }
+</pre>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='practice' class='scrollspy-element' scrollspy-title='Practice + HW3'></div>
+            <h1>Practice &amp; Homework 3 Help</h1>
+            <div>
+              <p>Homework first, because let's face it, that's why you came to discussion.</p>
+              <p>We should talk a little bit about some more things you can do with strings:</p>
+              <p class='toolkit'><strong>Substring</strong> is a string method that returns another string equal to a part of the calling string. The syntax is:<br/>string s = "some string";<br/>s.substr(start, length);</p>
+              <p>In s.substr(start, length), start and length are integers designating the following:</p>
+              <ul class='indent-1'>
+                <li><p>start defines the index at which you'd like to start collecting characters in the calling string.</p></li>
+                <li><p>length defines how many characters from start you'd like to collect</p></li>
+              </ul>
+              <p>You'll get this quickly with an example:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      string s = "stringz";
+      // Print out the first 3
+      // characters of s
+      cout &lt;&lt; s.substr(0, 3) &lt;&lt; endl;
+      
+      // Print out 3 characters
+      // of s following index 2
+      cout &lt;&lt; s.substr(2, 3) &lt;&lt; endl;
+      
+      // Print out all characters
+      // of s
+      cout &lt;&lt; s.substr(0, s.length()) &lt;&lt; endl;
+      
+      // Print NOTHING FROM s
+      cout &lt;&lt; s.substr(2, 0) &lt;&lt; endl;
+      
+      // Notice, none of this
+      // changed s
+      cout &lt;&lt; s &lt;&lt; endl;
+  }
+</pre>
+            </div>
+            <p>Because the substring returns a string, I can easily concatenate their results with the + operator.</p>
+            <p>Try some examples?</p>
+            <p class='example'>Design a function called evenLetterThief of return type void that takes in a string <strong>by reference</strong> and then removes all of its even index letters.</p>
+            <p>Examples of this function include:</p>
+            <ul class='indent-1'>
+              <li><p>
+<pre class='prettyprint'>
+  string s = "test";
+  evenLetterThief(s);
+  cout &lt;&lt; s &lt;&lt; endl; // prints "et"
+</pre>
+              </p></li>
+              <li><p>
+<pre class='prettyprint'>
+  s = "t";
+  evenLetterThief(s);
+  cout &lt;&lt; s &lt;&lt; endl; // prints ""
+</pre>
+              </p></li>
+              <li><p>
+<pre class='prettyprint'>
+  s = "";
+  evenLetterThief(s);
+  cout &lt;&lt; s &lt;&lt; endl; // prints ""
+</pre>
+              </p></li>
+            </ul>
+            <div class='example'>
+              <p>Design two functions with the following signatures and purposes:</p>
+            </div>
+            <ol class='indent-1'>
+              <li><p>bool isLameChar (char c, int i); returns whether or not the character code of c is less than i.</p></li>
+              <li><p>string redeemLameChars (string s, int i, char c); returns a string result that is equal to s with all characters whose code is less than i replaced with c.</p></li>
+            </ol>
+            <br/>
+            <h2>Project Development</h2>
+            <p>Some general guidelines for project development:</p>
+            <ul class='indent-1'>
+              <li><p>When developing functions, always test them individually to make sure you're getting what you expect!</p></li>
+              <li><p>If your code is still behaving unexpectedly, you may want to do some simple cout statements to make sure variables have the values you expect.</p></li>
+              <li><p>If your code is STILL behaving unexpectedly, you may want to use an IDE's debugger.</p></li>
+            </ul>
+            <p class='definition'>A <strong>debugger</strong> allows you to take baby-steps through your code, and assess the value of each variable or output without having to run it all at once.</p>
+            <p class='definition'>A <strong>breakpoint</strong> is a point you set in your code at which you would like the debugger to stop for you to assess the state of your program.</p>
+            <p>For example, input the following program into your favorite IDE and insert breakpoints where instructed. Then, run with debugging and see how the breakpoints operate.</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int main () {
+      int i = 3;
+      string snake = "hiss";
+      // Insert breakpoint below
+      
+      while (i &gt; 0) {
+          snake += "s";
+          cout &lt;&lt; snake &lt;&lt; endl;
+          // Insert breakpoint below
+          i--;
+      }
+  }
+</pre>
+              <p>For more informatin on debuggers, consult our course page, which has videos and slides.</p>
+            <hr/>
+            
+          </div>
+          <!-- END PRESENTATION CONTENT -->
+          
+        </div>
+      </div>
+      <!-- END MAIN CONTENT -->
+      
+      
+    </div>
+    <!-- END WRAPPER -->
+    
+    <!-- BEGIN FOOTER -->
+    <div id="footer">
+      <div class="container">
+        <div class="col-md-12 text-center">
+          
+        </div>
+      </div>
+    </div>
+    <!-- END FOOTER -->
+    
+  </body>
+</html>
