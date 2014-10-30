@@ -122,6 +122,8 @@
               <p>So, above, I give my function f the value 5, and get the value 30 back.</p>
               <p class='question' name='intro-q1'>What, then, is a general definition of a function?</p>
               <p class='answer' name='intro-q1'>A function uses its definition to describe a relationship between its inputs and how they map to outputs.</p>
+              <br/>
+              
               <p>Andrew, that definition is lame and isn't on the homework, teach me C++.</p>
               <p>OK, fine. We must first remember that our computer is dumb, and needs us to tell it a lot about our function definitions.</p>
               <p>Above, I said that I wanted a function called f (its name), which takes in a number called x (its parameter type and name) and spits back another number (its return type).</p>
@@ -146,20 +148,21 @@
   }
 </pre>
               </div>
+              <br/>
               <p>Later, if I wanted to use this function, then I would just say <code class='prettyprint'>f(5.3)</code> or even pass in a variable that's a double like <code class='prettyprint'>f(someDoubleVar)</code>. We call this... &quot;calling&quot; the function.</p>
-              <p class='definition'><strong>Arguments</strong> are what you call the values you pass into a function when you're <strong>calling</strong> it</p>
+              <p class='definition'><strong>Arguments</strong> are what you call the values you pass into a function when you're <strong>calling</strong> it.</p>
+              <p class='definition'><strong>Parameters</strong> are what you call the placeholder values passed into a function when you're <strong>defining</strong> it.</p>
             </div>
             <hr/>
-            
-            
             <br/>
+            
+            
             <div id='programmingFunctions' class='scrollspy-element' scrollspy-title='C++ Functions'></div>
             <h1>Functions in C++</h1>
             <div>
               <p>Our analogy with <code class='prettyprint'>f(x) = x + x^2</code> can take us far with C++ functions, but not all the way.</p>
               <p>Let's look at a complete program with our running example:</p>
-              <div class='question' name='functions-q1'>
-                <p>Will the following code compile? If so, what will it print out?</p>
+              <p class='debug'>Will the following code compile? If so, what will it print out?</p>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
   #include &lt;string&gt;
@@ -175,10 +178,12 @@
       return x + x * x;
   }
 </pre>
-              </div>
+              <p class='question' name='functions-q1'>Click for answer.</p>
               <p class='answer' name='functions-q1'>No! I run my program from the first line of code down to the last. When I hit the line saying <code class='prettyprint'>double x = f(5.0);</code> f has yet to be defined!</p>
+              <br/>
               <p>So how do we get around that? I want to put my main function first because it makes sense for the first thing I run to be up towards the top.</p>
               <p class='definition'><strong>Function Prototypes</strong> are hints to the compiler that say, &quot;Hey, here's a function with a name, a return type, and some parameters... I'm not going to define it now, but if you use it, I promise I'll have it defined later!&quot;</p>
+              <br/>
               <p>Please, Compiler? I promise I'm good for my function definition!</p>
               <p>OK, fine, this time kid.</p>
               <p>So we do this:</p>
@@ -201,8 +206,7 @@
   }
 </pre>
               <p>So, now we get to the line in main <code class='prettyprint'>double x = f(5.0);</code> and although f is not yet defined, I see a function prototype (later defined after main) and so my code compiles.</p>
-              <div class='question' name='functions-q3'>
-                <p>Will the following code compile? If so, what will it output?</p>
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
   #include &lt;string&gt;
@@ -217,8 +221,9 @@
       cout &lt;&lt; x &lt;&lt; endl;
   }
 </pre>
-              </div>
+              <p class='question' name='functions-q3'>Click for answer</p>
               <p class='answer' name='functions-q3'>No! We broke our promise to the compiler that we'd define f later, so now we have to leave town or it will break our legs.</p>
+              <br/>
               <p>Now, as another note, there are certain things I can put into a function that just don't make sense.</p>
               <p>If I tried to give my function <code class='prettyprint'>f(&quot;functionsSuck&quot;) = x + x^2</code>, it would neither be well defined nor very nice. My function f expects a number and outputs one as well.</p>
               <p>Similarly, if I put in <code class='prettyprint'>f(5.3)</code> and got <code class='prettyprint'>f(5.3) = &quot;No you do!&quot;</code> in return, I would be both surprised and offended.</p>
@@ -243,6 +248,7 @@
       return x + x * x;
   }
 </pre>
+              <br/>
               <p class='debug'>Will the following code compile? If so, what will it output?</p>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
@@ -264,6 +270,7 @@
       return x + x * x;
   }
 </pre>
+              <br/>
               <p class='debug'>Will the following code compile? If so, what will it output?</p>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
@@ -285,6 +292,7 @@
       return result;
   }
 </pre>
+              <br/>
               <p>Although it might be obvious, whenever I call a function, once I return from that function, I resume my program from the point at which I called it.</p>
               <p class='debug'>Will the following code compile? If so, what will it output?</p>
 <pre class='prettyprint'>
@@ -305,6 +313,7 @@
       return x + x * x;
   }
 </pre>
+              <br/>
               <p>Above, whenever I called g from main, I return to the point in the main from which I called it after g returned an int.</p>
               <p>So, this means I can also call functions from other functions, so I can function while I function.</p>
 <pre class='prettyprint'>
@@ -332,7 +341,7 @@
       cout &lt;&lt; "hi :)" &lt;&lt; endl;
   }
 </pre>
-              
+              <br/>
               <p>Lastly, if I promise my compiler that my function is going to return something of a certain type, I better deliver... or else...</p>
               <p class='debug'>Will the following code compile? If so, what will it output?</p>
 <pre class='prettyprint'>
@@ -397,8 +406,10 @@
   // This is a chip off the ole block
   string chip = "-_-";
 </pre>
+              <br/>
               <p>So what do blocks mean and what do they do for us? Well, first we need to know what identifiers are:</p>
               <p class='definition'><strong>Identifiers</strong> are just the names we assign to variables, functions, templates, classes, namespaces, etc. E.g., int x = 5; x is an identifier.</p>
+              <br/>
               <p>Blocks allow us to keep identifiers in a &quot;container&quot; so that we can reuse them in different parts of the code and always know what identifier we're referring to when we use one.</p>
               <p>Blocks act like envelopes such that blocks inside of other blocks will have access to their ancestors' identifiers.</p>
               <div class='example'>
@@ -429,6 +440,7 @@
       }
   }
 </pre>
+              <br/>
               <p>Here's a graphical representation of the blocks above:</p>
               <div class='thumbnail'>
                 <p><strong>Global Space</strong></p>
@@ -461,8 +473,7 @@
               </ol>
               <p class='debug'><strong>NOTE:</strong> I say this is how scope works in C++ (and a variety of other languages), but not all languages in general!</p>
               <p>Alright, let's look at some examples and trace the blocks and scopes.</p>
-              <div class='question' name='scope-q1'>
-                <p>Will the following code compile? If so, draw the block nesting and say what it will output?</p><br/>
+              <p class='debug'>Will the following code compile? If so, draw the block nesting and say what it will output?</p>
 <pre class='prettyprint'>
   /*
    * I call this example:
@@ -487,7 +498,7 @@
       }
   }
 </pre>
-              </div>
+              <p class='question' name='scope-q1'>Click for answer.</p>
               <div class='answer' name='scope-q1'>
                 <div class='thumbnail'>
                   <p><strong>Global Space</strong></p>
@@ -511,9 +522,9 @@
                   </div>
                 </div>
               </div>
+              <br/>
               
               <p>One important note: although a variable may eventually live in a particular block, if it is referenced <strong>before</strong> it's defined, then we'll get a compile error.</p>
-              <div class='question' name='scope-q2'>
                 <p>Will the following code compile? If so, draw the block nesting and say what it will output?</p><br/>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
@@ -536,7 +547,7 @@
       }
   }
 </pre>
-              </div>
+              <p class='question' name='scope-q2'>Click for answer.</p>
               <div class='answer' name='scope-q2'>
                 <div class='thumbnail'>
                   <p><strong>Global Space</strong></p>
@@ -562,10 +573,10 @@
                 <br/>
                 <p>No! Doesn't compile; even though samuel is technically defined in the main function, by the time I want to use it, it hasn't been defined yet.</p>
               </div>
+              <br/>
               
               <p>So how does all of this jazz about scope work with functions? Well, pretty much exactly how you'd expect.</p>
-              <div class='question' name='scope-q3'>
-                <p>What will the output be of the following code?</p><br/>
+              <p class='debug'>What will the output be of the following code?</p>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
   #include &lt;string&gt;
@@ -584,7 +595,7 @@
       return snakes == "SNAAAKES!";
   }
 </pre>
-              </div>
+              <p class='question' name='scope-q3'>Click for answer.</p>
               <div class='answer' name='scope-q3'>
                 <div class='thumbnail'>
                   <p><strong>Global Space</strong></p>
