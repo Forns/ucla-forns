@@ -107,6 +107,54 @@
               <li class="active">Week 4</li>
             </ol>
             
+            
+            <div id='review' class='scrollspy-element' scrollspy-title='Notes from Grading'></div>
+            <h1>Notes from Grading</h1>
+            <div>
+              <p>A couple of days ago I had the chance to grade your project 2. There were a few common mistakes that I'd like to review.</p>
+              <p>...and if you've already gotten your grades and comments back, know this: I'm very picky and will point out seemingly minor flaws because I love you and want you to be perfect!</p>
+              <p class='debug'>If you find yourself repeating the same code over and over... there's probably a better way to do whatever you're trying to do.</p>
+              <br/>
+              <p>Remember to keep your code DRY (Don't Repeat Yourself); remember that you can always abstract commonalities using the control flow we've already learned.</p>
+              <p class='debug'>Comments should describe, conversationally, what a piece of code is doing. Do not simply echo the code syntax!</p>
+<pre class='prettyprint'>
+  // If texts is less than 400
+  if (texts &lt; HIGH_TEXT_THRESHOLD) {
+      bill += someComplicatedQuantity;
+  } else {
+      bill += someOtherComplicatedQuantity;
+  }
+</pre>
+              <p class='question' name='comments-q0'>What is wrong with the above comment?</p>
+              <div class='answer' name='comments-q0'>
+                <ul class='indent-1'>
+                  <li><p>It tells me nothing about what that code is doing.</p></li>
+                  <li><p>It's restating the syntax.</p></li>
+                  <li><p>It lists the constant 400 that might be true for the CURRENT value of HIGH_TEXT_THRESHOLD, but not in general.</p></li>
+                </ul>
+              </div>
+              <br/>
+              <p>Better, would be something like:</p>
+<pre class='prettyprint'>
+  // Adjust the bill if a user has texted over the higher
+  // text-message threshold, and will be penalized accordingly
+  if (texts &lt; HIGH_TEXT_THRESHOLD) {
+      bill += someComplicatedQuantity;
+  } else {
+      bill += someOtherComplicatedQuantity;
+  }
+</pre>
+              <br/>
+              <p class='debug'>Don't be afraid to scrub a segment of code and start over if, during the course of writing that bad code, you think of a better way to do it. (save the original first, of course)</p>
+              <br/>
+              <p>I saw a lot of instances where there was rampant repetition of clauses...</p>
+              <p>People probably thought of a better way while they were typing the like... 50th if clause, but then thought, "Well crap... I've typed 50 if-clauses, now I'm invested!"</p>
+              <p>Just start over... your grade will thank you, and you'll be a better programmer as a result (we all do it, trust me).</p>
+            </div>
+            <hr/>
+            <br/>
+            
+            
             <div id='functionIntro' class='scrollspy-element' scrollspy-title='Introduction'></div>
             <h1>Introduction to Functions</h1>
             <div>
@@ -130,27 +178,36 @@
               <div class='toolkit'>
                 <p>A <strong>function</strong> definition in C++ has the following syntax:</p>
 <pre class='prettyprint'>
-  // The first line below is commonly called
-  // a "function signature"
+  /*
+   * Note: My top level comment above a function
+   * goes here using the multi-line comment, and
+   * should describe the function's input and output.
+   * The first line below is commonly called
+   * a "function signature"
+   */
   return_type function_name (parameter1_type parameter1_name, parameter2_type parameter2_name, ...) {
-    // function definition
+      // function body
   }
 </pre>
               </div>
+              <br/>
               <p>Of course, the above contains placeholders, so let's start by defining some things:</p>
               <p class='definition'><strong>Parameters</strong> are the ZERO or MORE inputs to your functions. Each has its type defined, and a placeholder name assigned to it.</p>
               <p class='definition'><strong>Return type</strong> is the type of value I expect to receive back from a function (e.g. ints, doubles, strings, etc.)</p>
-              <p class='question' name='intro-q2'>So, how would I convert my simple mathematical function <code class='prettyprint'>f(x) = x + x^2</code> into a C++ function?</p>
+              <p class='question' name='intro-q2'>So, how would I convert my simple mathematical function <code class='prettyprint'>f(x) = x + x^2</code> into a C++ function? (assume double x)</p>
               <div class='answer' name='intro-q2'>
 <pre class='prettyprint'>
   double f (double x) {
-    return x + x * x;
+      return x + x * x;
   }
 </pre>
               </div>
               <br/>
               <p>Later, if I wanted to use this function, then I would just say <code class='prettyprint'>f(5.3)</code> or even pass in a variable that's a double like <code class='prettyprint'>f(someDoubleVar)</code>. We call this... &quot;calling&quot; the function.</p>
               <p class='definition'><strong>Arguments</strong> are what you call the values you pass into a function when you're <strong>calling</strong> it.</p>
+              <br/>
+              <p>Calling a function means that you've passed in some inputs (or none, if none are expected) and are expecting it to execute, possibly returning some result.</p>
+              <p>Note that we call the inputs "arguments" when we call a function, and "parameters" when we are designing its signature.</p>
               <p class='definition'><strong>Parameters</strong> are what you call the placeholder values passed into a function when you're <strong>defining</strong> it.</p>
             </div>
             <hr/>
@@ -182,7 +239,8 @@
               <p class='answer' name='functions-q1'>No! I run my program from the first line of code down to the last. When I hit the line saying <code class='prettyprint'>double x = f(5.0);</code> f has yet to be defined!</p>
               <br/>
               <p>So how do we get around that? I want to put my main function first because it makes sense for the first thing I run to be up towards the top.</p>
-              <p class='definition'><strong>Function Prototypes</strong> are hints to the compiler that say, &quot;Hey, here's a function with a name, a return type, and some parameters... I'm not going to define it now, but if you use it, I promise I'll have it defined later!&quot;</p>
+              <p class='definition'><strong>Function Prototypes</strong> are hints to the compiler that say, &quot;Hey, here's a function with a name, a return type, and some parameters... 
+                I'm not going to define it now, but if you use it, I promise I'll have it defined later!&quot;<br/><br/>They consist of a function signature without the function body.</p>
               <br/>
               <p>Please, Compiler? I promise I'm good for my function definition!</p>
               <p>OK, fine, this time kid.</p>
@@ -315,7 +373,13 @@
 </pre>
               <br/>
               <p>Above, whenever I called g from main, I return to the point in the main from which I called it after g returned an int.</p>
-              <p>So, this means I can also call functions from other functions, so I can function while I function.</p>
+              <p class='toolkit'>After a function has returned, the code will resume execution from wherever that function was called.</p>
+              <p class='toolkit'>Apropos, this means that functions can even call one another!</p>
+              <br/>
+              <p>Finally, if we have a function that is not returning anything (can still have 0 or more parameters), we can specify a return type of void.</p>
+              <p class='toolkit'>The <strong>void</strong> return type asserts that the function will not return anything. (though you can still stop the execution of a void function with <code class='prettyprint'>return;</code>)</p>
+              <br/>
+              <p class='example'>What will the following code print out?</p>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
   #include &lt;string&gt;
@@ -362,7 +426,49 @@
       // Uhh... err...
   }
 </pre>
-              
+              <br/>
+              <p class='example'>Design two functions with the following signatures and purposes:</p>
+              <ol class='indent-1'>
+                <li><p><code class='prettyprint'>isLameChar</code> returns whether or not the character code of char c is less than int i.</p></li>
+                <li><p><code class='prettyprint'>redeemLameChars</code> returns a string result that is equal to input string s with all characters whose code is less than int i replaced with char r.</p></li>
+              </ol>
+              <br/>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cassert&gt;
+  using namespace std;
+  
+  /*
+   * Returns whether or not the character code if c
+   * is less than i.
+   */
+  ??? isLameChar ( ??? ) {
+      return c &lt; i;
+  }
+  
+  /*
+   * Returns a string that is equal to s with all chars
+   * whose code is less than i replaced with r
+   */
+  ??? redeemLameChars ( ??? ) {
+      for (int j = 0; j &lt; s.length(); j++) {
+          // [!] If we meet our isLameChar criteria...
+          if ( ??? ) {
+              // ...then replace the current letter with r
+              ???
+          }
+      }
+      // Return that string with replacement
+      ???
+  }
+  
+  int main () {
+      cout &lt;&lt; redeemLameChars("abc", 1, '!') &lt;&lt; endl;
+      cout &lt;&lt; redeemLameChars("abc", 100, '!') &lt;&lt; endl;
+      cout &lt;&lt; redeemLameChars("C00L", '9', '!') &lt;&lt; endl;
+  }
+</pre>
             </div>
             <hr/>
             
@@ -373,8 +479,10 @@
             <div>
               <p>The long awaited lecture on scope has finally arrived, you may now stop holding your breath.</p>
               <p class='definition'><strong>Scope</strong> refers to the names of variables, functions, identifiers, and other objects that are visible to your program in a particular region (block) of the code.</p>
+              <br/>
               <p>What do I mean by &quot;a particular region of the code?&quot;</p>
               <p class='definition'><strong>Blocks</strong> are any regions of code enclosed by the curly brackets {...}. Each block contains its own scope.</p>
+              <br/>
               <p>Some examples:</p>
 <pre class='prettyprint'>
   if (conditional) {
@@ -525,7 +633,7 @@
               <br/>
               
               <p>One important note: although a variable may eventually live in a particular block, if it is referenced <strong>before</strong> it's defined, then we'll get a compile error.</p>
-                <p>Will the following code compile? If so, draw the block nesting and say what it will output?</p><br/>
+              <p class='debug'>Will the following code compile? If so, draw the block nesting and say what it will output?</p>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
   #include &lt;string&gt;
@@ -576,7 +684,7 @@
               <br/>
               
               <p>So how does all of this jazz about scope work with functions? Well, pretty much exactly how you'd expect.</p>
-              <p class='debug'>What will the output be of the following code?</p>
+              <p class='example'>What will the output be of the following code?</p>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
   #include &lt;string&gt;
@@ -612,6 +720,7 @@
                 <br/>
                 <p>So, we get 0 and 1 output, respectively.</p>
               </div>
+              <br/>
               <p>As a final note, we should talk about how to override scope, viz. what to do in the following scenario:</p>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
@@ -630,37 +739,22 @@
               <p>How do I print out the global getMe? Well, the easiest way would be to rename one of the variables...</p>
               <p>But say I insisted upon it being called getMe.</p>
               <p class='toolkit'><strong>Scope access</strong> is done using the :: operator.</p>
+              <br/>
               <p>If I wanted to access a variable named x in the imANamespace namespace, I would say imANamespace::x</p>
               <p>If I wanted to access a variable named x in the global namespace (and x was already defined in my scope), I would say ::x</p>
-              <div class='example'>
-                <p>
-                  Design a function called presetSubstring that takes in a string s, and an int i, and then returns a 
-                  string of all characters starting at the index of s designated by a global namespace constant int START 
-                  up until index START + i. You may not use the builtin .substr(...) function!<hr/>
-                  <p>
-                    <strong>Test Cases:</strong><br/>
-                    ...<br/>
-                    const int START = 1;<br/>
-                    ...<br/>
-                    presetSubstring(&quot;test&quot;, 3); // Returns &quot;est&quot;<br/>
-                    presetSubstring(&quot;testing&quot;, 3); // Returns &quot;est&quot;<br/>
-                    presetSubstring(&quot;&quot;, 5); // Returns &quot;&quot;<br/>
-                    presetSubstring(&quot;testing&quot;, -1); // Returns &quot;&quot;<br/>
-                    presetSubstring(&quot;testing&quot;, 5000); // Returns &quot;esting&quot;
-                  </p>
-                </p>
-              </div>
             </div>
             <hr/>
-            
-            
             <br/>
+            
+            
             <div id='references' class='scrollspy-element' scrollspy-title='References'></div>
             <h1>References</h1>
             <div>
               <p>We all make &quot;references&quot; in English all the time. &quot;The Golden State&quot; is a reference to California. &quot;Nick&quot; is a reference to some guy named Nickolas.</p>
               <p>References are just different names for the same objects.</p>
-              <p class='definition'>In C++, <strong>references</strong> are aliases for an object, in that they can be treated as actually being the object they're referencing. The syntax for a reference is:<br/>&lt;type&gt; &amp; &lt;name&gt;</p>
+              <p class='definition'>In C++, <strong>references</strong> are aliases for an object, in that they can be treated as actually being the object they're referencing. They are simply different
+                names for the same object in memory. The syntax for a reference is:<br/>&lt;type&gt;&amp; &lt;name&gt;</p>
+              <br/>
               <p>Here's a simple example:</p>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
@@ -680,11 +774,11 @@
     cout &lt;&lt; "issue is: " &lt;&lt; issue &lt;&lt; endl;
   }
 </pre>
+              <br/>
               <p>So, when I change issue above, trouble changes also... which isn't surprising because issue is just another name for trouble.</p>
               <p>So why have references? Well, one illustration is how function parameters work in C++.</p>
               <p>By default, function parameters are taken in what is known as &quot;pass by value.&quot;</p>
-              <!-- TODO -->
-              <p class='definition'><strong>Pass by value</strong> means that parameter values are copied whenever a function is called, and do not refer to the argument variables.</p>
+              <p class='definition'><strong>Pass by value</strong> means that parameter values are <strong>copied</strong> whenever a function is called, and do not refer to the exact argument variables.</p>
               <p class='example'>What are the values of x and result that get printed?</p>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
@@ -707,8 +801,10 @@
       return x;
   }
 </pre>
+              <br/>
               <p>Notice how I passed in x (by value) in main, but x in main did not get modified after I called f(x).</p>
-              <p class='definition'><strong>Pass by reference</strong> means that parameters are references (aliases, nicknames, etc.) to the arguments; they are essentially the same variable.</p>
+              <p class='definition'><strong>Pass by reference</strong> means that parameters are references (aliases, nicknames, etc.) to the arguments; they refer to the same variable in memory.</p>
+              <p class='toolkit'>To indicate that a parameter is passed by reference, we place the ambserand (&amp;) after the type in the parameter list.</p>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
   #include &lt;string&gt;
@@ -739,18 +835,24 @@
             
             
             <br/>
-            <div id='practice' class='scrollspy-element' scrollspy-title='Practice + HW3'></div>
-            <h1>Practice &amp; Homework 3 Help</h1>
+            <div id='practice' class='scrollspy-element' scrollspy-title='Practice + Proj3'></div>
+            <h1>Practice &amp; Project 3 Help</h1>
             <div>
-              <p>Homework first, because let's face it, that's why you came to discussion.</p>
+              <p>Let's give you the tools you need for your homework, hmm?</p>
               <p>We should talk a little bit about some more things you can do with strings:</p>
-              <p class='toolkit'><strong>Substring</strong> is a string method that returns another string equal to a part of the calling string. The syntax is:<br/>string s = "some string";<br/>s.substr(start, length);</p>
-              <p>In s.substr(start, length), start and length are integers designating the following:</p>
+              <div class='toolkit'><p><strong>Substring</strong> is a string class method that returns a string equal to a sub-sequence of the calling string. The syntax is:</p><br/>
+<pre class='prettyprint'>
+  string s = "some string";
+  s.substr(start, length);
+</pre>
+              </div>
+              <br/>
+              <p>In <code class='prettyprint'>s.substr(start, length)</code>, start and length are integers designating the following:</p>
               <ul class='indent-1'>
-                <li><p>start defines the index at which you'd like to start collecting characters in the calling string.</p></li>
-                <li><p>length defines how many characters from start you'd like to collect</p></li>
+                <li><p>start defines the index at which you'd like to start collecting characters in the calling string (including the character at the start index).</p></li>
+                <li><p>length defines how many characters from that start index you'd like to collect</p></li>
               </ul>
-              <p>You'll get this quickly with an example:</p>
+              <p class='example'>What will the following code print out?</p>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
   #include &lt;string&gt;
@@ -763,7 +865,8 @@
       cout &lt;&lt; s.substr(0, 3) &lt;&lt; endl;
       
       // Print out 3 characters
-      // of s following index 2
+      // of s following index 2, including
+      // the character at index 2
       cout &lt;&lt; s.substr(2, 3) &lt;&lt; endl;
       
       // Print out all characters
@@ -778,52 +881,182 @@
       cout &lt;&lt; s &lt;&lt; endl;
   }
 </pre>
-            </div>
+            <br/>
             <p>Because the substring returns a string, I can easily concatenate their results with the + operator.</p>
             <p>Try some examples?</p>
-            <p class='example'>Design a function called evenLetterThief of return type void that takes in a string <strong>by reference</strong> and then removes all of its even index letters.</p>
-            <p>Examples of this function include:</p>
-            <ul class='indent-1'>
-              <li><p>
+            <p class='example'>Design a function called excitementThief of return type void that takes in a string <strong>by reference</strong> and then removes all exclamation points from it.</p>
 <pre class='prettyprint'>
-  string s = "test";
-  evenLetterThief(s);
-  cout &lt;&lt; s &lt;&lt; endl; // prints "et"
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  /*
+   * Takes in a string by reference and then removes all exclamation
+   * points from it.
+   */
+  void excitementThief ( ??? ) {
+      for (int i = 0; i &lt; s.length(); i++) {
+          // [!] If the current character is an exclamation
+          // point...
+          if ( ??? ) {
+              // [!] ...then remove that character using the
+              // the substr function
+              s = s.substr( ??? ) + s.substr( ??? );
+              
+              // [!] We need to do one more thing for this
+              // to work below...
+              ???
+          }
+      }
+  }
+  
+  int main () {
+      string s = "test!ing",
+             t = "tes!!!t!i!ng",
+             r = "!!!";
+  
+      excitementThief(s);
+      excitementThief(t);
+      excitementThief(r);
+      
+      // "testing"
+      cout &lt;&lt; s &lt;&lt; endl;
+      // "testing"
+      cout &lt;&lt; t &lt;&lt; endl;
+      // ""
+      cout &lt;&lt; r &lt;&lt; endl;
+  }
 </pre>
-              </p></li>
-              <li><p>
-<pre class='prettyprint'>
-  s = "t";
-  evenLetterThief(s);
-  cout &lt;&lt; s &lt;&lt; endl; // prints ""
-</pre>
-              </p></li>
-              <li><p>
-<pre class='prettyprint'>
-  s = "";
-  evenLetterThief(s);
-  cout &lt;&lt; s &lt;&lt; endl; // prints ""
-</pre>
-              </p></li>
-            </ul>
-            <div class='example'>
-              <p>Design two functions with the following signatures and purposes:</p>
             </div>
-            <ol class='indent-1'>
-              <li><p>bool isLameChar (char c, int i); returns whether or not the character code of c is less than i.</p></li>
-              <li><p>string redeemLameChars (string s, int i, char c); returns a string result that is equal to s with all characters whose code is less than i replaced with c.</p></li>
-            </ol>
+            <hr/>
             <br/>
-            <h2>Project Development</h2>
-            <p>Some general guidelines for project development:</p>
-            <ul class='indent-1'>
-              <li><p>When developing functions, always test them individually to make sure you're getting what you expect!</p></li>
-              <li><p>If your code is still behaving unexpectedly, you may want to do some simple cout statements to make sure variables have the values you expect.</p></li>
-              <li><p>If your code is STILL behaving unexpectedly, you may want to use an IDE's debugger.</p></li>
-            </ul>
-            <p class='definition'>A <strong>debugger</strong> allows you to take baby-steps through your code, and assess the value of each variable or output without having to run it all at once.</p>
-            <p class='definition'>A <strong>breakpoint</strong> is a point you set in your code at which you would like the debugger to stop for you to assess the state of your program.</p>
-            <p>For example, input the following program into your favorite IDE and insert breakpoints where instructed. Then, run with debugging and see how the breakpoints operate.</p>
+            
+            
+            <div id='debugging' class='scrollspy-element' scrollspy-title='Debugging &amp; Testing'></div>
+            <h1>Debugging &amp; Testing</h1>
+            <div>
+              <p>Some general guidelines for project development and debugging:</p>
+              <ul class='indent-1'>
+                <li><p>When developing functions, always test them individually to make sure you're getting what you expect!</p></li>
+                <li><p>If your code is still behaving unexpectedly, you may want to do some simple cout statements to make sure variables have the values you expect.</p></li>
+                <li><p>If your code is STILL behaving unexpectedly, you may want to use an IDE's debugger.</p></li>
+              </ul>
+              <br/>
+              <p>We begin by describing unit tests and then will talk about the debugger.</p>
+              <br/>
+              <h2>Unit Tests</h2>
+              <p class='definition'><strong>Unit tests</strong> verify that each individual piece of a program are operating as intended so that we can be confident that the whole program is correct.</p>
+              <br/>
+              <p>Generally, this means we are individually testing the functions that constitute our program as a whole, verifying that every input generates their expected output.</p>
+              <p>Where do we perform unit tests? Typically we can devote a function to this task, even though we may not carry these tests into our final product.</p>
+              <p>First, let's look at a couple of ways to construct individual unit tests.</p>
+              <p class='definition'>An individual unit test compares the <strong>expected</strong> output of a function to the <strong>actual</strong> output. When they match, that test is a success.</p>
+              <br/>
+              <p>There are a variety of tools at our disposal for this definition, including the <code class='prettyprint'>#include &lt;cassert&gt;</code> library's assert statement.</p>
+              <p class='toolkit'>The <strong>assert</strong> statement takes in a boolean value and, if false, will terminate the program with an error relating to the line of code on which an assertion failed.</p>
+              <br/>
+              <p>This looks like:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cassert&gt;
+  using namespace std;
+  
+  int main () {
+      int a = 5,
+          b = 3;
+  
+      assert(true);
+      assert(a == b);
+      assert(a &gt; b);
+  }
+</pre>
+              <br/>
+              <p>We see that any false assertion will stop our code, and we can examine what expression violated our expectations.</p>
+              <p>Suppose we wanted to abstract that into a test suite using, of course, functions!</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cassert&gt;
+  using namespace std;
+  
+  // ...some function definitions here
+  // (assuming that someFunc is well defined)
+  
+  void runTests () {
+      assert(someFunc(someParam1) == "test");
+      assert(someFunc(someParam2) == "test2");
+      // ...
+  }
+  
+  int main () {
+      // Now, if I want to run tests, I just have to
+      // keep this line in main, otherwise, I can comment
+      // it out!
+      runTests();
+  }
+</pre>
+              <br/>
+              <p>This is a really clean way of running unit tests.</p>
+              <p>The only issue with the <code class='prettyprint'>assert</code> statement is that it stops execution of your code immediately, and you don't get to see the results of all tests.</p>
+              <p>Better, is to make a custom test function that will alert you if a test succeeds and print out what it got and what it was expecting.</p>
+              <p>Here's an example one I made for string comparisons (feel free to use it yourself).</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cassert&gt;
+  using namespace std;
+  
+  /*
+   * Dumb function that removes the
+   * first letter from a string and
+   * returns a copy of that string
+   */
+  string stringyFunc (string s) {
+      if (!s.length()) {
+          return s;
+      }
+      return s.substr(1, s.length());
+  }
+  
+  /*
+   * Compares two strings: an actual (gotten from
+   * from the function I'm testing) and an expected
+   * (coded by the programmer), which will output
+   * what test failed if a test were to fail
+   * Returns true if a test succeeds
+   */
+  bool testString (string actual, string expected) {
+      bool passed = actual == expected;
+      if (!passed) {
+          cerr &lt;&lt; "[X] Test failed; EXPECTED: "
+               &lt;&lt; expected
+               &lt;&lt; " GOT: "
+               &lt;&lt; actual
+               &lt;&lt; endl;
+      }
+      return passed;
+  }
+  
+  /*
+   * Put all my unit tests in here!
+   */
+  void runTests () {
+      testString(stringyFunc("test"), "est");
+      testString(stringyFunc("t"), "");
+      testString(stringyFunc(""), "");
+  }
+  
+  int main () {
+      // Run those tests here!
+      runTests();
+  }
+</pre>
+              <br/>
+              <h2>The Debugger</h2>
+              <p class='definition'>A <strong>debugger</strong> allows you to take baby-steps through your code, and assess the value of each variable or output without having to run it all at once.</p>
+              <p class='definition'>A <strong>breakpoint</strong> is a point you set in your code at which you would like the debugger to stop for you to assess the state of your program.</p>
+              <p>For example, input the following program into your favorite IDE and insert breakpoints where instructed. Then, run with debugging and see how the breakpoints operate.</p>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
   #include &lt;string&gt;
@@ -843,7 +1076,9 @@
   }
 </pre>
               <p>For more informatin on debuggers, consult our course page, which has videos and slides.</p>
-            <hr/>
+            </div>
+            <br/>
+              
             
           </div>
           <!-- END PRESENTATION CONTENT -->
