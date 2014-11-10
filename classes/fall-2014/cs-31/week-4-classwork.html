@@ -1,0 +1,226 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Andrew Forney - UCLA CS</title>
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/magic-bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/main.css" rel="stylesheet" type="text/css">
+    <script src="../../../js/lib/jquery-2.0.3.min.js"></script>
+    <script src="../../../js/lib/bootstrap.min.js"></script>
+    <script src="../../../js/lib/expanding.js"></script>
+    <script src="../../../js/display/general/general-display.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+  </head>
+  
+  <body data-spy="scroll" data-target="#scrollspy">
+    
+    <!-- BEGIN WRAP -->
+    <div id="wrap">
+      
+      <!-- BEGIN NAVIGATION -->
+      <nav class='navbar navbar-default' role='navigation'>
+        <div class='nav-accent'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-12'>
+              <div class='navbar-header'>
+                <button class='navbar-toggle' type='button' data-toggle='collapse' data-target='.navbar-main-collapse'>
+                  <span class='sr-only'>Toggle Navigation</span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                </button>
+                <a class='navbar-brand' href='/~forns/'>
+                  <span id='brand-text'>
+                    Andrew Forney
+                  </span>
+                </a>
+              </div>
+              
+              <div id='nav-main' class='collapse navbar-collapse navbar-main-collapse'>
+                <ul class='nav navbar-nav navbar-right'>
+                  
+                  <li>
+                    <a href='/~forns/about.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-user'></span>
+                      </div>
+                      <p class='text-center'>About</p>
+                    </a>
+                  </li>
+                  
+                  <li class='active'>
+                    <a href='/~forns/classes.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-book'></span>
+                      </div>
+                      <p class='text-center'>Classes</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/contact.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-comment'></span>
+                      </div>
+                      <p class='text-center'>Contact</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/publications.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-file'></span>
+                      </div>
+                      <p class='text-center'>Publications</p>
+                    </a>
+                  </li>
+                  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <!-- END NAVIGATION -->
+      
+      <!-- BEGIN MAIN CONTENT -->
+      <div id="main-content" class="container">
+        <div class="row">
+          
+          <!-- BEGIN SCROLLSPY -->
+          <div class='col-md-2'>
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+              <ul id='scrollspy' class="nav bs-sidenav">
+              </ul>
+            </div>
+          </div>
+          <!-- END SCROLLSPY -->
+          
+          <!-- BEGIN PRESENTATION CONTENT -->
+          <div class='col-md-10 presentation-content' role='main'>
+            
+            <ol class="breadcrumb">
+              <li><a href="../../../classes.html">Classes</a></li>
+              <li><a href="./cs-31.html">Fall14 CS31</a></li>
+              <li class="active">Week 4 Classwork</li>
+            </ol>
+            
+            <h1>Week 4 Classwork</h1>
+            
+            <div id='example1' class='scrollspy-element' scrollspy-title='Redeem Lame Chars'></div>
+            <h1>Redeem Lame Chars</h1>
+            <div>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cassert&gt;
+  using namespace std;
+    
+  /*
+  * Returns whether or not the character code if c
+  * is less than i.
+  */
+  bool isLameChar (char c, int i) {
+      return c &lt; i;
+  }
+    
+  /*
+  * Returns a string that is equal to s with all chars
+  * whose code is less than i replaced with r
+  */
+  string redeemLameChars (string s, int i, char r) {
+      for (int j = 0; j &lt; s.length(); j++) {
+          // [!] If we meet our isLameChar criteria...
+          if (isLameChar(s[j], i)) {
+              // ...then replace the current letter with r
+              s[j] = r;
+          }
+      }
+      // Return that string with replacement
+      return s;
+  }
+    
+  int main () {
+      cout &lt;&lt; redeemLameChars("abc", 1, '!') &lt;&lt; endl;
+      cout &lt;&lt; redeemLameChars("abc", 100, '!') &lt;&lt; endl;
+      cout &lt;&lt; redeemLameChars("C00L", '9', '!') &lt;&lt; endl;
+  }
+</pre>
+            </div>
+            <hr/>
+            <br/>
+            
+            
+            <div id='example2' class='scrollspy-element' scrollspy-title='Excitement Thief'></div>
+            <h1>Excitement Thief</h1>
+            <div>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+    
+  /*
+  * Takes in a string by reference and then removes all exclamation
+  * points from it.
+  */
+  void excitementThief (string&amp; s) {
+      for (int i = 0; i &lt; s.length(); i++) {
+          // [!] If the current character is an exclamation
+          // point...
+          if (s[i] == '!') {
+              // [!] ...then remove that character using the
+              // the substr function
+              s = s.substr(0, i) + s.substr(i + 1);
+                
+              // [!] We need to do one more thing for this
+              // to work below...
+              i--;
+          }
+      }
+  }
+    
+  int main () {
+      string s = "test!ing",
+              t = "tes!!!t!i!ng",
+              r = "!!!";
+    
+      excitementThief(s);
+      excitementThief(t);
+      excitementThief(r);
+        
+      // "testing"
+      cout &lt;&lt; s &lt;&lt; endl;
+      // "testing"
+      cout &lt;&lt; t &lt;&lt; endl;
+      // ""
+      cout &lt;&lt; r &lt;&lt; endl;
+  }
+</pre>
+            </div>
+            <hr/>
+            <br/>
+          
+        <!-- END PRESENTATION CONTENT -->
+        </div>
+      </div>
+      <!-- END MAIN CONTENT -->
+      
+      
+    </div>
+    <!-- END WRAPPER -->
+    
+    <!-- BEGIN FOOTER -->
+    <div id="footer">
+      <div class="container">
+        <div class="col-md-12 text-center">
+          
+        </div>
+      </div>
+    </div>
+    <!-- END FOOTER -->
+    
+  </body>
+</html>

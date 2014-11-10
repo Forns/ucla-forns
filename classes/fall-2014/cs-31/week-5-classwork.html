@@ -1,0 +1,277 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Andrew Forney - UCLA CS</title>
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/magic-bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/main.css" rel="stylesheet" type="text/css">
+    <script src="../../../js/lib/jquery-2.0.3.min.js"></script>
+    <script src="../../../js/lib/bootstrap.min.js"></script>
+    <script src="../../../js/lib/expanding.js"></script>
+    <script src="../../../js/display/general/general-display.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+  </head>
+  
+  <body data-spy="scroll" data-target="#scrollspy">
+    
+    <!-- BEGIN WRAP -->
+    <div id="wrap">
+      
+      <!-- BEGIN NAVIGATION -->
+      <nav class='navbar navbar-default' role='navigation'>
+        <div class='nav-accent'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-12'>
+              <div class='navbar-header'>
+                <button class='navbar-toggle' type='button' data-toggle='collapse' data-target='.navbar-main-collapse'>
+                  <span class='sr-only'>Toggle Navigation</span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                </button>
+                <a class='navbar-brand' href='/~forns/'>
+                  <span id='brand-text'>
+                    Andrew Forney
+                  </span>
+                </a>
+              </div>
+              
+              <div id='nav-main' class='collapse navbar-collapse navbar-main-collapse'>
+                <ul class='nav navbar-nav navbar-right'>
+                  
+                  <li>
+                    <a href='/~forns/about.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-user'></span>
+                      </div>
+                      <p class='text-center'>About</p>
+                    </a>
+                  </li>
+                  
+                  <li class='active'>
+                    <a href='/~forns/classes.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-book'></span>
+                      </div>
+                      <p class='text-center'>Classes</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/contact.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-comment'></span>
+                      </div>
+                      <p class='text-center'>Contact</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/publications.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-file'></span>
+                      </div>
+                      <p class='text-center'>Publications</p>
+                    </a>
+                  </li>
+                  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <!-- END NAVIGATION -->
+      
+      <!-- BEGIN MAIN CONTENT -->
+      <div id="main-content" class="container">
+        <div class="row">
+          
+          <!-- BEGIN SCROLLSPY -->
+          <div class='col-md-2'>
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+              <ul id='scrollspy' class="nav bs-sidenav">
+              </ul>
+            </div>
+          </div>
+          <!-- END SCROLLSPY -->
+          
+          <!-- BEGIN PRESENTATION CONTENT -->
+          <div class='col-md-10 presentation-content' role='main'>
+            
+            <ol class="breadcrumb">
+              <li><a href="../../../classes.html">Classes</a></li>
+              <li><a href="./cs-31.html">Fall14 CS31</a></li>
+              <li class="active">Week 5 Classwork</li>
+            </ol>
+            
+            <h1>Week 5 Classwork</h1>
+            
+            <div id='example0' class='scrollspy-element' scrollspy-title='Int Arrays Equal'></div>
+            <h1>Int Arrays Equal</h1>
+            <div>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+      
+  bool intArraysEqual(int arr1[], int arr2[], int start, int n) {
+      // [!] Iterate through all n items starting
+      // at the start index
+      for (int i = start; i &lt; n; i++) {
+          // [!] We can return something whenever we find
+          // an inconsistency
+          if (arr1[i] != arr2[i]) {
+              return false;
+          }
+      }
+      // [!] If we get here, we know there was no
+      // inconsistency so...
+      return true;
+  }
+    
+  int main () {
+      int i[] = {1, 2, 3};
+      int j[] = {0, 2, 3, 4, 5};
+      cout &lt;&lt; intArraysEqual(i, j, 1, 2) &lt;&lt; endl;
+      // Above will print out: 1
+      // because {2, 3} == {2, 3}
+    
+      cout &lt;&lt; intArraysEqual(i, j, 0, 2) &lt;&lt; endl;
+      // Above will print out: 0
+      // because {1, 2} != {0, 2} 
+  }
+</pre>
+            </div>
+            <hr/>
+            <br/>
+            
+            
+            <div id='example1' class='scrollspy-element' scrollspy-title='String Array Print'></div>
+            <h1>String Array Print</h1>
+            <div>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+      
+  /*
+  * Takes in an array of strings and some max index
+  * n, and prints all n strings in the array, comma
+  * and space separated and enclosed in brackets
+  */
+  void stringArrayPrint (string s[], int n) {
+      // [!] What should be prepended?
+      string result = "{";
+        
+      // Iterate through all n specified indexes
+      for (int i = 0; i &lt; n; i++) {
+          // [!] Add the string, its quotes, and any
+          // comma-space separation
+          result += "\"" + s[i] + "\", ";
+      }
+        
+      // [!] We need to fix something at the end of all this
+      // (hint, consider n as zero and non-zero)
+      if (n &gt; 0) {
+          result = result.substr(0, result.length() - 2);
+      }
+        
+      // Tack on the closing bracket
+      result += "}";
+      cout &lt;&lt; result &lt;&lt; endl;
+  }
+    
+  int main () {
+      string s[] = {"print", "me", "NOW"};
+      stringArrayPrint(s, 3);
+      // Above will print out:
+      // {"print", "me", "NOW"}
+      
+      stringArrayPrint(s, 0);
+      // Above will print out:
+      // {}
+  }
+</pre>
+            </div>
+            <hr/>
+            <br/>
+            
+            
+            <div id='example2' class='scrollspy-element' scrollspy-title='Interleave Strings'></div>
+            <h1>Interleave Strings</h1>
+            <div>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  /*
+   * interleaveStrings takes in an array of strings s,
+   * and a number of strings in that array n, and interleaves
+   * all characters of each string, producing a string
+   * as a result.
+   */
+  string interleaveStrings (string s[], int n) {
+      string result;
+  
+      bool charsLeft = true;
+  
+      for (int i = 0; charsLeft; i++) {
+          charsLeft = false;
+          for (int j = 0; j &lt; n; j++) {
+              if (i &lt; s[j].length()) {
+                  result += s[j][i];
+                  charsLeft = true;
+              }
+          }
+      }
+      return result;
+  }
+  
+  int main () {
+      string s[] = {"AAA", "BB", "CCCC"};
+      cout &lt;&lt; interleaveStrings(s, 3) &lt;&lt; endl;
+      // Above prints out:
+      // ABCABCACC
+    
+      string w[] = {"BB", "AAA", "CCCC"};
+      cout &lt;&lt; interleaveStrings(w, 3) &lt;&lt; endl;
+      // Above prints out:
+      // BACBACACC
+    
+      string t[] = {"AAA", ""};
+      cout &lt;&lt; interleaveStrings(t, 2) &lt;&lt; endl;
+      // Above prints out:
+      // AAA
+  }
+</pre>
+            </div>
+            <hr/>
+            <br/>
+            
+            
+        <!-- END PRESENTATION CONTENT -->
+        </div>
+      </div>
+      <!-- END MAIN CONTENT -->
+      
+      
+    </div>
+    <!-- END WRAPPER -->
+    
+    <!-- BEGIN FOOTER -->
+    <div id="footer">
+      <div class="container">
+        <div class="col-md-12 text-center">
+          
+        </div>
+      </div>
+    </div>
+    <!-- END FOOTER -->
+    
+  </body>
+</html>
