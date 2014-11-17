@@ -109,7 +109,7 @@
             
             <h1>Midterm II Review</h1>
             <p>The following review covers the topics you asked me to review at the end of week 7's discussion, plus some other stuff.</p>
-            <p>By no means is it meant to serve as a comprehensive review (look through my other notes for greater detail), but will help you get some more practice as you suddenly remember Monday's midterm.</p>
+            <p>By no means is it meant to serve as a comprehensive review (look through my other notes for greater detail), but will help you get some more practice as you suddenly remember the impending midterm.</p>
             
             <br/>
             <div id='grabBag' class='scrollspy-element' scrollspy-title='Miscellaneous'></div>
@@ -129,7 +129,9 @@
       cout &lt;&lt; (c == t) &lt;&lt; endl;
   }
 </pre>
-            <br/>
+              <p class='question' name='grab-q0'>Click for answer.</p>
+              <p class='answer' name='grab-q0'>Yep, that's fine -- a string is expected when we use the == comparison, so a cstring will suffice.</p>
+              <br/>
               <p class='debug'>Will the following code compile? If so, what will it print out?</p>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
@@ -144,7 +146,9 @@
       cout &lt;&lt; (strcmp(c, t)) &lt;&lt; endl;
   }
 </pre>
-            <br/>
+              <p class='question' name='grab-q1'>Click for answer.</p>
+              <p class='answer' name='grab-q1'>Nope, the strcmp will fail since a cstring is expected for both argument, and a C++ string is given for one.</p>
+              <br/>
               <p class='debug'>Will the following code compile? If so, what will it print out?</p>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
@@ -170,7 +174,9 @@
       return mine * mine;
   }
 </pre>
-            <br/>
+              <p class='question' name='grab-q2'>Click for answer.</p>
+              <p class='answer' name='grab-q2'>Answer: 5. Why? Because the <code class='prettyprint'>mine</code> in the loop refers to the iterator, not the one being printed!</p>
+              <br/>
               <p class='debug'>Will the following code compile? If so, what will it print out?</p>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
@@ -197,6 +203,9 @@
       return mine * mine;
   }
 </pre>
+              <p class='question' name='grab-q3'>Click for answer.</p>
+              <p class='answer' name='grab-q3'>Answer: 26. Why? The argument to ::mine is passed by reference, and the loop iterator now uses the <code class='prettyprint'>mine</code> from main since it
+                isn't declared in the loop.</p>
             </div>
             <hr/>
               
@@ -206,7 +215,7 @@
             <h1>Functions</h1>
             <div>
               <h2>Examples</h2>
-              <p class='example'>We went over this code in class but there's one small difference: what will this snippet print out?</p>
+              <p class='example'>We went over this code in class but there's one small difference: what will this snippet print out? (Warning: annoying and tedious; do last if you feel confident on functions.)</p>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
   #include &lt;string&gt;
@@ -245,6 +254,14 @@
       return result;
   }
 </pre>
+              <p class='question' name='funs-q0'>Click for answer.</p>
+              <div class='answer' name='funs-q0'>
+<pre class='prettyprint'>
+  i: 5 0 3
+  n: 2
+  d: -0.8
+</pre>
+              </div>
               <br/>
               <p class='example'>
                 The following code will work for some input arguments, but may cause issues and overflows with others. 
@@ -315,6 +332,9 @@
   char c[] = "\0";
   cstringSubstr(c, 0, 2);
 </pre>
+              <p class='question' name='funs-q1'>Click for answer.</p>
+              <p class='answer' name='funs-q1'>E, F, G, H, J</p>
+              
               <br/>
               <h2>Exercises</h2>
               <p class='example'>Design a function gcd that takes as input two ints and returns the int representing their greatest common divisor. Assume inputs are positive.</p>
@@ -327,7 +347,36 @@
   cout &lt;&lt; gcd(5, 15) &lt;&lt; endl; // 5
   cout &lt;&lt; gcd(1000, 300) &lt;&lt; endl; // 100
 </pre>
+              <p class='question' name='funs-q2'>Click for sample solution.</p>
+              <div class='answer' name='funs-q2'>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  int gcd (int a, int b) {
+      // This can be done a variety of ways; see:
+      // http://en.wikipedia.org/wiki/Euclidean_algorithm
+      while (b != 0) {
+          int t = b;
+          b = a % b;
+          a = t;
+      }
+      return a;
+  }
+  
+  int main () {
+      cout &lt;&lt; gcd(1, 1) &lt;&lt; endl; // 1
+      cout &lt;&lt; gcd(2, 2) &lt;&lt; endl; // 2
+      cout &lt;&lt; gcd(2, 4) &lt;&lt; endl; // 2
+      cout &lt;&lt; gcd(2, 8) &lt;&lt; endl; // 2
+      cout &lt;&lt; gcd(5, 15) &lt;&lt; endl; // 5
+      cout &lt;&lt; gcd(1000, 300) &lt;&lt; endl; // 100
+  }
+</pre>
+              </div>
               <br/>
+              
               <p class='example'>Implement the isStringDouble function below, which determines whether or not the input string is a string representation of a decimal number with possible leading / ending spaces:</p>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
@@ -356,6 +405,59 @@
       }
   }
 </pre>
+              <p class='question' name='funs-q3'>Click for (probably sloppy) sample solution.</p>
+              <div class='answer' name='funs-q3'>
+<pre class='prettyprint'>
+  bool isDoubleString (string s) {
+      // Set up flags
+      bool foundFirstChar = false,
+           foundDecimal = false,
+           trailingWhitespace = false;
+  
+      for (int i = 0; i &lt; s.length(); i++) {
+          // Our two legal character classes are
+          // digits and the decimal point
+          if (isdigit(s[i]) || s[i] == '.') {
+              // Case where we've seen whitespace
+              // at the end but then see another
+              // legal char
+              if (trailingWhitespace) {
+                  return false;
+              }
+              if (!foundFirstChar) {
+                  foundFirstChar = true;
+              }
+              if (s[i] == '.') {
+                  if (!foundDecimal) {
+                      foundDecimal = true;
+                  } else {
+                      // Case where we've seen 2 decimals
+                      return false;
+                  }
+              }
+              
+          // Otherwise, we've seen a character that
+          // is not a decimal or digit
+          } else {
+              if (s[i] == ' ') {
+                  // Case where we've already seen our
+                  // first legal char but then have
+                  // trailing whitespace
+                  if (foundFirstChar) {
+                      trailingWhitespace = true;
+                  }
+                  
+              // Catch-all for bad chars
+              } else {
+                  return false;
+              }
+          }
+      }
+      // If we reach this point, we have a legal double-string
+      return foundFirstChar;
+  }
+</pre>
+              
               <br/>
             </div>
             <hr/>
@@ -391,6 +493,16 @@
       // End result is still a better poem...
   }
 </pre>
+              <p class='question' name='cstrings-q0'>Click for answer.</p>
+              <div class='answer' name='cstrings-q0'>
+<pre>
+  Do you like
+  I think it
+  I'm not go
+</pre>
+              </div>
+              <br/>
+                
               <h2>Exercises</h2>
               <p class='example'>
                 Design a function cstringSecretMessage that takes as input a cstring and a number n, which is the number of characters in the cstring to examine. 
@@ -398,34 +510,75 @@
                 whenever it finds one between null characters. It will finish whenever it reaches n characters, or when it encounters 3 null characters in a row.
               </p>
 <pre class='prettyprint'>
-  char c[] = "Nothing to see here!\0HELP\0TRAPPED\0IN\0CS\031!!!\0";
-  cstringSecretMessage(c, 46);
-  // Prints:
-  // Nothing to see here!
-  // HELP
-  // TRAPPED
-  // IN
-  // CS
-  // 31!!!
+  int main () {
+      char c[] = "Nothing to see here!\0HELP\0TRAPPED\0IN\0CS\0-31!!!\0";
+      cstringSecretMessage(c, 47);
+      // Prints:
+      // Nothing to see here!
+      // HELP
+      // TRAPPED
+      // IN
+      // CS
+      // 31!!!
+      
+      cout &lt;&lt; " ------------ " &lt;&lt; endl;
   
-  cstringSecretMessage(c, 36);
-  // Prints:
-  // Nothing to see here!
-  // HELP
-  // TRAPPED
-  // IN
+      cstringSecretMessage(c, 36);
+      // Prints:
+      // Nothing to see here!
+      // HELP
+      // TRAPPED
+      
+      cout &lt;&lt; " ------------ " &lt;&lt; endl;
   
-  char t[] = "Just us letters!\0DON'T\0LISTEN\0IT'S\0A\0TRAP!!!\0\0\0AIEEE!\0";
-  cstringSecretMessage(t, 1000);
-  // Prints:
-  // Just us letters!
-  // DON'T
-  // LISTEN
-  // IT'S
-  // A
-  // TRAP!!!
+      char t[] = "Just us letters!\0DON'T\0LISTEN\0IT'S\0A\0TRAP!!!\0\0\0AIEEE!\0";
+      cstringSecretMessage(t, 1000);
+      // Prints:
+      // Just us letters!
+      // DON'T
+      // LISTEN
+      // IT'S
+      // A
+      // TRAP!!!
+  }
 </pre>
+              <p class='question' name='cstrings-q1'>Click for answer.</p>
+              <div class='answer' name='cstrings-q1'>
+<pre class='prettyprint'>
+  void cstringSecretMessage(char c[], int n) {
+      string s;
+      int nullCounter = 0;
+      
+      // Iterate through the encoded string one char
+      // at a time
+      for (int j = 0; j &lt; n; j++) {
+        
+          // If it's a null char, we'll increment our
+          // null counter, print all the chars we collected
+          // up until now, and then wipe the string clean
+          if (c[j] == '\0') {
+              nullCounter++;
+              cout &lt;&lt; s &lt;&lt; endl;
+              s = "";
+              
+          // Otherwise, it was a char to print out, so add that
+          // to our string to print out, and reset nullCounter
+          } else {
+              nullCounter = 0;
+              s += c[j];
+          }
+          
+          // We'll terminate whenever we see 3 null chars in a
+          // row
+          if (nullCounter == 3) {
+              return;
+          }
+      }
+  }
+</pre>
+              </div>
               <br/>
+              
               <p>We didn't get to the following two exercises during class, so try them out now:</p>
               <p class='example'>
                 Design a function called inflateCString that takes in a cstring and adds a number of null characters at the specified index, 
