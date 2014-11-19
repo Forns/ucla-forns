@@ -597,24 +597,48 @@
       char hotAir[100] = "balloon!";
       inflateCString(hotAir, 0, 2);
       // hotAir is now: "\0\0balloon!\0"
-  
+      assert(hotAir[0] == '\0' &amp;&amp; hotAir[1] == '\0' &amp;&amp; !strcmp(hotAir+2, "balloon!"));
+    
       // Political / Economic zinger!
       char usDollar[100] = "so poor!";
       inflateCString(usDollar, 3, 1);
       // usDollar is now: "so \0poor!\0"
-      
+      assert(usDollar[3] == '\0' &amp;&amp; !strcmp(usDollar, "so ") &amp;&amp; !strcmp(usDollar+4, "poor!"));
+  
       // :/
       char andrewsEgo[100] = ""; // not to be confused with breakfast treat
       inflateCString(andrewsEgo, 0, 2);
       // andrewsEgo is now: "\0\0\0",
       // more empty than ever before
-      
+      assert(andrewsEgo[0] == '\0' &amp;&amp; andrewsEgo[1] == '\0' &amp;&amp; andrewsEgo[2] == '\0');
   }
   
   void inflateCString (char c[], int index, int spaces) {
       // ...
   }
 </pre>
+              <p class='question' name='cstrings-q2'>Click for answer.</p>
+              <div class='answer' name='cstrings-q2'>
+<pre class='prettyprint'>
+  void inflateCString (char c[], int index, int spaces) {
+      // Gather the size once; danger if we recompute
+      // at each iteration, or at least not efficient
+      int size = strlen(c);
+  
+      // Shift all of the current elements down by spaces
+      // amount
+      for (int i = size; i &gt;= index; i--) {
+          c[i + spaces] = c[i];
+      }
+  
+      // Add the null bytes in place of those we just
+      // shifted down
+      for (int j = 0; j &lt; spaces; j++) {
+          c[index + j] = '\0';
+      }
+  }
+</pre>
+              </div>
               <br/>
               <p class='example'>
                 Using inflateCString that you did above, create a function injectText that takes as input a cstring, some text to inject into it, and then the index at which to inject said text.
@@ -628,13 +652,13 @@
   void injectText (char c[], int index, char injection[]);
   
   int main () {
-      char stimpack[] = "nnHmmm";
+      char stimpack[100] = "nnHmmm";
       injectText(stimpack, 2, "AIEEE");
       // Prints "nnAIEEEHmmm"
       cout &lt;&lt; stimpack &lt;&lt; endl;
   
       // Make sure to get yours today, kids!
-      char fluShot[] = "";
+      char fluShot[100] = "";
       injectText(fluShot, 0, "Go Ashe Center!");
       // Prints "Go Ashe Center!"
       cout &lt;&lt; fluShot &lt;&lt; endl;
@@ -644,6 +668,22 @@
       // ...
   }
 </pre>
+              <p class='question' name='cstrings-q3'>Click for answer.</p>
+              <div class='answer' name='cstrings-q3'>
+<pre class='prettyprint'>
+  void injectText (char c[], int index, char injection[]) {
+      int size = strlen(injection);
+  
+      // First make room for the text
+      inflateCString(c, index, size);
+  
+      // Then place it where you just made room
+      for (int i = 0; i &lt; size; i++) {
+          c[index + i] = injection[i];
+      }
+  }
+</pre>
+              </div>
             </div>
             <hr/>
             
@@ -653,7 +693,7 @@
             <h1>Multidimensional Arrays</h1>
             <div>
               <h2>Examples</h2>
-              <p class='example'>For the following code, determine which printed statements will return a determinate value (always known), an indeterminate value (not known), and which access an element out of bounds (also indeterminate value).</p>
+              <p class='example'>For the following code, determine which printed statements will return a determinate value (always known) and which return an indeterminate value (not known). List the determinate values.</p>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
   #include &lt;string&gt;
@@ -677,14 +717,23 @@
           }
       };
   
-      cout &lt;&lt; megaArray[0][1][2] &lt;&lt; endl;
+      cout &lt;&lt; megaArray[0][1][2] &lt;&lt; endl; // #1
       // We have to go deeper!
-      cout &lt;&lt; megaArray[0][megaArray[0][0][1]][2] &lt;&lt; endl;
-      cout &lt;&lt; megaArray[1][megaArray[0][1][2] - 1][1] &lt;&lt; endl;
+      cout &lt;&lt; megaArray[0][megaArray[0][0][1]][2] &lt;&lt; endl; //#2
+      cout &lt;&lt; megaArray[1][megaArray[0][1][2] - 1][1] &lt;&lt; endl; // #3
       // Still with us?
-      cout &lt;&lt; megaArray[0][megaArray[0][1][1]][1] &lt;&lt; endl;
+      cout &lt;&lt; megaArray[0][megaArray[0][1][1]][1] &lt;&lt; endl; // #4
   }
 </pre>
+              <p class='question' name='multiarr-q0'>Click for answer.</p>
+              <div class='answer' name='multiarr-q0'>
+<pre>
+  #1: Determinate, 1
+  #2: Indeterminate
+  #3: Determinate, 100
+  #4: Indeterminate
+</pre>
+              </div>
             </div>
             <hr/>
             
@@ -693,7 +742,7 @@
             <div id='diagnosis' class='scrollspy-element' scrollspy-title='Code Triage'></div>
             <h1>Code Triage</h1>
             <div>
-              <p class='example'>Noob A. Nooberson attempted to solve the isDoubleString problem presented in class and threw up the following monstrosity; which test cases in the main method will it fail?</p>
+              <p class='debug'>Noob A. Nooberson attempted to solve the isDoubleString problem presented in class and threw up the following monstrosity; which test cases in the main function will it fail?</p>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
   #include &lt;string&gt;
@@ -702,16 +751,17 @@
   
   bool isDoubleString (string s);
   
+  // Problem numbers listed with their intended output:
   int main () {
-      cout &lt;&lt; isDoubleString("1.23") &lt;&lt; endl; // True
-      cout &lt;&lt; isDoubleString("  1.23  ") &lt;&lt; endl; // True
-      cout &lt;&lt; isDoubleString(".23") &lt;&lt; endl; // True
-      cout &lt;&lt; isDoubleString("  1.  23  ") &lt;&lt; endl; // False
-      cout &lt;&lt; isDoubleString("1.2.3.4") &lt;&lt; endl; // False
-      cout &lt;&lt; isDoubleString("I IZ DUBLE :DDD") &lt;&lt; endl; // False
-      cout &lt;&lt; isDoubleString("1a.23") &lt;&lt; endl; // False
-      cout &lt;&lt; isDoubleString("a1.23") &lt;&lt; endl; // False
-      cout &lt;&lt; isDoubleString("") &lt;&lt; endl; // False
+      cout &lt;&lt; isDoubleString("1.23") &lt;&lt; endl; // #1, True
+      cout &lt;&lt; isDoubleString("  1.23  ") &lt;&lt; endl; // #2, True
+      cout &lt;&lt; isDoubleString(".23") &lt;&lt; endl; // #3, True
+      cout &lt;&lt; isDoubleString("  1.  23  ") &lt;&lt; endl; // #4, False
+      cout &lt;&lt; isDoubleString("1.2.3.4") &lt;&lt; endl; // #5, False
+      cout &lt;&lt; isDoubleString("I IZ DUBLE :DDD") &lt;&lt; endl; // #6, False
+      cout &lt;&lt; isDoubleString("1a.23") &lt;&lt; endl; // #7, False
+      cout &lt;&lt; isDoubleString("a1.23") &lt;&lt; endl; // #8, False
+      cout &lt;&lt; isDoubleString("") &lt;&lt; endl; // #9, False
   }
   
   // Determines whether or not the input string is a string representation
@@ -728,8 +778,16 @@
       return true;
   }
 </pre>
+              <p class='question' name='debug-q0'>Click for answer.</p>
+              <div class='answer' name='debug-q0'>
+<pre>
+  Failed Tests:
+  4, 5, 9
+</pre>
+              </div>
               <br/>
-              <p class='example'>
+              
+              <p class='debug'>
                 Lame O. Badprogrammer, apart from being born to the same parents who named Noob A. Nooberson and somehow changed his last name (shut up, I made you a practice midterm), 
                 attempted to solve the selfStrcat problem presented in class and made a small, insidious error. Where is the problem, and how could you fix it?
               </p>
@@ -770,8 +828,14 @@
       c[strlen(c)] = '\0';
   }
 </pre>
+              <p class='question' name='debug-q1'>Click for answer.</p>
+              <p class='answer' name='debug-q1'>
+                The line <code class='prettyprint'>c[strlen(c)] = '\0';</code> recomputes the length of c before null terminating, inviting errors like in the test with the cstring <code class='prettyprint'>devious</code>.
+                You can fix this by replacing it with: <code class='prettyprint'>c[len * 2] = '\0';</code>, since len was computed before any modifications were made to the original cstring.
+              </p>
               <br/>
-              <p class='example'>
+              
+              <p class='debug'>
                 James T. Buzzkillington III, Esq. attempted to implement the injectText function covered during class, but made one mistake that will embarrass him greatly at the next clubhouse meating. FIND IT.
               </p>
 <pre class='prettyprint'>
@@ -797,7 +861,7 @@
   }
   
   void inflateCString (char c[], int index, int spaces) {
-      // Assume implemented correctly; see class notes
+      // Assume implemented correctly; see answer above
   }
   
   void injectText (char c[], int index, char injection[]) {
@@ -813,9 +877,15 @@
       strcat(c, injection);
   }
 </pre>
+              <p class='question' name='debug-q2'>Click for answer.</p>
+              <p class='answer' name='debug-q2'>
+                The line <code class='prettyprint'>strcat(c, injection);</code> will incorrectly null-terminate after the insertion for valid cstrings in parameter injection.
+              </p>
               <br/>
-              <p class='example'>
-                &lt;// TODO: INSERT VAGUELY HUMOROUS NAME HERE&gt; tried to fix the stringArrayMatch example from class but failed horribly and was forced to take a job as a TA. Where is the error?
+              
+              <p class='debug'>
+                &lt;// TODO: INSERT VAGUELY HUMOROUS NAME HERE&gt; tried to implement stringArrayMatch, which compares an array of strings and array of cstrings, and replaces each matching element with the
+                characters "MATCH"... but they failed horribly and were forced to take a job as a TA. Where is the error? Fix it!
               </p>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
@@ -838,6 +908,7 @@
       }
   }
   
+  
   void stringArrayMatch (string s[], char c[][MAX_CSTRING_LENGTH], int n) {
       for (int i = 0; i &lt; n; i++) {
           bool match = true;
@@ -854,9 +925,24 @@
       }
   }
 </pre>
+              <p class='question' name='debug-q3'>Click for answer.</p>
+              <div class='answer' name='debug-q3'>
+                <p>In the case of no match at a character, we should not return from the function, but simply break from that inner loop; specifically:</p>
+<pre class='prettyprint'>
+  // ...
+  if (s[i][j] != c[i][j]) {
+      match = false;
+      return; // [!] Should be break;
+  }
+  // ...
+</pre>
+              </div>
               <br/>
-              <p class='example'>
-                Find and fix all of the syntax errors below so that the code behaves as "intended".
+              
+              <p class='debug'>
+                Before he entered the Matrix, Neo was a supernoob who couldn't code to save his life. Below, in order to save him time typing in 13375P34K, he wanted to make a function that could replace all
+                lowercase Os with zeroes, and all uppercase As with fours in each cstring in an array of an array of cstrings. 
+                Find and fix all of his syntax errors below so that the code behaves as "intended," and he doesn't have to ask Trinity for help.
               </p>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
@@ -878,10 +964,12 @@
       };
   
       nukeAllChars(lotsODimensions, 'o');
+      nukeAllChars(lotsODimensions, 'A');
   
       // Select sample
       cout &lt;&lt; lotsODimensions[0][0] &lt;&lt; endl;
       cout &lt;&lt; lotsODimensions[0][1] &lt;&lt; endl;
+      cout &lt;&lt; lotsODimensions[0][2] &lt;&lt; endl;
       cout &lt;&lt; lotsODimensions[1][0] &lt;&lt; endl;
       cout &lt;&lt; lotsODimensions[2][0] &lt;&lt; endl;
       cout &lt;&lt; lotsODimensions[2][1] &lt;&lt; endl;
@@ -901,8 +989,32 @@
       }
   }
 </pre>
+              <p class='question' name='debug-q4'>Click for answer.</p>
+              <div class='answer' name='debug-q4'>
+                <p>Listing of all errors:</p>
+<pre>
+  // #1: Function prototype and signature for nukeAllChars is missing an array 
+  // dimension specification for parameter c; should be:
+  void nukeAllChars (char c[][CSTRING_ROWS][MAX_CSTRING_LENGTH], char toBeNuked, char nukedChar) ...
+  
+  // #2: lotsODimensions is missing an array dimension specification; should be:
+  char lotsODimensions[][CSTRING_ROWS][MAX_CSTRING_LENGTH] = { ... };
+  
+  // #3: Calls to nukeAllChars in main are missing the nukedChar parameters:
+  nukeAllChars(lotsODimensions, 'o', '0');
+  nukeAllChars(lotsODimensions, 'A', '4');
+  
+  // #4: strcmp is not well defined for characters! As such, its attempt to be used so is 
+  // incorrect within the function, and should be:
+  if (c[i][j][k] == toBeNuked) {
+      c[i][j][k] = nukedChar;
+  }
+</pre>
+              </div>
               <br/>
-              <p class='example'>Someone tried to implement the csReverse function from Week 6, which takes in a cstring and reverses the characters in it. What did they do wrong below?</p>
+              
+              <p class='debug'>Someone (OK fine, me while I was making the answer) tried to implement the csReverse function from Week 6, 
+                which takes in a cstring and reverses the characters in it. What did they, very understandably, do wrong below?</p>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
   #include &lt;string&gt;
@@ -918,6 +1030,8 @@
       }
   }
 </pre>
+              <p class='question' name='debug-q5'>Click for answer.</p>
+              <p class='answer' name='debug-q5'>Each index access for [size - i] should be [size - i - 1] since we do not take the null byte into account as it currently is.</p>
             </div>
             <hr/>
             
