@@ -215,7 +215,7 @@
             <h1>Functions</h1>
             <div>
               <h2>Examples</h2>
-              <p class='example'>We went over this code in class but there's one small difference: what will this snippet print out? (Warning: annoying and tedious; do last if you feel confident on functions.)</p>
+              <p class='example'>What will this snippet of long, arbitrary code print out? (Warning: annoying and tedious; do last if you feel confident on functions.)</p>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
   #include &lt;string&gt;
@@ -337,124 +337,210 @@
               
               <br/>
               <h2>Exercises</h2>
-              <p class='example'>Design a function gcd that takes as input two ints and returns the int representing their greatest common divisor. Assume inputs are positive.</p>
-<pre class='prettyprint'>
-  // Test Cases
-  cout &lt;&lt; gcd(1, 1) &lt;&lt; endl; // 1
-  cout &lt;&lt; gcd(2, 2) &lt;&lt; endl; // 2
-  cout &lt;&lt; gcd(2, 4) &lt;&lt; endl; // 2
-  cout &lt;&lt; gcd(2, 8) &lt;&lt; endl; // 2
-  cout &lt;&lt; gcd(5, 15) &lt;&lt; endl; // 5
-  cout &lt;&lt; gcd(1000, 300) &lt;&lt; endl; // 100
-</pre>
-              <p class='question' name='funs-q2'>Click for sample solution.</p>
-              <div class='answer' name='funs-q2'>
+              <p class='example'>Design a function, intSums that takes in a 2D array of ints called a, a 1D array of ints called result, and a single int n. The intSums function will place the sums
+                of all n subarrays of a and place them in the corresponding column of result, for all n subarrays.</p>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
   #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  #include &lt;cassert&gt;
   using namespace std;
   
-  int gcd (int a, int b) {
-      // This can be done a variety of ways; see:
-      // http://en.wikipedia.org/wiki/Euclidean_algorithm
-      while (b != 0) {
-          int t = b;
-          b = a % b;
-          a = t;
+  const int MAX_INTS = 3;
+  
+  /*
+   * Set each element i in result to the sum of
+   * each sub-array / row i in a. Assume MAX_INTS
+   * subarrays in a and columns in result.
+   */
+  void intSums ( ??? ) {
+      for (int i = 0; ???; i++) {
+          ???
       }
-      return a;
   }
   
   int main () {
-      cout &lt;&lt; gcd(1, 1) &lt;&lt; endl; // 1
-      cout &lt;&lt; gcd(2, 2) &lt;&lt; endl; // 2
-      cout &lt;&lt; gcd(2, 4) &lt;&lt; endl; // 2
-      cout &lt;&lt; gcd(2, 8) &lt;&lt; endl; // 2
-      cout &lt;&lt; gcd(5, 15) &lt;&lt; endl; // 5
-      cout &lt;&lt; gcd(1000, 300) &lt;&lt; endl; // 100
+      int a[][MAX_INTS] = {
+          {1, 2, 3},
+          {0, 0, 0},
+          {5, -5, 1}
+      };
+      int result[MAX_INTS];
+  
+      intSums(a, result, MAX_INTS);
+  
+      assert(result[0] == 6 &amp;&amp; result[1] == 0 &amp;&amp; result[2] == 1);
+  
+      cout &lt;&lt; "[!] ALL TEST(S) PASSED" &lt;&lt; endl;
+  }
+</pre>
+              <p class='question' name='funs-q1-1'>Click for sample solution.</p>
+              <div class='answer' name='funs-q1-1'>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  #include &lt;cassert&gt;
+  using namespace std;
+  
+  const int MAX_INTS = 3;
+  
+  /*
+   * Set each element i in result to the sum of
+   * each sub-array / row i in a
+   */
+  void intSums (int a[][MAX_INTS], int result[], int n) {
+      for (int i = 0; i &lt; n; i++) {
+          result[i] = 0;
+          for (int j = 0; j &lt; n; j++) {
+              result[i] += a[i][j];
+          }
+      }
+  }
+  
+  int main () {
+      int a[][MAX_INTS] = {
+          {1, 2, 3},
+          {0, 0, 0},
+          {5, -5, 1}
+      };
+      int result[MAX_INTS];
+  
+      intSums(a, result, MAX_INTS);
+  
+      assert(result[0] == 6 &amp;&amp; result[1] == 0 &amp;&amp; result[2] == 1);
+  
+      cout &lt;&lt; "[!] ALL TESTS PASSED" &lt;&lt; endl;
   }
 </pre>
               </div>
               <br/>
               
-              <p class='example'>Implement the isStringDouble function below, which determines whether or not the input string is a string representation of a decimal number with possible leading / ending spaces:</p>
+              <p class='example'>Design a function trim that takes in a string by reference and removes all trailing and leading whitespace.</p>
+<pre class='prettyprint'>
+  int main () {
+      string s1 = "   test   "; 
+      string s2 = "   ";
+      string s3 = " test this ";
+      
+      trim(s1);
+      trim(s2);
+      trim(s3);
+      
+      assert(s1 == "test");
+      assert(s2 == "");
+      assert(s3 == "test this");
+  }
+</pre>
+              <p class='question' name='funs-q2'>Click for sample solution.</p>
+              <div class='answer' name='funs-q2'>
+<pre class='prettyprint'>
+  void trim (string&amp; s) {
+      if (s.empty()) {
+          return;
+      }
+  
+      int firstChar = 0,
+          lastChar = s.length() - 1;
+  
+      // Move the firstChar index inwards to find the first non-space
+      // character, and then the lastChar index inwards to find the last
+      // non-space character
+      while (s[firstChar] == ' ' &amp;&amp; firstChar &lt; s.length()) {
+          firstChar++;
+      }
+      while (s[lastChar] == ' ' &amp;&amp; lastChar &gt; 0) {
+          lastChar--;
+      }
+  
+      // If they passed each other, then there were all spaces
+      if (firstChar &gt; lastChar) {
+          s = "";
+  
+      // Otherwise, we can substr to get the right result
+      // Note the +1 at the length because lastChar finds the
+      // index of the last char, which would otherwise not include
+      // the last char from the call to substr
+      } else {
+          s = s.substr(firstChar, lastChar - firstChar + 1);
+      }
+  }
+</pre>
+              </div>
+              <br/>
+              
+              <p class='example'>Implement the isDoubleString function below, which determines whether or not the input string is a string representation of a decimal number with possible leading / ending whitespace. <br/>
+                You may (read: should) use your trim function from the previous exercise for this problem.
+              </p>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
-  #include &lt;string&gt;
   #include &lt;cctype&gt;
+  #include &lt;cassert&gt;
+  #include &lt;string&gt;
+  
   using namespace std;
   
-  bool isDoubleString (string s);
-  
-  int main () {
-      cout &lt;&lt; isDoubleString("1.23") &lt;&lt; endl; // True
-      cout &lt;&lt; isDoubleString("  1.23  ") &lt;&lt; endl; // True
-      cout &lt;&lt; isDoubleString(".23") &lt;&lt; endl; // True
-      cout &lt;&lt; isDoubleString("  1.  23  ") &lt;&lt; endl; // False
-      cout &lt;&lt; isDoubleString("1.2.3.4") &lt;&lt; endl; // False
-      cout &lt;&lt; isDoubleString("I IZ DUBLE :DDD") &lt;&lt; endl; // False
-      cout &lt;&lt; isDoubleString("1a.23") &lt;&lt; endl; // False
-      cout &lt;&lt; isDoubleString("a1.23") &lt;&lt; endl; // False
-      cout &lt;&lt; isDoubleString("") &lt;&lt; endl; // False
+  void trim (string&amp; s) {
+      // ...
   }
   
   bool isDoubleString (string s) {
-    // ...
+      // ???
       for (int i = 0; i &lt; s.length(); i++) {
-          // ...
+          // ???
       }
+      // ???
+  }
+    
+  int main () {
+      assert(  isDoubleString("1.23")); // True
+      assert(  isDoubleString("1")); // True
+      assert(  isDoubleString("  1.23  ")); // True
+      assert(  isDoubleString(".23")); // True
+      assert(! isDoubleString("  1.  23  ")); // False
+      assert(! isDoubleString("1.2.3.4")); // False
+      assert(! isDoubleString("I IZ DUBLE :DDD")); // False
+      assert(! isDoubleString("1a.23")); // False
+      assert(! isDoubleString("a1.23")); // False
+      assert(! isDoubleString("")); // False
+  
+      cerr &lt;&lt; "[!] ALL TESTS PASSED!" &lt;&lt; endl;
   }
 </pre>
               <p class='question' name='funs-q3'>Click for (probably sloppy) sample solution.</p>
               <div class='answer' name='funs-q3'>
 <pre class='prettyprint'>
   bool isDoubleString (string s) {
-      // Set up flags
-      bool foundFirstChar = false,
-           foundDecimal = false,
-           trailingWhitespace = false;
+      // Set up flags, which will see if we've found a digit
+      // or decimal yet
+      bool foundFirstDigit = false,
+           foundDecimal = false;
+      
+      // Purge our string of trailing / leading whitespace
+      trim(s);
   
       for (int i = 0; i &lt; s.length(); i++) {
-          // Our two legal character classes are
-          // digits and the decimal point
-          if (isdigit(s[i]) || s[i] == '.') {
-              // Case where we've seen whitespace
-              // at the end but then see another
-              // legal char
-              if (trailingWhitespace) {
+          // Case where we've seen a digit
+          if (isdigit(s[i])) {
+              foundFirstDigit = true;
+                
+          // Case where we've seen a decimal point
+          } else if (s[i] == '.') {
+              if (foundDecimal) {
+                  // Case where we've seen 2 decimals
                   return false;
               }
-              if (!foundFirstChar) {
-                  foundFirstChar = true;
-              }
-              if (s[i] == '.') {
-                  if (!foundDecimal) {
-                      foundDecimal = true;
-                  } else {
-                      // Case where we've seen 2 decimals
-                      return false;
-                  }
-              }
-              
-          // Otherwise, we've seen a character that
-          // is not a decimal or digit
+              foundDecimal = true;
+          
+          // Catch-all for bad chars
           } else {
-              if (s[i] == ' ') {
-                  // Case where we've already seen our
-                  // first legal char but then have
-                  // trailing whitespace
-                  if (foundFirstChar) {
-                      trailingWhitespace = true;
-                  }
-                  
-              // Catch-all for bad chars
-              } else {
-                  return false;
-              }
+              return false;
           }
       }
-      // If we reach this point, we have a legal double-string
-      return foundFirstChar;
+      
+      // If we reach this point, we have a legal double-string so long as
+      // at least one digit was found
+      return foundFirstDigit;
   }
 </pre>
               
@@ -742,7 +828,7 @@
             <div id='diagnosis' class='scrollspy-element' scrollspy-title='Code Triage'></div>
             <h1>Code Triage</h1>
             <div>
-              <p class='debug'>Noob A. Nooberson attempted to solve the isDoubleString problem presented in class and threw up the following monstrosity; which test cases in the main function will it fail?</p>
+              <p class='debug'>Noob A. Nooberson attempted to solve the isDoubleString problem presented above and threw up the following monstrosity; which test cases in the main function will it fail?</p>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
   #include &lt;string&gt;
@@ -789,7 +875,7 @@
               
               <p class='debug'>
                 Lame O. Badprogrammer, apart from being born to the same parents who named Noob A. Nooberson and somehow changed his last name (shut up, I made you a practice midterm), 
-                attempted to solve the selfStrcat problem presented in class and made a small, insidious error. Where is the problem, and how could you fix it?
+                attempted to solve the selfStrcat problem, which appends a cstring to itself, and made a small, insidious error. Where is the problem, and how could you fix it?
               </p>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
