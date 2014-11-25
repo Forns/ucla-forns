@@ -265,7 +265,7 @@
               <br/>
               <p class='example'>
                 The following code will work for some input arguments, but may cause issues and overflows with others. 
-                Identify which of the following are &quot;safe&quot; uses (that do not attempt to overwrite indecies out of bounds) of the cstringSubstr function:
+                Identify which of the following are &quot;UNSAFE&quot; uses (that attempt to overwrite indecies out of bounds) of the cstringSubstr function:
               </p>
 <pre class='prettyprint'>
   // Works just like substr for strings, except that the argument
@@ -333,7 +333,7 @@
   cstringSubstr(c, 0, 2);
 </pre>
               <p class='question' name='funs-q1'>Click for answer.</p>
-              <p class='answer' name='funs-q1'>E, F, H, J</p>
+              <p class='answer' name='funs-q1'>Unsafe usages: E, F, H, J</p>
               
               <br/>
               <h2>Exercises</h2>
