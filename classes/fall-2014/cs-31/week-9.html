@@ -1,0 +1,1573 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Andrew Forney - UCLA CS</title>
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/magic-bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/main.css" rel="stylesheet" type="text/css">
+    <script src="../../../js/lib/jquery-2.0.3.min.js"></script>
+    <script src="../../../js/lib/bootstrap.min.js"></script>
+    <script src="../../../js/lib/expanding.js"></script>
+    <script src="../../../js/display/general/general-display.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+  </head>
+  
+  <body data-spy="scroll" data-target="#scrollspy">
+    
+    <!-- BEGIN WRAP -->
+    <div id="wrap">
+      
+      <!-- BEGIN NAVIGATION -->
+      <nav class='navbar navbar-default' role='navigation'>
+        <div class='nav-accent'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-12'>
+              <div class='navbar-header'>
+                <button class='navbar-toggle' type='button' data-toggle='collapse' data-target='.navbar-main-collapse'>
+                  <span class='sr-only'>Toggle Navigation</span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                </button>
+                <a class='navbar-brand' href='/~forns/'>
+                  <span id='brand-text'>
+                    Andrew Forney
+                  </span>
+                </a>
+              </div>
+              
+              <div id='nav-main' class='collapse navbar-collapse navbar-main-collapse'>
+                <ul class='nav navbar-nav navbar-right'>
+                  
+                  <li>
+                    <a href='/~forns/about.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-user'></span>
+                      </div>
+                      <p class='text-center'>About</p>
+                    </a>
+                  </li>
+                  
+                  <li class='active'>
+                    <a href='/~forns/classes.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-book'></span>
+                      </div>
+                      <p class='text-center'>Classes</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/contact.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-comment'></span>
+                      </div>
+                      <p class='text-center'>Contact</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/publications.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-file'></span>
+                      </div>
+                      <p class='text-center'>Publications</p>
+                    </a>
+                  </li>
+                  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <!-- END NAVIGATION -->
+      
+      <!-- BEGIN MAIN CONTENT -->
+      <div id="main-content" class="container">
+        <div class="row">
+          
+          <!-- BEGIN SCROLLSPY -->
+          <div class='col-md-2'>
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+              <ul id='scrollspy' class="nav bs-sidenav">
+              </ul>
+            </div>
+          </div>
+          <!-- END SCROLLSPY -->
+          
+          <!-- BEGIN PRESENTATION CONTENT -->
+          <div class='col-md-10 presentation-content' role='main'>
+            <ol class="breadcrumb">
+              <li><a href="../../../classes.html">Classes</a></li>
+              <li><a href="./cs-31.html">Fall14 CS31</a></li>
+              <li class="active">Week 9</li>
+            </ol>
+            
+            <br/>
+            <div id='structs' class='scrollspy-element' scrollspy-title='Intro to Structs'></div>
+            <h1>Introduction to Structs</h1>
+            <div>
+              <p class='toolkit'><strong>Structs</strong> are objects in C++ that represent &quot;data <strong>struct</strong>ures&quot;, or variables, functions, etc. that are organized under a categorizing identifier.</p>
+              <br/>
+              <p>Andrew, no one is impressed when you use lots of words.</p>
+              <p>Fine... in other words, structs are ways of grouping variables and functions into single, cohesive objects.</p>
+              <p>For example, instead of shipping you your TV piece by piece, the manufacturers send it as a completed, cohesive television.</p>
+              <p>"Hey, nice screen, antenna, RF input, tuner, and speakers! Is it a Sony?"</p>
+              <p>Don't be foolish, it's a television. We name it by its whole unit and worry less about its individual parts... yet, we still have names for those individual parts:</p>
+              <p class='toolkit'><strong>Data Members</strong> are variable components of a given struct; they can be of any variable type.</p>
+              <br/>
+              <p>So, essentially, when we declare a struct, we are declaring a new type! All of the rules we're familiar with (when dealing with types) now similarly apply.</p>
+              <p>For starters, we should look at how to declare a struct...</p>
+              
+              <div class='definition'><p>We declare structs using the following syntax:</p>
+<pre class='prettyprint'>
+  struct &lt;structName&gt; {
+      &lt;member1_type&gt; &lt;member1_name&gt;;
+      &lt;member2_type&gt; &lt;member2_name&gt;;
+      // ...etc.
+  }; // Remember the semicolon!
+</pre>
+              </div>
+              <br/>
+              <p>So how about an example? Let's declare a struct, as such:</p>
+<pre class='prettyprint'>
+  struct such {
+      char soCstring[5];
+      int muchNumber;
+  };
+</pre>
+              <br/>
+              <p>Here, I've defined a struct named such that has two members: (1) a 5 element cstring named soCstring, and (2) an int named muchNumber.</p>
+              <p class='debug'>Warning! You cannot initialize members within the struct definition using the traditional notation! The following will NOT compile:</p>
+<pre class='prettyprint'>
+  struct such {
+      char soCstring[5] = "test";
+      int muchNumber = 5;
+  };
+</pre>
+              <br/>
+              <p>We'll talk about &quot;initializing&quot; structs later.</p>
+              <p class='toolkit'>A struct <strong>instance</strong> is an object of a particular type of struct.</p>
+              <br/>
+              <p>If we modeled the car company Ford as a struct, then an instance of Ford might be: <code class='prettyprint'>Ford myMustang;</code>.</p>
+              <p>That said, if I wanted to declare an instance of a struct, I need the following notation:</p>
+<pre class='prettyprint'>
+  struct such {
+      char soCstring[5];
+      int muchNumber;
+  };
+  
+  // ...
+  
+  // [Primitive] "i" is of type "int"
+  int i;
+  
+  // [Struct] "doge" is of type "such"
+  such doge;
+  // (is doge still cool? I like doge.)
+</pre>
+              <br/>
+              <p>Here, <code class='prettyprint'>doge</code> is an instance of struct <code class='prettyprint'>such</code>.</p>
+              <p>Alright, so I've declared a struct... now what?</p>
+              <p>The world is your oyster! Go forth and struct!</p>
+              <p>But first... let's talk about how to talk about members of structs...</p>
+              <p class='toolkit'>The <strong>Element / Member Selection Operator (.)</strong> says, &quot;Give me member &lt;rvalue&gt; of the object in my &lt;lvalue&gt;...&quot; That is, we select the member on the right of the period from the struct instance on the left.</p>
+              <br/>
+              <p>Here's an example:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+  
+  struct such {
+      char soCstring[5];
+      int muchNumber;
+  };
+  
+  int main () {
+      such doge;
+      strcpy(doge.soCstring, "wow");
+      doge.muchNumber = 5;
+  
+      cout &lt;&lt; doge.soCstring &lt;&lt; endl;
+      cout &lt;&lt; doge.muchNumber &lt;&lt; endl;
+  }
+</pre>
+                <br/>
+                <p class='debug'>Will the following code compile or have any unpredictable behavior? If &quot;No&quot; to both questions, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+  
+  struct such {
+      char soCstring[5];
+      int muchNumber;
+  };
+  
+  int main () {
+      such doge;
+      
+      cout &lt;&lt; doge.soCstring &lt;&lt; endl;
+      cout &lt;&lt; doge.muchNumber &lt;&lt; endl;
+  }
+</pre>
+                <br/>
+                <p class='debug'>Will the following code compile or have any unpredictable behavior? If &quot;No&quot; to both questions, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+  
+  struct such {
+      char soCstring[5];
+      int muchNumber;
+  };
+  
+  int main () {
+      cout &lt;&lt; such.soCstring &lt;&lt; endl;
+      cout &lt;&lt; such.muchNumber &lt;&lt; endl;
+  }
+</pre>
+                <br/>
+                <p class='definition'>Structs are defined within scope the same way variables are:</p>
+                <p>This gives us a couple of implications... for instance, I can have two structs of the same name but in different scopes:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+  
+  struct such {
+      char soCstring[5];
+      int muchNumber;
+  };
+  
+  int main () {
+      struct such {
+          double suchRepetition;
+      };
+  
+      // See which representation of such we use?
+      such doge;
+      doge.suchRepetition = 2.2;
+  
+      // Remember :: selects from the global namespace!
+      ::such doge2;
+      doge2.muchNumber = 3;
+  
+      cout &lt;&lt; doge.suchRepetition &lt;&lt; endl;
+      cout &lt;&lt; doge2.muchNumber &lt;&lt; endl;
+  }
+</pre>
+              <p>Because we can treat struct definitions as entities of a particular scope, there is a shorthand to both define and declare variables of a struct type:</p>
+<pre class='prettyprint'>
+  struct such {
+      char soCstring[5] = "test";
+      int muchNumber = 5;
+  };
+  
+  such doge;
+  such doge2;
+  such doge3;
+  
+  // ...
+  // Is equivalent to saying
+  // ...
+  
+  struct such {
+      char soCstring[5] = "test";
+      int muchNumber = 5;
+  } doge, doge2, doge3;
+</pre>
+              <br/>
+              <p class='debug'>Which of the following marked lines would I need to remove in order for the code to compile and run correctly?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+  
+  struct wow {
+      int woah;
+      char manyWords[11];
+      char* greatWords;
+  } otherDoge;
+  
+  int main () {
+      struct such {
+          double suchRepetition;
+          char manyWords[10];
+      } doge;
+  
+      // Which lines below break the code?
+      // Which lead to undefined behavior?
+      otherDoge.wow.woah = 3;
+      strcpy(such.wow.manyWords, "suchPoetry");
+      strcpy(doge.wow.manyWords, "suchPoetry");
+      strcpy(otherDoge.manyWords, "suchPoetry");
+      
+      such.suchRepetition = 2.222222;
+      otherDoge.greatWords = doge.manyWords;
+      strcpy(otherDoge.greatWords, otherDoge.manyWords);
+      cout &lt;&lt; doge.manyWords &lt;&lt; endl;
+  }
+</pre>
+            </div>
+            <hr/>
+            
+              
+            <br/>
+            <div id='constructors' class='scrollspy-element' scrollspy-title='Constructors'></div>
+            <h1>Constructors and Initializing Structs</h1>
+            <div>
+              <p>Now, the next question you might be asking is: how do I initialize a struct?</p>
+              <p>To give values to our struct members, we can use constructors:</p>
+              <p class='toolkit'>A <strong>constructor</strong> is used to assign values to a newly created struct instance's members; it's how we &quot;initialize&quot; them. Constructors are called automatically at struct instance declaration.</p>
+              <p>We define constructor behaviors by listing a function definition with the same name as the struct as a member function and NO return type.</p>
+              <p class='definition'>A member function is a function defined on the struct that instances of the struct have access to.</p>
+              <p>Take the following example for... example:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;cstring&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  struct Ford {
+      int tires;
+      string model;
+      bool fourWheelDrive;
+      
+      // Constructor for Ford objects
+      Ford () {
+          // +One spare
+          tires = 5;
+          model = "Ranger";
+          fourWheelDrive = false;
+      }
+  };
+  
+  int main () {
+      Ford myCar;
+  
+      cout &lt;&lt; myCar.tires &lt;&lt; endl;
+      cout &lt;&lt; myCar.model &lt;&lt; endl;
+      cout &lt;&lt; myCar.fourWheelDrive &lt;&lt; endl;
+  }
+</pre>
+              <p>See how when I declared a new instance of Ford called myCar in the main function, it attains the member values defined in the constructor.</p>
+              <br/>
+              <h3>Member Functions</h3>
+              <p class='definition'>Member functions, sometimes called <strong>methods</strong>, are functions that are called by instances of a particular struct.</p>
+              <p>Here's an example where I define a member function called <code class='prettyprint'>getFlat()</code> that returns the number of remaining tires on my Ford after decrementing how many it has.</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;cstring&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  struct Ford {
+      int tires;
+      string model;
+      bool fourWheelDrive;
+  
+      int getFlat () {
+          tires--;
+          if (tires &lt; 0) {
+              tires = 0;
+          }
+          return tires;
+      }
+  
+      // Constructor
+      Ford () {
+          // +One spare
+          tires = 5;
+          model = "Ranger";
+          fourWheelDrive = false;
+      }
+  };
+  
+  int main () {
+      Ford myCar;
+      Ford yourCar;
+  
+      myCar.getFlat();
+      myCar.getFlat();
+      yourCar.getFlat();
+  
+      cout &lt;&lt; myCar.tires &lt;&lt; endl;
+      cout &lt;&lt; yourCar.tires &lt;&lt; endl;
+  }
+</pre>
+              <p>Some things to notice:</p>
+              <ul class='indent-1'>
+                <li><p>The number of tires each instance of Ford has is specific to each object in main</p></li>
+                <li><p>When I reference a member variable in a member function defined in a struct, it refers to the variable owned by the calling instance</p></li>
+              </ul>
+              <br/>
+              <p>But what if I wanted to define a member function outside of the struct definition? I could use the following syntax:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;cstring&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  struct Ford {
+      int tires;
+      string model;
+      bool fourWheelDrive;
+  
+      // Need function prototype
+      int getFlat();
+  
+      // Constructor
+      Ford () {
+          // +One spare
+          tires = 5;
+          model = "Ranger";
+          fourWheelDrive = false;
+      }
+  };
+  
+  // Member function definition
+  int Ford::getFlat () {
+      // this is a keyword for a pointer to the
+      // calling Ford instance
+      this-&gt;tires--;
+      if (this-&gt;tires &lt; 0) {
+          this-&gt;tires = 0;
+      }
+      return this-&gt;tires;
+  }
+  
+  int main () {
+      Ford myCar;
+      Ford yourCar;
+  
+      myCar.getFlat();
+      myCar.getFlat();
+      yourCar.getFlat();
+  
+      cout &lt;&lt; myCar.tires &lt;&lt; endl;
+      cout &lt;&lt; yourCar.tires &lt;&lt; endl;
+  }
+</pre>
+              <p class='toolkit'>The <strong>this</strong> keyword is a special keyword usable within member functions that provides a pointer to the calling instance.</p>
+              <p class='toolkit'>The <strong>-&gt;</strong> operator is just like the member selector (.) operator except that the lvalue of (-&gt;) is a pointer to an object rather than the object itself.</p>
+              <p>A few things to note about this syntax:</p>
+              <ul class='indent-1'>
+                <li><p>Note how in the struct, I need to provide a function prototype for the member function that I've promised I'll later define.</p></li>
+                <li><p>When I define the member function getFlat outside of the struct, I specify the function name within the struct scope by saying Ford::getFlat</p></li>
+                <li><p>
+                  Now that I've defined the member function outside of struct, I need a way to refer to the instance's members; towards this end, I can use the keyword <code class='prettyprint'>this</code> 
+                  as a pointer to the calling instance of the struct.
+                </p></li>
+                <li><p>Since I'm talking about a pointer to the instance, in order to reference its members, I use the arrow operator (-&gt;) to get at the members when a pointer is the lvalue.</p></li>
+              </ul>
+              <br/>
+              
+              <h3/>Public &amp; Private Tags</h3>
+              <p>What if we didn't want users of our structs to tamper with its internal data members? We could ask them nicely and be disappointed, or we could force them to obey our will!</p>
+              <p class='toolkit'>The <strong>public</strong> tag, used in a struct, says &quot;Everything that comes after this (until you say otherwise) is publically accessible and modifiable.&quot;</p>
+              <p class='toolkit'>The <strong>private</strong> tag, used in a struct, says &quot;Everything that comes after this (until you say otherwise) is ONLY accessible to member functions.&quot;</p>
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;cstring&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  struct Ford {
+      // Available to anyone!
+      public:
+          // Need function prototype
+          int getFlat();
+          // Constructor
+          Ford () {
+              // +One spare
+              tires = 5;
+              model = "Ranger";
+              fourWheelDrive = false;
+          }
+  
+      // Can't touch these!
+      private:
+          int tires;
+          string model;
+          bool fourWheelDrive;
+  };
+  
+  // Member function definition
+  int Ford::getFlat () {
+      // this is a keyword for a pointer to the
+      // calling Ford instance
+      this-&gt;tires--;
+      if (this-&gt;tires &lt; 0) {
+          this-&gt;tires = 0;
+      }
+      return this-&gt;tires;
+  }
+  
+  int main () {
+      Ford myCar;
+      Ford yourCar;
+  
+      myCar.getFlat();
+      myCar.getFlat();
+      yourCar.getFlat();
+  
+      // ...errrr, are tires private?
+      cout &lt;&lt; myCar.tires &lt;&lt; endl;
+      cout &lt;&lt; yourCar.tires &lt;&lt; endl;
+  }
+</pre>
+            </div>
+            <br/>
+            <p>So how do I give users access to my private members? ...there's gotta be a better way to say that...</p>
+            <p class='definition'>Member functions called <strong>getters</strong> are used to allow users access to viewing private member values.</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;cstring&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  struct Ford {
+      // Available to anyone!
+      public:
+          // Need function prototypes
+          int getFlat();
+          int getTires();
+  
+          // Constructor
+          Ford () {
+              // +One spare
+              tires = 5;
+              model = "Ranger";
+              fourWheelDrive = false;
+          }
+  
+      // Can't touch these!
+      private:
+          int tires;
+          string model;
+          bool fourWheelDrive;
+  };
+  
+  // Member function definition
+  int Ford::getFlat () {
+      // this is a keyword for a pointer to the
+      // calling Ford instance
+      this-&gt;tires--;
+      if (this-&gt;tires &lt; 0) {
+          this-&gt;tires = 0;
+      }
+      return this-&gt;tires;
+  }
+  
+  int Ford::getTires () {
+      return this-&gt;tires;
+  }
+  
+  int main () {
+      Ford myCar;
+      Ford yourCar;
+  
+      myCar.getFlat();
+      myCar.getFlat();
+      yourCar.getFlat();
+  
+      // ...now I've provided an interface to see the number
+      // of tires!
+      cout &lt;&lt; myCar.getTires() &lt;&lt; endl;
+      cout &lt;&lt; yourCar.getTires() &lt;&lt; endl;
+  }
+</pre>
+            <hr/>
+            
+            
+            <br/>
+            <div id='classes' class='scrollspy-element' scrollspy-title='Classes'></div>
+            <h1>Classes</h1>
+            <div>
+              <p>I'm making a new section for classes not because they're very different from structs, but because the last section was getting too big...</p>
+              <p class='definition'><strong>Classes</strong> are just like structs except that, instead of having all members default to public access, all members of classes default to private.</p>
+              <p class='debug'>Will the following code compile?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;cstring&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  struct StructExample {
+      int x;
+      double d;
+  
+      StructExample () {
+        x = 3;
+        d = 3.333;
+      }
+  
+      void printX () {
+          cout &lt;&lt; x &lt;&lt; endl;
+      }
+  };
+  
+  int main () {
+      StructExample s;
+      s.printX();
+  }
+</pre>
+              <br/>
+              <p class='debug'>Will the following code compile?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;cstring&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  class ClassExample {
+      int x;
+      double d;
+  
+      ClassExample () {
+        x = 3;
+        d = 3.333;
+      }
+  
+      void printX () {
+          cout &lt;&lt; x &lt;&lt; endl;
+      }
+  };
+  
+  int main () {
+      ClassExample s;
+      s.printX();
+  }
+</pre>
+            </div>
+            <hr/>
+            
+              
+            <br/>
+            <div id='structsMemory' class='scrollspy-element' scrollspy-title='Structs in Memory'></div>
+            <h1>Structs in Memory</h1>
+            <div>
+              <p>Remember when we said that memory addresses are contiguous in the hardware? This is still true! But we didn't say the whole truth...</p>
+              <p>(you couldn't handle the whole truth then, but now you can)</p>
+              <p>Memory addresses are segmented into storage locations known as machine words, which we talked about at the beginning of class but as reminder:</p>
+              <p class='definition'>A <strong>machine word</strong> in memory is the architecture-specific &quot;native&quot; data size that the CPU is capable of processing.</p>
+              <p>So, for example, on a 32-bit processor, a machine word is 4 bytes long, because the processor can handle 32 bits at a time, which we know is = 4 bytes * 8 bits / 1 byte.</p>
+              <p>Physical memory is therefore separated into whatever word size the current architecture and operating system can support.</p>
+              <p>Think of a 32-bit machine with 4 byte machine words as having 4 byte &quot;chunks&quot; of memory indicies.</p>
+              <p>If we had a 64-bit machine with 8 byte machine words, then we might envision the memory laid out as follows:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/fall-2013/cs-31/week-9/structs0.PNG' />
+              </div>
+              <p>A couple things to note here:</p>
+              <ul class='indent-1'>
+                <li><p>We still have sequential indecies of memory addresses; that hasn't changed</p></li>
+                <li><p>We still have the same *amount* of memory</p></li>
+                <li><p>BUT, the way different C++ types get stored in memory gets a tiny bit tricky</p></li>
+              </ul>
+              <p class='definition'>A <strong>word boundary</strong> is therefore the end address of a word in memory.</p>
+              <p>So if a word started in memory at address 1000, then on a 32 bit machine, that word's boundary would be at the end of address 1003.</p>
+              <p>Why is this important, Andrew? I've already eaten 5 pumpkin pies and the only reason I'm reading this is because I'm too tired to switch tabs.</p>
+              <p>Glad you asked... my apologies in advance for being a bit handwavy here (the specifics are a bit out of this class' scope), but getting the general idea will help you to understand structs in memory.</p>
+              <p class='definition'>A struct's individual members are guaranteed to be sequential in memory, but not necessarily contiguous. That said, we are also guaranteed that other variables (outside of the struct members) will not be stored in between the members.</p>
+              <p>
+                By sequential, I mean that if member <code class='prettyprint'>int i;</code> is declared before <code class='prettyprint'>char c;</code> in a given struct, then we are guaranteed that
+                <code class='prettyprint'>&amp;i &lt; &amp;c</code> 
+              </p>
+              <p>
+                That said, if <code class='prettyprint'>i</code> starts at memory address 1000 and extends to address 1003 on a 64-bit machine, then we are NOT guaranteed that <code class='prettyprint'>c</code>
+                is located at address 1004.
+              </p>
+              <p>In brief, your compiler is free to add padding in memory between members to align things properly.</p>
+              <p class='example'>
+                Take, for example, the following two structs with the same members declared in two different orders. The main function will print different values out for you depending on where the
+                members are put in memory at runtime, but you can still glean the padding that the compiler has added.
+              </p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+  
+  struct inStructive {
+      int i;
+      double d;
+      char c;
+  };
+  
+  int main () {
+      inStructive s;
+  
+      cout &lt;&lt; static_cast&lt;void *&gt;(&amp;s.i) &lt;&lt; endl;
+      cout &lt;&lt; static_cast&lt;void *&gt;(&amp;s.d) &lt;&lt; endl;
+      cout &lt;&lt; static_cast&lt;void *&gt;(&amp;s.c) &lt;&lt; endl;
+  }
+</pre>
+              <p>Your compiler might have done the following allocation of this struct in memory:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/fall-2013/cs-31/week-9/structs1.PNG' />
+              </div>
+              <p>Andrew, that's pretty lame how you couldn't fit &quot;char c;&quot; into that box, it looks really asymmetrical.</p>
+              <p>I will find you and ruin your Thanksgiving meal!</p>
+              <p>Now, if I rearrange the member declarations as such:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+  
+  struct inStructive {
+      double d;
+      int i;
+      char c;
+  };
+  
+  int main () {
+      inStructive s;
+  
+      cout &lt;&lt; static_cast&lt;void *&gt;(&amp;s.d) &lt;&lt; endl;
+      cout &lt;&lt; static_cast&lt;void *&gt;(&amp;s.i) &lt;&lt; endl;
+      cout &lt;&lt; static_cast&lt;void *&gt;(&amp;s.c) &lt;&lt; endl;
+  }
+</pre>
+              <p>Then I *might* get some sort of spacing like the following:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/fall-2013/cs-31/week-9/structs2.PNG' />
+              </div>
+              <p>See how that works? Here are the take-away messages:</p>
+              <ul class='indent-1'>
+                <li><p>Struct members are guaranteed to be sequential (relatively positioned to each other) in memory</p></li>
+                <li><p>Struct members are not guaranteed to be contiguous (absolutely positioned one after another) in memory</p></li>
+                <li><p>Because of the above, the size of our struct types will depend on what members it has, what types those members are, and in what order they're declared.</p></li>
+              </ul>
+              <p>Just how these are arranged will be a topic for a future class, worry not!</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='structPointers' class='scrollspy-element' scrollspy-title='Struct Pointers'></div>
+            <h1>Struct Pointers</h1>
+            <div>
+              <p>Struct pointers work pretty much exactly as you'd expect.</p>
+              <p class='definition'>Pointers to struct instances must have the same type as the object to which they're pointing</p>
+              <p>Remember our arrow operator to access the members of whatever struct a struct pointer points to:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;cstring&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  struct Stuff {
+      int x;
+      string s;
+  
+      Stuff () {
+          x = 5;
+          s = "hi :)";
+      }
+  };
+  
+  int main () {
+      Stuff ing;
+  
+      // Pointer of type Stuff equal to the
+      // location of the first member of ing
+      Stuff* ptr = &amp;ing;
+  
+      cout &lt;&lt; ptr-&gt;x &lt;&lt; endl;
+      cout &lt;&lt; ptr-&gt;s &lt;&lt; endl;
+  }
+</pre>
+              <p>Notice the addresses that the pointer points to and the address of the first declared member, x:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;cstring&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  struct Stuff {
+      int x;
+      string s;
+  
+      Stuff () {
+          x = 5;
+          s = "hi :)";
+      }
+  };
+  
+  int main () {
+      Stuff ing;
+  
+      // Pointer of type Stuff equal to the
+      // location of the first member of ing
+      Stuff* ptr = &amp;ing;
+  
+      cout &lt;&lt; ptr &lt;&lt; endl;
+      cout &lt;&lt; &ptr-&gt;x &lt;&lt; endl;
+  }
+</pre>
+              <p>What if we had an array as a member of a struct?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;cstring&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  struct Stuff {
+      int x;
+      string s;
+      int i[3];
+  
+      Stuff () {
+          x = 5;
+          s = "hi :)";
+          i[0] = 5;
+          i[1] = 6;
+          i[2] = 7;
+      }
+  };
+  
+  int main () {
+      Stuff ing;
+  
+      // Pointer of type Stuff equal to the
+      // location of the first member of ing
+      Stuff* ptr = &ing;
+  
+      for (int j = 0; j &lt; 3; j++) {
+          cout &lt;&lt; ptr-&gt;i[j] &lt;&lt; endl;
+      }
+  }
+</pre>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='structArrays' class='scrollspy-element' scrollspy-title='Struct Arrays'></div>
+            <h1>Arrays of Structs</h1>
+            <div>
+              <p>Now that we know how structs are arranged in memory, we can talk about sticking them into arrays!</p>
+              <p class='toolkit'>To declare an array of structs, we use the notation we're all used to with other types:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;cstring&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  struct Stuff {
+      int x;
+      char c[6];
+  
+      Stuff () {
+          x = 3;
+          strcpy(c, "mine?");
+      }
+  };
+  
+  int main () {
+      // An array of 5 Stuffs!
+      Stuff ing[5];
+  
+      // Ways to access members and elements of
+      // members, like arrays
+      cout &lt;&lt; ing[0].c &lt;&lt; endl;
+      cout &lt;&lt; ing[2].c &lt;&lt; endl;
+      cout &lt;&lt; ing[2].c[4] &lt;&lt; endl;
+  }
+</pre>
+              <p>What we see here is that the constructor is called for EACH of the 5 elements of ing, which is why we get the predictable values of the text in member c.</p>
+              <p>I can still talk about the array elements with pointers:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;cstring&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  struct Stuff {
+      int x;
+      char c[6];
+  
+      Stuff () {
+          x = 3;
+          strcpy(c, "mine?");
+      }
+  };
+  
+  int main () {
+      Stuff ing[3];
+      Stuff* ptr = ing;
+      strcpy((ptr + 1)-&gt;c, "woah!");
+  
+      for (int i = 0; i &lt; 3; i++) {
+          cout &lt;&lt; (ptr + i)-&gt;c &lt;&lt; endl;
+      }
+  }
+</pre>
+              <br/>
+              <p class='debug'>Will the following code print out the same thing twice? If not, what could you *add* to the first print out to make it print the same thing?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;cstring&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  struct Stuff {
+      int x;
+      char c[6];
+  
+      Stuff () {
+          x = 3;
+          strcpy(c, "mine?");
+      }
+  };
+  
+  int main () {
+      Stuff ing[3];
+      Stuff* ptr = ing;
+  
+      // Will these print out the same thing?
+      cout &lt;&lt; *(ptr + 1)-&gt;c &lt;&lt; endl;
+      cout &lt;&lt; ing[1].c &lt;&lt; endl;
+  }
+</pre>
+              <p>We can still call member functions in an array as well:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;cstring&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  struct Stuff {
+      int x;
+      char c[6];
+  
+      int incX (int i) {
+          x += i;
+          return x;
+      }
+  
+      Stuff () {
+          x = 3;
+          strcpy(c, "mine?");
+      }
+  };
+  
+  int main () {
+      Stuff ing[3];
+  
+      ing[2].incX(2);
+  
+      for (int i = 0; i &lt; 3; i++) {
+          cout &lt;&lt; ing[i].x &lt;&lt; endl;
+      }
+  }
+</pre>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='structFuncs' class='scrollspy-element' scrollspy-title='Functions &amp; Structs'></div>
+            <h1>Functions &amp; Structs</h1>
+            <div>
+              <p>Yada yada we can use structs in functions yada yada...</p>
+              <p>First things first, as always:</p>
+              <p class='definition'>Structs are <strong>passed by value</strong> in function parameters, meaning that copies are made.</p>
+              <p>This can be harmless whenever our structs are small, usually whenever they simply have primitive-type members...</p>
+              <p>...but when our structs are large, e.g., with huge array members, then this operation can be expensive.</p>
+              <p>Let's look at a simple example function that returns the average of a type we've defined called SmartIntArray:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;cstring&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  struct SmartIntArray {
+      private:
+          int size;
+          int arr[100];
+          int maxIndex;
+  
+      public:
+          void set (int i, int val) {
+              arr[i] = val;
+              // Do you see a possible issue here?
+              if (i &gt; maxIndex) {
+                  size = i + 1;
+                  maxIndex = i;
+              }
+          }
+  
+          int get (int i) {
+              return arr[i];
+          }
+  
+          int length () {
+              return size;
+          }
+  
+          SmartIntArray () {
+              maxIndex = 0;
+              size = 0;
+          }
+  };
+  
+  double average (SmartIntArray sInt) {
+      int result = 0;
+      for (int i = 0; i &lt; sInt.length(); i++) {
+          result += sInt.get(i);
+      }
+      return (double) result / sInt.length();
+  }
+  
+  int main () {
+      SmartIntArray sInt;
+      for (int j = 0; j &lt; 5; j++) {
+          sInt.set(j, j * 5);
+      }
+      cout &lt;&lt; average(sInt) &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p>Of course, we can still pass by reference whenever we want to modify the struct:</p>
+              <p class='debug'>Will the following code compile? If so, what will it print out?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;cstring&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  struct SmartIntArray {
+      private:
+        int size;
+        int arr[100];
+        int maxIndex;
+  
+      public:
+          void set (int i, int val) {
+              arr[i] = val;
+              // Do you see a possible issue here?
+              if (i &gt; maxIndex) {
+                  size = i + 1;
+                  maxIndex = i;
+              }
+          }
+  
+          void toCout () {
+              for (int i = 0; i &lt; size; i++) {
+                  cout &lt;&lt; arr[i] &lt;&lt; endl;
+              }
+          }
+  
+          int get (int i) {
+              return arr[i];
+          }
+  
+          int length () {
+              return size;
+          }
+  
+          SmartIntArray () {
+              maxIndex = 0;
+              size = 0;
+          }
+  };
+  
+  void addToEach (SmartIntArray sInt, int toAdd) {
+      for (int i = 0; i &lt; sInt.length(); i++) {
+          sInt.set(i, sInt.get(i) + toAdd);
+      }
+  }
+  
+  int main () {
+      SmartIntArray sInt;
+      for (int j = 0; j &lt; 5; j++) {
+          sInt.set(j, j * 5);
+      }
+      addToEach(sInt, 5);
+      sInt.toCout();
+  }
+</pre>
+              <br/>
+              <p class='debug'>Will the following code compile? If so, what will it print out?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;cstring&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  struct SmartIntArray {
+      private:
+        int size;
+        int arr[100];
+        int maxIndex;
+  
+      public:
+          void set (int i, int val) {
+              arr[i] = val;
+              // Do you see a possible issue here?
+              if (i &gt; maxIndex) {
+                  size = i + 1;
+                  maxIndex = i;
+              }
+          }
+  
+          void toCout () {
+              for (int i = 0; i &lt; size; i++) {
+                  cout &lt;&lt; arr[i] &lt;&lt; endl;
+              }
+          }
+  
+          int get (int i) {
+              return arr[i];
+          }
+  
+          int length () {
+              return size;
+          }
+  
+          SmartIntArray () {
+              maxIndex = 0;
+              size = 0;
+          }
+  };
+  
+  void addToEach (SmartIntArray&amp; sInt, int toAdd) {
+      for (int i = 0; i &lt; sInt.length(); i++) {
+          sInt.set(i, sInt.get(i) + toAdd);
+      }
+  }
+  
+  int main () {
+      SmartIntArray sInt;
+      for (int j = 0; j &lt; 5; j++) {
+          sInt.set(j, j * 5);
+      }
+      addToEach(sInt, 5);
+      sInt.toCout();
+  }
+</pre>
+              <br/>
+              <p>As per usual, we can also set struct parameters to be const, meaning that we expect that the struct (and any of its members) will not be modified.</p>
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;cstring&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  struct SmartIntArray {
+      private:
+        int size;
+        int arr[100];
+        int maxIndex;
+  
+      public:
+          void set (int i, int val) {
+              arr[i] = val;
+              // Do you see a possible issue here?
+              if (i &gt; maxIndex) {
+                  size = i + 1;
+                  maxIndex = i;
+              }
+          }
+  
+          void toCout () {
+              for (int i = 0; i &lt; size; i++) {
+                  cout &lt;&lt; arr[i] &lt;&lt; endl;
+              }
+          }
+  
+          int get (int i) {
+              return arr[i];
+          }
+  
+          int length () {
+              return size;
+          }
+  
+          SmartIntArray () {
+              maxIndex = 0;
+              size = 0;
+          }
+  };
+  
+  // Notice the const SmartIntArray parameter
+  int total (const SmartIntArray sInt) {
+      int result = 0;
+      for (int j = 0; j &lt; sInt.length(); j++) {
+          result += sInt.get(j);
+      }
+      return result;
+  }
+  
+  int main () {
+      SmartIntArray sInt;
+      for (int j = 0; j &lt; 5; j++) {
+          sInt.set(j, j * 5);
+      }
+      cout &lt;&lt; total(sInt) &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p>Well that's weird... Why didn't that work? Nothing I did modified SmartIntArray...</p>
+              <p>Well, because we call member functions .length() and .get(...), the compiler doesn't know that these seamingly innocuous functions won't change the parameter sInt.</p>
+              <p>So, we have to tell our compiler that the member functions won't modify the calling instance.</p>
+              <p class='toolkit'>To declare a member function that will not modify the calling instance, we use the keyword const after the parameter list:</p>
+              <p>Here's how we would fix our code above by declaring our member functions constant:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;cstring&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  struct SmartIntArray {
+      private:
+        int size;
+        int arr[100];
+        int maxIndex;
+  
+      public:
+          void set (int i, int val) {
+              arr[i] = val;
+              // Do you see a possible issue here?
+              if (i &gt; maxIndex) {
+                  size = i + 1;
+                  maxIndex = i;
+              }
+          }
+  
+          void toCout () const {
+              for (int i = 0; i &lt; size; i++) {
+                  cout &lt;&lt; arr[i] &lt;&lt; endl;
+              }
+          }
+  
+          int get (int i) const {
+              return arr[i];
+          }
+  
+          int length () const {
+              return size;
+          }
+  
+          SmartIntArray () {
+              maxIndex = 0;
+              size = 0;
+          }
+  };
+  
+  // Notice the const SmartIntArray parameter
+  int total (const SmartIntArray sInt) {
+      int result = 0;
+      for (int j = 0; j &lt; sInt.length(); j++) {
+          result += sInt.get(j);
+      }
+      return result;
+  }
+  
+  int main () {
+      SmartIntArray sInt;
+      for (int j = 0; j &lt; 5; j++) {
+          sInt.set(j, j * 5);
+      }
+      cout &lt;&lt; total(sInt) &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p>See how we use the <code class='prettyprint'>const</code> keyword after the parameters in our member function definitions? This saves us a lot of headache later...</p>
+              <p>The rule of thumb is: always think about what member functions could *possibly* modify the calling instance, and if they *never* will, tag them with the const keyword.</p>
+              <p>We can also return structs, which is safe as long as we're returning by value:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;cstring&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  struct SmartIntArray {
+      private:
+        int size;
+        int arr[100];
+        int maxIndex;
+  
+      public:
+          void set (int i, int val) {
+              arr[i] = val;
+              // Do you see a possible issue here?
+              if (i &gt; maxIndex) {
+                  size = i + 1;
+                  maxIndex = i;
+              }
+          }
+  
+          void toCout () const {
+              for (int i = 0; i &lt; size; i++) {
+                  cout &lt;&lt; arr[i] &lt;&lt; endl;
+              }
+          }
+  
+          int get (int i) const {
+              return arr[i];
+          }
+  
+          int length () const {
+              return size;
+          }
+  
+          SmartIntArray () {
+              maxIndex = 0;
+              size = 0;
+          }
+  };
+  
+  // Converts the first count elements of i into a SmartIntArray
+  SmartIntArray intsToSIA (int i[], int count) {
+      SmartIntArray sInt;
+      if (count &gt; 100) {
+          count = 100;
+      }
+      for (int j = 0; j &lt; count; j++) {
+          sInt.set(j, i[j]);
+      }
+      return sInt;
+  }
+  
+  int main () {
+      int i[] = {5, 6, 7};
+      SmartIntArray sInt = intsToSIA(i, 3);
+  
+      sInt.toCout();
+  }
+</pre>
+              <p>But wait... I thought local variables got deallocated as soon as we returned from a function? Won't this be undefined behavior?</p>
+              <p>Nope! Although the local variable sInt in intsToSIA gets deallocated upon return, what *gets* returned is a copy, so we're safe. Good question, Andrew. Thanks, Andrew.</p>
+              <br/>
+              <p>Lastly, we can pass pointers to structs as function parameters, remembering to use the arrow operator to access members of the pointer's dereference:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;cstring&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  struct SmartIntArray {
+      private:
+        int size;
+        int arr[100];
+        int maxIndex;
+  
+      public:
+          void set (int i, int val) {
+              arr[i] = val;
+              // Do you see a possible issue here?
+              if (i &gt; maxIndex) {
+                  size = i + 1;
+                  maxIndex = i;
+              }
+          }
+  
+          void toCout () const {
+              for (int i = 0; i &lt; size; i++) {
+                  cout &lt;&lt; arr[i] &lt;&lt; endl;
+              }
+          }
+  
+          int get (int i) const {
+              return arr[i];
+          }
+  
+          int length () const {
+              return size;
+          }
+  
+          SmartIntArray () {
+              maxIndex = 0;
+              size = 0;
+          }
+  };
+  
+  void normBySize (SmartIntArray* sIPtr) {
+      for (int j = 0; j &lt; sIPtr-&gt;length(); j++) {
+          sIPtr-&gt;set(j, sIPtr-&gt;get(j) / sIPtr-&gt;length());
+      }
+  }
+  
+  int main () {
+      SmartIntArray sInt;
+      for (int j = 0; j &lt; 5; j++) {
+          sInt.set(j, j * 5);
+      }
+      SmartIntArray* sIPtr = &amp;sInt;
+  
+      normBySize(sIPtr);
+      sInt.toCout();
+  }
+</pre>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='exercises' class='scrollspy-element' scrollspy-title='Exercises'></div>
+            <h1>Miscellaneous Exercises</h1>
+            <div>
+              <p>The following assortment of exercises will test your knowledge of structs to the deepest levels imaginable. Good luck.</p>
+              <br/>
+              <p class='example'>What will the following code output? (I eagerly await your angst ridden emails heh)</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;cstring&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  struct xzibit {
+      string yo,
+             dawg;
+  
+      struct inAStruct {
+          string yo,
+                 dawg;
+  
+          inAStruct () {
+              yo = "stringz";
+              dawg = "inside";
+          }
+      } heardYouLiked;
+  
+      xzibit () {
+          yo = heardYouLiked.yo;
+          dawg = "stringsss";
+      }
+  };
+  
+  int main () {
+      xzibit x;
+  
+      cout &lt;&lt; x.yo &lt;&lt; endl;
+      cout &lt;&lt; x.heardYouLiked.yo &lt;&lt; endl;
+      cout &lt;&lt; x.heardYouLiked.dawg &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;cstring&gt;
+  #include &lt;cctype&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  struct trickz {
+      char c[5];
+  
+      trickz () {
+          for (int j = 0; j &lt; 4; j++) {
+              // Assume ASCII encoding
+              c[j] = 'a' + j;
+          }
+          c[4] = '\0';
+      }
+  };
+  
+  void trickzInc (const trickz* t, int count) {
+      for (int i = 0; i &lt; count; i++) {
+          toupper(t-&gt;c[i]);
+      }
+  }
+  
+  int main () {
+      trickz t;
+      trickz* ptr = &t;
+  
+      cout &lt;&lt; t.c &lt;&lt; endl;
+      trickzInc(ptr, 5);
+      cout &lt;&lt; t.c &lt;&lt; endl;
+  }
+</pre>
+            <br/>
+            <p class='example'>What will the following code output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;cstring&gt;
+  #include &lt;cctype&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  struct trickz {
+      int i[5];
+  
+      trickz () {
+          for (int j = 0; j &lt; 5; j++) {
+              // Assume ASCII encoding
+              i[j] = j;
+          }
+      }
+  };
+  
+  void trickzInc (trickz*& t, int count) {
+      for (int j = 0; j &lt; count; j++) {
+          t-&gt;i[j]++;
+      }
+  }
+  
+  int main () {
+      trickz t;
+      trickz* ptr;
+      trickzInc(ptr, 5);
+  
+      for (int j = 0; j &lt; 5; j++) {
+          cout &lt;&lt; t.i[j] &lt;&lt; endl;
+      }
+  
+      // True or false?
+      cout &lt;&lt; (ptr == &t) &lt;&lt; endl;
+  }
+</pre>
+            </div>
+            <hr/>
+            
+          </div>
+          <!-- END PRESENTATION CONTENT -->
+          
+          
+            <!-- TODO: Arrays of struct types -->
+              <!-- TODO: dynamic memory and why we use it for arrays of structs -->
+                <!-- TODO: don't want to instantiate, say, 100 objects, so we'll only use the memory for however many variables we need -->
+                <!-- TODO: thus, we'll have an array of pointers of type whatever, and we'll instantiate them as we need them -->
+                <!-- TODO: Enter: the new operator, which allocates memory somewhere for a struct, and returns a pointer to the location it put it -->
+                <!-- TODO: Whenever we want to reference an object at an index of an array of that object, we use, say, array[i]->move(); -->
+                
+          
+        </div>
+      </div>
+      <!-- END MAIN CONTENT -->
+      
+      
+    </div>
+    <!-- END WRAPPER -->
+    
+    <!-- BEGIN FOOTER -->
+    <div id="footer">
+      <div class="container">
+        <div class="col-md-12 text-center">
+          
+        </div>
+      </div>
+    </div>
+    <!-- END FOOTER -->
+    
+  </body>
+</html>
