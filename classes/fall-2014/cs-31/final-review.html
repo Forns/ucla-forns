@@ -120,7 +120,6 @@
             <div>
               <p>The following examples are designed to be open-ended in the sense that they may contain runtime or compile time errors... or may work just fine! See if you can figure them out.</p>
               <p class='debug'>Will the following code compile? Is there any undefined behavior? If &quot;No&quot; to both questions, what will it print out?</p>
-              <br/>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
   #include &lt;string&gt;
@@ -603,139 +602,272 @@ The class tracks each agent / contact's system id, name, whether or not they tel
   }
 </pre>
               </div>
+              <br/>
+              <p class='example'>The following code compiles and runs with no error. For each statement in the main function, determine what is printed out, taking care to determine what type of object
+                is being printed.</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+  
+  const int MAX_LENGTH = 50;
+  char arr[][MAX_LENGTH] = {
+      "ARR",
+      "PIRATE",
+      "RELATED",
+      "JOKE",
+      "BECAUSE",
+      "ARRRRAY"
+  };
+    
+  int main () {
+      char* ptr1 = arr[0];
+      cout &lt;&lt; ptr1 &lt;&lt; endl;               // #1
+  
+      char* ptr2 = ptr1 + 1;
+      cout &lt;&lt; ptr2 &lt;&lt; endl;               // #2
+      cout &lt;&lt; ptr2[0] &lt;&lt; endl;            // #3
+  
+      char* ptr3 = *(arr + 2);
+      cout &lt;&lt; *(ptr3 + 2) &lt;&lt; endl;        // #4
+      cout &lt;&lt; (ptr3 &lt; ptr2) &lt;&lt; endl;      // #5
+      cout &lt;&lt; (ptr3[7] == '\0') &lt;&lt; endl;  // #6
+  
+      strcpy(ptr1, ptr3 + 2);
+      cout &lt;&lt; ptr1 &lt;&lt; endl;               // #7
+      cout &lt;&lt; *ptr1 &lt;&lt; endl;              // #8
+  }
+</pre>
+              <p class='question' name='pointers-q2'>Click for answer.</p>
+              <div class='answer' name='pointers-q2'>
+<pre>
+  1. ARR
+  2. RR
+  3. R
+  4. L
+  5. 0
+  6. 1
+  7. LATED
+  8. L
+</pre>
+              </div>
+              <br/>
             </div>
             <hr/>
-            
-            <!-- TODO: trying to swap array elements with pointers... poorly -->
-            <!-- TODO: student tried to make dynamic int array; show failure with reassigning pointer to internal int array -->
-            
             <br/>
+            
+
             <div id='codeTriage' class='scrollspy-element' scrollspy-title='Code Triage'></div>
             <h1>Code Triage</h1>
             <div>
-              <p class='example'>
+              <p class='debug'>
                 Last practice midterm we discussed a function isDoubleString that returns true if the input string is a representation 
-                of a decimal number (dictated by the tests in the main function as follows). Someone tried to solve it and did an insultingly
-                poor job at it. Below is their attempt to solve it; they've made 1 error and left out 2 important components. Find the error and
-                complete their code where YOUR CODE HERE is indicated.
+                of a possibly white-space-surrounded decimal number (dictated by the tests in the main function as follows). Someone tried to solve it and did an insultingly
+                poor job at it. Below is their attempt to solve it. Your task is twofold:<br/><br/>
+                1. Although this code DOES compile, find all of the errors that lead to undefined behavior or other problems at runtime.<br/>
+                2. Fix these errors. Now, determine which test case this "working" code will fail.
               </p>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
   #include &lt;string&gt;
   #include &lt;cctype&gt;
+  #include &lt;cassert&gt;
   using namespace std;
   
   bool isDoubleString (string s);
   
   int main () {
-      cout &lt;&lt; isDoubleString("1.23") &lt;&lt; endl; // True
-      cout &lt;&lt; isDoubleString("  1.23  ") &lt;&lt; endl; // True
-      cout &lt;&lt; isDoubleString(".23") &lt;&lt; endl; // True
-      cout &lt;&lt; isDoubleString("  1.  23  ") &lt;&lt; endl; // False
-      cout &lt;&lt; isDoubleString("1.2.3.4") &lt;&lt; endl; // False
-      cout &lt;&lt; isDoubleString("I IZ DUBLE :DDD") &lt;&lt; endl; // False
-      cout &lt;&lt; isDoubleString("1a.23") &lt;&lt; endl; // False
-      cout &lt;&lt; isDoubleString("a1.23") &lt;&lt; endl; // False
-      cout &lt;&lt; isDoubleString("") &lt;&lt; endl; // False
+      assert(  isDoubleString("1.23")); // True
+      assert(  isDoubleString("1")); // True
+      assert(  isDoubleString("  1.23  ")); // True
+      assert(  isDoubleString(".23")); // True
+      assert(! isDoubleString("  1.  23  ")); // False
+      assert(! isDoubleString("1.2.3.4")); // False
+      assert(! isDoubleString("I IZ DUBLE :DDD")); // False
+      assert(! isDoubleString("1a.23")); // False
+      assert(! isDoubleString("a1.23")); // False
+      assert(! isDoubleString("")); // False
+  
+      cerr &lt;&lt; "[!] ALL TESTS PASSED!" &lt;&lt; endl;
   }
   
   bool isDoubleString (string s) {
-      // Set up flags
-      bool foundFirstChar = false,
-           foundDecimal = false,
-           trailingWhitespace = false;
-      for (int i = 0; i &lt; s.length(); i++) {
-          // Our two legal character classes are
-          // digits and the decimal point
-          if (isalnum(s[i]) || s[i] == '.') {
-              // Case where we've seen whitespace
-              // at the end but then see another
-              // legal char
-              // YOUR CODE HERE
-  
-              if (!foundFirstChar) {
-                  foundFirstChar = true;
+      // Set up flags, which will see if we've found a digit
+      // or decimal yet
+      bool foundFirstDigit = false,
+           foundDecimal = false;
+      
+      int i;
+      while (i &lt; s.length()) {
+          // Case where we've seen a digit
+          if (isdigit(s[i])) {
+              foundFirstDigit = true;
+                  
+          // Case where we've seen a decimal point
+          } else if (s[i] == '.') {
+              if (foundDecimal) {
+                  // Case where we've seen 2 decimals
+                  return false;
               }
-              if (s[i] == '.') {
-                  if (!foundDecimal) {
-                      foundDecimal = true;
-                  } else {
-                      // Case where we've seen 2 decimals
-                      return false;
-                  }
-              }
-  
-          // Otherwise, we've seen a character that
-          // is not a decimal or digit
+              foundDecimal = true;
+          
+          // Case where we've seen a space
+          } else if (s[i] == ' ') {
+              continue;
+          
+          // Catch-all for bad chars
           } else {
-              if (s[i] == ' ') {
-                  // Case where we've already seen our
-                  // first legal char but then have
-                  // trailing whitespace
-                  if (foundFirstChar) {
-                      trailingWhitespace = true;
-                  }
-  
-              // Catch-all for bad chars...
-              }
-              // YOUR CODE HERE
+              return false;
           }
+  
+          i++;
       }
-      // If we reach this point, we have a legal double-string
-      return foundFirstChar;
+        
+      // If we reach this point, we have a legal double-string so long as
+      // at least one digit was found
+      return foundFirstDigit;
   }
 </pre>
+              <p class='question' name='debug-q0'>Click for answer.</p>
+              <div class='answer' name='debug-q0'>
+                <p>1. The programmer forgot to take care of his/her iterator! See portions marked with [X] below:</p>
+<pre class='prettyprint'>
+  bool isDoubleString (string s) {
+      // Set up flags, which will see if we've found a digit
+      // or decimal yet
+      bool foundFirstDigit = false,
+           foundDecimal = false;
+      
+      // [X] Iterator i was uninitialized
+      int i = 0;
+      while (i &lt; s.length()) {
+          // Case where we've seen a digit
+          if (isdigit(s[i])) {
+              foundFirstDigit = true;
+                  
+          // Case where we've seen a decimal point
+          } else if (s[i] == '.') {
+              if (foundDecimal) {
+                  // Case where we've seen 2 decimals
+                  return false;
+              }
+              foundDecimal = true;
+          
+          // Case where we've seen a space
+          } else if (s[i] == ' ') {
+              // [X] Continuing here without an iterator
+              // increment will enter an infinite loop!
+              i++;
+              continue;
+          
+          // Catch-all for bad chars
+          } else {
+              return false;
+          }
+  
+          i++;
+      }
+        
+      // If we reach this point, we have a legal double-string so long as
+      // at least one digit was found
+      return foundFirstDigit;
+  }
+</pre>
+                <br/>
+                <p>2. Even with these fixes, the code will fail the test: <code class='prettyprint'>assert(! isDoubleString("  1.  23  ")); // False</code> because it assumes spaces should simply be ignored.</p>
+              </div>
               <br/>
-              <p class='example'>You take pity on the poor programmer who produced the following code: they attempted to solve a function that reverses a substring in a cstring. Fix their mistake below:</p>
+              
+              <p class='debug'>Your friend Yenrof was very tired while coding late into the night, and attempted to create a function that reverses a substring in a cstring. Remedy their blatant incompetence 
+                by finding their error (and proposing a solution, which may modify any element of the code) below:</p>
 <pre class='prettyprint'>
   #include &lt;iostream&gt;
   #include &lt;string&gt;
   #include &lt;cctype&gt;
+  #include &lt;cassert&gt;
   using namespace std;
-  
+    
   char* reverseSubstring (char c[], int start, int count);
-  
+    
   int main () {
-      {
-          char c[] = "art";
-          cout &lt;&lt; reverseSubstring(c, 0, 1) &lt;&lt; endl; // Should be "rat"
-      }
-      {
-          char c[] = "pretty";
-          cout &lt;&lt; reverseSubstring(c, 1, 1) &lt;&lt; endl; // Should be "pertty"
-      }
-      {
-          char c[] = "howdy!";
-          cout &lt;&lt; reverseSubstring(c, 0, 1000) &lt;&lt; endl; // Should be "!ydwoh"
-      }
+      char c1[] = "art";
+      assert(!strcmp(reverseSubstring(c1, 0, 1), "rat"));
+      char c2[] = "pretty";
+      assert(!strcmp(reverseSubstring(c2, 1, 1), "pertty"));
+      char c3[] = "howdy!";
+      assert(!strcmp(reverseSubstring(c3, 0, 1000), "!ydwoh"));
+      cout &lt;&lt; "[!] PASSED ALL UNIT TESTS!" &lt;&lt; endl;
   }
-  
+    
   // Returns a pointer to the cstring c after all elements from
   // index start to (start + count) have been reversed
   char* reverseSubstring (char c[], int start, int count) {
       int endIndex = start + count,
           len = strlen(c);
+  
       char* iter = &amp;c[start];
       char* holder;
-  
+      
+      // Put a ceiling on the endIndex such that it is no
+      // greater than the cstring length
       if (endIndex &gt;= len) {
           endIndex = len - 1;
       }
-  
+    
+      // As long as our iterator has a smaller address than
+      // the end index, we'll keep swapping elements
       while (iter &lt; &amp;c[endIndex]) {
           holder = &amp;c[endIndex];
           *iter = c[endIndex--];
           *holder = *iter;
           iter++;
       }
+  
       return c;
   }
 </pre>
+              <p class='question' name='debug-q1'>Click for answer.</p>
+              <div class='answer' name='debug-q1'>
+                <p>Yenrof's error was in overwriting the char at *iter with the one at c[endIndex] before swapping it into the holder position!</p>
+<pre class='prettyprint'>
+  // Returns a pointer to the cstring c after all elements from
+  // index start to (start + count) have been reversed
+  char* reverseSubstring (char c[], int start, int count) {
+      int endIndex = start + count,
+          len = strlen(c);
+  
+      char* iter = &amp;c[start];
+      
+      // [!] Change holder to a char type, not char*
+      char holder;
+      
+      // Put a ceiling on the endIndex such that it is no
+      // greater than the cstring length
+      if (endIndex &gt;= len) {
+          endIndex = len - 1;
+      }
+    
+      // As long as our iterator has a smaller address than
+      // the end index, we'll keep swapping elements
+      while (iter &lt; &amp;c[endIndex]) {
+          // [!] holder now preserves the iterator's element
+          // while we swap the endIndex char with the one
+          // at iter
+          holder = *iter;
+          *iter = c[endIndex];
+          c[endIndex--] = holder;
+          iter++;
+      }
+  
+      return c;
+  }
+</pre>
+              </div>
             </div>
             <hr/>
             
             
-            <!-- TODO: implementing class ground-up -->
             <br/>
             <div id='diy' class='scrollspy-element' scrollspy-title='DIY'></div>
             <h1>DIY</h1>
@@ -745,7 +877,7 @@ The class tracks each agent / contact's system id, name, whether or not they tel
                 <li>
                   <p>Private members:</p>
                   <ul class='indent-1'>
-                    <li><p>Spy* m_ring[MAX_SPIES]; // the internal array of pointers to spies</p></li>
+                    <li><p>Spy* m_ring[MAX_SPIES]; // the internal array of pointers to spies; assume MAX_SPIES is a const int defined in scope (you may assign to it whatever value you please).</p></li>
                     <li><p>Spy* leader; // the leader of the spy ring; the leader is also within m_ring</p></li>
                     <li><p>int m_nSpies; // tracking count for the number of spies in the ring</p></li>
                   </ul>
@@ -753,25 +885,144 @@ The class tracks each agent / contact's system id, name, whether or not they tel
                 <li>
                   <p>Public interface:</p>
                   <ul class='indent-1'>
-                    <li><p>Spy* findLeader (); // returns a pointer to the true leader if he / she tells the truth, the true leader's target otherwise (if it has one, otherwise the nullptr)</p></li>
-                    <li><p>void issueHit (Spy* target); // sets each member of the spy ring's target to that of the leader</p></li>
-                    <li><p>int findLoyal (); // returns the number of spies in the ring that have the leader as their contact</p></li>
+                    <li><p><code class='prettyprint'>SpyRing ();</code> // SpyRing default constructor that creates an empty SpyRing with no leader and no spies.</p></li>
+                    <li><p><code class='prettyprint'>~SpyRing ();</code> // SpyRing destructor that makes sure to delete any dynamically allocated Spies in the ring.</p></li>
+                    <li><p><code class='prettyprint'>bool addSpy (char name[], bool truthy, bool isLeader);</code> // create a new Spy in the SpyRing with the name and truth-telling attributes of the input.
+                      Set isLeader to true if this newly created Spy is the leader of the SpyRing. Use m_nSpies to set the agentId of the Spy. Return true if there is enough room in the SpyRing to insert
+                      the Spy, otherwise, return false and do not modify the SpyRing.</p></li>
+                    <li><p><code class='prettyprint'>void setContact (int agentId, Spy* contact);</code> // sets the contact of the SpyRing spy with the given agentId to the input Spy* contact.
+                      (assume agentId corresponds with the m_ring index)</p></li>
+                    <li><p><code class='prettyprint'>void setTarget (int agentId, Spy* target);</code> // sets the target of the SpyRing spy with the given agentId to the input Spy* target.
+                      (assume agentId corresponds with the m_ring index)</p></li>
+                    <li><p><code class='prettyprint'>void issueHit ();</code> // sets each member of the spy ring's target to that of the leader. Do nothing if there is no leader.</p></li>
+                    <li><p><code class='prettyprint'>int findLoyal ();</code> // returns the number of spies in the ring that have the leader as their contact. Return -1 if there is no leader.</p></li>
                   </ul>
                 </li>
               </ul>
-              <p class='example'>Add a constructor and destructor to your implementation of the SpyRing to avoid memory leaks.</p>
-              <p class='example'>Create an auxiliary function isSpyCycle that takes as input a Spy pointer and determines whether or not a cycle of targets leads back to him / her.</p>
-              <p>For example:</p>
+              <br/>
+              
+              <p class='question' name='spyring-q0'>Click for <code class='prettyprint'>private member</code> and class structure solution.</p>
+              <div class='answer' name='spyring-q0'>
 <pre class='prettyprint'>
-  Spy a;
-  Spy b;
-  Spy c;
-  a.setTarget(&amp;b);
-  b.setTarget(&amp;c);
-  c.setTarget(&amp;a);
+  const int MAX_SPIES = 10;
   
-  cout &lt;&lt; isSpyCycle(&amp;a) &lt;&lt; endl; // would print 1
+  class SpyRing {
+  private:
+      Spy* m_ring[MAX_SPIES];
+      Spy* leader;
+      int m_nSpies;
+  };
 </pre>
+              </div>
+              <br/>
+              
+              <p class='question' name='spyring-q1'>Click for <code class='prettyprint'>constructor / destructor</code> solutions.</p>
+              <div class='answer' name='spyring-q1'>
+<pre class='prettyprint'>
+  class SpyRing {
+  private:
+      Spy* m_ring[MAX_SPIES];
+      Spy* leader;
+      int m_nSpies;
+  
+  public:
+      SpyRing ();
+      ~SpyRing ();
+  };
+  
+  SpyRing::SpyRing () {
+      leader = nullptr;
+      m_nSpies = 0;
+  }
+  
+  SpyRing::~SpyRing () {
+      for (int i = 0; i &lt; m_nSpies; i++) {
+          delete m_ring[i];
+      }
+  }
+</pre>
+              </div>
+              <br/>
+              
+              <p class='question' name='spyring-q2'>Click for <code class='prettyprint'>addSpy, setContact, setTarget</code> solutions.</p>
+              <div class='answer' name='spyring-q2'>
+<pre class='prettyprint'>
+  // ... class definition omitted above
+  
+  bool SpyRing::addSpy (char name[], bool truthy, bool isLeader) {
+      // Only add a spy if there's room
+      if (m_nSpies &lt; MAX_SPIES) {
+          // Add that spy to the m_ring array
+          m_ring[m_nSpies] = new Spy(m_nSpies, name, truthy);
+  
+          // Set them to the leadership status if necessary
+          if (isLeader) {
+              leader = m_ring[m_nSpies];
+          }
+  
+          // Increase the spy count and return true, indicating
+          // that we successfully added the spy
+          m_nSpies++;
+          return true;
+      } else {
+          return false;
+      }
+  }
+  
+  void SpyRing::setContact (int agentId, Spy* contact) {
+      m_ring[agentId]-&gt;setContact(contact);
+  }
+  
+  void SpyRing::setTarget (int agentId, Spy* target) {
+      m_ring[agentId]-&gt;setTarget(target);
+  }
+</pre>
+              </div>
+              <br/>
+              
+              <p class='question' name='spyring-q4'>Click for <code class='prettyprint'>issueHit</code> solution.</p>
+              <div class='answer' name='spyring-q4'>
+<pre class='prettyprint'>
+  void SpyRing::issueHit () {
+      // If no leader, do nothing
+      if (leader == nullptr) {
+          return;
+      }
+  
+      // Otherwise, we'll get the leader's target, and set
+      // everyone else's target to that!
+      Spy* target = leader-&gt;getTarget();
+      for (int i = 0; i &lt; m_nSpies; i++) {
+          m_ring[i]-&gt;setTarget(target);
+      }
+  }
+</pre>
+              </div>
+              <br/>
+              <p class='question' name='spyring-q5'>Click for <code class='prettyprint'>findLoyal</code> solution.</p>
+              <div class='answer' name='spyring-q5'>
+<pre class='prettyprint'>
+  // These spies aint loyal...
+  int SpyRing::findLoyal () {
+      // No leader? Return -1
+      if (leader == nullptr) {
+          return -1;
+      }
+  
+      // Otherwise, compare the pointers of each Spy's contact
+      // to see if it's equivalent to the leader; track how many
+      // meet this criteria and return it at the end
+      int loyal = 0;
+      for (int i = 0; i &lt; m_nSpies; i++) {
+          if (m_ring[i]-&gt;getContact() == leader) {
+              loyal++;
+          }
+      }
+  
+      return loyal;
+  }
+</pre>
+              </div>
             </div>
             <hr/>
             
@@ -786,25 +1037,26 @@ The class tracks each agent / contact's system id, name, whether or not they tel
   #include &lt;iostream&gt;
   #include &lt;string&gt;
   #include &lt;cstring&gt;
+  #include &lt;cmath&gt;
   using namespace std;
-  
+    
   const int MAX_OPS = 100;
-  
+    
   struct opString {
       double d;
       char op[MAX_OPS];
-      
+        
       opString (double start, char* ops) {
           d = start;
           strcpy(op, ops);
       }
-      
+        
       double applyOp () {
           int len = strlen(op);
           if (len == 0) {
               return d;
           }
-      
+        
           for (int i = 0; i &lt; len; i++) {
               char currentOp = op[i];
               switch (currentOp) {
@@ -815,6 +1067,11 @@ The class tracks each agent / contact's system id, name, whether or not they tel
                       d -= d;
                       break;
                   case '^':
+                      // cmath power function that raises the first
+                      // argument to the power of the second and returns
+                      // that value
+                      d = pow(d, d);
+                      break;
                   case '*':
                       d *= d;
                       break;
@@ -836,79 +1093,50 @@ The class tracks each agent / contact's system id, name, whether or not they tel
                 <li><p>Can the output ever be positive?</p></li>
                 <li><p>Can the output ever be zero?</p></li>
               </ul>
-                <br/>
+              <br/>
 <pre class='prettyprint'>
   int main () {
-      // x = ...
+      double x = ...;
       opString op1(x, "+++");
       cout &lt;&lt; op1.applyOp() &lt;&lt; endl;
   }
 </pre>
+              <p class='question' name='abs-q0'>Click for answer.</p>
+              <p class='answer' name='abs-q0'><strong>Can be:</strong> negative (x = -1), zero (x = 0), or positive (x = 1)</p>
+              <br/>
+
 <pre class='prettyprint'>
   int main () {
-      // x = ...
-      opString op1(x, "+-+");
-      cout &lt;&lt; op1.applyOp() &lt;&lt; endl;
+      double x = ...;
+      opString op2(x, "+-+");
+      cout &lt;&lt; op2.applyOp() &lt;&lt; endl;
   }
 </pre>
+              <p class='question' name='abs-q1'>Click for answer.</p>
+              <p class='answer' name='abs-q1'><strong>Can be:</strong> negative (x = -1), zero (x = 0), or positive (x = 1)</p>
+              <br/>
+              
 <pre class='prettyprint'>
   int main () {
-      // x = ...
-      opString op1(x, "+-^$^");
-      cout &lt;&lt; op1.applyOp() &lt;&lt; endl;
+      double x = ...;
+      opString op3(x, "+-^$^");
+      cout &lt;&lt; op3.applyOp() &lt;&lt; endl;
   }
 </pre>
+              <p class='question' name='abs-q2'>Click for answer.</p>
+              <p class='answer' name='abs-q2'><strong>Always strictly positive</strong> (in fact, is 4 for all input; remember that 0 ^ 0 = 1)</p>
+              <br/>
+              
 <pre class='prettyprint'>
   int main () {
-      // x = ...
-      opString op1(x, "**");
-      cout &lt;&lt; op1.applyOp() &lt;&lt; endl;
+      double x = ...;
+      opString op4(x, "***");
+      cout &lt;&lt; op4.applyOp() &lt;&lt; endl;
   }
 </pre>
-              <div class='example'><p>Take the following struct definition outline for example:</p>
-<pre class='prettyprint'>
-  struct crazyCard {
-      int digit;
-      char letter;
-      
-      // Returns a boolean of the following scenario:
-        // if this card's digit is even, then return false if letter is a vowel
-        // return true otherwise
-      bool isValidCard ();
-      
-      // Prints to cout EITHER the calling crazyCard's digit or letter
-      void revealDigitOrLetter ();
-      
-      // Assume isValidCard and revealDigitOrLetter are implemented
-      // elsewhere... and done so correctly
-      
-      // Constructor randomly assigns a digit and letter to the instance's members
-      crazyCard() {...}
-  };
-</pre>
-                <p>
-                  Here's the question: if I wanted to verify that isValidCard was working correctly (i.e., that all of my cards are valid),
-                  but I only get to see one &quot;side&quot; of each card (i.e. EITHER the digit or the letter), which of the following cards must I check, and why?
-                 </p>
-                <p>By &quot;check,&quot; I mean that if I'm given the digit from revealDigitOrLetter, then check the letter to make sure it conforms to the rules of isValidCard, and vice versa if shown the letter.</p>
-                <br/>
-<pre class='prettyprint'>
-  // Assume values printed out are the same for each run
-  crazyCard a;
-  a.revealDigitOrLetter(); // Prints out 6
-  
-  crazyCard b;
-  b.revealDigitOrLetter(); // Prints out E
-  
-  crazyCard c;
-  c.revealDigitOrLetter(); // Prints out 7
-  
-  crazyCard d;
-  d.revealDigitOrLetter(); // Prints out F
-</pre>
-                <br/>
-                <p>Another way to think about the problem is: which of the above cards do I know will return true from isValidCard()? The ones I do *not* know must be checked.</p>
-              </div>
+              <p class='question' name='abs-q3'>Click for answer.</p>
+              <p class='answer' name='abs-q3'><strong>Can be:</strong> zero (x = 0) or positive (x = 1)</p>
+              <br/>
             </div>
             <hr/>
             
