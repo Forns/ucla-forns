@@ -1,0 +1,228 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Andrew Forney - UCLA CS</title>
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/magic-bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/main.css" rel="stylesheet" type="text/css">
+    <script src="../../../js/lib/jquery-2.0.3.min.js"></script>
+    <script src="../../../js/lib/bootstrap.min.js"></script>
+    <script src="../../../js/lib/expanding.js"></script>
+    <script src="../../../js/display/general/general-display.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+  </head>
+  
+  <body data-spy="scroll" data-target="#scrollspy">
+    
+    <!-- BEGIN WRAP -->
+    <div id="wrap">
+      
+      <!-- BEGIN NAVIGATION -->
+      <nav class='navbar navbar-default' role='navigation'>
+        <div class='nav-accent'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-12'>
+              <div class='navbar-header'>
+                <button class='navbar-toggle' type='button' data-toggle='collapse' data-target='.navbar-main-collapse'>
+                  <span class='sr-only'>Toggle Navigation</span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                </button>
+                <a class='navbar-brand' href='/~forns/'>
+                  <span id='brand-text'>
+                    Andrew Forney
+                  </span>
+                </a>
+              </div>
+              
+              <div id='nav-main' class='collapse navbar-collapse navbar-main-collapse'>
+                <ul class='nav navbar-nav navbar-right'>
+                  
+                  <li>
+                    <a href='/~forns/about.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-user'></span>
+                      </div>
+                      <p class='text-center'>About</p>
+                    </a>
+                  </li>
+                  
+                  <li class='active'>
+                    <a href='/~forns/classes.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-book'></span>
+                      </div>
+                      <p class='text-center'>Classes</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/contact.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-comment'></span>
+                      </div>
+                      <p class='text-center'>Contact</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/publications.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-file'></span>
+                      </div>
+                      <p class='text-center'>Publications</p>
+                    </a>
+                  </li>
+                  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <!-- END NAVIGATION -->
+      
+      <!-- BEGIN MAIN CONTENT -->
+      <div id="main-content" class="container">
+        <div class="row">
+          
+          <!-- BEGIN SCROLLSPY -->
+          <div class='col-md-2'>
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+              <ul id='scrollspy' class="nav bs-sidenav">
+              </ul>
+            </div>
+          </div>
+          <!-- END SCROLLSPY -->
+          
+          <!-- BEGIN PRESENTATION CONTENT -->
+          <div class='col-md-10 presentation-content' role='main'>
+            <ol class="breadcrumb">
+              <li><a href="../../../classes.html">Classes</a></li>
+              <li><a href="./cs-31.html">Fall14 CS31</a></li>
+              <li class="active">Extra Review</li>
+            </ol>
+            
+            <div id='review' class='scrollspy-element' scrollspy-title='Review'></div>
+            <h1>Review</h1>
+            <div>
+              <p class='definition'>Enjoy the following last-minute extra practice problems! We'll go over these on Saturday morning if no one has any questions.</p>
+              <br/>
+              <p class='example'>What will the following code print out?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+    
+  const int MAX_LENGTH = 50;
+  char arr[][2][MAX_LENGTH] = {
+      {
+          "CSTRINGS",
+          "IN A"
+      },
+      {
+          "SEA OF",
+          "STRINGS"
+      }
+  };
+      
+  int main () {
+      char* ptr1 = arr[0][0];
+      cout &lt;&lt; ptr1 &lt;&lt; endl;           // #1
+      cout &lt;&lt; ptr1[0] &lt;&lt; endl;        // #2
+      cout &lt;&lt; (ptr1 + 3) &lt;&lt; endl;     // #3
+  
+      char* ptr2 = arr[1][1];
+      ptr2[6] = 'Z';
+      cout &lt;&lt; ptr2 &lt;&lt; endl;           // #4
+  
+      *ptr1 = *ptr2;
+      cout &lt;&lt; ptr1 &lt;&lt; endl;           // #5
+      cout &lt;&lt; ptr2 &lt;&lt; endl;           // #6
+  }
+</pre>
+              <br/>
+              
+              <div class='example'>
+                <p>Observe the two arrays arr and ans below. Your task is to turn each element of arr into the corresponding element of ans with the following restrictions:</p>
+                <ul class='indent-1'>
+                  <li><p>You MUST use ONLY the cstring library's functions.</p></li>
+                  <li><p>You MUST NOT assign to individual characters in the cstring using the [] operator.</p></li>
+                  <li><p>You MUST NOT declare any additional variables.</p></li>
+                  <li><p>You MUST NOT use ANY string literals like "string" in your answers.</p></li>
+                </ul>
+              </div>
+              
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;cstring&gt;
+  using namespace std;
+  
+  const int MAX_LENGTH = 50;
+  
+  char arr[][MAX_LENGTH] = {
+      "SEE",
+      "SAW",
+      "C",
+      "STRINGS"
+  };
+  
+  char ans[][MAX_LENGTH] = {
+      "SEESAW",
+      "SAWINGS",
+      "SEESEE",
+      "RING"
+  };
+  
+  int main () {
+      // -----------------------------------
+      // [!] Your code here!
+      // -----------------------------------
+  
+      for (int i = 0; i &lt; 4; i++) {
+          if (strcmp(arr[i], ans[i])) {
+              cout &lt;&lt; "[X] FAILED: " &lt;&lt; endl
+                   &lt;&lt; "EXPECTED: " &lt;&lt; ans[i] &lt;&lt; endl
+                   &lt;&lt; "GOT: " &lt;&lt; arr[i];
+  
+              return 1;
+          }
+      }
+  
+      cout &lt;&lt; "[!] You win CS31!" &lt;&lt; endl;
+  }
+</pre>
+              
+            </div>
+            <hr/>
+            <br/>
+            
+          </div>
+          <!-- END PRESENTATION CONTENT -->
+          
+          
+        </div>
+      </div>
+      <!-- END MAIN CONTENT -->
+      
+      
+    </div>
+    <!-- END WRAPPER -->
+    
+    <!-- BEGIN FOOTER -->
+    <div id="footer">
+      <div class="container">
+        <div class="col-md-12 text-center">
+          
+        </div>
+      </div>
+    </div>
+    <!-- END FOOTER -->
+    
+  </body>
+</html>
