@@ -16,7 +16,7 @@
 
 html, body {
   height: 100%;
-  font-family: 'Lato', sans-serif;
+  font-family: 'Lato', 'Arial', sans-serif;
 }
 
 pre, code {
