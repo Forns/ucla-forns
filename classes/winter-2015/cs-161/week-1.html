@@ -256,7 +256,7 @@
               </ul>
               <br/>
               <p>When some of these constraints are relaxed, even very simple chatbots have completed modified Turing tests...</p>
-              <p>(Shameless plug for my own undergrad chatbot, (Gilbert &amp; Forney, in press))</p>
+              <p>(Shameless plug for my own undergrad chatbot, (Gilbert &amp; Forney, 2014))</p>
               
               <br/>
               <h3>Summary</h3>
@@ -363,7 +363,7 @@
               <h3>Atom &amp; Eval</h3>
               <p>Get it? Because we're starting with the basics? :/</p>
               <p class='toolkit'><strong>Atoms</strong> are simple data types in LISP such as numbers and strings. These are indivisible into smaller components, thus the name.</p>
-              <p class='toolkit'><strong>Symbols</strong> are atoms that can refer to functions and variables.</p>
+              <p class='toolkit'><strong>Symbols</strong> are atoms that possess a name, possibly a value, and possibly a function definition.</p>
               <p>In this way, all symbols are atoms, but not all atoms are necessarily symbols.</p>
               <br/>
               <p class='debug'>NOTE: Symbols are case-insensitive, which means that a symbol representing some function called SYMBOL-ENOUGH is equivalent to referencing the same function SyMbOl-EnOuGh</p>
@@ -870,7 +870,20 @@
   
   (+ lame (first example))
 </pre>
-              <p>Again, avoid using setq in your assignments; you may use it for test code!</p>
+              <p>Again, unless otherwise specified, you should avoid using setq in your assignments; you may use it for test code!</p>
+              <br/>
+              <p class='toolkit'>The <code class='prettyprint'>boundp</code> predicate tests whether or not a given symbol is bound to some definition.</p>
+<pre class='prettyprint'>
+  ;; Assuming no other code above, is 'TEST bound yet?
+  (print (boundp 'TEST))
+  
+  (setq TEST 5)
+  
+  ;; Now is 'TEST bound?
+  (print (boundp 'TEST))
+</pre>
+              <p>[HINT] You may find boundp useful in your homework for determining if gaps are conatms!</p>
+              <p>We'll talk about this later...</p>
               <br/>
               <p>Now, I know what your next question is: What's the difference between <code class='prettyprint'>let</code> and <code class='prettyprint'>let*</code>?</p>
               <ul class='indent-1'>
@@ -1144,8 +1157,41 @@
             <div id='hw1' class='scrollspy-element' scrollspy-title='Homework 1'></div>
             <h1>Homework 1</h1>
             <div>
-              <p><code class='prettyprint'>// TODO: IOU Homework Help</code></p>
-              <p>The professor has yet to upload homework one, but as soon as it becomes available, I'll have hints and information on it here!</p>
+              <p>Homework 1 asks you to define some functions relevant to frames.</p>
+              <p class='definition'><strong>Frames</strong> are data structures in LISP that attempt to break a natural language sentence down into its constituent, semantic components.</p>
+              <p>What does that mean?</p>
+              <p>Well, we're interested in picking apart a text sentence, with all of the nuances of human writing, into computer-friendly pieces for semantic processing (extracting meaning).</p>
+              <p>A frame abides by the following syntax:</p>
+<pre class='prettyprint'>
+  frame    -> (pred (slot filler)* ) | NIL 
+  pred     -> atom
+  slot     -> atom
+  filler   -> frame | gap
+  gap      -> variable | atom
+  variable -> (*V atom)
+</pre>
+              <br/>
+              <p>Here's an example:</p>
+              <p class='example'>A frame representing the sentence:
+                <br/><br/>
+                &quot;Andrew taught class.&quot;
+              </p>
+<pre class='prettyprint'>
+  (ACT (AGENT (HUMAN (F-NAME (ANDREW))
+                     (GENDER (MALE))))
+       (ACTION (TAUGHT))
+       (OBJECT (CLASS)))
+</pre>
+              <p>Some things to note:</p>
+              <ul class='indent-1'>
+                <li><p>Note the syntax structure with outermost predicate ACT, which has 3 slots: AGENT, ACTION, OBJECT.</p></li>
+                <li><p>The AGENT slot actually has a frame as a filler with predicate HUMAN and slots F-NAME and GENDER.</p></li>
+                <li><p>In Lisp, these are all lists of symbols, with the nesting schema specified by the above syntax.</p></li>
+              </ul>
+              <p>Using what we've learned today about Lisp, you should be able to complete most (if not all) of your HW1 problems.</p>
+              <p>If there's time, we can go over a few of those now.</p>
+              <br/>
+              <p>That's it for today, look over the functions you've been assigned and let me know if any need clarification! Good luck!</p>
             </div>
             <hr/>
             
