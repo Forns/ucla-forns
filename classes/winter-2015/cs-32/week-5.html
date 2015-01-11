@@ -1,0 +1,1352 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Andrew Forney - UCLA CS</title>
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/magic-bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/main.css" rel="stylesheet" type="text/css">
+    <script src="../../../js/lib/jquery-2.0.3.min.js"></script>
+    <script src="../../../js/lib/bootstrap.min.js"></script>
+    <script src="../../../js/lib/expanding.js"></script>
+    <script src="../../../js/display/general/general-display.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+  </head>
+  
+  <body data-spy="scroll" data-target="#scrollspy">
+    
+    <!-- BEGIN WRAP -->
+    <div id="wrap">
+      
+      <!-- BEGIN NAVIGATION -->
+      <nav class='navbar navbar-default' role='navigation'>
+        <div class='nav-accent'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-12'>
+              <div class='navbar-header'>
+                <button class='navbar-toggle' type='button' data-toggle='collapse' data-target='.navbar-main-collapse'>
+                  <span class='sr-only'>Toggle Navigation</span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                </button>
+                <a class='navbar-brand' href='/~forns/'>
+                  <span id='brand-text'>
+                    Andrew Forney
+                  </span>
+                </a>
+              </div>
+              
+              <div id='nav-main' class='collapse navbar-collapse navbar-main-collapse'>
+                <ul class='nav navbar-nav navbar-right'>
+                  
+                  <li>
+                    <a href='/~forns/about.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-user'></span>
+                      </div>
+                      <p class='text-center'>About</p>
+                    </a>
+                  </li>
+                  
+                  <li class='active'>
+                    <a href='/~forns/classes.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-book'></span>
+                      </div>
+                      <p class='text-center'>Classes</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/contact.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-comment'></span>
+                      </div>
+                      <p class='text-center'>Contact</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/publications.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-file'></span>
+                      </div>
+                      <p class='text-center'>Publications</p>
+                    </a>
+                  </li>
+                  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <!-- END NAVIGATION -->
+      
+      <!-- BEGIN MAIN CONTENT -->
+      <div id="main-content" class="container">
+        <div class="row">
+          
+          <!-- BEGIN SCROLLSPY -->
+          <div class='col-md-2 hidden-sm hidden-xs'>
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+              <ul id='scrollspy' class="nav bs-sidenav">
+              </ul>
+            </div>
+          </div>
+          <!-- END SCROLLSPY -->
+          
+          <!-- BEGIN PRESENTATION CONTENT -->
+          <div class='col-md-10 presentation-content' role='main'>
+            
+            <ol class="breadcrumb hidden-print">
+              <li><a href="../../../classes.html">Classes</a></li>
+              <li><a href="./cs-32.html">Winter14 CS32</a></li>
+              <li class="active">Week 5</li>
+            </ol>
+            
+            
+            <br/>
+            <div id='review' class='scrollspy-element' scrollspy-title='Review'></div>
+            <h1>Questions from Last Week</h1>
+            <div>
+              <p><strong>Q: What data structure does the standard library implementation of stacks employ?</strong></p>
+              <p>Turns out, *you* can specify the type of container that you want it to use, as long as that container supports the following three operations:</p>
+              <ul class='indent-1'>
+                <li><p>Back: get the item at the &quot;back&quot; of the collection.</p></li>
+                <li><p>Push: push an item to the back of the collection.</p></li>
+                <li><p>Pop: pop an item from the back of the collection.</p></li>
+              </ul>
+              <p>The following three standard library &quot;container types&quot; support these operations:</p>
+              <ul class='indent-1'>
+                <li><p>Vector</p></li>
+                <li><p>List</p></li>
+                <li><p>Deque (pronounced like &quot;Deck&quot;)</p></li>
+              </ul>
+              <p>If you do not specify which container you'd like to use, then a deque is used by default.</p>
+              <p>A deque is short for &quot;double-ended queue&quot;, which is simply a dynamic array that tracks the begin and end index offsets, expanding as needed.</p>
+              <p>Not something you really need to know, but some trivia that someone asked about last time :)</p>
+              
+              <br/>
+              <p><strong>Q: Are global variables located on the stack? If so, where are they located?</strong></p>
+              <p>No, global variables are not found in the stack.</p>
+              <p>They exist in a portion of the running process called the data segment, which is far beyond the scope (pun intended) of this class.</p>
+              <p>
+                We won't talk about it, but if you're really interested and ambitious, a breakdown of the process' memory divisions and how the compiler manages them can be 
+                <a href='http://www.tenouk.com/ModuleW.html' target='_blank'>found here</a>.
+              </p>
+              <p>...or you could... you know... wait for CS33</p>
+              
+              <br/>
+              <p><strong>Q: Does inlining member functions really do anything?</strong></p>
+              <p>Well, yes and no:</p>
+              <p>Modern compilers are so much smarter than the programmer that giving the inline hint is likely to encounter 1 of 2 scenarios:</p>
+              <ul class='indent'>
+                <li><p>The inline hint will get ignored because the compiler doesn't think the inline is a good idea.</p></li>
+                <li><p>The inline strategy would have already been considered by the compiler had you not included the hint, thus making it redundant and pointless.</p></li>
+              </ul>
+              <p>That said, the only time you get a real benefit from the inline keyword is if you decide to provide a member function definition outside of the class definition:</p>
+<pre class='prettyprint'>
+  class Stuff {
+      public:
+          // [X] Useless to declare inline here, really
+          inline int doStuff () {return 20;};
+  };
+  
+  // ... vs ...
+  
+  // [!] OK, prevents multiple definition issue
+  inline int Stuff::doStuff () {return 20;}
+</pre>
+              <p>And, of course, there is no benefit to inlining functions in .cpp files. Your compiler's got you covered :)</p>
+              
+              <br/>
+              <p><strong>Q: I got marked off on my homework for not having good (read: any) top-level function comments. What should I be doing?</strong></p>
+              <p>
+                Top-level function comments are important because they give at-a-glance information about what the function does, what parameters it expects, and 
+                what the result / return will look like.
+              </p>
+              <p>It is largely insufficient to nest this information within the function body itself lest a user of your function have to read through the entire code!</p>
+              <p>Here's what a good, concise top-level comment looks like:</p>
+<pre class='prettyprint'>
+  // Combines the key value pairs of two Maps, m1 &amp; m2 such that Map result
+  // is the set union of m1 &amp; m2. Matching keys in m1 &amp; m2 will only be
+  // included in result if their corresponding values also match. If any such 
+  // values do not match, return false. Return true otherwise.
+  bool combine(const Map&amp; m1, const Map&amp; m2, Map&amp; result) {
+      // ...
+  }
+</pre>
+              <p>OK, that's a little verbose, but you get the idea :)</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='inheritance' class='scrollspy-element' scrollspy-title='Inheritance'></div>
+            <h1>Class Inheritance</h1>
+            <div>
+              <p>Last week was unfortunately... quite dull... can we do something vaguely resembling entertainment?</p>
+              <p>Yeah I wish so too... unfortunately, all I have is the following:</p>
+              <hr/>
+              <p>I'm glad you guys are here because I'm designing an all new battle game that in no way, shape, or form resembles a certain Nintendo franchise...</p>
+              <p>Naturally, I'm calling it ForneyMon, where we have different mythical pets of different types locked in psuedo-humane combat for our amusement!</p>
+              <p>I'm starting off slow and hoping we can develop the concept a bit in this class... here's the gist:</p>
+              <ul class='indent-1'>
+                <li><p>I have two types of ForneyMon right now: the BurnyMon, which singes its opponents with the fire of 5 suns, and DampyMon, which annoys its opponents by getting them wet.</p></li>
+                <li><p>Both have a certain amount of starting health and a name that its <span class='strike'>trainer</span> err... owner has given it.</p></li>
+                <li><p>Presently, ForneyMon can only interact by dealing damage and taking damage of a certain type (e.g. Burny damage or Dampy damage).</p></li>
+                <li><p>DampyMon take bonus damage from BurnyMon, but DampyMon start with more health.</p></li>
+              </ul>
+              <p>...anyways here's the sketch I have so far, take a look:</p>
+              <br/>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+    
+  class DampyMon;
+  
+  class BurnyMon {
+      private:
+          string m_name;
+          int m_health;
+  
+      public:
+          BurnyMon (string name);
+          int takeDamage (int dam, string type);
+          void dealDamage (DampyMon* other, int dam, string type);
+  };
+  
+  class DampyMon {
+      private:
+          string m_name;
+          int m_health;
+  
+      public:
+          DampyMon (string name);
+          int takeDamage (int dam, string type);
+          void dealDamage (BurnyMon* other, int dam, string type);
+  };
+</pre>
+              <br/>
+              <p class='question' name='inheritance-q0'>Point out some problems with my class definitions (and don't you dare say the whole example).</p>
+              <div class='answer' name='inheritance-q0'>
+                <ul class='indent-1'>
+                  <li><p>No ability to talk about groups of ForneyMon, regardless of whether they're DampyMon or BurnyMon</p></li>
+                  <li><p>Code repetition, especially with private members and constructors</p></li>
+                  <li><p>No scalability: all of my functions that target other ForneyMon are specific to the class of the other ForneyMon!</p></li>
+                </ul>
+              </div>
+              <p>Let's look at each of these problems separately and see how we might fix them:</p>
+              
+              <br/>
+              
+              <h3>Abstracting Common Members</h3>
+              <p>As we noticed, the private members for our two classes are the same!</p>
+              <p class='question' name='inheritance-q1'>Remind me, why is code repetition bad?</p>
+              <p class='answer' name='inheritance-q1'>It violates the One-Change, One-Place principal, wastes file space, and can potentially hinder efficiency.</p>
+              <p>If we could somehow abstract those elements outside of these two classes into another class that, say, was higher in a hierarchy, that would be great!</p>
+              <p>Turns out, that's exactly what we'll do...</p>
+              <p class='definition'>A <strong>base class</strong> is a class from which other (derived) classes inherit properties.</p>
+              <p>We'll define a base class from which our two classes inherit some common elements. This makes our two classes that inherit from the base class called derived classes.</p>
+              <p class='definition'>A <strong>derived class</strong> is a class that inherits features from a base class.</p>
+              <p class='definition'>
+                <strong>Inheritance</strong>, therefore, is the process of defining a derived class from an existing base class. We say that the derived class <strong>inherits</strong>
+                certain characteristics of its base.
+              </p>
+              <p>The syntax for defining inheritance is the following:</p>
+<pre class='prettyprint'>
+  class DerivedClass: public BaseClass {
+    // ...
+  };
+</pre>
+              <p class='example'>Here's a simple example of inheritance of a Base class to a Derived class:</p>
+<pre class='prettyprint'>
+  struct DropTheBase {
+      int a;
+      string s;
+      string m;
+      DropTheBase () {
+          a = 3;
+          s = "[s] Base!";
+          m = "[m] Base!";
+      }
+  };
+  
+  // This example's puns are off the hook
+  struct DerivingMeCrazy : public DropTheBase {
+      int a;
+      string s;
+      string t;
+      DerivingMeCrazy () {
+          a = 1;
+          s = "[s] Derived!";
+          t = "[t] Derived!";
+      }
+  };
+</pre>
+              <p>So what's happening behind the scenes here? Let's look at a few properties of inheritance:</p>
+              <p class='definition'>The <strong>is-a</strong> relationship describes the inheritance flow from a base class to a derived class. We say that a derived class is-a type of the base class.</p>
+              <p>Well, during lecture, we said that a <code class='prettyprint'>Dog</code> (derived class) is-a <code class='prettyprint'>Mammal</code> (base class).</p>
+              <p>So, above, we say that <code class='prettyprint'>DerivingMeCrazy</code> is-a <code class='prettyprint'>DropTheBase</code>... hmm, not one of my finest examples... but worth the joke.</p>
+              <p>What this means is that the Base class, and all of its members, are now a PART of the derived class!</p>
+              <p>
+                The UML standard for representing inheritance is by drawing an arrow from the Derived classes to their Base class(es); I've also represented our inheritance from a sort of... member perspective:
+              </p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-5/inheritance-0.PNG' />
+              </div>
+              <p>See how that relationship works out?</p>
+              <p>This means that I can access any member of a Base class from its Derived classes.</p>
+              <p class='example'>See how we access the m member from a DerivingMeCrazy class:</p>
+<pre class='prettyprint'>
+  struct DropTheBase {
+      int a;
+      string s;
+      string m;
+      DropTheBase () {
+          a = 3;
+          s = "[s] Base!";
+          m = "[m] Base!";
+      }
+  };
+  
+  struct DerivingMeCrazy : public DropTheBase {
+      int a;
+      string s;
+      string t;
+      DerivingMeCrazy () {
+          a = 1;
+          s = "[s] Derived!";
+          t = "[t] Derived!";
+      }
+  };
+  
+  int main () {
+      DerivingMeCrazy d;
+      cout &lt;&lt; d.a &lt;&lt; endl;
+      cout &lt;&lt; d.s &lt;&lt; endl;
+      cout &lt;&lt; d.t &lt;&lt; endl;
+      cout &lt;&lt; d.m &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p>
+                Now that's all fine and good, but why did I get the Derived class versions of <code class='prettyprint'>a</code> and <code class='prettyprint'>s</code>
+                over the <code class='prettyprint'>DropTheBase</code> versions?
+              </p>
+              <div class='definition'>
+                <p>If a data member is defined in both a Derived class and its Base class, AND:</p>
+                <ul class='indent-1'>
+                  <li><p>An object is an instance of the Derived class, then we use the Derived class' definitions of those members.</p></li>
+                  <li><p>An object is an instance of the Base class, then we use the Base class' definitions of those members.</p></li>
+                </ul>
+              </div>
+              <p>So, if I have a DropTheBase object, I use the Base class' <code class='prettyprint'>a</code> and <code class='prettyprint'>s</code>...</p>
+              <p>So, if I have a DerivingMeCrazy object, I use the Derived class' <code class='prettyprint'>a</code> and <code class='prettyprint'>s</code>...</p>
+              <p class='definition'>If a member is not defined in my object's class, I will try to find it in my Base classes.</p>
+              <p class='example'>What will the following code print out?</p>
+<pre class='prettyprint'>
+  struct DropTheBase {
+      int a;
+      string s;
+      string m;
+      DropTheBase () {
+          a = 3;
+          s = "[s] Base!";
+          m = "[m] Base!";
+      }
+  };
+  
+  struct DerivingMeCrazy : public DropTheBase {
+      int a;
+      string s;
+      string t;
+      DerivingMeCrazy () {
+          a = 1;
+          s = "[s] Derived!";
+          t = "[t] Derived!";
+      }
+  };
+  
+  int main () {
+      DropTheBase b;
+      DerivingMeCrazy d;
+      cout &lt;&lt; d.a &lt;&lt; endl;
+      cout &lt;&lt; b.a &lt;&lt; endl;
+      
+      cout &lt;&lt; d.s &lt;&lt; endl;
+      cout &lt;&lt; b.s &lt;&lt; endl;
+      
+      cout &lt;&lt; d.m &lt;&lt; endl;
+      cout &lt;&lt; b.m &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p class='example'>Will any of the following lines of code need to be removed to allow it to compile? If so, which of the numbered lines, and what will it print out once they're removed?</p>
+<pre class='prettyprint'>
+  struct Basically {
+      int a;
+      int b;
+      Basically () {a = 1; b = 2;}
+  };
+  struct Best : public Basically {
+      int a;
+      int c;
+      Best () {a = 3; c = 4;}
+  };
+  struct Example : public Basically {
+      int a;
+      int d;
+      Example () {a = 5; d = 6;}
+  };
+  
+  int main () {
+      Basically base;
+      Best best;
+      Example ex;
+      cout &lt;&lt; base.a &lt;&lt; endl; // 1
+      cout &lt;&lt; best.a &lt;&lt; endl; // 2
+      cout &lt;&lt; ex.a &lt;&lt; endl;   // 3
+      cout &lt;&lt; best.b &lt;&lt; endl; // 4
+      cout &lt;&lt; ex.c &lt;&lt; endl;   // 5
+      cout &lt;&lt; ex.d &lt;&lt; endl;   // 6
+      cout &lt;&lt; base.d &lt;&lt; endl; // 7
+  }
+</pre>
+              <br/>
+              <p class='example'>Draw a UML-like inheritance diagram and show what classes are a &quot;part&quot; of the others.</p>
+              
+              <br/>
+              <p class='example'>Will any of the following lines of code need to be removed to allow it to compile? If so, which of the numbered lines, and what will it print out once they're removed?</p>
+<pre class='prettyprint'>
+  struct Basically {
+      int a;
+      int b;
+      Basically () {a = 1; b = 2;}
+  };
+  struct Best : public Basically {
+      int a;
+      int c;
+      Best () {a = 3; c = 4;}
+  };
+  // [!] Note the inheritance change!
+  struct Example : public Best {
+      int a;
+      int d;
+      Example () {a = 5; d = 6;}
+  };
+  
+  int main () {
+      Basically base;
+      Best best;
+      Example ex;
+      cout &lt;&lt; base.a &lt;&lt; endl; // 1
+      cout &lt;&lt; best.a &lt;&lt; endl; // 2
+      cout &lt;&lt; ex.a &lt;&lt; endl;   // 3
+      cout &lt;&lt; best.b &lt;&lt; endl; // 4
+      cout &lt;&lt; ex.c &lt;&lt; endl;   // 5
+      cout &lt;&lt; ex.d &lt;&lt; endl;   // 6
+      cout &lt;&lt; base.d &lt;&lt; endl; // 7
+  }
+</pre>
+              <p class='example'>Draw a UML-like inheritance diagram and show what classes are a &quot;part&quot; of the others.</p>
+              <br/>
+              <p>Now, here comes the magic...</p>
+              <p>I know that because DerivingMeCrazy inherits from DropTheBase, which means that somewhere in DerivingMeCrazy is a DropTheBase object... how do I access its members?</p>
+              <p class='toolkit'>
+                If I have a pointer of type Base class, and it points to an object of one that Base class' Derived classes, then my pointer now points to the Base class portion of that
+                Derived class object.
+              </p>
+              <p>Here's what that looks like:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-5/inheritance-1.PNG' />
+              </div>
+              
+              <p class='example'>So knowing that's how pointers of the Base class behave, what will the following print out?</p>
+<pre class='prettyprint'>
+  struct DropTheBase {
+      int a;
+      string s;
+      string m;
+      DropTheBase () {
+          a = 3;
+          s = "[s] Base!";
+          m = "[m] Base!";
+      }
+  };
+  
+  struct DerivingMeCrazy : public DropTheBase {
+      int a;
+      string s;
+      string t;
+      DerivingMeCrazy () {
+          a = 1;
+          s = "[s] Derived!";
+          t = "[t] Derived!";
+      }
+  };
+  
+  int main () {
+      DerivingMeCrazy d;
+      DropTheBase* bPtr = &amp;d;
+      
+      cout &lt;&lt; bPtr-&gt;a &lt;&lt; endl;
+      cout &lt;&lt; bPtr-&gt;s &lt;&lt; endl;
+      cout &lt;&lt; bPtr-&gt;m &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p>NOTE: I said that a Base class pointer can point to the Base class portion of one of its Derived class' objects... it does NOT work the other way around.</p>
+              <p class='debug'>Will the following code compile?</p>
+<pre class='prettyprint'>
+  int main () {
+      DropTheBase b;
+      DerivingMeCrazy* dPtr = &amp;b;
+      
+      cout &lt;&lt; dPtr-&gt;s &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p>Will the following code compiler? If so, what will it print out?</p>
+<pre class='prettyprint'>
+  int main () {
+      DropTheBase b = DerivingMeCrazy();
+        
+      cout &lt;&lt; b.a &lt;&lt; endl;
+      cout &lt;&lt; b.s &lt;&lt; endl;
+      cout &lt;&lt; b.m &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p>Will the following code compiler? If so, what will it print out?</p>
+<pre class='prettyprint'>
+  int main () {
+      DerivingMeCrazy b = DropTheBase();
+        
+      cout &lt;&lt; b.a &lt;&lt; endl;
+      cout &lt;&lt; b.s &lt;&lt; endl;
+      cout &lt;&lt; b.m &lt;&lt; endl;
+  }
+</pre>
+              
+              <br/>
+              <h3>Heterogeneous Collections</h3>
+              <p>One of the issues we noticed was that I cannot make a collection (let's say, an array) of ForneyMon that consists of both BurnyMon and DampyMon.</p>
+              <p>It would be nice if I could tell the compiler that I want to make a sort of type hierarchy where I arrange both of these classes under a more general one...</p>
+              <p>Hey, how bout that! Turns out I can...</p>
+              <p>So, let's start by defining a new base class called ForneyMon:</p>
+              <p class='example'>Have the BurnyMon and DampyMon classes inherit from a new ForneyMon base class, which you'll define. Abstract the m_name and m_health members into ForneyMon.</p>
+<pre class='prettyprint'>
+  class ForneyMon {
+      private:
+          // [!] Need to add members
+          
+      public:
+          ForneyMon (string n, int h);
+  };
+  
+  // [!] Need to change something here
+  class BurnyMon {
+      private:
+          // [!] Need to change something here
+          string m_name;
+          int m_health;
+  
+      public:
+          BurnyMon (string name);
+          int takeDamage (int dam, string type);
+          // [!] Need to change something here
+          void dealDamage (DampyMon* other, int dam, string type);
+  };
+  
+  // [!] Need to change something here
+  class DampyMon {
+      private:
+          // [!] Need to change something here
+          string m_name;
+          int m_health;
+  
+      public:
+          DampyMon (string name);
+          int takeDamage (int dam, string type);
+          // [!] Need to change something here
+          void dealDamage (BurnyMon* other, int dam, string type);
+  };
+</pre>
+              <br/>
+              <p>Now, all that we're missing is a way to construct our objects and we'll be on our way!</p>
+              <p>Let's look at how to do that next...</p>
+            </div>
+            <hr/>
+            
+            <br/>
+            <div id='construction' class='scrollspy-element' scrollspy-title='Constructors'></div>
+            <h1>Hey Look, More on Construction</h1>
+            <div>
+              <p>Before we can implement our constructors for the ForneyMon, BurnyMon, and DampyMon classes, we'll need to see all of the construction steps:</p>
+              <ol class='indent-1'>
+                <li><p>Construct this class' base class(es)</p></li>
+                <li><p>Construct this class' data members</p></li>
+                <li><p>Execute the body of the constructor</p></li>
+              </ol>
+              <p>Let's look at each step and then integrate them into our ForneyMon implementation.</p>
+              
+              <br/>
+              <p>We construct the base class of the object we're constructing before we do anything else.</p>
+              <p class='toolkit'>Although the base class is not technically a member of the derived class, we construct it using the member initialization list of the derived class.</p>
+              <p>So, let's look at how that constructor might look for some inheritance structure:</p>
+              <p class='example'>What will the following code print out?</p>
+<pre class='prettyprint'>
+  // Possibly the most topical reference I've
+  // ever made
+  struct AllYourBase {
+      string stuff;
+      AllYourBase (string s) {
+          cout &lt;&lt; "[Base] Constructor!" &lt;&lt; endl;
+          stuff = s;
+      }
+  };
+    
+  struct AreBelongToUs : public AllYourBase {
+      int i;
+      AreBelongToUs (string s, int j) : AllYourBase(s) {
+          cout &lt;&lt; "[Derived] Constructor!" &lt;&lt; endl;
+          i = j;
+      }
+  };
+    
+  int main () {
+      AreBelongToUs a(":D", 3);
+      cout &lt;&lt; a.i &lt;&lt; endl;
+      cout &lt;&lt; a.stuff &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p class='debug'>Will the following code compile? If so, what will it print out?</p>
+<pre class='prettyprint'>
+  // Possibly the most topical reference I've
+  // ever made
+  struct AllYourBase {
+      string stuff;
+      AllYourBase (string s) {
+          cout &lt;&lt; "[Base] Constructor!" &lt;&lt; endl;
+          stuff = s;
+      }
+  };
+    
+  struct AreBelongToUs : public AllYourBase {
+      int i;
+      
+      // [!] Member initialization of base class removed
+      AreBelongToUs (string s, int j) {
+          cout &lt;&lt; "[Derived] Constructor!" &lt;&lt; endl;
+          i = j;
+      }
+  };
+    
+  int main () {
+      AreBelongToUs a(":D", 3);
+      cout &lt;&lt; a.i &lt;&lt; endl;
+      cout &lt;&lt; a.stuff &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p>Now that we know how construction works, let's implement our constructors for ForneyMon!</p>
+              <p>Here's what I want of each ForneyMon constructor:</p>
+              <ul class='indent-1'>
+                <li><p>Each ForneyMon will be given a name</p></li>
+                <li><p>Health is decided by the type of ForneyMon; a BurnyMon will start with 10 health, and a DampyMon with 15.</p></li>
+              </ul>
+<pre class='prettyprint'>
+  ForneyMon::ForneyMon (string n, int h) {
+      // [!] TODO
+  }
+  
+  BurnyMon::BurnyMon (string n) /* [!] TODO */ {}
+  DampyMon::DampyMon (string n) /* [!] TODO */ {}
+</pre>
+              <br/>
+              <p>Returning to our heterogeneous collections example, and assuming we did the above correctly, I can now say things like:</p>
+<pre class='prettyprint'>
+  int main () {
+      ForneyMon* menagere[3];
+      menagere[0] = new BurnyMon("Emberterd");
+      menagere[1] = new DampyMon("Blastoilet");
+      // Now with double the copyright infringement!
+      menagere[2] = new BurnyMon("Firefox");
+  }
+</pre>
+              <p>See how I was able to store both a BurnyMon and DampyMon in that array?! Crazy!</p>
+              <p>But why is this useful if all I can ever access are the common ForneyMon elements of each?</p>
+              <p>Let's find out!</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='polymorphism' class='scrollspy-element' scrollspy-title='Polymorphism'></div>
+            <h1>Polymorphism</h1>
+            <div>
+              <p class='definition'><strong>Polymorphism</strong> is defined as &quot;the provision of a single interface to entities of different types.&quot;</p>
+              <p>Ugh... let's unpack that:</p>
+              <p>
+                We have two different types: BurnyMon and DampyMon, and each of them can take damage (i.e., they each have a takeDamage function, the single interface), but the way each
+                handles taking damage is slightly different.
+              </p>
+              <p>We know that pointers of polymorphic Base classes are type-compatible with objects of their Derived classes...</p>
+              <p class='question' name='poly-q0'>
+                If we have a ForneyMon pointer to a BurnyMon object vs a ForneyMon pointer to a DampyMon object, do we want each pointer's member function calls to have the exact same behavior?
+              </p>
+              <p class='answer' name='poly-q0'>No! We've already said that some operations of DampyMon differ from those of BurnyMon.</p>
+              <p>So, let's see how to distinguish between member functions.</p>
+              <p>First off, some definitions and rules:</p>
+              <p class='definition'>A function <strong>binding</strong> determines which function implementation in which class to call when that function name is overloaded.</p>
+              <p class='definition'><strong>Non-virtual</strong> member functions will bind to the implementation within the type of the object or pointer that called them (aka static-binding, the default).</p>
+              <p class='example'>What will the following code print out?</p>
+<pre class='prettyprint'>
+  // Too good to just have in one example:
+  // (read: I'm too lazy to think of another)
+  struct AllYourBase {
+      void yell () {
+          cout &lt;&lt; "[Base] AIEEE!" &lt;&lt; endl;
+      }
+  };
+      
+  struct AreBelongToUs : public AllYourBase {
+      void yell () {
+          cout &lt;&lt; "[Derived] AIEEE!" &lt;&lt; endl;
+      }
+  };
+      
+  int main () {
+      AllYourBase base;
+      AreBelongToUs derived;
+      AllYourBase* basePtr = &amp;derived;
+  
+      base.yell();
+      derived.yell();
+      basePtr-&gt;yell();
+  }
+</pre>
+              <br/>
+              <p class='question' name='poly-q1'>Is it a problem that <code class='prettyprint'>derived.yell();</code> and <code class='prettyprint'>basePtr-&gt;yell();</code> elicited different behaviors?</p>
+              <p class='answer' name='poly-q1'>
+                Generally, yes; there would be no point to having base and derived classes if we couldn't have a Base class pointer to a Derived class that elicits the derived class' member function
+                behavior. We'll look at how to solve that problem shortly. 
+              </p>
+              <br/>
+              <p class='definition'>If a function is not defined for a Derived class, but it is for the Base class, then we will use the Base class' implementation.</p>
+              <p class='debug'>Will the following code compile? If so, what will it print out?</p>
+<pre class='prettyprint'>
+  // Too good to just have in one example:
+  // (read: I'm too lazy to think of another)
+  struct AllYourBase {
+      void yell () {
+          cout &lt;&lt; "[Base] AIEEE!" &lt;&lt; endl;
+      }
+  };
+      
+  struct AreBelongToUs : public AllYourBase {
+      // &gt;_&gt; &lt;_&lt;
+  };
+      
+  int main () {
+      AllYourBase base;
+      AreBelongToUs derived;
+      AllYourBase* basePtr = &amp;derived;
+  
+      base.yell();
+      derived.yell();
+      basePtr-&gt;yell();
+  }
+</pre>
+              <br/>
+              <p class='definition'>You can call a base class' functions from inside a derived class by using the scope access (::) operator:</p>
+              <p class='example'>What will the following code print out?</p>
+<pre class='prettyprint'>
+  struct AllYourBase {
+      void yell () {
+          cout &lt;&lt; "[Base] AIEEE!" &lt;&lt; endl;
+      }
+  };
+      
+  struct AreBelongToUs : public AllYourBase {
+      void yell () {
+          AllYourBase::yell();
+      }
+  };
+      
+  int main () {
+      AllYourBase base;
+      AreBelongToUs derived;
+      AllYourBase* basePtr = &amp;derived;
+  
+      base.yell();
+      derived.yell();
+      basePtr-&gt;yell();
+  }
+</pre>
+              <br/>
+              <p>Cool right? So knowing these three rules for non-virtual member functions, let's try implementing takeDamage and dealDamage for ForneyMons... ForneyMen? ForneyMon (plural and singular).</p>
+              <p>I want to define a general ForneyMon takeDamage and then specify any different behavior within the derived classes.</p>
+              <p>Since there's nothing special about how BurnyMon take damage, let's let the Base class handle that.</p>
+              <p>However, since I want special handling of how DampyMon take damage, we'll override its implementation.</p>
+<pre class='prettyprint'>
+  // ...
+  
+  class BurnyMon : public ForneyMon {
+      public:
+          BurnyMon (string name);
+          // [!] takeDamage removed from BurnyMon!
+          void dealDamage (ForneyMon* other, int dam, string type);
+  };
+  
+  // ...
+  
+  // (General) Take damage regardless of the type of attack
+  int ForneyMon::takeDamage (int dam, string type) {
+      // Reduce the current health by dam amount
+      m_health -= dam;
+      cout &lt;&lt; "[" &lt;&lt; type &lt;&lt; "] Damage: -" &lt;&lt; dam &lt;&lt; endl;
+      return m_health;
+  }
+  
+  // (DampyMon) Take damage equal to dam UNLESS the type
+  // of the attack was burny, in which case take 1 extra
+  int DampyMon::takeDamage (int dam, string type) {
+      // [!] TODO: Note, I do not have access to the Base
+      // class' private members in derived class member
+      // functions! What to do, what to do?
+      if ( ... ) { ... }
+      return /* TODO ??? */;
+  }
+</pre>
+              <br/>
+              <p>If all went according to plan, I should see the following output -2 and -3 damage respectively:</p>
+<pre class='prettyprint'>
+  int main () {
+      // Why do all my variables end with y?
+      // It's not even cute...
+      BurnyMon scorchy("Scorchy");
+      DampyMon puddly("Puddly");
+  
+      scorchy.takeDamage(2, "dampy");
+      puddly.takeDamage(2, "burny");
+  }
+</pre>
+              <br/>
+              <p>But there's one problem left... what happens if I try the following?</p>
+<pre class='prettyprint'>
+  int main () {
+      BurnyMon scorchy("Scorchy");
+      DampyMon puddly("Puddly");
+      ForneyMon* ptr = &amp;puddly;
+  
+      scorchy.takeDamage(2, "dampy");
+      ptr-&gt;takeDamage(2, "burny");
+  }
+</pre>
+              <p>Uh oh, even though I had a ForneyMon pointer to a DampyMon, I still only took 2 damage from a burny attack... let's see how to fix this next!</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='virtualFuncs' class='scrollspy-element' scrollspy-title='Virtual Functions'></div>
+            <h1>Virtual Functions</h1>
+            <div>
+              <p>We've already seen the behavior of static-binding such that we call the member function implementation within the class of the object, or pointer to object, that's calling it.</p>
+              <p class='definition'><strong>Static binding</strong> is decided at compile-time.</p>
+              <p>In the case where we want the function implementation of the Derived class that a Base class pointer points to, then we need dynamic-binding.</p>
+              <p class='definition'>
+                <strong>Dynamic binding</strong> is decided at runtime, and executes the Derived class function implementation of any overloaded Base class function tagged with the keyword
+                <code class='prettyprint'>virtual</code>.
+              </p>
+              <p>That's a lot of noise, let's look at it in action:</p>
+              <p class='example'>What will the following code print out?</p>
+<pre class='prettyprint'>
+  struct AllYourBase {
+      // [!] Note the virtual keyword
+      virtual void yell () {
+          cout &lt;&lt; "[Base] AIEEE!" &lt;&lt; endl;
+      }
+  };
+        
+  struct AreBelongToUs : public AllYourBase {
+      virtual void yell () {
+          cout &lt;&lt; "[Derived] AIEEE!" &lt;&lt; endl;
+      }
+  };
+        
+  int main () {
+      AllYourBase base;
+      AreBelongToUs derived;
+      AllYourBase* basePtr = &amp;derived;
+    
+      base.yell();
+      derived.yell();
+      basePtr-&gt;yell();
+  }
+</pre>
+              <p>Woah, so <code class='prettyprint'>basePtr</code> knew to use the Derived class' implementation? Doesn't it just point to the Base object within the Derived one? How'd it know to use it?</p>
+              <p class='definition'>
+                Whenever we declare at least one member function of a Base class as virtual, it is considered a virtual class. It, and any of its derived classes, will establish virtual tables that
+                are pointers to the correct function implementation to use for each context.
+              </p>
+              <p>
+                NOTE: I did NOT have to declare the AreBelongToUs::yell (); as virtual, though it is clean programming to do so in order to alert users that the overloaded function will be dynamically bound.
+              </p>
+              <p>So, whenever I create an object with a Base class that has *at least one* virtual function, I create hidden pointers within the object stored in its virtual table.</p>
+              <p class='definition'>A <strong>virtual table</strong> is just an array of pointers to virtual functions that point to the correct implementation at runtime.</p>
+              <p>We won't talk much about virtual tables, but know that they are hidden members that we, as programmers, don't interface with.</p>
+              <br/>
+              <p>So let's return to the problem of our ForneyMon possibly having the wrong implementation of takeDamage called (when a ForneyMon pointer points to a DampyMon object and calls takeDamage).</p>
+              <p class='question' name='virtual-q1'>I need make only one change to my ForneyMon class to elicit the desired behavior. What is it?</p>
+              <p class='answer' name='virtual-q1'>Simply declare ForneyMon::takeDamage to be virtual!</p>
+              <br/>
+              <p class='example'>With this fix made, what does the following code print out?</p>
+<pre class='prettyprint'>
+  int main () {
+      AllYourBase base;
+      AreBelongToUs derived;
+      AllYourBase* basePtr = &amp;derived;
+    
+      base.yell();
+      derived.yell();
+      basePtr-&gt;yell();
+  }
+</pre>
+              <p>Sweet! Well that problem's resolved... of course there's one last thing to consider with our ForneyMon...</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='abstractClasses' class='scrollspy-element' scrollspy-title='Pure Virtual Functions'></div>
+            <h1>Pure Virtual Functions</h1>
+            <div>
+              <p>There's one thing left that we'll discuss about ForneyMon... take the following code for example:</p>
+<pre class='prettyprint'>
+  int main () {
+      ForneyMon f("Forneytron", 2000);
+      f.takeDamage(0, "NOTHING HARMS FORNEYTRON");
+  }
+</pre>
+              <p>Errr... I've created a ForneyMon... ForneyMon... that's not right, I only wanted to allow BurneyMon and DampyMon to be created!</p>
+              <p>Like we said in class, we should never be able to create a Mammal (base) object so much as a Dog (derived) object, because Mammal is just an archtype classification.</p>
+              <p>So, I want to find a way to prevent users from creating ForneyMon objects, because this class is meant to be abstract.</p>
+              <p class='definition'>An <strong>abstract class</strong> is one in which at least one function is declared as pure-virtual. You cannot create objects of abstract classes.</p>
+              <p>Alright, so what's a pure virtual function?</p>
+              <p class='definition'>
+                A <strong>pure virtual function</strong> is denoted by placing &quot;= 0&quot; after the function signature, meaning that the class in which the signature exists is now
+                an abstract class, and that all classes derived from it must either implement said function or become abstract themselves.
+              </p>
+              <p class='definition'>A pure virtual function can still be implemented, but need not be so.</p>
+              <p>Let's see how that looks...</p>
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  struct Basically {
+      int a;
+      int b;
+      Basically () {a = 1; b = 2;}
+      // [!] Pure virtual function
+      virtual int compute () = 0;
+  };
+  struct Best : public Basically {
+      int a;
+      int c;
+      Best () {a = 3; c = 4;}
+      virtual int compute () {return a + b;}
+  };
+  
+  int main () {
+      Basically base;
+      Best best;
+      cout &lt;&lt; best.compute() &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p class='debug'>Will the following code compile? If so, what will it output?</p>
+<pre class='prettyprint'>
+  struct Basically {
+      int a;
+      int b;
+      Basically () {a = 1; b = 2;}
+      // [!] Pure virtual function
+      virtual int compute () = 0;
+  };
+  struct Best : public Basically {
+      int a;
+      int c;
+      Best () {a = 3; c = 4;}
+      virtual int compute () {return a + b;}
+  };
+  // [!] Added another class...
+  struct Example : public Best {
+      int a;
+      int d;
+      Example () {a = 5; d = 6;}
+  };
+  
+  int main () {
+      Best best;
+      Example ex;
+      cout &lt;&lt; ex.compute() &lt;&lt; endl;
+  }
+</pre>
+                <br/>
+                <p>Very cool... so, let's look again at our ForneyMon classes:</p>
+<pre class='prettyprint'>
+  class ForneyMon {
+      private:
+          string m_name;
+          int m_health;
+      public:
+          ForneyMon (string n, int h);
+          virtual int takeDamage (int dam, string type);
+  };
+  
+  class BurnyMon : public ForneyMon {
+      public:
+          BurnyMon (string name);
+          // [!] Take damage removed from BurnyMon!
+          void dealDamage (ForneyMon* other, int dam, string type);
+  };
+  
+  class DampyMon : public ForneyMon {
+      public:
+          DampyMon (string name);
+          int takeDamage (int dam, string type);
+          void dealDamage (ForneyMon* other, int dam, string type);
+  };
+</pre>
+              <br/>
+              <p class='question' name='abstract-q0'>Is there a function I could make pure virtual so that my ForneyMon class becomes abstract?</p>
+              <p class='answer' name='abstract-q0'>Yes! The dealDamage function, which has the same signature for each derived class! Alternately, I could declare, and implement, a pure virtual destructor.</p>
+              <br/>
+              <p class='example'>We'll need to implement the dealDamage function in our derived classes now that we declared in pure virtual in our base. Do so now!</p>
+<pre class='prettyprint'>
+  // [!] Hmm, these are the same function! I probably should make
+  // this a function of ForneyMon instead... left as an exercise ;)
+  void BurnyMon::dealDamage (ForneyMon* other, int dam, string type) {
+      other-&gt;takeDamage(dam, type);
+  }
+  void DampyMon::dealDamage (ForneyMon* other, int dam, string type) {
+      other-&gt;takeDamage(dam, type);
+  }
+</pre>
+              <p>
+                As a final note, if I don't have any functions that I want to make pure virtual, but still want an abstract class, then I can define a pure virtual destructor for the base that I implement.
+              </p>
+              <p>So, let's make that change now and see if our code behaves as intended...</p>
+              <p>If everything went according to plan, then the following code should *not* compile:</p>
+<pre class='prettyprint'>
+  // [!] Warning: Should NOT compile if everything went well
+  int main () {
+      ForneyMon f("FORNEYTRON", 2000);
+      cout &lt;&lt; f.takeDamage(0, "INVINCIBLLLE") &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p>Alright! My ForneyMon classes are looking pretty good!</p>
+              <p>Now, let's abandon them forever!</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='destructors' class='scrollspy-element' scrollspy-title='Destructors'></div>
+            <h1>Destructors &amp; Virtual Destructors</h1>
+            <div>
+              <p>There's a final concern with inheritance that we should consider: the clean up!</p>
+              <p>We know, of course, that this must involve the destructors.</p>
+              <p>As it turns out, the destruction process is simply the reverse of the construction one:</p>
+              <ol class='indent-1'>
+                <li><p>Execute the destructor body.</p></li>
+                <li><p>Destroy any remaining non-dynamic data members (built-in types are ignored)</p></li>
+                <li><p>Destroy the base part.</p></li>
+              </ol>
+              <p>So, let's look back at our constructor example and add some dynamically allocated members:</p>
+<pre class='prettyprint'>
+  struct AllYourBase {
+      // [!] New data member is pointer to
+      // dynamically allocated string!
+      string* stuff;
+      AllYourBase (string s) {
+          cout &lt;&lt; "[Base] Constructor!" &lt;&lt; endl;
+          stuff = new string(s);
+      }
+      ~AllYourBase () {
+          cout &lt;&lt; "[Base] Destructor!" &lt;&lt; endl;
+          delete stuff;
+      }
+  };
+      
+  struct AreBelongToUs : public AllYourBase {
+      // [!] New data member is pointer to
+      // dynamically allocated int array!
+      int* i;
+      AreBelongToUs (string s, int* j, int size) : AllYourBase(s) {
+          cout &lt;&lt; "[Derived] Constructor!" &lt;&lt; endl;
+          i = new int[size];
+          for (int k = 0; k &lt; size; k++) {
+              i[k] = j[k];
+          }
+      }
+      ~AreBelongToUs () {
+          cout &lt;&lt; "[Derived] Destructor!" &lt;&lt; endl;
+          delete[] i;
+      }
+  };
+</pre>
+              <p class='debug'>Remembering our steps of construction and destruction, will there be any memory leaks in the following code? What will it print out?</p>
+<pre class='prettyprint'>
+  int main () {
+      int j[] = {1, 2, 3};
+      AreBelongToUs a(":D", j, 3);
+  }
+</pre>
+              <br/>
+              <p class='debug'>Remembering our steps of construction and destruction, will there be any memory leaks in the following code? What will it print out?</p>
+<pre class='prettyprint'>
+  int main () {
+      AllYourBase b("AIEE!!!");
+  }
+</pre>
+              <br/>
+              <p class='debug'>Remembering our steps of construction and destruction, will there be any memory leaks in the following code? What will it print out?</p>
+<pre class='prettyprint'>
+  int main () {
+      int j[] = {1, 2, 3};
+      AllYourBase* ptr = new AreBelongToUs(":(", j, 3);
+      delete ptr;
+  }
+</pre>
+              <br/>
+              <p>Ruh roh... I see I called my derived constructor (which performs dynamic allocation), but never my derived destructor! Memory leak! What happened?</p>
+              <p class='question' name='destructor-q0'>Why didn't the derived destructor get called in the example above?</p>
+              <p class='answer' name='destructor-q0'>Because the base destructor is statically bound due to the pointer being of the Base type!</p>
+              <br/>
+              <p>So, again, we rely on the <code class='prettyprint'>virtual</code> keyword to save the day by using virtual destructors to get dynamic binding.</p>
+              <p class='definition'>A <strong>virtual destructor</strong> ensures that the proper object destructor is called at runtime, regardless of what type of pointer is having delete called on it.</p>
+              <p>So, to fix our error above, we simply add the virtual keyword to the Base class' destructor!</p>
+<pre class='prettyprint'>
+  // ...
+  // [!] Now, destructor is virtual
+  virtual ~AllYourBase () {
+      cout &lt;&lt; "[Base] Destructor!" &lt;&lt; endl;
+      delete stuff;
+  }
+  // ...
+</pre>
+              <p>So, let's revisit our problematic example and make sure that the dynamic binding is indeed happening:</p>
+<pre class='prettyprint'>
+  int main () {
+      int j[] = {1, 2, 3};
+      AllYourBase* ptr = new AreBelongToUs(":(", j, 3);
+      delete ptr;
+  }
+</pre>
+              <p>Whew! All clear!</p>
+              <p>So, we see that it's very dangerous to leave a base class without a virtual destructor, even if there are no dynamic members to clean up in the base class.</p>
+              <p class='definition'>Rule: if a class is going to be a Base class, give it a virtual destructor, which means you must also implement it, even if the body is blank!</p>
+              <p class='example'>Implement a virtual destructor for the ForneyMon class.</p>
+              <p>That's it for inheritance and polymorphism... on to the fun stuff...</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='recursion' class='scrollspy-element' scrollspy-title='Recursion'></div>
+            <h1>Recursion</h1>
+            <div>
+              <p>Recursion is just one of those iconic elements of computer science that takes a rather large paradigm shift to learn.</p>
+              <p>Not only is recursion useful, and can often simplify otherwise messy code, but it is the butt of many CS jokes; even Google is in on it:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-5/inheritance-2.PNG' />
+              </div>
+              <p>Recursion is a little difficult to wrap your head around at first, but it will quickly feel like second nature.</p>
+              <p>Let's start with some definitions:</p>
+              <p class='definition'><strong>Recursion</strong> is the repeated application of a recursive process; less formally, in CS, it is when a function calls itself.</p>
+              <p>
+                Typically, we use recursion to take a large problem that is difficult to solve, break it into some number of small problems that are easy to solve, and then combine our mini-results into
+                a result that solves the original large problem!
+              </p>
+              <p>Usually, this splitting of a problem involves two key cases:</p>
+              <p class='definition'>
+                The <strong>Base Case</strong> or stopping condition, is when we've split our problem into a sufficiently small one that we can trivially solve. We return a solution
+                to our small problem in the base case(s) and do not recurse further.
+              </p>
+              <p class='definition'>
+                The <strong>Recursive Case(s)</strong> are when we have not reached a small enough subproblem to solve and need to continue looking for a base case that is trivially solved.
+                In these cases, we call our function from within our function on some even smaller problems.
+              </p>
+              <br/>
+              <p>Now, there are some constraints on valid recursive functions:</p>
+              <ul class='indent-1'>
+                <li><p>Recursive functions must have some stopping condition lest they recurse infinitely.</p></li>
+                <li><p>Each recursive case must bring the problem closer to a base case or solution; if they diverge, then we're not guaranteed that the recursion will successfully terminate.</p></li>
+              </ul>
+              <p>Let's start off gently, shall we?</p>
+              
+              <br/>
+              <h3>First &amp; Rest Split</h3>
+              <p>When we talk about solving smaller subproblems, we don't always have to think about performing massive splits on our data set to achieve our goal.</p>
+              <p>For our first example, we'll focus on an array of ints.</p>
+              <p class='example'>Create a recursive function <code class='prettyprint'>sum</code> that returns the sum of an array of ints.</p>
+              <p>Let's use the following function signature for sum:</p>
+<pre class='prettyprint'>
+  int sum (const int arr[], int size, int total);
+</pre>
+              <p>Here, I have an int array arr, the number of elements remaining in it (size), and the running total of the elements' sum.</p>
+              <p>My strategy is to look at the first element in my current sub-list, add it to my total, then recurse on the rest of the list!</p>
+              <p class='question' name='recursion-0'>What is my base case in this scenario?</p>
+              <p class='answer' name='recursion-0'>Since I'm summing all of the elements, my base case is when I've summed the last element and have run out of list items! i.e., size will be 0.</p>
+              <p>As soon as I hit my base case, I want to return the solution that I've collected.</p>
+              <p class='example'>Trace the stack frames of the following call to sum:</p>
+<pre class='prettyprint'>
+  int i[] = {1, 3, 6};
+  cout &lt;&lt; sum(i, 3, 0) &lt;&lt; endl;
+</pre>
+              <a href='../../../assets/images/winter-2014/cs-32/week-5/recursion.GIF' target='_blank'>
+                <div class='text-center fit-pres'>
+                  <img src='../../../assets/images/winter-2014/cs-32/week-5/recursion.GIF' />
+                </div>
+              </a>
+              <p>Yeah I haven't mastered the whole gif thing yet so... enjoy all that whitespace above...</p>
+              <br/>
+              <p>OK, here's a function skeleton to get us on our way:</p>
+<pre class='prettyprint'>
+  int sum (const int arr[], int size, int total) {
+      // [!] Base case check
+      if ( ... ) {
+          // [!] Return solution
+          return ...;
+      }
+      // [!] Recursive case; go to next element, dec
+      // size, and then add the current front to total
+      return sum( ... );
+  }
+</pre>
+              <p class='definition'>Whenever a recursive call is made, I suspend my position in the current stack frame until the ones above it return.</p>
+              <p>See how that works?</p>
+              
+              <br/>
+              <h3>Divide &amp; Conquer Split</h3>
+              <p>Divide &amp; conquer splits attempt to reduce the size of the problem by some factor with each recursive call.</p>
+              <p>Unlike the first &amp; rest split, we will attempt to substantively reduce the size of each subproblem, solve the trivial case, and then recombine to the larger problem.</p>
+              <p>
+                In class, we reviewed mergesort, an algorithm for sorting a list of ints by first dividing the list into subgroups as small as 1, merging the tiniest groups into sorted order (a trivial,
+                binary comparison), and then merging each smaller, sorted list into a larger and larger one until we got the original list, sorted!
+              </p>
+              <p>Here's the pseudocode we looked at in class:</p>
+<pre class='prettyprint'>
+  void sort (int a[], int b, int e) {
+      if (e - b >= 2) {
+          int mid = (b + e) / 2;
+          
+          // Recursive call on first half of a
+          sort(a, b, mid);
+          // Recursive call on other half of a
+          sort(a, mid, e);
+          
+          // Merge those sorted subpropblems!
+          merge(a, b, mid, e);
+      }
+  }
+  
+  int main () {
+      int arr[] = {4, 3, 1, 2};
+      sort(arr, 0, 4);
+      // arr will now be {1, 2, 3, 4}
+  }
+</pre>
+              <p>There's a big step of understanding how this works, and it's under the assumption of a working merge function:</p>
+              <p>Here, the merge function combines the two sublists into a single, ordered sublist.</p>
+              <p>Let's take a look at it in action (gif shamelessly stolen from <a href='http://en.wikipedia.org/wiki/Merge_sort' target='_blank'>Wikipedia</a>):</p>
+              <a href='../../../assets/images/winter-2014/cs-32/week-5/mergesort.gif' target='_blank'>
+                <div class='text-center fit-pres'>
+                  <img src='../../../assets/images/winter-2014/cs-32/week-5/mergesort.gif' />
+                </div>
+              </a>
+              
+              <br/>
+              <h3>Practice</h3>
+              <p>There's a rite of passage for all students of recursion: you must solve the Fibonacci problem.</p>
+              <p>The Fibonacci sequence begins with two 1's, and then continues with each digit being the sum of the two previous.</p>
+              <p>Here's a sample start of the Fibonacci sequence:</p>
+<pre class='prettyprint'>
+  1, 1, 2, 3, 5, 8, 13, 21, ...
+</pre>
+              <p class='example'>Compute the nth Fibonacci number in this sequence using a recursive function.</p>
+              <p>Hints: the function signature is <code class='prettyprint'>int Fibonacci(int n);</code></p>
+              <p>There are two base cases.</p>
+              <p>The recursive call breaks into two subproblems... hint, these two are in the problem description!</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='homework3' class='scrollspy-element' scrollspy-title='Homework 3'></div>
+            <h1>Homework 3 Help</h1>
+            <div>
+              <p>Well, we got recursion covered pretty much above... let's just do a quick runthrough with the maze:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-4/stacks-1.PNG' />
+              </div>
+              <p>Here's the new recursive algorithm:</p>
+<pre class='prettyprint'>
+  If the start location is equal to the ending location, then we've
+      solved the maze, so return true.
+  Mark the start location as visted.
+  For each of the four directions,
+      If the location one step in that direction (from the start
+    location) is unvisited,
+        then call pathExists starting from that location (and
+        ending at the same ending location as in the
+        current call).
+       If that returned true,
+           then return true.
+  Return false.
+</pre>
+              <p>Whew! That's all I have for today... that was a lot of stuff... go relax a bit and then GET TO WORK.</p>
+            </div>
+            <hr/>
+            
+            
+            <a class='btn btn-default pull-right hidden-print' href='javascript:window.print();'>
+              <span class='glyphicon glyphicon-print'></span>
+              &nbsp; PDF / Print
+            </a>
+            
+          </div>
+          <!-- END PRESENTATION CONTENT -->
+          
+          <!-- MATERIALS FROM CLASS: -->
+          
+        </div>
+      </div>
+      <!-- END MAIN CONTENT -->
+      
+      
+      
+    </div>
+    <!-- END WRAPPER -->
+    
+    <!-- BEGIN FOOTER -->
+    <div id="footer">
+      <div class="container">
+        <div class="col-md-12 text-center">
+          
+        </div>
+      </div>
+    </div>
+    <!-- END FOOTER -->
+    
+  </body>
+</html>

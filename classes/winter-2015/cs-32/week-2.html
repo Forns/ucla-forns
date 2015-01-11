@@ -1,0 +1,955 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Andrew Forney - UCLA CS</title>
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/magic-bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/main.css" rel="stylesheet" type="text/css">
+    <script src="../../../js/lib/jquery-2.0.3.min.js"></script>
+    <script src="../../../js/lib/bootstrap.min.js"></script>
+    <script src="../../../js/lib/expanding.js"></script>
+    <script src="../../../js/display/general/general-display.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+  </head>
+  
+  <body data-spy="scroll" data-target="#scrollspy">
+    
+    <!-- BEGIN WRAP -->
+    <div id="wrap">
+      
+      <!-- BEGIN NAVIGATION -->
+      <nav class='navbar navbar-default' role='navigation'>
+        <div class='nav-accent'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-12'>
+              <div class='navbar-header'>
+                <button class='navbar-toggle' type='button' data-toggle='collapse' data-target='.navbar-main-collapse'>
+                  <span class='sr-only'>Toggle Navigation</span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                </button>
+                <a class='navbar-brand' href='/~forns/'>
+                  <span id='brand-text'>
+                    Andrew Forney
+                  </span>
+                </a>
+              </div>
+              
+              <div id='nav-main' class='collapse navbar-collapse navbar-main-collapse'>
+                <ul class='nav navbar-nav navbar-right'>
+                  
+                  <li>
+                    <a href='/~forns/about.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-user'></span>
+                      </div>
+                      <p class='text-center'>About</p>
+                    </a>
+                  </li>
+                  
+                  <li class='active'>
+                    <a href='/~forns/classes.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-book'></span>
+                      </div>
+                      <p class='text-center'>Classes</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/contact.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-comment'></span>
+                      </div>
+                      <p class='text-center'>Contact</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/publications.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-file'></span>
+                      </div>
+                      <p class='text-center'>Publications</p>
+                    </a>
+                  </li>
+                  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <!-- END NAVIGATION -->
+      
+      <!-- BEGIN MAIN CONTENT -->
+      <div id="main-content" class="container">
+        <div class="row">
+          
+          <!-- BEGIN SCROLLSPY -->
+          <div class='col-md-2 hidden-sm hidden-xs'>
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+              <ul id='scrollspy' class="nav bs-sidenav">
+              </ul>
+            </div>
+          </div>
+          <!-- END SCROLLSPY -->
+          
+          <!-- BEGIN PRESENTATION CONTENT -->
+          <div class='col-md-10 presentation-content' role='main'>
+            
+            <ol class="breadcrumb hidden-print">
+              <li><a href="../../../classes.html">Classes</a></li>
+              <li><a href="./cs-32.html">Winter14 CS32</a></li>
+              <li class="active">Week 2</li>
+            </ol>
+            
+            <div id='resources' class='scrollspy-element' scrollspy-title='Resource Management'></div>
+            <h1>Introduction to Resource Management</h1>
+            <div>
+              <p>
+                As you might have already seen in class, one of the interesting aspects of programming is that different problem solutions (although eliciting the same correct behavior), 
+                may go about finding the solution in wildly different ways.
+              </p>
+              <p>The next thing you'll notice is that not all solutions are the same quality!</p>
+              <p>What I mean by this is that what one solution takes 2 minutes to solve, another takes 2 days...</p>
+              <p>Just because they arrive at the same answer, doesn't mean that one of them wasn't incredibly stupid in doing it.</p>
+              <p class='definition'><strong>Resource management</strong> involves the ability to effectively, efficiently, and economically use data structures to accomplish your program's goals.</p>
+              <p>That sounded more like a business slogan than a definition, but the idea is that you want to use the right tool for the right job, and then effectively clean up after ourselves.</p>
+              <p>So, let's examine how to engineer the right tools so we won't be sad.</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='functionTrickz' class='scrollspy-element' scrollspy-title='Function Stuff'></div>
+            <h1>A Few Notes on Functions</h1>
+            <div>
+              <p>I didn't know where else to put this section, so why not here?</p>
+              <p>Say I had a function with which I wanted to give the user some parameter flexibility.</p>
+              <p>If my function could take in 3 arguments, but I only *needed* the user to specify 2 of those, I could use default parameter values:</p>
+              <p class='definition'><strong>Default parameters</strong> specify the value for a function parameter if it is not included as an argument from the user's function call.</p>
+              <p>Take a look:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  // hippyFunc will like... take whatever arguments
+  // you want to give, man
+  double hippyFunc (int i, double d = 1.0, string s = "cool man") {
+      for (int n = 0; n &lt; i; n++) {
+          cout &lt;&lt; s &lt;&lt; endl;
+      }
+      return i * d;
+  }
+  
+  int main () {
+      // Not specifying d or s parameters
+      cout &lt;&lt; hippyFunc(1) &lt;&lt; endl;
+      // Not specifying s parameter
+      cout &lt;&lt; hippyFunc(1, 2.3) &lt;&lt; endl;
+      // Specifying all parameters
+      cout &lt;&lt; hippyFunc(2, 4.5, "GET A JOB!") &lt;&lt; endl;
+  }
+</pre>
+              <p>Yeah, that's about the quality of examples you can expect from this set of notes... it's been a long week.</p>
+              <p>Warning! Once you decide that, say, parameter #2 (in the parameter list of a function) can have a default value, all parameters following it must also have a default value.</p>
+              <p class='debug'>Will the following code compile?</p>
+<pre class='prettyprint'>
+  double hippyFunc (int i, double d = 1.0, string s) {
+      for (int n = 0; n &lt; i; n++) {
+          cout &lt;&lt; s &lt;&lt; endl;
+      }
+      return i * d;
+  }
+</pre>
+              <p>Notice how the parameter s followed a parameter with a default value while lacking one of its own.</p>
+              <p>Any who, why might this be useful?</p>
+              <ul class='indent-1'>
+                <li><p>We can give users of our functions some flexibility with the function interface, especially when some values can be specified that aren't usually cared about.</p></li>
+                <li><p>We can specify logical default values for class object constructors that reduce the amount of code we have to write.</p></li>
+              </ul>
+              <p>Here's an example for condensing two constructors using parameter defaults:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  class LazyConstructors {
+      private:
+          int i;
+          string s;
+      public:
+          // One default constructor...
+          LazyConstructors () {
+              i = 0;
+          }
+          
+          // Another taking two parameters
+          LazyConstructors (int j, string t) {
+              i = j;
+              s = t;
+          }
+  
+          // ...
+  
+          // Getters
+          int getI () {return i;}
+          string getS () {return s;}
+  };
+  
+  int main () {
+      LazyConstructors lame;
+      LazyConstructors alsoLame(3, "-_-");
+  
+      cout &lt;&lt; lame.getI() &lt;&lt; endl;
+      cout &lt;&lt; alsoLame.getS() &lt;&lt; endl;
+  }
+</pre>
+              <p>Wow... that example was really boring... let's at least improve it before we forget it ever happened:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  class LazyConstructors {
+      private:
+          int i;
+          string s;
+      public:
+          // Now with fewer constructors!
+          LazyConstructors (int j = 0, string t = "") {
+              i = j;
+              s = t;
+          }
+  
+          // ...
+  
+          // Getters
+          int getI () {return i;}
+          string getS () {return s;}
+  };
+  
+  int main () {
+      LazyConstructors lame;
+      LazyConstructors alsoLame(3, "-_-");
+  
+      cout &lt;&lt; lame.getI() &lt;&lt; endl;
+      cout &lt;&lt; alsoLame.getS() &lt;&lt; endl;
+  }
+</pre>
+              <p>Neat, right? We combined our two constructors into one with the same behavior.</p>
+              <p class='question' name='funcs-q0'>There *is* however, one difference between what our second default-parameter constructor allows and the two it replaced. What is it?</p>
+              <p class='answer' name='funcs-q0'>
+                Our second implementation allows us to construct a LazyConstructors object with just the i parameter defined, which would not similarly work for the first 
+                implementation... we won't worry about it in this case, though, because we'll just pretend that our spec didn't care.
+              </p>
+              <p>One final note for default parameters: where am I meant to specify them? The signatures (typically in header files) or the implementations (typically in .cpp files)?</p>
+              <p>Convention says to place the default parameter values in the header files because users who are interested in how functions / classes operate will look there first.</p>
+              <p class='debug'>WARNING: Necessity says to NOT put the default parameter values in BOTH the function signature and implementation, as this will cause a compile error.</p>
+              <p>For example, with our hippyFunc from earlier:</p>
+<pre class='prettyprint'>
+  // In a header file somewhere...
+  double hippyFunc (int i, double d  = 1.0, string s = "cool man");
+  
+  // ...
+  
+  // In a .cpp file somewhere...
+  double hippyFunc (int i, double d, string s) {
+      for (int n = 0; n &lt; i; n++) {
+          cout &lt;&lt; s &lt;&lt; endl;
+      }
+      return i * d;
+  }
+</pre>
+              <p class='debug'>BUT, *this* will not compile. Why?</p>
+<pre class='prettyprint'>
+  // In a header file somewhere...
+  double hippyFunc (int i, double d = 1.0, string s = "cool man");
+  
+  // ...
+  
+  // In a .cpp file somewhere...
+  double hippyFunc (int i, double d = 1.0, string s = "cool man") {
+      for (int n = 0; n &lt; i; n++) {
+          cout &lt;&lt; s &lt;&lt; endl;
+      }
+      return i * d;
+  }
+</pre>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='delete' class='scrollspy-element' scrollspy-title='Delete Operator'></div>
+            <h1>Review of the Delete Operator</h1>
+            <div>
+              <p>Just a brief note to remind us of what the delete keyword does.</p>
+              <p>If you're a bit hazy, I suggest you review my 
+                <a href='http://cs.ucla.edu/~forns/classes/fall-2013/cs-31/cs-31-week-10.html#dynamicMem' target='_blank'>notes on dynamic memory from CS 31, located here!</a>
+              </p>
+              <p>We need to say one more thing that we only touched upon in CS 31:</p>
+              <p class='toolkit'>
+                Note that we have two forms of the delete operator:<br/><br/>
+                <code class='prettyprint'>delete dynamicObject; // used ONLY when dynamicObject was allocated with the new syntax</code><br/>
+                <code class='prettyprint'>delete[] dynamicArray; // used ONLY when dynamicArray was allocated with the new[] syntax</code>
+              </p>
+              <p>In CS 31, we only used the delete keyword but never the delete[] one.</p>
+              <p>
+                We use the delete keyword whenever the target object of our deletion was a pointer to a *single* object, whereas we use the delete[] keyword whenever the target object was a pointer to 
+                a dynamically allocated *array* of objects.
+              </p>
+              <p>Here's a nice example:</p>
+<pre class='prettyprint'>
+  int main () {
+      int* i = new int(3);
+      int* arr = new int[3];
+  
+      // OK!
+      delete i;
+      // BAD:
+      // delete[] i;
+  
+      // OK!
+      delete[] arr;
+      // BAD:
+      // delete arr[0];
+  }
+</pre>
+              <p>The first pointer, i, just sticks an int on the heap. The second pointer, arr, allows us to dynamically allocate an array of the size of our choosing (also on the heap).</p>
+              <p>We delete them in different ways, though, as you see above.</p>
+              <p>I think that's as much of a review as I'd like to go over right now... so onwards!</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='constructors' class='scrollspy-element' scrollspy-title='Copy Constructors'></div>
+            <h1>Copy Constructors</h1>
+            <div>
+              <p>Sometimes I think this class should be called &quot;Intro to C++ Constructors.&quot;</p>
+              <p>So, say we've got this cool class:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  const int MAX_COPIES = 100;
+  
+  // Kinkos is a registered trademark of FedEx
+  // Its use in this example is purely for bad joke
+  // purposes and in no way reflects the views or
+  // copy constructors of the company or its affiliates
+  class Kinkos {
+      private:
+          string copies[MAX_COPIES];
+          int currentCopy;
+  
+      public:
+          Kinkos () {
+              currentCopy = 0;
+          }
+  
+          string makeCopy () {
+              string copy;
+              if (currentCopy &gt; 0) {
+                  copy = copies[currentCopy - 1];
+                  currentCopy--;
+              }
+              return copy;
+          }
+  
+          void addOrder (string s) {
+              if (currentCopy &lt;= MAX_COPIES) {
+                  copies[currentCopy] = s;
+                  currentCopy++;
+              }
+          }
+  };
+</pre>
+              <p>Alright, so I have a Kinkos that takes in copy orders for string text, and then makes copies of the most recently received orders (I never said customers were happy with it).</p>
+              <p>Now, our Kinkos stores, being specialists in making copies, want to make an expansion store...</p>
+              <p>So, naturally, they copy one of their own stores!</p>
+              <p>To help them do so, they use a copy constructor...</p>
+              <p class='toolkit'>
+                A <strong>copy constructor</strong> is a special constructor definition that is called whenever a new object of some class C is created from another object of that same class C.
+              </p>
+              <p>So, if I try to make a new class C object, and then create a &quot;copy&quot; of it, I might say:</p>
+<pre class='prettyprint'>
+  C object1;
+  // Make object2 a "copy" of object1
+  C object2(object1);
+</pre>
+              <p>Let's create a couple of Kinkos stores and see what happens:</p>
+              <p class='example'>What will the following code output?</p>
+<pre class='prettyprint'>
+  int main () {
+      Kinkos inWestwood;
+      inWestwood
+          .addOrder("Don't")
+          .addOrder("sue me...")
+          .addOrder("FedEx");
+      
+      // A copy constructor called using the source
+      // Kinkos object, inWestwood, creating a new
+      // Kinkos object expansion!
+      Kinkos expansion(inWestwood);
+  
+      cout &lt;&lt; inWestwood.makeCopy() &lt;&lt; " ";
+      cout &lt;&lt; inWestwood.makeCopy() &lt;&lt; " ";
+      cout &lt;&lt; expansion.makeCopy() &lt;&lt; endl;
+  }
+</pre>
+              <p>Err, ignore that output, FedEx &gt;_&gt; &lt;_&lt;</p>
+              <p>Here, we see that when I wanted expansion to be a copy of inWestwood, it copied all of the data members over as well!</p>
+              <p>How did our program know how to do this?</p>
+              <p class='definition'>
+                If a copy constructor is not defined by the programmer, a default copy constructor will be provided by the compiler. This generic copy constructor will
+                simply attempt to create a copy of each of the source's data members, and initialize the copy's data members to these copies.
+              </p>
+              <p>This explains why I see &quot;FedEx sue me... FedEx&quot; instead of &quot;FedEx sue me... Don't&quot; in the example above; the copies data member is itself a copy in expansion.</p>
+              <p>Now, say our Kinkos wanted to specify how many copies a given store could handle, i.e., they wanted different maximum copies for each store.</p>
+              <p>We see that having the copies data member as an array of strings won't work for this goal because its size must be constant at compile time.</p>
+              <p>So, we change our data members to work with dynamic allocation of the copies array:</p>
+<pre class='prettyprint'>
+  class Kinkos {
+      private:
+          // [!] Changes to the data member
+          string* copies;
+          int currentCopy;
+          int maxCopies;
+  
+      public:
+          // [!] Changes to the constructor
+          Kinkos (int maximum) {
+              copies = new string[maximum];
+              currentCopy = 0;
+              maxCopies = maximum;
+          }
+          
+          // [!] Added destructor
+          ~Kinkos () {
+              delete[] copies;
+          }
+  
+          string makeCopy () {
+              string copy;
+              if (currentCopy &gt; 0) {
+                  copy = copies[currentCopy - 1];
+                  currentCopy--;
+              }
+              return copy;
+          }
+  
+          Kinkos&amp; addOrder (string s) {
+              if (currentCopy &lt;= maxCopies) {
+                  copies[currentCopy] = s;
+                  currentCopy++;
+              }
+              return *this;
+          }
+  };
+</pre>
+              <p>Now, we try and run it with the same main function as above...</p>
+              <p class='question' name='constructors-q1'>Will the new class definition for Kinkos function as intended?</p>
+              <p class='answer' name='constructors-q1'>
+                No! Our compiler-generated copy constructor copied all of our data members when we made the expansion object... except that the copies pointer 
+                still points to the same object in both the inWestwood and expansion objects! I then try to delete this dynamically allocated array twice, causing problems 
+                at runtime (undefined behavior).
+              </p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-2/constructors-0.PNG' />
+              </div>
+              <p>&quot;Andrew, if you squint at that diagram, it looks a little like a mustached robot.&quot;</p>
+              <p>Thank you for that information.</p>
+              <p>So how do I get around this? I want to define my own copy constructor behavior!</p>
+              <div class='toolkit'>
+                <p>Users may define their own copy constructors using the following syntax:</p>
+<pre class='prettyprint'>
+  ClassName::ClassName(const ClassName&amp; c) {
+    // Body of copy constructor
+  }
+</pre>
+              </div>
+              <p>Notice some of the features of this syntax:</p>
+              <ul class='indent-1'>
+                <li><p>Its parameter list consists of a single object of the same type as the class for which it is a member function.</p></li>
+                <li><p>We indicate this single parameter as a const value so that we don't change anything in the object getting copied.</p></li>
+                <li><p>We indicate that this single parameter is a *reference* to another ClassName object.</p></li>
+              </ul>
+              <p class='question' name='constructors-q2'>Why do we indicate the copy constructor parameter as a reference to another object of the same class?</p>
+              <p class='answer' name='constructors-q2'>
+                If we indicate that it is pass-by-value, then it will attempt to make a copy of the argument... which will then call the copy constructor 
+                again and again into infinite regress!
+              </p>
+              <p>From this point, we see that:</p>
+              <p class='definition'>By definition, copy constructors define the behavior of pass-by-value for a particular class.</p>
+              <p>Let's start out by fixing our Kinkos class with its own copy constructor:</p>
+<pre class='prettyprint'>
+  class Kinkos {
+      private:
+          string* copies;
+          int currentCopy;
+          int maxCopies;
+  
+      public:
+          Kinkos (int maximum) {
+              maxCopies = maximum;
+              copies = new string[maximum];
+              currentCopy = 0;
+          }
+  
+          // [!] NEW: Copy constructor added!
+          Kinkos (const Kinkos&amp; k) {
+              maxCopies = k.maxCopies;
+              copies = new string[maxCopies];
+              // Instead of just copying the pointer of
+              // the copy, I want to copy the elements of the
+              // pointer instead!
+              for (int i = 0; i &lt; maxCopies; i++) {
+                  copies[i] = k.copies[i];
+              }
+              currentCopy = k.currentCopy;
+          }
+  
+          ~Kinkos () {
+              delete[] copies;
+          }
+  
+          string makeCopy () {
+              string copy;
+              if (currentCopy &gt; 0) {
+                  copy = copies[currentCopy - 1];
+                  currentCopy--;
+              }
+              return copy;
+          }
+  
+          Kinkos&amp; addOrder (string s) {
+              if (currentCopy &lt;= maxCopies) {
+                  copies[currentCopy] = s;
+                  currentCopy++;
+              }
+              return *this;
+          }
+  };
+</pre>
+              <p>Now if I try to run my main function from before, I'm OK!</p>
+              <p>
+                One thing to note about this copy constructor: 
+                We can access the private members of k, the Kinkos being copied, because the copy constructor is still a member function of the Kinkos class.
+              </p>
+              <p>The two Kinkos objects now look like this:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-2/constructors-1.PNG' />
+              </div>
+              <p>One final note about copy constructors:</p>
+              <p class='definition'>We can use the assignment operator to invoke the copy constructor if both operands of the same class and the lvalue has not been declared before.</p>
+              <p>So, in our previous example's main function:</p>
+<pre class='prettyprint'>
+  Kinkos expansion(inWestwood);
+  
+  // ... is equivalent to ...
+  
+  Kinkos expansion = inWestwood;
+</pre>
+              <p>BUT, what if the lvalue *has* been declared before? Let's take a look in a bit...</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='opOverloading' class='scrollspy-element' scrollspy-title='Operator Overloading'></div>
+            <h1>Intro to Operator Overloading</h1>
+            <div>
+              <p>Before we look at handling object assignment, let's take a quick review / detour into operator overloading.</p>
+              <p class='definition'><strong>Operator overloading</strong> is the act of providing user-defined behavior for different C++ operators.</p>
+              <p>When we want to define the behavior of an operator (let's say, the plus sign +) for our class, we use the syntax:</p>
+<pre class='prettyprint'>
+  ClassName&amp; ClassName::operator+ (SomeType other) {
+      // Operator behavior within
+  }
+</pre>
+              <p>Let's look at a quick, arbitrary example:</p>
+              <p class='example'>What will the following code output?</p>
+<pre class='prettyprint'>
+  struct OpExample {
+      string s;
+      int i;
+  
+      OpExample () {
+          i = 1;
+      }
+      
+      // [!] Using the += operator with another OpExample object
+      // as the rvalue will add the rvalue's string data member
+      // to the lvalue's string data member as many times as the
+      // lvalue's int data member
+      OpExample&amp; operator+= (OpExample&amp; rvalue) {
+          for (int j = 0; j &lt; i; j++) {
+              s += rvalue.s;
+          }
+          return *this;
+      }
+  };
+  
+  int main () {
+      OpExample op1,
+                op2;
+  
+      op2.s = "Test!";
+      op1.i = 3;
+      
+      // [!] Using our custom += operator definition!
+      op1 += op2;
+  
+      cout &lt;&lt; op1.s &lt;&lt; endl;
+  }
+</pre>
+              <p>Some things to note about our example:</p>
+              <ul class='indent-1'>
+                <li><p>Our overloaded symbol inherits the precedence rules of the C++ language.</p></li>
+                <li><p>The parameter in our class' operator overloading function definition refers to the rvalue in this case.</p></li>
+                <li><p>We return a reference to the lvalue object so that we can chain operator calls together.</p></li>
+                <li><p>Instead of saying <code class='prettyprint'>op1 += op2;</code> I could have said <code class='prettyprint'>op1.operator+=(op2);</code> in the main function.</p></li>
+              </ul>
+              <p>Here's another example for practice!</p>
+              <p class='example'>What will the following code output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  struct OpExample {
+      string s;
+      int i;
+  
+      OpExample () {
+          i = 1;
+      }
+  
+      OpExample&amp; operator+= (OpExample&amp; rvalue) {
+          for (int j = 0; j &lt; i; j++) {
+              s += rvalue.s;
+          }
+          return *this;
+      }
+  
+      // [!] New prefix increment operator! Notice how
+      // my operator overloading functions can return types
+      // other than that of the class / struct in which
+      // they are defined!
+      int operator++ () {
+          return i++;
+      }
+  };
+  
+  int main () {
+      OpExample op1,
+                op2,
+                op3;
+  
+      op2.s = "Test!";
+      op3.s = "Wow!";
+      ++op1;
+      ++op2;
+      op1 += (op2 += op3);
+  
+      cout &lt;&lt; op1.s &lt;&lt; endl;
+  }
+</pre>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='assignment' class='scrollspy-element' scrollspy-title='Overloading Assignment'></div>
+            <h1>Overloading the Assignment Operator</h1>
+            <div>
+              <p>In our segment about copy constructors, we saw that we can use the assignment operator (=) to invoke the copy constructor of the lvalue when it has yet to be declared before.</p>
+              <p>BUT, what happens if we try the following for some class C:</p>
+<pre class='prettyprint'>
+  C c1;
+  C c2;
+  
+  // [!] Will this invoke the copy constructor
+  // for c1?
+  c1 = c2;
+</pre>
+              <p>Above, we see that c1 has already been declared and constructed, so the statement <strong>c1 = c2;</strong> will NOT invoke the copy constructor, but rather, the assignment behavior.</p>
+              <p>What is the assignment behavior, by default?</p>
+              <p class='definition'>
+                The <strong>default assignment behavior</strong> for an lvalue and rvalue of the same class is generated by the compiler, and will simply perform an assignment 
+                of each of the lvalue's data members to each of the rvalue's corresponding data members.
+              </p>
+              <p>Well that's wordy and useless... why don't we examine a simple example?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  // hehe... it's short for assignment but you
+  // still have to say "ass example"
+  struct AssExample {
+      int m_i;
+      string m_s;
+      bool m_b;
+  
+      AssExample () {};
+  
+      AssExample (int i, string s, bool b) {
+          m_i = i;
+          m_s = s;
+          m_b = b;
+      }
+  };
+  
+  int main () {
+      AssExample a1(3, "test", 1),
+                 a2;
+  
+      // [!] Note: a2 has already been constructed,
+      // so the copy constructor won't be called, but rather
+      // the assignment behavior will occur
+      a2 = a1;
+  
+      cout &lt;&lt; a2.m_i &lt;&lt; endl;
+      cout &lt;&lt; a2.m_s &lt;&lt; endl;
+      cout &lt;&lt; a2.m_b &lt;&lt; endl;
+  }
+</pre>
+              <p>Naturally, then, if I wanted to control the behavior of the assignment, I could implement an operator overloading for it in my class definition:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  struct AssExample {
+      int m_i;
+      string m_s;
+      bool m_b;
+  
+      AssExample () {};
+  
+      AssExample (int i, string s, bool b) {
+          m_i = i;
+          m_s = s;
+          m_b = b;
+      }
+  
+      // [!] Define the behavior of the assignment to NOT
+      // copy over the string data member
+      AssExample&amp; operator= (const AssExample&amp; other) {
+          m_i = other.m_i;
+          m_b = other.m_b;
+          return *this;
+      }
+  };
+  
+  int main () {
+      AssExample a1(3, "test", 1),
+                 a2;
+  
+      a2 = a1;
+  
+      // [!] See what I print out now...
+      cout &lt;&lt; a2.m_i &lt;&lt; endl;
+      cout &lt;&lt; a2.m_s &lt;&lt; endl;
+      cout &lt;&lt; a2.m_b &lt;&lt; endl;
+  }
+</pre>
+              <p>Just like with the compiler-given copy constructor, we can see that we might get into trouble with the compiler-given assignment behavior if one of our data members was a pointer!</p>
+              <p>As such, we have to be vigilant and make sure that classes with pointer data members don't rely on the default assignment behavior.</p>
+              <p>One other common pitfall with the assignment behavior is when we assign an object to itself.</p>
+              <p>If we want to prevent our assignment operator from allowing assignment to and from the same object, we can compare against the object's memory address as such:</p>
+<pre class='prettyprint'>
+  ClassName&amp; ClassName::operator= (const ClassName&amp; other) {
+      // if the lvalue's address is not the same as the
+      // rvalue's address... (i.e. they are different objects)
+      if (this != &amp;other) {
+          // ...assignment behavior here, safe from
+          // self-assignment
+      }
+  }
+</pre>
+              
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='summary' class='scrollspy-element' scrollspy-title='Summary'></div>
+            <h1>Summary</h1>
+            <div>
+              <p>So, on the long journey from copy constructors to assignment overloading, here's a brief rundown:</p>
+              <ul class='indent-1'>
+                <li><p>Beware of copied pointers in the default copy constructor and default assignment behavior!</p></li>
+                <li><p>Beware of memory leaks from the assignment overloading!</p></li>
+                <li><p>Beware of dangling pointers from the assignment overloading!</p></li>
+              </ul>
+              <p>To pull it all together, let's examine the following class that does a bunch of output to the console whenever key events happen:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  class NoisyClass {
+      private:
+          string s;
+  
+      public:
+          NoisyClass () {
+              cout &lt;&lt; "[C] Default constructor" &lt;&lt; endl;
+          }
+  
+          NoisyClass (string stuff) {
+              s = stuff;
+              cout &lt;&lt; "[P] Parameterized constructor" &lt;&lt; endl;
+          }
+  
+          NoisyClass (const NoisyClass&amp; other) {
+              s = other.s;
+              cout &lt;&lt; "[~] Copy constructor" &lt;&lt; endl;
+          }
+  
+          ~NoisyClass () {
+              cout &lt;&lt; "[D] Destructor" &lt;&lt; endl;
+          }
+  
+          NoisyClass&amp; operator= (const NoisyClass&amp; other) {
+              s = other.s;
+              cout &lt;&lt; "[=] Assignment" &lt;&lt; endl;
+              return *this;
+          }
+  };
+</pre>
+              <br/>
+              <p class='example'>With the NoisyClass definition from above, what will the following code print out?</p>
+<pre class='prettyprint'>
+  int main () {
+      NoisyClass n1,
+                 n2;
+  
+      n1 = n2;
+      // Don't forget that n1 and n2 are local...
+  }
+</pre>
+              <p class='example'>With the NoisyClass definition from above, what will the following code print out?</p>
+<pre class='prettyprint'>
+  int main () {
+      NoisyClass n1("Not the parameterized constructor &gt;_&gt; &lt;_&lt;");
+      NoisyClass n2(n1);
+      NoisyClass n3 = n2;
+  }
+</pre>
+              <p class='example'>With the NoisyClass definition from above, what will the following code print out?</p>
+<pre class='prettyprint'>
+  int main () {
+      NoisyClass* n1;
+      NoisyClass n2,
+                 n3;
+  
+      n1 = new NoisyClass();
+      n2 = *n1;
+      delete n1;
+      n3 = n2;
+  }
+</pre>
+              <p class='example'>With the NoisyClass definition from above, what will the following code print out?</p>
+<pre class='prettyprint'>
+  int main () {
+      NoisyClass n[3];
+  }
+</pre>
+              <p class='example'>With the NoisyClass definition from above, what will the following code print out?</p>
+<pre class='prettyprint'>
+  int main () {
+      NoisyClass* n;
+      n = new NoisyClass[4];
+      delete[] n;
+  }
+</pre>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='homework' class='scrollspy-element' scrollspy-title='Homework Help'></div>
+            <h1>Tips on Homework 1</h1>
+            <div>
+              <p>First, you've been reading through a lot of my notes, which must be draining without me there to say them to you.</p>
+              <p>To provide some morale support, here's an XKCD from a bit ago that reminded me of office hours:</p>
+              <div class='text-center fit-pres'>
+                <a href='http://xkcd.com/1316/' target='_blank'>
+                  <img src='http://imgs.xkcd.com/comics/inexplicable.png' />
+                </a>
+              </div>
+              <br/>
+              <p>Now, on the homework, you're asked to use typedef:</p>
+              <p class='toolkit'>A <strong>typedef</strong> keyword simply provides a top-level new name (alias) for an existing type.</p>
+              <p>Uhh, OK... why do we need to use this?</p>
+              <p>
+                Well, if we want our code to be able to handle different types, but don't want users to have to find and replace every instance 
+                of a particular type in our code, we can provide a typedef to do the work for them! 
+              </p>
+<pre class='prettyprint'>
+  typedef &lt;ExistingType&gt; &lt;NewTypeName&gt;;
+  
+  // ... so for example ...
+  typedef int CRAZY_INT_NAME_WOW;
+  
+  CRAZY_INT_NAME_WOW i = 1, j = 2;
+  cout &lt;&lt; i + j &lt;&lt; endl;
+</pre>
+              <p>Finally, some general reminders:</p>
+              <ul class='indent-1'>
+                <li><p>Comments!</p></li>
+                <li><p>Read the spec description for the <code class='prettyprint'>get</code> member functions very carefully...</p></li>
+                <li><p>Pay attention to the last sentence of criteria #4...</p></li>
+                <li><p>Test your code! The general strategy for testing is that you should try to find some combination of legal statements that actually break it!</p></li>
+              </ul>
+              <p class='definition'>Lastly, I will be hosting online office hours via Skype on the holiday from 2:30 - 4:30 pm. My Skype handle for this class is UCLA-Forns.</p>
+            </div>
+            <hr/>
+            
+            
+            <a class='btn btn-default pull-right hidden-print' href='javascript:window.print();'>
+              <span class='glyphicon glyphicon-print'></span>
+              &nbsp; PDF / Print
+            </a>
+            
+          </div>
+          <!-- END PRESENTATION CONTENT -->
+          
+          <!-- MATERIALS FROM CLASS: -->
+            <!-- TODO: Homework Help -->
+              <!-- TODO: Go over typedef -->
+              <!-- TODO: Online office hours -->
+            
+            
+        </div>
+      </div>
+      <!-- END MAIN CONTENT -->
+      
+      
+    </div>
+    <!-- END WRAPPER -->
+    
+    <!-- BEGIN FOOTER -->
+    <div id="footer">
+      <div class="container">
+        <div class="col-md-12 text-center">
+          
+        </div>
+      </div>
+    </div>
+    <!-- END FOOTER -->
+    
+  </body>
+</html>

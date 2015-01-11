@@ -1,0 +1,989 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Andrew Forney - UCLA CS</title>
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/magic-bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/main.css" rel="stylesheet" type="text/css">
+    <script src="../../../js/lib/jquery-2.0.3.min.js"></script>
+    <script src="../../../js/lib/bootstrap.min.js"></script>
+    <script src="../../../js/lib/expanding.js"></script>
+    <script src="../../../js/display/general/general-display.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+  </head>
+  
+  <body data-spy="scroll" data-target="#scrollspy">
+    
+    <!-- BEGIN WRAP -->
+    <div id="wrap">
+      
+      <!-- BEGIN NAVIGATION -->
+      <nav class='navbar navbar-default' role='navigation'>
+        <div class='nav-accent'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-12'>
+              <div class='navbar-header'>
+                <button class='navbar-toggle' type='button' data-toggle='collapse' data-target='.navbar-main-collapse'>
+                  <span class='sr-only'>Toggle Navigation</span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                </button>
+                <a class='navbar-brand' href='/~forns/'>
+                  <span id='brand-text'>
+                    Andrew Forney
+                  </span>
+                </a>
+              </div>
+              
+              <div id='nav-main' class='collapse navbar-collapse navbar-main-collapse'>
+                <ul class='nav navbar-nav navbar-right'>
+                  
+                  <li>
+                    <a href='/~forns/about.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-user'></span>
+                      </div>
+                      <p class='text-center'>About</p>
+                    </a>
+                  </li>
+                  
+                  <li class='active'>
+                    <a href='/~forns/classes.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-book'></span>
+                      </div>
+                      <p class='text-center'>Classes</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/contact.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-comment'></span>
+                      </div>
+                      <p class='text-center'>Contact</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/publications.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-file'></span>
+                      </div>
+                      <p class='text-center'>Publications</p>
+                    </a>
+                  </li>
+                  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <!-- END NAVIGATION -->
+      
+      <!-- BEGIN MAIN CONTENT -->
+      <div id="main-content" class="container">
+        <div class="row">
+          
+          <!-- BEGIN SCROLLSPY -->
+          <div class='col-md-2 hidden-sm hidden-xs'>
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+              <ul id='scrollspy' class="nav bs-sidenav">
+              </ul>
+            </div>
+          </div>
+          <!-- END SCROLLSPY -->
+          
+          <!-- BEGIN PRESENTATION CONTENT -->
+          <div class='col-md-10 presentation-content' role='main'>
+            
+            <ol class="breadcrumb hidden-print">
+              <li><a href="../../../classes.html">Classes</a></li>
+              <li><a href="./cs-32.html">Winter14 CS32</a></li>
+              <li class="active">Week 1</li>
+            </ol>
+            
+            <div id='introduction' class='scrollspy-element' scrollspy-title='Introduction'></div>
+            <h1>Introduction: The Discussion Section</h1>
+            <div>
+              <p>Welcome to CS32!</p>
+              <p>To those of you joining from last quarter... really? You're all gluttons for punishment? And those of you who are just now joining, welcome <span class='strike'>to hell</span> aboard!</p>
+              <p><strong>About the Discussion Section:</strong></p>
+              <ul class='indent-1'>
+                <li><p>The discussion section is largely review and practice of everything that was covered during lecture in the previous week, plus some greater depth.</p></li>
+                <li><p>This is the time when you ask questions that you didn't during lecture--leave nothing to chance!</p></li>
+                <li><p>The general discussion format is to review topics at the high level, examine a bunch of examples that illustrate them, and then practice them by hand.</p></li>
+              </ul>
+              <p><strong>About My Role as Your TA:</strong></p>
+              <ul class='indent-1'>
+                <li><p>I am always available to email; don't hesitate to ask for any clarifications.</p></li>
+                <li><p>
+                  My office hours are on Mondays from 2:30 - 5:30pm, right after class for your convenience, in Boelter 2432. If you can't make those hours, and can't take advantage 
+                  of the other TA office hours, email me to set up an appointment.
+                </p></li>
+                <li><p>
+                  I grade the *style and comments* of your assignments, but not the correctness... so if you have time, entertain me with fun comments... 
+                  but you know... focus on getting things right first...
+                </p></li>
+              </ul>
+              <p><strong>Site Upgrades:</strong></p>
+              <ul class='indent-1'>
+                <li><p>
+                  You can now add notes inside the website so that you can follow along and type as I say stuff! Just hit <code class='prettyprint'>SHIFT + N</code> 
+                  and then click on a paragraph to add an editable note area below. NOTE: the notes you add will not persist if you close your browser, so make sure you save 
+                  it to PDF when you're done taking notes! (see below)
+                </p></li>
+                <li><p>
+                  The site has been optimized for printing, which includes the notes that you add, above. I've added a print button to the bottom of the site, but really it just 
+                  calls your printer functionality, which typically includes the export to PDF.
+                </p></li>
+              </ul>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='review' class='scrollspy-element' scrollspy-title='Review'></div>
+            <h1>A Return to CS31</h1>
+            <div>
+              <p>The first portion of CS 32 dealt heavily with topics from CS 31, and in particular, those surrounding classes and dynamic memory.</p>
+              <p>If you're unfamiliar with my site from last quarter, <a href='http://cs.ucla.edu/~forns/classes/fall-2013/cs-31/cs-31.html' target="_blank">here is a link</a> to *all* of the necessary review material.</p>
+              <p>More specifically:</p>
+              <ul class='indent-1'>
+                <li><p><strong>Structs &amp; Classes:</strong> here is last quarter's <a href='http://cs.ucla.edu/~forns/classes/fall-2013/cs-31/cs-31-week-9.html' target="_blank">lecture</a>.</p></li>
+                <li><p><strong>Dynamic Memory &amp; More on Structs:</strong> here is last quarter's <a href='http://cs.ucla.edu/~forns/classes/fall-2013/cs-31/cs-31-week-10.html' target="_blank">lecture</a>.</p></li>
+              </ul>
+              <p>Ah such nostalgia... it feels like just last quarter that we were learning about ints.</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='constructors' class='scrollspy-element' scrollspy-title='Advanced Constructors'></div>
+            <h1>Advanced Constructor Notes</h1>
+            <div>
+              <p>This isn't Bob the Builder territory any more (I promise to stop using him in my constructor examples).</p>
+              <p>
+                We spoke a bit more extensively about the details of constructors last quarter 
+                (<a href='http://cs.ucla.edu/~forns/classes/fall-2013/cs-31/cs-31-week-10.html#structs' target='_blank'>lecture here</a>) 
+                but now there are a few more things to say.
+              </p>
+              <p>First, let's introduce a new tool for our constructors: the initialization list.</p>
+              <p class='toolkit'>An <strong>initialization list</strong> is a constructor syntax for initializing class data members *as* they are being declared.</p>
+              <p>We've previously dealt with member objects *after* they've been declared, by performing assignments *within* the constructor body.</p>
+              <p>In other words, by the time we execute the code in the body of our constructor, our data members have already been declared.</p>
+              <p>Since our recent homeworks have dealt with zombies, far be it from me to ruin the streak with my examples:</p>
+<pre class='prettyprint'>
+  class Survivor {
+      private:
+          string m_name;
+          bool m_infected;
+          int m_health;
+  
+      public:
+          // Default constructor
+          Survivor () {
+              // Assignments here happen *after*
+              // the data members have already
+              // been declared / had memory allocated
+              m_name = "Rick Grimes";
+              m_infected = false;
+              m_health = 100;
+          }
+  
+          // Getters
+          string getName () {return m_name;}
+          bool isInfected () {return m_infected;}
+          int getHealth () {return m_health;}
+  };
+</pre>
+              <p>
+                Notice here that I assign values in my default constructor within the constructor body. This means that by the time I've reached my constructor body, all of the data members 
+                have had their default constructors called upon them (though primitive types will store garbage until changed).
+              </p>
+              <p>BUT, if we use an initialization list, we will preempt this default behavior.</p>
+              <div class='toolkit'>
+                <p>The initialization list syntax is as follows:</p><br/>
+<pre class='prettyprint'>
+  ClassName (): member_1(setting_1), ..., member_n(setting_n) {
+    &lt;constructor body&gt;
+  }
+</pre>
+              </div>
+                <p>Above, <code class='prettyprint'>member_i</code> represents any data members we want to initialize using the initialization list. We need not initialize every data member.</p>
+                <p>Similarly, <code class='prettyprint'>setting_i</code> represents the expression to which we wish to initialize <code class='prettyprint'>member_i</code>. This could be a literal, function call, etc.</p>
+                <p>So, rewriting the above example using an initialization list:</p>
+<pre class='prettyprint'>
+  class Survivor {
+      private:
+          string m_name;
+          bool m_infected;
+          int m_health;
+  
+      public:
+          Survivor (): m_name("Rick Grimes"), m_infected(false), m_health(100) {}
+  
+          // Getters
+          string getName () {return m_name;}
+          bool isInfected () {return m_infected;}
+          int getHealth () {return m_health;}
+  };
+</pre>
+              <p>You can even use initialization lists with non-default constructors:</p>
+<pre class='prettyprint'>
+  class Survivor {
+      private:
+          string m_name;
+          bool m_infected;
+          int m_health;
+  
+      public:
+          Survivor (): m_name("Rick Grimes"), m_health(100), m_infected(false) {}
+  
+          Survivor (string name, bool infected, int health):
+              m_name(name), m_health(health), m_infected(infected) {}
+  
+          // Getters
+          string getName () {return m_name;}
+          bool isInfected () {return m_infected;}
+          int getHealth () {return m_health;}
+  };
+</pre>
+              <p>NOTE: above, my parameters on the new constructor are in a different order than in my initialization list. This is fine... however...</p>
+              <p class='debug'>Initialization lists initialize data members in the order in which the data members were listed in the class definition, NOT in the order they appear in the initialization list.</p>
+              <p>So, say I wanted to generate a (kinda) random maximum health anywhere from 1 - 100 for my survivors when they're constructed:</p>
+<pre class='prettyprint'>
+  class Survivor {
+      private:
+          string m_name;
+          bool m_infected;
+          int m_health;
+          int m_max_health;
+  
+      public:
+          Survivor ():
+              // See the new list item for m_max_health
+              m_name("Rick Grimes"), m_max_health(rand() % 100 + 1), m_health(m_max_health), m_infected(false) {}
+  
+          // Getters
+          string getName () {return m_name;}
+          bool isInfected () {return m_infected;}
+          int getHealth () {return m_health;}
+  };
+</pre>
+              <p>But does this work as I intended? i.e., does <code class='prettyprint'>m_health</code> get set to the random value of <code class='prettyprint'>m_max_health</code>?</p>
+              <p>Try running this simple main function with the above class definition:</p>
+<pre class='prettyprint'>
+  int main () {
+      Survivor s;
+      cout &lt;&lt; s.getHealth() &lt;&lt; endl;
+  }
+</pre>
+              <p>
+                Well, as it turns out, even though my initialization for <code class='prettyprint'>m_max_health</code> comes before my initialization for <code class='prettyprint'>m_health</code> 
+                in the initialization list, <code class='prettyprint'>m_max_health</code> does NOT come before <code class='prettyprint'>m_health</code> in the *class definition.*
+              </p>
+              <p>Making the following switch will fix our issue:</p>
+<pre class='prettyprint'>
+  class Survivor {
+      private:
+          string m_name;
+          bool m_infected;
+          
+          // Now listing m_max_health BEFORE
+          // m_health
+          int m_max_health;
+          int m_health;
+  
+      public:
+          Survivor ():
+              m_name("Rick Grimes"), m_max_health(rand() % 100 + 1), m_health(m_max_health), m_infected(false) {}
+  
+          // Getters
+          string getName () {return m_name;}
+          bool isInfected () {return m_infected;}
+          int getHealth () {return m_health;}
+  };
+</pre>
+              <p>Of course, you know that this is a crappy random generator because we never seeded it but... meh... too much typing.</p>
+              <br/>
+              <p><strong>Summary so far:</strong></p>
+              <div class='col-md-6'>
+<pre class='prettyprint'>
+  // A constructor like:
+  Survivor () {
+      m_name = "Rick Grimes";
+      m_infected = false;
+      m_health = 100;
+  }
+  
+  // Is as though we had declared
+  // variables and then later initialized
+  // them, like:
+  string m_name;
+  bool m_infected;
+  int m_health;
+  
+  m_name = "Rick Grimes";
+  m_infected = false;
+  m_health = 100;
+</pre>
+              </div>
+              <div class='col-md-6'>
+<pre class='prettyprint'>
+  // A constructor with initialization
+  // list like:
+  Survivor ():
+      m_name("Rick Grimes"),
+      m_health(100),
+      m_infected(false) {}
+  
+  // Is as though we had instantiated
+  // our variables like:
+  string m_name = "Rick Grimes";
+  bool m_infected = false;
+  int m_health = 100;
+  
+  
+  
+  
+  
+</pre>
+              </div>
+              <p>See the extra step we shave off by using initialization lists?</p>
+              <br/>
+              <p>&quot;But Andrew, why do we care about shaving off the extra step? It shouldn't really matter with primitives data members...&quot;</p>
+              <p>&quot;Right as always, Andrew! So when do we actually see an improvement in performance?&quot;</p>
+              <p>Thanks for playing. As it turns out, we see the benefit of using initialization lists when we have non-primitive data members.</p>
+              <p>Let's add a new class to our example:</p>
+<pre class='prettyprint'>
+  class Weapon {
+      private:
+          string m_name;
+          int m_ammo;
+      
+      public:
+          Weapon (): m_name("Colt Python"), m_ammo(6) {}
+          Weapon (string name, int ammo): m_name(name), m_ammo(ammo) {}
+          string getName () {return m_name;}
+          int getAmmo () {return m_ammo;}
+  };
+  
+  class Survivor {
+      private:
+          string m_name;
+          bool m_infected;
+          int m_health;
+          Weapon m_gun;
+  
+      public:
+          Survivor () {
+              m_name = "Rick Grimes";
+              m_infected = false;
+              m_health = 100;
+          }
+  
+          // Getters
+          string getName () {return m_name;}
+          bool isInfected () {return m_infected;}
+          int getHealth () {return m_health;}
+          Weapon getWeapon () {return m_gun;}
+  };
+</pre>
+              <p class='question' name='constructors-q0'>What happens when I don't include any mention of <code class='prettyprint'>m_gun</code> in my constructor?</p>
+              <p class='answer' name='constructors-q0'>Its default constructor will be called, giving it the name &quot;Colt Python&quot; and 6 ammo.</p>
+              <p>Alright... but what happens if I didn't want the default Weapon constructor to be called and instead used the following Survivor constructor?</p>
+<pre class='prettyprint'>
+  Survivor () {
+      m_name = "Rick Grimes";
+      m_infected = false;
+      m_health = 100;
+      
+      // See what's happened here?
+      // What gets printed?
+      cout &lt;&lt; m_gun.getName() &lt;&lt; endl;
+      m_gun = Weapon("Beretta", 30);
+  }
+</pre>
+              <p>Here, the default Weapon constructor gets called before I get to use the second Weapon constructor to specify the Weapon members I want!</p>
+              <p>So essentially, if I do NOT use an initialization list instantiation for <code class='prettyprint'>m_gun</code>, I call the Weapon constructor twice.</p>
+              <p>For small classes like Weapon, this is trivial, but in large applications with large classes, it may not be!</p>
+              <p>Take the following fix for example:</p>
+<pre class='prettyprint'>
+  class Survivor {
+      private:
+          string m_name;
+          bool m_infected;
+          int m_health;
+          Weapon m_gun;
+  
+      public:
+          Survivor ():
+              m_name("Rick Grimes"), m_health(100), m_infected(false), m_gun("Beretta", 30) {}
+  
+          // Getters
+          string getName () {return m_name;}
+          bool isInfected () {return m_infected;}
+          int getHealth () {return m_health;}
+          Weapon getWeapon () {return m_gun;}
+  };
+</pre>
+              <p>Here, I use the second Weapon constructor *before* the default Weapon constructor would get called.</p>
+              <p>This establishes the rough construction sequence (some items omitted):</p>
+              <ol class='indent-1'>
+                <li><p>Use the calling constructor's initialization list</p></li>
+                <li><p>Construct any remaining data members (default constructors)</p></li>
+                <li><p>Execute the calling constructor's function body</p></li>
+              </ol>
+              <p class='definition'>Rule of thumb: put as many member initializations as you can into the initialization list.</p>
+              <p>And, as a final, less important note:</p>
+              <p class='toolkit'>Initialization lists serve as the only way to initialize <code class='prettyprint'>constant</code> data members.</p>
+              <p>Aaaand that's probably way more than you'd ever care to know about constructors. On to the bigger stuff!</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='compilation' class='scrollspy-element' scrollspy-title='Compilation'></div>
+            <h1>More Notes on Compilation</h1>
+            <div>
+              <p>
+                Before we start talking about File Organization and the process of breaking large projects into constituent bits, it helps to have some 
+                greater detail on the compilation process.
+              </p>
+              <p>You see, C++ compilation is actually a 3 step process:</p>
+              <ol class='indent-1'>
+                <li><p>Preprocessing</p></li>
+                <li><p>Compilation</p></li>
+                <li><p>Linking</p></li>
+              </ol>
+              <p>Let's look at what happens at each stage:</p>
+              
+              <h3>Preprocessing</h3>
+              <p>(Note: we didn't go over this yet, but I wanted to fill in a few blanks from lecture)</p>
+              <p class='definition'>
+                The preprocessing stage handles what are called &quot;preprocessor directives&quot; like <code class='prettyprint'>#include</code> and <code class='prettyprint'>#define</code>.
+              </p>
+              <p>What we mean by preprocessing is that we are literally doing some file transformations before we begin processing the source into machine code.</p>
+              <p>For review:</p>
+              <p class='definition'><strong>Source code</strong> is the human-readable code that we use to create machine-readable instructions through compilation.</p>
+              <p class='definition'><strong>Machine code</strong> is the machine-executable code that we run during program runtime.</p>
+              <p>
+                So, what preprocessing does is to prepare the source code for compilation by &quot;replacing&quot; each <code class='prettyprint'>#include</code> instance with 
+                their respective file contents (or at least the identifiers, to be resolved later).
+              </p>
+              <p>Lastly, since we haven't really seen it before, the <code class='prettyprint'>#define</code> directive does the following:</p>
+              <p class='toolkit'>
+                The <code class='prettyprint'>#define</code> directive says this: give me the name of some identifier, and before compilation, I'll replace it anywhere I see it 
+                in the code with the literal you associate with it.
+              </p>
+              <p>So, for example:</p>
+<pre class='prettyprint'>
+  #define LOUD_STRING "YELLING"
+  #define COOL_INT 42
+  
+  int main () {
+    cout &lt;&lt; LOUD_STRING &lt;&lt; endl;
+    cout &lt;&lt; COOL_INT &lt;&lt; endl;
+  }
+</pre>
+                <p>Here, I say, &quot;Before compiling, anywhere you see the identifier LOUD_STRING, replace it with (literally, the text) &quot;YELLING&quot;. &quot;... and similarly for the COOL_INT.</p>
+                <p>So why use <code class='prettyprint'>#define</code> and not a <code class='prettyprint'>const</code> variable?</p>
+                <p>
+                  The differences are subtle, but the main difference is that <code class='prettyprint'>const</code> variables abide by scope rules, whereas <code class='prettyprint'>#define</code> 
+                  values are applied globally.
+                </p>
+                <p>Because <code class='prettyprint'>#define</code> is preprocessed, it also means you're not taking up space for another variable, though in practice this isn't a big concern.</p>
+              
+              <h3>Compilation</h3>
+              <p class='definition'>
+                The compilation stage turns the source code (having been preprocessed) into machine code.
+              </p>
+              <p>These are binary files that are called object files.</p>
+              <p>Each source code file will therefore be translated into an object file, with all of its variables, function definitions, etc. now ready to be checked by the linker.</p>
+              
+              <h3>Linking</h3>
+              <p class='definition'>
+                The Linker takes the object files compiled from source in the previous step and then makes sure that, amongst any of the compiled objects and 
+                included libraries, there exists a definition for every function or variable used in the code. If not, then we get a compilation error.
+              </p>
+              <p>Linkers then assemble all of the dependencies we've listed throughout our source, and creates the executable file, which we run to execute the code (thus the name).</p>
+              <p>Wow that was dry reading. You still awake? I fell asleep just writing that...</p>
+              <p>How about some pictures? Everyone likes pictures...</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-1/compilation-0.PNG' />
+              </div>
+              <p>&quot;That's one of your better illustrations, Andrew. I especially like how you ran out of room and had to throw the Executable to the side. Also, I could probably read it from space.&quot;</p>
+              <p>:(</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='file-org' class='scrollspy-element' scrollspy-title='File Organization'></div>
+            <h1>File Organization</h1>
+            <div>
+              <p>So now that we know a little bit about what's going on with multiple-source-file projects, let's actually see how to implement them...</p>
+              <p>I guess we should start by considering:</p>
+              <p class='question' name='org-q0'>Why do we bother breaking down our source into different files? Isn't this just more overhead to learn?</p>
+              <p class='answer' name='org-q0'>Well, any projects of any appreciable size become ungainly if you have a file that is, say, a million lines of code long! It would be impossible to find anything.</p>
+              <p>There are also implications for version control and debugging that make breaking projects into multiple files a great idea.</p>
+              <p>Hey, here's something we haven't talked about before:</p>
+              <p class='toolkit'>
+                A <strong>Header File (.h)</strong> is just like a .cpp file except that by convention, we use header files to *declare* functions and variables, but .cpp files to *implement* 
+                and *use* them.
+              </p>
+              <p>You can think of header files as contracts between you and the compiler: the headers state what you promise to implement, and the .cpp files are your fulfillment of the contract.</p>
+              <p>Headers also collect function prototypes so that it's easy to see what the expected behavior of a particular interface will be.</p>
+              <p>The process of creating header files is typically the following:</p>
+              <ol class='indent-1'>
+                <li><p>
+                  Create a new header file; by convention, we usually name it the same as the relevant .cpp file, so for example if I had <code class='prettyprint'>Survivor.cpp</code>, 
+                  I might make a header file called <code class='prettyprint'>Survivor.h</code> (which we'll do in a moment... be patient).
+                </p></li>
+                <li><p>Next, we put all of the necessary class definitions, function prototypes, etc. that we deem relevant to wherever that particular header file is to be included.</p></li>
+                <li><p>Finally, we invoke the preprocessor directive by <code class='prettyprint'>#include</code>-ing the header file into other files in which it is relevant.</p></li>
+              </ol>
+              <p>We're used to using includes to get standard library components when we say things like <code class='prettyprint'>#include &lt;string&gt;</code>.</p>
+              <p class='debug'>
+                WARNING: We use the bracketed notation on library inclusions, but the quotation notation for our custom header files. For example:<br/><br/>
+                <code class='prettyprint'>#include &lt;cctype&gt; // a library include</code><br/>
+                <code class='prettyprint'>#include &quot;Survivor.h&quot; // a custom header include</code>
+              </p>
+              <p>Let's try splitting our Survivor class into a header and .cpp file.</p>
+              <p>Here's what we had before:</p>
+<pre class='prettyprint'>
+  class Survivor {
+      private:
+          string m_name;
+          bool m_infected;
+          int m_health;
+          Weapon m_gun;
+  
+      public:
+          Survivor () {
+              m_name = "Rick Grimes";
+              m_infected = false;
+              m_health = 100;
+              m_gun = Weapon("Beretta", 30);
+          }
+  
+          // Getters
+          string getName () {return m_name;}
+          bool isInfected () {return m_infected;}
+          int getHealth () {return m_health;}
+          Weapon getWeapon () {return m_gun;}
+  };
+</pre>
+              <p>Now, we'll make our two files!</p>
+              <p class='debug'>Will the following implementation work? Is there something missing?</p>
+              <div class='col-md-6'>
+<pre class='prettyprint'>
+  // Survivor.h
+  #include &lt;string&gt;
+
+  class Survivor {
+      private:
+          std::string m_name;
+          bool m_infected;
+          int m_health;
+          Weapon m_gun;
+  
+      public:
+          Survivor::Survivor ();
+          std::string getName ();
+          bool isInfected ();
+          int getHealth ();
+          Weapon getWeapon ();
+  };
+</pre>
+              </div>
+              <div class='col-md-6'>
+<pre class='prettyprint'>
+  // Survivor.cpp
+  #include "Survivor.h"
+  using namespace std;
+  
+  // Initialization list style
+  Survivor::Survivor ():
+      m_name("Rick Grimes"),
+      m_infected(false),
+      m_health(100),
+      m_gun(Weapon("Beretta", 30)) {}
+  
+  string Survivor::getName () {return m_name;}
+  bool Survivor::isInfected () {return m_infected;}
+  int Survivor::getHealth () {return m_health;}
+  Weapon Survivor::getWeapon () {return m_gun;}
+  
+  
+</pre>
+              </div>
+              <p>Hmm... what was missing here?</p>
+              <p>You're so smart... we have a data member of the Weapon class that our compiler doesn't know about any more!</p>
+              <p>Let's make split our Weapon class into a header and .cpp and see how they all fit together...</p>
+              <div class='col-md-6'>
+<pre class='prettyprint'>
+  // Weapon.h
+  #include &lt;string&gt;
+  
+  class Weapon {
+      private:
+          std::string m_name;
+          int m_ammo;
+      
+      public:
+          Weapon ();
+          Weapon (std::string name, int ammo);
+          std::string getName ();
+          int getAmmo ();
+  };
+</pre>
+              </div>
+              <div class='col-md-6'>
+<pre class='prettyprint'>
+  // Weapon.cpp
+  #include "Weapon.h"
+  using namespace std;
+  
+  Weapon::Weapon ():
+      m_name("Colt Python"), m_ammo(6) {}
+  
+  Weapon::Weapon (string name, int ammo):
+      m_name(name), m_ammo(ammo) {}
+  
+  string Weapon::getName () {return m_name;}
+  int Weapon::getAmmo () {return m_ammo;}
+  
+  
+</pre>
+              </div>
+              <p>Now all I have to do is add the Weapon header to my Survivor header and I'm good to go!</p>
+              <p>I could even execute some test code with a main function in a new file:</p>
+              <div class='col-md-6'>
+<pre class='prettyprint'>
+  // Survivor.h
+  #include &lt;string&gt;
+  #include "Weapon.h" // Added!
+  
+  class Survivor {
+      private:
+          std::string m_name;
+          bool m_infected;
+          int m_health;
+          Weapon m_gun;
+  
+      public:
+          Survivor::Survivor();
+          std::string getName ();
+          bool isInfected ();
+          int getHealth ();
+          Weapon getWeapon ();
+  };
+</pre>
+              </div>
+              <div class='col-md-6'>
+<pre class='prettyprint'>
+  // RunIt.cpp
+  #include &lt;iostream&gt;
+  #include "Survivor.h"
+  using namespace std;
+  
+  int main () {
+      Survivor s;
+  
+      cout &lt;&lt; s.getName() &lt;&lt; endl;
+      cout &lt;&lt; s.getWeapon().getName() &lt;&lt; endl;
+  }
+  
+  
+  
+  
+  
+  
+  
+</pre>
+              </div>
+              <p>Notice: I don't have to include the Weapon header or .cpp in my RunIt.cpp because it's already been Linked in the Survivor.h.</p>
+              <p>Neat eh? EH?!</p>
+              <p class='question' name='files-q1'>There's one superfluous inclusion directive in my 5-file package listed above. Can you find it?</p>
+              <p class='answer' name='files-q1'>You don't need to include the string library in Survivor.h any more because it's been included in Weapon.h, which is included by Survivor.h :D</p>
+              <br/>
+              <h3>Summary</h3>
+              <ul class='indent-1'>
+                <li><p>Header files used to abstract common components and declarations from the meat of the source and are handy for organizing large projects.</p></li>
+                <li><p>Use header files for class and function declarations, and .cpp files for their implementations and uses.</p></li>
+                <li><p>
+                  Your header files should include whatever other files they're dependent upon, that way your .cpps that use the header files don't have to worry about including more than one for
+                  a single dependency.
+                </p></li>
+              </ul>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='includes' class='scrollspy-element' scrollspy-title='Inclusion Tricks'></div>
+            <h1>Inclusion Tips &amp; Tricks</h1>
+            <div>
+              <p>Our example so far has had pretty tame and dull uses of the inclusion directive, and a straightforward dependence hierarchy.</p>
+              <p>LET'S RUIN EVERYTHING.</p>
+              <p>Say I wanted to add an owner data member to my weapon class that is a pointer to a Survivor, as follows:</p>
+<pre class='prettyprint'>
+  // Weapon.h
+  #include &lt;string&gt;
+  
+  class Weapon {
+      private:
+          std::string m_name;
+          int m_ammo;
+          Survivor* m_owner;
+      
+      public:
+          Weapon ();
+          Weapon (std::string name, int ammo);
+          std::string getName ();
+          int getAmmo ();
+  };
+</pre>
+              <p>Am I good? Will that compile?</p>
+              <p>No! Everything's wrong! Our compiler doesn't know what a Survivor is in our Weapon.h class specification.</p>
+              <p>&quot;Well,&quot; you might remark, &quot;Fine then, I'll just include the Survivor header and everything will be fine!&quot;</p>
+              <p class='debug'>Will the following code compile?</p>
+<pre class='prettyprint'>
+  // Weapon.h
+  #include &lt;string&gt;
+  #include "Survivor.h"
+  
+  class Weapon {
+      private:
+          std::string m_name;
+          int m_ammo;
+          Survivor* m_owner;
+      
+      public:
+          Weapon ();
+          Weapon (std::string name, int ammo);
+          std::string getName ();
+          int getAmmo ();
+  };
+</pre>
+              <p>Aieee! No, we have what's called a circular dependency because Survivor.h also includes Weapon.h:</p>
+              <p class='definition'>
+                A <strong>circular dependency</strong> exists when we have two or more class definitions that each need something from the other. When we try to include one inside of the other, 
+                it creates an infinite loop attempting to resolve the other class!
+              </p>
+              <p>So, we use a little trick...</p>
+              <p class='toolkit'>
+                A <strong>forward declaration</strong> can be used to tell the compiler that a certain class exists, even though we do not fully specify its data members, public interface, 
+                or full implementation in line with the forward declaration. 
+              </p>
+              <p>So I can tell the compiler that class Survivor exists (and that I promise to give it meaning later, thanks to the Linker!), without providing the whole class definition on the spot, as follows:</p>
+<pre class='prettyprint'>
+  #include &lt;string&gt;
+  
+  // Forward declaration!
+  class Survivor;
+  
+  class Weapon {
+      private:
+          std::string m_name;
+          int m_ammo;
+          Survivor* m_owner;
+      
+      public:
+          Weapon ();
+          Weapon (std::string name, int ammo);
+          std::string getName ();
+          int getAmmo ();
+  };
+</pre>
+              <p>Now, my compiler trusts me that there exists some Survivor class out there while resolving the circular dependency.</p>
+              <p>A warning about forward declarations:</p>
+              <div class='debug'>
+                <ul class='indent-1'>
+                  <li><p>
+                    You cannot specify an incomplete type (like above) to resolve a circular dependency when the data member needing resolution is an object, rather than a pointer to an object, 
+                    of the desired class.
+                  </p></li>
+                  <li><p>
+                    If you use a forward declaration with an incomplete type (like above), you cannot reference any of the pointer's public interface elements until the Linker has resolved 
+                    that other class as well. Typically, this is not an issue if you separate your code into header and .cpp files.
+                  </p></li>
+                </ul>
+              </div>
+              <br/>
+              
+              <h3>Include Guards</h3>
+              <p>Finally, let's talk about a useful and common practice with header files: include guards.</p>
+              <p>
+                In large projects with a ton of dependencies flying back and forth trying to be resolved by the compiler, it could be easy to lose track of what you've already included and what 
+                you still need to include.
+              </p>
+              <p>
+                To this end, we have include guards to make sure we avoid the multiple-definition error, which occurs when we accidentally include something twice that attempts to redefine 
+                a previously defined identifier.
+              </p>
+              <p class='toolkit'>
+                The <strong>include guard</strong> directive prevents the multiple-definition error by *only* performing an inclusion if it hasn't already been included. The method for doing this 
+                is to say, &quot;If I haven't set a flag yet saying that I've included this, then set that flag and include this.&quot;
+              </p>
+              <div class='toolkit'>
+                <p>The syntax for an include guard is as follows:</p><br/>
+<pre class='prettyprint'>
+  // If FLAG_NAME is not defined...
+  #ifndef FLAG_NAME
+  
+  // ...then define it...
+  #define FLAG_NAME
+  ...
+  // Perform the necessary inclusions
+  // and source body definitions here
+  ...
+  
+  // ...up until you see the endif
+  #endif
+</pre>
+              </div>
+              <p>Let's add include guards to our example headers:</p>
+              <div class='col-md-6'>
+<pre class='prettyprint'>
+  // Weapon.h
+  #ifndef WEAPON_INCLUDE
+  #define WEAPON_INCLUDE
+  
+  #include &lt;string&gt;
+  
+  // Forward declaration!
+  class Survivor;
+  
+  class Weapon {
+      private:
+          std::string m_name;
+          int m_ammo;
+          Survivor* m_owner;
+      
+      public:
+          Weapon ();
+          Weapon (std::string name, int ammo);
+          std::string getName ();
+          int getAmmo ();
+  };
+  
+  #endif
+</pre>
+              </div>
+              <div class='col-md-6'>
+<pre class='prettyprint'>
+  // Survivor.h
+  #ifndef SURVIVOR_INCLUDE
+  #define SURVIVOR_INCLUDE
+  
+  #include "Weapon.h"
+  
+  class Survivor {
+      private:
+          std::string m_name;
+          bool m_infected;
+          int m_health;
+          Weapon m_gun;
+  
+      public:
+          Survivor::Survivor();
+          std::string getName ();
+          bool isInfected ();
+          int getHealth ();
+          Weapon getWeapon ();
+  };
+  
+  #endif
+  
+</pre>
+              </div>
+              <p>Cool... now if, by some accident I included one of my headers twice on accident, I protect myself from having to perform relentless book-keeping.</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='faq' class='scrollspy-element' scrollspy-title='FAQ'></div>
+            <h1>Inclusion FAQ</h1>
+            <div>
+              <p>I wrote a couple things down that I thought I should address but <span class='strike'>it's Saturday and I'm lazy</span> including examples might confound good practice so:</p>
+              <p><strong>What if I put a non-inline function implementation into a header file. Will it compile?</strong></p>
+              <p>(Don't worry about what a non-inline function means yet--just think of the function definitions we've learned thus far)</p>
+              <p>
+                There are a couple things wrong with that: (1) you generally want to separate your implementations into .cpp files, and (2) if you try to include that header file twice, you'll get a 
+                multiple-definition error for implementing that function twice. tl;dr: don't do it until we've learned about the inline keyword.
+              </p>
+              <br/>
+              <p><strong>Can I put global constants in header files? Could there be a multiple-definition problem here?</strong></p>
+              <p>You might run into problems with non-primitive global constants, but primitive constants are OK.</p>
+              <br/>
+              <p><strong>With all of these different files, how do I know what runs when I run my program?</strong></p>
+              <p>Remember that the main function is special--it is what gets executed at runtime, regardless of what file it is in, as long as it's part of the compiled project.</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='hw' class='scrollspy-element' scrollspy-title='Project 1'></div>
+            <h1>Project 1 Tips</h1>
+            <div>
+              <p>A couple things to look out for on Project 1 that may doom you:</p>
+              <p class='debug'>Although your code may still work, superfluous include directives may cost you points! Make sure that you include only what is necessary to include in each header.</p>
+              <p class='debug'>Remember to test compilation under multiple compilers!</p>
+              <p class='debug'>Are capital letters contiguous is every character coding schema? Make sure to account for this...</p>
+              <p class='debug'>Include guards!</p>
+              <p class='debug'>Comments!</p>
+              <p>Good luck!</p>
+            </div>
+            <hr/>
+            
+            
+            <a class='btn btn-default pull-right hidden-print' href='javascript:window.print();'>
+              <span class='glyphicon glyphicon-print'></span>
+              &nbsp; PDF / Print
+            </a>
+            
+          </div>
+          <!-- END PRESENTATION CONTENT -->
+          
+          <!-- MATERIALS FROM CLASS: -->
+          
+            <!-- TODO: Header files -->
+              <!-- TODO: What if I have two header files with the same definition? -->
+              <!-- TODO: What if I try to include something twice on accident? -->
+                <!-- TODO: Define and endif declarations to make sure that I don't unnecessarily re-include -->
+                <!-- TODO: ifdef and endif aka "include guards" -->
+                  <!-- TODO: EVERY header should have include guards -->
+                  
+            <!-- TODO: Homework Help -->
+              <!-- TODO: NOTE: although it may work, you may NOT include any superfluous dependencies -->
+              <!-- TODO: NOTE: are letters *always* contiguous in encoding schemas? -->
+            
+        </div>
+      </div>
+      <!-- END MAIN CONTENT -->
+      
+      
+    </div>
+    <!-- END WRAPPER -->
+    
+    <!-- BEGIN FOOTER -->
+    <div id="footer">
+      <div class="container">
+        <div class="col-md-12 text-center">
+          
+        </div>
+      </div>
+    </div>
+    <!-- END FOOTER -->
+    
+  </body>
+</html>

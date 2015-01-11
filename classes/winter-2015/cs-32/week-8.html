@@ -1,0 +1,887 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Andrew Forney - UCLA CS</title>
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/magic-bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/main.css" rel="stylesheet" type="text/css">
+    <script src="../../../js/lib/jquery-2.0.3.min.js"></script>
+    <script src="../../../js/lib/bootstrap.min.js"></script>
+    <script src="../../../js/lib/expanding.js"></script>
+    <script src="../../../js/lib/chart.min.js"></script>
+    <script src="../../../js/display/general/general-display.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+  </head>
+  
+  <body data-spy="scroll" data-target="#scrollspy">
+    
+    <!-- BEGIN WRAP -->
+    <div id="wrap">
+      
+      <!-- BEGIN NAVIGATION -->
+      <nav class='navbar navbar-default' role='navigation'>
+        <div class='nav-accent'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-12'>
+              <div class='navbar-header'>
+                <button class='navbar-toggle' type='button' data-toggle='collapse' data-target='.navbar-main-collapse'>
+                  <span class='sr-only'>Toggle Navigation</span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                </button>
+                <a class='navbar-brand' href='/~forns/'>
+                  <span id='brand-text'>
+                    Andrew Forney
+                  </span>
+                </a>
+              </div>
+              
+              <div id='nav-main' class='collapse navbar-collapse navbar-main-collapse'>
+                <ul class='nav navbar-nav navbar-right'>
+                  
+                  <li>
+                    <a href='/~forns/about.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-user'></span>
+                      </div>
+                      <p class='text-center'>About</p>
+                    </a>
+                  </li>
+                  
+                  <li class='active'>
+                    <a href='/~forns/classes.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-book'></span>
+                      </div>
+                      <p class='text-center'>Classes</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/contact.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-comment'></span>
+                      </div>
+                      <p class='text-center'>Contact</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/publications.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-file'></span>
+                      </div>
+                      <p class='text-center'>Publications</p>
+                    </a>
+                  </li>
+                  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <!-- END NAVIGATION -->
+      
+      <!-- BEGIN MAIN CONTENT -->
+      <div id="main-content" class="container">
+        <div class="row">
+          
+          <!-- BEGIN SCROLLSPY -->
+          <div class='col-md-2 hidden-sm hidden-xs'>
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+              <ul id='scrollspy' class="nav bs-sidenav">
+              </ul>
+            </div>
+          </div>
+          <!-- END SCROLLSPY -->
+          
+          <!-- BEGIN PRESENTATION CONTENT -->
+          <div class='col-md-10 presentation-content' role='main'>
+            
+            <ol class="breadcrumb hidden-print">
+              <li><a href="../../../classes.html">Classes</a></li>
+              <li><a href="./cs-32.html">Winter14 CS32</a></li>
+              <li class="active">Week 8</li>
+            </ol>
+            
+            
+            <div id='review' class='scrollspy-element' scrollspy-title='Review'></div>
+            <h1>Questions from Last Week</h1>
+            <div>
+              <p>HELP! Project 3 is due tomorrow! Why am I even at discussion / reading these notes?!</p>
+              <p><strong>Q: Whenever I try to delete an Actor, everything goes to hell... why?!</strong></p>
+              <p>You should check to make sure you're not committing any of the following offenses:</p>
+              <ul class='indent-1'>
+                <li><p>
+                  Your <code class='prettyprint'>getWorld()</code> function isn't returning a vector / list of Actors by reference, but is instead returning by value, meaning that your modifications
+                  to the copy are not making it to the one in your StudentWorld.
+                </p></li>
+                <li><p>You're successfully deleting an Actor in your vector / list but forgetting to update the iterator appropriately.</p></li>
+                <li><p>You're successfully deleting an Actor but attempting to delete it a second time later in some other check for Actors being dead.</p></li>
+              </ul>
+              <br/>
+              <p><strong>I don't know where to start with the ComplexZumi's pathfinding... any tips?</strong></p>
+              <p>You've done a recent homework or two that might involve a useful algorithm...</p>
+              
+              <br/>
+              <h3>Challenge</h3>
+              <p class='example'>What is the time complexity of the following algorithm?</p>
+<pre class='prettyprint'>
+  int main () {
+      int N = 100;
+      list&lt;int&gt; s;
+      for (int k = 1; k &lt;= N; k++) {
+          s.push_back(10*k);
+      }
+  
+      vector&lt;int&gt; t;
+      for (list&lt;int&gt;::iterator p = s.begin(); p != s.end(); p = s.erase(p)) {
+          t.insert(t.begin(), *p);
+      }
+  }
+</pre>
+              <p>Let's provide a solution to this now...</p>
+            </div>
+            <hr/>
+            
+            
+            <div id='sorting' class='scrollspy-element' scrollspy-title='Sorting'></div>
+            <h1>Sorting</h1>
+            <div>
+              <p>Now that we can judge the algorithmic complexity of code, it's time to look at a very common and applicable subject in computing: sorting!</p>
+              <p class='definition'><strong>Sorting</strong> involves the act of ordering items in a collection systematically.</p>
+              <p>The systematic aspect of sorting has been of research interest for computer scientists since the dawn of the digital age, and many algorithms have sprung forth from such endeavors.</p>
+              <p>Just as we know that not all algorithms were created equal, so must we observe that not all sorting methods are equally good for certain sorting tasks.</p>
+              <p>We'll now examine several sorting algorithms, see how they work, what they're good at, and what they're horrible at, all to avoid producing sorting algorithms like the following:</p>
+              <div class='text-center fit-pres'>
+                <a href='http://xkcd.com/1185/' target='_blank'>
+                  <img src='../../../assets/images/winter-2014/cs-32/week-8/sorting-0.PNG' />
+                  <br/>
+                  <small>(credit of course to the great XKCD)</small>
+                </a>
+              </div>
+              
+             <br/>
+             <h3>Quadratic Sorts</h3>
+             <p>The quadratic sorts are those that perform with O(n^2) time complexity... they're not that great, and there's rarely a good reason to use them.</p>
+             <p>Now let's study a couple :)</p>
+             
+             <br/>
+             <h3>Bubble Sort</h3>
+             <p>Perhaps the cliche first-sorting-lesson algorithm, bubble sort operates with the following steps:</p>
+<pre class='prettyprint'>
+  for each item i in the array of n items:
+      for each item j from n to i+1:
+          if the item at a[j] is less than the item at a[j-1]
+              swap those two items
+      stop if you didn't swap any items on this iteration
+</pre>
+              <p>
+                So essentially, just compare two adjacent numbers from the back to the front of the array, arranging the two with the lesser on the left and greater on the right (assuming ascending order),
+                and continue to do so until the smallest numbers have "bubbled" to the front, and the largest have bubbled to the back.
+              </p>
+              <br/>
+              <p class='example'>Use Bubblesort to sort the following list of ints:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-8/sorting-1.PNG' />
+              </div>
+              <p class='question' name='sorting-q1'>Click here for the steps the algorithm would take.</p>
+              <div class='answer' name='sorting-q1'>
+                <div class='text-center fit-pres'>
+                  <img src='../../../assets/images/winter-2014/cs-32/week-8/sorting-2.PNG' />
+                </div>
+              </div>
+              <br/>
+              <p>Now that we've seen how it's done, let's look at how to implement it in code:</p>
+              <p class='example'>Complete the shell for BubbleSort described below:</p>
+<pre class='prettyprint'>
+  // Helper to print out array elements
+  void printIntArr (int arr[], int size) {
+      for (int i = 0; i &lt; size; i++) {
+          cout &lt;&lt; arr[i] &lt;&lt; " ";
+      }
+      cout &lt;&lt; endl;
+  }
+  
+  // Helper function; swaps two array elements via
+  // the input pointers
+  void swapInts (int* i1, int* i2) {
+      int temp = *i1;
+      *i1 = *i2;
+      *i2 = temp;
+  }
+  
+  // Not to be confused with BubleSort, which
+  // just replaces your array elements with lyrics
+  // from Haven't Met You Yet
+  void bubbleSort (int arr[], int size) {
+      // [!] Iterate through each element of the
+      // list
+      for ( ??? ) {
+          // Track if a swap has been made
+          bool swapped = false;
+          // [!] Iterate through all elements of the list
+          // starting at the end element and up to the
+          // i + 1 element
+          for ( ??? ) {
+              // [!] Swap if the two currently adjacent
+              // in the 2nd loop iteration are out of order
+              if ( ??? ) {
+                  swapInts( ??? );
+                  // Mark that you've swapped
+                  swapped = true;
+              }
+          }
+          // [!] Return if you made no swaps
+          if (!swapped) {return;}
+      }
+  }
+  
+  int main () {
+      int i[] = {0, -5, 4, 2, -2, 0, 1, 6, 9, 3};
+      bubbleSort(i, 10);
+      printIntArr(i, 10);
+  }
+</pre>
+              <br/>
+              <p class='question' name='sorting-q2'>Bubble sort can &quot;sort&quot; a list in linear time if the list has what property?</p>
+              <p class='answer' name='sorting-q2'>It's already almost sorted :P</p>
+              <p class='question' name='sorting-q3'>What list property will cause BubbleSort the most inconvenience?</p>
+              <p class='answer' name='sorting-q3'>Reversed order of elements.</p>
+              <br/>
+              <p class='definition'>There are some good BubbleSort animations <a href='http://www.sorting-algorithms.com/bubble-sort' target='_blank'>located here</a>.</p>
+              <p>OK nice! Got a simple sort down... here's another one that you should avoid writing on a midterm:</p>
+              <div class='text-center fit-pres'>
+                <a href='http://xkcd.com/1185/' target='_blank'>
+                  <img src='../../../assets/images/winter-2014/cs-32/week-8/sorting-3.PNG' />
+                  <br/>
+                  <small>(credit to XKCD)</small>
+                </a>
+              </div>
+              
+              <br/>
+              <h3>Insertion Sort</h3>
+              <p>The second most cliche sorting algorithm, insertion sort operates with the following steps:</p>
+<pre class='prettyprint'>
+  for each element i in the array, starting with the 2nd:
+      for each element k = i down to k = 0 where arr[k] &lt; arr[k-1]:
+          swap a[k] and a[k-1]
+</pre>
+              <p>So, the idea is that we continue to lock items at the front of the array into their proper place, assuming everything to the left of the current one is sorted already.</p>
+              <p class='example'>Use Insertion Sort to sort the following list of ints:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-8/sorting-1.PNG' />
+              </div>
+              <p class='question' name='sorting-q4'>Click here for the steps the algorithm would take.</p>
+              <div class='answer' name='sorting-q4'>
+                <div class='text-center fit-pres'>
+                  <img src='../../../assets/images/winter-2014/cs-32/week-8/sorting-4.PNG' />
+                  <img src='../../../assets/images/winter-2014/cs-32/week-8/sorting-5.PNG' />
+                </div>
+              </div>
+              <p>(maybe if I don't say anything, they won't notice that the illustration is actually two different images because I couldn't fit it all into one slide...)</p>
+              <p>Any who, let's implement this now; it won't take long!</p>
+              <p class='example'>Implement the insertionSort skeleton begun below.</p>
+<pre class='prettyprint'>
+  void insertionSort (int arr[], int size) {
+      // [!] Iterate through each element of the array
+      // starting with the second
+      for ( ??? ) {
+          // [!] Iterate through the first i elements
+          // of the array, except the first
+          for ( ??? ) {
+              // [!] If the currently examined
+              // element is greater than the one
+              // before it in the list, stop
+              if ( ??? ) {
+                  break;
+              }
+              // [!] Otherwise, swap the two
+              swapInts( ??? );
+          }
+      }
+  }
+</pre>
+              <p class='question' name='sorting-q5'>Insertion sort can &quot;sort&quot; a list in linear time if the list has what property?</p>
+              <p class='answer' name='sorting-q5'>It's already almost sorted... same as BubbleSort, but insertion sort has less overhead</p>
+              <p class='question' name='sorting-q6'>What list property will cause Insertion Sort the most inconvenience?</p>
+              <p class='answer' name='sorting-q6'>Reversed order of elements.</p>
+              <br/>
+              <p class='definition'>There are some good Insertion animations <a href='http://www.sorting-algorithms.com/insertion-sort' target='_blank'>located here</a>.</p>
+              <p>I think that's it for covering quadratic sorts... remember that these have O(n^2) and are generally not preferred on their own in the general case.</p>
+              <p>Let's take a quick review of merge sort, unlike the following half-hearted implementation:</p>
+              <div class='text-center fit-pres'>
+                <a href='http://xkcd.com/1185/' target='_blank'>
+                  <img src='../../../assets/images/winter-2014/cs-32/week-8/sorting-6.PNG' />
+                  <br/>
+                  <small>(credit to XKCD)</small>
+                </a>
+              </div>
+              
+              <h3>Better Sort Algorithms</h3>
+              <p>We can do much better than quadratic sorting time; let's look at some alternatives below:</p>
+              
+              <br/>
+              <h3>Merge Sort</h3>
+              <p>We remember merge sort but let's review:</p>
+<pre class='prettyprint'>
+  void mergeSort (int a[], int b, int e) {
+      if (e - b >= 2) {
+          int mid = (b + e) / 2;
+          
+          // Recursive call on first half of a
+          mergeSort(a, b, mid);
+          // Recursive call on other half of a
+          mergeSort(a, mid, e);
+          
+          // Merge those sorted subpropblems!
+          merge(a, b, mid, e);
+      }
+  }
+  
+  int main () {
+      int arr[] = {4, 3, 1, 2};
+      sort(arr, 0, 4);
+      // arr will now be {1, 2, 3, 4}
+  }
+</pre>
+              <p>Here, the merge function combines the two sublists into a single, ordered sublist.</p>
+              <p>Let's take another look at it in action (gif shamelessly stolen from <a href='http://en.wikipedia.org/wiki/Merge_sort' target='_blank'>Wikipedia</a>):</p>
+              <a href='../../../assets/images/winter-2014/cs-32/week-5/mergesort.gif' target='_blank'>
+                <div class='text-center fit-pres'>
+                  <img src='../../../assets/images/winter-2014/cs-32/week-5/mergesort.gif' />
+                </div>
+              </a>
+              <p class='question' name='sorting-q7'>What is the time complexity of MergeSort?</p>
+              <p class='answer' name='sorting-q7'>
+                O(n*log(n)) because it continuously splits the array into smaller subarrays [O(log(n))], and then merges them [O(n)]
+              </p>
+              <p class='question' name='sorting-q8'>Taking into account its splitting and merging behavior, are there any properties of lists that MergeSort struggles with?</p>
+              <p class='answer' name='sorting-q8'>
+                MergeSort actually handles input of any type pretty much the same; because of the splits down to small, managable sub-arrays, the format of the larger array is not relevant to its performance.
+              </p>
+              <br/>
+              <p class='definition'>There are some good MergeSort animations <a href='http://www.sorting-algorithms.com/merge-sort' target='_blank'>located here</a>.</p>
+              
+              <br/>
+              <h3>Quick Sort</h3>
+              <p>The sort of choice for the discerning programmer, Quick Sort (or some variant of it) is used in many modern sorting applications.</p>
+              <p>It goes something like this:</p>
+<pre class='prettyprint'>
+  Return the current array if 1 element or fewer
+  Randomly choose a pivot value in the array
+  Remove the pivot from the array
+  For each remaining array element:
+      Put those greater than the pivot into an array
+      Put those smaller than the pivot into another
+  // Recursive step on lesser and greater arrays:
+  return concat(quickSort(lesser), pivot, quicksort(greater))
+</pre>
+              <br/>
+              <p>So, we want to, at each call, choose a pivot randomly, divide the numbers less than and greater than the pivot into two piles, then recurse on those and combine back up!</p>
+              <p class='example'>Use QuickSort to sort the following list of ints:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-8/sorting-8.PNG' />
+              </div>
+              <p class='question' name='sorting-q9'>Click here for the steps the algorithm *could* take.</p>
+              <div class='answer' name='sorting-q9'>
+                <div class='text-center fit-pres'>
+                  <img src='../../../assets/images/winter-2014/cs-32/week-8/sorting-9.PNG' />
+                  <img src='../../../assets/images/winter-2014/cs-32/week-8/sorting-10.PNG' />
+                </div>
+              </div>
+              
+              <p>Here's a, perhaps more intuitive, implementation of quicksort that has an increased high space cost but illustrates the point:</p>
+<pre class='prettyprint'>
+  vector&lt;int&gt; quickSort (vector&lt;int&gt; arr) {
+      // Base case: return current array if 1
+      // element or fewer
+      if (arr.size() &lt;= 1) {return arr;}
+  
+      // Randomly choose a pivot
+      int pivotChoice = (rand() % arr.size());
+      int pivot = arr[pivotChoice];
+  
+      // We'll make 3 blank vectors: 1 that holds
+      // all of the numbers less than the pivot,
+      // 1 that holds all of the numbers greater,
+      // and then 1 that just holds the pivot itself
+      // for ease of concatenation
+      vector&lt;int&gt; lesser, greater, pivotHolder;
+      vector&lt;int&gt;::iterator it = arr.begin();
+      pivotHolder.push_back(pivot);
+  
+      // Erase the pivot from the current vector
+      arr.erase(it + pivotChoice);
+  
+      for (int i = 0; i &lt; arr.size(); i++) {
+          // Put remaining elements in their respective
+          // greater or less than piles
+          if (arr[i] &lt; pivot) {
+              lesser.push_back(arr[i]);
+          } else {
+              greater.push_back(arr[i]);
+          }
+      }
+  
+      // Recurse on the lesser and greater vectors,
+      // and then concatenate their results with the
+      // pivot in the center
+      return concatVect(quickSort(lesser), 
+             concatVect(pivotHolder, quickSort(greater)));
+  }
+  
+  int main () {
+      int i[] = {0, 4, 2, 0, 1, 6, 9, 3};
+      vector&lt;int&gt; v(i, i+8);
+      v = quickSort(v);
+      printIntVArr(v);
+  }
+</pre>
+              <br/>
+              <p class='question' name='sorting-q10'>Is QuickSort stable? i.e., is it going to perform equally well every time it runs?</p>
+              <p class='answer' name='sorting-q10'>No! We can get really unlucky with pivot choices and divisions, trending towards O(n^2)</p>
+              <p class='question' name='sorting-q11'>So what is the time complexity of QuickSort?</p>
+              <p class='answer' name='sorting-q11'>The average case is that it hits O(n*log(n)) because of its divide and conquer behavior.</p>
+              <br/>
+              <p>There are a variety of improvements to this QuickSort algorithm that better its performance, including:</p>
+              <ul class='indent-1'>
+                <li><p>Perform a 3-way partitioning</p></li>
+                <li><p>When a sub list is small enough (typically around 9 items) use another sort like insertion sort, then recombine upwards.</p></li>
+              </ul>
+              <p class='debug'>Warning: QuickSort performs best when the elements are randomly distributed; a lack of unique values will actually slow it down!</p>
+              <p class='definition'>There are some good QuickSort animations <a href='http://www.sorting-algorithms.com/quick-sort' target='_blank'>located here</a>.</p>
+              
+              <br/>
+              <p>Now that you're accustomed to QuickSort, this won't be you in a job interview:</p>
+              <div class='text-center fit-pres'>
+                <a href='http://xkcd.com/1185/' target='_blank'>
+                  <img src='../../../assets/images/winter-2014/cs-32/week-8/sorting-7.PNG' />
+                  <br/>
+                  <small>(credit to XKCD)</small>
+                </a>
+              </div>
+              
+              <br/>
+              <h3>Practice</h3>
+              <p>How about a couple of practice problems to round this all out?</p>
+              <p class='example'>The following examples show a starting list of ints, followed by several steps taken by a sorting algorithm. Identify which algorithm(s) are being applied!</p>
+<pre class='prettyprint'>
+  8, 6, 1, 2, 5, 0, 7, 3, 9, 4
+  ====== BEGIN SORTING ======
+  6, 8, 1, 2, 5, 0, 7, 3, 9, 4
+  6, 1, 8, 2, 5, 0, 7, 3, 9, 4
+  1, 6, 8, 2, 5, 0, 7, 3, 9, 4
+  1, 6, 2, 8, 5, 0, 7, 3, 9, 4
+  1, 2, 6, 8, 5, 0, 7, 3, 9, 4
+  1, 2, 6, 8, 5, 0, 7, 3, 9, 4
+  1, 2, 6, 5, 8, 0, 7, 3, 9, 4
+  1, 2, 5, 6, 8, 0, 7, 3, 9, 4
+  1, 2, 5, 6, 8, 0, 7, 3, 9, 4
+  1, 2, 5, 6, 0, 8, 7, 3, 9, 4
+  1, 2, 5, 0, 6, 8, 7, 3, 9, 4
+  1, 2, 0, 5, 6, 8, 7, 3, 9, 4
+  1, 0, 2, 5, 6, 8, 7, 3, 9, 4
+</pre>
+              <br/>
+              <p class='example'>How many *swaps* will BubbleSort make in sorting the following:</p>
+<pre class='prettyprint'>
+  1, 2, 0, 3, 4
+</pre>
+              <br/>
+              <p class='example'>Which sorting algorithm will excel at sorting the following input? Which will degenerate toward quadratic time?</p>
+<pre class='prettyprint'>
+  0, 0, 0, 0, 2, 2, 1, 1, 2, 2, 1, 1, 3, 3, 3, 3, 4, 4, 4, 4
+</pre>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='trees' class='scrollspy-element' scrollspy-title='Tree Basics'></div>
+            <h1>Tree Basics</h1>
+            <div>
+              <p>Hey, remember doubly linked lists?</p>
+              <p>Yeah me neither... well that's OK, here's a refresher:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-3/linkedLists-7.PNG' />
+              </div>
+              <p>Double linked lists consisted of a sequence of nodes with data elements and pointers to the previous and next node in the sequence.</p>
+              <p>Indeed, the concept of a Node is something that Trees and Linked Lists have in common:</p>
+              <p class='definition'>A <strong>Node</strong> is just an object that stores some data as well as a means of accessing other Nodes in the data structure.</p>
+              <p>The &quot;means of accessing other Nodes&quot; from a Node in a Linked List was to traverse it via prev and next; for Trees, it's only slightly more complicated.</p>
+              <p>Trees (in the general definition) possess Nodes with any number of &quot;children,&quot; which are pointers to the next Node in the Tree.</p>
+              <p>Let's go over some definitions, see a Tree, and then run some code!</p>
+              <p class='definition'>
+                A <strong>Tree</strong> is yet another abstract data type consisting of data nodes arranged hierarchically, with a root node possessing some number of pointers (edges) to other children nodes,
+                who in turn have their own children, etc.
+              </p>
+              <p class='definition'>There are two primary constraints for a Tree to be a... Tree: (1) no node's pointer (edge) points to the root, and (2) no two pointers point to the same node.</p>
+              <p>To formalize some of those definitions:</p>
+              <p class='definition'>The <strong>root</strong> of a tree is a single node that has no inbound edges.</p>
+              <p class='definition'>A <strong>leaf</strong> node is one that has no outbound edges.</p>
+              <p class='definition'>An <strong>internal node</strong> has both inbound and outbound edges.</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-8/trees-0.PNG' />
+              </div>
+              <br/>
+              <p>A tree can have duplicate values in its data nodes.</p>
+              <p>There are also a variety of relationships we can define between nodes:</p>
+              <p class='definition'>An edge extends from a <strong>parent</strong> to a <strong>child</strong> with the arrow pointing to the child.</p>
+              <p class='definition'>An <strong>path</strong> is any set of connected, directed edges.</p>
+              <p class='definition'>A <strong>descendant</strong> of a node A is any node B with a directed path from A to B.</p>
+              <p class='definition'>An <strong>ancestor</strong> of a node B is any node A with a directed path from A to B.</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-8/trees-1.PNG' />
+              </div>
+              <br/>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-8/trees-2.PNG' />
+              </div>
+              <br/>
+              <p class='definition'>The <strong>depth</strong> of a node is equal to the number of edges along the path that separate it and the root.</p>
+              <p class='definition'>The <strong>tree-depth</strong> a given tree is equal to maximum depth of any node in the tree.</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-8/trees-3.PNG' />
+              </div>
+              <br/>
+              <p>Well, those are the tree basics! Let's look at some code now...</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='treeAlgos' class='scrollspy-element' scrollspy-title='Tree Algorithms'></div>
+            <h1>Tree Algorithms</h1>
+            <div>
+              <p>I hope you liked recursion because trees were built for it! (or from it? any who...)</p>
+              <p>Let's start off with how we might construct a Node class:</p>
+<pre class='prettyprint'>
+  struct TreeNode {
+      int data;
+      TreeNode(int d) {data = d;}
+      void addChild (TreeNode* c) {
+          this-&gt;children.push_back(c);
+      }
+      vector&lt;TreeNode*&gt; children;
+  };
+</pre>
+              <p>Here, we have our TreeNode with an int data member and then an STL vector with TreeNode pointers to all of that TreeNode's children.</p>
+              <p>Let's reformat our tree from before with numerical values.</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-8/trees-4.PNG' />
+              </div>
+              <br/>
+              <p>Now, let's say I wanted to create this tree using my new TreeNode class... since my numbers are conveniently in sequence, I can make a vector with them and then create the edges!</p>
+<pre class='prettyprint'>
+  int main () {
+      vector&lt;TreeNode&gt; tree;
+      int nodes = 13;
+  
+      // Create the TreeNodes in the tree
+      for (int i = 0; i &lt; 13; i++) {
+          tree.push_back(TreeNode(i));
+      }
+  
+      // Connect the nodes with edges!
+      // (obviously there's a better way to do
+      // this that we'll discuss next time)
+      // [!] Left branch
+      tree[0].addChild(&amp;tree[7]);
+      tree[7].addChild(&amp;tree[2]);
+      tree[7].addChild(&amp;tree[10]);
+      tree[10].addChild(&amp;tree[5]);
+      tree[5].addChild(&amp;tree[4]);
+  
+      // [!] Middle branch
+      tree[0].addChild(&amp;tree[6]);
+      tree[6].addChild(&amp;tree[3]);
+      tree[3].addChild(&amp;tree[8]);
+      tree[3].addChild(&amp;tree[11]);
+  
+      // [!] Right branch
+      tree[0].addChild(&amp;tree[12]);
+      tree[12].addChild(&amp;tree[1]);
+      tree[1].addChild(&amp;tree[9]);
+  
+      // ...
+  }
+</pre>
+              <br/>
+              <p>Now, before we dive head-first into Tree algorithms, we should always be on the lookout for these 4 test cases:</p>
+              <ul class='indent-1'>
+                <li><p>Does my algorithm work (read: not break) for an input nullptr?</p></li>
+                <li><p>Does my algorithm work for an input root node?</p></li>
+                <li><p>Does my algorithm work for an input interior node?</p></li>
+                <li><p>Does my algorithm work for an input leaf node?</p></li>
+              </ul>
+              <p>Let's start off light with the following problem... which might look a little familiar:</p>
+<pre class='prettyprint'>
+  // Returns the maximum data node value in the
+  // tree; expect no input nullptr
+  int maxInTree (TreeNode* n) {
+      // Set the current max to the input node's
+      // data member
+      int currentMax = n-&gt;data;
+  
+      // Find the max of each child's subtree
+      for (int i = 0; i &lt; n-&gt;children.size(); i++) {
+          // Set currentMax equal to the max of
+          // child i's subtree
+          currentMax = max(currentMax, maxInTree(n-&gt;children[i]));
+      }
+      return currentMax;
+  }
+</pre>
+              <br/>
+              <p>Not too bad... let's try one ourselves:</p>
+              <p class='example'>Modify your maxInTree function to implement treeDepth, a function that determines the tree depth of the input tree (TreeNode pointer).</p>
+<pre class='prettyprint'>
+  int treeDepth (TreeNode* n) {
+      int currentMax = 0;
+      for (int i = 0; i &lt; n-&gt;children.size(); i++) {
+          currentMax = ??? ;
+      }
+      return currentMax;
+  }
+</pre>
+              <br/>
+              <p class='example'>Implement the nodesAtLevel function, which returns the number of nodes located at the depth specified.</p>
+<pre class='prettyprint'>
+  int nodesAtLevel (TreeNode* n, int level) {
+      // Base case! Return when...
+      if ( ??? ) {
+          return ???;
+      }
+  
+      // Iterate through every child
+      int nodes = 0;
+      for (int i = 0; i &lt; n-&gt;children.size(); i++) {
+          // [!] Add the number of nodes at the next level
+          // if that's our target level! (hint: don't
+          // need to use a conditional due to our base case)
+          nodes += ???;
+      }
+      return nodes;
+  }
+</pre>
+              <br/>
+              <p>Cool! How about a question to round things off?</p>
+              <p class='question' name='trees-q0'>Are all doubly linked lists also trees?</p>
+              <p class='answer' name='trees-q0'>No! Linked lists allow for the possibility of cycles.</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='naryTrees' class='scrollspy-element' scrollspy-title='N-ary Trees'></div>
+            <h1>N-ary Trees</h1>
+            <div>
+              <p>Whereas with the general definition of a tree allowed us to specify an arbitrary number of children for any node, there may be some benefits in restricting that number...</p>
+              <p class='definition'>An <strong>n-ary tree</strong> is a tree in which each node can have at most n children.</p>
+              <p>Thus, a binary tree has nodes with at most 2 children, a trinary tree has nodes with at most 3 children... etc.</p>
+              <p>For the purposes of this discussion, we'll be examining binary trees.</p>
+              <p>Hey! Here comes one now!</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-8/trees-5.PNG' />
+              </div>
+              <br/>
+              <p>&quot;Hey... isn't that just the last example but with the right branch gone and a couple of numbers swi--&quot;</p>
+              <p>It's 3:00am! Sue me!</p>
+              <p>Now, the Node structure that we define for binary trees might look a tiny bit different, just by convention because we like to define &quot;left&quot; and &quot;right&quot; children.</p>
+<pre class='prettyprint'>
+  struct BinTreeNode {
+      int data;
+      BinTreeNode* left;
+      BinTreeNode* right;
+      BinTreeNode(int d) {
+          data = d;
+          left = nullptr;
+          right = nullptr;
+      }
+  };
+</pre>
+              <br/>
+              <p>Again representing our example from above:</p>
+<pre class='prettyprint'>
+  int main () {
+      vector&lt;BinTreeNode&gt; tree;
+      int nodes = 10;
+  
+      // Create the TreeNodes in the tree
+      for (int i = 0; i &lt; nodes; i++) {
+          tree.push_back(BinTreeNode(i));
+      }
+  
+      // Connect the nodes with edges!
+      // (obviously there's a better way to do
+      // this that we'll discuss next time)
+      // [!] Left branch
+      tree[0].left = &tree[1];
+      tree[1].left = &tree[2];
+      tree[1].right = &tree[9];
+      tree[9].left = &tree[5];
+      tree[5].right = &tree[4];
+  
+      // [!] Right branch
+      tree[0].right = &tree[6];
+      tree[6].left = &tree[3];
+      tree[3].left = &tree[8];
+      tree[3].right = &tree[7];
+  
+      // ...
+  }
+</pre>
+              <p>Let's look at some neat properties of binary trees.</p>
+              
+              <br/>
+              <h3>Tree Traversal</h3>
+              <p class='definition'>Tree traversal determines the order in which we visit each node in a tree, starting at some node (usually the root).</p>
+              <p>Traversal strategies are defined recursively, in terms of the current node, its left child, and its right child.</p>
+              <p>There are three primary traversal strategies under the heading of &quot;Depth first&quot; which we'll talk about later:</p>
+              
+              <br/>
+              <h3>Pre-order Traversal</h3>
+              <p>The preorder traversal strategy follows these steps:</p>
+              <ol class='indent-1'>
+                <li><p>Visit the current node (base case)</p></li>
+                <li><p>Visit the left subtree (recursive case)</p></li>
+                <li><p>Visit the right subtree (recursive case)</p></li>
+              </ol>
+              <p>The definition of &quot;visit&quot; will depend on your application. For the moment, let's consider our application to be simply to print out the data at each Node in a given order.</p>
+<pre class='prettyprint'>
+  // Prints the data in each node using
+  // the preorder traversal strategy
+  void preorderPrint (BinTreeNode* n) {
+      if (n == nullptr) {return;}
+      cout &lt;&lt; n-&gt;data &lt;&lt; endl;
+      preorderPrint(n-&gt;left);
+      preorderPrint(n-&gt;right);
+  }
+</pre>
+              <p>Preorder traversal looks like this:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-8/trees-6.PNG' />
+              </div>
+              <p>So, here, preorder traversal prints out: 0, 1, 2, 9, 5, 4, 6, 3, 8, 7</p>
+              
+              <br/>
+              <h3>Post-order Traversal</h3>
+              <p>The postorder traversal strategy follows these steps:</p>
+              <ol class='indent-1'>
+                <li><p>Visit the left subtree (recursive case)</p></li>
+                <li><p>Visit the right subtree (recursive case)</p></li>
+                <li><p>Visit the current node (base case)</p></li>
+              </ol>
+              <p class='debug'>NOTE: This means, even though we might &quot;pass through&quot; a node, we don't print it until its left and right subtrees have been processed!</p>
+              <p>Here is the postorderPrint function:</p>
+<pre class='prettyprint'>
+  void postorderPrint (BinTreeNode* n) {
+      if (n == nullptr) {return;}
+      postorderPrint(n-&gt;left);
+      postorderPrint(n-&gt;right);
+      cout &lt;&lt; n-&gt;data &lt;&lt; endl;
+  }
+</pre>
+              <p>So, what will the postorder traversal of our tree print out?</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-8/trees-5.PNG' />
+              </div>
+              <br/>
+              <p class='question' name='trees-q1'>The postorder traversal prints...</p>
+              <p class='answer' name='trees-q1'>2, 4, 5, 9, 1, 8, 7, 3, 6, 0</p>
+              
+              <br/>
+              <h3>In-order Traversal</h3>
+              <p>The inorder traversal strategy follows these steps:</p>
+              <ol class='indent-1'>
+                <li><p>Visit the left subtree (recursive case)</p></li>
+                <li><p>Visit the current node (base case)</p></li>
+                <li><p>Visit the right subtree (recursive case)</p></li>
+              </ol>
+              <p>For completion, here's that in code form:</p>
+<pre class='prettyprint'>
+  void inorderPrint (BinTreeNode* n) {
+      if (n == nullptr) {return;}
+      inorderPrint(n-&gt;left);
+      cout &lt;&lt; n-&gt;data &lt;&lt; endl;
+      inorderPrint(n-&gt;right);
+  }
+</pre>
+              <br/>
+              <h3>Applications for Binary Trees</h3>
+              <p>We've already discussed one of the most prevalent applications for binary trees: binary search.</p>
+              <p class='definition'>
+                A <strong>binary search tree</strong> is a binary tree in which all elements in the left subtree of a node are less than the data member of that node, and all elements of the right
+                subtree are greater than the data member of that node.
+              </p>
+              <p>Some other constraints for binary search trees is that there must be no duplicate nodes, and the left and right subtrees of each node must also be a binary search tree.</p>
+              <p>Let's revise our ongoing example:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-8/trees-7.PNG' />
+              </div>
+              <p>We observe that, for each node, the left subtree contains data elements strictly less than the data element of the subtree root, and vice versa for the right subtrees.</p>
+              <p>Now, binary search becomes a trivial algorithm:</p>
+<pre class='prettyprint'>
+  bool binarySearch (BinTreeNode* n, int query) {
+      if (n == nullptr) {return false;}
+      if (n-&gt;data == query) {return true;}
+      else if (query &lt; n-&gt;data) {
+          return binarySearch(n-&gt;left, query);
+      } else {
+        return binarySearch(n-&gt;right, query);
+      }
+  }
+</pre>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='practice' class='scrollspy-element' scrollspy-title='Practice'></div>
+            <h1>Practice Problems</h1>
+            <div>
+              <p class='example'>Provide two binary trees that could elicit the preorder traversal print out: <code class='prettyprint'>5, 3, 1, 2, 0</code></p>
+              <p class='question' name='practice-q0'>Is it possible for a binary search tree to have the postorder traversal print out of: <code class='prettyprint'>12, 18, 14, 21, 20, 17</code></p>
+              <p class='answer' name='practice-q0'>
+                No! The 18 wedged between the 12 and 14 implies that a number greater than the root (which we know must be 17 because it was printed last) existed on the side intended to be less than
+                the root.
+              </p>
+            </div>
+            <hr/>
+              
+            <a class='btn btn-default pull-right hidden-print' href='javascript:window.print();'>
+              <span class='glyphicon glyphicon-print'></span>
+              &nbsp; PDF / Print
+            </a>
+            
+          </div>
+          <!-- END PRESENTATION CONTENT -->
+          
+          <!-- MATERIALS FROM CLASS: -->
+          
+          
+        </div>
+      </div>
+      <!-- END MAIN CONTENT -->
+      
+    </div>
+    <!-- END WRAPPER -->
+    
+    <!-- BEGIN FOOTER -->
+    <div id="footer">
+      <div class="container">
+        <div class="col-md-12 text-center">
+          
+        </div>
+      </div>
+    </div>
+    <!-- END FOOTER -->
+    
+  </body>
+</html>

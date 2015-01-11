@@ -1,0 +1,1068 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Andrew Forney - UCLA CS</title>
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/magic-bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/main.css" rel="stylesheet" type="text/css">
+    <script src="../../../js/lib/jquery-2.0.3.min.js"></script>
+    <script src="../../../js/lib/bootstrap.min.js"></script>
+    <script src="../../../js/lib/expanding.js"></script>
+    <script src="../../../js/display/general/general-display.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+  </head>
+  
+  <body data-spy="scroll" data-target="#scrollspy">
+    
+    <!-- BEGIN WRAP -->
+    <div id="wrap">
+      
+      <!-- BEGIN NAVIGATION -->
+      <nav class='navbar navbar-default' role='navigation'>
+        <div class='nav-accent'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-12'>
+              <div class='navbar-header'>
+                <button class='navbar-toggle' type='button' data-toggle='collapse' data-target='.navbar-main-collapse'>
+                  <span class='sr-only'>Toggle Navigation</span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                </button>
+                <a class='navbar-brand' href='/~forns/'>
+                  <span id='brand-text'>
+                    Andrew Forney
+                  </span>
+                </a>
+              </div>
+              
+              <div id='nav-main' class='collapse navbar-collapse navbar-main-collapse'>
+                <ul class='nav navbar-nav navbar-right'>
+                  
+                  <li>
+                    <a href='/~forns/about.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-user'></span>
+                      </div>
+                      <p class='text-center'>About</p>
+                    </a>
+                  </li>
+                  
+                  <li class='active'>
+                    <a href='/~forns/classes.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-book'></span>
+                      </div>
+                      <p class='text-center'>Classes</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/contact.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-comment'></span>
+                      </div>
+                      <p class='text-center'>Contact</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/publications.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-file'></span>
+                      </div>
+                      <p class='text-center'>Publications</p>
+                    </a>
+                  </li>
+                  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <!-- END NAVIGATION -->
+      
+      <!-- BEGIN MAIN CONTENT -->
+      <div id="main-content" class="container">
+        <div class="row">
+          
+          <!-- BEGIN SCROLLSPY -->
+          <div class='col-md-2 hidden-sm hidden-xs'>
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+              <ul id='scrollspy' class="nav bs-sidenav">
+              </ul>
+            </div>
+          </div>
+          <!-- END SCROLLSPY -->
+          
+          <!-- BEGIN PRESENTATION CONTENT -->
+          <div class='col-md-10 presentation-content' role='main'>
+            
+            <ol class="breadcrumb hidden-print">
+              <li><a href="../../../classes.html">Classes</a></li>
+              <li><a href="./cs-32.html">Winter14 CS32</a></li>
+              <li class="active">Week 3</li>
+            </ol>
+            
+            <div id='intro' class='scrollspy-element' scrollspy-title='Welcome Back'></div>
+            <h1>Welcome Back to the Discussion!</h1>
+            <div>
+              <p>First off, welcome back to the discussion section!</p>
+              <p>Just a few notes before we start:</p>
+              <ul class='indent-1'>
+                <li><p>
+                  New note feature on the site (that I've barely tested)! Type <code class='prettyprint'>SHIFT + N</code> and click on any paragraph to add an editable notes section to it. 
+                  Use it, or don't! If you do, tell me if you have any feedback.
+                </p></li>
+                <li><p>Discussion section is meant to be just that: a discussion. Feel free to interrupt at any time with questions or comments (especially if you see a mistake).</p></li>
+                <li><p>If, at any time during the week, you have topics you'd like me to cover during discussion, please email me!</p></li>
+                <li><p>If, at any time during discussion, I call on you and don't know your name, please tell it to me!</p></li>
+              </ul>
+              <br/>
+              <p>That said, here's my agenda for today, which focuses on Linked Lists for Project 2 and the Midterm:</p>
+              <ul class='indent-1'>
+                <li><p>Review of some midterm-relevant material</p></li>
+                <li><p>Quick review of Linked List basics</p></li>
+                <li><p>Looking at Linked Lists in a slightly different data structure</p></li>
+                <li><p>A tour of Doubly Linked Lists, and overview of their common operations</p></li>
+                <li><p>Debugger and Testing</p></li>
+                <li><p>Homework and Midterm Advice</p></li>
+              </ul>
+              <br/>
+              <p>What an unusually full plate for our first lecture! I hope you're hungry...</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='review' class='scrollspy-element' scrollspy-title='Resource Management'></div>
+            <h1>Review of Resource Management</h1>
+            <div>
+              <p>We should take a quick look back at where different variables live in memory, because it's particularly important for constructing and destruct...ing objects.</p>
+              <p>For starters, say I make variable declarations like the following:</p>
+<pre class='prettyprint'>
+  string theory = &quot;woah&quot;;
+  int* i;
+</pre>
+              <p class='question' name='resource-q0'>With regards to scope and memory access, what do we call these variables? In what partition of memory are these variables stored?</p>
+              <p class='answer' name='resource-q0'>These are <strong>local variables</strong>; they live in the partition of memory known as the <strong>stack</strong>.</p>
+              <br/>
+              <p>Is it all coming back, like riding a bike? (fun fact: I'm terrified of bicycles)</p>
+              <p>If so, say I have the following variables:</p>
+<pre class='prettyprint'>
+  string* getThePoint = new string(&quot;point taken&quot;);
+  int* redundantExample = new int(5);
+</pre>
+              <p class='question' name='resource-q1'>Question 1: the dynamic allocation of memory like <code class='prettyprint'>new int(5);</code> is stored in what partition of memory?</p>
+              <p class='answer' name='resource-q1'>
+                The <strong>heap!</strong> This is where dynamically allocated variables live; it is kept distinct from the stack because variables 
+                in the heap are not deallocated upon exit from scope.
+              </p>
+              <br/>
+              <p class='question' name='resource-q2'>
+                Question 2: the pointer that refers to the dynamically allocated memory ( e.g., <code class='prettyprint'>getThePoint</code> in 
+                <code class='prettyprint'>string* getThePoint = new string(&quot;point taken&quot;);</code> ) lives in what partition of memory? 
+              </p>
+              <p class='answer' name='resource-q2'>
+                The <strong>stack!</strong> Even though the memory that the pointer *points to* is dynamically allocated to the heap, the pointer itself lives in the stack 
+                and will disappear when it falls out of scope.
+              </p>
+              <br/>
+              <p>
+                This is the very reason we have memory leaks: dynamically allocated objects persist in the heap even though we lose the capacity to point to, and then delete,  
+                them when the pointer falls out of scope.
+              </p>
+              <p>In summary:</p>
+              <table class='table table-striped table-bordered'>
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th><p>Stack</p></th>
+                    <th><p>Heap</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th><p>What variables live here?</p></th>
+                    <td>
+                      <p>Local variables, functions, function arguments, etc.</p>
+                    </td>
+                    <td>
+                      <p>Dynamically allocated memory reserved by the programmer</p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th><p>How can variables be accessed?</p></th>
+                    <td>
+                      <p>By any type of identifier defined in scope</p>
+                    </td>
+                    <td>
+                      <p>Only through pointers!</p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th><p>Memory is allocated:</p></th>
+                    <td>
+                      <p>Whenever a variable is declared in scope</p>
+                    </td>
+                    <td>
+                      <p>Whenever the <code class='prettyprint'>new</code> keyword is used to initialize a variable and call a constructor</p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th><p>Memory is freed / deallocated:</p></th>
+                    <td>
+                      <p>Whenever a variable disappears from scope (e.g., local variables in a function after returning from that function)</p>
+                    </td>
+                    <td>
+                      <p>Only after the delete keyword is used!</p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+              <p>Why am I re-telling this to you?</p>
+              <p>Maybe I deleted my memory of the first time...</p>
+              <p>The real reason is because it helps us dissect our class definitions, and in particular, the data members that make them up, how to construct them, and how to DESTROY them.</p>
+              <p>To do so, we need to know when certain class object events happen. Let's fill in this table:</p>
+              <table class='table table-striped table-bordered'>
+                <thead>
+                  <tr>
+                    <th><p>Event</p></th>
+                    <th><p>Stack</p></th>
+                    <th><p>Heap</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th><p>Construction</p></th>
+                    <td>
+                      <p class='question' name='stack-q0'>When does it happen?</p>
+                      <div class='answer' name='stack-q0'><p>Local variable declarations such as:</p>
+<pre class='prettyprint'>
+  // Called 1 time
+  string s = "hi!";
+  
+  // Called 3 times!
+  LinkedList LLCoolJ[3];
+</pre>
+                      </div>
+                    </td>
+                    <td>
+                      <p class='question' name='heap-q0'>When does it happen?</p>
+                      <div class='answer' name='heap-q0'><p>Dynamic variable declarations such as:</p>
+<pre class='prettyprint'>
+  // Called 1 time
+  string* s 
+    = new string("neat!");
+  
+  // Called 3 times!
+  LinkedList* lists 
+    = new LinkedList[3];
+</pre>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th><p>Deallocation</p></th>
+                    <td>
+                      <p class='question' name='stack-q1'>When does it happen?</p>
+                      <div class='answer' name='stack-q1'><p>Local variable leaves scope:</p>
+<pre class='prettyprint'>
+  // Called 3 times!
+  for (int i = 0; i &lt; 3; i++) {
+    LinkedList LLama;
+  }
+</pre>
+                      </div>
+                    </td>
+                    <td>
+                      <p class='question' name='heap-q1'>When does it happen?</p>
+                      <div class='answer' name='heap-q1'><p>delete or delete[] called on dynamically allocated object:</p>
+<pre class='prettyprint'>
+  LinkedList* linky 
+    = new LinkedList();
+  // Called 1 time
+  delete linky;
+  
+  LinkedList* links 
+    = new LinkedList[4];
+  // Called 4 times!
+  delete[] links;
+</pre>
+                      </div>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+              <p>Just to be sure we understand, let's use NoisyClass from a week ago because I'm lazy:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  class NoisyClass {
+      private:
+          string s;
+  
+      public:
+          NoisyClass () {
+              cout &lt;&lt; "[C] Default constructor" &lt;&lt; endl;
+          }
+  
+          NoisyClass (string stuff) {
+              s = stuff;
+              cout &lt;&lt; "[P] Parameterized constructor" &lt;&lt; endl;
+          }
+  
+          NoisyClass (const NoisyClass&amp; other) {
+              s = other.s;
+              cout &lt;&lt; "[~] Copy constructor" &lt;&lt; endl;
+          }
+  
+          ~NoisyClass () {
+              cout &lt;&lt; "[D] Destructor" &lt;&lt; endl;
+          }
+  
+          NoisyClass&amp; operator= (const NoisyClass&amp; other) {
+              s = other.s;
+              cout &lt;&lt; "[=] Assignment" &lt;&lt; endl;
+              return *this;
+          }
+  };
+</pre>
+              <p class='example'>With the NoisyClass definition from above, what will the following code print out?</p>
+<pre class='prettyprint'>
+  // [C] Default constructor
+  // [P] Parameterized constructor
+  // [~] Copy constructor
+  // [D] Destructor
+  // [=] Assignment
+  int main () {
+      NoisyClass* heapsOfNoise;
+  
+      for (int i = 0; i &lt; 2; i++) {
+          NoisyClass n[2];
+      }
+  
+      heapsOfNoise = new NoisyClass[2];
+      delete[] heapsOfNoise;
+  }
+</pre>
+              <br/>
+              <p class='example'>With the NoisyClass definition from above, what will the following code print out?</p>
+<pre class='prettyprint'>
+  // [C] Default constructor
+  // [P] Parameterized constructor
+  // [~] Copy constructor
+  // [D] Destructor
+  // [=] Assignment
+  int main () {
+      NoisyClass* heapsOfNoise = new NoisyClass[2];
+      NoisyClass echo = heapsOfNoise[1];
+      heapsOfNoise[0] = echo;
+      delete[] heapsOfNoise;
+  }
+</pre>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='LL-basics' class='scrollspy-element' scrollspy-title='Singly Linked Lists'></div>
+            <h1>Review of Singly Linked Lists</h1>
+            <div>
+              <p>Here's what we've said so far about Singly Linked Lists...</p>
+              <p class='definition'>They are an abstract data type consisting of Nodes with data elements and a pointer to each successive Node:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-3/linkedLists-0.PNG' />
+              </div>
+              <br/>
+              <p>
+                Then, we examined LinkedLists in comparison the Arrays because of their similarities. We concluded that, although they can do (mostly) the same things, Arrays 
+                are more efficient than LinkedLists at some things, and vice versa.
+              </p>
+              <br/>
+              
+              <h3>Element Insertion</h3>
+              <p>We saw that adding elements to the end of an array is easy:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-3/linkedLists-1.PNG' />
+              </div>
+              <br/>
+              <br/>
+              <p>But finding the end of a LinkedList actually takes some effort:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-3/linkedLists-2.PNG' />
+              </div>
+              <br/>
+              <p>Now, we stopped the discussion there... that Arrays win at end-of-list insertions...</p>
+              <p class='question' name='ll-q0'>Is there a way that we could make LinkedLists comparable to Arrays with end-of-list insertion?</p>
+              <p class='answer' name='ll-q0'>Yes! Maintain a pointer within the LinkedList that always points to the last Node. Let's call that the tail.</p>
+              <br/>
+              <p>Here was our implementation of the LinkedList from last class... why don't we modify it and see how we improve the code?</p>
+<pre class='prettyprint'>
+  // LinkedList.h
+  #ifndef LINKED_LIST_INCLUDED
+  #define LINKED_LIST_INCLUDED
+  #include &lt;string&gt;
+  #include &lt;iostream&gt;
+  
+  class LinkedList {
+      private:
+          struct Node {
+              std::string m_data;
+              Node* m_next;
+              Node (std::string s) {
+                  m_data = s;
+                  m_next = nullptr;
+              }
+          };
+          
+          Node* head;
+          // [!] Added the tail pointer
+          Node* tail;
+          int size;
+  
+      public:
+          LinkedList();
+          ~LinkedList();
+          void insert(std::string);
+          bool erase(std::string);
+          bool contains(std::string s);
+          void print();
+  };
+  
+  #endif
+</pre>
+              <br/>
+<pre class='prettyprint'>
+  // LinkedList.cpp
+  #include "LinkedList.h"
+  
+  // Default LinkedList constructor
+  LinkedList::LinkedList () {
+      head = nullptr;
+      tail = nullptr;
+      size = 0;
+  }
+  
+  // Destructor
+  LinkedList::~LinkedList () {
+      // TODO
+  }
+</pre>
+              <br/>
+              <p>We then looked at how to implement the insert to end function, and came up with the following:</p>
+<pre class='prettyprint'>
+  // Insert a new Node at the end of the List
+  // with the given string data
+  void LinkedList::insert (std::string s) {
+      // 1) Dynamically allocate a Node
+      Node* toAdd = new Node(s);
+    
+      // 2) Update the head if first insertion
+      if (head == nullptr) {
+          head = toAdd;
+      } else {
+          // 3) Make an iterator to find the last
+          // position in the List
+          Node* iterator = head;
+    
+          // 4) Stick the new Node on the end of the List
+          while ( iterator-&gt;m_next != nullptr ) {
+              iterator = iterator-&gt;m_next;
+          }
+          iterator-&gt;m_next = toAdd;
+      }
+  
+      // 5) Add one to the size
+      size++;
+  }
+</pre>
+              <br/>
+              <p class='example'>Modify the code for the insert function so that it uses and maintains the tail pointer:</p>
+<pre class='prettyprint'>
+  // Insert a new Node at the end of the List
+  // with the given string data
+  void LinkedList::insert (std::string s) {
+      // 1) Dynamically allocate a Node
+      Node* toAdd = new Node(s);
+    
+      // 2) Update the head if first insertion
+      if (head == nullptr) {
+          head = toAdd;
+      }
+  
+      // 3) Make last node point to toAdd
+      // if it exists
+      // [!] ???
+  
+      // 4) Tail now points to toAdd
+      // [!] ???
+  
+      // 5) Add one to the size
+      size++;
+  }
+</pre>
+              <br/>
+              <h3>Element Deletion</h3>
+              <p>As another brief review, we saw that, for Arrays, element deletion is easy when we don't care about sorting the elements:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-3/linkedLists-3.PNG' />
+              </div>
+              <br/>
+              <p>...but is actually a huge pain when we need to delete something toward the front / in the middle of the array:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-3/linkedLists-4.PNG' />
+              </div>
+              <br/>
+              <p>Lastly, we saw that LinkedLists perform admirably at deletion, but the overhead of finding the element to delete costs us efficiency:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-3/linkedLists-5.PNG' />
+              </div>
+              <p>Let's look at the Singly Linked List delete for a moment...</p>
+              <p class='debug'>Some poor soul on an internet forum submitted the following as a solution to a Singly Linked List deletion. Where does it go wrong?</p>
+<pre class='prettyprint'>
+  bool LinkedList::erase (std::string s) {
+      Node* iterator = head;
+      Node* prev = nullptr;
+      bool erased = false;
+  
+      // First, find the Node to delete...
+      while (iterator != nullptr) {
+          // If we don't find a match, keep looking
+          if (iterator-&gt;m_data != s) {
+              prev = iterator;
+              iterator = iterator-&gt;m_next;
+              
+          // Otherwise, perform the necessary deletion
+          } else {
+              prev-&gt;m_next = iterator-&gt;m_next;
+              delete iterator;
+              erased = true;
+              break;
+          }
+      }
+      
+      // Return whether or not we found
+      // and erased anything
+      return erased;
+  }
+</pre>
+              
+              <br/>
+              <h3>Practice &amp; Diagnosis</h3>
+              <p>Just to round everything out, let's do a little LinkedList triage and then move on (I totally didn't reuse these from Wednesday &gt;_&gt;):</p>
+              <p class='debug'>Noob R. Nooberson thought that the following destructor would work for the LinkedList. Is there a problem with it?</p>
+<pre class='prettyprint'>
+  // Destructor
+  LinkedList::~LinkedList () {
+      delete head;
+  }
+</pre>
+              <p class='debug'>
+                Then, your illustrious TA suggested it would be cute to solve the above problem by doing the following; why is he a lamo?:
+              </p>
+<pre class='prettyprint'>
+  // ...
+  ~Node () {
+      delete m_next;
+  }
+  // ...
+</pre>
+              <br/>
+              <p class='debug'>Lord Voldemort himself produced the following attempt at the LinkedList contains function. Why should he not be named (in respectable programming circles)?</p>
+<pre class='prettyprint'>
+  bool LinkedList::contains (std::string s) {
+      Node* iterator = head;
+      while (iterator-&gt;m_data != s &amp;&amp; iterator != nullptr) {
+          iterator = iterator-&gt;m_next;
+      }
+      return iterator != nullptr;
+  }
+</pre>
+              <p>He then tested it on this main function and concluded success:</p>
+<pre class='prettyprint'>
+  #include "LinkedList.h"
+  
+  int main () {
+      LinkedList listy;
+      listy.insert("WHERE");
+      listy.insert("IS");
+      listy.insert("POTTER");
+      std::cout &lt;&lt; listy.contains("POTTER") &lt;&lt; std::endl;
+  }
+</pre>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='LL-stacks' class='scrollspy-element' scrollspy-title='Linked List Stacks'></div>
+            <h1>Application of Linked Lists: The Stack</h1>
+            <div>
+              <p>Heretofore (can you believe that's a word?), we've only seen some abstract uses for LinkedLists and their comparisons to Arrays...</p>
+              <p>Let's talk about a real-world data structure that works well with LinkedLists: the stack.</p>
+              <p class='definition'>A <strong>stack</strong> is a data structure used to store elements in a way that the most recently stored items are the first to be retrieved.</p>
+              <p>...O...K...</p>
+              <p>Trust me, it's cool! By analogy, think of a pile of dishes:</p>
+              <ul class='indent-1'>
+                <li><p>You <em>stack</em> dishes one on top of the other</p></li>
+                <li><p>Once you've stacked dish Z on top of all the other dishes, you can only access dish Z (and <em>cannot</em> access any other dish beneath it) until you pop Z off the top again</p></li>
+              </ul>
+              <p>
+                Stacks are very useful; in fact, there's a reason why local variables are stored in <strong>the stack,</strong> because every function's variables get stacked on the top when they're called, 
+                and popped off again when you leave the function!
+              </p>
+              <p>So, let's try to use a LinkedList to represent this data structure:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-3/linkedLists-6.PNG' />
+              </div>
+              <br/>
+              <p class='question' name='stacks-q0'>OK, Andrew, why would we want to make a data structure that's a LinkedList... but more restricted than one?</p>
+              <p class='answer' name='stacks-q0'>
+                This goes back to our public vs. private interface discussion: we want to give users of our classes certain guaranteed behaviors that allow for predictable code execution. 
+                If an algorithm requires that only the most recently pushed Node can be accessed at any time, we need to make sure our users don't tamper with that guaranteed behavior.
+              </p>
+              <p>Here's my new interface:</p>
+<pre class='prettyprint'>
+  // Stack.h
+  #ifndef STACK_INCLUDED
+  #define STACK_INCLUDED
+  #include &lt;string&gt;
+  #include &lt;iostream&gt;
+  
+  class Stack {
+      private:
+          struct Node {
+              std::string m_data;
+              Node* m_next;
+              Node (std::string s) {
+                  m_data = s;
+                  m_next = nullptr;
+              }
+          };
+  
+          Node* head;
+          int size;
+  
+      public:
+          Stack();
+          ~Stack();
+          void push(std::string s);
+          std::string pop();
+          void print();
+  };
+  
+  #endif
+</pre>
+              <br/>
+              <p>And, of course, a shell for the implementation.</p>
+<pre class='prettyprint'>
+  // LinkedList.cpp
+  #include "Stack.h"
+  
+  // Default Stack constructor
+  Stack::Stack () {
+      head = nullptr;
+      size = 0;
+  }
+  
+  // Destructor
+  Stack::~Stack () {
+      // TODO
+  }
+  
+  // Pushes a new Node with data string s
+  // to the top of the stack!
+  void Stack::push (std::string s) {
+      // TODO
+  }
+  
+  // Pops the top Node on the stack off,
+  // returning its data member and removing
+  // itself from the top (making the one beneath
+  // it the new top)
+  std::string Stack::pop () {
+      // TODO
+      return "";
+  }
+  
+  // ... print function same as for LinkedList
+</pre>
+              <p>Let's fill out the push and pop functions to see it in action:</p>
+              <p class='example'>Implement the following shell for the push function:</p>
+<pre class='prettyprint'>
+  // Pushes a new Node with data string s
+  // to the top of the stack!
+  void Stack::push (std::string s) {
+      // 1) Dynamically allocate a new Node
+      Node* toAdd = new Node(s);
+  
+      // 2) If it's not the first to be added,
+      // we need to have it point to the current
+      // head
+      // [!] Fill in here!
+  
+      // 3) Whether it's first or not, have the head point
+      // to it
+      // [!] Fill in here!
+  
+      // 4) Bump the size
+      size++;
+  }
+</pre>
+              <br/>
+              <p class='example'>If we test our push with the following main function, what gets printed out?</p>
+<pre class='prettyprint'>
+  int main () {
+      Stack onStacksOnStacks;
+      onStacksOnStacks.push("Bill");
+      onStacksOnStacks.push("Dolla");
+      onStacksOnStacks.push("Dolla");
+      onStacksOnStacks.print();
+  }
+</pre>
+              <br/>
+              <p class='example'>Implement the following shell for the pop function:</p>
+<pre class='prettyprint'>
+  // Pops the top Node on the stack off,
+  // returning its data member and removing
+  // itself from the top (making the one beneath
+  // it the new top)
+  std::string Stack::pop () {
+      // 1) Return the empty string if empty
+      if (head == nullptr) {
+          return "";
+      }
+  
+      // 2) Set a pointer to the top node
+      // [!] Fill in here!
+  
+      // 3) Save the top Node's data
+      std::string result; // [!] Fill in here!
+  
+      // 4) Adjust head accordingly
+      // [!] Fill in here!
+  
+      // 5) ...take care of the top Node... quietly...
+      // [!] Fill in here!
+      
+      // 6) Reduce size
+      size--;
+  
+      return result;
+  }
+</pre>
+              <p class='example'>If we test our pop with the following main function, what gets printed out?</p>
+<pre class='prettyprint'>
+  int main () {
+      Stack onStacksOnStacks;
+      onStacksOnStacks.pop();
+      onStacksOnStacks.push("TA");
+      onStacksOnStacks.push("great");
+      onStacksOnStacks.pop();
+      onStacksOnStacks.push("is a");
+      onStacksOnStacks.push("Andrew");
+      onStacksOnStacks.push("Great...");
+      onStacksOnStacks.print();
+  }
+</pre>
+              <br/>
+              <p>-_______________-</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='double-LL' class='scrollspy-element' scrollspy-title='Doubly Linked Lists'></div>
+            <h1>Doubly Linked Lists (or: Give Me Homework Answers)</h1>
+            <div>
+              <p>Hey guys! He's finally talking about the important stuff!</p>
+              <p>Wake up your neighbors folks, let's talk Doubly Linked Lists.</p>
+              <p class='definition'>
+                A <strong>doubly linked list</strong> is just like a regular linked list, except each Node has a pointer to the previous Node in the sequence along with a pointer to the next Node.
+              </p>
+              <p>What's this look like you ask?</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-3/linkedLists-7.PNG' />
+              </div>
+              <p>&quot;I like the new arrows, Andrew... what good do they do?&quot;</p>
+              <p>
+                Excellent question. Whereas previously, in the Singly Linked List, we had only forward arrows, if we ever wanted information about a Node behind us in the sequence, we had to start 
+                all over at the beginning... now we don't!
+              </p>
+              <p>I'm sure the 1 or 2 cases in which these new arrows save us headaches will more than make up for their upkeep...</p>
+              <br/>
+              <p>Should we start at the start? Check out pushing elements to the end?</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-3/linkedLists-8.PNG' />
+              </div>
+              <br/>
+              <p>Alright... so we've been dealing with Nodes this whole time, but you know what?</p>
+              <p>I'm bored with Nodes... let's use a more pop-culture-friendly class and implementation.</p>
+              <br/>
+<pre class='prettyprint'>
+  // HumanCentipede.h
+  #ifndef HC_INCLUDED
+  #define HC_INCLUDED
+  #include &lt;string&gt;
+  #include &lt;iostream&gt;
+  
+  class HumanCentipede {
+      private:
+          struct Person {
+              std::string m_data;
+              Person* m_front;
+              Person* m_behind;
+              Person (std::string s) {
+                  m_data = s;
+                  m_front = nullptr;
+                  m_behind = nullptr;
+              }
+          };
+  
+          Person* head;
+          Person* tail;
+          int size;
+  
+      public:
+          HumanCentipede();
+          ~HumanCentipede();
+          void insert(std::string);
+          bool erase(std::string);
+          void print();
+  };
+  
+  #endif
+</pre>
+              <p>...and if you haven't seen the movie, or didn't catch the reference, please don't look it up (read: please don't sue me if you do)</p>
+              <br/>
+              <p class='example'>Make a single change to our LinkedList insert function to bring it up to speed with the HumanCentipede. That rhymed:</p>
+<pre class='prettyprint'>
+  // Add a new person to the centipede at the
+  // end with name s
+  void HumanCentipede::insert (std::string s) {
+      // 1) Dynamically allocate a Person
+      // ...whatever that translates to in
+      // people terms...
+      Person* toAdd = new Person(s);
+    
+      // 2) Update the head if first victim
+      if (head == nullptr) {
+          head = toAdd;
+  
+      // 2) Otherwise, we already have some People
+      } else {
+          // TODO: Use tail in HumanCentipede to track
+          // the last slot in the centipede instead
+  
+          // Make an iterator to find the last
+          // Person in the Centipede
+          Person* iterator = head;
+      
+          // Stick the new Person on the end of the
+          // centipede
+          while ( iterator-&gt;m_front != nullptr ) {
+              iterator = iterator-&gt;m_front;
+          }
+          // Update the last Person's m_front
+          iterator-&gt;m_front = toAdd;
+          
+          // Update the new Person's m_back
+          // [!] Fill in here!
+      }
+  
+      // 3) Add one to the size
+      size++;
+  }
+</pre>
+              <br/>
+              <p>It should work with this main function:</p>
+<pre class='prettyprint'>
+  int main () {
+      // Looked up the character names
+      HumanCentipede cent;
+      cent.insert("Katsuro");
+      cent.insert("Lindsay");
+      cent.insert("Jenny");
+      cent.print();
+  }
+</pre>
+              <br/>
+              <p>Alright, that one was basically a freebie... no more freebies for HumanCentipede... instead, let's just walk through the erase function.</p>
+              <p>Here are some behaviors for erasing a node at certain positions in a Doubly Linked... err... HumanCentipede:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-3/linkedLists-9.PNG' />
+              </div>
+              <hr/>
+              <p>K, how about this one?</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-3/linkedLists-10.PNG' />
+              </div>
+              <p>There are a couple other cases for you to isolate and handle... we'll cover them in the next section, but won't diagram them here.</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='project2' class='scrollspy-element' scrollspy-title='Project 2'></div>
+            <h1>Project 2: Testing and Advice</h1>
+            <div>
+              <p>Write tests for your functions... lots of tests...</p>
+              <p>Here are the minimum, but probably sufficient, tests you should make for your functions:</p>
+              <ul class='indent-1'>
+                <li><p>Handling for Nodes in the middle of the list</p></li>
+                <li><p>Handling for Nodes at the beginning of the list</p></li>
+                <li><p>Handling for Nodes at the end of the list</p></li>
+                <li><p>Handling for the empty list</p></li>
+                <li><p>Handling for a one-element list</p></li>
+              </ul>
+              <p class='debug'>
+                WARNING: You're required to implement two *non-member* functions of your Map. This means you don't have access to their private members and must instead 
+                rely on the public interface. Don't make the mistake of making these functions a part of the Map class.
+              </p>
+              <p class='debug'>
+                Remember to implement the copy constructors, assignment overloading, and destructors for your Map!
+              </p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='debugging' class='scrollspy-element' scrollspy-title='Debugging'></div>
+            <h1>The Debugger</h1>
+            <div>
+              <p>Consider the following implementation of count:</p>
+              <p class='debug'>Use the debugger to find the problem with this function (if it's obvious, don't say anything!)</p>
+<pre class='prettyprint'>
+  // Returns a count of how many times
+  // s appears in the LinkedList
+  int LinkedList::count (std::string s) {
+      Node* n = head;
+      int count = 0;
+      
+      // Go through all size Nodes
+      // in the List and compare to s
+      for (int i = 0; i &lt; size; i++) {
+          if (n-&gt;m_data == s) {
+              count++;
+          }
+      }
+      return count;
+  }
+</pre>
+              <p>Steps for debugging:</p>
+              <ol class='indent-1'>
+                <li><p>Set breakpoints</p></li>
+                <li><p>Open debugger</p></li>
+                <li><p>Step through your code, stopping at each breakpoint</p></li>
+                <li><p>Conquer your bugs</p></li>
+              </ol>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='midterm' class='scrollspy-element' scrollspy-title='Midterm'></div>
+            <h1>Midterm</h1>
+            <div>
+              <p class='definition'>Your first Midterm will be on January 29!</p>
+              <p>There are two midterm sections for you to sign up for, so watch on the course page; the two time slots are:</p>
+              <ul class='indent-1'>
+                <li><p>5:00 - 6:05pm, location TBA</p></li>
+                <li><p>5:45 - 6:50pm, location TBA</p></li>
+              </ul>
+              <p class='definition'>Please send me a list of items you'd like on a practice midterm by tonight, or tell me now! I'll try to make a few extra questions...</p>
+              <p>Good luck!</p>
+            </div>
+            <hr/>
+            
+            <br/>
+            <div id='challenges' class='scrollspy-element' scrollspy-title='Challenges'></div>
+            <h1>Challenges</h1>
+            <div>
+              <p>So you think you've got LinkedLists down eh? Try out this weird example:</p>
+              <p class='example'>Implement the humanCentiCircle function, which returns a boolean as to whether or not a cycle exists in the set of linked People:</p>
+<pre class='prettyprint'>
+  #include "HumanCentipede.h"
+  using namespace std;
+  
+  struct Person {
+      std::string m_data;
+      Person* m_front;
+      Person (std::string s) {
+          m_data = s;
+          m_front = nullptr;
+      }
+  };
+  
+  // Returns true iff a cycle exists in the links
+  bool humanCentiCircle (const Person* first) {
+      // TODO
+      return false;
+  }
+  
+  int main () {
+      Person p1("P1");
+      Person p2("P2");
+      Person p3("P3");
+      Person p4("P4");
+      p1.m_front = &amp;p2;
+      p2.m_front = &amp;p3;
+      p3.m_front = &amp;p4;
+      p4.m_front = &amp;p1;
+  
+      // True
+      std::cout &lt;&lt; humanCentiCircle(&amp;p1) &lt;&lt; std::endl;
+  
+      Person p5("P5");
+      Person p6("P6");
+      Person p7("P7");
+      p5.m_front = &amp;p6;
+      p6.m_front = &amp;p7;
+  
+      // False
+      std::cout &lt;&lt; humanCentiCircle(&amp;p5) &lt;&lt; std::endl;
+  }
+</pre>
+              <br/>
+              <p class='example'>Figured it out? OK... now, is there a solution you can think of where you don't end up comparing each individual to every other one multiple times?</p>
+            </div>
+            <hr/>
+            
+            <a class='btn btn-default pull-right hidden-print' href='javascript:window.print();'>
+              <span class='glyphicon glyphicon-print'></span>
+              &nbsp; PDF / Print
+            </a>
+            
+          </div>
+          <!-- END PRESENTATION CONTENT -->
+          
+          <!-- MATERIALS FROM CLASS: -->
+            
+        </div>
+      </div>
+      <!-- END MAIN CONTENT -->
+      
+      
+    </div>
+    <!-- END WRAPPER -->
+    
+    <!-- BEGIN FOOTER -->
+    <div id="footer">
+      <div class="container">
+        <div class="col-md-12 text-center">
+          
+        </div>
+      </div>
+    </div>
+    <!-- END FOOTER -->
+    
+  </body>
+</html>

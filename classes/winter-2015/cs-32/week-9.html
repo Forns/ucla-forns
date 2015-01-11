@@ -1,0 +1,771 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Andrew Forney - UCLA CS</title>
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/magic-bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/main.css" rel="stylesheet" type="text/css">
+    <script src="../../../js/lib/jquery-2.0.3.min.js"></script>
+    <script src="../../../js/lib/bootstrap.min.js"></script>
+    <script src="../../../js/lib/expanding.js"></script>
+    <script src="../../../js/lib/chart.min.js"></script>
+    <script src="../../../js/display/general/general-display.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+  </head>
+  
+  <body data-spy="scroll" data-target="#scrollspy">
+    
+    <!-- BEGIN WRAP -->
+    <div id="wrap">
+      
+      <!-- BEGIN NAVIGATION -->
+      <nav class='navbar navbar-default' role='navigation'>
+        <div class='nav-accent'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-12'>
+              <div class='navbar-header'>
+                <button class='navbar-toggle' type='button' data-toggle='collapse' data-target='.navbar-main-collapse'>
+                  <span class='sr-only'>Toggle Navigation</span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                </button>
+                <a class='navbar-brand' href='/~forns/'>
+                  <span id='brand-text'>
+                    Andrew Forney
+                  </span>
+                </a>
+              </div>
+              
+              <div id='nav-main' class='collapse navbar-collapse navbar-main-collapse'>
+                <ul class='nav navbar-nav navbar-right'>
+                  
+                  <li>
+                    <a href='/~forns/about.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-user'></span>
+                      </div>
+                      <p class='text-center'>About</p>
+                    </a>
+                  </li>
+                  
+                  <li class='active'>
+                    <a href='/~forns/classes.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-book'></span>
+                      </div>
+                      <p class='text-center'>Classes</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/contact.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-comment'></span>
+                      </div>
+                      <p class='text-center'>Contact</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/publications.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-file'></span>
+                      </div>
+                      <p class='text-center'>Publications</p>
+                    </a>
+                  </li>
+                  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <!-- END NAVIGATION -->
+      
+      <!-- BEGIN MAIN CONTENT -->
+      <div id="main-content" class="container">
+        <div class="row">
+          
+          <!-- BEGIN SCROLLSPY -->
+          <div class='col-md-2 hidden-sm hidden-xs'>
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+              <ul id='scrollspy' class="nav bs-sidenav">
+              </ul>
+            </div>
+          </div>
+          <!-- END SCROLLSPY -->
+          
+          <!-- BEGIN PRESENTATION CONTENT -->
+          <div class='col-md-10 presentation-content' role='main'>
+            
+            <ol class="breadcrumb hidden-print">
+              <li><a href="../../../classes.html">Classes</a></li>
+              <li><a href="./cs-32.html">Winter14 CS32</a></li>
+              <li class="active">Week 9</li>
+            </ol>
+            
+            
+            <div id='review' class='scrollspy-element' scrollspy-title='Review'></div>
+            <h1>Practice from Last Week</h1>
+            <div>
+              <p class='example'>Starting off with some warmup... remind me what postorder traversal is again? What's the postorder traversal of this tree?</p>
+              <div class="text-center fit-pres">
+                <img src="../../../assets/images/winter-2014/cs-32/week-8/trees-7.PNG">
+              </div>
+              <p class='definition'>[!] Interesting property about postorder traversal... what happens when I remove each Node found in postorder traversal, in the order in which I visit them?</p>
+              
+              <br/>
+              <p class='question' name='practice-q0'>Is it possible for a binary search tree to have the postorder traversal print out of: <code class='prettyprint'>12, 18, 14, 21, 20, 17</code></p>
+              <p class='answer' name='practice-q0'>
+                No! The 18 wedged between the 12 and 14 implies that a number greater than the root (which we know must be 17 because it was printed last) existed on the side intended to be less than
+                the root.
+              </p>
+              
+              <br/>
+              <p class='example'>Provide two binary trees that could elicit the preorder traversal print out: <code class='prettyprint'>5, 3, 1, 2, 0</code></p>
+              
+              <br/>
+              <p class='example'>What is the inorder traversal of this tree (replicated for you below):</p>
+              <div class="text-center fit-pres">
+                <img src="../../../assets/images/winter-2014/cs-32/week-8/trees-7.PNG">
+              </div>
+              <p class='definition'>[!] Interesting property about inorder traversal on a binary search tree... what is it?</p>
+              
+              <br/>
+              <p>
+                Now, we remember that binary search trees are great because, for some extra cost during their construction (average O(log(n)), worst O(n)), we can reduce search operations 
+                (in the average case) to about O(log(n)) time complexity.
+              </p>
+              <p class='question' name='btree-q0'>Say I'm inserting ints into a binary search tree. What property of this input list of ints will cause insertion to take O(n) time?</p>
+              <p class='answer' name='btree-q0'>When the insertions are done one at a time and arrive in sorted order.</p>
+              <p class='definition'>You can test out insertion into a binary tree <a href='http://www.cs.jhu.edu/~goodrich/dsa/trees/btree.html' target='_blank'>here (click me)</a></p>
+              <p>Well, as it turned out, that worst case insertion was problematic... and the more linear, and less tree-like binary search trees became, the less efficient their search became too!</p>
+              <p>So the eggheads of yore considered making an algorithm that would keep the tree balanced such that any insertion won't make the tree become too linear.</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='treeBalancing' class='scrollspy-element' scrollspy-title='Tree Balancing'></div>
+            <h1>Balancing Binary Search Trees</h1>
+            <div>
+              <p>There are a variety of different ways to keep trees balanced and maintain the log(n) search guarantee for binary search trees; we'll examine a couple now.</p>
+              <br/>
+              <h3>AVL Trees</h3>
+              <p class='definition'>AVL trees have 1 property in addition to those of binary search trees: the heights (depths) of any two of a given node's subtrees must differ by *at most* 1.</p>
+              <p>This enforced property makes sure that the depth of any subtree never becomes too linear, which would degrade the efficiency of search and further insertions.</p>
+              <p>This balancing act takes O(log(n)) time, which means that, upon insertion of any new value, we get O(log(n) + log(n)) = O(log(n)) time; a greater overhead, but same complexity class.</p>
+              <br/>
+              <p class='debug'>You do *not* need to know about tree balancing for this class, but for completion, let's just look at a sketch of how AVL trees stay balanced.</p>
+              <ol class='indent-1'>
+                <li><p>Firstly, we keep track of a &quot;balance factor&quot; at each node which is equal to: <code class='prettyprint'>balance = height(left_subtree) - height(right_subtree)</code></p></li>
+                <li><p>A tree is out of balance if its balance factor is greater than or equal to 2, or less than or equal to -2.</p></li>
+                <li><p>If a tree is out of balance, then we use the following balancing algorithm:</p></li>
+              </ol>
+<pre class='prettyprint'>
+  // Code skeleton for C++, edited from Wikipedia :)
+  if (balance_factor(L) == 2) { // The left subtree
+      Node* P = left_child(L);
+      if (balance_factor(P) == -1) { // The "Left Right Case"
+          rotate_left(P); // Reduce to "Left Left Case"
+      }
+      // The Left Left Case
+      rotate_right(L);
+      
+  } else { // balance_factor(L) == -2, the right subtree
+      Node* P=right_child(L);
+      if (balance_factor(P) == 1) { //The "Right Left Case"
+         rotate_right(P); // Reduce to "Right Right Case"
+      }
+      // The Right Right Case
+      rotate_left(L);
+  }
+</pre>
+              <br/>
+              <p>So what does it mean to &quot;rotate&quot; a tree, you might ask?</p>
+              <p class='definition'>A rotation promotes a child node to the parent, and demotes the parent to a child node depending on the direction of the rotation. Subtree structures are maintained.</p>
+              <div class='text-center fit-pres'>
+                <a href='http://en.wikipedia.org/wiki/AVL_tree' target='_blank'>
+                  <img src='../../../assets/images/winter-2014/cs-32/week-9/tree-rotation.png' />
+                  <br/>
+                  <small>(credit to Wiki for image)</small>
+                </a>
+              </div>
+              <br/>
+              <p>Above, a right / clockwise rotation would start at the right image and finish with the left image.</p>
+              <p>Similarly, a left / counter-clockwise rotation would start at the left image and finish with the right image.</p>
+              <p>Notice that the subtree structures are maintained with each rotation.</p>
+              <div class='question' name='rotation-q0'><p>What would a left rotation of the 10 node look like in the following tree?</p>
+                <div class='text-center fit-pres'>
+                  <img src='../../../assets/images/winter-2014/cs-32/week-9/tree-rotation-1.png' />
+                </div>
+              </div>
+              <div class='answer' name='rotation-q0'>
+                <div class='text-center fit-pres'>
+                  <img src='../../../assets/images/winter-2014/cs-32/week-9/tree-rotation-2.png' />
+                </div>
+              </div>
+              <br/>
+              <p class='definition'>Let's examine a visualization <a href='http://www.cs.jhu.edu/~goodrich/dsa/trees/avltree.html' target='_blank'>here (click me)</a></p>
+              <br/>
+              <h3>Red-Black Trees</h3>
+              <p>
+                So, the one problem with AVL trees is that with a lot of insertions, you'll have to keep performing the balancing overhead any time a branch becomes 2 depths or more greater than a parent.
+              </p>
+              <p>
+                Red-Black Trees said, &quot;Hey, let's not do all of this rebalancing nonsense all the time; everything's chill until the path from the root to the farthest leaf is no more than twice
+                the distance from the root to the closest leaf.&quot;
+              </p>
+              <p>So, without diving deep into how it rebalances when this distance is exceeded, let's just look at some properties of red-black trees lifted from wikipedia:</p>
+              <ul class='indent-1'>
+                <li><p>A node is &quot;painted&quot; either red or black</p></li>
+                <li><p>The root is black</p></li>
+                <li><p>Every red node must have two black child nodes</p></li>
+                <li><p>Every path from a given node to any of its descendant leaves contains the same number of black nodes.</p></li>
+              </ul>
+              <p>What we end up with is a binary search tree that still ensures O(log(n)) search without the need to so frequently rebalance.</p>
+              <p class='definition'>Let's examine a visualization <a href='http://www.ece.uc.edu/~franco/C321/html/RedBlack/redblack.html' target='_blank'>here (click me)</a></p>
+            </div>
+            <hr/>
+              
+              
+            <br/>
+            <div id='btreeAlgorithms' class='scrollspy-element' scrollspy-title='BTree Algorithms'></div>
+            <h1>Binary Tree Algorithms</h1>
+            <div>
+              <p>We've seen some traversal algorithms for binary trees, but let's look at a couple extra for practice.</p>
+              <p>Below, I've gotten us started with a Binary Tree class, as well as a new way to insert Nodes with a given path to an empty space.</p>
+<pre class='prettyprint'>
+  struct BinTree {
+      // BinTreeNode struct internal
+      // to the BinTree
+      struct BinTreeNode {
+          int data;
+          BinTreeNode* left;
+          BinTreeNode* right;
+          BinTreeNode(int d) {
+              data = d;
+              left = nullptr;
+              right = nullptr;
+          }
+      };
+  
+      // Root just points to a single
+      // BinTreeNode
+      BinTreeNode* root;
+  
+      BinTree() {
+          root = nullptr;
+      }
+      ~BinTree() {}; // TODO!
+      void insertAt (int i, string path);
+  };
+  
+  // Creates a new node with the given data member
+  // if input string p specifies a path in terms of
+  // L and R children to follow to an empty spot in
+  // the tree
+  // The path p will look like some string of "LRL"
+  void BinTree::insertAt (int data, string p) {
+      BinTreeNode* b = root;
+      BinTreeNode* last = nullptr;
+      int i = 0;
+  
+      // First, we'll go through our desired path
+      // of insertion
+      while (i &lt; p.length()) {
+          // If we hit the nullptr before we're
+          // done, just break out of the loop
+          if (b == nullptr) {
+              break;
+          }
+          // Keep track of our parent node...
+          last = b;
+          // ...then move on to the path's desired
+          // child
+          b = (p[i] == 'L') ? b-&gt;left : b-&gt;right;
+          i++;
+      }
+  
+      // If we followed a path the length of
+      // our desired path, then we have a valid
+      // insertion; otherwise the path was
+      // mis-specified
+      if (i == p.length()) {
+          // If there's already a node there,
+          // bad path, so we'll just return
+          if (b != nullptr) {
+              return;
+          }
+          // Otherwise, there's an opening, so
+          // we'll make a new node at b
+          b = new BinTreeNode(data);
+          // If there's nothing in the tree yet,
+          // then b is our root!
+          if (root == nullptr) {
+              root = b;
+          }
+          // If we have a parent node to add
+          // the child to, update its left or
+          // right pointer
+          if (last != nullptr) {
+              if (p[i - 1] == 'L') {
+                  last-&gt;left = b;
+              } else {
+                  last-&gt;right = b;
+              }
+          }
+      }
+  }
+</pre>
+              <p>So, if I wanted to add Nodes to my tree, I would simply say:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-9/btree-0.png' />
+              </div>
+              <br/>
+              <p>So, now I can recreate this tree in my BinaryTree class via:</p>
+<pre class='prettyprint'>
+  int main () {
+      BinTree bt;
+      bt.insertAt(14, "");
+      bt.insertAt(10, "L");
+      bt.insertAt(8, "LL");
+      bt.insertAt(11, "LR");
+      bt.insertAt(15, "R");
+  }
+</pre>
+              <br/>
+              <p>Neat! Now let's look at making some of our own functions...</p>
+              <p>First, let's have a way to print out our tree; we'll print out each subtree as enclosed within parentheses, like so:</p>
+<pre class='prettyprint'>
+  int main () {
+      BinTree bt;
+      
+      bt.insertAt(14, "");
+      // prints: (14)
+      printByClosure(bt.root);
+      cout &lt;&lt; endl;
+        
+      bt.insertAt(10, "L");
+      // prints: ((10)14)
+      printByClosure(bt.root);
+      cout &lt;&lt; endl;
+        
+      bt.insertAt(8, "LL");
+      // prints: (((8)10)14)
+      printByClosure(bt.root);
+      cout &lt;&lt; endl;
+        
+      bt.insertAt(11, "LR");
+      // prints: (((8)10(11))14)
+      printByClosure(bt.root);
+      cout &lt;&lt; endl;
+        
+      bt.insertAt(15, "R");
+      // prints: (((8)10(11))14(15))
+      printByClosure(bt.root);
+      cout &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p>Complete the function shell for printByClosure below:</p>
+<pre class='prettyprint'>
+  void printByClosure (BinTree::BinTreeNode* b) {
+      // [!] Base case
+      if ( ??? ) {
+          ???
+      }
+  
+      // [!] Otherwise, starting a new
+      // closure, so print out...
+      cout &lt;&lt; ???;
+  
+      // [!] Perform some form of traversal
+      // here... which one will give us the
+      // desired output?
+      
+      // [!] Ending our closure, so print...
+      cout &lt;&lt; ???;
+  }
+</pre>
+              <br/>
+              <p>Let's do something &quot;fun&quot;... why don't we create a function that turns our tree into a mirror image of itself?</p>
+<pre class='prettyprint'>
+  int main () {
+      BinTree bt;
+      bt.insertAt(14, "");
+      bt.insertAt(10, "L");
+      bt.insertAt(18, "R");
+      printByClosure(bt.root);
+      cout &lt;&lt; endl;
+      // Was ((10)14(18)),
+      // Now ((18)14(10))
+      mirror(bt.root);
+      printByClosure(bt.root);
+      cout &lt;&lt; endl;
+  
+      bt.insertAt(17, "LR");
+      printByClosure(bt.root);
+      cout &lt;&lt; endl;
+      // Was ((18(17))14(10)),
+      // Now ((10)14((17)18))
+      mirror(bt.root);
+      printByClosure(bt.root);
+      cout &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p class='example'>Complete the function shell for mirror, below:</p>
+<pre class='prettyprint'>
+  void mirror (BinTree::BinTreeNode* b) {
+      // [!] Base Case
+      if ( ??? ) {
+          return;
+      }
+    
+    // Create a temp holder for our swap
+      BinTree::BinTreeNode* temp;
+    
+    // [!] Perform some order of traversal
+    // to do the swap... which one?
+      ???
+    
+    // [!] Swap the current node's left
+    // and right with the temp, saving
+    // one into temp first
+      ???
+  }
+  // ^ Example credit to Stanford's tree examples
+  // (listed later)
+</pre>
+              <br/>
+              <p>I'll have some more examples using this class on the practice final...</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='STLSetMap' class='scrollspy-element' scrollspy-title='STL Set &amp; Map'></div>
+            <h1>STL Set &amp; Map</h1>
+            <div>
+              <p>Let's take a whirlwind tour through two STL collections: the set and the map</p>
+              
+              <br/>
+              <h3>#include &lt;set&gt;</h3>
+              <p class='definition'><strong>Sets</strong> are simply a collection of items of the given templated type stored in a binary search tree.</p>
+              <p>Here's an example of some common operations with sets:</p>
+<pre class='prettyprint'>
+  int main () {
+      set&lt;int&gt; s;
+  
+      // Inserting values into set
+      s.insert(5);
+      s.insert(20);
+      s.insert(2);
+  
+      // You can erase values from the set
+      s.erase(2);
+      s.insert(3);
+  
+      // You can define iterators
+      // [!] This is a binary search tree,
+      // what will get printed out?
+      set&lt;int&gt;::iterator sit = s.begin();
+      while (sit != s.end()) {
+          cout &lt;&lt; *sit++ &lt;&lt; endl;
+      }
+  
+      // Get the size of the set
+      cout &lt;&lt; "size: " &lt;&lt; s.size() &lt;&lt; endl;
+  
+      // Clear the set
+      s.clear();
+  }
+</pre>
+              <br/>
+              <h3>#include &lt;map&gt;</h3>
+              <p class='definition'><strong>Maps</strong> are simply a collection of key/value pairs (associations) of the given templated types stored in a binary search tree.</p>
+              <p>These are very similar to your MultiMap for homework!</p>
+<pre class='prettyprint'>
+  int main () {
+      map&lt;string, int&gt; m;
+  
+      // Inserting values into map
+      m["look"] = 3;
+      m["at"] = 20;
+      m["me"] = 10;
+      // [!] Note! Unlike vectors, in which the
+      // bracket operator is undefined when the
+      // index is out of range, this insertion
+      // method is OK for keys that haven't been
+      // set yet
+  
+      // You can erase values from the map
+      m.erase("look");
+      m["yo"] = 15;
+  
+      // You can update existing values
+      m["me"] = 12;
+  
+      // You can define iterators
+      // [!] This is a binary search tree,
+      // what will get printed out?
+      map&lt;string, int&gt;::iterator mit = m.begin();
+      while (mit != m.end()) {
+          // [!] Keys in iterators are stored in a
+          // "first" field; values in a "second" field
+          cout &lt;&lt; mit-&gt;first &lt;&lt; ": " &lt;&lt; mit-&gt;second &lt;&lt; endl;
+          mit++;
+      }
+  
+      // Get the size of the map
+      cout &lt;&lt; "size: " &lt;&lt; m.size() &lt;&lt; endl;
+  
+      // Clear the map
+      m.clear();
+  }
+</pre>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='complexity' class='scrollspy-element' scrollspy-title='Complexity Review'></div>
+            <h1>Complexity Review</h1>
+            <div>
+              <p>There were a significant number of questions regarding time complexity in the logarithmic case.</p>
+              <p>Since tree algorithms generally involve some flavor of a log complexity, let's review some algorithms now...</p>
+              <p class='definition'>
+                A rule of thumb for logarithm complexity is when you're omitting or ignoring some number of input elements with every step that is proportional to the log of the size of the input.
+              </p>
+              <p>Often, this is manifest in divide-and-conquer algorithms, but sometimes it's simpler than that... that for example the following:</p>
+              <p class='example'>What is the time complexity of the following function?</p>
+<pre class='prettyprint'>
+  void someFunc (vector&lt;int&gt; v) {
+      for (int i = 1; i &lt; v.size(); i *= 2) {
+          cout &lt;&lt; v[i] &lt;&lt; endl;
+      }
+  }
+</pre>
+              <br/>
+              <p>We also know that some algorithms can have logarithmic components that rely on other components of the algorithm, and vice versa...</p>
+              <p class='example'>What is the time complexity of the following function?</p>
+<pre class='prettyprint'>
+  void someFunc (vector&lt;int&gt; v) {
+      for (int i = 0; i &lt; v.size(); i++) {
+          for (int j = i; j &gt; 0; j /= 2) {
+              if (v[j] == v[i]) {
+                  cout &lt;&lt; v[i] &lt;&lt; endl;
+              }
+          }
+      }
+  }
+</pre>
+              <br/>
+              <p>You should also be aware that big-O complexity need not be reliant upon a single input; you can have complexities in terms of multiple inputs as well!</p>
+              <p class='example'>What is the time complexity of the following function?</p>
+<pre class='prettyprint'>
+  // [!] Consider N = v1.size() and M = v2.size()
+  void someFunc (vector&lt;int&gt; v1, vector&lt;int&gt; v2) {
+      for (int i = 0; i &lt; v1.size(); i++) {
+          for (int j = 0; j &gt; v2.size(); j += 2) {
+              if (v1[i] == v2[j]) {
+                  cout &lt;&lt; v1[i] &lt;&lt; endl;
+              }
+          }
+      }
+  }
+</pre>
+              <br/>
+              <p>Lastly, let's remember our tree algorithm complexities...</p>
+              <p class='example'>What is the time complexity of the following function?</p>
+<pre class='prettyprint'>
+  // [!] Consider N = v1.size() and M = s.size()
+  void someFunc (vector&lt;int&gt; v1, set&lt;int&gt; s) {
+      for (int i = 0; i &lt; v1.size(); i++) {
+          if (s.find(v[i]) != s.end()) {
+              cout &lt;&lt; v1[i] &lt;&lt; endl;
+          }
+      }
+  }
+</pre>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='project4' class='scrollspy-element' scrollspy-title='Project 4'></div>
+            <h1>Project 4</h1>
+            <div>
+              <p>Welcome to &quot;Project 4 in 60 seconds!&quot; (with unfortunately less Nicolas Cage)</p>
+              <p class='debug'>Warning! Do not trust anything in this guide more than the spec! It is meant as a brief overview!</p>
+              <p>What's project 4 in a nutshell you ask?</p>
+              <p>You're going to be creating your own database, complete with a MultiMap (that you make) in the form of a binary search tree! Yay!</p>
+              <p>Some definitions:</p>
+              <p class='definition'>A database is a piece of software that stores one or more data records</p>
+              <p class='definition'>A record (sometimes called a &quot;row&quot;) contains all of the data fields on a particular entry.</p>
+              <p>For example, a given Student table of a database might look like:</p>
+              <table class='table table-bordered'>
+                <thead>
+                  <tr>
+                    <th><p>firstName</p></th>
+                    <th><p>lastName</p></th>
+                    <th><p>studentID</p></th>
+                    <th><p>phoneNum</p></th>
+                    <th><p>GPA</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><p>Yenrof</p></td>
+                    <td><p>Werdna</p></td>
+                    <td><p>555555555</p></td>
+                    <td><p>555-555-5555</p></td>
+                    <td><p>5.0</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>Davie</p></td>
+                    <td><p>Nachensmall</p></td>
+                    <td><p>0020397722</p></td>
+                    <td><p>310-318-2020</p></td>
+                    <td><p>4.0</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>Carie</p></td>
+                    <td><p>Bergberg</p></td>
+                    <td><p>0020397723</p></td>
+                    <td><p>310-318-2020</p></td>
+                    <td><p>4.0</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>...</p></td>
+                    <td><p>...</p></td>
+                    <td><p>...</p></td>
+                    <td><p>...</p></td>
+                    <td><p>...</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+              <p>So above, you can see that each row consists of the firstName, lastName, studentID, phoneNum, and GPA fields of a particular entity (student) of the table</p>
+              <p>Notice we can have two fields be the same between two different rows (records).</p>
+              <p class='definition'>A schema defines what fields belong in a given table.</p>
+              <p class='definition'>A schema field can be indexed (in which case we will be able to efficiently search for matching entities of that field in the database) or not indexed.</p>
+              <p>A schema for our Student table might have looked like:</p>
+              <ul class='indent-1'>
+                <li><p>firstName: not indexed</p></li>
+                <li><p>lastName: indexed</p></li>
+                <li><p>studentID: not indexed</p></li>
+                <li><p>phoneNum: not indexed</p></li>
+                <li><p>GPA: indexed</p></li>
+              </ul>
+              <p>...giving us the ability to efficiently search for records by last name and GPA.</p>
+              <p>Queries can then be posed in terms of a given field value and then a given sort order for the returned results.</p>
+              <p>So, to help you store the records, let's examine a slightly new data structure: the MultiMap:</p>
+              
+              <br/>
+              <h3>MultiMaps</h3>
+              <p class='definition'>MultiMaps (in terms of this project) map strings to unsigned ints, which isn't different from a map except that MultiMaps allow for duplicate keys.</p>
+              <p>This means we can have two entries with the same keys but different values.</p>
+              <p class='definition'>Your MultiMap must define an iterator capable of traversing its elements.</p>
+              <p>To help you organize and efficiently search your keys, you will implement the MultiMap using a binary search tree.</p>
+              <p>You do not have to balance your binary search tree, but your keys in the binary search tree should abide by the property of: less than on the left and greater than on the right.</p>
+              <div class='example'>
+                <p>Create a binary search tree with key-value pairs:</p>
+                <ul class='indent-1'>
+                  <li><p>Andrew -&gt; 1</p></li>
+                  <li><p>Rocked -&gt; 5</p></li>
+                  <li><p>This -&gt; 22</p></li>
+                  <li><p>Example -&gt; 4</p></li>
+                  <li><p>Andrew -&gt; 2 // What happens here?! (you have to think about it... think about our traversals!)</p></li>
+                </ul>
+              </div>
+              <p>There are variety of other MultiMap constraints you'll need to follow in order to complete the assignment correctly... they are in the spec, and not here.</p>
+              
+              <br/>
+              <h3>FAQ</h3>
+              <p>Many people have been asking about the structure of their MultiMap class... the following example is not related to MultiMaps but might help you understand class structures:</p>
+<pre class='prettyprint'>
+  class Example {
+      private:
+          struct Node {
+              Node (string str) {s = str;}
+              string s;
+              Node* left;
+              Node* right;
+          };
+          Node* node;
+  
+      public:
+          struct Iterator {
+              Iterator (Node* p) {
+                  pointy = p;
+              }
+              string getS () {
+                  return pointy-&gt;s;
+              }
+              private:
+                  Node* pointy;
+          };
+          Iterator addNode (string s) {
+              // Mem leak possible, but just
+              // for example purposes...
+              node = new Node(s);
+              Iterator it(node);
+              return it;
+          }
+  };
+  
+  int main () {
+      Example ex;
+      Example::Iterator it(ex.addNode("testing!"));
+      cout &lt;&lt; it.getS() &lt;&lt; endl;
+  }
+</pre>
+              
+              <br/>
+              <p class='debug'>The assignment is due Thursday, March 13.</p>
+              <p class='debug'>The spec is not yet complete, and the connection from Database to MultiMap is not quite clear yet--it will be in the coming days. Start on MultiMap in the meantime!</p>
+              
+              <br/>
+              <p class='definition'>If you have any final topics that you'd like me to focus on in an review, please email me as soon as possible; I will be compiling a problem set in the coming weeks.</p>
+            </div>
+            <hr/>
+            
+              
+            <a class='btn btn-default pull-right hidden-print' href='javascript:window.print();'>
+              <span class='glyphicon glyphicon-print'></span>
+              &nbsp; PDF / Print
+            </a>
+            
+          </div>
+          <!-- END PRESENTATION CONTENT -->
+          
+          <!-- MATERIALS FROM CLASS: -->
+          
+          
+        </div>
+      </div>
+      <!-- END MAIN CONTENT -->
+      
+          
+    </div>
+    <!-- END WRAPPER -->
+    
+    <!-- BEGIN FOOTER -->
+    <div id="footer">
+      <div class="container">
+        <div class="col-md-12 text-center">
+          
+        </div>
+      </div>
+    </div>
+    <!-- END FOOTER -->
+    
+  </body>
+</html>
