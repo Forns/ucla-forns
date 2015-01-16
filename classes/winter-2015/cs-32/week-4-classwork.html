@@ -104,76 +104,154 @@
             
             <ol class="breadcrumb hidden-print">
               <li><a href="../../../classes.html">Classes</a></li>
-              <li><a href="./cs-32.html">Winter14 CS32</a></li>
-              <li class="active">Week 10 - Classwork</li>
+              <li><a href="./cs-32.html">Summer CS32</a></li>
+              <li class="active">Week 4 - Classwork</li>
             </ol>
             
-            <div id='heap' class='scrollspy-element' scrollspy-title='Binary Heaps'></div>
-            <h1>Binary Heap Classwork</h1>
+            <div id='binSearch' class='scrollspy-element' scrollspy-title='Binary Search'></div>
+            <h1>Binary Search</h1>
             <div>
+              <p class='definition'>During class, you came up with the following Binary Search implementation. Here it is!</p>
+              <br/>
 <pre class='prettyprint'>
-  template &lt;typename T&gt;
-  class BinaryHeap {
-      private:
-          vector&lt;T&gt; heap;
+  template&lt;typename T&gt;
+  bool binarySearch(vector&lt;T&gt; v, T query) {
+      // First, define our iterators on v
+      // We'll narrow down the possible indexes of
+      // our vector by shifting the minIndex right
+      // and the maxIndex left, when appropriate
+      typename vector&lt;T&gt;::iterator minIndex = v.begin(),
+               maxIndex = v.end(),
+               mid;
   
-          // Traversal helpers
-          int getParent (int index) {
-              return (index - 1) / 2;
-          }
-          int getChild (int index, char child) {
-              int result = (index * 2) + 1;
-              if (child == 'R') {
-                  result++;
-              }
-              return result;
-          }
+      // Keep looking as long as we haven't narrowed
+      // down the results to nothing (hint: think
+      // in terms of our iterators)
+      while ( minIndex &lt; maxIndex ) {
+          // Examine the midpoint element between the
+          // minIndex and the maxIndex (remember, it's
+          // an iterator on a vector!
+          mid = minIndex + ((maxIndex - minIndex) / 2);
   
-          // Continues to bubble values up the
-          // tree until we find a node that is
-          // greater than it
-          void bubbleUp (int index) {
-              // [!] If we're at the root, then
-              // we're done
-              if (index == 0) {return;}
-  
-              // [!] Get parent index and store it
-              int parent = getParent(index);
-  
-              // [!] If the parent's value is less than
-              // the current one's...
-              if (heap[parent] &lt; heap[index]) {
-                  // [!] ...then we swap them...
-                  T temp = heap[parent];
-                  heap[parent] = heap[index];
-                  heap[index] = temp;
-  
-                  // [!] ...and recurse on the new parent!
-                  bubbleUp(parent);
-              }
-  
+          // Is the element at mid our query? If so,
+          // return true
+          if ( *mid == query ) {
+              return true;
           }
   
-      public:
-          void print () {
-              for (int i = 0; i &lt; heap.size(); i++) {
-                  cout &lt;&lt; heap[i] &lt;&lt; endl;
-              }
+          // Otherwise, we can narrow our search; only look
+          // to the left of the midpoint if our query is smaller
+          // than the mid, and vice versa if query is larger
+          // Hint: Think of squeezing the array on one side
+          if ( *mid &lt; query ) {
+              minIndex = mid + 1;
+          } else {
+              maxIndex = mid;
           }
+      }
   
-          void insert (T toInsert) {
-              // [!] Add new element to next available
-              // slot in the binary tree
-              heap.push_back(toInsert);
+      // If we make it here, we never found the query
+      return false;
+  }
+
+</pre>
+              <br/>
+              <p>And for testing:</p>
+<pre class='prettyprint'>
+  int main () {
+      int i[] = {1, 5, 8, 32, 45, 99, 100};
+      vector&lt;int&gt; v(i, i+7);
   
-              // [!] Start bubbling values up from
-              // the newly added value
-              bubbleUp(heap.size() - 1);
-          }
-  };
+      cout &lt;&lt; binarySearch(v, 45) &lt;&lt; endl;
+      cout &lt;&lt; binarySearch(v, 42) &lt;&lt; endl;
+      
+      vector&lt;string&gt; s;
+      string query = "Eva";
+      s.push_back("Andrew");
+      s.push_back("Bobby");
+      s.push_back("CyynthiaWithTwoYs");
+      s.push_back("Daren");
+      s.push_back("Eva");
+      s.push_back("ForneyBecauseImMakingThis");
+      s.push_back("ForneyBecauseWhyNot");
+      s.push_back("ForneyToShowEvenNumber");
+  
+      cout &lt;&lt; binarySearch(s, query) &lt;&lt; endl;
+      cout &lt;&lt; binarySearch(s, query + "NOT") &lt;&lt; endl;
+  }
 </pre>
             </div>
             <hr/>
+            
+            <br/>
+            <div id='binarySearchRec' class='scrollspy-element' scrollspy-title='Recursive Binary Search'></div>
+            <h1>Recursive Binary Search</h1>
+            <div>
+              <p class='definition'>During class, you came up with the following Recursive Binary Search implementation. Here it is!</p>
+              <br/>
+<pre class='prettyprint'>
+  template&lt;typename T, typename Iter&gt;
+  bool binarySearchExec(vector&lt;T&gt; v, T&amp; query,
+                        Iter minIndex, Iter maxIndex) {
+  
+      // Base case: the end iterator is before the begin
+      // iterator
+      if ( minIndex &gt;= maxIndex ) {
+          return false;
+      }
+  
+      // Otherwise, find the midpoint:
+      Iter mid = minIndex + ((maxIndex - minIndex) / 2);
+  
+      // Base case: we've found our query!
+      if (*mid == query) {
+          return true;
+      }
+  
+      // Recursive cases:
+      // Otherwise, we need to keep "squeezing" our iterator
+      // bounds:
+  
+      // If our query is greater than the mid, recusively
+      // squeeze our min index
+      if (query &gt; *mid) {
+          return binarySearchExec(v, query, mid + 1, maxIndex);
+      } else {
+          return binarySearchExec(v, query, minIndex, mid);
+      }
+  }
+  
+  template&lt;typename T&gt;
+  bool binarySearchRecursive(vector&lt;T&gt; v, T query) {
+      return binarySearchExec(v, query, v.begin(), v.end());
+  }
+</pre>
+              <br/>
+              <p>And for testing:</p>
+<pre class='prettyprint'>
+  int main () {
+      int i[] = {1, 5, 8, 32, 45, 99, 100};
+      vector&lt;int&gt; v(i, i+7);
+    
+      cout &lt;&lt; binarySearchRecursive(v, 45) &lt;&lt; endl;
+      cout &lt;&lt; binarySearchRecursive(v, 42) &lt;&lt; endl;
+        
+      vector&lt;string&gt; s;
+      string query = "Eva";
+      s.push_back("Andrew");
+      s.push_back("Bobby");
+      s.push_back("CyynthiaWithTwoYs");
+      s.push_back("Daren");
+      s.push_back("Eva");
+      s.push_back("ForneyBecauseImMakingThis");
+      s.push_back("ForneyBecauseWhyNot");
+      s.push_back("ForneyToShowEvenNumber");
+    
+      cout &lt;&lt; binarySearchRecursive(s, query) &lt;&lt; endl;
+      cout &lt;&lt; binarySearchRecursive(s, query + "NOT") &lt;&lt; endl;
+  }
+</pre>
+            </div>
             
             
             <a class='btn btn-default pull-right hidden-print' href='javascript:window.print();'>
@@ -184,6 +262,8 @@
           </div>
           <!-- END PRESENTATION CONTENT -->
           
+          <!-- MATERIALS FROM CLASS: -->
+            
         </div>
       </div>
       <!-- END MAIN CONTENT -->

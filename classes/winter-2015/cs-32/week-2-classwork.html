@@ -104,8 +104,8 @@
             
             <ol class="breadcrumb hidden-print">
               <li><a href="../../../classes.html">Classes</a></li>
-              <li><a href="./cs-32.html">Winter14 CS32</a></li>
-              <li class="active">Week 3 - Classwork</li>
+              <li><a href="./cs-32.html">Summer CS32</a></li>
+              <li class="active">Week 2 - Classwork</li>
             </ol>
             
             <div id='linkedlist' class='scrollspy-element' scrollspy-title='Linked List'></div>
@@ -368,115 +368,80 @@
             </div>
             
             
-            <br/>
-            <div id='hc' class='scrollspy-element' scrollspy-title='HumanCentipede'></div>
-            <h1>Stack Classwork</h1>
+            <div id='ForneyMon' class='scrollspy-element' scrollspy-title='ForneyMon'></div>
+            <h1>ForneyMon Classwork</h1>
             <div>
-              <p class='definition'>During class, you came up with the following HumanCentipede implementation. Here it is!</p>
-              <br/>
+              <p>In class we developed the next hit game and reinvented a genre; its starting implementation is below (should really be broken up into different files, but for ease of viewing, I've
+                left everything in-line below):</p>
+              <p class='example'>We never got to do one thing with our ForneyMon's destructor. What is it?</p>
 <pre class='prettyprint'>
-  // HumanCentipede.h
-  #ifndef HC_INCLUDED
-  #define HC_INCLUDED
-  #include &lt;string&gt;
   #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+    
+  class DampyMon;
   
-  class HumanCentipede {
+  class ForneyMon {
       private:
-          struct Person {
-              std::string m_data;
-              Person* m_front;
-              Person* m_behind;
-              Person (std::string s);
-          };
-  
-          Person* head;
-          Person* tail;
-          int size;
-  
+          string m_name;
+          int m_health;
       public:
-          HumanCentipede();
-          ~HumanCentipede();
-          void insert(std::string);
-          bool erase(std::string);
-          void print();
+          ForneyMon (string n, int h);
+          virtual int takeDamage (int dam, string type);
+          virtual void dealDamage (ForneyMon* other, int dam, string type) = 0;
   };
   
-  #endif
-</pre>
-              <br/>
-<pre class='prettyprint'>
-  // HumanCentipede.cpp
-  #include "HumanCentipede.h"
+  class BurnyMon : public ForneyMon {
+      public:
+          BurnyMon (string name);
+          // [!] Take damage removed from BurnyMon!
+          void dealDamage (ForneyMon* other, int dam, string type);
+  };
   
-  // Default centipede constructor
-  HumanCentipede::HumanCentipede () {
-      head = nullptr;
-      tail = nullptr;
-      size = 0;
+  class DampyMon : public ForneyMon {
+      public:
+          DampyMon (string name);
+          int takeDamage (int dam, string type);
+          void dealDamage (ForneyMon* other, int dam, string type);
+  };
+  
+  ForneyMon::ForneyMon (string n, int h) {
+      m_name = n;
+      m_health = h;
   }
   
-  // Destructor
-  HumanCentipede::~HumanCentipede () {
-      // TODO
+  BurnyMon::BurnyMon (string n) : ForneyMon(n, 10) {}
+  DampyMon::DampyMon (string n) : ForneyMon(n, 15) {}
+  
+  // (General) Take damage regardless of the type of attack
+  int ForneyMon::takeDamage (int dam, string type) {
+      // Reduce the current health by dam amount
+      m_health -= dam;
+      cout &lt;&lt; "[" &lt;&lt; type &lt;&lt; "] Damage: -" &lt;&lt; dam &lt;&lt; endl;
+      return m_health;
   }
   
-  HumanCentipede::Person::Person (std::string s) {
-      m_data = s;
-      m_front = nullptr;
-      m_behind = nullptr;
-  }
-  
-  // Add a new person to the centipede at the
-  // end with name s
-  void HumanCentipede::insert (std::string s) {
-      // 1) Dynamically allocate a Person
-      // ...whatever that translates to in
-      // people terms...
-      Person* toAdd = new Person(s);
-    
-      // 2) Update the head if first victim
-      if (head == nullptr) {
-          head = toAdd;
-  
-      // 2) Otherwise, we already have some People
-      } else {
-          // TODO: Use tail in HumanCentipede to track
-          // the last slot in the centipede instead
-  
-          // Make an iterator to find the last
-          // Person in the Centipede
-          Person* iterator = head;
-      
-          // Stick the new Person on the end of the
-          // centipede
-          while ( iterator-&gt;m_front != nullptr ) {
-              iterator = iterator-&gt;m_front;
-          }
-          // Update the last Person's m_front
-          iterator-&gt;m_front = toAdd;
-          
-          // Update the new Person's m_back
-          toAdd-&gt;m_behind = iterator;
+  // (DampyMon) Take damage equal to dam UNLESS the type
+  // of the attack was burny, in which case take 1 extra
+  int DampyMon::takeDamage (int dam, string type) {
+      if (type == "burny") {
+          dam += 1;
       }
-  
-      // 3) Add one to the size
-      size++;
+      return ForneyMon::takeDamage(dam, type);
   }
   
-  void HumanCentipede::print () {
-      if (head == nullptr) {
-          return;
-      }
-      
-      for (Person* pointy = head; pointy != nullptr; pointy = pointy-&gt;m_front) {
-          std::cout &lt;&lt; pointy-&gt;m_data &lt;&lt; " ";
-      }
-      std::cout &lt;&lt; std::endl;
+  // [!] Hmm, these are the same function! I probably should make
+  // this a function of ForneyMon instead... left as an exercise ;)
+  void BurnyMon::dealDamage (ForneyMon* other, int dam, string type) {
+      other-&gt;takeDamage(dam, type);
+  }
+  void DampyMon::dealDamage (ForneyMon* other, int dam, string type) {
+      other-&gt;takeDamage(dam, type);
   }
 </pre>
             </div>
             <hr/>
+            
             
             <a class='btn btn-default pull-right hidden-print' href='javascript:window.print();'>
               <span class='glyphicon glyphicon-print'></span>
@@ -487,19 +452,6 @@
           <!-- END PRESENTATION CONTENT -->
           
           <!-- MATERIALS FROM CLASS: -->
-          
-          <!-- TODO: NoisyClass example, revisited -->
-            <!-- TODO: Review of memory leaks, stack, heap, etc. -->
-          <!-- TODO: Linked lists: a different perspective (Stacks) -->
-            <!-- TODO: Push -->
-            <!-- TODO: Pop -->
-          <!-- TODO: Doubly linked lists -->
-            <!-- TODO: Insert -->
-            <!-- TODO: Reverse ? -->
-          <!-- TODO: Brief tour of debugger -->
-          <!-- TODO: How to test Linked Lists (following pointers in different cases) -->
-          <!-- TODO: Homework advice -->
-          <!-- TODO: Midterm Wednesday -->
             
         </div>
       </div>

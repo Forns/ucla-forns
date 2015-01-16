@@ -57,5 +57,20 @@ $(function () {
           ]
         },
         options
+      ),
+      
+      ctxLogarithmic = $("#bigOLogarithmic").get(0).getContext("2d"),
+      logarithmicChart = new Chart(ctxLogarithmic).Line(
+        {
+          labels: [0, 100, 1000, 10000, 100000, 1000000],
+          datasets: [
+            {
+              strokeColor: "rgba(151,187,205,1)",
+              fillColor: "rgba(151,187,205,0.5)",
+              data: [0, Math.log(100), Math.log(1000), Math.log(10000), Math.log(100000), Math.log(1000000)]
+            }
+          ]
+        },
+        options
       );
 });

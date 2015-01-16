@@ -104,7 +104,7 @@
             
             <ol class="breadcrumb hidden-print">
               <li><a href="../../../classes.html">Classes</a></li>
-              <li><a href="./cs-32.html">Winter14 CS32</a></li>
+              <li><a href="./cs-32.html">Summer14 CS32</a></li>
               <li class="active">Week 1</li>
             </ol>
             
@@ -112,7 +112,6 @@
             <h1>Introduction: The Discussion Section</h1>
             <div>
               <p>Welcome to CS32!</p>
-              <p>To those of you joining from last quarter... really? You're all gluttons for punishment? And those of you who are just now joining, welcome <span class='strike'>to hell</span> aboard!</p>
               <p><strong>About the Discussion Section:</strong></p>
               <ul class='indent-1'>
                 <li><p>The discussion section is largely review and practice of everything that was covered during lecture in the previous week, plus some greater depth.</p></li>
@@ -123,7 +122,7 @@
               <ul class='indent-1'>
                 <li><p>I am always available to email; don't hesitate to ask for any clarifications.</p></li>
                 <li><p>
-                  My office hours are on Mondays from 2:30 - 5:30pm, right after class for your convenience, in Boelter 2432. If you can't make those hours, and can't take advantage 
+                  My office hours are on Wednesdays from 2:00 - 4:00pm, in Boelter 2432. If you can't make those hours, and can't take advantage 
                   of the other TA office hours, email me to set up an appointment.
                 </p></li>
                 <li><p>
@@ -131,7 +130,7 @@
                   but you know... focus on getting things right first...
                 </p></li>
               </ul>
-              <p><strong>Site Upgrades:</strong></p>
+              <p><strong>Site Features:</strong></p>
               <ul class='indent-1'>
                 <li><p>
                   You can now add notes inside the website so that you can follow along and type as I say stuff! Just hit <code class='prettyprint'>SHIFT + N</code> 
@@ -158,7 +157,237 @@
                 <li><p><strong>Structs &amp; Classes:</strong> here is last quarter's <a href='http://cs.ucla.edu/~forns/classes/fall-2013/cs-31/cs-31-week-9.html' target="_blank">lecture</a>.</p></li>
                 <li><p><strong>Dynamic Memory &amp; More on Structs:</strong> here is last quarter's <a href='http://cs.ucla.edu/~forns/classes/fall-2013/cs-31/cs-31-week-10.html' target="_blank">lecture</a>.</p></li>
               </ul>
-              <p>Ah such nostalgia... it feels like just last quarter that we were learning about ints.</p>
+              <p>Ah such nostalgia... it feels like just yesterday that we were learning about ints.</p>
+              <p>Why not a bit of review to get our feet wet?</p>
+              
+              <br/>
+              <h3>Review of Resource Management</h3>
+              <p>We should take a quick look back at where different variables live in memory, because it's particularly important for constructing and destruct...ing objects.</p>
+              <p>For starters, say I make variable declarations like the following:</p>
+<pre class='prettyprint'>
+  string theory = &quot;woah&quot;;
+  int* i;
+</pre>
+              <p class='question' name='resource-q0'>With regards to scope and memory access, what do we call these variables? In what partition of memory are these variables stored?</p>
+              <p class='answer' name='resource-q0'>These are <strong>local variables</strong>; they live in the partition of memory known as the <strong>stack</strong>.</p>
+              <br/>
+              <p>Is it all coming back, like riding a bike? (fun fact: I'm terrified of bicycles)</p>
+              <p>If so, say I have the following variables:</p>
+<pre class='prettyprint'>
+  string* getThePoint = new string(&quot;point taken&quot;);
+  int* redundantExample = new int(5);
+</pre>
+              <p class='question' name='resource-q1'>Question 1: the dynamic allocation of memory like <code class='prettyprint'>new int(5);</code> is stored in what partition of memory?</p>
+              <p class='answer' name='resource-q1'>
+                The <strong>heap!</strong> This is where dynamically allocated variables live; it is kept distinct from the stack because variables 
+                in the heap are not deallocated upon exit from scope.
+              </p>
+              <br/>
+              <p class='question' name='resource-q2'>
+                Question 2: the pointer that refers to the dynamically allocated memory ( e.g., <code class='prettyprint'>getThePoint</code> in 
+                <code class='prettyprint'>string* getThePoint = new string(&quot;point taken&quot;);</code> ) lives in what partition of memory? 
+              </p>
+              <p class='answer' name='resource-q2'>
+                The <strong>stack!</strong> Even though the memory that the pointer *points to* is dynamically allocated to the heap, the pointer itself lives in the stack 
+                and will disappear when it falls out of scope.
+              </p>
+              <br/>
+              <p>
+                This is the very reason we have memory leaks: dynamically allocated objects persist in the heap even though we lose the capacity to point to, and then delete,  
+                them when the pointer falls out of scope.
+              </p>
+              <p>In summary:</p>
+              <table class='table table-striped table-bordered'>
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th><p>Stack</p></th>
+                    <th><p>Heap</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th><p>What variables live here?</p></th>
+                    <td>
+                      <p>Local variables, functions, function arguments, etc.</p>
+                    </td>
+                    <td>
+                      <p>Dynamically allocated memory reserved by the programmer</p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th><p>How can variables be accessed?</p></th>
+                    <td>
+                      <p>By any type of identifier defined in scope</p>
+                    </td>
+                    <td>
+                      <p>Only through pointers!</p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th><p>Memory is allocated:</p></th>
+                    <td>
+                      <p>Whenever a variable is declared in scope</p>
+                    </td>
+                    <td>
+                      <p>Whenever the <code class='prettyprint'>new</code> keyword is used to initialize a variable and call a constructor</p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th><p>Memory is freed / deallocated:</p></th>
+                    <td>
+                      <p>Whenever a variable disappears from scope (e.g., local variables in a function after returning from that function)</p>
+                    </td>
+                    <td>
+                      <p>Only after the delete keyword is used!</p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+              <p>Why am I re-telling this to you?</p>
+              <p>Maybe I deleted my memory of the first time...</p>
+              <p>The real reason is because it helps us dissect our class definitions, and in particular, the data members that make them up, how to construct them, and how to DESTROY them.</p>
+              <p>To do so, we need to know when certain class object events happen. Let's fill in this table:</p>
+              <table class='table table-striped table-bordered'>
+                <thead>
+                  <tr>
+                    <th><p>Event</p></th>
+                    <th><p>Stack</p></th>
+                    <th><p>Heap</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th><p>Construction</p></th>
+                    <td>
+                      <p class='question' name='stack-q0'>When does it happen?</p>
+                      <div class='answer' name='stack-q0'><p>Local variable declarations such as:</p>
+<pre class='prettyprint'>
+  // Called 1 time
+  string s = "hi!";
+  
+  // Called 3 times!
+  LinkedList LLCoolJ[3];
+</pre>
+                      </div>
+                    </td>
+                    <td>
+                      <p class='question' name='heap-q0'>When does it happen?</p>
+                      <div class='answer' name='heap-q0'><p>Dynamic variable declarations such as:</p>
+<pre class='prettyprint'>
+  // Called 1 time
+  string* s 
+    = new string("neat!");
+  
+  // Called 3 times!
+  LinkedList* lists 
+    = new LinkedList[3];
+</pre>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th><p>Deallocation</p></th>
+                    <td>
+                      <p class='question' name='stack-q1'>When does it happen?</p>
+                      <div class='answer' name='stack-q1'><p>Local variable leaves scope:</p>
+<pre class='prettyprint'>
+  // Called 3 times!
+  for (int i = 0; i &lt; 3; i++) {
+    LinkedList LLama;
+  }
+</pre>
+                      </div>
+                    </td>
+                    <td>
+                      <p class='question' name='heap-q1'>When does it happen?</p>
+                      <div class='answer' name='heap-q1'><p>delete or delete[] called on dynamically allocated object:</p>
+<pre class='prettyprint'>
+  LinkedList* linky 
+    = new LinkedList();
+  // Called 1 time
+  delete linky;
+  
+  LinkedList* links 
+    = new LinkedList[4];
+  // Called 4 times!
+  delete[] links;
+</pre>
+                      </div>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+              <p>Just to be sure we understand, let's use NoisyClass from a week ago because I'm lazy:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  class NoisyClass {
+      private:
+          string s;
+  
+      public:
+          NoisyClass () {
+              cout &lt;&lt; "[C] Default constructor" &lt;&lt; endl;
+          }
+  
+          NoisyClass (string stuff) {
+              s = stuff;
+              cout &lt;&lt; "[P] Parameterized constructor" &lt;&lt; endl;
+          }
+  
+          NoisyClass (const NoisyClass&amp; other) {
+              s = other.s;
+              cout &lt;&lt; "[~] Copy constructor" &lt;&lt; endl;
+          }
+  
+          ~NoisyClass () {
+              cout &lt;&lt; "[D] Destructor" &lt;&lt; endl;
+          }
+  
+          NoisyClass&amp; operator= (const NoisyClass&amp; other) {
+              s = other.s;
+              cout &lt;&lt; "[=] Assignment" &lt;&lt; endl;
+              return *this;
+          }
+  };
+</pre>
+              <p class='example'>With the NoisyClass definition from above, what will the following code print out?</p>
+<pre class='prettyprint'>
+  // [C] Default constructor
+  // [P] Parameterized constructor
+  // [~] Copy constructor
+  // [D] Destructor
+  // [=] Assignment
+  int main () {
+      NoisyClass* heapsOfNoise;
+  
+      for (int i = 0; i &lt; 2; i++) {
+          NoisyClass n[2];
+      }
+  
+      heapsOfNoise = new NoisyClass[2];
+      delete[] heapsOfNoise;
+  }
+</pre>
+              <br/>
+              <p class='example'>With the NoisyClass definition from above, what will the following code print out?</p>
+<pre class='prettyprint'>
+  // [C] Default constructor
+  // [P] Parameterized constructor
+  // [~] Copy constructor
+  // [D] Destructor
+  // [=] Assignment
+  int main () {
+      NoisyClass* heapsOfNoise = new NoisyClass[2];
+      NoisyClass echo = heapsOfNoise[1];
+      heapsOfNoise[0] = echo;
+      delete[] heapsOfNoise;
+  }
+</pre>
             </div>
             <hr/>
             
@@ -169,15 +398,16 @@
             <div>
               <p>This isn't Bob the Builder territory any more (I promise to stop using him in my constructor examples).</p>
               <p>
-                We spoke a bit more extensively about the details of constructors last quarter 
+                We spoke a bit more extensively about the details of constructors in CS31 
                 (<a href='http://cs.ucla.edu/~forns/classes/fall-2013/cs-31/cs-31-week-10.html#structs' target='_blank'>lecture here</a>) 
                 but now there are a few more things to say.
               </p>
               <p>First, let's introduce a new tool for our constructors: the initialization list.</p>
               <p class='toolkit'>An <strong>initialization list</strong> is a constructor syntax for initializing class data members *as* they are being declared.</p>
+              <br/>
               <p>We've previously dealt with member objects *after* they've been declared, by performing assignments *within* the constructor body.</p>
               <p>In other words, by the time we execute the code in the body of our constructor, our data members have already been declared.</p>
-              <p>Since our recent homeworks have dealt with zombies, far be it from me to ruin the streak with my examples:</p>
+              <p>Now, when I wrote this example, we were just completing a zombie assignment in CS32 so what may have been topical then is kinda weird now... meh:</p>
 <pre class='prettyprint'>
   class Survivor {
       private:
@@ -210,13 +440,15 @@
               <div class='toolkit'>
                 <p>The initialization list syntax is as follows:</p><br/>
 <pre class='prettyprint'>
-  ClassName (): member_1(setting_1), ..., member_n(setting_n) {
-    &lt;constructor body&gt;
+  ClassName (): member_1(constructor_args_1), ..., member_n(constructor_args_n) {
+    // &lt;constructor body&gt;
   }
 </pre>
               </div>
                 <p>Above, <code class='prettyprint'>member_i</code> represents any data members we want to initialize using the initialization list. We need not initialize every data member.</p>
-                <p>Similarly, <code class='prettyprint'>setting_i</code> represents the expression to which we wish to initialize <code class='prettyprint'>member_i</code>. This could be a literal, function call, etc.</p>
+                <p>Similarly, <code class='prettyprint'>constructor_args_i</code> represents the arguments we're passing to that member's constructor for each <code class='prettyprint'>member_i</code>.
+                  This could be a literal, function call, etc. that resolves to some argument value.</p>
+                <br/>
                 <p>So, rewriting the above example using an initialization list:</p>
 <pre class='prettyprint'>
   class Survivor {
@@ -226,7 +458,9 @@
           int m_health;
   
       public:
-          Survivor (): m_name("Rick Grimes"), m_infected(false), m_health(100) {}
+          Survivor (): m_name("Rick Grimes"), 
+                       m_infected(false),
+                       m_health(100) {}
   
           // Getters
           string getName () {return m_name;}
@@ -234,6 +468,7 @@
           int getHealth () {return m_health;}
   };
 </pre>
+              <br/>
               <p>You can even use initialization lists with non-default constructors:</p>
 <pre class='prettyprint'>
   class Survivor {
@@ -243,66 +478,14 @@
           int m_health;
   
       public:
-          Survivor (): m_name("Rick Grimes"), m_health(100), m_infected(false) {}
+          Survivor (): m_name("Rick Grimes"),
+                       m_health(100),
+                       m_infected(false) {}
   
           Survivor (string name, bool infected, int health):
-              m_name(name), m_health(health), m_infected(infected) {}
-  
-          // Getters
-          string getName () {return m_name;}
-          bool isInfected () {return m_infected;}
-          int getHealth () {return m_health;}
-  };
-</pre>
-              <p>NOTE: above, my parameters on the new constructor are in a different order than in my initialization list. This is fine... however...</p>
-              <p class='debug'>Initialization lists initialize data members in the order in which the data members were listed in the class definition, NOT in the order they appear in the initialization list.</p>
-              <p>So, say I wanted to generate a (kinda) random maximum health anywhere from 1 - 100 for my survivors when they're constructed:</p>
-<pre class='prettyprint'>
-  class Survivor {
-      private:
-          string m_name;
-          bool m_infected;
-          int m_health;
-          int m_max_health;
-  
-      public:
-          Survivor ():
-              // See the new list item for m_max_health
-              m_name("Rick Grimes"), m_max_health(rand() % 100 + 1), m_health(m_max_health), m_infected(false) {}
-  
-          // Getters
-          string getName () {return m_name;}
-          bool isInfected () {return m_infected;}
-          int getHealth () {return m_health;}
-  };
-</pre>
-              <p>But does this work as I intended? i.e., does <code class='prettyprint'>m_health</code> get set to the random value of <code class='prettyprint'>m_max_health</code>?</p>
-              <p>Try running this simple main function with the above class definition:</p>
-<pre class='prettyprint'>
-  int main () {
-      Survivor s;
-      cout &lt;&lt; s.getHealth() &lt;&lt; endl;
-  }
-</pre>
-              <p>
-                Well, as it turns out, even though my initialization for <code class='prettyprint'>m_max_health</code> comes before my initialization for <code class='prettyprint'>m_health</code> 
-                in the initialization list, <code class='prettyprint'>m_max_health</code> does NOT come before <code class='prettyprint'>m_health</code> in the *class definition.*
-              </p>
-              <p>Making the following switch will fix our issue:</p>
-<pre class='prettyprint'>
-  class Survivor {
-      private:
-          string m_name;
-          bool m_infected;
-          
-          // Now listing m_max_health BEFORE
-          // m_health
-          int m_max_health;
-          int m_health;
-  
-      public:
-          Survivor ():
-              m_name("Rick Grimes"), m_max_health(rand() % 100 + 1), m_health(m_max_health), m_infected(false) {}
+                       m_name(name), 
+                       m_health(health),
+                       m_infected(infected) {}
   
           // Getters
           string getName () {return m_name;}
@@ -368,8 +551,11 @@
           int m_ammo;
       
       public:
-          Weapon (): m_name("Colt Python"), m_ammo(6) {}
-          Weapon (string name, int ammo): m_name(name), m_ammo(ammo) {}
+          Weapon (): m_name("Colt Python"),
+                     m_ammo(6) {}
+          Weapon (string name, int ammo): 
+                     m_name(name),
+                     m_ammo(ammo) {}
           string getName () {return m_name;}
           int getAmmo () {return m_ammo;}
   };
@@ -424,7 +610,10 @@
   
       public:
           Survivor ():
-              m_name("Rick Grimes"), m_health(100), m_infected(false), m_gun("Beretta", 30) {}
+              m_name("Rick Grimes"),
+              m_health(100),
+              m_infected(false),
+              m_gun("Beretta", 30) {}
   
           // Getters
           string getName () {return m_name;}
@@ -532,12 +721,14 @@
               <p>I guess we should start by considering:</p>
               <p class='question' name='org-q0'>Why do we bother breaking down our source into different files? Isn't this just more overhead to learn?</p>
               <p class='answer' name='org-q0'>Well, any projects of any appreciable size become ungainly if you have a file that is, say, a million lines of code long! It would be impossible to find anything.</p>
+              <br/>
               <p>There are also implications for version control and debugging that make breaking projects into multiple files a great idea.</p>
               <p>Hey, here's something we haven't talked about before:</p>
               <p class='toolkit'>
                 A <strong>Header File (.h)</strong> is just like a .cpp file except that by convention, we use header files to *declare* functions and variables, but .cpp files to *implement* 
                 and *use* them.
               </p>
+              <br/>
               <p>You can think of header files as contracts between you and the compiler: the headers state what you promise to implement, and the .cpp files are your fulfillment of the contract.</p>
               <p>Headers also collect function prototypes so that it's easy to see what the expected behavior of a particular interface will be.</p>
               <p>The process of creating header files is typically the following:</p>
@@ -595,7 +786,7 @@
           Weapon m_gun;
   
       public:
-          Survivor::Survivor ();
+          Survivor ();
           std::string getName ();
           bool isInfected ();
           int getHealth ();
@@ -610,7 +801,7 @@
   using namespace std;
   
   // Initialization list style
-  Survivor::Survivor ():
+  Survivor ():
       m_name("Rick Grimes"),
       m_infected(false),
       m_health(100),
@@ -624,9 +815,10 @@
   
 </pre>
               </div>
-              <p>Hmm... what was missing here?</p>
-              <p>You're so smart... we have a data member of the Weapon class that our compiler doesn't know about any more!</p>
-              <p>Let's make split our Weapon class into a header and .cpp and see how they all fit together...</p>
+              <p class='question' name='file-org-q0'>What was missing above that caused an error?</p>
+              <p class='answer' name='file-org-q0'>You're so smart... we have a data member of the Weapon class that our compiler doesn't know about any more! We can fix this now...</p>
+              <br/>
+              <p>Let's split our Weapon class into a header and .cpp and see how they all fit together...</p>
               <div class='col-md-6'>
 <pre class='prettyprint'>
   // Weapon.h
@@ -679,7 +871,7 @@
           Weapon m_gun;
   
       public:
-          Survivor::Survivor();
+          Survivor();
           std::string getName ();
           bool isInfected ();
           int getHealth ();
@@ -712,7 +904,7 @@
               <p>Notice: I don't have to include the Weapon header or .cpp in my RunIt.cpp because it's already been Linked in the Survivor.h.</p>
               <p>Neat eh? EH?!</p>
               <p class='question' name='files-q1'>There's one superfluous inclusion directive in my 5-file package listed above. Can you find it?</p>
-              <p class='answer' name='files-q1'>You don't need to include the string library in Survivor.h any more because it's been included in Weapon.h, which is included by Survivor.h :D</p>
+              <p class='answer' name='files-q1'>You don't need to include the string library in Survivor.h any more because it's been included in Weapon.h, which is included by Survivor.h</p>
               <br/>
               <h3>Summary</h3>
               <ul class='indent-1'>
@@ -894,7 +1086,7 @@
           Weapon m_gun;
   
       public:
-          Survivor::Survivor();
+          Survivor();
           std::string getName ();
           bool isInfected ();
           int getHealth ();
@@ -911,10 +1103,10 @@
             
             
             <br/>
-            <div id='faq' class='scrollspy-element' scrollspy-title='FAQ'></div>
+            <div id='faq' class='scrollspy-element' scrollspy-title='Inclusion FAQ'></div>
             <h1>Inclusion FAQ</h1>
             <div>
-              <p>I wrote a couple things down that I thought I should address but <span class='strike'>it's Saturday and I'm lazy</span> including examples might confound good practice so:</p>
+              <p>I wrote a couple things down that I thought I should address but <span class='strike'>it's summer and I'm lazy</span> including examples might confound good practice so:</p>
               <p><strong>What if I put a non-inline function implementation into a header file. Will it compile?</strong></p>
               <p>(Don't worry about what a non-inline function means yet--just think of the function definitions we've learned thus far)</p>
               <p>
@@ -932,16 +1124,616 @@
             
             
             <br/>
-            <div id='hw' class='scrollspy-element' scrollspy-title='Project 1'></div>
+            <div id='copyCons' class='scrollspy-element' scrollspy-title='Copy Constructors'></div>
+            <h1>Copy Constructors</h1>
+            <div>
+              <p>Sometimes I think this class should be called &quot;Intro to C++ Constructors.&quot;</p>
+              <p>So, say we've got this cool class:</p>
+              <br/>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  const int MAX_COPIES = 100;
+  
+  // Kinkos is a registered trademark of FedEx
+  // Its use in this example is purely for bad joke
+  // purposes and in no way reflects the views or
+  // copy constructors of the company or its affiliates
+  class Kinkos {
+      private:
+          string copies[MAX_COPIES];
+          int currentCopy;
+  
+      public:
+          Kinkos () {
+              currentCopy = 0;
+          }
+  
+          string makeCopy () {
+              string copy;
+              if (currentCopy &gt; 0) {
+                  copy = copies[currentCopy - 1];
+                  currentCopy--;
+              }
+              return copy;
+          }
+  
+          void addOrder (string s) {
+              if (currentCopy &lt;= MAX_COPIES) {
+                  copies[currentCopy] = s;
+                  currentCopy++;
+              }
+          }
+  };
+</pre>
+              <br/>
+              <p>Alright, so I have a Kinkos that takes in copy orders for string text, and then makes copies of the most recently received orders (I never said customers were happy with it).</p>
+              <p>Now, our Kinkos stores, being specialists in making copies, want to make an expansion store...</p>
+              <p>So, naturally, they copy one of their own stores!</p>
+              <p>To help them do so, they use a copy constructor...</p>
+              <p class='toolkit'>
+                A <strong>copy constructor</strong> is a special constructor definition that is called whenever a new object of some class C is created from another object of that same class C.
+              </p>
+              <br/>
+              <p>So, if I try to make a new class C object, and then create a &quot;copy&quot; of it, I might say:</p>
+<pre class='prettyprint'>
+  C object1;
+  // Make object2 a "copy" of object1
+  C object2(object1);
+</pre>
+              <p>Let's create a couple of Kinkos stores and see what happens:</p>
+              <p class='example'>What will the following code output?</p>
+<pre class='prettyprint'>
+  int main () {
+      Kinkos inWestwood;
+      inWestwood.addOrder("Don't")
+      inWestwood.addOrder("sue me...")
+      inWestwood.addOrder("FedEx");
+      
+      // A copy constructor called using the source
+      // Kinkos object, inWestwood, creating a new
+      // Kinkos object expansion!
+      Kinkos expansion(inWestwood);
+  
+      cout &lt;&lt; inWestwood.makeCopy() &lt;&lt; " ";
+      cout &lt;&lt; inWestwood.makeCopy() &lt;&lt; " ";
+      cout &lt;&lt; expansion.makeCopy() &lt;&lt; endl;
+  }
+</pre>
+              <p>Err, ignore that output, FedEx &gt;_&gt; &lt;_&lt;</p>
+              <p>Here, we see that when I wanted expansion to be a copy of inWestwood, it copied all of the data members over as well!</p>
+              <p>How did our program know how to do this?</p>
+              <p class='definition'>
+                If a copy constructor is not defined by the programmer, a default copy constructor will be provided by the compiler. This generic copy constructor will
+                simply attempt to create a copy of each of the source's data members, and initialize the copy's data members to these copies.
+              </p>
+              <br/>
+              <p>This explains why I see &quot;FedEx sue me... FedEx&quot; instead of &quot;FedEx sue me... Don't&quot; in the example above; the copies data member is itself a copy in expansion.</p>
+              <p>Now, say our Kinkos wanted to specify how many copies a given store could handle, i.e., they wanted different maximum copies for each store.</p>
+              <p>We see that having the copies data member as an array of strings won't work for this goal because its size must be constant at compile time.</p>
+              <p>So, we change our data members to work with dynamic allocation of the copies array:</p>
+<pre class='prettyprint'>
+  class Kinkos {
+      private:
+          // [!] Changes to the data member
+          string* copies;
+          int currentCopy;
+          int maxCopies;
+  
+      public:
+          // [!] Changes to the constructor
+          Kinkos (int maximum) {
+              copies = new string[maximum];
+              currentCopy = 0;
+              maxCopies = maximum;
+          }
+          
+          // [!] Added destructor
+          ~Kinkos () {
+              delete[] copies;
+          }
+  
+          string makeCopy () {
+              string copy;
+              if (currentCopy &gt; 0) {
+                  copy = copies[currentCopy - 1];
+                  currentCopy--;
+              }
+              return copy;
+          }
+  
+          Kinkos&amp; addOrder (string s) {
+              if (currentCopy &lt;= maxCopies) {
+                  copies[currentCopy] = s;
+                  currentCopy++;
+              }
+              return *this;
+          }
+  };
+</pre>
+              <p>Now, we try and run it with the same main function as above...</p>
+              <p class='question' name='constructors-q1'>Will the new class definition for Kinkos function as intended?</p>
+              <p class='answer' name='constructors-q1'>
+                No! Our compiler-generated copy constructor copied all of our data members when we made the expansion object... except that the copies pointer 
+                still points to the same object in both the inWestwood and expansion objects! I then try to delete this dynamically allocated array twice, causing problems 
+                at runtime (undefined behavior).
+              </p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-2/constructors-0.PNG' />
+              </div>
+              <br/>
+              <p>&quot;Andrew, if you squint at that diagram, it looks a little like a mustached robot.&quot;</p>
+              <p>Thank you for that information.</p>
+              <p>So how do I get around this? I want to define my own copy constructor behavior!</p>
+              <div class='toolkit'>
+                <p>Users may define their own copy constructors using the following syntax:</p>
+<pre class='prettyprint'>
+  ClassName::ClassName(const ClassName&amp; c) {
+    // Body of copy constructor
+  }
+</pre>
+              </div>
+              <p>Notice some of the features of this syntax:</p>
+              <ul class='indent-1'>
+                <li><p>Its parameter list consists of a single object of the same type as the class for which it is a member function.</p></li>
+                <li><p>We indicate this single parameter as a const value so that we don't change anything in the object getting copied.</p></li>
+                <li><p>We indicate that this single parameter is a *reference* to another ClassName object.</p></li>
+              </ul>
+              <p class='question' name='constructors-q2'>Why do we indicate the copy constructor parameter as a reference to another object of the same class?</p>
+              <p class='answer' name='constructors-q2'>
+                If we indicate that it is pass-by-value, then it will attempt to make a copy of the argument... which will then call the copy constructor 
+                again and again into infinite regress!
+              </p>
+              <p>From this point, we see that:</p>
+              <p class='definition'>By definition, copy constructors define the behavior of pass-by-value for a particular class.</p>
+              <p>Let's start out by fixing our Kinkos class with its own copy constructor:</p>
+<pre class='prettyprint'>
+  class Kinkos {
+      private:
+          string* copies;
+          int currentCopy;
+          int maxCopies;
+  
+      public:
+          Kinkos (int maximum) {
+              maxCopies = maximum;
+              copies = new string[maximum];
+              currentCopy = 0;
+          }
+  
+          // [!] NEW: Copy constructor added!
+          Kinkos (const Kinkos&amp; k) {
+              maxCopies = k.maxCopies;
+              copies = new string[maxCopies];
+              // Instead of just copying the pointer of
+              // the copy, I want to copy the elements of the
+              // pointer instead!
+              for (int i = 0; i &lt; maxCopies; i++) {
+                  copies[i] = k.copies[i];
+              }
+              currentCopy = k.currentCopy;
+          }
+  
+          ~Kinkos () {
+              delete[] copies;
+          }
+  
+          string makeCopy () {
+              string copy;
+              if (currentCopy &gt; 0) {
+                  copy = copies[currentCopy - 1];
+                  currentCopy--;
+              }
+              return copy;
+          }
+  
+          Kinkos&amp; addOrder (string s) {
+              if (currentCopy &lt;= maxCopies) {
+                  copies[currentCopy] = s;
+                  currentCopy++;
+              }
+              return *this;
+          }
+  };
+</pre>
+              <p>Now if I try to run my main function from before, I'm OK!</p>
+              <p>
+                One thing to note about this copy constructor: 
+                We can access the private members of k, the Kinkos being copied, because the copy constructor is still a member function of the Kinkos class.
+              </p>
+              <p>The two Kinkos objects now look like this:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-2/constructors-1.PNG' />
+              </div>
+              <p>One final note about copy constructors:</p>
+              <p class='definition'>We can use the assignment operator to invoke the copy constructor if both operands of the same class and the lvalue has not been declared before.</p>
+              <p>So, in our previous example's main function:</p>
+<pre class='prettyprint'>
+  Kinkos expansion(inWestwood);
+  
+  // ... is equivalent to ...
+  
+  Kinkos expansion = inWestwood;
+</pre>
+              <p>BUT, what if the lvalue *has* been declared before? Let's take a look in a bit...</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='opOverloading' class='scrollspy-element' scrollspy-title='Operator Overloading'></div>
+            <h1>Intro to Operator Overloading</h1>
+            <div>
+              <p>Before we look at handling object assignment, let's take a quick review / detour into operator overloading.</p>
+              <p class='definition'><strong>Operator overloading</strong> is the act of providing user-defined behavior for different C++ operators.</p>
+              <p>When we want to define the behavior of an operator (let's say, the plus sign +) for our class, we use the syntax:</p>
+<pre class='prettyprint'>
+  ClassName&amp; ClassName::operator+ (SomeType other) {
+      // Operator behavior within
+  }
+</pre>
+              <p>Let's look at a quick, arbitrary example:</p>
+              <p class='example'>What will the following code output?</p>
+<pre class='prettyprint'>
+  struct OpExample {
+      string s;
+      int i;
+  
+      OpExample () {
+          i = 1;
+      }
+      
+      // [!] Using the += operator with another OpExample object
+      // as the rvalue will add the rvalue's string data member
+      // to the lvalue's string data member as many times as the
+      // lvalue's int data member
+      OpExample&amp; operator+= (OpExample&amp; rvalue) {
+          for (int j = 0; j &lt; i; j++) {
+              s += rvalue.s;
+          }
+          return *this;
+      }
+  };
+  
+  int main () {
+      OpExample op1,
+                op2;
+  
+      op2.s = "Test!";
+      op1.i = 3;
+      
+      // [!] Using our custom += operator definition!
+      op1 += op2;
+  
+      cout &lt;&lt; op1.s &lt;&lt; endl;
+  }
+</pre>
+              <p>Some things to note about our example:</p>
+              <ul class='indent-1'>
+                <li><p>Our overloaded symbol inherits the precedence rules of the C++ language.</p></li>
+                <li><p>The parameter in our class' operator overloading function definition refers to the rvalue in this case.</p></li>
+                <li><p>We return a reference to the lvalue object so that we can chain operator calls together.</p></li>
+                <li><p>Instead of saying <code class='prettyprint'>op1 += op2;</code> I could have said <code class='prettyprint'>op1.operator+=(op2);</code> in the main function.</p></li>
+              </ul>
+              <p>Here's another example for practice!</p>
+              <p class='example'>What will the following code output?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  struct OpExample {
+      string s;
+      int i;
+  
+      OpExample () {
+          i = 1;
+      }
+  
+      OpExample&amp; operator+= (OpExample&amp; rvalue) {
+          for (int j = 0; j &lt; i; j++) {
+              s += rvalue.s;
+          }
+          return *this;
+      }
+  
+      // [!] New prefix increment operator! Notice how
+      // my operator overloading functions can return types
+      // other than that of the class / struct in which
+      // they are defined!
+      int operator++ () {
+          return i++;
+      }
+  };
+  
+  int main () {
+      OpExample op1,
+                op2,
+                op3;
+  
+      op2.s = "Test!";
+      op3.s = "Wow!";
+      ++op1;
+      ++op2;
+      op1 += (op2 += op3);
+  
+      cout &lt;&lt; op1.s &lt;&lt; endl;
+  }
+</pre>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='assignment' class='scrollspy-element' scrollspy-title='Overloading Assignment'></div>
+            <h1>Overloading the Assignment Operator</h1>
+            <div>
+              <p>In our segment about copy constructors, we saw that we can use the assignment operator (=) to invoke the copy constructor of the lvalue when it has yet to be declared before.</p>
+              <p>BUT, what happens if we try the following for some class C:</p>
+<pre class='prettyprint'>
+  C c1;
+  C c2;
+  
+  // [!] Will this invoke the copy constructor
+  // for c1?
+  c1 = c2;
+</pre>
+              <p>Above, we see that c1 has already been declared and constructed, so the statement <strong>c1 = c2;</strong> will NOT invoke the copy constructor, but rather, the assignment behavior.</p>
+              <p>What is the assignment behavior, by default?</p>
+              <p class='definition'>
+                The <strong>default assignment behavior</strong> for an lvalue and rvalue of the same class is generated by the compiler, and will simply perform an assignment 
+                of each of the lvalue's data members to each of the rvalue's corresponding data members.
+              </p>
+              <br/>
+              <p>Well that's wordy and useless... why don't we examine a simple example?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  // hehe... it's short for assignment but you
+  // still have to say "ass example"
+  struct AssExample {
+      int m_i;
+      string m_s;
+      bool m_b;
+  
+      AssExample () {};
+  
+      AssExample (int i, string s, bool b) {
+          m_i = i;
+          m_s = s;
+          m_b = b;
+      }
+  };
+  
+  int main () {
+      AssExample a1(3, "test", 1),
+                 a2;
+  
+      // [!] Note: a2 has already been constructed,
+      // so the copy constructor won't be called, but rather
+      // the assignment behavior will occur
+      a2 = a1;
+  
+      cout &lt;&lt; a2.m_i &lt;&lt; endl;
+      cout &lt;&lt; a2.m_s &lt;&lt; endl;
+      cout &lt;&lt; a2.m_b &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p>Naturally, then, if I wanted to control the behavior of the assignment, I could implement an operator overloading for it in my class definition:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  struct AssExample {
+      int m_i;
+      string m_s;
+      bool m_b;
+  
+      AssExample () {};
+  
+      AssExample (int i, string s, bool b) {
+          m_i = i;
+          m_s = s;
+          m_b = b;
+      }
+  
+      // [!] Define the behavior of the assignment to NOT
+      // copy over the string data member
+      AssExample&amp; operator= (const AssExample&amp; other) {
+          m_i = other.m_i;
+          m_b = other.m_b;
+          return *this;
+      }
+  };
+  
+  int main () {
+      AssExample a1(3, "test", 1),
+                 a2;
+  
+      a2 = a1;
+  
+      // [!] See what I print out now...
+      cout &lt;&lt; a2.m_i &lt;&lt; endl;
+      cout &lt;&lt; a2.m_s &lt;&lt; endl;
+      cout &lt;&lt; a2.m_b &lt;&lt; endl;
+  }
+</pre>
+              <p>Just like with the compiler-given copy constructor, we can see that we might get into trouble with the compiler-given assignment behavior if one of our data members was a pointer!</p>
+              <p>As such, we have to be vigilant and make sure that classes with pointer data members don't rely on the default assignment behavior.</p>
+              <p>One other common pitfall with the assignment behavior is when we assign an object to itself.</p>
+              <p>If we want to prevent our assignment operator from allowing assignment to and from the same object, we can compare against the object's memory address as such:</p>
+<pre class='prettyprint'>
+  ClassName&amp; ClassName::operator= (const ClassName&amp; other) {
+      // if the lvalue's address is not the same as the
+      // rvalue's address... (i.e. they are different objects)
+      if (this != &amp;other) {
+          // ...assignment behavior here, safe from
+          // self-assignment
+      }
+  }
+</pre>
+              
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='summary' class='scrollspy-element' scrollspy-title='Summary'></div>
+            <h1>Summary</h1>
+            <div>
+              <p>So, on the long journey from copy constructors to assignment overloading, here's a brief rundown:</p>
+              <ul class='indent-1'>
+                <li><p>Beware of copied pointers in the default copy constructor and default assignment behavior!</p></li>
+                <li><p>Beware of memory leaks from the assignment overloading!</p></li>
+                <li><p>Beware of dangling pointers from the assignment overloading!</p></li>
+              </ul>
+              <p>To pull it all together, let's examine the following class that does a bunch of output to the console whenever key events happen:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+  
+  class NoisyClass {
+      private:
+          string s;
+  
+      public:
+          NoisyClass () {
+              cout &lt;&lt; "[C] Default constructor" &lt;&lt; endl;
+          }
+  
+          NoisyClass (string stuff) {
+              s = stuff;
+              cout &lt;&lt; "[P] Parameterized constructor" &lt;&lt; endl;
+          }
+  
+          NoisyClass (const NoisyClass&amp; other) {
+              s = other.s;
+              cout &lt;&lt; "[~] Copy constructor" &lt;&lt; endl;
+          }
+  
+          ~NoisyClass () {
+              cout &lt;&lt; "[D] Destructor" &lt;&lt; endl;
+          }
+  
+          NoisyClass&amp; operator= (const NoisyClass&amp; other) {
+              s = other.s;
+              cout &lt;&lt; "[=] Assignment" &lt;&lt; endl;
+              return *this;
+          }
+  };
+</pre>
+              <br/>
+              <p class='example'>With the NoisyClass definition from above, what will the following code print out?</p>
+<pre class='prettyprint'>
+  int main () {
+      NoisyClass n1,
+                 n2;
+  
+      n1 = n2;
+      // Don't forget that n1 and n2 are local...
+  }
+</pre>
+              <p class='example'>With the NoisyClass definition from above, what will the following code print out?</p>
+<pre class='prettyprint'>
+  int main () {
+      NoisyClass n1("Not the parameterized constructor &gt;_&gt; &lt;_&lt;");
+      NoisyClass n2(n1);
+      NoisyClass n3 = n2;
+  }
+</pre>
+              <p class='example'>With the NoisyClass definition from above, what will the following code print out?</p>
+<pre class='prettyprint'>
+  int main () {
+      NoisyClass* n1;
+      NoisyClass n2,
+                 n3;
+  
+      n1 = new NoisyClass();
+      n2 = *n1;
+      delete n1;
+      n3 = n2;
+  }
+</pre>
+              <p class='example'>With the NoisyClass definition from above, what will the following code print out?</p>
+<pre class='prettyprint'>
+  int main () {
+      NoisyClass n[3];
+  }
+</pre>
+              <p class='example'>With the NoisyClass definition from above, what will the following code print out?</p>
+<pre class='prettyprint'>
+  int main () {
+      NoisyClass* n;
+      n = new NoisyClass[4];
+      delete[] n;
+  }
+</pre>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='proj1' class='scrollspy-element' scrollspy-title='Project 1'></div>
             <h1>Project 1 Tips</h1>
             <div>
+              <p><strong>DUE: July 1st, 9:00 pm</strong></p>
               <p>A couple things to look out for on Project 1 that may doom you:</p>
               <p class='debug'>Although your code may still work, superfluous include directives may cost you points! Make sure that you include only what is necessary to include in each header.</p>
               <p class='debug'>Remember to test compilation under multiple compilers!</p>
               <p class='debug'>Are capital letters contiguous is every character coding schema? Make sure to account for this...</p>
               <p class='debug'>Include guards!</p>
               <p class='debug'>Comments!</p>
-              <p>Good luck!</p>
+              <br/>
+              <p>At this point in the discussion we'll do a live demo of a correctly implemented history.</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='hw1' class='scrollspy-element' scrollspy-title='Homework 1'></div>
+            <h1>Homework 1 Tips</h1>
+            <div>
+              <p><strong>DUE: July 3rd, 9:00 pm</strong></p>
+              <p>First, you've been reading through a lot of my notes, which must be draining without me there to say them to you.</p>
+              <p>To provide some morale support, here's an XKCD from a bit ago that reminded me of office hours:</p>
+              <div class='text-center fit-pres'>
+                <a href='http://xkcd.com/1316/' target='_blank'>
+                  <img src='http://imgs.xkcd.com/comics/inexplicable.png' />
+                </a>
+              </div>
+              <br/>
+              <p>Now, on the homework, you're asked to use typedef:</p>
+              <p class='toolkit'>A <strong>typedef</strong> keyword simply provides a top-level new name (alias) for an existing type.</p>
+              <br/>
+              <p>Uhh, OK... why do we need to use this?</p>
+              <p>
+                Well, if we want our code to be able to handle different types, but don't want users to have to find and replace every instance 
+                of a particular type in our code, we can provide a typedef to do the work for them! 
+              </p>
+<pre class='prettyprint'>
+  // typedef syntax:
+  // typedef &lt;ExistingType&gt; &lt;NewTypeName&gt;;
+  
+  // ... so for example ...
+  typedef int CRAZY_INT_NAME_WOW;
+  
+  CRAZY_INT_NAME_WOW i = 1, j = 2;
+  cout &lt;&lt; i + j &lt;&lt; endl;
+</pre>
+              <p>Finally, some general reminders:</p>
+              <ul class='indent-1'>
+                <li><p>Comments!</p></li>
+                <li><p>Read the spec description for the <code class='prettyprint'>get</code> member functions very carefully...</p></li>
+                <li><p>Pay attention to the last sentence of criteria #4...</p></li>
+                <li><p>Test your code! The general strategy for testing is that you should try to find some combination of legal statements that actually break it!</p></li>
+              </ul>
             </div>
             <hr/>
             
@@ -956,17 +1748,6 @@
           
           <!-- MATERIALS FROM CLASS: -->
           
-            <!-- TODO: Header files -->
-              <!-- TODO: What if I have two header files with the same definition? -->
-              <!-- TODO: What if I try to include something twice on accident? -->
-                <!-- TODO: Define and endif declarations to make sure that I don't unnecessarily re-include -->
-                <!-- TODO: ifdef and endif aka "include guards" -->
-                  <!-- TODO: EVERY header should have include guards -->
-                  
-            <!-- TODO: Homework Help -->
-              <!-- TODO: NOTE: although it may work, you may NOT include any superfluous dependencies -->
-              <!-- TODO: NOTE: are letters *always* contiguous in encoding schemas? -->
-            
         </div>
       </div>
       <!-- END MAIN CONTENT -->

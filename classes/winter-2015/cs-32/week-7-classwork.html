@@ -104,50 +104,298 @@
             
             <ol class="breadcrumb hidden-print">
               <li><a href="../../../classes.html">Classes</a></li>
-              <li><a href="./cs-32.html">Winter14 CS32</a></li>
+              <li><a href="./cs-32.html">Summer14 CS32</a></li>
               <li class="active">Week 7 - Classwork</li>
             </ol>
             
-            <div id='binarySearch' class='scrollspy-element' scrollspy-title='Binary Search'></div>
-            <h1>Binary Search Classwork</h1>
+            <div id='heaps' class='scrollspy-element' scrollspy-title='Heaps'></div>
+            <h1>Binary Heap Classwork</h1>
             <div>
 <pre class='prettyprint'>
-  template&lt;typename T&gt;
-  bool binarySearch(vector&lt;T&gt; v, T query) {
-      // First, define our two iterators on v
-      vector&lt;T&gt;::iterator minIndex = v.begin();
-      vector&lt;T&gt;::iterator maxIndex = v.end();
-      vector&lt;T&gt;::iterator mid;
+  template &lt;typename T&gt;
+  class BinaryHeap {
+      private:
+          vector&lt;T&gt; heap;
   
-      // Keep looking as long as we haven't narrowed
-      // down the results to nothing
-      while (maxIndex &gt;= minIndex) {
-          // Examine the midpoint element; remember
-          // that mid is an index!
-          mid = minIndex + ((maxIndex - minIndex) / 2);
-  
-          // Is the element at mid our query? If so,
-          // return true
-          if (*mid == query) {
-              return true;
+          // Traversal helpers
+          int getParent (int index) {
+              return (index - 1) / 2;
+          }
+          int getChild (int index, char child) {
+              int result = (index * 2) + 1;
+              if (child == 'R') {
+                  result++;
+              }
+              return result;
           }
   
-          // Otherwise, we can narrow our search; only look
-          // to the left of the midpoint if our query is smaller
-          // than the mid, and vice versa if query is larger
-          if (*mid &lt; query) {
-              minIndex = mid + 1;
-          } else {
-              maxIndex = mid - 1;
-          }
-      }
+          // Continues to bubble values up the
+          // tree until we find a node that is
+          // greater than it
+          void bubbleUp (int index) {
+              // [!] If we're at the root, then
+              // we're done
+              if (index == 0) {return;}
   
-      // If we make it here, we never found the query
-      return false;
-  }
+              // [!] Get parent index and store it
+              int parent = getParent(index);
+  
+              // [!] If the parent's value is less than
+              // the current one's...
+              if (heap[parent] &lt; heap[index]) {
+                  // [!] ...then we swap them...
+                  T temp = heap[parent];
+                  heap[parent] = heap[index];
+                  heap[index] = temp;
+  
+                  // [!] ...and recurse on the new parent!
+                  bubbleUp(parent);
+              }
+  
+          }
+  
+      public:
+          void print () {
+              for (int i = 0; i &lt; heap.size(); i++) {
+                  cout &lt;&lt; heap[i] &lt;&lt; endl;
+              }
+          }
+  
+          void insert (T toInsert) {
+              // [!] Add new element to next available
+              // slot in the binary tree
+              heap.push_back(toInsert);
+  
+              // [!] Start bubbling values up from
+              // the newly added value
+              bubbleUp(heap.size() - 1);
+          }
+  };
 </pre>
             </div>
             <hr/>
+            
+            
+            <div id='review' class='scrollspy-element' scrollspy-title='Review'></div>
+            <h1>Review Solutions</h1>
+            <div>
+              <br/>
+              <h3>Data Structures</h3>
+              <br/>
+              <p><strong>Scenario 1:</strong>
+                In the year 3000 (following the fall of mankind to the great Forney Industries Fembot Malfunction), you (who have somehow survived until then) are tasked with
+                developing tracking chips to emplant in the loyal subjects of your dystopian hegemony (OK, so I might be writing a book on this). These tracking chips have very
+                little storage, and must be able to able to look for and possibly add a new contact for an individual in (at most) log(n) time so that we'll always know who is talking to whom...
+              </p>
+              <p class='example'>Can you suggest a data structure to be used for this purpose? Fun fact, the C++ STL collections made it to the year 3000, which of them might you employ?</p>
+              <p class='definition'>A set (binary search tree) since we can add and lookup individuals with log(n) time.</p>
+              
+              <br/>
+              <p><strong>Scenario 2:</strong>
+                Before the collapse of society, Forney Industries developed TriageBot 4000, a robot designed to assess the severity of hospital patients' maladies and begin treatment on those
+                with the worst. It maintained a collection of waiting patients and was required to instantaneously determine who was most in need of the next available doctor.
+              </p>
+              <p class='example'>What data structure would best accomplish TriageBot 4000's collection of patients?</p>
+              <p class='definition'>A max-heap organized with some assessment of "injury / illness severity" where the worst (and therefore first) is always at the top.</p>
+              
+              <br/>
+              <p><strong>Scenario 3:</strong>
+                One of the more popular inventions of Forney Industries was a geneticist family-tracking robot called the GENEy. It was employed by the Census bureau to make sure that your reported
+                family members were indeed related to you. Its job: canvas neighborhoods and organize People (capitalized to indicate it as a class) by their family name. It was required to track
+                last names of families and organize each family member sequentially (though not in any particular order within the family).
+              </p>
+              <p class='example'>What data structure would best track each family by their last name and organize each family's constituent People sequentially? Quick (at most O(log(n))) lookup and insertion of family members required.</p>
+              <p class='definition'>A map of strings (family names) to lists (containing each family's Person objects). We can always find a family in log(n) time, and insert to the front of the family list.</p>
+              
+              <br/>
+              <p><strong>Scenario 4:</strong>
+                You are in charge of managing a prison for the political dissidents of the Forney Industries Empire. Prisoners are kept in isolation so as not to develop escape plans or further slander
+                the great Forney Industries name. The one time that Prisoners are not in isolation is during meal times, during which you want to track who speaks with whom, and how often. You must design
+                a system that can instantaneously find or place a Prisoner in one of your solitary-cells, and furthermore, in at most log(n) time determine how many times a Prisoner has spoken to another at mealtime.
+                As a side-note, your prison is always at max-capacity.
+              </p>
+              <p class='example'>Firstly, what container best stores the Prisoners in their cells? Secondly, what data structure internal to a Prisoner will best store their contacts? You need not worry
+                about sorting either the Prisoners nor their contacts, but your data structures should *waste no space.*</p>
+              <p class='definition'>Use a vector to store the Prisoners in their cells, since there is 1 Prisoner per cell and the prison is always at max capacity. You can always look up a cell number
+                instantaneously by index in the vector. You should store the Prisoners' contact frequencies in a map such that the cell# of a contact maps to the frequency of their mealtime conversations.
+                You should *not* use hash tables in this scenario since you were told that no space is wasted, which would be required for buckets to maintain a small load factor.</p>
+              
+              <br/>
+              <p><strong>Scenario 5:</strong>
+                One of the more mundane inventions that came from Forney Industries was the SparkleMaster 2k, an industrial dish-washing robot designed to take large groups of dishes, clean them, and then
+                file them into their proper kitchen locations. It received dishes in stacks on a conveyer-belt, and would need to clean each dish in a stack before moving to the next. After cleaning
+                a dish, it would assess the dish's size, shape, and color, and have the instantaneous knowledge of which cabinet to place it in. Within a cabinet, dishes must be sorted from largest (on
+                the bottom) to smallest (on the top).
+              </p>
+              <p class='example'>What data structure should you use to model the sequence of washing from the inbound conveyer-belt? What data structure should you use to model the plate storage? You may
+                need to use compound data-structures for each task.</p>
+              <p class='definition'>Use a queue of stacks for the inbound plate conveyer-belt so that you're always washing the top dish of the front stack in the queue. Use a hash table of stacks for
+                buckets to store the dishes so that you ensure largest-to-smallest stacking and always know the exact cabinet in which to store a given dish.</p>
+
+
+              <br/>
+              <h3>Design Triage</h3>
+              <br/>
+              <p><strong>Scenario 1:</strong>
+                You are in charge of the M.E.R.I.C.A-S.T.A.R-S.P.A.N.G.L.E missile defense system (no one knows what the acronym stands for) that must assess which, out of some
+                collection of missiles, is the closest, and target that first. Your simulations suggest that as long as you're able to sort the missile distances for destruction
+                in n*log(n) time or less, the nation will be safe.
+              </p>
+              <p class='example'>Which sort that we've learned about would you *not* want to pick for this task? Why?</p>
+              <p class='definition'>You would not want to user QuickSort since the chance of devolving to a quadratic runtime could mean that everyone is dead.</p>
+              
+              <br/>
+              <p><strong>Scenario 2:</strong>
+                You have been tasked with creating a new map app... a mapp... called Cartographer using the abstract data type of a graph with locations separated by distances. With your new graph
+                knowledge, you decide to represent your graph as an adjacency matrix with distances connecting two elements. Cartographer maps landmarks around the globe that are connected by roads.
+              </p>
+              <p class='example'>What is wrong with your design approach, and what can you instead use to be more efficient?</p>
+              <p class='definition'>An adjacency matrix in this case wastes a lot of space since most locations won't be connected by roads. You could instead use a map with locations as keys, and their
+                distances to, and identities of, other locations that are connected as values.</p>
+                
+              <br/>
+              <p><strong>Scenario 3:</strong>
+                You decided to get clever and reduce collisions in your hash table by making your buckets hash tables themselves (the second level of which has buckets that are lists)! Triumphantly,
+                you sit back in your chair for being so damn smart, but then run your code and discover that you have the same number of collisions that you had before!
+              </p>
+              <p class='example'>What did you forget to do that made this approach problematic?</p>
+              <p class='definition'>You probably forgot the define two hash functions! If you used only one, then you would still map to the same buckets in both the outer and nested hash tables.</p>
+              
+              <br/>
+              <p><strong>Scenario 4:</strong>
+                You are a programmer prone to frequent bouts of selective amnesia. Unfortunately, today you've forgotten how to use recursion... entirely. Just your luck, your boss comes in and asks
+                you to complete a task requiring a breadth-first traversal of some trees.
+              </p>
+              <p class='example'>What technique or data structure could you use to perform the breadth-first traversal using iteration instead of recursion?</p>
+              <p class='definition'>Simply maintain a queue starting at the root and "visit" each node in the breadth-first order maintained by the queue.</p>
+              
+              <br/>
+              <p><strong>Scenario 5:</strong>
+                Inspired by the last project, you've decided to reinvent the spell checker in a very compact manner. You've shrewdly determined that it's possible to represent
+                words in a tree with insertion and lookup that is linear *for the size of the word,* which, if you're considering standard English, could be held beneath a constant that is the
+                size of the longest English word.
+              </p>
+              <p class='example'>Describe how you would structure the tree, and how you would use it to perform insertion and lookup that is linear in the size of the query word. In what ways is this
+                technique superior to the hashtable implementation?</p>
+              <p class='definition'>This data structure is actually called a Trie, in which each node contains a letter, and possibly, a "terminating" flag. Starting at the root, you would take a path
+                to a child indicated by the next letter in the query word. You return false if you ended your word at a node without a terminating flag or had more letters after reaching a leaf. You
+                return true whenever your traversal ends you at a node with a terminating flag, and there are no more letters left in the word.</p>
+              <br/>
+              <p>Here's an example from wikipedia (the numbers beneath nodes are arbitrary and are simply the "terminating flags" as described above):</p>
+              <br/>
+              <a href='http://en.wikipedia.org/wiki/Trie' target='_blank'>
+                <div class='fit-pres text-center'>
+                  <img src='http://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Trie_example.svg/400px-Trie_example.svg.png' />
+                </div>
+              </a>
+              
+              
+              <br/>
+              <h3>Coding Practice</h3>
+              <p>These examples, and other good ones if you're interested, were taken from <a href='http://www.careercup.com/'>CareerCup.com</a>.</p>
+              <br/>
+              <br/>
+              <p class='example'>You are given a square grid of characters (we'll call it a maze), and a query string to find by an omni-directional path traversal in the maze. Your task is to count
+                the number of times that you could form the query string by starting anywhere in the maze and moving in any of the four cardinal directions: N, E, S, and W.</p>
+              <p class='definition'>Example solution given below:</p>
+              <br/>
+<pre class='prettyprint'>
+  const int GRID_SIZE = 4;
+  
+  int occurences (char maze[][GRID_SIZE], string query, int r, int c) {
+      bool outOfBounds = r &lt; 0 || c &lt; 0 || r &gt;= GRID_SIZE || c &gt;= GRID_SIZE;
+      
+      // Base case: 0 when out of bounds or not
+      // matching
+      if (outOfBounds || maze[r][c] != query[0]) {
+          return 0;
+      }
+      
+      // Base case: 1 when we match our last character
+      // on a path
+      if (query.length() == 1 &amp;&amp; maze[r][c] == query[0]) {
+          return 1;
+      }
+    
+      // Recursive case: shave one off front of query
+      // and recurse in all 4 directions
+      string newQuery = query.substr(1, query.length());
+      return occurences(maze, newQuery, r+1, c) +
+             occurences(maze, newQuery, r, c+1) +
+             occurences(maze, newQuery, r-1, c) +
+             occurences(maze, newQuery, r, c-1);
+  }
+  
+  // Counts all occurences in the grid
+  int countOccurences (char maze[][GRID_SIZE], string query) {
+      int total = 0;
+      for (int i = 0; i &lt; GRID_SIZE; i++) {
+          for (int j = 0; j &lt; GRID_SIZE; j++) {
+              if (maze[i][j] == query[0]) {
+                  total += occurences(maze, query, i, j);
+              }
+          }
+      }
+      return total;
+  }
+  
+  int main () {
+      char maze[GRID_SIZE][GRID_SIZE] = {
+          { 'S', 'N', 'A', 'S' },
+          { 'B', 'A', 'K', 'E' },
+          { 'B', 'K', 'A', 'N' },
+          { 'S', 'E', 'B', 'S' }
+      };
+      
+      // Prints 5
+      cout &lt;&lt; countOccurences(maze, "SNAKES") &lt;&lt; endl;
+  }
+</pre>
+              
+              <br/>
+              <p class='example'>You are given two sorted arrays of N &gt; 0 positive, unique (i.e., no repeats amongst either array) integers. Provide a function <code class='prettyprint'>median</code>, as
+                given by the skeleton below, that computes the median value of a hypothetical third, sorted array composed of the elements of the 2 input arrays combined in O(log(n)) time.</p>
+              <p class='definition'>Example solution given below:</p>
+<pre class='prettyprint'>
+  double median (int* b1, int* e1, int* b2, int* e2) {
+      // Determine size of first array
+      int n = e1 - b1;
+      
+      // Base case: 1 element left in arr1,
+      // so median is first elements of both
+      // arrays divided by 2
+      if (n == 1) {
+          return (*b1 + *b2) / 2.0;
+      }
+      
+      // Now, use n as our offset to probe
+      // midpoints of each arr (bin search)
+      n = n / 2;
+      
+      int m1 = *(b1 + n);
+      int m2 = *(e2 - n);
+      
+      // If the mid of arr1 is less than that
+      // of m2...
+      if (m1 &lt; m2) {
+          // ...then push the start of arr1 and
+          // the end of arr2 in by n (squeeze)
+          return median(b1 + n, e1, b2, e2 - n);
+          
+      // ...otherwise, we retract arr1 and push
+      // the start of arr2 out (expand)
+      } else {
+          return median(b1, b1 + n, e2 - n, e2);
+      }
+  }
+</pre>
+              <br/>
+              
+            </div>
+            <hr/>
+            
+            
+            
             
             <a class='btn btn-default pull-right hidden-print' href='javascript:window.print();'>
               <span class='glyphicon glyphicon-print'></span>

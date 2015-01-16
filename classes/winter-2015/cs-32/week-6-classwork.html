@@ -104,145 +104,171 @@
             
             <ol class="breadcrumb hidden-print">
               <li><a href="../../../classes.html">Classes</a></li>
-              <li><a href="./cs-32.html">Winter14 CS32</a></li>
-              <li class="active">Week 8 - Classwork</li>
+              <li><a href="./cs-32.html">Summer14 CS32</a></li>
+              <li class="active">Week 6 - Classwork</li>
             </ol>
             
-            <div id='sorting' class='scrollspy-element' scrollspy-title='Sorting'></div>
-            <h1>Sorting Classwork</h1>
+            <div id='BST' class='scrollspy-element' scrollspy-title='BST'></div>
+            <h1>Binary Search Tree Classwork</h1>
             <div>
 <pre class='prettyprint'>
-  // Helper to print out array elements
-  void printIntArr (int arr[], int size) {
-      for (int i = 0; i &lt; size; i++) {
-          cout &lt;&lt; arr[i] &lt;&lt; ", ";
+  struct BST {
+      // BSTNode struct internal
+      // to the BST
+      struct BSTNode {
+          int data;
+          BSTNode* left;
+          BSTNode* right;
+          BSTNode(int d) {
+              data = d;
+              left = nullptr;
+              right = nullptr;
+          }
+      };
+      
+      // Root just points to a single
+      // BSTNode
+      BSTNode* root;
+      
+      BST() {
+          root = nullptr;
       }
-      cout &lt;&lt; endl;
-  }
+      ~BST(); // TODO!
+      void insert (int i); // TODO!
+      void clear(BSTNode* subtree); // TODO!
+  };
   
-  // Helper function; swaps two array elements via
-  // the input pointers
-  void swapInts (int* i1, int* i2) {
-      int temp = *i1;
-      *i1 = *i2;
-      *i2 = temp;
-  }
-  
-  // Not to be confused with BubleSort, which
-  // just replaces your array elements with lyrics
-  // from Haven't Met You Yet
-  void bubbleSort (int arr[], int size) {
-      for (int i = 0; i &lt; size; i++) {
-          bool swapped = false;
-          for (int j = size - 1; j &gt;= i + 1; j--) {
-              printIntArr(arr, size);
-              if (arr[j] &lt; arr[j-1]) {
-                  swapInts(arr+j, arr+j-1);
-                  swapped = true;
+  // Creates a new node with the given data member
+  // in the BST
+  void BST::insert (int data) {
+      BSTNode* b = root;
+      
+      // Base case: tree is empty
+      if ( b == nullptr ) {
+          root = new BSTNode(data);
+          return;
+      }
+      
+      // Otherwise, find its proper position
+      while (true) {
+          // Case: Data is less than current node
+          if (data &lt; b-&gt;data) {
+              // If there's already a node left...
+              if (b-&gt;left) {
+                  // Then continue down the tree
+                  b = b-&gt;left;
+                  
+                  // Otherwise, no node to left, so insert:
+              } else {
+                  b-&gt;left = new BSTNode(data);
+                  return;
               }
-          }
-          if (!swapped) {
-              return;
-          }
-      }
-  }
-  
-  void insertionSort (int arr[], int size) {
-      for (int i = 1; i &lt; size; i++) {
-          for (int j = i; j &gt; 0; j--) {
-              if (arr[j] &gt; arr[j-1]) {
-                  break;
-              }
-              swapInts(arr + j, arr + j-1);
-          }
-      }
-  }
-  
-  vector&lt;int&gt; concatVect (vector&lt;int&gt; v1, vector&lt;int&gt; v2) {
-      vector&lt;int&gt; result(v1.begin(), v1.end());
-      result.insert(result.end(), v2.begin(), v2.end());
-      return result;
-  }
-  
-  // Helper to print out array elements
-  void printIntVArr (vector&lt;int&gt; arr) {
-      for (vector&lt;int&gt;::iterator i = arr.begin(); i != arr.end(); i++) {
-          cout &lt;&lt; *i &lt;&lt; " ";
-      }
-      cout &lt;&lt; endl;
-  }
-  
-  vector&lt;int&gt; quickSort (vector&lt;int&gt; arr) {
-      // Base case: return current array if 1
-      // element or fewer
-      if (arr.size() &lt;= 1) {return arr;}
-  
-      // Randomly choose a pivot
-      srand(time(NULL));
-      int pivotChoice = (rand() % arr.size());
-      int pivot = arr[pivotChoice];
-  
-      // We'll make 3 blank vectors: 1 that holds
-      // all of the numbers less than the pivot,
-      // 1 that holds all of the numbers greater,
-      // and then 1 that just holds the pivot itself
-      // for ease of concatenation
-      vector&lt;int&gt; lesser, greater, pivotHolder;
-      vector&lt;int&gt;::iterator it = arr.begin();
-      pivotHolder.push_back(pivot);
-  
-      // Erase the pivot from the current vector
-      arr.erase(it + pivotChoice);
-  
-      for (int i = 0; i &lt; arr.size(); i++) {
-          // Put remaining elements in their respective
-          // greater or less than piles
-          if (arr[i] &lt; pivot) {
-              lesser.push_back(arr[i]);
+              
+              // Case: Data is greater than / equal to node
           } else {
-              greater.push_back(arr[i]);
+              if (b-&gt;right) {
+                  b = b-&gt;right;
+              } else {
+                  b-&gt;right = new BSTNode(data);
+                  return;
+              }
           }
       }
+  }
   
-      // Recurse on the lesser and greater vectors,
-      // and then concatenate their results with the
-      // pivot in the center
-      return concatVect(quickSort(lesser), 
-             concatVect(pivotHolder, quickSort(greater)));
+  // Clears all nodes, making sure to
+  // deallocate appropriately
+  void BST::clear(BSTNode* subtree) {
+      // Base case: reached an ending
+      if ( subtree == nullptr ) {
+          return;
+      }
+      
+      // Otherwise, traverse and delete:
+      clear(subtree-&gt;left);
+      clear(subtree-&gt;right);
+      
+      // [!] Printout for example before
+      // deleting:
+      cout &lt;&lt; subtree-&gt;data &lt;&lt; endl;
+      delete subtree;
+  }
+  
+  // Destructor properly calls clear
+  BST::~BST() {
+      clear(root);
   }
 </pre>
             </div>
             <hr/>
             
-            <br/>
-            <div id='trees' class='scrollspy-element' scrollspy-title='Trees'></div>
-            <h1>Tree Classwork</h1>
+            
+            <div id='hash' class='scrollspy-element' scrollspy-title='HashTables'></div>
+            <h1>HashTable Classwork</h1>
             <div>
 <pre class='prettyprint'>
-  int treeDepth (TreeNode* n) {
-      int currentMax = 0;
-      for (int i = 0; i &lt; n-&gt;children.size(); i++) {
-          currentMax = max(currentMax, 1 + treeDepth(n-&gt;children[i]));
+  template &lt;typename T&gt;
+  class HashTable {
+  private:
+      int MAX_BUCKETS;
+      vector&lt;list&lt;T&gt; &gt; buckets;
+      
+      // NOTE: If we want to be able to handle other
+      // template types than strings for T, we'd need
+      // other, more generalized hash functions...
+      unsigned int hash (string toHash) {
+          unsigned int result = 0;
+          for (int i = 0; i &lt; toHash.length() || i &lt; 5; i++) {
+              result = result * 101 + toHash[i];
+          }
+          return result % MAX_BUCKETS;
       }
-      return currentMax;
-  }
-  
-  int nodesAtLevel (TreeNode* n, int level) {
-      // Base case! Return when...
-      if (level == 0) {
-          return 1;
+      
+  public:
+      HashTable (): MAX_BUCKETS(10000) {
+          // Start off the buckets with MAX_BUCKETS
+          buckets.resize(MAX_BUCKETS);
       }
-  
-      // [!] Iterate through every child
-      int nodes = 0;
-      for (int i = 0; i &lt; n-&gt;children.size(); i++) {
-          // [!] Add the number of nodes at the next level
-          // if that's our target level! (hint: don't
-          // need to use a conditional due to our base case)
-          nodes += nodesAtLevel(n-&gt;children[i], level - 1);
+      
+      void print () {
+          for (int i = 0; i &lt; buckets.size(); i++) {
+              typename list&lt;T&gt;::iterator it = buckets[i].begin();
+              if (buckets[i].empty()) {
+                  continue;
+              }
+              cout &lt;&lt; "=== Bucket[ " &lt;&lt; i &lt;&lt; " ] ===" &lt;&lt; endl;
+              while (it != buckets[i].end()) {
+                  cout &lt;&lt; *it++ &lt;&lt; endl;
+              }
+          }
       }
-      return nodes;
-  }
+      
+      bool hasKey (T query) {
+          // Store a pointer to the bucket's list
+          list&lt;T&gt;* lPtr = &amp;buckets[hash(query)];
+          // Start an iterator at it's beginning
+          typename list&lt;T&gt;::iterator it = lPtr-&gt;begin();
+          // Search linearly for the query item
+          while (it != lPtr-&gt;end()) {
+              if (*it == query) {
+                  break;
+              }
+              it++;
+          }
+          // Return whether the iterator found a
+          // match or not
+          return it != lPtr-&gt;end();
+      }
+      
+      void insert (T toInsert) {
+          if (hasKey(toInsert)) {
+              return;
+          }
+          // [!] Push toInsert to the back of the list that the
+          // hash function gives you from input toInsert
+          buckets[ hash(toInsert) ].push_back(toInsert);
+      }
+  };
 </pre>
             </div>
             <hr/>
