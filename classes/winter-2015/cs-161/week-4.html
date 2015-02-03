@@ -261,7 +261,7 @@
   ; To resolve the above node inconsistency, we
   ; amend the domains of A and B to be:
   X = { A, B }
-  D = { {1}, {3} }
+  D = { {1}, {4} }
   C = {
         A != 2
         B != 3
@@ -325,7 +325,7 @@
       if a value in the domain of A is unsatisfiable, remove that val
       if any value was removed from A then do:
           if the domain of A is reduced to &empty;, return false
-          enque all arcs from C_i to A (C_i, A) where C_i = all neighbor nodes of X except B
+          enque all arcs from C_i to A (C_i, A) where C_i = all neighbor nodes of A except B
           
   return true (if your queue is empty and you've made all domains arc consistent)
 </pre>
@@ -380,7 +380,7 @@
   ; ----------------------------------------------------
   Q = { (Y, W), (X, Y), (Y, X), (X, W) }
   
-  chosenArc = (W, Y)
+  chosenArc = (Y, W)
   DomainW = {0, 1}
   DomainY = {0, 1, 2}
   constraint = W = floor(Y/2)
@@ -448,7 +448,7 @@
   ; Our domains were therefore modified to:
   DomainW = {0, 1}
   DomainX = {0, 1}
-  DomainX = {1, 2}
+  DomainY = {1, 2}
   
   ; Reducing the size of our search space substantively!
 </pre>

@@ -123,7 +123,7 @@
             
             
             <br/>
-            <div id='search' class='scrollspy-element' scrollspy-title='Search'></div>
+            <div id='c-search' class='scrollspy-element' scrollspy-title='Classical Search'></div>
             <h1>Search Problems</h1>
             <div>
               <p class='example'>
@@ -275,6 +275,176 @@
             
             
             <br/>
+            <div id='l-search' class='scrollspy-element' scrollspy-title='Local Search'></div>
+            <h1>Local Search Problems</h1>
+            <div>
+              <p class='example'>Recall the map-coloring problem where we must find a coloring of each geographic body on a map such that no two bodies share the same color. The following
+                adjacency map depicts such a problem, and represents some state along the solution path of a local search strategy.</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2015/cs-161/midterm/local-search-0.PNG' width="30%" height="30%" />
+              </div>
+              <br/>
+              <div class='question' name='local-q0'><p>Suppose we had some state scoring function that counted the number of pairs of same-colored bodies on our map. The goal state is found when this
+                score is 0. Give a possible sequence of actions that local search might take (starting from the above coloring) consisting of the following path. You may change no body's color more than once
+                and may use a maximum of 3 colors:</p>
+<pre class='prettyprint'>
+  1. Downward move
+  2. Upward move
+  3. Upward move and goal state reached
+</pre>
+              </div>
+              <div class='answer' name='local-q0'>
+                <table class='table table-bordered'>
+                  <thead>
+                    <tr>
+                      <th><p>Move Number</p></th>
+                      <th><p>Change</p></th>
+                      <th><p>State Score</p></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><p>1</p></td>
+                      <td><p>A: red, B: red, C: blue, D: <strong>red</strong>, E: red</p></td>
+                      <td><p>3</p></td>
+                    </tr>
+                    <tr>
+                      <td><p>2</p></td>
+                      <td><p>A: <strong>green</strong>, B: red, C: blue, D: blue, E: red</p></td>
+                      <td><p>1</p></td>
+                    </tr>
+                    <tr>
+                      <td><p>3</p></td>
+                      <td><p>A: green, B: red, C: blue, D: blue, E: <strong>green</strong></p></td>
+                      <td><p>0</p></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <br/>
+              <p class='question' name='local-q1'>Starting with the initial state and scoring function depicted and mentioned above, what would be an instance of a sideways move?</p>
+              <p class='answer' name='local-q1'>A: red, B: red, C: blue, D: blue, E: <strong>green</strong>; the score is 2 before and after the move.</p>
+              
+              <br/>
+              <p class='example'>Suppose we are looking at a local search problem (whose parameters are unimportant for this example) and have landed on state S with neighbors N1, N2, N3 each scored
+                by some function f. Scores are strictly positive and low scores are considered better than others. Thus, the closest to 0, the better.</p>
+              <table class='table table-bordered table-striped'>
+                <thead>
+                  <tr>
+                    <th><p>State</p></th>
+                    <th><p>Score (f(state))</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><p>S</p></td>
+                    <td><p>5</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>N1</p></td>
+                    <td><p>7</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>N2</p></td>
+                    <td><p>6</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>N3</p></td>
+                    <td><p>7</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+              
+              <p class='question' name='local-q2'>True or false: we are at a peak at state S.</p>
+              <p class='answer' name='local-q2'>True: all neighbors have worse scores than our current state S.</p>
+              
+              <br/>
+              <p><strong>Simulated annealing</strong> is a local search strategy where we may make downward or sideways moves with some probability proportional to the amount of time that we've
+                been searching.</p>
+              <p>Typically, we refer to this probability as a function of our <strong>temperature</strong>, which (just like a metal cooling) will decrease over time, giving us much exploration of the
+                search space at the beginning until we "settle" upon a local max near the end.</p>
+              <p>Now, for our purposes, suppose we have the following pseudocode denoting a simulated annealing probability of moving to some neighbor whereby we take as parameters three values:</p>
+              <ol class='indent-1'>
+                <li><p>S = current state score (the score of the state we're currently occupying)</p></li>
+                <li><p>N = neighbor score (the score of the neightbor state we're considering)</p></li>
+                <li><p>T = temperature (higher values means we are more likely to explore worse neighbors)</p></li>
+              </ol>
+              <br/>
+<pre class='prettyprint'>
+  annealingProbability (S, N, T)
+      if (N &lt; S)
+          return 1.0
+      return exp((S - N) / T)
+</pre>
+              <br/>
+              <p class='question' name='local-q3'>Suppose our temperature starts out at T = 100, cools at a rate of 10% per action taken, and that we have taken 3 steps to reach state S in the table above.
+                What will be the probability of moving to neighbor N2?</p>
+              <div class='answer' name='local-q3'>
+<pre>
+  Here we have taken 3 steps to reach S, meaning our temperature:
+  T = (100 * 0.9 ^ 3) = 72.9
+  
+  Since N &gt; S, this gives us a movement probability of:
+  exp((S - N) / T) = exp((5 - 6) / 72.9)
+                   = 0.986
+</pre>
+                <p>...a very high chance to move to N2!</p>
+              </div>
+              <br/>
+              <p class='question' name='local-q4'>Suppose our temperature starts out at T = 100, cools at a rate of 10% per action taken, and that we have taken 50 steps to reach state S in the table above.
+                What will be the probability of moving to neighbor N1?</p>
+              <div class='answer' name='local-q4'>
+<pre>
+  Here we have taken 3 steps to reach S, meaning our temperature:
+  T = (100 * 0.9 ^ 50) = 0.52
+  
+  Since N &gt; S, this gives us a movement probability of:
+  exp((S - N) / T) = exp((5 - 7) / 0.52)
+                   = 0.021
+</pre>
+                <p>...a very low chance to move to N1 since we've been exploring for awhile.</p>
+              </div>
+              
+              <br/>
+              <p>Now, take the following state and neighbors into consideration:</p>
+              <table class='table table-bordered table-striped'>
+                <thead>
+                  <tr>
+                    <th><p>State</p></th>
+                    <th><p>Score (f(state))</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><p>S</p></td>
+                    <td><p>5</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>N1</p></td>
+                    <td><p>7</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>N2</p></td>
+                    <td><p>6</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>N3</p></td>
+                    <td><p>4</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+              <p class='question' name='local-q5'>Suppose our temperature starts out at T = 100, cools at a rate of 10% per action taken, and that we have taken 50 steps to reach state S in the table above.
+                What will be the probability of moving to neighbor N3?</p>
+              <div class='answer' name='local-q5'>
+                <p>100%! N3 has a better score than our current state.</p>
+              </div>
+            </div>
+            <hr/>
+            
+            
+            <br/>
             <div id='csp' class='scrollspy-element' scrollspy-title='Constraint Satisfacation'></div>
             <h1>Constraint Satisfaction Problems</h1>
             <div>
@@ -383,21 +553,30 @@
   2. sent1 = P &hArr; &not;Q
      sent2 = ( (P &and; &not;Q) &or; (&not;P &and; Q) )
 </pre>
-              <p class='question' name='propLog-q0'>Click for answer.</p>
-              <div class='answer' name='propLog-q0'>
+              <p class='question' name='propLog-q1'>Click for answer.</p>
+              <div class='answer' name='propLog-q1'>
+<pre class='prettyprint'>
+  ; Note:
+  sent1 = P &hArr; &not;Q
+        = ( (&not;P &or; &not;Q) &and; (Q &or; P) )
+</pre>
                 <table class='table table-bordered table-striped'>
                   <thead>
                     <tr>
                       <th><p>P</p></th>
                       <th><p>Q</p></th>
                       <th><p>&not;P &or; &not;Q</p></th>
-                      <th><p>&not;Q &or; &not;P</p></th>
+                      <th><p>Q &or; P</p></th>
+                      <th><p>P &hArr; &not;Q</p></th>
+                      <th><p>( (P &and; &not;Q) &or; (&not;P &and; Q) )</p></th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
                       <td><p>F</p></td>
                       <td><p>F</p></td>
+                      <td><p>T</p></td>
+                      <td><p>F</p></td>
                       <td><p>F</p></td>
                       <td><p>F</p></td>
                     </tr>
@@ -406,21 +585,29 @@
                       <td><p>T</p></td>
                       <td><p>T</p></td>
                       <td><p>T</p></td>
+                      <td><p>T</p></td>
+                      <td><p>T</p></td>
                     </tr>
                     <tr>
                       <td><p>T</p></td>
                       <td><p>F</p></td>
                       <td><p>T</p></td>
                       <td><p>T</p></td>
+                      <td><p>T</p></td>
+                      <td><p>T</p></td>
                     </tr>
                     <tr>
                       <td><p>T</p></td>
+                      <td><p>T</p></td>
+                      <td><p>F</p></td>
                       <td><p>T</p></td>
                       <td><p>F</p></td>
                       <td><p>F</p></td>
                     </tr>
                   </tbody>
                 </table>
+                <br/>
+                <p>The two sentences agree for all worlds, and are therefore logically equivalent.</p>
               </div>
               
               <br/>
