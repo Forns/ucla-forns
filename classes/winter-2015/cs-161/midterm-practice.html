@@ -188,6 +188,23 @@
               
               <br/>
               <hr/>
+              <p class='example'>Suppose we are playing as MAX in the following adversarial search tree, exploring nodes in a DFS, left-to-right order. By &alpha;-&beta; pruning, what sub-trees will
+                be trimmed from exploration? Why?</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2015/cs-161/midterm/ab-pruning.PNG' />
+              </div>
+              <p class='question' name='ab-q0'>Click for solution.</p>
+              <div class='answer' name='ab-q0'>
+                <div class='text-center fit-pres'>
+                  <img src='../../../assets/images/winter-2015/cs-161/midterm/ab-pruning-ans.PNG' />
+                </div>
+                <br/>
+                <p>Min5, Min6 get trimmed because as soon as we see the score of 4 from Min4, we know that choosing action Max2 will be an inferior choice to Max1.</p>
+                <p>Min9 gets trimmed because as soon as we see the score of 4 from Min8, we know that choosing action Max3 will be an inferior choice to Max1.</p>
+              </div>
+              
+              <br/>
+              <hr/>
               <p class='example'>Now that you remember everything there is to know about search, why don't you fill in this table below:</p>
               <p>Assume the following variable definitions:</p>
               <ul class='indent-1'>
