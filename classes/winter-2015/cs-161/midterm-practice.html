@@ -173,6 +173,19 @@
               <br/>
               <p class='question' name='midterm-q9'>If our A* search does stop at a goal state, which will it find? Is this an optimal goal?</p>
               <p class='answer' name='midterm-q9'>A* search stops at goal state O, which is the optimum. Changing the costs of the problem did indeed affect its search order.</p>
+              
+              <br/>
+              <hr/>
+              <p class='definition'><strong>Beam search</strong> is a breadth-first-search optimization whereby some subset of nodes along the frontier of each level are expanded according to some heuristic score.
+                The <strong>beam width</strong> defines the number of best (according to the heuristic) nodes along the frontier that will be expanded with each level.</p>
+              <p class='question' name='beam-q0'>Suppose our beam width is 2, we use the greedy heuristic in scoring nodes along the frontier (i.e., just h(n)), and in the event of a tie, we will expand the left-most
+                node(s) over the others (nodes along the then limited frontier will be expanded left-to-right). What will be the order of expansion for beam search in the search tree above, assuming we do not 
+                stop at goal states?</p>
+              <p class='answer' name='beam-q0'>A, B, D, E, F, J, K, O</p>
+              <br/>
+              <p class='question' name='beam-q1'>In general, is Beam Search complete?</p>
+              <p class='answer' name='beam-q1'>No! What we gain in efficiency from pruning some unfavorable-looking subtrees, we lose in completeness since the subtrees we prune may have contained a solution.</p>
+              
               <br/>
               <hr/>
               <p class='example'>Now that you remember everything there is to know about search, why don't you fill in this table below:</p>
@@ -180,8 +193,8 @@
               <ul class='indent-1'>
                 <li><p>d = depth of shallowest solution</p></li>
                 <li><p>b = branching factor</p></li>
-                <li><p>b* = effective branching factor</p></li>
-                <li><p>L = depth limit</p></li>
+                <li><p>m = manual depth limit</p></li>
+                <li><p>L = iteratively increasing depth limit</p></li>
               </ul>
               <br/>
               <table class='table table-bordered table-striped'>
@@ -250,15 +263,15 @@
                       <th><p>Depth-(limited)-first</p></th>
                       <td><p>No</p></td>
                       <td><p>No</p></td>
-                      <td><p>Exponential:<br/>O(b^L)</p></td>
-                      <td><p>Linear:<br/>O(b*L)</p></td>
+                      <td><p>Exponential:<br/>O(b^m)</p></td>
+                      <td><p>Linear:<br/>O(b*m)</p></td>
                     </tr>
                     <tr>
                       <th><p>Iterative-Deepening-Depth-first</p></th>
                       <td><p>Yes</p></td>
                       <td><p>Yes (for uniform cost)</p></td>
-                      <td><p>Exponential:<br/>O(b^d)</p></td>
-                      <td><p>Linear:<br/>O(b*d)</p></td>
+                      <td><p>Exponential:<br/>O(b^L)</p></td>
+                      <td><p>Linear:<br/>O(b*L)</p></td>
                     </tr>
                     <tr>
                       <th><p>A*</p></th>
@@ -326,6 +339,7 @@
               <p class='answer' name='local-q1'>A: red, B: red, C: blue, D: blue, E: <strong>green</strong>; the score is 2 before and after the move.</p>
               
               <br/>
+              <hr/>
               <p class='example'>Suppose we are looking at a local search problem (whose parameters are unimportant for this example) and have landed on state S with neighbors N1, N2, N3 each scored
                 by some function f. Scores are strictly positive and low scores are considered better than others. Thus, the closest to 0, the better.</p>
               <table class='table table-bordered table-striped'>
@@ -364,7 +378,7 @@
                 been searching.</p>
               <p>Typically, we refer to this probability as a function of our <strong>temperature</strong>, which (just like a metal cooling) will decrease over time, giving us much exploration of the
                 search space at the beginning until we "settle" upon a local max near the end.</p>
-              <p>Now, for our purposes, suppose we have the following pseudocode denoting a simulated annealing probability of moving to some neighbor whereby we take as parameters three values:</p>
+              <p>Now, for our purposes, suppose we have the following simulated-annealing pseudocode denoting the probability of moving to some neighbor; we take three parameters as values:</p>
               <ol class='indent-1'>
                 <li><p>S = current state score (the score of the state we're currently occupying)</p></li>
                 <li><p>N = neighbor score (the score of the neightbor state we're considering)</p></li>
