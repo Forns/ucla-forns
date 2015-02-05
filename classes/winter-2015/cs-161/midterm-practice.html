@@ -178,24 +178,31 @@
               <hr/>
               <p class='definition'><strong>Beam search</strong> is a breadth-first-search optimization whereby some subset of nodes along the frontier of each level are expanded according to some heuristic score.
                 The <strong>beam width</strong> defines the number of best (according to the heuristic) nodes along the frontier that will be expanded with each level.</p>
-              <p class='question' name='beam-q0'>Suppose our beam width is 2, we use the greedy heuristic in scoring nodes along the frontier (i.e., just h(n)), and in the event of a tie, we will expand by
-                depth first, and then in left-to-right order (nodes along the then limited frontier will be expanded in order of depth then left-to-right). 
+              <p>Thus, the steps of beam search for beam width N are:</p>
+              <ol class='indent-1'>
+                <li><p>If our frontier is empty, we're done. Otherwise, expand the best N nodes in the current frontier, adding the nodes generated from that expansion to the queue.</p></li>
+                <li><p>Order those generated nodes by their heuristic cost.</p></li>
+                <li><p>Are any the goal state? If so, we're done, otherwise:</p></li>
+                <li><p>Remove all but the first N nodes from the queue and go back to (1).</p></li>
+              </ol>
+              <p>Thus, Beam Search reduces the memory and time complexity tax of a BFS at the cost of pruning some subtrees.</p>
+              <br/>
+              
+              <p class='question' name='beam-q0'>Suppose our beam width is 2, we use the greedy heuristic in scoring nodes along the frontier (i.e., just h(n)), and in the event of a tie, we will expand 
+                in left-to-right order (nodes along the then-limited frontier will be expanded in order of cost, then left-to-right). 
                 What will be the order of expansion for beam search in the search tree above, assuming we do not stop at goal states?</p>
               <div class='answer' name='beam-q0'>
 <pre>
   ; Frontiers and scores
   ; (2 nodes at front are expanded)
+  ; (bar | marks the beam cutoff)
   Frontier 1: {A: N/A}
-  Frontier 2: {D:0, B:1, C:1}
-  Frontier 3: {F:0, C:1, K:1, E:2, J:2}
-  Frontier 4: {K:1, E:2, G:2, H:2, J:2, I:3}
-  Frontier 5: {O:0, G:2, H:2, J:2, I:3}
-  Frontier 6: {H:2, J:2, L:2, I:3}
-  Frontier 7: {N:1, L:2, M:2, I:3}
-  Frontier 8: {M:2, I:3}
-  Frontier 9: {}
+  Frontier 2: {D:0, B:1  |  C:1}
+  Frontier 3: {F:0, K:1  |  E:2, J:2}
+  Frontier 4: {O:0}
+  Frontier 5: {}
   
-  Order: A, D, B, F, C, K, E, O, G, H, J, N, L, M, I
+  Order: A, D, B, F, K, O
 </pre>
               </div>
               <br/>
