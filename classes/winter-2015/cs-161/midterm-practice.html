@@ -181,7 +181,23 @@
               <p class='question' name='beam-q0'>Suppose our beam width is 2, we use the greedy heuristic in scoring nodes along the frontier (i.e., just h(n)), and in the event of a tie, we will expand the left-most
                 node(s) over the others (nodes along the then limited frontier will be expanded left-to-right). What will be the order of expansion for beam search in the search tree above, assuming we do not 
                 stop at goal states?</p>
-              <p class='answer' name='beam-q0'>A, B, D, E, F, J, K, O</p>
+              <div class='answer' name='beam-q0'>
+<pre>
+  ; Frontiers and scores
+  ; (2 nodes at front are expanded)
+  Frontier 1: {A: N/A}
+  Frontier 2: {D:0, B:1, C:1}
+  Frontier 3: {F:0, K:1, C:1, E:2, J:2}
+  Frontier 4: {O:0, C:1, E:2, J:2}
+  Frontier 5: {E:2, G:2, H:2, J:2, I:3}
+  Frontier 6: {L:2, H:2, J:2, I:3}
+  Frontier 7: {N:1, M:2, J:2, I:3}
+  Frontier 8: {J:2, I:3}
+  Frontier 9: {}
+  
+  Order: A, D, B, F, K, I, C, E, G, L, H, N, M, J, I
+</pre>
+              </div>
               <br/>
               <p class='question' name='beam-q1'>In general, is Beam Search complete?</p>
               <p class='answer' name='beam-q1'>No! What we gain in efficiency from pruning some unfavorable-looking subtrees, we lose in completeness since the subtrees we prune may have contained a solution.</p>
