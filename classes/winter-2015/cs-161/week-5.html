@@ -571,7 +571,7 @@
               <p>&alpha; = Did Curiosity kill the cat?</p>
               <br/>
 <pre class='prettyprint'>
-  ; We'll start by converting the sentences from English to FOL
+  ; We start by converting the sentences from English to FOL
   ; HINT: Focus on quantifier-denoting words like "any," "exist,"
   ; "some," and "all"
   
@@ -602,12 +602,12 @@
 <pre class='prettyprint'>
   1. &exist;x Dog(x) &and; Owns(Jack, x)
   ; Firstly, we notice that we have an existential quantifier, so to
-  ; get rid of it, we'll Skolemize and choose the unique symbol D
+  ; get rid of it, we Skolemize, choosing the unique symbol D
     
     Dog(D) &and; Owns(Jack, D)
   
   ; Next, we notice this actually consists of two clauses conjoined
-  ; so we'll split it into two sentences in our KB
+  ; so we split it into two sentences in our KB
   
     KB1. Dog(D)
     KB2. Owns(Jack, D)
@@ -615,7 +615,7 @@
 </pre>
 <pre class='prettyprint'>  
   2. &forall;x [&exist;y Owns(x, y) &and; Dog(y)] &rArr; AnimalLover(x)
-  ; Firstly, we'll get rid of that pesky implication arrow and convert
+  ; Firstly, we get rid of that pesky implication arrow and convert
   ; everything into &and; and &or; statements:
     
     &forall;x &not;[&exist;y Owns(x, y) &and; Dog(y)] &or; AnimalLover(x)
@@ -630,20 +630,20 @@
 </pre>
 <pre class='prettyprint'>  
   3. &forall;x AnimalLover(x) &rArr; [&forall;y Animal(y) &rArr; &not;Kills(x, y)]
-  ; Let's start off by unpacking those implication arrows!
+  ; Start off by unpacking those implication arrows!
   
     &forall;x AnimalLover(x) &rArr; [&forall;y &not;Animal(y) &or; &not;Kills(x, y)]
   = &forall;x &not;AnimalLover(x) &or; [&forall;y &not;Animal(y) &or; &not;Kills(x, y)]
   = &forall;x &forall;y &not;AnimalLover(x) &or; &not;Animal(y) &or; &not;Kills(x, y)
   
-  ; We've got ourselves a clause! Let's drop those universal quantifiers to get:
+  ; We have ourselves a clause! Drop those universal quantifiers to get:
   
     KB4. &not;AnimalLover(x) &or; &not;Animal(y) &or; &not;Kills(x, y)
     
 </pre>
 <pre class='prettyprint'>    
   4. Kills(Jack, Tuna) &or; Kills(Curiosity, Tuna)
-  ; That's already a clause! Nice!
+  ; That is already a clause! Nice!
   
     KB5. Kills(Jack, Tuna) &or; Kills(Curiosity, Tuna)
     
@@ -668,7 +668,7 @@
 </pre>
 <pre class='prettyprint'>  
   &alpha; = Kills(Curiosity, Tuna)
-  ; For our query, we'll need to add &not;&alpha; to the KB, so:
+  ; For our query, we need to add &not;&alpha; to the KB, so:
   &not;&alpha; = &not;Kills(Curiosity, Tuna)
   ; ...which is also a clause! Add it in!
   
@@ -691,6 +691,10 @@
      
   ; Begin inference!
   
+</pre>
+              <p class='question' name='inf-q0'>Click for sample derivation.</p>
+              <div class='answer' name='inf-q0'>
+<pre class='prettyprint'>
      9.  &not;Owns(x, D) &or; AnimalLover(x) [1, 3, &Theta; = { x/D }]
      10. AnimalLover(Jack) [2, 9, &Theta; = { x/Jack }]
      11. Animal(Tuna) [6, 7, &Theta; = { x/Tuna }]
@@ -700,8 +704,8 @@
      &rarr; &larr; Contradiction! [8, 14]
      
   &there4; KB &#8872; &alpha;
-  
 </pre>
+              </div>
             </div>
             <hr/>
             
@@ -775,6 +779,28 @@
                 <li><p><strong>Facts / Axioms:</strong> atomic statements that establish our system's knowledge of the environment</p></li>
               </ul>
               <br/>
+              <p class='question' name='chaining-q0'>What are our rules above, which are statements that have an implication to be used by GMP?</p>
+              <div class='answer' name='chaining-q0'>
+<pre class='prettyprint'>
+  ; Rules:
+     1. (American(x) &and; Weapon(y) &and; Sells(x, y, z) &and; Hostile(z)) &rArr; Criminal(x)
+     4. (Missile(x) &and; Owns(Nono, x)) &rArr; Sells(West, x, Nono)
+     5. Missile(x) &rArr; Weapon(x)
+     6. Enemy(x, America) &rArr; Hostile(x)
+</pre>
+              </div>
+              <p class='question' name='chaining-q1'>What are our facts above, which are atomic statements that establish our knowledge about the environment?</p>
+              <div class='answer' name='chaining-q1'>
+<pre class='prettyprint'>
+  ; Facts:
+     2. Owns(Nono, M1)
+     3. Missile(M1)
+     7. American(West)
+     8. Enemy(Nono, America)
+</pre>
+              </div>
+              <br/>
+              
               <p>As such, we divide the above KB into:</p>
 <pre class='prettyprint'>
   KB =
@@ -815,11 +841,16 @@
      7. American(West)
      8. Enemy(Nono, America)
   
+</pre>
+              <p class='question' name='chaining-q2'>What facts are discovered on iteration 1 above? Hint: we can unify rules over multiple facts from previous iterations to make new ones.</p>
+              <div class='answer' name='chaining-q2'>
+<pre class='prettyprint'>
   ; New facts discovered on iteration 1:
      9.  Weapon(M1) [Rule 3, Fact 5, &Theta; = { x/M1 }]
      10. Sells(West, M1, Nono) [Rule 4, Fact 2, Fact 3, &Theta; = { x/M1 }]
      11. Hostile(Nono) [Rule 6, Fact 8, &Theta; = { x/Nono }]
 </pre>
+              </div>
               <br/>
               <p>Notice that on our current iteration, we don't yet use any of the new facts we discover; these will be used in the next iteration.</p>
               <p>Now, we start iteration 2 with the new facts that we got from last time!</p>
@@ -842,12 +873,18 @@
      10. Sells(West, M1, Nono) [Rule 4, Fact 2, Fact 3, &Theta; = { x/M1 }]
      11. Hostile(Nono) [Rule 6, Fact 8, &Theta; = { x/Nono }]
   
+</pre>
+              <p class='question' name='chaining-q3'>What facts are discovered on iteration 2 above?</p>
+              <div class='answer' name='chaining-q3'>
+<pre class='prettyprint'>
   ; New facts discovered on iteration 2:
      12. Criminal(West) [Rule 1, Fact 7, Fact 9, Fact 10, Fact 11, &Theta; = { x/West, y/M1, z/Nono }]
      ; STOP - Found our query!
      
   &there4; KB &#8872; &alpha;
 </pre>
+              </div>
+              <br/>
               <p>So, we terminate here since we found our query, meaning that KB &#8872; &alpha;</p>
               <p>Pictorially, we might think of this forward chaining taking the steps:</p>
               <div class='text-center fit-pres'>
@@ -882,7 +919,8 @@
      8. Enemy(Nono, America)
      
   &alpha; = Criminal(West)
-  
+</pre>
+<pre class='prettyprint'>
   ; ==========================================================================================
   ; Recursive Level 1 Goals:
   { Criminal(West) } ; Start with just the query
@@ -897,6 +935,8 @@
   ; Recurse on new goals
      New Goals: American(West), Weapon(y), Sells(West, y, z), Hostile(z)
 
+</pre>
+<pre class='prettyprint indent-1'>
   ; ==========================================================================================
   ; Recursive Level 2 Goals:
   { American(West), Weapon(y), Sells(West, y, z), Hostile(z) }
@@ -905,6 +945,8 @@
   ; Rules that contain the relations of our target goal on RHS OR facts containing our goals:
      7. American(West) [&Theta; = {}] ; Done! Satisfied this goal! Remove it.
      
+</pre>
+<pre class='prettyprint indent-1'>
   ; ==========================================================================================
   ; Recursive Level 2 Goals:
   { Weapon(y), Sells(West, y, z), Hostile(z) }
@@ -916,6 +958,8 @@
   ; Recurse on new goals
      New Goals: Missile(y)
   
+</pre>
+<pre class='prettyprint indent-2'>
   ; ==========================================================================================
   ; Recursive Level 3 Goals:
   { Missile(y) }
@@ -928,6 +972,8 @@
   
   ; Out of goals for this level, so return success to previous level!
   
+</pre>
+<pre class='prettyprint indent-1'>
   ; ==========================================================================================
   ; Recursive Level 2 Goals:
   { Sells(West, M1, z), Hostile(z) }
@@ -941,6 +987,8 @@
   ; Recurse on new goals
      New Goals: Missile(M1), Owns(Nono, M1)
      
+</pre>
+<pre class='prettyprint indent-2'>
   ; ==========================================================================================
   ; Recursive Level 3 Goals:
   { Missile(M1), Owns(Nono, M1) }
@@ -949,6 +997,8 @@
   ; Rules that contain the relations of our target goal on RHS OR facts containing our goals:
      3. Missile(M1) [&Theta; = {}] ; Done! Satisfied this goal! Remove it
      
+</pre>
+<pre class='prettyprint indent-2'>
   ; ==========================================================================================
   ; Recursive Level 3 Goals:
   { Owns(Nono, M1) }
@@ -959,6 +1009,8 @@
      
   ; Out of goals for this level, so return success to previous level!
   
+</pre>
+<pre class='prettyprint indent-1'>
   ; ==========================================================================================
   ; Recursive Level 2 Goals:
   { Hostile(Nono) }
@@ -970,6 +1022,8 @@
   ; Recurse on new goals
      New Goals: Enemy(Nono, America)
      
+</pre>
+<pre class='prettyprint indent-2'>
   ; ==========================================================================================
   ; Recursive Level 3 Goals:
   { Enemy(Nono, America) }
@@ -980,11 +1034,15 @@
      
   ; Out of goals for this level, so return success to previous level!
   
+</pre>
+<pre class='prettyprint indent-1'>
   ; ==========================================================================================
   ; Recursive Level 2 Goals:
   { }
   ; Out of goals for this level, so return success to previous level!
   
+</pre>
+<pre class='prettyprint'>
   ; ==========================================================================================
   ; Recursive Level 1 Goals:
   { }
@@ -1029,14 +1087,6 @@
             </div>
             <hr/>
             
-            
-            <br/>
-            <div id='hw3' class='scrollspy-element' scrollspy-title='Homework 3'></div>
-            <h1>Homework 3</h1>
-            <div>
-              <p>At this point in discussion we'll review the newly posted homework 3!</p>
-            </div>
-            <hr/>
             
             <a class='btn btn-default pull-right hidden-print' href='javascript:window.print();'>
               <span class='glyphicon glyphicon-print'></span>

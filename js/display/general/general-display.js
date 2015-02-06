@@ -98,6 +98,18 @@ $(function () {
             .fadeIn(animationTime);
         });
     });
+    
+  // Setup question reset
+  $(document)
+    .on("keypress", function (e) {
+      if (e.keyCode === 82) {
+        $(".question")
+          .each(function () {
+            $("[name='" + $(this).attr("name") + "'].answer")
+              .hide();
+          });
+      }
+    });
   
   /*
    * NOTE TAKING MECHANICS
