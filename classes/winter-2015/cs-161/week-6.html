@@ -1,0 +1,943 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Andrew Forney - UCLA CS</title>
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/magic-bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/main.css" rel="stylesheet" type="text/css">
+    <script src="../../../js/lib/jquery-2.0.3.min.js"></script>
+    <script src="../../../js/lib/bootstrap.min.js"></script>
+    <script src="../../../js/lib/expanding.js"></script>
+    <script src="../../../js/display/general/general-display.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+  </head>
+  
+  <body data-spy="scroll" data-target="#scrollspy">
+    
+    <!-- BEGIN WRAP -->
+    <div id="wrap">
+      
+      <!-- BEGIN NAVIGATION -->
+      <nav class='navbar navbar-default' role='navigation'>
+        <div class='nav-accent'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-12'>
+              <div class='navbar-header'>
+                <button class='navbar-toggle' type='button' data-toggle='collapse' data-target='.navbar-main-collapse'>
+                  <span class='sr-only'>Toggle Navigation</span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                </button>
+                <a class='navbar-brand' href='/~forns/'>
+                  <span id='brand-text'>
+                    Andrew Forney
+                  </span>
+                </a>
+              </div>
+              
+              <div id='nav-main' class='collapse navbar-collapse navbar-main-collapse'>
+                <ul class='nav navbar-nav navbar-right'>
+                  
+                  <li>
+                    <a href='/~forns/about.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-user'></span>
+                      </div>
+                      <p class='text-center'>About</p>
+                    </a>
+                  </li>
+                  
+                  <li class='active'>
+                    <a href='/~forns/classes.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-book'></span>
+                      </div>
+                      <p class='text-center'>Classes</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/contact.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-comment'></span>
+                      </div>
+                      <p class='text-center'>Contact</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/publications.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-file'></span>
+                      </div>
+                      <p class='text-center'>Publications</p>
+                    </a>
+                  </li>
+                  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <!-- END NAVIGATION -->
+      
+      <!-- BEGIN MAIN CONTENT -->
+      <div id="main-content" class="container">
+        <div class="row">
+          
+          <!-- BEGIN SCROLLSPY -->
+          <div class='col-md-2 hidden-sm hidden-xs'>
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+              <ul id='scrollspy' class="nav bs-sidenav">
+              </ul>
+            </div>
+          </div>
+          <!-- END SCROLLSPY -->
+          
+          <!-- BEGIN PRESENTATION CONTENT -->
+          <div class='col-md-10 presentation-content' role='main'>
+            
+            <ol class="breadcrumb hidden-print">
+              <li><a href="../../../classes.html">Classes</a></li>
+              <li><a href="./cs-161.html">Spring14 CS161</a></li>
+              <li class="active">Week 6</li>
+            </ol>
+            
+            
+            <div id='review' class='scrollspy-element' scrollspy-title='Review'></div>
+            <h1>Questions from Last Week</h1>
+            <div>
+              <p><strong>Q: Why would I use forward chaining over backward chaining or vice versa? When does one outshine the other?</strong></p>
+              <p>In class I gave an approximation for when you might prefer forward chaining over backward chaining but didn't formalize it with examples...</p>
+              <p>There are some great articles out there (a simple Google search away) that describe these scenarios, which I've outlined below.</p>
+              <p class='definition'>Use <strong>forward chaining</strong> when you need to reach a conclusion that you may not know at the onset or how to reach at the onset of your inference (deductive reasoning).</p>
+              <br/>
+              <p>Forward chaining is also preferable when:</p>
+              <ul class='indent-1'>
+                <li><p>You are precomputing and storing answers (remember that we generate all the facts we can)</p></li>
+                <li><p>Facts are relatively inexpensive to store and compute</p></li>
+                <li><p>Generated facts are largely static and will not change (i.e., knowledge generated is monotonic)</p></li>
+              </ul>
+              <br/>
+              <p class='question' name='chaining-q0'>So why not always perform forward chaining so that we have the most facts available to us when we start reasoning?</p>
+              <p class='answer' name='chaining-q0'>Space, of course! We might clog up our search space when we need a particular query answered, especially if we've generated many entailed, but irrelevant, facts.</p>
+              <br/>
+              <p>This brings us to backward chaining.</p>
+              <p class='definition'>Use <strong>backward chaining</strong> when you have a goal query to ask at the start and can look solely at dependencies to reduce your search space.</p>
+              <br/>
+              <p>Backward chaining is therefore preferable when:</p>
+              <ul class='indent-1'>
+                <li><p>There is a huge number of rules that might be used to reach a conclusion and you need to narrow down the possibilities</p></li>
+                <li><p>Computed answers and facts have little chance of being reused</p></li>
+                <li><p>Facts are expensive to store or compute</p></li>
+              </ul>
+              <br/>
+              <p>Some articles also offered a <strong>hybrid</strong> approach (similar to one someone mentioned in class) such that you only store / index facts that are used frequently in answering questions.</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='planning' class='scrollspy-element' scrollspy-title='Planning'></div>
+            <h1>Planning</h1>
+            <div>
+              <p>Planning is an important extension of first order logic that is really exactly what it sounds like:</p>
+              <ul class='indent-1'>
+                <li><p>Represent states and actions as first order logic statements (actually a subset of FOL that doesn't have functions)</p></li>
+                <li><p>Use a KB to represent our current states, which will determine whether or not we meet the conditions for taking an action that will change our KB.</p></li>
+                <li><p>Attempt to reach a goal state specification through some sequence of actions for which we've met the requirements.</p></li>
+              </ul>
+              <br/>
+              <p>Hey wait a second... initial conditions? Actions? Goals?</p>
+              <p class='question' name='planning-q0'>What is this starting to sound like?</p>
+              <div class='answer' name='planning-q0'>
+                <div class='fit-pres text-center'>
+                  <img src='../../../assets/images/spring-2014/cs-161/week-6/peeweeSearch.GIF' />
+                </div>
+              </div>
+              <br/>
+              <p>(I hope you guys remember Peewee's Playhouse from your childhood and their whole word of the day thing, otherwise that last joke will be weird for you... also, I can't make gifs)</p>
+              <p>
+                But yes, because this is a class on search apparently, we're going to talk about planning as a search operation starting at some initial state and using actions (that we're capable of using)
+                to hopefully get to a goal.
+              </p>
+              <p>First, some definitions...</p>
+              <p class='definition'><strong>Fluents</strong> are our states of the world that are subject to change and consist solely of grounded FOL atoms (no functions)</p>
+              <br/>
+              <p>Some examples of fluents include:</p>
+<pre class='prettyprint'>
+  ; Constants
+  LAX
+  Andrew
+  ProtocolObserved
+  
+  ; Functionless Predicates
+  ISA(Home, Building)
+  Thirsty(Liz)
+</pre>
+              <br/>
+              <p class='definition'>Our state of fluents uses <strong>database semantics</strong> under the <strong>closed world</strong> and <strong>unique name</strong> assumptions.</p>
+              <br/>
+              <p>In other words, our conception of state will be contained in a knowledge base with certain properties:</p>
+              <ul class='indent-1'>
+                <li><p><strong>Closed World:</strong> our KB consists of a set of fluents assumed to be true, and any fluents *not* mentioned are assumed to be false</p></li>
+                <li><p><strong>Unique Names:</strong> constants with different names are assumed to refer to different objects (remember Skolemization?)</p></li>
+              </ul>
+<pre class='prettyprint'>
+  ; For example:
+  Andrew1 ; me
+  Andrew2 ; my evil twin
+  Andrew1 &ne; Andrew2
+</pre>
+              <br/>
+              <p>So, our states might just look like KBs such as:</p>
+<pre class='prettyprint'>
+  KB =
+     1. At(Andrew, UCLA)
+     2. Teaching(Andrew, CS161)
+     3. AwakeAt(Andrew, 2:00) ; sorry folks
+     ; ...
+</pre>
+              <br/>
+              <p>Now that we have our states, we should look at how to modify them.</p>
+              <p>In classical search this meant using actions, and planning is only slightly different...</p>
+              <p>Our actions in classical search were generated from legal movements to our atomic states that we knew were adjacent by one movement.</p>
+              <p>This same paradigm doesn't work so neatly for planning because we don't have atomic states! Our states are KBs with a bunch of different sentences.</p>
+              <p class='definition'><strong>Planning actions</strong>, therefore, are a way of modifying our states that can be applied when their pre-conditions are met.</p>
+              <p class='definition'><strong>Preconditions</strong> are criteria that our current state must meet in order to perform an action. They are in the form of (possibly unground) FOL sentences.</p>
+              <p class='example'>Given the following state, are the following action preconditions satisfied?</p>
+<pre class='prettyprint'>
+  ; Example in honor of Dyer
+  KB =
+     1. HasBat(MerryWidowMurderer)
+     2. IsWith(MerryWidowMurderer, Charlotte)
+     3. Alive(MerryWidowMurderer)
+     4. Alive(Charlotte)
+     
+  ; Action 1: Bonk
+  ; [!] Notice that our action has two &quot;parameters&quot;
+  ; bonker (the one who is bonking) and bonkee (the one who is
+  ; being bonked); these are FOL variables
+  Action(Bonk(bonker, bonkee)
+    Precondition:
+      Alive(bonker) &and; HasBat(bonker) &and; IsWith(bonker, bonkee)
+    Effect:
+      ; ...
+  )
+</pre>
+              <br/>
+              <p class='definition'><strong>Postconditions / Effects</strong> are what happen to our state if we choose to take a certain action for which we have satisfied the preconditions.</p>
+              <br/>
+              <p>Once we choose to take an action for which our state has satisfied the preconditions, the result is a new state KB where the set of fluents has changed.</p>
+              <div class='definition'><p>The changes a state undergoes from taking an action are as follows:</p><br/>
+                <ul class='indent-1'>
+                  <li><p>If, in the postcondition, a fluent is positive, you add that to your KB. (the <strong>add-list</strong> [ADD])</p></li>
+                  <li><p>If, in the postcondition, a fluent is negative, you remove that fluent from your KB. (the <strong>delete-list</strong> [DEL])</p></li>
+                  <li><p>All other state fluents are left the same.</p></li>
+                  <li><p>Formally, the result of taking action a at state s is: <code class='prettyprint'>Result(s, a) = (s - DEL(a)) &cup; ADD(a)</code><br/>Or in other words, our current state
+                    minus the fluents in the delete list of the action, plus the fluents in the add list of the action.</p></li>
+                </ul>
+              </div>
+              <br/>
+              <p class='example'>Taking our example from before, what will our new state look like after performing the following two versions of Bonk?</p>
+<pre class='prettyprint'>
+  KB =
+     1. HasBat(MerryWidowMurderer)
+     2. IsWith(MerryWidowMurderer, Charlotte)
+     3. Alive(MerryWidowMurderer)
+     4. Alive(Charlotte)
+     
+  ; Action 1.1: Bonk
+  Action(Bonk(bonker, bonkee)
+    Precondition:
+      Alive(bonker) &and; HasBat(bonker) &and; IsWith(bonker, bonkee)
+    Effect:
+      &not;Alive(bonkee) &and; &not;HasBat(bonker) ; the bat breaks, clearly
+  )
+  
+  Bonk(MerryWidowMurderer, Charlotte)
+</pre>
+              <p class='question' name='plan-act-0'>Click for solution.</p>
+              <div class='answer' name='plan-act-0'>
+<pre class='prettyprint'>
+  KB =
+     1. IsWith(MerryWidowMurderer, Charlotte)
+     2. Alive(MerryWidowMurderer)
+</pre>
+              </div>
+              <br/>
+              <p class='question' name='planning-q1'>Why don't we add negative fluents to our KB?</p>
+              <p class='answer' name='planning-q1'>Due to the closed-world assumption (stating that any fluent not in our KB is considered false)</p>
+              <br/>
+              
+<pre class='prettyprint'>
+  KB =
+     1. HasBat(MerryWidowMurderer)
+     2. IsWith(MerryWidowMurderer, Charlotte)
+     3. Alive(MerryWidowMurderer)
+     4. Alive(Charlotte)
+     
+  ; Action 1.2: Bonk
+  Action(Bonk(bonker, bonkee)
+    Precondition:
+      Alive(bonker) &and; HasBat(bonker) &and; IsWith(bonker, bonkee)
+    Effect:
+      &not;Alive(bonkee) &and; HasSplinter(bonker) ; the bat gave bonker splinters
+  )
+  
+  Bonk(MerryWidowMurderer, Charlotte)
+</pre>
+              <p class='question' name='plan-act-1'>Click for solution.</p>
+              <div class='answer' name='plan-act-1'>
+<pre class='prettyprint'>
+  KB =
+     1. HasBat(MerryWidowMurderer)
+     2. IsWith(MerryWidowMurderer, Charlotte)
+     3. Alive(MerryWidowMurderer)
+     4. HasSplinter(MerryWidowMurderer)
+</pre>
+              </div>
+              <br/>
+              <p>So, we can formalize our planning search problem:</p>
+              <ul class='indent-1'>
+                <li><p>The <strong>initial state</strong> is simply a list of positive fluents</p></li>
+                <li><p>
+                  The <strong>goal</strong> is just a <em>FOL description</em> of conditions that our state must match for success--just like a precondition, except goals are our terminating condition.
+                </p></li>
+                <li><p>The <strong>solution path</strong> we want to find is a series of actions taken that are allowed from our initial state to our goal.</p></li>
+              </ul>
+              <p class='example'>Determine a sequence of actions that reaches the goal state from the initial state in the following planning specification (from your book):</p>
+              <blockquote>
+              <p>
+                You must change a flat on your car using the following actions. You could try to get a ride from a friend, and leave it overnight, but your car is in a bad neighborhood so apparently
+                that means that all of your tires, regardless of where they are, get stolen.
+              </p>
+              </blockquote>
+<pre class='prettyprint'>
+  KB = Tire(Flat) &and; Tire(Spare) &and; At(Flat, Axle) &and; At(Spare, Trunk)
+  Goal(At(Spare, Axle))
+  
+  Action(Remove(obj, loc),
+    Precondition:
+      At(obj, loc)
+    Effect:
+      &not;At(obj, loc) &and; At(obj, Ground))
+  
+  Action(PutOn(t, Axle),
+    Precondition:
+      Tire(t) &and; At(t, Ground) &and; &not;At(Flat, Axle)
+    Effect:
+      &not;At(t, Ground) &and; At(t, Axle))
+      
+  Action(LeaveOvernight(),
+    Precondition:
+    Effect: &not;At(Spare, Ground) &and; &not;At(Spare, Axle) &and; &not;At(Spare, Trunk) &and;
+            &not;At(Flat, Ground) &and; &not;At(Flat, Axle) &and; &not;At(Flat, Trunk))
+</pre>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='planningAlgos' class='scrollspy-element' scrollspy-title='Planning Algorithms'></div>
+            <h1>Planning Algorithms</h1>
+            <div>
+              <p>Just as we talked about backward and forward chaining as inference algorithms in first order logic, so do we have backward and forward search strategies for planning.</p>
+              <p>The paradigms between the two strategies are quite similar; we'll start by looking at backward relevant-states search:</p>
+              
+              <br/>
+              <h3>Relevant State-space Search</h3>
+              <p class='definition'><strong>Backward / Relevant States Search</strong> starts with our goal and attempts to derive the initial state (or a subset of it) from relevant actions.</p>
+              <p class='definition'>
+                A <strong>relevant action</strong> is one that unifies on at least one goal / subgoal fluent (either positive or negative) in its effects AND that does not contradict any goal fluents.
+              </p>
+              <p class='question' name='backsearch-q0'>Why is it sufficient to derive a subset of the initial state's positive fluents rather than the initial state in its entirety?</p>
+              <p class='answer' name='backsearch-q0'>
+                Because for initial state S composed of positive fluents (and under the closed world assumption), any S' &sube; S means that M(S) &sube; M(S') and therefore, by definition, S &#8872; S'.
+              </p>
+              <br/>
+              <p>
+                The gist is the same as for backward chaining: starting with the goal, look for actions that could be relevant for deriving the initial state and then generate sub-goals to satisfy relevant
+                pre-conditions.
+              </p>
+              <p>
+                Note that our problem must allow us an easy means of working backwards to derive a new state from a hypothesized relevant action (that will hopefully work us from the goal to the initial state).
+              </p>
+              <p>Luckily, using our PDDL representation of planning problems, this isn't difficult.</p>
+              <p class='definition'>Given a ground goal description <code>g</code> and ground action <code>a</code>, the regression (backward step) from <code>g</code> over action a gives us a new state 
+                <code>g'</code> described as:</p>
+<pre>
+  g' = (g - ADD(a)) &cup; Preconditions(a)
+</pre>
+              <p class='debug'><strong>WARNING:</strong> Notice that we have set union over the Preconditions(a), indicating that we do indeed add negative fluents to our state.</p>
+              <p class='question' name='backsearch-q00'>Why do we need to add these negative fluents to our regression search state? Doesn't the closed-world assumption still hold?</p>
+              <p class='answer' name='backsearch-q00'>If we did not add them to our state, then we could potentially take later actions that had preconditions of their negation without reaching contradiction
+                within our state (which we would like to do in the event we try to take an action that was forbidden by a previous commitment).</p>
+              <br/>
+              <p>In other words, taking a step back is simply removing the add list of an action from our current state and the uniting over that actions preconditions.</p>
+              <p>The idea is that we &quot;undo&quot; the action's effects under the assumption that we met its preconditions in order to have taken it in the first place.</p>
+              <p class='definition'><strong>Partially uninstantiated</strong> states are states we encounter along the way of taking regression actions in which not all variables are grounded.</p>
+              <br/>
+              <p>Just like in backward chaining, we want to make sure we have a fully grounded KB.</p>
+              <p>The process, then, is as follows:</p>
+              <ol class='indent-1'>
+                <li><p>Start with your query as the goal</p></li>
+                <li><p>Explore relevant actions starting from the goal specification hoping to derive the initial state (or a subset of it)</p></li>
+                <li><p>For each relevant action, search for groundings in our KB state that will derive the initial state (or a subset of it)</p></li>
+                <li><p>Return your plan if you derive some grounded subset of the initial set, or return failure if you have no relevant actions remaining</p></li>
+              </ol>
+              <p>So, let's try using relevant state search on a fantastic example planning problem:</p>
+              <br/>
+              <blockquote>
+              <p>Forney Industries (the makers who brought you The Intelligent Sponge and PillowTurner2999) is developing a new general purpose buttler bot named ForneyBot3000.</p>
+              <p>It takes commands from its owner (currently only Andrew) to fetch and refill party libations.</p>
+              <p>During its stress test, Andrew commands it to refill another partier's beverage in order to quench that person's thirst.</p>
+              </blockquote>
+              <br/>
+              <p class='example'>Use relevant state search to derive a sequence of actions that will find our initial state starting with the goal of quenching our party goer's thirst.</p>
+<pre class='prettyprint'>
+  Constants: Andrew, Partier2, Cup1, Cup2, ForneyBot3000
+  Goal: &not;Thirsty(Partier2)
+  
+  Initial State:
+    KB =
+       1. Thirsty(Partier2)
+       2. BotOwner(Andrew)
+       3. ContainsLiquid(Cup2)
+       4. Has(Partier2, Cup1)
+  
+  Action(Drink(agent, cup)
+    Precondition: Has(agent, cup) &and; ContainsLiquid(cup)
+    Effect: &not;Thirsty(agent) &and; &not;ContainsLiquid(cup)
+  )
+  Action(Fetch(commander, object, recip)
+    Precondition: &not;Has(recip, object) &and; BotOwner(commander)
+    Effect: Has(recip, object)
+  )
+</pre>
+              <p class='question' name='backsearch-ex-0'>What relevant action(s) do we have available for our first goal step?</p>
+              <p class='answer' name='backsearch-ex-0'>Just Drink(agent, cup), since it has an effect mentioning the current goal: <code>&not;Thirsty(agent)</code></p>
+              <p class='question' name='backsearch-ex-1'>What constants shall we use to ground over this/these relevant action(s)? Can we ground to some subset of our initial state?</p>
+              <div class='answer' name='backsearch-ex-1'>
+                <p>We see that, in order to match our goal state in the effects, we must ground <code>agent</code> to Partier2.
+                But we do not know what should be ground for the cup parameter (there are 2 cup constants, after all). So, we'll Skolemize and call this imaginary cup that we hope to someday find: 
+                <code>Cup'</code>.</p><br/>
+                <p>This is known as finding the <strong>Most General Unifier</strong> since we don't need to ground the cup parameter immediately.</p>
+                <p>We cannot yet ground everything to our initial state, so we continue.</p>
+              </div>
+              <br/>
+              <p>Thus, taking our first step, we have:</p>
+<pre>
+  ; First step
+  Goal(&not;Thirsty(Partier2))
+  g = &empty;
+  
+  ; Relevant actions:
+  Action(Drink(agent, cup)
+    Precondition: Has(agent, cup) &and; ContainsLiquid(cup)
+    Effect: &not;Thirsty(agent) &and; &not;ContainsLiquid(cup)
+  )
+  
+  ; Groundings available:
+  &Theta; = { agent/Partier2 }
+  
+  ; Gives us KB g':
+  g' =
+     1. Has(Partier2, Cup')
+     2. ContainsLiquid(Cup')
+</pre>
+              <br/>
+              <p class='question' name='backsearch-ex-2'>What relevant action(s) do we have available for our second goal step? Remember, we're trying to ground the fluents in <code>g = g'</code>.</p>
+              <p class='answer' name='backsearch-ex-2'>Since action Fetch has fluent Has(recip, object) in its effects, we'll use it as our relevant action to pursue next.</p>
+              <p class='question' name='backsearch-ex-3'>What groundings shall we use for this relevant action?</p>
+              <p class='answer' name='backsearch-ex-3'>We must make the effect look like our goal's fluent <code>Has(Partier2, Cup')</code>, so we commit <code>&theta; = { recip/Partier2, object/Cup' }</code>.</p>
+              <p class='question' name='backsearch-ex-31'>What will our state g' look like after taking this action and grounding? (Remember to Skolemize where appropriate)</p>
+              <div class='answer' name='backsearch-ex-31'>
+<pre>
+  g' =
+      1. ContainsLiquid(Cup')
+      2. BotOwner(Commander')
+      3. &not;Has(Partier2, Cup')
+</pre>
+              </div>
+              <br/>
+<pre>
+  ; Second step (g' from step 1 becomes g)
+  g =
+     1. Has(Partier2, Cup')
+     2. ContainsLiquid(Cup')
+     
+  ; Relevant actions:
+  Action(Fetch(commander, object, recip)
+    Precondition: &not;Has(recip, object) &and; BotOwner(commander)
+    Effect: Has(recip, object)
+  )
+  
+  ; Groundings available
+  &Theta; = { recip/Partier2, object/Cup' }
+  
+  ; Gives us KB g':
+  g' =
+      1. ContainsLiquid(Cup')
+      2. BotOwner(Commander')
+      3. &not;Has(Partier2, Cup')
+      
+  ; [!] Note: We include the negative fluent &not;Has(Partier2, Cup')
+  ; (despite the closed world assumption) so-as to verify that we were
+  ; not in a state that already assumed Has(Partier2, Cup')
+</pre>
+              <br/>
+              <div class='question' name='backsearch-ex-4'>
+                <p>Are groundings available that will make our current partial instantiation a subset of our initial state? Reminder, our initial state was:</p>
+<pre>
+  KB =
+     1. Thirsty(Partier2)
+     2. BotOwner(Andrew)
+     3. ContainsLiquid(Cup2)
+     4. Has(Partier2, Cup1)
+</pre>
+              </div>
+              <p class='answer' name='backsearch-ex-4'>Yes! Choose <code>&theta; = { Cup'/Cup2, Commander'/Andrew }.</code></p>
+              <br/>
+<pre>  
+  ; Since we have constants Cup1 and Cup2 eligible for binding to the
+  ; Cup' placeholder, we can try each and find that Cup2 matches
+  ; the fact in our initial state; similarly, we have only one choice
+  ; for matching Commander' with Andrew in our initial state
+  
+  ; [!] As it turns out, this binding is sufficient for deriving a subset
+  ; of our initial state:
+  &Theta; = {Cup'/Cup2, Commander'/Andrew}
+  KB =
+     1. ContainsLiquid(Cup2)
+     2. BotOwner(Andrew)
+     3. &not;Has(Partier2, Cup2)
+     
+ ; So, we return our successful action sequence:
+ Fetch(Andrew, Cup2, Partier2) &rarr; Drink(Partier2, Cup2)
+</pre>
+              
+              <br/>
+              <h3>Forward State-space Search</h3>
+              <p>Unimaginatively, forward state-space search is similar to forward chaining:</p>
+              <p class='definition'><strong>Forward state-space search</strong> starts with our initial state and attempts to use applicable actions to derive the goal state.</p>
+              <p class='definition'>In forward state-space search, our "applicable / relevant" actions will be those for which we've met all preconditions (and possess groundings for the action parameters).</p>
+              <br/>
+              <p>Thus, the forward state-space search algorithm goes something like:</p>
+              <ol class='indent-1'>
+                <li><p>Find relevant actions that can be taken given our current state.</p></li>
+                <li><p>Branch every time we have multiple relevant actions, grounding appropriately at each branch.</p></li>
+                <li><p>Add effects of each relevant action to our state until we finish by either deriving our goal fluent or run out of relevant actions.</p></li>
+              </ol>
+              <br/>
+              <p class='debug'>Warning! Needless to say, we'll need good heuristics to narrow down what actions we should take at a given state to guide us to a goal.</p>
+              <br/>
+              <p>Without good heuristics, our expansions of possible actions can be totally intractable (we'll talk about heuristic formation later)</p>
+              <p>In the meantime, let's just run through our previous example with forward state-space search:</p>
+              <br/>
+              <p class='example'>Use forward state-space search to derive the goal state from our initial state in the following problem:</p>
+<pre class='prettyprint'>
+  Constants: Andrew, Partier2, Cup1, Cup2, ForneyBot3000
+  Goal: &not;Thirsty(Partier2)
+  
+  Initial State:
+    KB =
+       1. Thirsty(Partier2)
+       2. BotOwner(Andrew)
+       3. ContainsLiquid(Cup2)
+       4. Has(Partier2, Cup1)
+  
+  Action(Drink(agent, cup)
+    Precondition: Has(agent, cup) &and; ContainsLiquid(cup)
+    Effect: &not;Thirsty(agent) &and; &not;ContainsLiquid(cup)
+  )
+  Action(Fetch(commander, object, recip)
+    Precondition: &not;Has(recip, object) &and; BotOwner(commander)
+    Effect: Has(recip, object)
+  )
+</pre>
+              <p class='question' name='fw-q0'>What are any relevant actions given our initial state?</p>
+              <p class='answer' name='fw-q0'>Fetch is the only relevant action (note that Drink is not relevant since we could not successfully ground to it).</p>
+              <p class='question' name='fw-q1'>What groundings are available for this/these action(s)?</p>
+              <p class='answer' name='fw-q1'>We must ground over preconditions: <code>&not;Has(recip, object) &and; BotOwner(commander)</code>, so we can use:<br/>
+                <code>&theta; = { recip/Partier2, object/Cup2, commander/Andrew }</code>
+              </p>
+              <br/>
+<pre>
+  ; Step 1
+  ; Start at initial state
+  KB =
+     1. Thirsty(Partier2)
+     2. BotOwner(Andrew)
+     3. ContainsLiquid(Cup2)
+     4. Has(Partier2, Cup1)
+     
+  ; Relevant actions:
+  { Fetch(Andrew, Patier2, Cup2) }
+  
+  ; Applying that, we get the KB:
+  KB =
+     1. Thirsty(Partier2)
+     2. BotOwner(Andrew)
+     3. ContainsLiquid(Cup2)
+     4. Has(Partier2, Cup1)
+     5. Has(Partier2, Cup2) ; double fisting!
+</pre>
+              <br/>
+<pre class='prettyprint'>
+  ; Step 2
+  KB =
+     1. Thirsty(Partier2)
+     2. BotOwner(Andrew)
+     3. ContainsLiquid(Cup2)
+     4. Has(Partier2, Cup1)
+     5. Has(Partier2, Cup2)
+     
+  ; Relevant actions:
+  { Drink(Partier2, Cup2) }
+  
+  ; Applying that, we get the KB:
+  KB =
+     1. BotOwner(Andrew)
+     2. Has(Partier2, Cup1)
+     3. Has(Partier2, Cup2)
+     
+  ; [!] This is consistent with our goal state, since Partier2
+  ; is no longer thirsty from the closed-world assumption,
+  ; so we return the action sequence:
+  Fetch(Andrew, Cup2, Partier2) &rarr; Drink(Partier2, Cup2)
+</pre>
+              <br/>
+              <p class='example'>
+                Note the additional exploration options we would have had to consider if we added the following to our initial state:<br/>
+                (5) Thirsty(Andrew)<br/>
+                (6) ContainsLiquid(Cup3)
+              </p>
+              <br/>
+              <p class='definition'>
+                Note that both forward and backward state-space searches are <strong>sound and complete</strong> for the same reasons that forward and backward chaining were: they derive only those fluents
+                that are entailed by allowable actions from the initial state.
+              </p>
+              <p>So, the trick, it would seem, is in choosing a good heuristic to avoid unnecessary action explorations. Enter the planning graph...</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='planningGraphs' class='scrollspy-element' scrollspy-title='Planning Graphs'></div>
+            <h1>Planning Graphs</h1>
+            <div>
+              <p>Clearly the choice of a good heuristic is necessary to adequately navigate a planning search space, especially if the number of constants and fluents is very large.</p>
+              <p>As it turns out, however, the fact that backward search employs state sets to navigate its planning, finding good heuristics is generally quite difficult.</p>
+              <p>For this reason, forward state-space search is largely the preferred method, and planning graphs represent a useful heuristic for reducing the search space.</p>
+              <p class='definition'>A <strong>planning graph</strong> is a directed graph organized into levels that alternate between state and action levels.</p>
+              <br/>
+              <p>So, we have the following decomposition of entities at each level where S_i represents the <strong>state</strong> levels and A_i the <strong>action</strong> levels:</p>
+              <ul class='indent-1'>
+                <li><p>At level S_i, all fluents that <strong>might possibly</strong> be accessible (from some sequence of actions) in i steps appear (NOTE: we never list a fluent that might not possibly
+                  exist at level i)</p></li>
+                <li><p>At level A_i, all actions that <strong>might possibly</strong> have their preconditions met given the previous state possibilities S_i appear (NOTE: we never list an action that
+                  might not possibly exist at level i)</p></li>
+                <li><p><strong>Mutex</strong> links illustrate mutually exclusive actions and fluents (i.e., if we were to choose one action / arrive at one fluent, 
+                  then we necessarily could not have chosen any to which a mutex link exists)</p></li>
+              </ul>
+              <br/>
+              <p>The whole point of planning graphs is to prevent us from having to combinitorically choose one action after another and see if our effort reaches fruition.</p>
+              <p>Although imperfect (e.g., a fluent will never appear too late, but it might show up too early than actually possible), remember that planning graphs are a heuristic strategy...</p>
+              <p>This means that they're meant to give us an estimate of how hard it is to attain a literal from the initial state.</p>
+              
+              <br/>
+              <h3>How to Have a Planning Graph and Eat it Too</h3>
+              <p>...oh wait, I think something got switched there... we're going to dissect the book's example of having your cake and eating it too, as follows:</p>
+<pre class='prettyprint'>
+  Constants: Cake
+  Goals: (Have(Cake) &and; Eaten(Cake))
+  KB =
+    1. Have(Cake)
+    (2. &not;Eaten(Cake))*
+    
+  ; * Notice that we still illustrate negative fluents in our
+  ; planning graphs explicitly, even though they might be
+  ; generated from the closed-world assumption
+  
+  Action(Eat(Cake)
+    Precondition:
+      Have(Cake)
+    Effect:
+      &not;Have(Cake) &and; Eaten(Cake))
+      
+  Action(Bake(Cake)
+    Precondition:
+      &not;Have(Cake)
+    Effect: 
+      Have(Cake))
+</pre>
+              <br/>
+              <p class='toolkit'><strong>Setup:</strong> add your initial state to S_0, the first state level, making a node for each fluent.</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-6/planningGraph-0.PNG' />
+              </div>
+              <br/>
+              <p class='toolkit'><strong>Creating Action Levels:</strong> for action level i, (1) add a persistence action (small box) for each fluent in S_i, and (2) add any actions
+                that can be performed using any combo of fluents from S_i.
+              </p>
+              <br/>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-6/planningGraph-1.PNG' />
+              </div>
+              <br/>
+              <p class='toolkit'><strong>Adding Action Mutex Links:</strong> there are three criteria for adding a mutex (mutual exclusivity) between actions:</p>
+              <ul class='indent-1'>
+                <li><p><strong>Inconsistent effects:</strong> action1 sets X and action2 sets &not;X are mutually exclusive.</p></li>
+                <li><p><strong>Interference:</strong> an effect of action1 is the negation of a precondition for action2</p></li>
+                <li><p><strong>Competing needs:</strong> a precondition of action1 is mutex with a precondition of action2</p></li>
+              </ul>
+              <br/>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-6/planningGraph-2.PNG' />
+              </div>
+              <br/>
+              <p class='question' name='planningGraph-q2'>What mutex rule is represented in our addition of the two mutex additions above?</p>
+              <p class='answer' name='planningGraph-q2'>
+                Interference, because the action of Eating your cake is mutually exclusive with both having your cake (persist) and not having eaten your cake (persist). OR inconsistent effects.
+              </p>
+              <br/>
+              <p class='toolkit'><strong>Creating State Levels:</strong> add fluents resulting from each action (including persistence actions) at the previous action level.</p>
+              <br/>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-6/planningGraph-3.PNG' />
+              </div>
+              <br/>
+              <p class='toolkit'><strong>Adding Fluent Mutex Links:</strong> there are two criteria for adding a mutex (mutual exclusivity) between fluents:</p>
+              <ul class='indent-1'>
+                <li><p>If the two fluents are contradictory (e.g., X and &not;X)</p></li>
+                <li><p>If <strong>every</strong> pair of actions that could produce them is also mutex</p></li>
+              </ul>
+              <br/>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-6/planningGraph-4.PNG' />
+              </div>
+              <br/>
+              <p class='question' name='planningGraph-q3'>Why were each of the above 4 fluent mutexes added?</p>
+              <p class='answer' name='planningGraph-q3'>
+                The smaller ones because the fluents were mutually exclusive, the larger ones because every pair of actions that could produce them were also mutex (Eat(Cake) and persistence actions).
+              </p>
+              <br/>
+              <p class='toolkit'>We stop generating new levels when we have <strong>leveled off</strong>, meaning that two consecutive state levels (S_i and S_(i+1)) are identical.</p>
+              <br/>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-6/planningGraph-5.PNG' />
+              </div>
+              <br/>
+              <p>We observe that S_1 and S_2 are identical, so we've leveled off and do not continue generating levels.</p>
+              
+              <br/>
+              <h3>Using the Planning Graph</h3>
+              <p>Alright, so we've generated our planning graph, have all of our mutexes in place... now what? ...what were we trying to do again?</p>
+              <p>Oh, right... reduce the number of action explorations our forward state space search will have to check to derive a plan if it exists.</p>
+              <p class='definition'>
+                The <strong>set-level</strong> heuristic finds the level at which all the literals in the conjunctive goal appear in the planning graph without any pair of them being mutex.
+              </p>
+              <br/>
+              <p>So, once we have our planning graph, we can use set-level to give us the following:</p>
+              <ul class='indent-1'>
+                <li><p>We are guaranteed that if we <strong>never</strong> derive the goal state's literals before we level off that there exists no solution plan.</p></li>
+                <li><p>We are NOT guaranteed that if we derive the goal state's literals that a plan certainly exists; only that it might!*</p></li>
+                <li><p>
+                  Lemma: We only compare mutual exclusions between two actions / fluents at a time, leaving more complex exclusions between 3 or more actions / fluents an unaccounted-for possibility.
+                </p></li>
+              </ul>
+              <br/>
+              <p class='question' name='planningGraph-q4'>So why don't we check for 3-consistency, 4-consistency, etc. in our planning graph actions / fluents?</p>
+              <p class='answer' name='planningGraph-q4'>
+                Remember that heuristics are designed to give us hints of where to explore next, and inexpensively so! Adding checks for anything more than 2-consistency mutex is expensive, and so our
+                heuristic loses its edge over classical search.
+              </p>
+              <br/>
+              <p>The same reason explains our persistence actions in planning graphs--they might not be completely accurate, but they simplify the heuristic by making sure it doesn't become too expensive.</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='hierarchicalPlanning' class='scrollspy-element' scrollspy-title='Hierarchichal Planning'></div>
+            <h1>Hierarchical Planning</h1>
+            <div>
+              <p>Our previous discussion of planning gave us the basic elements to enact a plan, but with very low-level action effects that were atomic and did little abstraction.</p>
+              <p>It would be nice, then, if we were capable of programming our intelligent systems to have some level of action abstraction so that we don't have to spell every little thing out.</p>
+              <p class='definition'>A <strong>hierarchical decomposition</strong> of actions attempts to group small actions into larger, more abstract ones to make large planning problems tractable.</p>
+              <p class='definition'>
+                <strong>High-level actions (HLAs)</strong> are defined as 1 or more refinements that consist of some number of preconditions and then some number of steps to satisfy that refinement. 
+              </p>
+              <p class='definition'>A refinement <strong>step</strong> may be either another (recursively defined) HLA or a primitive action.</p>
+              <p class='definition'>A <strong>primitive action</strong> is an atomic action instruction like we've dealt with previously (Chapter 10).</p>
+              <br/>
+<pre class='prettyprint'>
+  ; Example of HLA:
+  Refinement(Go(Home, LAX)
+    Preconditions:
+      Fueled(Car)
+    Steps:
+      [Drive(Car, Home, LAXLongTermParking),
+       Shuttle(LAXLongTermParking, LAX)]
+  )
+</pre>
+              <br/>
+              <p>Notice that our steps are primitive actions in the above case that are performed in sequence.</p>
+              <p class='definition'>A list of steps containing only primitive actions is called an <strong>implementation</strong>.</p>
+              <br/>
+              <p>So, in order to use HLA to find plans from an initial state to a goal, we search for an implementation that obeys all preconditions and leads to the goal state.</p>
+              <br/>
+              <p class='example'>Find an implementation using the following HLAs that allow us to make tea!</p>
+<pre class='prettyprint'>
+  Constants = { Water, Tea }
+  KB =
+     1. IsLiquid(Water)
+     2. Temperature(Water, 20) ; Celcius, room temp
+  
+  g = Steep(Tea, Water)
+  
+  ; HLAs:
+  Refinement(Brew(tea, water)
+    Steps:
+      [Boil(water), Steep(tea, water)])
+  
+  Refinement(Boil(liquid)
+    Precondition:
+      IsLiquid(liquid) &and; Temperature(liquid, 100)
+    Steps: [])
+    
+  Refinement(Boil(liquid)
+    Precondition:
+      IsLiquid(liquid)
+    Steps:
+      [ApplyHeat(liquid), Boil(liquid)])
+      
+  Refinement(ApplyHeat(object)
+    Precondition:
+      Temperature(object, x)
+    Steps:
+      [Temperature(object, x+1)])
+</pre>
+<p class='text-center'><small>(example credit to Evan Lloyd)</small></p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='nondeterministicPlans' class='scrollspy-element' scrollspy-title='Nondeterministic Planning'></div>
+            <h1>Nondeterministic Planning</h1>
+            <div>
+              <p>Previously, our knowledge bases have operated under the closed world assumption because we assumed that we had full percept of our intelligent agent's environment...</p>
+              <p>Of course, in practice, this might not always be the case, and we should treat <strong>uncertainty</strong> with special deference in our reasoning system.</p>
+              <p>We can divide this process into three primary diversions from our traditional Action representations:</p>
+              <p class='toolkit'>Fluents can be true, false, or unknown (we remove the closed world assumption in favor of the open world one in which uncertainty is possible)</p>
+              <br/>
+              <p>Now, our state semantics have been modified such that we no longer know that a missing fluent is automatically false.</p>
+              <p>So, we need to add mechanisms to reduce uncertainty:</p>
+              <p class='toolkit'>Add actions that do nothing except learn the values of unknown fluents. We'll call these actions <strong>Percepts</strong>.</p>
+              <br/>
+<pre class='prettyprint'>
+  ; Example percepts
+  Percept(Color(x, c)
+    Precondition:
+      Object(x) &and; InView(x))
+  Percept(ContainsLiquid(x, liquid)
+    Precondition:
+      Cup(x) &and; InView(x))
+      
+  ; Might also need a mechanism for causing
+  ; an object to come into view (one object
+  ; at a time)
+  Action(LookAt(x),
+    Precondition:
+      InView(y) &and; (x &ne; y)
+    Effect:
+      InView(x) &and; &not;InView(y))
+</pre>
+              <br/>
+              <p>By adding percepts, we assume that our agent has sensors to set the proper parameters from the perception findings, and thus give us more information about our environment's objects.</p>
+              <p>Finally, by using these percepts, we can approach our planning problem to react to different scenarios with appropriate actions.</p>
+              <p>We can react to unknown values and randomness using contingent plans, which are really just if-then-else actions based on the knowledge from our percepts.</p>
+<pre class='prettyprint'>
+  ; Contingent Planning
+  Constants: Andrew, Partier2, Cup1, Cup2, ForneyBot3000
+  ; [!] No longer closed world assumption!
+  KB =
+     1. Thirsty(Partier2)
+     2. BotOwner(Andrew)
+     3. ContainsLiquid(Cup2)
+     4. Has(Partier2, Cup1)
+     
+  Action(LookAt(x),
+    Precondition:
+      InView(y) &and; (x &ne; y)
+    Effect:
+      InView(x) &and; &not;InView(y))
+      
+  Percept(ContainsLiquid(x, liquid)
+    Precondition:
+      Cup(x) &and; InView(x))
+      
+  ; ...other actions from example omitted
+  
+  ; Contingent plan:
+  [Observe(Cup1)
+    if ContainsLiquid(Cup1)
+    then Drink(Partier2, Cup1)
+    else [Observe(Cup2)
+           if ContainsLiquid(Cup2)
+           then Fetch... ; too lazy to fill out
+           else [Explode(ForneyBot3000)] ; still some kinks to work out...
+         ]
+  ]
+</pre>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='hw3' class='scrollspy-element' scrollspy-title='Homework 3'></div>
+            <h1>Homework 3</h1>
+            <div>
+              <p>Homework 3 has been posted! We'll go over it now...</p>
+              <p>The gist: you'll be implementing unification and a simplified forward-chaining algorithm using frames to parse a story.</p>
+            </div>
+            <hr/>
+            
+            <a class='btn btn-default pull-right hidden-print' href='javascript:window.print();'>
+              <span class='glyphicon glyphicon-print'></span>
+              &nbsp; PDF / Print
+            </a>
+            
+          </div>
+          <!-- END PRESENTATION CONTENT -->
+          
+          <!-- MATERIALS FROM CLASS: -->
+          
+            
+        </div>
+      </div>
+      <!-- END MAIN CONTENT -->
+      
+      
+    </div>
+    <!-- END WRAPPER -->
+    
+    <!-- BEGIN FOOTER -->
+    <div id="footer">
+      <div class="container">
+        <div class="col-md-12 text-center">
+          
+        </div>
+      </div>
+    </div>
+    <!-- END FOOTER -->
+    
+  </body>
+</html>
