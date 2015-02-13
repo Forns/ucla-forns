@@ -1,0 +1,831 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Andrew Forney - UCLA CS</title>
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/magic-bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/main.css" rel="stylesheet" type="text/css">
+    <script src="../../../js/lib/jquery-2.0.3.min.js"></script>
+    <script src="../../../js/lib/bootstrap.min.js"></script>
+    <script src="../../../js/lib/expanding.js"></script>
+    <script src="../../../js/display/general/general-display.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+  </head>
+  
+  <body data-spy="scroll" data-target="#scrollspy">
+    
+    <!-- BEGIN WRAP -->
+    <div id="wrap">
+      
+      <!-- BEGIN NAVIGATION -->
+      <nav class='navbar navbar-default' role='navigation'>
+        <div class='nav-accent'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-12'>
+              <div class='navbar-header'>
+                <button class='navbar-toggle' type='button' data-toggle='collapse' data-target='.navbar-main-collapse'>
+                  <span class='sr-only'>Toggle Navigation</span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                </button>
+                <a class='navbar-brand' href='/~forns/'>
+                  <span id='brand-text'>
+                    Andrew Forney
+                  </span>
+                </a>
+              </div>
+              
+              <div id='nav-main' class='collapse navbar-collapse navbar-main-collapse'>
+                <ul class='nav navbar-nav navbar-right'>
+                  
+                  <li>
+                    <a href='/~forns/about.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-user'></span>
+                      </div>
+                      <p class='text-center'>About</p>
+                    </a>
+                  </li>
+                  
+                  <li class='active'>
+                    <a href='/~forns/classes.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-book'></span>
+                      </div>
+                      <p class='text-center'>Classes</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/contact.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-comment'></span>
+                      </div>
+                      <p class='text-center'>Contact</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/publications.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-file'></span>
+                      </div>
+                      <p class='text-center'>Publications</p>
+                    </a>
+                  </li>
+                  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <!-- END NAVIGATION -->
+      
+      <!-- BEGIN MAIN CONTENT -->
+      <div id="main-content" class="container">
+        <div class="row">
+          
+          <!-- BEGIN SCROLLSPY -->
+          <div class='col-md-2 hidden-sm hidden-xs'>
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+              <ul id='scrollspy' class="nav bs-sidenav">
+              </ul>
+            </div>
+          </div>
+          <!-- END SCROLLSPY -->
+          
+          <!-- BEGIN PRESENTATION CONTENT -->
+          <div class='col-md-10 presentation-content' role='main'>
+            
+            <ol class="breadcrumb hidden-print">
+              <li><a href="../../../classes.html">Classes</a></li>
+              <li><a href="./cs-32.html">Summer14 CS32</a></li>
+              <li class="active">Week 3</li>
+            </ol>
+            
+            
+            <div id='templates' class='scrollspy-element' scrollspy-title='Templates'></div>
+            <h1>Templates</h1>
+            <div>
+              <p>If you remember from our discussion of stacks and queues, we said that these were two instances of abstract data types.</p>
+              <p>This meant that, for example, stacks had the FILO behavior, and as long as this behavior is honored, any stack implementation can decide the details for itself.</p>
+              <p>We noted that one detail that should be in a stack implementation is that it should be <em>type agnostic,</em> i.e., I can have a stack of whatever types I want:</p>
+<pre class='prettyprint'>
+  int main () {
+      stack&lt;int&gt; intsOnInts;
+      intsOnInts.push(4);
+      intsOnInts.push(20);
+      intsOnInts.push(-2);
+  
+      stack&lt;string&gt; weave;
+      weave.push("bad");
+      weave.push("puns");
+      weave.push("return");
+  }
+</pre>
+              <br/>
+              <p>Along with this point, we said that, to keep things simple, we wanted to talk about a stack of only one type (for the present). So:</p>
+<pre class='prettyprint'>
+  int main () {
+      stack&lt;int&gt; intsOnInts;
+      stack&lt;string&gt; weave;
+      // weave.push(-2); BAD!
+      // intsOnInts.push("bad"); BAD!
+  }
+</pre>
+              <br/>
+              <p>
+                But this begs the question: how do I have stacks that can handle ints, strings, or whatever types I want them to handle? Is there a different stack type defined for whatever
+                type I want to stack?
+              </p>
+              <p>No! We used templates!</p>
+              <p class='definition'><strong>Templates</strong> are a C++ language feature that allow functions and classes to operate with generic types.</p>
+              <p class='definition'>A <strong>generic type</strong> is a sort of <em>placeholder</em> for a type that will be matched as needed during compilation.</p>
+              <br/>
+              <p>
+                Using templates, we can define functions and classes that work for a variety of different types without having to explicitly create multiple function and class definitions, one for each type.
+              </p>
+              <p>So what does the syntax for a template look like? Let's start by discussing them for functions:</p>
+              <div class='toolkit'>
+                <p>A function template is defined for some number of generic types with the following syntax:</p>
+<pre class='prettyprint'>
+  template &lt;typename TypeOneName, typename TypeTwoName, ...&gt;
+  returnType nameOfFunction (...parameters...) {
+      // ... function body ...
+  }
+</pre>
+              </div>
+              <p>Now, say I wanted to have a function that compares two types and determines which one is &quot;greater.&quot;</p>
+              <p>For many types, we have a good understanding of what this means:</p>
+              <ul class='indent-1'>
+                <li><p>An int, int1 is greater than int2 if int1 - int2 > 0; i.e., if the quantity of int1 is greater than int2</p></li>
+                <li><p>A char operates the same way, except we examine character codes and perform the same comparison.</p></li>
+                <li><p>A string s1 is greater than a string s2 by examining each character in the sequence one by one and determining which comes first in the alphabet.</p></li>
+              </ul>
+              <p>Without templates, we would need to define 3 different functions for the above:</p>
+<pre class='prettyprint'>
+  int maximum(int i1, int i2) {
+      return (i1 &gt; i2) ? i1 : i2;
+  }
+  
+  char maximum(char c1, char c2) {
+      return (c1 &gt; c2) ? c1 : c2;
+  }
+  
+  string maximum(string s1, string s2) {
+      return (s1 &gt; s2) ? s1 : s2;
+  }
+  
+  int main () {
+      string s1 = "test",
+             s2 = "this";
+      cout &lt;&lt; maximum(s1, s2) &lt;&lt; endl;
+  
+      int i1 = 20,
+          i2 = 8;
+      cout &lt;&lt; maximum(i1, i2) &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p>Immediately we see that there are syntactic similarities between our three max functions, not to mention the code repetition.</p>
+              <p>Let's fix it using a template:</p>
+<pre class='prettyprint'>
+  template &lt;typename T&gt;
+  T maximum(T i1, T i2) {
+      return (i1 &gt; i2) ? i1 : i2;
+  }
+  
+  int main () {
+      string s1 = "test",
+             s2 = "this";
+      cout &lt;&lt; maximum(s1, s2) &lt;&lt; endl;
+  
+      int i1 = 20,
+          i2 = 8;
+      cout &lt;&lt; maximum(i1, i2) &lt;&lt; endl;
+  }
+</pre>
+              <p>Well that's handy... so is this template some magical one-stop function that handles all of these different cases?</p>
+              <p>NO! Templates work like this:</p>
+              <p class='definition'>A template function defines a &quot;prototype&quot; function that, during compilation, will be forked into a matching one for the type that wants to use it.</p>
+              <p>So, when we call maximum with the 2 strings, our compiler sees the matching template expecting 2 string parameters, and then creates its own, copied function implementation where 
+                <code class='prettyprint'>typename T</code> is replaced by <code class='prettyprint'>string</code>
+              </p>
+              <p>
+                Similarly, when the compiler sees maximum called with 2 int parameters, it forks yet another copy from the prototype where <code class='prettyprint'>typename T</code> 
+                is replaced by <code class='prettyprint'>int</code>
+              </p>
+              <p class='definition'>The process by which the compiler finds matches between a function call and a template is called <strong>argument deduction.</strong></p>
+              <p class='debug'>Remember: templates are not functions, they are *patterns* for functions that are then created by the compiler when they see that they are needed.</p>
+              <br/>
+              <p>Sometimes, the compiler will fail at argument deduction:</p>
+              <p class='debug'>Will the following code compile? If so, what will it print?</p>
+<pre class='prettyprint'>
+  template &lt;typename T&gt;
+  T maximum(T i1, T i2) {
+      return (i1 &gt; i2) ? i1 : i2;
+  }
+  
+  int main () {
+      int i = 22;
+      double d = 22.2;
+      // [!] Will this work?
+      cout &lt;&lt; maximum(i, d) &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p>Hmm, so why didn't that work?</p>
+              <p class='definition'>When templates define a generic type, e.g. <code class='prettyprint'>typename T</code>, then parameters defined in terms of that generic type must be EXACT matches.</p>
+              <p>This means that <code class='prettyprint'>template &lt;typename T&gt; T maximum(T i1, T i2)</code> says, &quot;You can match me as long as T i1 and T i2 are EXACTLY the same type.&quot;</p>
+              <p>This strict rule is different than what we're used to because ints and doubles can usually be coerced into one another quite easily.</p>
+              <p>Such is not the case for templates, where an exact match is required.</p>
+              <p class='definition'>A template <strong>ambiguity</strong> is an error when our compiler fails to deduce the correct argument type for a call to a template function.</p>
+              <p>To solve this, we can give our compiler a hint as to which implementation we want to use; we do this in our function call by saying:</p>
+<pre class='prettyprint'>
+  template &lt;typename T&gt;
+  T maximum(T i1, T i2) {
+      return (i1 &gt; i2) ? i1 : i2;
+  }
+  
+  int main () {
+      int i = 22;
+      double d = 22.2;
+      // [!] Notice the hint we gave to our compiler suggesting
+      // that the call to maximum should now expect two doubles,
+      // which means we'll simply coerce argument i into a double
+      cout &lt;&lt; maximum&lt;double&gt;(i, d) &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p>Cool, so that gives us a little more control over our templates arguments, but what about the following:</p>
+              <p class='debug'>Examine how maximum is being used below and its intended use with parameters of type ProtoForneyMon. Will the following code compile?</p>
+<pre class='prettyprint'>
+  class ProtoForneyMon {
+      private:
+          int m_health;
+      public:
+          ProtoForneyMon (int h) {
+              m_health = h;
+          }
+          int getHealth () {
+              return m_health;
+          }
+  };
+  
+  template &lt;typename T&gt;
+  T maximum(T i1, T i2) {
+      return (i1 &gt; i2) ? i1 : i2;
+  }
+  
+  int main () {
+      ProtoForneyMon p1(10), p2(15);
+      // [!] I'd like to compare two ProtoForneyMon
+      // (the early sketch of the hit-game ForneyMon)
+      // and return the health of the one that has more
+      cout &lt;&lt; maximum(p1, p2) &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p>Well that's a problem... I want my maximum function to behave in a way that's an exception to the template!</p>
+              <p>No problem! We'll just create our own definition for how to handle two ProtoForneyMon parameters:</p>
+<pre class='prettyprint'>
+  // ... ProtoForneyMon defined here ...
+  
+  template &lt;typename T&gt;
+  T maximum(T i1, T i2) {
+      return (i1 &gt; i2) ? i1 : i2;
+  }
+  
+  // [!] Overload maximum with an implementation specific
+  // to ProtoForneyMon
+  int maximum(ProtoForneyMon p1, ProtoForneyMon p2) {
+      int h1 = p1.getHealth(),
+          h2 = p2.getHealth();
+      return (h1 &gt; h2) ? h1 : h2;
+  }
+  
+  int main () {
+      ProtoForneyMon p1(10), p2(15);
+      cout &lt;&lt; maximum(p1, p2) &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p>Nice, but why didn't my compiler try to perform argument deduction using the template and still blow up?</p>
+              <p class='definition'>
+                The compiler will always check for explicit function specializations (no templating) for function call matches before attempting to perform type deduction using a function
+                template.
+              </p>
+              <br/>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='partialTemplates' class='scrollspy-element' scrollspy-title='Partial Templates'></div>
+            <h1>Partial Templates</h1>
+            <div>
+              <p>So far we've seen templates where all parameter types are generic, but it's also possible to mingle generic types and explicit ones.</p>
+              <p>Let's use this section to develop the maxInArray function, which takes in an array of some generic type and then returns the maximum element.</p>
+<pre class='prettyprint'>
+  template &lt;typename T&gt;
+  T maximum(T i1, T i2) {
+      return (i1 &gt; i2) ? i1 : i2;
+  }
+  
+  template &lt;typename T&gt;
+  T maxInArray(T* arr, int size) {
+      if (size &lt;= 0) {
+          return NULL;
+      }
+  
+      // Seed our max with the first
+      // element
+      T currentMax = arr[0];
+      for (int i = 1; i &lt; size; i++) {
+          currentMax = maximum(currentMax, arr[i]);
+      }
+      return currentMax;
+  }
+  
+  int main () {
+      int i[] = {4, 5, 2, 3};
+      cout &lt;&lt; maxInArray(i, 4) &lt;&lt; endl;
+  
+      string s[] = {"max", "me", "now"};
+      cout &lt;&lt; maxInArray(s, 3) &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p>I might also want to be able to provide multiple generic types in a function definition, like comparing two arrays for equivalence.</p>
+              <p>Let's make an arraysEqual function that is designed to compare two arrays of generic types that support the equivalence operation:</p>
+<pre class='prettyprint'>
+  template &lt;typename Type1, typename Type2&gt;
+  bool arraysEquivalent (Type1* arr1, Type2* arr2, int size) {
+      for (int i = 0; i &lt; size; i++) {
+          if (arr1[i] != arr2[i]) {
+              return false;
+          }
+      }
+      return true;
+  }
+  
+  int main () {
+      int i[] = {48, 49, 50, 51};
+      char c[] = {'0', '1', '2', '3'};
+      cout &lt;&lt; arraysEquivalent(i, c, 4) &lt;&lt; endl;
+  
+      double d[] = {48, 49.5, 50.3, 51.2};
+      cout &lt;&lt; arraysEquivalent(i, d, 4) &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p>
+                Remembering that templates are patterns for functions, we see that the compiler deduced Type1 -> int and Type2 -> char in the first call to arraysEquivalent, and
+                then deduced Type1 -> int and Type2 -> double in the second call.
+              </p>
+              <br/>
+              <h3>Summary</h3>
+              <p>When designing function templates, we need to double check three key points for our function calls, pretending we're the compiler trying to make sense of the templates:</p>
+              <ul class='indent-1'>
+                <li><p>
+                  The call must match a template; if it doesn't, we either need to create an explicit specification to be compatible with the argument types, or give our compiler a template hint
+                  in the function call
+                </p></li>
+                <li><p>
+                  Once a match has been made (successful argument deduction), the matching template's code must compile; recall that our ProtoForneyMon matched the maximum template, but
+                  the maximum function compared its parameters using the '&gt;' operator, which was not defined for two ProtoForneyMon.
+                </p></li>
+                <li><p>
+                  The resulting function, once matched and compiled, must perform the intended behavior; the maximum of two pointer addresses may not behave as intended if the pointers are
+                  to elements in different arrays (for example)!
+                </p></li>
+              </ul>
+              
+              <br/>
+              <h3>Miscellany</h3>
+              <p>A couple last remarks that don't fit well into any other section:</p>
+              <p class='definition'>
+                Attempt to make template function parameters passed by constant reference where possible; since the function could possibly work on large, user-defined
+                types as well as built-in types, the cost of passing parameters by value can be significant.
+              </p>
+              <p class='definition'>
+                If you need to initialize a generic type to the &quot;0&quot; equivalent defined by the class (e.g. 0 for ints, &quot;&quot; for strings) you can
+                simply declare (for typename T): T();
+              </p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='classTemplates' class='scrollspy-element' scrollspy-title='Class Templates'></div>
+            <h1>Class Templates</h1>
+            <div>
+              <p>Just as we have templates for different function parameters, so can we have templates for our own classes!</p>
+              <p>This means that whenever I create a new object of a particular type, I can define a type to use for the generic type described in the class template.</p>
+              <p>We've already seen this in action with the Standard Template Library (STL) stacks, like from the start of this lecture:</p>
+<pre class='prettyprint'>
+  int main () {
+      stack&lt;int&gt; intsOnInts;
+      intsOnInts.push(4);
+      intsOnInts.push(20);
+      intsOnInts.push(-2);
+  
+      stack&lt;string&gt; weave;
+      weave.push("bad");
+      weave.push("puns");
+      weave.push("return");
+  }
+</pre>
+              <p>We know, then, that the stack class must have a class template that allows us to use stack in conjunction with whatever types we want (int and string in our example).</p>
+              <br/>
+              <p class='definition'>Similar to function templates, <strong>class templates</strong> allow us to define a multitude of classes from a single pattern.</p>
+              <p>The syntax is the same as function templates, with one exception; let's look at a simple example:</p>
+<pre class='prettyprint'>
+  template &lt;typename Type1, typename Type2&gt;
+  class TwoTypes {
+      private:
+          Type1 m_t1;
+          Type2 m_t2;
+      public:
+          TwoTypes (Type1 t1, Type2 t2) {
+              m_t1 = t1;
+              m_t2 = t2;
+          }
+          
+          // [!] What is being returned here?
+          // Can we predict what a given argument
+          // deduction will resolve to?
+          Type1 arbitraryFunc () {
+              return m_t1 * m_t2;
+          }
+  };
+  
+  int main () {
+      TwoTypes&lt;int, int&gt; tII(2, 3);
+      cout &lt;&lt; tII.arbitraryFunc() &lt;&lt; endl;
+  
+      // [!] This line may give you warnings;
+      // do you see why?
+      TwoTypes&lt;bool, double&gt; tBD(true, 2.3);
+      cout &lt;&lt; tBD.arbitraryFunc() &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p>No surprises there, we're used to templating; there's just one issue if we try to define member functions outside of the class definition:</p>
+<pre class='prettyprint'>
+  template &lt;typename Type1, typename Type2&gt;
+  class TwoTypes {
+      private:
+          Type1 m_t1;
+          Type2 m_t2;
+      public:
+          TwoTypes (Type1 t1, Type2 t2);
+          Type1 arbitraryFunc ();
+  };
+  
+  // [!] Observe; I need to list the template types above
+  // each function definition
+  template &lt;typename Type1, typename Type2&gt;
+  // [!] Furthermore, I need to define that this is a function
+  // on a TwoTypes object with template types &lt;Type1, Type2&gt;
+  TwoTypes&lt;Type1, Type2&gt;::TwoTypes (Type1 t1, Type2 t2) {
+      m_t1 = t1;
+      m_t2 = t2;
+  }
+  
+  template &lt;typename Type1, typename Type2&gt;
+  Type1 TwoTypes&lt;Type1, Type2&gt;::arbitraryFunc () {
+      return m_t1 * m_t2;
+  }
+  
+  int main () {
+      TwoTypes&lt;int, int&gt; tII(2, 3);
+      cout &lt;&lt; tII.arbitraryFunc() &lt;&lt; endl;
+  
+      TwoTypes&lt;bool, double&gt; tBD(true, 2.3);
+      cout &lt;&lt; tBD.arbitraryFunc() &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p>So, just make sure you treat any template member function definitions outside of the class definition as though they were blind to the template types that the class was created with.</p>
+              <p>That was a nice sentence.</p>
+              <br/>
+              <p>As a final note, you should be aware that you can program the same explicit specification for template member functions that we did for template functions.</p>
+              <p>For example, if I wanted TwoTypes' arbitraryFunc to handle bools specially, I could write:</p>
+<pre class='prettyprint'>
+  template &lt;typename Type1, typename Type2&gt;
+  class TwoTypes {
+      private:
+          Type1 m_t1;
+          Type2 m_t2;
+      public:
+          TwoTypes (Type1 t1, Type2 t2);
+          Type1 arbitraryFunc ();
+  };
+  
+  template &lt;typename Type1, typename Type2&gt;
+  TwoTypes&lt;Type1, Type2&gt;::TwoTypes (Type1 t1, Type2 t2) {
+      m_t1 = t1;
+      m_t2 = t2;
+  }
+  
+  template &lt;typename Type1, typename Type2&gt;
+  Type1 TwoTypes&lt;Type1, Type2&gt;::arbitraryFunc () {
+      return m_t1 * m_t2;
+  }
+  
+  // [!] 2 Bool specification
+  bool TwoTypes&lt;bool, bool&gt;::arbitraryFunc () {
+      cout &lt;&lt; "[Bool specification]" &lt;&lt; endl;
+      return m_t1 || m_t2;
+  }
+  
+  int main () {
+      TwoTypes&lt;int, int&gt; tII(2, 3);
+      cout &lt;&lt; tII.arbitraryFunc() &lt;&lt; endl;
+  
+      TwoTypes&lt;bool, bool&gt; tBD(true, false);
+      cout &lt;&lt; tBD.arbitraryFunc() &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p>And that's all we have to say about templates for now! Handy eh?</p>
+              <p>Not a whole lot new under the sun, but you have some new coding tools under your belt to simplify otherwise bulky code.</p>
+              <br/>
+              <p class='debug'>[!] WARNING: Template class definitions work differently with file organization than with non-templated classes.</p>
+              <br/>
+              <p>If your code is not compiling because you've tried splitting your templated class definition in a header and then the function implementations in a .cpp, you might be having issues.</p>
+              <p>This C++ quirk is described here, along with the possible resolutions: <a href='http://stackoverflow.com/questions/495021/why-can-templates-only-be-implemented-in-the-header-file' target='_blank'>Stack Overflow Article</a></p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='advancedTemplates' class='scrollspy-element' scrollspy-title='Advanced Templates'></div>
+            <h1>Advanced Templates</h1>
+            <div>
+              <h3>STL Template Functions</h3>
+              <p>We'll talk about STL in depth next week, but templating with standard template library objects is a little bit different than with others.</p>
+              <p>Performing some hand waving for the moment, let's say we wanted to accept any STL collection in some function, and then perform some operation using its iterators.</p>
+              <p>We can use the following syntax:</p>
+<pre class='prettyprint'>
+  template&lt;typename T&gt;
+  void printElements (T&amp; collection) {
+      for (T::iterator it = collection.begin(); it != collection.end(); it++) {
+          cout &lt;&lt; (*it) &lt;&lt; endl;
+      }
+  }
+  
+  int main () {
+      int i[] = {5, 6, 1, 20, 22};
+      vector&lt;int&gt; vi(i, i+5);
+  
+      string s[] = {"this", "example", "rox"};
+      list&lt;string&gt; sl(s, s+3);
+  
+      printElements(vi);
+      printElements(sl);
+  }
+</pre>
+              <p>Notice here that saying our printElements takes a template type T by reference allows the compiler to infer the iterator type when we use it internally.</p>
+              
+              <br/>
+              <h3>Template Template Functions</h3>
+              <p>...so you can template while you template.</p>
+              <p>Say I had the following class / struct template:</p>
+<pre class='prettyprint'>
+  template&lt;typename K, typename V&gt;
+  struct Example {
+      K k;
+      V v;
+      Example(K kP, V vP) {
+          k = kP;
+          v = vP;
+      }
+      K&amp; getKey () {
+          return k;
+      }
+      V&amp; getVal () {
+          return v;
+      }
+  };
+</pre>
+              <p>Now, I want to make a non-member function that accepts Example objects with different templated fields, but how do I then reference those field names in the function?</p>
+              <p>For example, I might create a new Example object like: <code class='prettyprint'>Example&lt;int, string&gt; e;</code> or <code class='prettyprint'>Example&lt;char, char&gt; e;</code></p>
+              <p>Above, the first Example object has its template K matching the int builtin type and V matching the string class. In the second example K and V both match to the char builtin type.</p>
+              <p>Now, I want to make a function that can operate knowing what types K and V refer to in a passed-in template class (Example) object.</p>
+              <p>The syntax is funky, so let's take a look:</p>
+<pre class='prettyprint'>
+  template&lt;template&lt;typename, typename&gt; class Container, typename K, typename V&gt;
+  void printAddedElements (Container&lt;K, V&gt;&amp; c) {
+      K keyDup = c.getKey() + c.getKey();
+      V valDup = c.getVal() + c.getVal();
+      cout &lt;&lt; "KeyDup: " &lt;&lt; keyDup &lt;&lt; endl;
+      cout &lt;&lt; "ValDup: " &lt;&lt; valDup &lt;&lt; endl;
+  }
+</pre>
+              <p>There are a couple of lines in the function signature to scrutinize:</p>
+<pre class='prettyprint'>
+  template&lt;template&lt;typename, typename&gt; class Container, typename K, typename V&gt;
+</pre>
+              <p>
+                This line says: "Expect a container (called Container) with two template parameters", and then I provide two typenames K and V 
+                (which, at this point, aren't connected to the Container).
+              </p>
+              <p>I'll preempt your next question:</p>
+              <p class='question' name='templateTemplates-q0'>
+                What's the difference between declaring a template class with the keyword <code class='prettyprint'>class</code> vs 
+                <code class='prettyprint'>typename</code>?
+              </p>
+              <p class='answer' name='templateTemplates-q0'>
+                There's one case where it matters to your compiler which to use: when you're templating a function with a class template (in the case where we have an Example template class, we want a 
+                way to refer to the types that the particular Example parameter was created with). Otherwise, the two are *functionally* equivalent, but *conventionally* different, whereby we sometimes
+                like to refer to objects that are class / user defined objects with the &quot;class&quot; keyword, and types that can also be built-in objects with the &quot;typename&quot; keyword.
+              </p>
+              <p>The other line of importance:</p>
+<pre class='prettyprint'>
+  void printAddedElements (Container&lt;K, V&gt;&amp; c) { ...
+</pre>
+              <p>Says: "Hey remember that Container template that has two template params? Well, let's call those K and V, our named template typenames from before."</p>
+              <p>Now, I've connected the two template typename declarations as being expected within the context of the templated Container in the parameter.</p>
+              <p>So, the following will now work!</p>
+<pre class='prettyprint'>
+  int main () {
+      int i = 5;
+      string s = "test";
+      Example&lt;int, string&gt; e1(i, s);
+      Example&lt;double, int&gt; e2(3.14, 3.14);
+      printAddedElements(e1);
+      printAddedElements(e2);
+  }
+</pre>
+              <p>Note: If I ever want to declare another Example object internal to a templated function, I still have to provide its template parameters!</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='recursion' class='scrollspy-element' scrollspy-title='Recursion'></div>
+            <h1>Recursion</h1>
+            <div>
+              <p>Recursion is just one of those iconic elements of computer science that takes a rather large paradigm shift to learn.</p>
+              <p>Not only is recursion useful, and can often simplify otherwise messy code, but it is the butt of many CS jokes; even Google is in on it:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-5/inheritance-2.PNG' />
+              </div>
+              <p>Recursion is a little difficult to wrap your head around at first, but it will quickly feel like second nature.</p>
+              <p>Let's start with some definitions:</p>
+              <p class='definition'><strong>Recursion</strong> is the repeated application of a recursive process; less formally, in CS, it is when a function calls itself.</p>
+              <p>
+                Typically, we use recursion to take a large problem that is difficult to solve, break it into some number of small problems that are easy to solve, and then combine our mini-results into
+                a result that solves the original large problem!
+              </p>
+              <p>Usually, this splitting of a problem involves two key cases:</p>
+              <p class='definition'>
+                The <strong>Base Case</strong> or stopping condition, is when we've split our problem into a sufficiently small one that we can trivially solve. We return a solution
+                to our small problem in the base case(s) and do not recurse further.
+              </p>
+              <p class='definition'>
+                The <strong>Recursive Case(s)</strong> are when we have not reached a small enough subproblem to solve and need to continue looking for a base case that is trivially solved.
+                In these cases, we call our function from within our function on some even smaller problems.
+              </p>
+              <br/>
+              <p>Now, there are some constraints on valid recursive functions:</p>
+              <ul class='indent-1'>
+                <li><p>Recursive functions must have some stopping condition lest they recurse infinitely.</p></li>
+                <li><p>Each recursive case must bring the problem closer to a base case or solution; if they diverge, then we're not guaranteed that the recursion will successfully terminate.</p></li>
+              </ul>
+              <p>Let's start off gently, shall we?</p>
+              
+              <br/>
+              <h3>First &amp; Rest Split</h3>
+              <p>When we talk about solving smaller subproblems, we don't always have to think about performing massive splits on our data set to achieve our goal.</p>
+              <p>For our first example, we'll focus on an array of ints.</p>
+              <p class='example'>Create a recursive function <code class='prettyprint'>sum</code> that returns the sum of an array of ints.</p>
+              <p>Let's use the following function signature for sum:</p>
+<pre class='prettyprint'>
+  int sum (const int arr[], int size, int total);
+</pre>
+              <p>Here, I have an int array arr, the number of elements remaining in it (size), and the running total of the elements' sum.</p>
+              <p>My strategy is to look at the first element in my current sub-list, add it to my total, then recurse on the rest of the list!</p>
+              <p class='question' name='recursion-0'>What is my base case in this scenario?</p>
+              <p class='answer' name='recursion-0'>Since I'm summing all of the elements, my base case is when I've summed the last element and have run out of list items! i.e., size will be 0.</p>
+              <p>As soon as I hit my base case, I want to return the solution that I've collected.</p>
+              <p class='example'>Trace the stack frames of the following call to sum:</p>
+<pre class='prettyprint'>
+  int i[] = {1, 3, 6};
+  cout &lt;&lt; sum(i, 3, 0) &lt;&lt; endl;
+</pre>
+              <a href='../../../assets/images/winter-2014/cs-32/week-5/recursion.GIF' target='_blank'>
+                <div class='text-center fit-pres'>
+                  <img src='../../../assets/images/winter-2014/cs-32/week-5/recursion.GIF' />
+                </div>
+              </a>
+              <p>Yeah I haven't mastered the whole gif thing yet so... enjoy all that whitespace above...</p>
+              <br/>
+              <p>OK, here's a function skeleton to get us on our way:</p>
+<pre class='prettyprint'>
+  int sum (const int arr[], int size, int total) {
+      // [!] Base case check
+      if ( ... ) {
+          // [!] Return solution
+          return ...;
+      }
+      // [!] Recursive case; go to next element, dec
+      // size, and then add the current front to total
+      return sum( ... );
+  }
+</pre>
+              <p class='definition'>Whenever a recursive call is made, I suspend my position in the current stack frame until the ones above it return.</p>
+              <p>See how that works?</p>
+              
+              <br/>
+              <h3>Divide &amp; Conquer Split</h3>
+              <p>Divide &amp; conquer splits attempt to reduce the size of the problem by some factor with each recursive call.</p>
+              <p>Unlike the first &amp; rest split, we will attempt to substantively reduce the size of each subproblem, solve the trivial case, and then recombine to the larger problem.</p>
+              <p>
+                In class, we reviewed mergesort, an algorithm for sorting a list of ints by first dividing the list into subgroups as small as 1, merging the tiniest groups into sorted order (a trivial,
+                binary comparison), and then merging each smaller, sorted list into a larger and larger one until we got the original list, sorted!
+              </p>
+              <p>Here's the pseudocode we looked at in class:</p>
+<pre class='prettyprint'>
+  void sort (int a[], int b, int e) {
+      if (e - b >= 2) {
+          int mid = (b + e) / 2;
+          
+          // Recursive call on first half of a
+          sort(a, b, mid);
+          // Recursive call on other half of a
+          sort(a, mid, e);
+          
+          // Merge those sorted subpropblems!
+          merge(a, b, mid, e);
+      }
+  }
+  
+  int main () {
+      int arr[] = {4, 3, 1, 2};
+      sort(arr, 0, 4);
+      // arr will now be {1, 2, 3, 4}
+  }
+</pre>
+              <p>There's a big step of understanding how this works, and it's under the assumption of a working merge function:</p>
+              <p>Here, the merge function combines the two sublists into a single, ordered sublist.</p>
+              <p>Let's take a look at it in action (gif shamelessly stolen from <a href='http://en.wikipedia.org/wiki/Merge_sort' target='_blank'>Wikipedia</a>):</p>
+              <a href='../../../assets/images/winter-2014/cs-32/week-5/mergesort.gif' target='_blank'>
+                <div class='text-center fit-pres'>
+                  <img src='../../../assets/images/winter-2014/cs-32/week-5/mergesort.gif' />
+                </div>
+              </a>
+              
+              <br/>
+              <h3>Practice</h3>
+              <p>There's a rite of passage for all students of recursion: you must solve the Fibonacci problem.</p>
+              <p>The Fibonacci sequence begins with two 1's, and then continues with each digit being the sum of the two previous.</p>
+              <p>Here's a sample start of the Fibonacci sequence:</p>
+<pre class='prettyprint'>
+  1, 1, 2, 3, 5, 8, 13, 21, ...
+</pre>
+              <p class='example'>Compute the nth Fibonacci number in this sequence using a recursive function.</p>
+              <p>Hints: the function signature is <code class='prettyprint'>int Fibonacci(int n);</code></p>
+              <p>There are two base cases.</p>
+              <p>The recursive call breaks into two subproblems... hint, these two are in the problem description!</p>
+            </div>
+            <hr/>
+            
+            
+            <a class='btn btn-default pull-right hidden-print' href='javascript:window.print();'>
+              <span class='glyphicon glyphicon-print'></span>
+              &nbsp; PDF / Print
+            </a>
+            
+          </div>
+          <!-- END PRESENTATION CONTENT -->
+          
+          <!-- MATERIALS FROM CLASS: -->
+          
+        </div>
+      </div>
+      <!-- END MAIN CONTENT -->
+      
+      
+    </div>
+    <!-- END WRAPPER -->
+    
+    <!-- BEGIN FOOTER -->
+    <div id="footer">
+      <div class="container">
+        <div class="col-md-12 text-center">
+          
+        </div>
+      </div>
+    </div>
+    <!-- END FOOTER -->
+    
+  </body>
+</html>

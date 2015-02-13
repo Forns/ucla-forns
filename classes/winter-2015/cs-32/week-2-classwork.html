@@ -1,0 +1,475 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Andrew Forney - UCLA CS</title>
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/magic-bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/main.css" rel="stylesheet" type="text/css">
+    <script src="../../../js/lib/jquery-2.0.3.min.js"></script>
+    <script src="../../../js/lib/bootstrap.min.js"></script>
+    <script src="../../../js/lib/expanding.js"></script>
+    <script src="../../../js/display/general/general-display.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+  </head>
+  
+  <body data-spy="scroll" data-target="#scrollspy">
+    
+    <!-- BEGIN WRAP -->
+    <div id="wrap">
+      
+      <!-- BEGIN NAVIGATION -->
+      <nav class='navbar navbar-default' role='navigation'>
+        <div class='nav-accent'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-12'>
+              <div class='navbar-header'>
+                <button class='navbar-toggle' type='button' data-toggle='collapse' data-target='.navbar-main-collapse'>
+                  <span class='sr-only'>Toggle Navigation</span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                </button>
+                <a class='navbar-brand' href='/~forns/'>
+                  <span id='brand-text'>
+                    Andrew Forney
+                  </span>
+                </a>
+              </div>
+              
+              <div id='nav-main' class='collapse navbar-collapse navbar-main-collapse'>
+                <ul class='nav navbar-nav navbar-right'>
+                  
+                  <li>
+                    <a href='/~forns/about.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-user'></span>
+                      </div>
+                      <p class='text-center'>About</p>
+                    </a>
+                  </li>
+                  
+                  <li class='active'>
+                    <a href='/~forns/classes.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-book'></span>
+                      </div>
+                      <p class='text-center'>Classes</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/contact.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-comment'></span>
+                      </div>
+                      <p class='text-center'>Contact</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/publications.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-file'></span>
+                      </div>
+                      <p class='text-center'>Publications</p>
+                    </a>
+                  </li>
+                  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <!-- END NAVIGATION -->
+      
+      <!-- BEGIN MAIN CONTENT -->
+      <div id="main-content" class="container">
+        <div class="row">
+          
+          <!-- BEGIN SCROLLSPY -->
+          <div class='col-md-2 hidden-sm hidden-xs'>
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+              <ul id='scrollspy' class="nav bs-sidenav">
+              </ul>
+            </div>
+          </div>
+          <!-- END SCROLLSPY -->
+          
+          <!-- BEGIN PRESENTATION CONTENT -->
+          <div class='col-md-10 presentation-content' role='main'>
+            
+            <ol class="breadcrumb hidden-print">
+              <li><a href="../../../classes.html">Classes</a></li>
+              <li><a href="./cs-32.html">Summer CS32</a></li>
+              <li class="active">Week 2 - Classwork</li>
+            </ol>
+            
+            <div id='linkedlist' class='scrollspy-element' scrollspy-title='Linked List'></div>
+            <h1>LinkedList Classwork</h1>
+            <div>
+              <p class='definition'>During class, you came up with the following LinkedList implementation. Here it is!</p>
+              <br/>
+<pre class='prettyprint'>
+  // LinkedList.h
+  #ifndef LINKED_LIST_INCLUDED
+  #define LINKED_LIST_INCLUDED
+  #include &lt;string&gt;
+  #include &lt;iostream&gt;
+  
+  class LinkedList {
+      private:
+          struct Node {
+              std::string m_data;
+              Node* m_next;
+              Node (std::string s);
+          };
+  
+          Node* head;
+          Node* tail;
+          int size;
+  
+      public:
+          LinkedList();
+          ~LinkedList();
+          void insert(std::string);
+          bool erase(std::string);
+          bool contains(std::string s);
+          int count(std::string s);
+          void print();
+  };
+  
+  #endif
+</pre>
+              <br/>
+<pre class='prettyprint'>
+  // LinkedList.cpp
+  #include "LinkedList.h"
+  
+  // Default LinkedList constructor
+  LinkedList::LinkedList () {
+      head = nullptr;
+      tail = nullptr;
+      size = 0;
+  }
+  
+  // Destructor
+  LinkedList::~LinkedList () {
+      // TODO
+  }
+  
+  LinkedList::Node::Node (std::string s) {
+      m_data = s;
+      m_next = nullptr;
+  }
+  
+  // Insert a new Node at the end of the List
+  // with the given string data
+  void LinkedList::insert (std::string s) {
+      // 1) Dynamically allocate a Node
+      Node* toAdd = new Node(s);
+    
+      // 2) Update the head if first insertion
+      if (head == nullptr) {
+          head = toAdd;
+      }
+  
+      // 3) Make last node point to toAdd
+      // if it exists
+      if (tail != nullptr) {
+          tail-&gt;m_next = toAdd;
+      }
+  
+      // 4) Tail now points to toAdd
+      tail = toAdd;
+  
+      // 5) Add one to the size
+      size++;
+  }
+  
+  void LinkedList::print () {
+      if (head == nullptr) {
+          return;
+      }
+      
+      for (Node* pointy = head; pointy != nullptr; pointy = pointy-&gt;m_next) {
+          std::cout &lt;&lt; pointy-&gt;m_data &lt;&lt; " ";
+      }
+      std::cout &lt;&lt; std::endl;
+  }
+  
+  // [!] Warning! This function has
+  // a bug in it
+  bool LinkedList::contains (std::string s) {
+      Node* iterator = head;
+      while (iterator-&gt;m_data != s &amp;&amp; iterator != nullptr) {
+          iterator = iterator-&gt;m_next;
+      }
+      return iterator != nullptr;
+  }
+  
+  // [!] Warning! This function has
+  // a bug in it
+  bool LinkedList::erase (std::string s) {
+      Node* iterator = head;
+      Node* prev = nullptr;
+      bool erased = false;
+  
+      while (iterator != nullptr) {
+          if (iterator-&gt;m_data != s) {
+              prev = iterator;
+              iterator = iterator-&gt;m_next;
+          } else {
+              prev-&gt;m_next = iterator-&gt;m_next;
+              delete iterator;
+              erased = true;
+              break;
+          }
+      }
+      return erased;
+  }
+  
+  // Returns a count of how many times
+  // s appears in the LinkedList
+  int LinkedList::count (std::string s) {
+      Node* n = head;
+      int count = 0;
+      
+      // Go through all size Nodes
+      // in the List and compare to s
+      for (int i = 0; i &lt; size; i++) {
+          if (n-&gt;m_data == s) {
+              count++;
+          }
+          n = n-&gt;m_next;
+      }
+      return count;
+    }
+</pre>
+            </div>
+            <hr/>
+            
+            <br/>
+            <div id='stack' class='scrollspy-element' scrollspy-title='Stack'></div>
+            <h1>Stack Classwork</h1>
+            <div>
+              <p class='definition'>During class, you came up with the following Stack implementation. Here it is!</p>
+              <br/>
+<pre class='prettyprint'>
+  // Stack.h
+  #ifndef STACK_INCLUDED
+  #define STACK_INCLUDED
+  #include &lt;string&gt;
+  #include &lt;iostream&gt;
+  
+  class Stack {
+      private:
+          struct Node {
+              std::string m_data;
+              Node* m_next;
+              Node (std::string s);
+          };
+  
+          Node* head;
+          int size;
+  
+      public:
+          Stack();
+          ~Stack();
+          void push(std::string s);
+          std::string pop();
+          void print();
+  };
+  
+  #endif
+</pre>
+              <br/>
+<pre class='prettyprint'>
+  // LinkedList.cpp
+  #include "Stack.h"
+  
+  // Default Stack constructor
+  Stack::Stack () {
+      head = nullptr;
+      size = 0;
+  }
+  
+  // Destructor
+  Stack::~Stack () {
+      // TODO
+  }
+  
+  Stack::Node::Node(std::string s) {
+      m_data = s;
+      m_next = nullptr;
+  }
+  
+  // Pushes a new Node with data string s
+  // to the top of the stack!
+  void Stack::push (std::string s) {
+      // 1) Dynamically allocate a new Node
+      Node* toAdd = new Node(s);
+  
+      // 2) If it's not the first to be added,
+      // we need to have it point to the current
+      // head
+      toAdd-&gt;m_next = head;
+  
+      // 3) Whether it's first or not, have the head point
+      // to it
+      head = toAdd;
+  
+      // 4) Bump the size
+      size++;
+  }
+  
+  // Pops the top Node on the stack off,
+  // returning its data member and removing
+  // itself from the top (making the one beneath
+  // it the new top)
+  std::string Stack::pop () {
+      // 1) Return the empty string if empty
+      if (head == nullptr) {
+          return "";
+      }
+  
+      // 2) Set a pointer to the top node
+      Node* ptr = head;
+  
+      // 3) Save the top Node's data
+      std::string result = head-&gt;m_data;
+  
+      // 4) Adjust head accordingly
+      head = head-&gt;m_next;
+  
+      // 5) ...take care of the top Node... quietly...
+      delete ptr;
+  
+      // 6) Reduce size
+      size--;
+  
+      return result;
+  }
+  
+  void Stack::print () {
+      if (head == nullptr) {
+          return;
+      }
+      
+      for (Node* pointy = head; pointy != nullptr; pointy = pointy-&gt;m_next) {
+          std::cout &lt;&lt; pointy-&gt;m_data &lt;&lt; " ";
+      }
+      std::cout &lt;&lt; std::endl;
+  }
+</pre>
+            </div>
+            
+            
+            <div id='ForneyMon' class='scrollspy-element' scrollspy-title='ForneyMon'></div>
+            <h1>ForneyMon Classwork</h1>
+            <div>
+              <p>In class we developed the next hit game and reinvented a genre; its starting implementation is below (should really be broken up into different files, but for ease of viewing, I've
+                left everything in-line below):</p>
+              <p class='example'>We never got to do one thing with our ForneyMon's destructor. What is it?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+    
+  class DampyMon;
+  
+  class ForneyMon {
+      private:
+          string m_name;
+          int m_health;
+      public:
+          ForneyMon (string n, int h);
+          virtual int takeDamage (int dam, string type);
+          virtual void dealDamage (ForneyMon* other, int dam, string type) = 0;
+  };
+  
+  class BurnyMon : public ForneyMon {
+      public:
+          BurnyMon (string name);
+          // [!] Take damage removed from BurnyMon!
+          void dealDamage (ForneyMon* other, int dam, string type);
+  };
+  
+  class DampyMon : public ForneyMon {
+      public:
+          DampyMon (string name);
+          int takeDamage (int dam, string type);
+          void dealDamage (ForneyMon* other, int dam, string type);
+  };
+  
+  ForneyMon::ForneyMon (string n, int h) {
+      m_name = n;
+      m_health = h;
+  }
+  
+  BurnyMon::BurnyMon (string n) : ForneyMon(n, 10) {}
+  DampyMon::DampyMon (string n) : ForneyMon(n, 15) {}
+  
+  // (General) Take damage regardless of the type of attack
+  int ForneyMon::takeDamage (int dam, string type) {
+      // Reduce the current health by dam amount
+      m_health -= dam;
+      cout &lt;&lt; "[" &lt;&lt; type &lt;&lt; "] Damage: -" &lt;&lt; dam &lt;&lt; endl;
+      return m_health;
+  }
+  
+  // (DampyMon) Take damage equal to dam UNLESS the type
+  // of the attack was burny, in which case take 1 extra
+  int DampyMon::takeDamage (int dam, string type) {
+      if (type == "burny") {
+          dam += 1;
+      }
+      return ForneyMon::takeDamage(dam, type);
+  }
+  
+  // [!] Hmm, these are the same function! I probably should make
+  // this a function of ForneyMon instead... left as an exercise ;)
+  void BurnyMon::dealDamage (ForneyMon* other, int dam, string type) {
+      other-&gt;takeDamage(dam, type);
+  }
+  void DampyMon::dealDamage (ForneyMon* other, int dam, string type) {
+      other-&gt;takeDamage(dam, type);
+  }
+</pre>
+            </div>
+            <hr/>
+            
+            
+            <a class='btn btn-default pull-right hidden-print' href='javascript:window.print();'>
+              <span class='glyphicon glyphicon-print'></span>
+              &nbsp; PDF / Print
+            </a>
+            
+          </div>
+          <!-- END PRESENTATION CONTENT -->
+          
+          <!-- MATERIALS FROM CLASS: -->
+            
+        </div>
+      </div>
+      <!-- END MAIN CONTENT -->
+      
+      
+    </div>
+    <!-- END WRAPPER -->
+    
+    <!-- BEGIN FOOTER -->
+    <div id="footer">
+      <div class="container">
+        <div class="col-md-12 text-center">
+          
+        </div>
+      </div>
+    </div>
+    <!-- END FOOTER -->
+    
+  </body>
+</html>
