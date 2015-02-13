@@ -1,0 +1,967 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Andrew Forney - UCLA CS</title>
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/magic-bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/main.css" rel="stylesheet" type="text/css">
+    <script src="../../../js/lib/jquery-2.0.3.min.js"></script>
+    <script src="../../../js/lib/bootstrap.min.js"></script>
+    <script src="../../../js/lib/expanding.js"></script>
+    <script src="../../../js/display/general/general-display.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+  </head>
+  
+  <body data-spy="scroll" data-target="#scrollspy">
+    
+    <!-- BEGIN WRAP -->
+    <div id="wrap">
+      
+      <!-- BEGIN NAVIGATION -->
+      <nav class='navbar navbar-default' role='navigation'>
+        <div class='nav-accent'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-12'>
+              <div class='navbar-header'>
+                <button class='navbar-toggle' type='button' data-toggle='collapse' data-target='.navbar-main-collapse'>
+                  <span class='sr-only'>Toggle Navigation</span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                </button>
+                <a class='navbar-brand' href='/~forns/'>
+                  <span id='brand-text'>
+                    Andrew Forney
+                  </span>
+                </a>
+              </div>
+              
+              <div id='nav-main' class='collapse navbar-collapse navbar-main-collapse'>
+                <ul class='nav navbar-nav navbar-right'>
+                  
+                  <li>
+                    <a href='/~forns/about.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-user'></span>
+                      </div>
+                      <p class='text-center'>About</p>
+                    </a>
+                  </li>
+                  
+                  <li class='active'>
+                    <a href='/~forns/classes.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-book'></span>
+                      </div>
+                      <p class='text-center'>Classes</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/contact.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-comment'></span>
+                      </div>
+                      <p class='text-center'>Contact</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/publications.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-file'></span>
+                      </div>
+                      <p class='text-center'>Publications</p>
+                    </a>
+                  </li>
+                  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <!-- END NAVIGATION -->
+      
+      <!-- BEGIN MAIN CONTENT -->
+      <div id="main-content" class="container">
+        <div class="row">
+          
+          <!-- BEGIN SCROLLSPY -->
+          <div class='col-md-2 hidden-sm hidden-xs'>
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+              <ul id='scrollspy' class="nav bs-sidenav">
+              </ul>
+            </div>
+          </div>
+          <!-- END SCROLLSPY -->
+          
+          <!-- BEGIN PRESENTATION CONTENT -->
+          <div class='col-md-10 presentation-content' role='main'>
+            
+            <ol class="breadcrumb hidden-print">
+              <li><a href="../../../classes.html">Classes</a></li>
+              <li><a href="./cs-161.html">Spring14 CS161</a></li>
+              <li class="active">Week 7</li>
+            </ol>
+            
+            
+            <div id='knowledge' class='scrollspy-element' scrollspy-title='Knowledge Representation'></div>
+            <h1>Knowledge Representation</h1>
+            <div>
+              <p>So you know stuff... big whoop, I know stuff too, and even our computers know some stuff!</p>
+              <p>But knowledge is useless for communication if we're not speaking the same language... and if our computer knows stuff, we want to know it too!</p>
+              <p class='definition'><strong>Knowledge representation</strong> attempts to coerce facts about the world into first order logic so that we can perform automated reasoning on it to discover
+                new facts.
+              </p>
+              <br/>
+              <p>Because after all, isn't that the whole purpose of computers? To munch away at data and spit back some interesting findings?!&lt;/controversialComments&gt;&lt;/unmatchedTags&gt;</p>
+              <p class='example'>
+                Some common uses of knowledge representation systems: medical databases linking diseases with symptoms, epidemics, etc.; drug interactions and pharmacological research; NLP and semantic webs.
+              </p>
+              <br/>
+              <p>So, naturally, we want the information that our computer spits back to be... well... natural, and readable to a human!</p>
+              <p>Before we do that, though, we want to organize our knowledge into an objective, unified representation such that communication is seemless and cross-domain integration is possible.</p>
+              <p class='definition'>
+                An <strong>ontology</strong> is a classification system (usually organized into Knowledge Bases) such that we establish membership of specific world entities into 
+              </p>
+              <br/>
+              <p>Here's a sample <strong>upper ontology</strong> for general classification, where parents of nodes are more general than their children.</p>
+              <p>NB, a node can have multiple parents in the case where it is correctly classified under multiple generalizations.</p>
+              <br/>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-7/knowledgeRep-0.PNG' />
+              </div>
+              <br/>
+              <p>In practice, as you might've expected, creating and then deciding upon a unified ontology has been empirically difficult.</p>
+              <p>There have been a variety of efforts to produce unified ontologies, including:</p>
+              <ul class='indent-1'>
+                <li><p><a href='http://www.cyc.com/' target='_blank'>CYC</a> develops semantic technologies for inference and data alignment.</p></li>
+                <li><p><a href='http://openmind.media.mit.edu/' target='_blank'>Openmind</a> was an MIT project to crowd-source commonsense knowledge, which resulted in ConceptNet, useful for NLP.</p></li>
+                <li><p>
+                  <a href='http://www.w3.org/TR/owl-features/' target='_blank'>OWL (Web Ontology Language)</a> was developed to interface with ontological databases in a way such that concepts are not
+                   simply stored but also assigned meaning in the DB.
+                </p></li>
+              </ul>
+              <br/>
+              <p>In the end, however, no one implementation emerged a victor over the others, and the world is still at large for a universal ontology.</p>
+              <p>Most modern applications will employ domain-specific ontologies, like the following one for neurological diseases:</p>
+              <a href='https://code.google.com/p/neurological-disease-ontology/' target='_blank'>
+                <div class='fit-pres text-center'>
+                  <img src='../../../assets/images/spring-2014/cs-161/week-7/NDontology.jpg' />
+                </div>
+              </a>
+              <br/>
+              <p class='question' name='knowledgeRep-q0'>So where do we get ontologies to begin with?</p>
+              <p class='answer' name='knowledgeRep-q0'>
+                Somewhat unromantically, most are constructed by humans from domain experts (or crowdsourced as with Openmind), though others are mined from texts and the web
+              </p>
+              <br/>
+              <p>
+                Ontologies are nice because they allow us to reason away from specifics and talk instead about <strong>categories</strong>, which doesn't limit our search for an item of interest
+                until necessary.
+              </p>
+              <p>If we want to make inferences about knowledge at the category level, then we typically want to enforce some notion of inheritance and classes.</p>
+              <p class='definition'>
+                A <strong>class</strong> is simply a categorization that establishes a set relationship of inheritance; all subclasses of a class &quot;inherit&quot; their ancestors'
+                categorizations.
+              </p>
+              <p class='definition'>A <strong>taxonomy</strong> is an ontology where classes and subclasses organize categories hierarchically.</p>
+<pre class='prettyprint'>
+  ; We can represent classes in FOL under
+  ; the assumption of set mechanics
+  Mammals &sube; Animals &rarr; Subset(Mammals, Animals)
+  Dogs &sube; Mammals &rarr; Subset(Dogs, Mammals)
+  
+  ; Since we have a taxonomy class structure like the
+  ; above, we can infer the following predicates:
+  Subset(Dogs, Mammals) ; true because Dogs &sube; Mammals
+  Subset(Dogs, Animals) ; true because Dogs &sube; Mammals &sube; Animals
+</pre>
+              <br/>
+              <p>Nothing surprising there!</p>
+              <p>This is simple class inheritance like I'm sure you did in some intro programming class... just... for knowledge now!</p>
+              <p>The real power is when we start exploiting FOL operations, such as implication, which can allow us to extract new facts from our ontologies.</p>
+<pre class='prettyprint'>
+  ; We can use quantification to talk about members of
+  ; our categories
+  &forall;x (x &in; Dogs) &rArr; CanBark(x)
+  
+  ; Saying the above without using set notation, but instead
+  ; FOL:
+  Member(x, Dogs) &rArr; CanBark(x)
+</pre>
+              <br/>
+              <p>We also define some rules to talk about relationships between classes in our ontologies.</p>
+              <p class='toolkit'>Two or more categories are <strong>disjoint</strong> if they have no members in common.</p>
+              <br/>
+<pre class='prettyprint'>
+  ; Examples of disjoint property:
+  Disjoint({Animals, Rocks}) ; sorry, no pet rocks
+  Disjoint({Cats, Dogs, Humans}) ; counterexample: Catdog?
+</pre>
+              <br/>
+              <p>Some class sets have a special property that they cover the entire field of membership possibilities.</p>
+              <p>
+                I.e., if you're a member of class A, and there is an exhaustive decomposition of class A into 3 subclasses B, C, and D, then belonging to A means you *must* belong to one of 
+                B, C, or D (or multiple)
+              </p>
+              <p class='toolkit'>An <strong>exhaustive decomposition</strong> defines a set of subclasses that, together, exhaustively compose some other class.</p>
+              <p class='toolkit'>A <strong>partition</strong> is an exhaustive decomposition where the subclasses are also disjoint.</p>
+<pre class='prettyprint'>
+  ; Exhaustive decompositions:
+  ExDec({Americans, Canadians, Mexicans}, NorthAmericans)
+  
+  ; i.e., if you are a NorthAmerican, then you must be at least
+  ; an American, Canadian, or Mexican (or multiples!)
+  
+  
+  ; Partitions:
+  Partition({Even, Odd}, Numbers)
+  
+  ; i.e., if you are a number, then you are either even or odd,
+  ; but cannot be both even and odd!
+</pre>
+              <br/>
+              <p>There are a number of other cool FOL tricks we can do with ontologies to represent different human-parsable concepts (even the abstract ones), including the following:</p>
+<pre class='prettyprint'>
+  ; Physical Parts:
+  PartOf(California, USA)
+  PartOf(Hawaii, USA)
+  
+  ; Properties of membership
+  PartOf(x, USA) &rArr; MURICAN(x)
+  
+  ; Generic aggregations to denote collections
+  BunchOf({Apple1, Apple2, Apple3})
+  &forall;x x &in; s &rArr; PartOf(x, BunchOf(s))
+  
+  ; Measurements
+  Temperature(LA, Today) = Farenheit(100)
+  ; Measurement Identities
+  d &in; Days &rArr; Duration(d) = Hours(24)
+  
+  ; Mental Events / Knowledge Transfer
+  Knows(Descartes, Exists(Descartes)) ; philosophy jokes?
+  Knows(Andrew, &not;CanFly(Pigs))
+  ; Useful for programming our agents with what they
+  ; think that others think 0_o
+  
+  ; Semantic implications
+  Member(John, OneLeggedPersons)
+  &forall; x x &in; Persons &and; (x &ne; John) &rArr; Legs(x, 2)
+  ; Useful for NLP systems to unpack sentences
+</pre>
+              <br/>
+              <p>And that's pretty much Knowledge Representation in a nutshell!</p>
+              <p>The book has some more examples and details but the gist is captured above... nothing really surprising!</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='uncertainty' class='scrollspy-element' scrollspy-title='Quantifying Uncertainty'></div>
+            <h1>Quantifying Uncertainty</h1>
+            <div>
+              <p>Yes, I know, I'm excited too! Finally some probability stuff!</p>
+              <br/>
+              <p>Someone made a very astute observation when we were discussing our propositional logic example with rain making the sidewalk wet:</p>
+              <p>They asked, &quot;We have these general rules that the sidewalk will always be wet if it's raining, but what if the sidewalk is covered by a tree during the storm?&quot;</p>
+              <p>Clearly there are exceptions to our general rules, and it's often difficult to represent the infinite number of exceptions that could happen with FOL:</p>
+<pre class='prettyprint'>
+  ; The naive reasoner about a wet sidewalk:
+  KB =
+     1. Weather(Rain)
+     2. Weather(Rain) &rArr; Wet(Sidewalk)
+     
+  ; Handling exceptions:
+  KB =
+     1. Weather(Rain)
+     2. (Weather(Rain) &and; &not;Covered(Sidewalk) &and; &not;WaterResistant(Sidewalk) &and; ...) &rArr; Wet(Sidewalk)
+  
+  ; Very difficult and impractical to cover all the possible
+  ; Cases where it's raining and the sidewalk isn't necessarily wet!
+  
+  ; Also, our intelligent agent just might not *know* whether the
+  ; sidewalk is covered
+</pre>
+              <br/>
+              <p>Another issue is the following: viewing our KB as stated above, does knowing anything about whether or not the sidewalk is wet tell us whether or not it's raining?</p>
+              <p>No! We don't have any rules to infer about observing the sidewalk whether it's raining or not, but certainly a wet sidewalk *suggests* that it might be raining.</p>
+              <p>In comes <strong>probabilistic reasoning</strong>, which attempts to model <strong>uncertainty</strong> about our environment in a parsimonious, statistical representation.</p>
+              <p class='definition'>
+                <strong>Uncertainty</strong> about an environment arises when our agent has partial sensor information, any sort of ignorance, or the problem is nondeterministic, but we still must make a
+                rational decision.
+              </p>
+              <br/>
+              <p>So, we're going to attempt to frame our set of possible worlds, just like in propositional logic, in terms of probabilities!</p>
+              
+              <br/>
+              <h3>Probabilistic Logic</h3>
+              <p>
+                Probabilistic logic is still interested in the set of possible worlds, but unlike propositional logic, our variables of interest may have more than 2 values (usually called <strong>events</strong>).
+              </p>
+              <p>
+                For example, instead of just <code class='prettyprint'>Raining</code> and <code class='prettyprint'>&not;Raining</code>, we might have a Weather variable with possible values of
+                {Sunny, Raining, Fog}. 
+              </p>
+              <p class='toolkit'>In probabilistic logic, variables set to a given value are represented as <code class='prettyprint'>Var = val</code> where Var is some variable and val is its current value.</p>
+              <br/>
+              <p><strong>NOTE:</strong> The convention is to Capitalize variable names while keeping the variable values in lowercase.</p>
+              <p>Let's use our rain and sidewalk wetness example to spearhead the discussion on probabilistic logic... as a reminder:</p>
+<pre class='prettyprint'>
+  ; We had two variables defined as:
+  R = Whether or not it's raining
+  S = Whether or not the sidewalk is wet
+</pre>
+              <br/>
+              <p>The fact that I have two propositional variables of interest means that I have 4 possible worlds consisting of:</p>
+              <table class='table table-striped table-bordered'>
+                <thead>
+                  <tr>
+                    <th><p>World</p></th>
+                    <th><p>R</p></th>
+                    <th><p>S</p></th>
+                    <th><p>Interpretation of (R &and; S)</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><p>W0</p></td>
+                    <td><p>F</p></td>
+                    <td><p>F</p></td>
+                    <td><p>It isn't raining and the sidewalk isn't wet</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>W1</p></td>
+                    <td><p>F</p></td>
+                    <td><p>T</p></td>
+                    <td><p>It isn't raining but the sidewalk IS wet</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>W2</p></td>
+                    <td><p>T</p></td>
+                    <td><p>F</p></td>
+                    <td><p>It IS raining, but the sidewalk isn't wet</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>W3</p></td>
+                    <td><p>T</p></td>
+                    <td><p>T</p></td>
+                    <td><p>It IS raining, and the sidewalk IS wet</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+              <p>Our query asked if the sidewalk was wet, i.e., &alpha; = S, dictated by the rule:</p>
+<pre class='prettyprint'>
+  KB =
+     ; If it's raining, then the sidewalk is wet
+     1. R &rArr; S
+     
+     ; It is raining!
+     2. R
+</pre>
+              <br/>
+              <p>This meant that we could ascertain the models of our world (in this case, M(&alpha;) = {W3}) such that:</p>
+              <table class='table table-striped table-bordered'>
+                <thead>
+                  <tr>
+                    <th><p>World</p></th>
+                    <th><p>R</p></th>
+                    <th><p>S</p></th>
+                    <th><p>(R &rArr; S) &and; R</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><p>W0</p></td>
+                    <td><p>F</p></td>
+                    <td><p>F</p></td>
+                    <td><p>F</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>W1</p></td>
+                    <td><p>F</p></td>
+                    <td><p>T</p></td>
+                    <td><p>F</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>W2</p></td>
+                    <td><p>T</p></td>
+                    <td><p>F</p></td>
+                    <td><p>F</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>W3</p></td>
+                    <td><p>T</p></td>
+                    <td><p>T</p></td>
+                    <td><p>T</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+              <p>This brittle KB and reasoning system has two main issues:</p>
+              <ul class='indent-1'>
+                <li><p>The list of rules for getting the sidewalk wet is <strong>incomplete</strong>; e.g., what if sprinklers turned on and wet the sidewalk but it wasn't raining?</p></li>
+                <li><p>
+                  The rule for getting the sidewalk wet (in this case, only in the event that it's raining) does not handle <strong>exceptions</strong>; e.g., a covering of the sidewalk when it's raining.
+                </p></li>
+              </ul>
+              <br/>
+              <p>As we already said, enumerating all of these possibilities is intractable, so instead we'll replace our KB with probability tables.</p>
+              <p class='definition'>
+                A <strong>probability table</strong> on some number of variables {A, B, C, ...} defines the probabilities of each possible world, i.e., the chance of that world happening.
+              </p>
+              <br/>
+              <p>Let's talk a little about notation and then we'll see how this works.</p>
+              <p class='toolkit'><strong>Pr(A, B, C)</strong> (uppercase variables) refers to a <strong>probability table</strong> of probabilities for variables A, B, and C.</p>
+              <p class='toolkit'>
+                <strong>Pr(A = a, B = b, C = c)</strong> refers to a <strong>row of that probability table</strong> such that variable A attains value a, B attains value b, etc. Setting a variable
+                X to some value x is called a variable <strong>instantiation</strong>.
+              </p>
+              <br/>
+              <p>So let's look at a probability table for our (now expanded) example:</p>
+              <p>Assumptions about our problem:</p>
+              <ul class='indent-1'>
+                <li><p>We'll define variable W to be the weather which can attain one of 3 values: {sunny, foggy, rainy}</p></li>
+                <li><p>S will remain a boolean variable of whether or not the sidewalk is wet, but we'll use possible values {wet, dry}.</p></li>
+                <li><p>We assume we live in a fairly wet environment where fog and rain aren't uncommon (relevant later)</p></li>
+              </ul>
+              <br/>
+              <table class='table table-striped table-bordered'>
+                <thead>
+                  <tr>
+                    <th><p>W</p></th>
+                    <th><p>S</p></th>
+                    <th><p>Pr(W, S)</p></th>
+                    <th><p>Explanation</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><p>sunny</p></td>
+                    <td><p>dry</p></td>
+                    <td><p>Pr(sunny, dry) = 0.20</p></td>
+                    <td><p>It's sunny and the sidewalk is dry.</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>sunny</p></td>
+                    <td><p>wet</p></td>
+                    <td><p>Pr(sunny, wet) = 0.05</p></td>
+                    <td><p>It's sunny, but the sidewalk is wet (sprinkler maybe?)</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>foggy</p></td>
+                    <td><p>dry</p></td>
+                    <td><p>Pr(foggy, dry) = 0.10</p></td>
+                    <td><p>It's foggy, but the sidewalk is dry (not a heavy fog?)</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>foggy</p></td>
+                    <td><p>wet</p></td>
+                    <td><p>Pr(foggy, wet) = 0.10</p></td>
+                    <td><p>It's foggy, and the sidewalk is wet (collection of dew?)</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>rainy</p></td>
+                    <td><p>dry</p></td>
+                    <td><p>Pr(rainy, dry) = 0.15</p></td>
+                    <td><p>It's rainy, but the sidewalk is dry (covered by tarp?)</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>rainy</p></td>
+                    <td><p>wet</p></td>
+                    <td><p>Pr(rainy, wet) = 0.40</p></td>
+                    <td><p>It's rainy, and the sidewalk is wet (duh)</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+              <p class='definition'>
+                We call this table the <strong>joint probability table</strong> for our variables W and S because it represents all possible worlds in our state space with the probabilities of seeing those
+                variable instantiations together.
+              </p>
+              <br/>
+              <p>There are a few things to notice immediately about our joint probability table:</p>
+              <ul class='indent-1'>
+                <li><p>The probability that we assign to a given world w must range between 0 (certain not to occur) and 1 (certain to occur), i.e.:<br/>
+                  <code class='prettyprint'>0 &le; Pr(w) &le; 1</code></p></li>
+                <li><p>The sum of all probability values in the <strong>joint distribution</strong> must sum to 1, i.e.:<br/>
+                  <code class='prettyprint'>&Sigma;_w Pr(w) = 1</code></p></li>
+                <li><p>The probability of some sentence &alpha; is just the sum of the probabilites of worlds that satisfy &alpha;<br/>
+                  <code class='prettyprint'>Pr(&alpha;) = &Sigma;_w&in;M(&alpha;) Pr(w)</code>
+                </p></li>
+              </ul>
+              <br/>
+              <p class='example'>Knowing that last rule, what is the probability that the sidewalk is wet? i.e., &alpha; = {S = wet}</p>
+              <p>We can look at our table and find all of the rows consistent with &alpha;, and then simply sum up their individual probabilities:</p>
+              <table class='table table-striped table-bordered'>
+                <thead>
+                  <tr>
+                    <th><p>W</p></th>
+                    <th><p>S</p></th>
+                    <th><p>Pr(W, S)</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><p>sunny</p></td>
+                    <td><p>dry</p></td>
+                    <td><p>Pr(sunny, dry) = 0.20</p></td>
+                  </tr>
+                  <tr class='success'>
+                    <td><p>sunny</p></td>
+                    <td><p>wet</p></td>
+                    <td><p>Pr(sunny, wet) = 0.05</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>foggy</p></td>
+                    <td><p>dry</p></td>
+                    <td><p>Pr(foggy, dry) = 0.10</p></td>
+                  </tr>
+                  <tr class='success'>
+                    <td><p>foggy</p></td>
+                    <td><p>wet</p></td>
+                    <td><p>Pr(foggy, wet) = 0.10</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>rainy</p></td>
+                    <td><p>dry</p></td>
+                    <td><p>Pr(rainy, dry) = 0.15</p></td>
+                  </tr>
+                  <tr class='success'>
+                    <td><p>rainy</p></td>
+                    <td><p>wet</p></td>
+                    <td><p>Pr(rainy, wet) = 0.40</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+              <p>There are also some useful properties of our notion of worlds that transfer to probability theory:</p>
+              <p>For example, we can arbitrarily slice up the set of possible worlds such that:</p>
+<pre class='prettyprint'>
+  ; i.e., &Omega; is the set of all possible worlds
+  M(&alpha;) &cup; M(&not;&alpha;) = &Omega;
+  
+  ; Therefore, if:
+  Pr(&alpha;) = &Sigma;_w&in;M(&alpha;) Pr(w)
+  
+  ; Then
+  Pr(&not;&alpha;) = &Sigma;_w&in;M(&not;&alpha;) Pr(w)
+  
+  ; And since we know the sum of all rows must add
+  ; to 1, then:
+  Pr(&alpha;) = 1 - Pr(&not;&alpha;)
+</pre>
+              <p class='example'>If Pr(rainy) = 0.55, then what's the Pr(&not;rainy)?</p>
+              <br/>
+              <p>Simple, right?</p>
+              <p>Here's another useful property:</p>
+              <p class='toolkit'>The <strong>inclusion-exclusion principle</strong> says that the probability of sentence &alpha; disjoined with sentence &beta; is the sum of Pr(&alpha;) and Pr(&beta;) minus
+                their overlap (i.e., Pr(&alpha; &and; &beta;)).</p>
+              <br/>
+              <p>Numerically, the inclusion-exclusion principle looks like:</p>
+<pre class='prettyprint'>
+  ; Inclusion-Exclusion Principle:
+  Pr(&alpha; &or; &beta;) = Pr(&alpha;) + Pr(&beta;) - Pr(&alpha; &and; &beta;) 
+</pre>
+              <br/>
+              <p class='example'>In our example above, what is Pr(W = rainy &or; S = wet)?</p>
+              <br/>
+              <p class='toolkit'>Two sentences &alpha; and &beta; are said to be <strong>mutually exclusive</strong> if Pr(&alpha; &and; &beta;) = 0</p>
+              <br/>
+              <p>We can bring this back to our inclusion-exclusion principle and observe that the &quot;overlap&quot; component is 0 for any mutually exclusive sentences.</p>
+              <p class='example'>In our example above, what is Pr(W = rainy &or; W = foggy)?</p>
+              <br/>
+              <p class='toolkit'>
+                The <strong>law of total probability</strong> says that for some set {&beta;_i} of pair-wise, mutually exclusive sentences that partition &Omega; (cover every possible world),
+                then <code class='prettyprint'>Pr(&alpha;) = &Sigma;_i Pr(&alpha;, &beta;_i)</code>
+              </p>
+              <br/>
+              <p>The law of total probability says that &quot;If I want to determine the probability of &alpha;, sum over every world where &alpha; and some sentence &beta;_i (from my mutually exclusive 
+                set of sentences &beta; that partition the whole state space) are found together.&quot;</p>
+              <p>Let's try that using our running example to find the probability that the sidewalk is dry...</p>
+<pre class='prettyprint'>
+  ; Defining &beta;
+  &beta; = {W = sunny, W = foggy, W = rainy}
+  
+  ; Does our &beta; partition &Omega;?
+  ; Yes! The weather must be sunny, foggy, or rainy in
+  ; our state space
+  
+  ; Is each &beta;_i pairwise mutually exclusive of the
+  ; other?
+  ; Yes! The weather can't be both sunny and foggy, etc.
+  
+  ; Therefore:
+  &alpha; = {S = dry}
+  Pr(&alpha;) = Pr(sunny, dry) + Pr(foggy, dry) + Pr(rainy, dry)
+         = 0.20 + 0.10 + 0.15
+         = 0.45
+</pre>
+              <br/>
+              <p>A reasonable question you might be asking is: where did these probability numbers come from in the first place?</p>
+              <p>This remains a hotly debated topic and the answer is: it depends who you ask!</p>
+              <p>Here are some of the popular opinions:</p>
+              <ul class='indent-1'>
+                <li><p><strong>Frequentists</strong> claim that you must run experiments to discover the probability values, e.g., in our problem, counting the number of days in a 365 day calendar year
+                  how many had both rain and a wet sidewalk, etc.</p></li>
+                <li><p><strong>Objectivists</strong> believe that the probabilities are real aspects of the way the universe operates, and the experiments of the frequentists attempt to measure these
+                  universal mechanisms.</p></li>
+                <li><p><strong>Subjectivists</strong> believe that probabilities represent an agent's beliefs about a system, and so the values are simply their prior educated guesses (that should
+                  be updated via Bayesian approaches, which we'll discuss later, if any evidence is brought before them)</p></li>
+              </ul>
+              <br/>
+              <p class='definition'><strong>Priors</strong> are the probabilities we assign to certain worlds before we take any circumstantial evidence into account.</p>
+              <br/>
+              <p>The above schools of thought are, therefore, simply different ways to get our priors!</p>
+              <p>The values in our table are priors as well because they are our understanding of the chances of witnessing the listed combination of variable instantiations without knowing anything more.</p>
+              <p>...but what if we do know something more 0_o</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='bayesian' class='scrollspy-element' scrollspy-title='Updating Beliefs'></div>
+            <h1>Updating Beliefs and Conditioning</h1>
+            <div>
+              <p>Say we started with our joint probability table (the priors) but suddenly, hark! We witness that it's raining outside!</p>
+              <p>As soon as we <strong>observe evidence</strong> about some variable in our environment, we want to take that observation into account.</p>
+              <p class='definition'><strong>Conditioning</strong> is an operation from probability theory that allows us to update our beliefs given evidence about the current state of our environment.</p>
+              <br/>
+              <p>Let's say we witnessed that it was raining outside...</p>
+              <p>Conditioning says, &quot;I don't care about all of those other probabilities for when it's sunny or foggy out... it's raining! I'm looking at it rain right now!&quot;</p>
+              <p>We say that evidence witnessed is now <strong>given</strong> in our probability calculations, which we represent as:</p>
+<pre class='prettyprint'>
+  Pr(&alpha; | &beta;)
+  
+  ; Where &alpha; is still some query sentence
+  ; and &beta; is whatever evidence we just witnessed
+</pre>
+              <br/>
+              <p>
+                If we're thinking in terms of our joint probability distribution, then conditioning on some evidence essentially causes the chance of witnessing a world that is <strong>inconsistent</strong>
+                with our evidence to go to 0.
+              </p>
+              <p>But remember, if we're zeroing out some rows that are inconsistent with our evidence, then what's left still has to add up to 1!</p>
+              <p>So, we perform <strong>normalization</strong> such that:</p>
+<pre class='prettyprint'>
+  ; For some normalizing constant N
+  Pr(&alpha; | &beta;) = N * Pr(&alpha; &and; &beta;)
+</pre>
+              <br/>
+              <p class='example'>Compute the probability that the sidewalk is wet <strong>given</strong> that it is raining out: Pr(S = wet | W = rainy)</p>
+              <br/>
+              <p>First, we can think about zeroing out the rows that are inconsistent with our evidence, {W = rainy}</p>
+              <table class='table table-bordered'>
+                <thead>
+                  <tr>
+                    <th><p>W</p></th>
+                    <th><p>S</p></th>
+                    <th><p>Pr(W, S)</p></th>
+                    <th><p>Pr(S | W = rainy)</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class='danger'>
+                    <td><p>sunny</p></td>
+                    <td><p>dry</p></td>
+                    <td><p>0.20</p></td>
+                    <td><p>0</p></td>
+                  </tr>
+                  <tr class='danger'>
+                    <td><p>sunny</p></td>
+                    <td><p>wet</p></td>
+                    <td><p>0.05</p></td>
+                    <td><p>0</p></td>
+                  </tr>
+                  <tr class='danger'>
+                    <td><p>foggy</p></td>
+                    <td><p>dry</p></td>
+                    <td><p>0.10</p></td>
+                    <td><p>0</p></td>
+                  </tr>
+                  <tr class='danger'>
+                    <td><p>foggy</p></td>
+                    <td><p>wet</p></td>
+                    <td><p>0.10</p></td>
+                    <td><p>0</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>rainy</p></td>
+                    <td><p>dry</p></td>
+                    <td><p>0.15</p></td>
+                    <td><p>0.15 / N</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>rainy</p></td>
+                    <td><p>wet</p></td>
+                    <td><p>0.40</p></td>
+                    <td><p>0.40 / N</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+              <p>We're not done yet! We have to normalize our remaining two rows consistent with the evidence that it's raining!</p>
+<pre class='prettyprint'>
+  ; To find N, we simply add up the joint
+  ; probabilities of all the worlds consistent
+  ; with the evidence, &beta;:
+  N = &Sigma;_M(&beta;) P(w)
+  
+  N = 0.15 + 0.40
+    = 0.55
+    
+  ; Now, we normalize, giving us:
+  Pr(S = dry | W = rainy) = 0.15 / N
+                          = 0.15 / 0.55
+                          = 0.27
+  
+  Pr(S = wet | W = rainy) = 0.40 / N
+                          = 0.40 / 0.55
+                          = 0.73
+</pre>
+              <br/>
+              <p>So there we have it! There's about a 73% chance that the sidewalk is wet if we observe that it's raining out.</p>
+              <p>Handily, there's also a closed form for conditioning (among others) that is doing what we just did above:</p>
+<pre class='prettyprint'>
+  ; Bayes' Conditioning
+  Pr(&alpha; | &beta;) = Pr(&alpha; &and; &beta;) / Pr(&beta;)
+  
+  ; Hey! Look at that! Turns out our normalizing
+  ; constant was actually just Pr(&beta;)!
+  
+  ; Makes sense, right? Because:
+  Pr(&beta;) = &Sigma;_M(&beta;) P(w)
+</pre>
+              <p>Conditioning is great because it allows us to update our probability distributions as soon as we reduce our uncertainty through observation in some capacity.</p>
+              <br/>
+              <p class='toolkit'>Events &alpha; and &beta; are said to be <strong>independent</strong> if knowing something about one tells us nothing about the other.</p>
+              <br/>
+              <p>We can represent this in probability calculus as:</p>
+<pre class='prettyprint'>
+  ; Independence:
+  Pr(&alpha; | &beta;) = Pr(&alpha;)
+</pre>
+              <p>
+                This makes sense because if I was curious about the probability that the sidewalk was wet &alpha; = {S = wet}, and you told me that you just saw the incredible hulk driving a truck outside
+                &beta; = {H = drivingTruck}, then I might be intrigued but:
+              </p>
+<pre class='prettyprint'>
+    Pr(S = wet | H = drivingTruck)
+  = Pr(S = wet)
+  
+  ; Because learning that the incredible hulk
+  ; is driving a truck outside is irrelevant to
+  ; the probability that the sidewalk is wet
+</pre>
+              <br/>
+              <p>We'll do some examples with this later...</p>
+              <br/>
+              <p>As we saw above, <code class='prettyprint'>Pr(&alpha; | &beta;) = Pr(&alpha; &and; &beta;) / Pr(&beta;)</code>.</p>
+              <p>This was our Bayes' conditioning example, but there are a number of other tricks we can play with it!</p>
+<pre class='prettyprint'>
+  ; What happens when we multiple our normalizing constant,
+  ; Pr(&beta;) to both sides?
+    Pr(&alpha; | &beta;) = Pr(&alpha; &and; &beta;) / Pr(&beta;)
+  = Pr(&alpha; | &beta;) * Pr(&beta;) = Pr(&alpha; &and; &beta;)
+  
+  ; Re-writing that to pretty it up:
+  Pr(&alpha;, &beta;) = Pr(&alpha; | &beta;) * Pr(&beta;)
+  
+  ; We could take this a step further; think about
+  ; having three variables in the mix!
+  ; This lets us choose different sets of variables for
+  ; our &alpha; and &beta;
+  Pr(A, B, C) = Pr(A, B | C) * Pr(C)
+              = Pr(A, C | B) * Pr(B)
+              = Pr(B, C | A) * Pr(A)
+              = Pr(A | B, C) * Pr(B, C)
+              = Pr(B | A, C) * Pr(A, C)
+              = Pr(C | A, B) * Pr(A, B)
+</pre>
+              <br/>
+              <p class='toolkit'>This interesting re-arranging of Bayes' Conditioning gives us the <strong>chain rule</strong> for factorization such that:</p>
+<pre class='prettyprint'>
+  ; Example 1:
+  Pr(A, B) = Pr(A | B) * Pr(B)
+  
+  ; Example 2:
+  Pr(A, B, C) = Pr(A, B | C) * Pr(C)
+              = Pr(A | B, C) * Pr(B | C) * Pr(C)
+              
+  ; Example 3:
+  Pr(A, B, C, D) = Pr(A | B, C, D) * Pr(B | C, D) * Pr(C | D) * Pr(D)
+  
+  ; ...
+</pre>
+              <br/>
+              <p>Notice one important point from the above factorizations:</p>
+              <p>What happens if A is independent from B?</p>
+<pre class='prettyprint'>
+  Pr(A, B) = Pr(A | B) * Pr(B)
+  
+  ; If A is independent of B, then we know:
+  Pr(A | B) = P(A)
+  
+  ; Therefore, subbing into our first equation,
+  ; if A is independent of B:
+  Pr(A, B) = Pr(A) * Pr(B)
+</pre>
+              <br/>
+              <p>These points are, of course, all leading us up to the big-daddy of probabilistic reasoning: Bayes' Theorem</p>
+              
+              <br/>
+              <h3>Bayes' Theorem</h3>
+              <p>Let's take our Bayes' Conditioning one step further to unlock the true power of Bayesian reasoning:</p>
+<pre class='prettyprint'>
+  ; We saw this from Bayes' Conditioning
+  Pr(A, B) = Pr(A | B) * Pr(B)
+  
+  ; But would you also agree that:
+  Pr(A, B) = Pr(B, A)
+  
+  ; It is just a conjunction! Sure! That works...
+  ; So, if:
+  Pr(A, B) = Pr(A | B) * Pr(B)
+
+  ; ...and:
+  Pr(B, A) = Pr(B | A) * Pr(A)
+
+  ; ...AND:
+  Pr(A, B) = Pr(B, A)
+
+  ; ...THEN...
+  Pr(A | B) * Pr(B) = Pr(B | A) * Pr(A)
+  
+  ; ...AND SO!!!
+  Pr(A | B) = (Pr(B | A) * Pr(A)) / Pr(B)
+  
+  ; This is Bayes' Rule... and yeah...
+  ; it's kinda a big deal
+</pre>
+              <br/>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-7/bayesTheorem.jpg' />
+              </div>
+              <br/>
+              <p>...at least some people seem to think so...</p>
+              <p class='question' name='bayes-q0'>What is so damn exciting about Bayes' theorem?</p>
+              <p class='answer' name='bayes-q0'>What isn't exciting about it?! It lets us estimate P(A | B) in terms of P(B | A)!</p>
+              <br/>
+              <p>This is huge because we may not know anything about P(A | B), but knowing something about P(B | A) gives us a wealth of information that we may now infer.</p>
+              <p>...and of course there's a relevant XKCD, thanks for asking!</p>
+              <a href='http://xkcd.com/1236/' target='_blank'>
+                <div class='fit-pres text-center'>
+                  <img src='http://imgs.xkcd.com/comics/seashell.png' />
+                </div>
+              </a>
+              <br/>
+              <p class='example'>Use Bayes' Theorem to compute the following quantity:</p>
+<pre class='prettyprint'>
+  ; Let's pretend we had a different joint distribution than our
+  ; one listed above such that we *only* knew the following:
+  Pr(S = wet) = 0.60
+  Pr(W = rainy) = 0.40
+  Pr(S = wet | W = rainy) = 0.75
+  
+  ; What if my new question is: what is the probability
+  ; that it's raining, given that the sidewalk is wet?
+  Pr(W = rainy | S = wet) = (Pr(S = Wet | W = rainy) * Pr(W = rainy)) / Pr(S = wet)
+                          = (0.75 * 0.40) / 0.60
+                          = 0.50
+</pre>
+              <br/>
+              <p>Neat! Next class we'll explore the FULL POTENTIAL of Bayes' Theorem...</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='hw4' class='scrollspy-element' scrollspy-title='Homework 4'></div>
+            <h1>Homework 4</h1>
+            <div>
+              <p>Here it is everyone... the homework you've all been waiting for!</p>
+              <p>I hope you really got HWs 1 - 3 because... oh... wait...</p>
+              <p>No, actually HW4 doesn't use anything from the previous homeworks :P</p>
+              <br/>
+              <p>Previous to HW4, we weren't really sure how to root the notion of frames to first order logic... now we can take the time to gain some clarity:</p>
+              <table class='table table-bordered table-striped'>
+                <thead>
+                  <tr>
+                    <th><p>FoL Concept</p></th>
+                    <th><p>FoL Example</p></th>
+                    <th><p>Frame Equivalent</p></th>
+                    <th><p>Frame Example</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th><p>Constant</p></th>
+                    <td><p>Andrew</p></td>
+                    <td><p>0-slot frame</p></td>
+                    <td><p>(ANDREW)</p></td>
+                  </tr>
+                  <tr>
+                    <th><p>Predicate</p></th>
+                    <td><p>Teaches(Andrew, CS161)</p></td>
+                    <td><p>Frame</p></td>
+                    <td><p>(TEACHES AGENT (ANDREW) OBJECT (CS161))</p></td>
+                  </tr>
+                  <tr>
+                    <th><p>Variable</p></th>
+                    <td><p>Teaches(Andrew, x)</p></td>
+                    <td><p>Variable</p></td>
+                    <td><p>(TEACHES AGENT (ANDREW) OBJECT (V X))</p></td>
+                  </tr>
+                  <tr>
+                    <th><p>Function</p></th>
+                    <td><p>Awesome(TeacherOf(161))</p></td>
+                    <td><p>Gap</p></td>
+                    <td><p>(AWESOME TEACHER-OF CS161)</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+              <p>So, HW4 is going to dive into Variables (which we mentioned in HW1 but only are now seeing in HW4) such that we will perform inference on some KB of frames to accomplish our story parsing.</p>
+              <p>This assignment uses forward chaining to perform inference, and backward chaining to derive some English sentence answers readable by a human.</p>
+              <p>We'll take a look at it now!</p>
+            </div>
+            <hr/>
+            
+            
+            <a class='btn btn-default pull-right hidden-print' href='javascript:window.print();'>
+              <span class='glyphicon glyphicon-print'></span>
+              &nbsp; PDF / Print
+            </a>
+            
+          </div>
+          <!-- END PRESENTATION CONTENT -->
+          
+          <!-- MATERIALS FROM CLASS: -->
+          
+            
+        </div>
+      </div>
+      <!-- END MAIN CONTENT -->
+      
+      
+    </div>
+    <!-- END WRAPPER -->
+    
+    <!-- BEGIN FOOTER -->
+    <div id="footer">
+      <div class="container">
+        <div class="col-md-12 text-center">
+          
+        </div>
+      </div>
+    </div>
+    <!-- END FOOTER -->
+    
+  </body>
+</html>
