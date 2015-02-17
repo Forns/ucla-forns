@@ -12,6 +12,7 @@
     <script src="../../../js/lib/expanding.js"></script>
     <script src="../../../js/display/general/general-display.js"></script>
     <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+    <script type="text/javascript" src="../../../js/display/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
   </head>
   
   <body data-spy="scroll" data-target="#scrollspy">
@@ -126,7 +127,7 @@
               <p>So, naturally, we want the information that our computer spits back to be... well... natural, and readable to a human!</p>
               <p>Before we do that, though, we want to organize our knowledge into an objective, unified representation such that communication is seemless and cross-domain integration is possible.</p>
               <p class='definition'>
-                An <strong>ontology</strong> is a classification system (usually organized into Knowledge Bases) such that we establish membership of specific world entities into 
+                An <strong>ontology</strong> is a classification system (usually organized into Knowledge Bases) such that we establish membership of specific world entities into classes or categories.
               </p>
               <br/>
               <p>Here's a sample <strong>upper ontology</strong> for general classification, where parents of nodes are more general than their children.</p>
@@ -281,17 +282,18 @@
   KB =
      1. Weather(Rain)
      2. (Weather(Rain) &and; &not;Covered(Sidewalk) &and; &not;WaterResistant(Sidewalk) &and; ...) &rArr; Wet(Sidewalk)
-  
-  ; Very difficult and impractical to cover all the possible
-  ; Cases where it's raining and the sidewalk isn't necessarily wet!
-  
-  ; Also, our intelligent agent just might not *know* whether the
-  ; sidewalk is covered
 </pre>
               <br/>
-              <p>Another issue is the following: viewing our KB as stated above, does knowing anything about whether or not the sidewalk is wet tell us whether or not it's raining?</p>
+              <p>This brittle KB and reasoning system has several main issues:</p>
+              <p class='debug'>The list of rules for getting the sidewalk wet is <strong>incomplete</strong>; e.g., what if sprinklers turned on and wet the sidewalk but it wasn't raining?</p>
+              <p class='debug'>
+                The rule for getting the sidewalk wet (in this case, only in the event that it's raining) does not handle <strong>exceptions</strong>; e.g., a covering of the sidewalk when it's raining.
+              </p>
+              <p class='debug'>We deal only with boolean logic and have no parsimonious means of representing <strong>uncertainty</strong>.</p>
+              <br/>
+              <p>So, for example, viewing our KB as stated above, does knowing anything about whether or not the sidewalk is wet tell us whether or not it's raining?</p>
               <p>No! We don't have any rules to infer about observing the sidewalk whether it's raining or not, but certainly a wet sidewalk *suggests* that it might be raining.</p>
-              <p>In comes <strong>probabilistic reasoning</strong>, which attempts to model <strong>uncertainty</strong> about our environment in a parsimonious, statistical representation.</p>
+              <p class='definition'>In comes <strong>probabilistic reasoning</strong>, which attempts to model <strong>uncertainty</strong> about our environment in a parsimonious, statistical representation.</p>
               <p class='definition'>
                 <strong>Uncertainty</strong> about an environment arises when our agent has partial sensor information, any sort of ignorance, or the problem is nondeterministic, but we still must make a
                 rational decision.
@@ -300,6 +302,7 @@
               <p>So, we're going to attempt to frame our set of possible worlds, just like in propositional logic, in terms of probabilities!</p>
               
               <br/>
+              <hr/>
               <h3>Probabilistic Logic</h3>
               <p>
                 Probabilistic logic is still interested in the set of possible worlds, but unlike propositional logic, our variables of interest may have more than 2 values (usually called <strong>events</strong>).
@@ -308,13 +311,10 @@
                 For example, instead of just <code class='prettyprint'>Raining</code> and <code class='prettyprint'>&not;Raining</code>, we might have a Weather variable with possible values of
                 {Sunny, Raining, Fog}. 
               </p>
-              <p class='toolkit'>In probabilistic logic, variables set to a given value are represented as <code class='prettyprint'>Var = val</code> where Var is some variable and val is its current value.</p>
-              <br/>
-              <p><strong>NOTE:</strong> The convention is to Capitalize variable names while keeping the variable values in lowercase.</p>
               <p>Let's use our rain and sidewalk wetness example to spearhead the discussion on probabilistic logic... as a reminder:</p>
 <pre class='prettyprint'>
   ; We had two variables defined as:
-  R = Whether or not it's raining
+  R = Whether or not it is raining
   S = Whether or not the sidewalk is wet
 </pre>
               <br/>
@@ -356,74 +356,11 @@
                 </tbody>
               </table>
               <br/>
-              <p>Our query asked if the sidewalk was wet, i.e., &alpha; = S, dictated by the rule:</p>
-<pre class='prettyprint'>
-  KB =
-     ; If it's raining, then the sidewalk is wet
-     1. R &rArr; S
-     
-     ; It is raining!
-     2. R
-</pre>
-              <br/>
-              <p>This meant that we could ascertain the models of our world (in this case, M(&alpha;) = {W3}) such that:</p>
-              <table class='table table-striped table-bordered'>
-                <thead>
-                  <tr>
-                    <th><p>World</p></th>
-                    <th><p>R</p></th>
-                    <th><p>S</p></th>
-                    <th><p>(R &rArr; S) &and; R</p></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td><p>W0</p></td>
-                    <td><p>F</p></td>
-                    <td><p>F</p></td>
-                    <td><p>F</p></td>
-                  </tr>
-                  <tr>
-                    <td><p>W1</p></td>
-                    <td><p>F</p></td>
-                    <td><p>T</p></td>
-                    <td><p>F</p></td>
-                  </tr>
-                  <tr>
-                    <td><p>W2</p></td>
-                    <td><p>T</p></td>
-                    <td><p>F</p></td>
-                    <td><p>F</p></td>
-                  </tr>
-                  <tr>
-                    <td><p>W3</p></td>
-                    <td><p>T</p></td>
-                    <td><p>T</p></td>
-                    <td><p>T</p></td>
-                  </tr>
-                </tbody>
-              </table>
-              <br/>
-              <p>This brittle KB and reasoning system has two main issues:</p>
-              <ul class='indent-1'>
-                <li><p>The list of rules for getting the sidewalk wet is <strong>incomplete</strong>; e.g., what if sprinklers turned on and wet the sidewalk but it wasn't raining?</p></li>
-                <li><p>
-                  The rule for getting the sidewalk wet (in this case, only in the event that it's raining) does not handle <strong>exceptions</strong>; e.g., a covering of the sidewalk when it's raining.
-                </p></li>
-              </ul>
-              <br/>
-              <p>As we already said, enumerating all of these possibilities is intractable, so instead we'll replace our KB with probability tables.</p>
+              <p>As we already said, enumerating all possible worlds (with their exceptions and managing uncertainty) is intractable, so instead we'll replace our KB with probability tables.</p>
               <p class='definition'>
-                A <strong>probability table</strong> on some number of variables {A, B, C, ...} defines the probabilities of each possible world, i.e., the chance of that world happening.
+                A <strong>probability table</strong> on some number of variables {A, B, C, ...} defines the probabilities of seeing each possible world, i.e., the chance of that world / combination of variables
+                being observed.
               </p>
-              <br/>
-              <p>Let's talk a little about notation and then we'll see how this works.</p>
-              <p class='toolkit'><strong>Pr(A, B, C)</strong> (uppercase variables) refers to a <strong>probability table</strong> of probabilities for variables A, B, and C.</p>
-              <p class='toolkit'>
-                <strong>Pr(A = a, B = b, C = c)</strong> refers to a <strong>row of that probability table</strong> such that variable A attains value a, B attains value b, etc. Setting a variable
-                X to some value x is called a variable <strong>instantiation</strong>.
-              </p>
-              <br/>
               <p>So let's look at a probability table for our (now expanded) example:</p>
               <p>Assumptions about our problem:</p>
               <ul class='indent-1'>
@@ -452,31 +389,31 @@
                     <td><p>sunny</p></td>
                     <td><p>wet</p></td>
                     <td><p>Pr(sunny, wet) = 0.05</p></td>
-                    <td><p>It's sunny, but the sidewalk is wet (sprinkler maybe?)</p></td>
+                    <td><p>It's sunny and the sidewalk is wet (sprinkler maybe?)</p></td>
                   </tr>
                   <tr>
                     <td><p>foggy</p></td>
                     <td><p>dry</p></td>
                     <td><p>Pr(foggy, dry) = 0.10</p></td>
-                    <td><p>It's foggy, but the sidewalk is dry (not a heavy fog?)</p></td>
+                    <td><p>It's foggy and the sidewalk is dry (not a heavy fog?)</p></td>
                   </tr>
                   <tr>
                     <td><p>foggy</p></td>
                     <td><p>wet</p></td>
                     <td><p>Pr(foggy, wet) = 0.10</p></td>
-                    <td><p>It's foggy, and the sidewalk is wet (collection of dew?)</p></td>
+                    <td><p>It's foggy and the sidewalk is wet (collection of dew?)</p></td>
                   </tr>
                   <tr>
                     <td><p>rainy</p></td>
                     <td><p>dry</p></td>
                     <td><p>Pr(rainy, dry) = 0.15</p></td>
-                    <td><p>It's rainy, but the sidewalk is dry (covered by tarp?)</p></td>
+                    <td><p>It's rainy and the sidewalk is dry (covered by tarp?)</p></td>
                   </tr>
                   <tr>
                     <td><p>rainy</p></td>
                     <td><p>wet</p></td>
                     <td><p>Pr(rainy, wet) = 0.40</p></td>
-                    <td><p>It's rainy, and the sidewalk is wet (duh)</p></td>
+                    <td><p>It's rainy and the sidewalk is wet (duh)</p></td>
                   </tr>
                 </tbody>
               </table>
@@ -485,15 +422,56 @@
                 We call this table the <strong>joint probability table</strong> for our variables W and S because it represents all possible worlds in our state space with the probabilities of seeing those
                 variable instantiations together.
               </p>
+              <p class='definition'>Note: Joint probability tables describe the probabilities of seeing the variable instantiations of each world <strong>without any other evidence.</strong></p>
               <br/>
-              <p>There are a few things to notice immediately about our joint probability table:</p>
+              <p>This is important because it means that a world's chance of being observed can be a consequence of any of that world's variables.</p>
+              <p>For example, a 5% chance that we see rainy weather and a wet sidewalk could mean that it rarely rains, or when it does rain, the sidewalk rarely gets wet (or any combination of explanations).</p>
+              
+              <br/>
+              <hr/>
+              <h3>Notation</h3>
+              <p>One of the hardest parts of dealing with probabilistic logic is its notation. We'll cover some basics now.</p>
+              <table class='table table-striped'>
+                <thead>
+                  <tr>
+                    <th><p>Element</p></th>
+                    <th><p>Example</p></th>
+                    <th><p>Description</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><p>Variable</p></td>
+                    <td><p>A, B, C<br/>Weather, Sidewalk</p></td>
+                    <td><p><strong>Capitalized</strong> letters, words.<br/>These will acquire values in each world of the model</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>Value</p></td>
+                    <td><p>a, b, c<br/>sunny, wet<br/>Weather = sunny, Sidewalk = wet</p></td>
+                    <td><p><strong>Lowercase</strong> letters, words.<br/>These are the instantiations that a given variable may attain.</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>Table / Distribution</p></td>
+                    <td><p>Pr(A, B, C)</p></td>
+                    <td><p><strong>Pr(...)</strong> with at least one uninstantiated variable.<br/>These define the probability mass amongst the variables listed in the Pr(...) statement.</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>World</p></td>
+                    <td><p>Pr(a, b, c)<br/>Pr(A = a, B = b, C = c)</p></td>
+                    <td><p><strong>Pr(...)</strong> with all values / instantiated variables.<br/>These are a single table-row; they define one instantiation of variables.</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              
+              <br/>
+              <p class='definition'>There are several <strong>axioms of probability theory</strong> that place intuitive constraints on our distributions / tables:</p>
               <ul class='indent-1'>
                 <li><p>The probability that we assign to a given world w must range between 0 (certain not to occur) and 1 (certain to occur), i.e.:<br/>
-                  <code class='prettyprint'>0 &le; Pr(w) &le; 1</code></p></li>
+                  $$0 &le; Pr(w) &le; 1$$</p></li>
                 <li><p>The sum of all probability values in the <strong>joint distribution</strong> must sum to 1, i.e.:<br/>
-                  <code class='prettyprint'>&Sigma;_w Pr(w) = 1</code></p></li>
-                <li><p>The probability of some sentence &alpha; is just the sum of the probabilites of worlds that satisfy &alpha;<br/>
-                  <code class='prettyprint'>Pr(&alpha;) = &Sigma;_w&in;M(&alpha;) Pr(w)</code>
+                  $$\sum_w Pr(w) = 1$$</p></li>
+                <li><p>The probability of some logical sentence &alpha; is just the sum of the probabilites of worlds that satisfy &alpha;<br/>
+                  $$Pr(\alpha) = \sum_{w \in M(\alpha)} Pr(w)$$
                 </p></li>
               </ul>
               <br/>
@@ -513,7 +491,7 @@
                     <td><p>dry</p></td>
                     <td><p>Pr(sunny, dry) = 0.20</p></td>
                   </tr>
-                  <tr class='success'>
+                  <tr>
                     <td><p>sunny</p></td>
                     <td><p>wet</p></td>
                     <td><p>Pr(sunny, wet) = 0.05</p></td>
@@ -523,7 +501,7 @@
                     <td><p>dry</p></td>
                     <td><p>Pr(foggy, dry) = 0.10</p></td>
                   </tr>
-                  <tr class='success'>
+                  <tr>
                     <td><p>foggy</p></td>
                     <td><p>wet</p></td>
                     <td><p>Pr(foggy, wet) = 0.10</p></td>
@@ -533,7 +511,7 @@
                     <td><p>dry</p></td>
                     <td><p>Pr(rainy, dry) = 0.15</p></td>
                   </tr>
-                  <tr class='success'>
+                  <tr>
                     <td><p>rainy</p></td>
                     <td><p>wet</p></td>
                     <td><p>Pr(rainy, wet) = 0.40</p></td>
@@ -543,66 +521,102 @@
               <br/>
               <p>There are also some useful properties of our notion of worlds that transfer to probability theory:</p>
               <p>For example, we can arbitrarily slice up the set of possible worlds such that:</p>
-<pre class='prettyprint'>
-  ; i.e., &Omega; is the set of all possible worlds
-  M(&alpha;) &cup; M(&not;&alpha;) = &Omega;
-  
-  ; Therefore, if:
-  Pr(&alpha;) = &Sigma;_w&in;M(&alpha;) Pr(w)
-  
-  ; Then
-  Pr(&not;&alpha;) = &Sigma;_w&in;M(&not;&alpha;) Pr(w)
-  
-  ; And since we know the sum of all rows must add
-  ; to 1, then:
-  Pr(&alpha;) = 1 - Pr(&not;&alpha;)
-</pre>
-              <p class='example'>If Pr(rainy) = 0.55, then what's the Pr(&not;rainy)?</p>
+              <div class='well'>
+                <p>&Omega; is the set of all possible worlds.</p>
+                <p>$$M(\alpha) \cup M(\neg \alpha) = \Omega$$</p>
+                
+                <p>Therefore, if:</p>
+                <p>$$Pr(\alpha) = \sum_{w \in M(\alpha)} Pr(w)$$</p>
+                
+                <p>Then</p>
+                <p>$$Pr(\neg \alpha) = \sum_{w \in M(\neg \alpha)} Pr(w)$$</p>
+                
+                <p>And since we know the sum of all rows must add to 1, then:</p>
+                <p>$$Pr(\alpha) = 1 - Pr(\neg \alpha)$$</p>
+              </div>
+              <p class='question' name='pr-0'>If Pr(rainy) = 0.55, then what's the Pr(&not;rainy)?</p>
+              <p class='answer' name='pr-0'>$$Pr(\neg rainy) = 1 - Pr(rainy) = 1 - 0.55 = 0.45$$</p>
+              
               <br/>
               <p>Simple, right?</p>
               <p>Here's another useful property:</p>
               <p class='toolkit'>The <strong>inclusion-exclusion principle</strong> says that the probability of sentence &alpha; disjoined with sentence &beta; is the sum of Pr(&alpha;) and Pr(&beta;) minus
-                their overlap (i.e., Pr(&alpha; &and; &beta;)).</p>
+                their overlap (i.e., Pr(&alpha; &and; &beta;)).<br/>$$Pr(\alpha \lor \beta) = Pr(\alpha) + Pr(\beta) - Pr(\alpha \land \beta)$$</p>
+              <p class='example'>In our example (repeated below), what is Pr(W = rainy &or; S = wet)?</p>
+              <table class='table table-striped table-bordered'>
+                <thead>
+                  <tr>
+                    <th><p>W</p></th>
+                    <th><p>S</p></th>
+                    <th><p>Pr(W, S)</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><p>sunny</p></td>
+                    <td><p>dry</p></td>
+                    <td><p>Pr(sunny, dry) = 0.20</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>sunny</p></td>
+                    <td><p>wet</p></td>
+                    <td><p>Pr(sunny, wet) = 0.05</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>foggy</p></td>
+                    <td><p>dry</p></td>
+                    <td><p>Pr(foggy, dry) = 0.10</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>foggy</p></td>
+                    <td><p>wet</p></td>
+                    <td><p>Pr(foggy, wet) = 0.10</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>rainy</p></td>
+                    <td><p>dry</p></td>
+                    <td><p>Pr(rainy, dry) = 0.15</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>rainy</p></td>
+                    <td><p>wet</p></td>
+                    <td><p>Pr(rainy, wet) = 0.40</p></td>
+                  </tr>
+                </tbody>
+              </table>
               <br/>
-              <p>Numerically, the inclusion-exclusion principle looks like:</p>
-<pre class='prettyprint'>
-  ; Inclusion-Exclusion Principle:
-  Pr(&alpha; &or; &beta;) = Pr(&alpha;) + Pr(&beta;) - Pr(&alpha; &and; &beta;) 
-</pre>
-              <br/>
-              <p class='example'>In our example above, what is Pr(W = rainy &or; S = wet)?</p>
-              <br/>
-              <p class='toolkit'>Two sentences &alpha; and &beta; are said to be <strong>mutually exclusive</strong> if Pr(&alpha; &and; &beta;) = 0</p>
-              <br/>
+              <p class='toolkit'>Two sentences &alpha; and &beta; are said to be <strong>mutually exclusive</strong> if:<br/>$$Pr(\alpha \land \beta) = 0$$</p>
               <p>We can bring this back to our inclusion-exclusion principle and observe that the &quot;overlap&quot; component is 0 for any mutually exclusive sentences.</p>
-              <p class='example'>In our example above, what is Pr(W = rainy &or; W = foggy)?</p>
+              <p class='question' name='pr-1'>In our example above, what is Pr(W = rainy &or; W = foggy)?</p>
+              <p class='answer' name='pr-1'>$$Pr(w_3) + Pr(w_4) + Pr(w_5) + Pr(w_6) = 0.75$$</p>
               <br/>
               <p class='toolkit'>
-                The <strong>law of total probability</strong> says that for some set {&beta;_i} of pair-wise, mutually exclusive sentences that partition &Omega; (cover every possible world),
-                then <code class='prettyprint'>Pr(&alpha;) = &Sigma;_i Pr(&alpha;, &beta;_i)</code>
+                The <strong>law of total probability</strong> says that for some set \({\beta_i}\) of pair-wise, mutually exclusive sentences that partition \(\Omega\) (cover every possible world),
+                then:<br/>
+                $$Pr(\alpha) = \sum_i Pr(\alpha, \beta_i)$$
               </p>
               <br/>
               <p>The law of total probability says that &quot;If I want to determine the probability of &alpha;, sum over every world where &alpha; and some sentence &beta;_i (from my mutually exclusive 
                 set of sentences &beta; that partition the whole state space) are found together.&quot;</p>
-              <p>Let's try that using our running example to find the probability that the sidewalk is dry...</p>
-<pre class='prettyprint'>
-  ; Defining &beta;
-  &beta; = {W = sunny, W = foggy, W = rainy}
-  
-  ; Does our &beta; partition &Omega;?
-  ; Yes! The weather must be sunny, foggy, or rainy in
-  ; our state space
-  
-  ; Is each &beta;_i pairwise mutually exclusive of the
-  ; other?
-  ; Yes! The weather can't be both sunny and foggy, etc.
-  
-  ; Therefore:
-  &alpha; = {S = dry}
-  Pr(&alpha;) = Pr(sunny, dry) + Pr(foggy, dry) + Pr(rainy, dry)
-         = 0.20 + 0.10 + 0.15
-         = 0.45
-</pre>
+              <p class='example'>Let's try that using our running example to find the probability that the sidewalk is dry...</p>
+              <div class='well'>
+                <p>Defining &beta;</p>
+                <p>$$\beta = \{W = sunny, W = foggy, W = rainy\}$$</p>
+                <br/>
+                <p>Does our &beta; partition &Omega;?</p>
+                <p>Yes! The weather must be sunny, foggy, or rainy in our state space</p>
+                <br/>
+                <p>Is each \(\beta_i\) pairwise mutually exclusive of the other?</p>
+                <p>Yes! The weather can't be both sunny and foggy, etc.</p>
+                <br/>
+                <p>Therefore, to determine the probability that the sidewalk is dry:</p>
+                <p>$$\alpha = {S = dry}$$</p>
+                <p>We use the law of total probability to derive:</p>
+                <p>\begin{eqnarray}Pr(\alpha) &=& Pr(sunny, dry) + Pr(foggy, dry) + Pr(rainy, dry)\\
+                       &=& 0.20 + 0.10 + 0.15\\
+                       &=& 0.45\end{eqnarray}
+                </p>
+              </div>
               <br/>
               <p>A reasonable question you might be asking is: where did these probability numbers come from in the first place?</p>
               <p>This remains a hotly debated topic and the answer is: it depends who you ask!</p>
