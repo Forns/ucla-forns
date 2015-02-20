@@ -776,7 +776,7 @@
               </div>
               <p class='question' name='pr-3'>(2) Normalize the remaining rows consistent with our evidence.</p>
               <p class='answer' name='pr-3'>First we'll find N:<br/>
-                $$N = \frac{1}{\sum_{\beta_i \in M(\beta)} Pr(\beta_i)} = \frac{1}{0.65}$$<br/>
+                $$N = \frac{1}{\sum_{\beta_i \in M(\beta)} Pr(\beta_i)} = \frac{1}{0.55}$$<br/>
                 Now, we normalize our remaining worlds, giving us:<br/>
                 \begin{eqnarray}
                   Pr(S = dry | W = rainy) &=& 0.15 / N\\
@@ -797,7 +797,7 @@
                 $$Pr(\alpha | \beta) = \frac{Pr(\alpha \land \beta)}{Pr(\beta)}$$
               </p>
               <div class='well'>
-                <p>Hey! Look at that! Turns out our normalizing constant was actually just \(Pr(&beta;)\)!</p>
+                <p>Hey! Look at that! Turns out our normalizing constant was actually just \(\frac{1}{Pr(&beta;)}\)!</p>
                 <p>Makes sense, right? Because:<br/>
                   $$Pr(\beta) = \sum_{\omega \in M(\beta)} Pr(\omega)$$
                 </p>
@@ -832,8 +832,7 @@
                 <p>Starting with Bayes' conditioning, what happens when we multiply our normalizing constant \(Pr(\beta)\) to both sides?<br/>
                   \begin{eqnarray}
                     Pr(\alpha | \beta) &=& \frac{Pr(\alpha \land \beta)}{Pr(\beta)}\\
-                                       &=& Pr(\alpha | \beta) * Pr(\beta)\\
-                                       &=& Pr(\alpha \land \beta)
+                    \therefore Pr(\alpha \land \beta) &=& Pr(\alpha | \beta) * Pr(\beta)\\
                   \end{eqnarray}
                 </p>
                 <p>Re-writing that to pretty it up:<br/>
