@@ -958,13 +958,124 @@
                   \end{eqnarray}
                 </p>
               </div>
-              <br/>
-              <p>Neat! Next class we'll explore the FULL POTENTIAL of Bayes' Theorem...</p>
             </div>
+            <hr/>
+            <br/>
+            
+            
+            <div id='bayesTheorem' class='scrollspy-element' scrollspy-title='Applying Bayes&#39; Theorem'></div>
+            <h1>Applying Bayes' Theorem</h1>
+            <div>
+              <p>We've learned the probabilistic theory and mechanisms behind Bayes' Theorem, so let's see how it all fits together.</p>
+              <p>Shall we start with a motivating example? Don't feel bad if you don't get this at first, about 85% of medical doctors asked the same question get it wrong.</p>
+              <br/>
+              <p class='example'>Read the following problem description, and for each probability mentioned, formalize it into a Pr(x | y) statement and then solve for the correct quantity.
+                Assume two binary variables: Test and Disease, as described by the problem.</p>
+              <blockquote>
+                A very rare condition, Schistosoforneymiosis, is found in about 1/1000 of those tested for it; sufferers experience a consistently wet left foot and sentient freckles.<br/><br/>
+                The test is an elaborate procedure involving multiple probes, and returns an end result that is either positive (Test) or negative (&not;Test). The problem is that the tests are not perfect, but 
+                95% of people who have the disease will test positive, and 2% of people who do *not* have the disease will test positive.<br/><br/>
+                <strong>If a patient tests positive, what is the probability that they have the disease?</strong>
+              </blockquote>
+              <br/>
+              <p>Let's dissect this problem and determine the proper quantities for each component to lead to our solution.</p>
+              <br/>
+              <p class='question' name='bayes-q0'>Translate the sentence into a Pr statement: &quot;A very rare condition, Schistosoforneymiosis, is found in about 1/1000 of those tested for it.&quot;</p>
+              <p class='answer' name='bayes-q0'>$$Pr(Disease) = 0.001$$</p>
+              <br/>
+              <p>The above represents the <strong>prior</strong> probability that we discussed from last time, i.e., the chance that someone has the condition before accounting for any evidence.</p>
+              <p class='question' name='bayes-q1'>Translate the sentence into a Pr statement: &quot;95% of people who have the disease will test positive.&quot;</p>
+              <p class='answer' name='bayes-q1'>$$Pr(Test | Disease) = 0.95$$</p>
+              <br/>
+              <p>This value represents the case of a <strong>true positive</strong> since the test is positive and so is the disease.</p>
+              <p class='question' name='bayes-q2'>Translate the sentence into a Pr statement: &quot;2% of people who do *not* have the disease will test positive.&quot;</p>
+              <p class='answer' name='bayes-q2'>$$Pr(Test | &not;Disease) = 0.02$$</p>
+              <br/>
+              <p>This value represents the case of a <strong>false positive</strong> since the test is positive but the disease is not.</p>
+              <p class='question' name='bayes-q3'>Translate the sentence into a Pr statement: &quot;If a patient tests positive, what is the probability that they have the disease?&quot;</p>
+              <p class='answer' name='bayes-q3'>$$Pr(Disease | Test) = ???$$<br/>(this is what we're trying to find out!)</p>
+              <br/>
+              <p>Alright, off to a good start! Let's write out everything that we have so far:</p>
+              <div class='well'>
+                <p>
+                  \begin{eqnarray}
+                    Pr(Disease) &=& 0.001\\
+                    Pr(Test | Disease) &=& 0.95\\
+                    Pr(Test | \neg Disease) &=& 0.02\\
+                  
+                    Pr(Disease | Test) &=& ???
+                  \end{eqnarray}
+                </p>
+              </div>
+              <br/>
+              <p>So, if it wasn't obvious before, we need to use Bayes' Theorem in order to solve for our target quantity! Let's write out what we'll need for that:</p>
+              <p>$$Pr(Disease | Test) = \frac{Pr(Test | Disease) * Pr(Disease)}{Pr(Test)}$$</p>
+              <br/>
+              <p>Do we have everything that we need to solve for Pr(Disease | Test)?</p>
+              <p>Well, yes and no; we have everything we need to calculate what we need, explicitly. In particular, we have everything on the RHS but Pr(Test).</p>
+              <p>Do we have a means of calculating the Pr(Test)?</p>
+              <br/>
+              <p class='question' name='bayes-q4'>Click here if you need a hint on how to calculate Pr(Test)...</p>
+              <p class='answer' name='bayes-q4'>Why, the Law of Total Probability of course!<br/>$$Pr(\alpha) = \sum_i Pr(\alpha, \beta_i)$$<br/> 
+                ...for mutually exclusive and exhaustive \(\beta_i\)</p>
+              <br/>
+              <p>&quot;But Andrew, we don't have things in terms of Pr(&alpha;, &beta;), only <strong>conditions</strong>!&quot;</p>
+              <p>You're correct! You even said the strategy we need to use! Let's take a look:</p>
+<div class='well'>
+  <p>I claim that the choice for &beta; is a partition in which each &beta;_i is mutually exclusive, do you agree?</p>
+  <p>$$\beta = \{Disease, \neg Disease\}$$</p>
+  
+  <p>So, by the Law of Total Probability:</p>
+  <p>
+    \begin{eqnarray}
+      Pr(\alpha) &=& \sum_i Pr(\alpha, \beta_i)\\
+        Pr(Test) &=& \sum_i Pr(Test, \beta_i)\\
+                 &=& Pr(Test, Disease) + Pr(Test, \neg Disease)
+     \end{eqnarray}
+  </p>
+  <br/>
+  
+  <p>Now, we can condition in order to get:</p>
+  <p>
+    \begin{eqnarray}
+       Pr(Test) &=& Pr(Test | Disease) * Pr(Disease)\\
+                &+& Pr(Test | \neg Disease) * Pr(\neg Disease)
+    \end{eqnarray}
+  </p>
+  <br/>
+        
+  <p>We do not *explicitly* have one of these quantities above, BUT, obvserve:</p>
+  <p>
+    \begin{eqnarray}
+      Pr(&not;Disease) &=& 1 - Pr(Disease)\\
+                       &=& 1 - 0.001\\
+                       &=& 0.999
+    \end{eqnarray}
+  </p>
+  <br/>
+  
+  <p>Therefore:</p>
+  <p>$$Pr(Test) = 0.95 * 0.001 + 0.02 * 0.999 \approx 0.02093$$</p>
+  <br/>
+  
+  <p>And now, plugging back into our original:</p>
+  <p>
+    \begin{eqnarray}
+      Pr(Disease | Test) &=& \frac{Pr(Test | Disease) * Pr(Disease)}{Pr(Test)}\\
+                         &\approx& \frac{0.95 * 0.001}{0.02093}\\
+                         &\approx& 0.045
+    \end{eqnarray}
+  </p>
+</div>
+              <br/>
+              <p>Wow! That's a really small chance given that our incredibly accurate test was still positive!</p>
+              <p>Understanding Bayes' Theorem gives us a lot of power to detect non-obvious consequences like the above.</p>
+              <p>Next week, we'll look at a specific application to Bayesian networks... a beautiful data structure for reasoning under uncertainty.</p>
+            </div>
+            <br/>
             <hr/>
             
             
-            <br/>
             <div id='hw3' class='scrollspy-element' scrollspy-title='Homework 3'></div>
             <h1>Homework 3</h1>
             <div>
