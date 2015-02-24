@@ -185,6 +185,10 @@ p, pre {
 }
 
 /* ACCENT */
+.white-bg {
+  background-color: white;
+}
+
 .indent-1 {
   margin-left: 20px;
 }

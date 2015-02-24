@@ -1,0 +1,1447 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Andrew Forney - UCLA CS</title>
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/magic-bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/main.css" rel="stylesheet" type="text/css">
+    <script src="../../../js/lib/jquery-2.0.3.min.js"></script>
+    <script src="../../../js/lib/bootstrap.min.js"></script>
+    <script src="../../../js/lib/expanding.js"></script>
+    <script src="../../../js/display/general/general-display.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+    <script type="text/javascript" src="../../../js/display/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  </head>
+  
+  <body data-spy="scroll" data-target="#scrollspy">
+    
+    <!-- BEGIN WRAP -->
+    <div id="wrap">
+      
+      <!-- BEGIN NAVIGATION -->
+      <nav class='navbar navbar-default' role='navigation'>
+        <div class='nav-accent'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-12'>
+              <div class='navbar-header'>
+                <button class='navbar-toggle' type='button' data-toggle='collapse' data-target='.navbar-main-collapse'>
+                  <span class='sr-only'>Toggle Navigation</span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                </button>
+                <a class='navbar-brand' href='/~forns/'>
+                  <span id='brand-text'>
+                    Andrew Forney
+                  </span>
+                </a>
+              </div>
+              
+              <div id='nav-main' class='collapse navbar-collapse navbar-main-collapse'>
+                <ul class='nav navbar-nav navbar-right'>
+                  
+                  <li>
+                    <a href='/~forns/about.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-user'></span>
+                      </div>
+                      <p class='text-center'>About</p>
+                    </a>
+                  </li>
+                  
+                  <li class='active'>
+                    <a href='/~forns/classes.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-book'></span>
+                      </div>
+                      <p class='text-center'>Classes</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/contact.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-comment'></span>
+                      </div>
+                      <p class='text-center'>Contact</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/publications.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-file'></span>
+                      </div>
+                      <p class='text-center'>Publications</p>
+                    </a>
+                  </li>
+                  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <!-- END NAVIGATION -->
+      
+      <!-- MathJax CUSTOM DEFS -->
+      <div class='hidden'>
+        \(\def\independence{\perp\!\!\!\perp}\)
+        \(\def\dependence{\perp\!\!\!\!\!/\!\!\!\!\!\perp}\)
+      </div>
+      
+      <!-- BEGIN MAIN CONTENT -->
+      <div id="main-content" class="container">
+        <div class="row">
+          
+          <!-- BEGIN SCROLLSPY -->
+          <div class='col-md-2 hidden-sm hidden-xs'>
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+              <ul id='scrollspy' class="nav bs-sidenav">
+              </ul>
+            </div>
+          </div>
+          <!-- END SCROLLSPY -->
+          
+          
+          <!-- BEGIN PRESENTATION CONTENT -->
+          <div class='col-md-10 presentation-content' role='main'>
+            
+            <ol class="breadcrumb hidden-print">
+              <li><a href="../../../classes.html">Classes</a></li>
+              <li><a href="./cs-161.html">Spring14 CS161</a></li>
+              <li class="active">Week 8</li>
+            </ol>
+            
+            
+            <div id='multivariate' class='scrollspy-element' scrollspy-title='Multivariate Distributions'></div>
+            <h1>Multivariate Distributions</h1>
+            <div>
+              <p>In the previous lecture, we dealt only with two variables, even though one of them was not binary.</p>
+              <p>Let's take a look at a multi-variate distribution taking a (not large) step to three variables.</p>
+              <p>For this example, let's just assume we have 3 binary variables X, Y, and Z, with a joint probability table that looks like:</p>
+              <table class='table table-bordered table-striped'>
+                <thead>
+                  <tr>
+                    <th><p>X</p></th>
+                    <th><p>Y</p></th>
+                    <th><p>Z</p></th>
+                    <th><p>Pr(X, Y, Z)</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><p>0</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0.030</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>0</p></td>
+                    <td><p>0</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0.120</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>0</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0.105</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>0</p></td>
+                    <td><p>1</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0.245</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>1</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0.105</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>1</p></td>
+                    <td><p>0</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0.045</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>1</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0.280</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>1</p></td>
+                    <td><p>1</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0.070</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+              <p>Let's talk about a couple of observations we can make on multivariate distributions.</p>
+              <p>Suppose we didn't want the entire joint distribution, but wanted to look at the co-occurences of only some subset of variables.</p>
+              <p class='definition'>We can <strong>sum out (marginalize)</strong> a variable by &quot;collapsing&quot; the distribution on the remaining variables we're not summing out. Formally,
+                for variables of interest \(\alpha\) and variables we're summing out \(\beta\) with \(\alpha \cap \beta = \varnothing\)<br/>
+                $$P(\alpha) = \sum_{\beta_i \in \beta} P(\alpha, \beta_i)$$
+              </p>
+              <p class='definition'>The resulting distribution over variables \(\alpha\) that have not been summed out is called the <strong>joint marginal</strong> distribution over \(P(\alpha)\).</p>
+              <br/>
+              <p>So, when we marginalize, we get a new table, or distribution, whose rows are the sums of probability mass over the variables that were summed out.</p>
+              <p class='question' name='marg-0'>
+                Marginalize Z in the above distribution, leaving a joint marginal on X and Y. To do so, simply look for every row where X and Y *agree* and then sum over the possible values for Z.
+              </p>
+              <div class='answer white-bg' name='marg-0'>
+                <p>Let's look at that in action; take a look at the following pairs of rows, color-coded for your convenience:</p>
+                <table class='table table-bordered'>
+                  <thead>
+                    <tr>
+                      <th><p>X</p></th>
+                      <th><p>Y</p></th>
+                      <th><p>Z</p></th>
+                      <th><p>Pr(X, Y, Z)</p></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class='success'>
+                      <td><p>0</p></td>
+                      <td><p>0</p></td>
+                      <td><p>0</p></td>
+                      <td><p>0.030</p></td>
+                    </tr>
+                    <tr class='success'>
+                      <td><p>0</p></td>
+                      <td><p>0</p></td>
+                      <td><p>1</p></td>
+                      <td><p>0.120</p></td>
+                    </tr>
+                    <tr class='danger'>
+                      <td><p>0</p></td>
+                      <td><p>1</p></td>
+                      <td><p>0</p></td>
+                      <td><p>0.105</p></td>
+                    </tr>
+                    <tr class='danger'>
+                      <td><p>0</p></td>
+                      <td><p>1</p></td>
+                      <td><p>1</p></td>
+                      <td><p>0.245</p></td>
+                    </tr>
+                    <tr class='warning'>
+                      <td><p>1</p></td>
+                      <td><p>0</p></td>
+                      <td><p>0</p></td>
+                      <td><p>0.105</p></td>
+                    </tr>
+                    <tr class='warning'>
+                      <td><p>1</p></td>
+                      <td><p>0</p></td>
+                      <td><p>1</p></td>
+                      <td><p>0.045</p></td>
+                    </tr>
+                    <tr class='white-bg'>
+                      <td><p>1</p></td>
+                      <td><p>1</p></td>
+                      <td><p>0</p></td>
+                      <td><p>0.280</p></td>
+                    </tr>
+                    <tr class='white-bg'>
+                      <td><p>1</p></td>
+                      <td><p>1</p></td>
+                      <td><p>1</p></td>
+                      <td><p>0.070</p></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <br/>
+              <p>(the individual colors don't mean anything but observe the corresponding rows)</p>
+              <p>These corresponding rows are where X and Y agree (i.e., in both rows 1 and 4 Y has value y and X has value x)</p>
+              <p>So, to sum out Z, we simply collapse across the two rows! It's as though X were removed entirely from the equation, just leaving us with a distribution over X and Y.</p>
+              <br/>
+              <p>This amounts to the following joint marginal on X and Y with Z summed out, written:<br/>
+                $$\sum_z Pr(X, Y)$$
+              </p>
+              <table class='table table-bordered'>
+                <thead>
+                  <tr>
+                    <th><p>X</p></th>
+                    <th><p>Y</p></th>
+                    <th><p>\(\sum_z Pr(X, Y)\)</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class='success'>
+                    <td><p>0</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0.15</p></td>
+                  </tr>
+                  <tr class='warning'>
+                    <td><p>0</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0.35</p></td>
+                  </tr>
+                  <tr class='danger'>
+                    <td><p>1</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0.15</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>1</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0.35</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+              <p>(Aside: that table looks really rasta)</p>
+              <p>Any who, observe how we now have a joint distribution on Y and Z.</p>
+              
+              <br/>
+              <h3>Independence</h3>
+              <p>Let's turn our attention to independence relationships, remembering that our definition of independence was that:</p>
+              <div class='well'>
+                <p>If X is independent from Y, written</p>
+                <p>$$X \independence Y$$</p>
+                <p>...then:</p>
+                <p>$$Pr(X | Y) = Pr(X), \forall x, y$$</p>
+              </div>
+              <br/>
+              <p>So using our joint marginal over X and Y above, let's test them for independence.</p>
+              <p>Repeating our joint marginal from before:</p>
+              <table class='table table-bordered'>
+                <thead>
+                  <tr>
+                    <th><p>X</p></th>
+                    <th><p>Y</p></th>
+                    <th><p>\(\sum_z Pr(X, Y)\)</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><p>0</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0.15</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>0</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0.35</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>1</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0.15</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>1</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0.35</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              
+              <p class='question' name='inde-0'>Using the joint marginal above, determine whether or not \(X \independence Y\). Click for solution.</p>
+              <div class='answer' name='inde-0'>
+                <p>Using Bayes' Conditioning, we remember that:</p>
+                <p>$$Pr(X | Y) = \frac{Pr(X, Y)}{Pr(Y)}$$</p>
+                
+                <p>Using our marginal on X and Y, it is easy to see that:</p>
+                <p>
+                  \begin{eqnarray}
+                    Pr(X = 0, Y = 0) &=& 0.15\\
+                    Pr(X = 0, Y = 1) &=& 0.35\\
+                    Pr(X = 0) &=& Pr(X = 1)\\
+                              &=& 0.5
+                  \end{eqnarray}
+                </p>
+                <p>
+                  \begin{eqnarray}
+                    Pr(X = 0, Y = 0) &=& 0.15\\
+                    Pr(X = 1, Y = 0) &=& 0.15\\
+                    Pr(Y = 0) &=& 0.30\\
+                    Pr(Y = 1) &=& 0.70
+                  \end{eqnarray}
+                </p>
+                <p>Now, to compute the conditional:</p>
+                <p>
+                  \begin{eqnarray}
+                    Pr(X = 0 | Y = 0) &=& \frac{Pr(X = 0, Y = 0)}{Pr(Y = 0)}\\
+                                      &=& \frac{0.15}{0.30}\\
+                                      &=& 0.5\\
+                                      &=& Pr(X = 0)
+                  \end{eqnarray}
+                </p>
+                <p>We would also show this for the other conditional values of \(Pr(X | Y)\), but in short:</p>
+                <p>
+                  \begin{eqnarray}
+                  Pr(X = 0 | Y = 0) &=& Pr(X = 0 | Y = 1)\\
+                                    &=& Pr(X = 1 | Y = 0)\\
+                                    &=& Pr(X = 1 | Y = 1)\\
+                                    &=& Pr(X = 0)\\
+                                    &=& Pr(X = 1)\\
+                  \end{eqnarray}
+                </p>
+                <p>As such we conclude:<br/>$$X \independence Y$$</p>
+              </div>
+              <br/>
+              
+              <p>Neat! So this means that knowing something about X tells me nothing about the state of Y and vice versa...</p>
+              <p>E.g., knowing that it's Tuesday tells me nothing about my chances of winning the lottery.</p>
+              <br/>
+              <p>If we were so inclined, we could repeat the process of summing out X from the original joint distribution to get:</p>
+              <table class='table table-bordered'>
+                <thead>
+                  <tr>
+                    <th><p>Y</p></th>
+                    <th><p>Z</p></th>
+                    <th><p>\(\sum_x Pr(Y, Z)\)</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><p>0</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0.135</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>0</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0.165</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>1</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0.385</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>1</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0.315</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+              <p>Performing the same test for independence, we would find that:</p>
+              <div class='well'>
+                <p>
+                  \begin{eqnarray}
+                    Pr(Y = 0 | Z = 0) &=& \frac{Pr(Y = 0, Z = 0)}{Pr(Z = 0)}\\
+                                      &=& \frac{0.135}{0.52}\\
+                                      &\approx& 0.260\\
+                                      &\ne& Pr(Y = 0)\\
+                                      
+                  \therefore Y \dependence Z
+                  \end{eqnarray}
+                </p>
+              </div>
+              
+              <br/>
+              <h3>Conditional Independence</h3>
+              <p>A topic we haven't talked about yet is a peculiar phenomenon known as conditional independence.</p>
+              <p>As it turns out, it's possible for two variables X and Y to be independent ONLY after we've observed (conditioned upon) some other variable(s) Z.</p>
+              <p>To compare:</p>
+              <table class='table table-bordered table-striped'>
+                <thead>
+                  <tr>
+                    <th><p>Relationship</p></th>
+                    <th><p>Description</p></th>
+                    <th><p>Written</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th><p>Independence</p></th>
+                    <td><p>If we have knowledge that X occurred, and that tells us nothing about whether or not Y occured, then X is independent of Y and vice versa.</p></td>
+                    <td><p>$$X \independence Y$$</p></td>
+                  </tr>
+                  <tr>
+                    <th><p>Conditional Independence</p></th>
+                    <td><p>X and Y are conditionally independent if and only if, given information about Z, having knowledge about X tells us nothing about whether or not Y occured; i.e., X and Y may
+                      not be independent until *after* conditioning on a third variable / set of variables Z.</p></td>
+                    <td class='col-md-2'><p>$$X \independence Y | Z$$</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+              <p>So you might be curious... what's an intuitive interpretation of conditional independence?</p>
+              <p>Here are some good good scenarios that explain it, using dice, because every statistician loves dice for some reason:</p>
+              <table class='table table-bordered table-striped'>
+                <thead>
+                  <tr>
+                    <th><p>Concept</p></th>
+                    <th><p>Description</p></th>
+                    <th class='col-md-3'><p>Written</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><p>Independent</p></td>
+                    <td><p>You roll two dice: A and B. Knowing the outcome of A tells you nothing about the outcome of B.</p></td>
+                    <td><p>$$A \independence B$$</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>Independent, but Conditionally Dependent</p></td>
+                    <td><p>You roll two dice: A and B. If I tell you that the sum (S) of the two dice's totals is even, then knowing the value of either A or B actually *does* tell me something about the other,
+                      even though A and B are independent on their own.</p></td>
+                    <td><p>$$A \dependence B | S$$</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>Independent, and Conditionally Independent</p></td>
+                    <td><p>You roll two dice: A and B. If I tell you that the result (R) of A is not 3 and the result of B is not 2, I learn new information about each, but nothing that connects the
+                      two outcomes. So, the dice rolls are independent AND conditionally independent based on the new information.</p></td>
+                    <td><p>$$A \independence B$$<br/>$$A \independence B | R$$</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>Dependent, but Conditionally Independent</p></td>
+                    <td><p>This one's a bit trickier and we'll need to develop a new toolkit to think about it, so let's hold off on it for now...</p></td>
+                    <td><p>$$A \dependence B$$<br/>$$A \independence B | C$$</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+              <p class='definition'>Two other, equivalent, ways to think about conditional independence are that:<br/>
+                \begin{eqnarray}
+                  Pr(X | Y, Z) = Pr(X | Z) &\Leftrightarrow& X \independence Y | Z\\
+                  Pr(X, Y | Z) = Pr(X | Z) Pr(Y | Z) &\Leftrightarrow& X \independence Y | Z
+                \end{eqnarray}
+              </p>
+              <br/>
+              <p>So, let's take a look at a probability distribution that might elicit conditional independence relationships.</p>
+              <p class='example'>Consider the following example relating three variables in a (fictitious) study on health effects of smoking.</p>
+              <ul class='indent-1'>
+                <li><p><strong>Smoking:</strong> whether or not an individual smokes</p></li>
+                <li><p><strong>Cancer:</strong> whether or not an individual has cancer</p></li>
+                <li><p><strong>Asthma:</strong> whether or not an individual has asthma</p></li>
+              </ul>
+              <br/>
+              <p>Let's look at a made-up distribution:</p>
+              <table class='table table-bordered table-striped'>
+                <thead>
+                  <tr>
+                    <th><p>Smoking</p></th>
+                    <th><p>Cancer</p></th>
+                    <th><p>Asthma</p></th>
+                    <th><p>Pr(Smoking, Cancer, Asthma)</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><p>0</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0.576</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>0</p></td>
+                    <td><p>0</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0.144</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>0</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0.008</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>0</p></td>
+                    <td><p>1</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0.072</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>1</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0.064</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>1</p></td>
+                    <td><p>0</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0.016</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>1</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0.012</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>1</p></td>
+                    <td><p>1</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0.108</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+              <p>We can see that the instances of smoking are usually indicative of both cancer and asthma.</p>
+              <p>Now, we make the following observations:</p>
+              <ol class='indent-1'>
+                <li><p>We hypothesize that smoking causes cancer and asthma.</p></li>
+                <li><p>If this is the case, then knowing that someone smokes immediately tells us that they are likely to develop cancer and asthma.</p></li>
+                <li><p>Because of (1) and (2) above, we observe that IF we know someone smokes, then knowing that they have asthma tells us nothing more about them having cancer.</p></li>
+              </ol>
+              <br/>
+              <p class='question' name='condind-q0'>What conditional independence relationship are the above observations making?</p>
+              <p class='answer' name='condind-q0'>That cancer and asthma are independent once we know whether or not someone smokes!<br/>$$Asthma \independence Cancer | Smoking$$</p>
+              <br/>
+              <p class='question' name='condind-q1'>Rationalize: why is this a conditional independence relationship and not an absolute independence relationship?</p>
+              <p class='answer' name='condind-q1'>Because *without* knowing whether or not someone smokes, we *do* know more about the probability of cancer given that someone has asthma, and vice versa;
+                we say that <strong>information flows</strong> from one variable to the other without the conditioning on variable Smoking.</p>
+              <br/>
+              <p class='question' name='condind-q2'>Express this conditional independence in probability notation involving all three variables;
+                how will we go about illustrating this independence relationship from the distribution?</p>
+              <p class='answer' name='condind-q2'>Either of the two probability statements will suffice to illustrate this conditional independence relation:
+                \begin{eqnarray}
+                  Pr(Asthma | Cancer, Smoking) &=& Pr(Asthma | Smoking)\\
+                  Pr(Cancer | Asthma, Smoking) &=& Pr(Cancer | Smoking)
+                \end{eqnarray}
+              </p>
+              <br/>
+              <p>Alright, now that we have our query in mind, let's observe the following:</p>
+              <div class='well'>
+                <p>Goal:</p>
+                <p>$$Pr(Asthma | Cancer, Smoking) = Pr(Asthma | Smoking)$$</p>
+                
+                <p>We have neither of those tables, but we can compute them! Let's use Bayes' Conditioning and marginalization!</p>
+                <p>
+                  $$Pr(Asthma | Cancer, Smoking) = \frac{Pr(Asthma, Cancer, Smoking)}{Pr(Cancer, Smoking)}$$
+                </p>
+                <p>
+                  $$Pr(Asthma | Smoking) = \frac{Pr(Asthma, Smoking)}{Pr(Smoking)}$$
+                </p>
+              </div>
+              <br/>
+              <p>Marginalizing from the joint distribution, we can get our two joint-marginals on \(Pr(Cancer, Smoking)\) and \(Pr(Asthma, Smoking)\):</p>
+              <div class='row'>
+                <div class='col-md-6'>
+                  <table class='table table-bordered table-striped'>
+                    <thead>
+                      <tr>
+                        <th><p>Smoking</p></th>
+                        <th><p>Cancer</p></th>
+                        <th><p>Pr(Smoking, Cancer)</p></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><p>0</p></td>
+                        <td><p>0</p></td>
+                        <td><p>0.64</p></td>
+                      </tr>
+                      <tr>
+                        <td><p>0</p></td>
+                        <td><p>1</p></td>
+                        <td><p>0.16</p></td>
+                      </tr>
+                      <tr>
+                        <td><p>1</p></td>
+                        <td><p>0</p></td>
+                        <td><p>0.02</p></td>
+                      </tr>
+                      <tr>
+                        <td><p>1</p></td>
+                        <td><p>1</p></td>
+                        <td><p>0.18</p></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class='col-md-6'>
+                  <table class='table table-bordered table-striped'>
+                    <thead>
+                      <tr>
+                        <th><p>Asthma</p></th>
+                        <th><p>Smoking</p></th>
+                        <th><p>Pr(Asthma, Smoking)</p></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><p>0</p></td>
+                        <td><p>0</p></td>
+                        <td><p>0.72</p></td>
+                      </tr>
+                      <tr>
+                        <td><p>0</p></td>
+                        <td><p>1</p></td>
+                        <td><p>0.08</p></td>
+                      </tr>
+                      <tr>
+                        <td><p>1</p></td>
+                        <td><p>0</p></td>
+                        <td><p>0.08</p></td>
+                      </tr>
+                      <tr>
+                        <td><p>1</p></td>
+                        <td><p>1</p></td>
+                        <td><p>0.12</p></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <br/>
+              <p>As a final ingredient for our proof of conditional independence, I'll save you the meager effort and tell you that:<br/>$$Pr(Smoking = 1) = 0.2$$</p>
+              <p>Now, we just need to compute the two conditional distributions; we'll start with the Pr(Asthma | Cancer, Smoking) from the joint:<br/>
+                $$Pr(Asthma | Cancer, Smoking) = \frac{Pr(Asthma, Cancer, Smoking)}{Pr(Cancer, Smoking)}$$
+              </p>
+              <table class='table table-bordered table-striped'>
+                <thead>
+                  <tr>
+                    <th><p>Asthma</p></th>
+                    <th><p>Cancer</p></th>
+                    <th><p>Smoking</p></th>
+                    <th><p>Pr(Asthma, Cancer, Smoking)</p></th>
+                    <th><p>Pr(Asthma | Cancer, Smoking)</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><p>0</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0.576</p></td>
+                    <td><p>0.9</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>0</p></td>
+                    <td><p>0</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0.144</p></td>
+                    <td><p>0.9</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>0</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0.008</p></td>
+                    <td><p>0.4</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>0</p></td>
+                    <td><p>1</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0.072</p></td>
+                    <td><p>0.4</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>1</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0.064</p></td>
+                    <td><p>0.1</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>1</p></td>
+                    <td><p>0</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0.016</p></td>
+                    <td><p>0.1</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>1</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0.012</p></td>
+                    <td><p>0.6</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>1</p></td>
+                    <td><p>1</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0.108</p></td>
+                    <td><p>0.6</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+              <p>Interesting, looks like we have some flavor of uniformity going on here... hmmm... Let's compute Pr(Asthma | Smoking):<br/>
+                $$Pr(Asthma | Smoking) = \frac{Pr(Asthma, Smoking)}{Pr(Smoking)}$$
+              </p>
+              <table class='table table-bordered table-striped'>
+                <thead>
+                  <tr>
+                    <th><p>Smoking</p></th>
+                    <th><p>Asthma</p></th>
+                    <th><p>Pr(Asthma | Smoking)</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><p>0</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0.9</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>0</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0.1</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>1</p></td>
+                    <td><p>0</p></td>
+                    <td><p>0.4</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>1</p></td>
+                    <td><p>1</p></td>
+                    <td><p>0.6</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+              <p>Aha! We see that the two are in fact equivalent, regardless of what we know about whether or not a person has cancer! For brevity's sake, consider the positive variables below to be = 1, and 
+                the negated ones to be = 0:</p>
+              <div class='well'>
+                <p>
+                  \begin{eqnarray}
+                    Pr(&not;Asthma | &not;Cancer, &not;Smoking) &=& Pr(&not;Asthma | Cancer, &not;Smoking)\\
+                                                                &=& Pr(&not;Asthma | &not;Smoking)\\
+                                                                &=& 0.9
+                  \end{eqnarray}
+                  
+                  \begin{eqnarray}
+                    Pr(&not;Asthma | &not;Cancer, Smoking) &=& Pr(&not;Asthma | Cancer, Smoking)\\
+                                                           &=& Pr(&not;Asthma | Smoking)\\
+                                                           &=& 0.4
+                  \end{eqnarray}
+                  
+                  \begin{eqnarray}
+                    Pr(Asthma | &not;Cancer, &not;Smoking) &=& Pr(Asthma | Cancer, &not;Smoking)\\
+                                                           &=& Pr(Asthma | &not;Smoking)\\
+                                                           &=& 0.1
+                  \end{eqnarray}
+                  
+                  \begin{eqnarray}
+                    Pr(Asthma | &not;Cancer, Smoking) &=& Pr(Asthma | Cancer, Smoking)\\
+                                                      &=& Pr(Asthma | Smoking)\\
+                                                      &=& 0.6
+                  \end{eqnarray}
+                  
+                  $$\therefore Pr(Asthma | Cancer, Smoking) = Pr(Asthma | Smoking)$$
+                  $$\therefore Asthma \independence Cancer | Smoking$$
+                </p>
+              </div>
+              <br/>
+              <p>Whew! That was a lot of work! But we'll see in a moment that this is all worth it...</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='bayesnet' class='scrollspy-element' scrollspy-title='Bayesian Networks'></div>
+            <h1>Bayesian Networks</h1>
+            <div>
+              <p>Finally, we get to Bayesian Networks! I know you paid for your whole seat this discussion but you're only going to need the edge!</p>
+              <p>To commemorate the occasion, I've created an image deserving of the day's grandeur that I've wanted to make for some time now.</p>
+              <br/>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayeswatch.png' />
+              </div>
+              <br/>
+              <p>That, of course, is a picture of Father Thomas Bayes, the one responsible for the eponymous theorem, photoshopped onto David Hasselhoff's body from the hit drama series Baywatch from 1989.</p>
+              <p>I haven't had any means of working this joke into conversation, and the previous part of this lecture's been dull, so here we are...</p>
+              <br/>
+              <p>You awake again? OK...</p>
+              <p>In the last section we derived that <code class='prettyprint'>Asthma &perp; Cancer | Smoking</code> from our dentist example.</p>
+              <p>Let's look at an interesting consequence:</p>
+              <p class='question' name='bayesnet-q0'>Give the chain-rule factorization of the joint probability table: <code class='prettyprint'>Pr(Asthma, Cancer, Smoking)</code></p>
+              <p class='answer' name='bayesnet-q0'>Pr(Asthma, Cancer, Smoking) = Pr(Asthma | Cancer, Smoking) * Pr(Cancer | Smoking) * Pr(Smoking)</p>
+              <br/>
+              <p>OK, and based on our conditional independence relation found from the previous section, can we reduce this to anything simpler?</p>
+              <br/>
+<pre class='prettyprint'>
+  ; Yes! Since:
+  Asthma &perp; Cancer | Smoking
+  
+  ; Then:
+    Pr(Asthma | Cancer, Smoking)
+  = Pr(Asthma | Smoking)
+  
+  ; And so our factorization:
+    Pr(Asthma, Cancer, Smoking)
+  = Pr(Asthma | Cancer, Smoking) * Pr(Cancer | Smoking) * Pr(Smoking)
+  = Pr(Asthma | Smoking) * Pr(Cancer | Smoking) * Pr(Smoking)
+</pre>
+              <br/>
+              <p>Hmm, interesting... so we took a big joint probability table (Pr(Asthma, Cancer, Smoking)) and broke it down into 3 smaller tables!</p>
+              <p>There's something else interesting about our factorization...</p>
+              <p>Remembering that we presumed that both Asthmas and Canceres were indicators of cavities:</p>
+              <p class='question' name='bayesnet-q1'>Thinking about cause-effect relationships, what's interesting about the tables: Pr(Asthma | Smoking) and Pr(Cancer | Smoking)</p>
+              <p class='answer' name='bayesnet-q1'>They are tables structured according to a possible effect *given* that effect's possible causes!</p>
+              <br/>
+              <p>Alright, we're almost ready to hit the punchline... one final example.</p>
+              <p class='example'>Using the following distribution properties, compare the full joint probability distribution's size (over all 5 variables) to its chain-rule factorization:</p>
+<pre class='prettyprint'>
+  ; Say we have 5 binary variables:
+  A, B, C, D, E
+  
+  ; They elicit a joint probability distrbution:
+  Pr(A, B, C, D, E)
+  
+  ; [?] How many rows are in this table?
+  
+  ; Now, say we had independence relationships
+  ; that allowed us to factor that joint distribution
+  ; into the following:
+    Pr(A, B, C, D, E)
+  = Pr(A) * Pr(B) * Pr(C) * Pr(D) * Pr(E)
+  
+  ; [?] How many rows are in each of these smaller
+  ; tables?
+  
+  ; [?] Do we witness a difference between the number
+  ; of rows in the full joint vs. the factorization?
+</pre>
+              <br/>
+              <p>Yes! Big savings, in fact!</p>
+              <p>There are 32 rows in the full joint, but only 10 rows in the individual, factored tables!</p>
+              <p class='definition'><strong>Bayesian Networks</strong> attempt to exploit independence relationships to reduce massive joint probability distributions to smaller tables, all while
+                capturing the intuitive notions of cause and effect to structure the independences.</p>
+              <br/>
+              <p>In the words of the great Judea Pearl, who was instrumental in their development, Bayesian networks are, &quot;A parsimonious representation&quot; of the joint distribution.</p>
+              <p>They're just really intuitive data structures!</p>
+              <p>Here's a simple Bayesian network representing our dentist's problem:</p>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-0.PNG' />
+              </div>
+              <br/>
+              <p>There's a lot to note about Bayesian networks:</p>
+              <p class='definition'>Bayesian networks are a class of graphs called <strong>directed, acyclic graphs (DAGs)</strong>, meaning that the edges between nodes are directed and they form 
+                no cycles (derp).</p>
+              <p class='definition'>The network's <strong>nodes</strong> are the variables in our distributions.</p>
+              <p class='definition'>The network's <strong>edges</strong> represent <strong>dependence</strong> relationships, i.e., two connected nodes are dependent upon one another.</p>
+              <p class='definition'>Edges illustrate only a dependence; effects can have multiple causes and causes can have multiple effects, any one of which illustrates an influence that may be negative 
+                OR positive (correlationally).</p>
+              <p class='definition'>The <strong>edge directions</strong> are merely tools to represent the independence relationships, but are structured with potential causes pointing to potential effects.</p>
+              <br/>
+              <p>Why do we say &quot;potential causes&quot; and &quot;potential effects?&quot;</p>
+              <p>Because our data is correlational!</p>
+              <a href='http://gizmodo.com/5977989/internet-explorer-vs-murder-rate-will-be-your-favorite-chart-today' target='_blank'>
+                <div class='fit-pres text-center'>
+                  <img src='../../../assets/images/spring-2014/cs-161/week-8/correlation.jpg' />
+                </div>
+              </a>
+              <br/>
+              <p>We would need stronger tools to claim confidence in a true causal relation, but for the purposes of Bayesian networks, it is convenient and intuitive to draw arrows from causes to effects.</p>
+              <p>The reason being the same as in our dentist example: if we know that someone has a Smoking (the cause), then knowing that they also have a Asthma doesn't tell us more about their chance
+                of having a Cancer.</p>
+              <p>That is, as soon as we know the state of the causes, we don't get any new information about the effects!</p>
+              <p>Thus, we glean some notion of the <strong>semantics / meaning</strong> implicit within Bayesian networks:</p>
+              <div class='definition'>
+<pre class='prettyprint'>
+  ; The joint distribution:
+    Pr(X1, X2, ..., Xn)
+  
+  ; ...can be factored using independence
+  ; relationships to:
+  = Pr(X1 | Parents(X1)) * Pr(X2 | Parents(X2)) * ...
+  
+  ; ...which semantically represents the putative
+  ; relationship between causes and effects:
+  = Pr(Effect1 | Causes(Effect1)) * (Effect2 | Causes(Effect2)) * ...
+  
+  = &Pi;_X&in;Vars Pr(X | Parents(X))
+</pre>
+              </div>
+              <br/>
+              <p class='definition'>This factorization allows us to express the large joint distribution in terms of <strong>conditional probability tables (CPTs)</strong> of an effect given its parents.</p>
+              <br/>
+              <p>For our dentist example, the CPTs would look like:</p>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-1.PNG' />
+              </div>
+              <br/>
+              <p class='question' name='bayesnet-q2'>Using the above CPTs, compute: Pr(Smoking = 0, Asthma = 1, Cancer = 0)</p>
+              <div class='answer' name='bayesnet-q2'>
+<pre class='prettyprint'>
+    Pr(Smoking = 0, Asthma = 1, Cancer = 0)
+  = Pr(Asthma = 1 | Smoking = 0) * Pr(Cancer = 0 | Smoking = 0) * Pr(Smoking = 0)
+  = 0.1 * 0.8 * 0.8
+  = 0.064
+</pre>
+              </div>
+              <br/>
+              <p>Since our CPTs describe a world in which the effects can be screened off from other portions of the network by knowing about their causes, we say that Bayesian networks make the
+                Markovian assumption:</p>
+              <p class='definition'>The <strong>Markovian assumption</strong> states that every node is independent of its non-descendents given its parents.</p>
+              <br/>
+              <p>(non-descendents of node X are defined as any node that you could not reach taking a directed path starting at X)</p>
+              <p>You should repeat that a couple times... make it your mantra.</p>
+              <p class='example'>What are the Markovian assumptions implicit in the following Bayesian network?</p>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-2.PNG' />
+              </div>
+              <p class='question' name='bayesnet-q3'>Click for answer.</p>
+              <div class='answer' name='bayesnet-q3'>
+<pre class='prettyprint'>
+  Earthquake &perp; Burglary
+  
+  Radio &perp; Alarm | Earthquake
+  Radio &perp; Call | Earthquake
+  Radio &perp; Burglary | Earthquake
+  
+  Burglary &perp; Radio
+  
+  Alarm &perp; Radio | Earthquake, Burglary
+  
+  Call &perp; Radio | Alarm
+  Call &perp; Earthquake | Alarm
+  Call &perp; Burglary | Alarm
+</pre>
+              </div>
+              <br/>
+              <p>We notice a couple things about our Markovian assumptions:</p>
+              <ol class='indent-1'>
+                <li><p>There are some redundancies (e.g., Burglary &perp; Radio, but we also have that Radio &perp; Burglary | Earthquake)</p></li>
+                <li><p>There are some independence relations that they miss...</p></li>
+              </ol>
+              <br/>
+              <p>Let's look at a formalization of independences implicit within our Bayesian Network next.</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='dsep' class='scrollspy-element' scrollspy-title='D-Separation'></div>
+            <h1>D-Separation</h1>
+            <div>
+              <p>Let's start off by considering 3 different simple Bayesian networks and observe how we can generalize their characteristics.</p>
+              <p>We'll examine Bayesian networks as a plumbing network where:</p>
+              <ol class='indent-1'>
+                <li><p>Nodes are &quot;valves&quot; that allow water (information) to flow through</p></li>
+                <li><p>Edges are &quot;pipes&quot; that connect the valves</p></li>
+                <li><p>Dependence is the process of determining whether water (information) could flow from some set of valves (variables) X to some other set of valves Y, accounting for whether or not
+                  any valves along any pipe-path are closed or not (our evidence, some set of variables Z)</p></li>
+              </ol>
+              <br/>
+              <p>We'll start with a familar problem:</p>
+              <p class='definition'>A valve Z is <strong>divergent / a fork</strong> along some path if it is a common cause of two effects, X and Y.<br/>
+                <code class='prettyprint'>X &larr; Z &rarr; Y</code></p>
+              <br/>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-0.PNG' />
+              </div>
+              <br/>
+              <p>Divergent nodes are sometimes referred to as common causes. Here, we see that if we know whether or not someone has a Smoking, then information does NOT flow from Asthma to Cancer.</p>
+              <p>So, the rule for divergent valves along some path is that when we have a triplet X &larr; Z &rarr; Y, given Z blocks information flow from X to Y.</p>
+              <br/>
+              <p class='definition'>A valve Z is <strong>sequential / a chain</strong> along some path if some other variable X is its cause and Z has some effect Y.<br/>
+                <code class='prettyprint'>X &rarr; Z &rarr; Y</code> OR <code class='prettyprint'>Y &larr; Z &larr; X</code></p>
+              <br/>
+              <p>Here's an example path of a chain:</p>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-3.PNG' />
+              </div>
+              <br/>
+              <p>Here, knowing that someone has tar in their lungs means that we no longer get information flowing from any knowledge that the person smoked to whether they'll have lung cancer.</p>
+              <p>So, the rule for chain valves along some path is that for triple X &rarr; Z &rarr; Y, given Z blocks information flow from X to Y.</p>
+              <br/>
+              <p class='definition'>A valve Z is <strong>convergent / a sink</strong> along some path if it is the common effect of two causes, X and Y.<br/>
+                <code class='prettyprint'>X &rarr; Z &larr; Y</code>
+              </p>
+              <br/>
+              <p>Convergent nodes are a special beast, so let's look at the following scenario:</p>
+              <blockquote>
+                Consider the scenario where a bell rings if and only if the outcome of two coin flips (from two separate coins) are identical (i.e., both heads or both tails).
+              </blockquote>
+              <br/>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-4.PNG' />
+              </div>
+              <br/>
+              <p class='question' name='bayesnet-q4'>If I know whether or not the bell rings, does information flow from coinflip 1 to coinflip 2?</p>
+              <p class='answer' name='bayesnet-q4'>Yes! If I know the bell rang, then knowing that coinflip 1 came up heads tells me exactly that coinflip 2 must have been heads!</p>
+              <br/>
+              <p class='question' name='bayesnet-q5'>If I DO NOT know whether or not the bell rang, does information flow from coinflip 1 to coinflip 2?</p>
+              <p class='answer' name='bayesnet-q4'>No! Just by knowing that coinflip 1 came up heads tells me nothing about coinflip 2.</p>
+              <br/>
+              <p>Now consider the following scenario:</p>
+              <blockquote>
+                A bell rings if and only if the outcome of two coin flips (from two separate coins) are identical (i.e., both heads or both tails). Additionally, if the bell rings, our elderly butler,
+                Jeeves, has an 80% chance of bringing tea to our room.
+              </blockquote>
+              <br/>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-5.PNG' />
+              </div>
+              <br/>
+              <p class='question' name='bayesnet-q5'>If I know whether or not Jeeves brings tea, does information flow from coinflip 1 to coinflip 2?</p>
+              <p class='answer' name='bayesnet-q5'>Yes! If I know that Jeeves brought tea, then I know that the bell *probably* rang! As such, I gain information about coinflip 2 based on whatever coinflip 1 was.</p>
+              <br/>
+              <p class='question' name='bayesnet-q6'>If I DO NOT know whether or not the bell rang AND I DO NOT know whether Jeeves brought tea, does information flow from coinflip 1 to coinflip 2?</p>
+              <p class='answer' name='bayesnet-q6'>No!</p>
+              <br/>
+              <p>So, the rule for convergent valves is the following: for common effect Z in configuration: X &rarr; Z &larr; Y, then Z is blocked if neither it NOR any of its descendants are given!</p>
+              
+              <br/>
+              <h3>d-Separation</h3>
+              <p>Now, we can think about these three cases of valves as being elements along a path in a Bayesian network.</p>
+              <p class='definition'><strong>d-separation</strong> (directional separation) allows us to determine all independence relations implicit from the graph just by looking at its structure.</p>
+              <br/>
+              <p>The rules of d-separation are as follows:</p>
+<pre class='prettyprint'>
+  ; To determine if some set of nodes X is
+  ; d-separated from some set of nodes Y by
+  ; some (possibly empty) set of nodes Z:
+  
+  trace ALL undirected paths from each X to each Y
+      for each valve V on the current path
+          if V is a fork and given (i.e., V&in;Z)
+              then this path is blocked
+          if V is a chain and given
+              then this path is blocked
+          if V is a sink and neither it NOR its
+            descendents are given
+              then this path is blocked
+      
+  if ALL paths blocked from each X to each Y given Z
+      then X is d-separated from Y given Z
+  else there was an open path
+      then X is NOT d-separated from Y given Z
+</pre>
+              <br/>
+              <p>Here's that algorithm at-a-glance:</p>
+              <table class='table table-bordered table-striped'>
+                <thead>
+                  <tr>
+                    <th><p>Valve Type</p></th>
+                    <th><p>Example (Z is the valve)</p></th>
+                    <th><p>Rule for being blocked</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th><p>Fork</p></th>
+                    <td><p>X &larr; Z &rarr; Y</p></td>
+                    <td><p>Path is blocked if Z is <strong>given</strong></p></td>
+                  </tr>
+                  <tr>
+                    <th><p>Sequence</p></th>
+                    <td><p>X &rarr; Z &rarr; Y</p></td>
+                    <td><p>Path is blocked if Z is <strong>given</strong></p></td>
+                  </tr>
+                  <tr>
+                    <th><p>Collider</p></th>
+                    <td><p>X &rarr; Z &larr; Y</p></td>
+                    <td><p>Path is blocked if <strong>NEITHER Z NOR ANY OF ITS DESCENDANTS</strong> are given</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+              <p>It might look complicated, but the fact that it's a strictly graphical criterion for independence makes it easy to trace.</p>
+              <p class='definition'>We use the following notation to establish d-separation relationships: 
+                <code class='prettyprint'>d-sep(X, Z, Y) &equiv; X &perp; Y | Z</code></p>
+              <br/>
+              <p>Let's do a bunch of examples:</p>
+              <br/>
+              <p class='example'>Use the following Bayesian network to determine if each variable set X is separated from Y given Z. If it is not, show the open path.</p>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-6.PNG' />
+              </div>
+              <br/>
+              <p class='question' name='bayesnet-q7'>Is <code class='prettyprint'>d-sep( {V}, {}, {T} )</code></p>
+              <p class='answer' name='bayesnet-q7'>No! They're directly connected ya dingus! The open path is simply: V &rarr; T</p>
+              <br/>
+              <p class='question' name='bayesnet-q8'>Is <code class='prettyprint'>d-sep( {V}, {T}, {O} )</code></p>
+              <p class='answer' name='bayesnet-q8'>Yes! The only path between V and O is: V &rarr; T &rarr; O, in which T is a chain that is given, so that path is blocked.</p>
+              <br/>
+              <p class='question' name='bayesnet-q9'>Is <code class='prettyprint'>d-sep( {T}, {O}, {S} )</code></p>
+              <p class='answer' name='bayesnet-q9'>No! There are two paths from T to S: one that goes through O to D (and is blocked), but the other which goes through O and up to C (which is open because
+                O is a sink and is given). So, the open path is: T &rarr; O &larr; C &larr; S</p>
+              <br/>
+              <p class='question' name='bayesnet-q10'>Is <code class='prettyprint'>d-sep( {T}, {D}, {S} )</code></p>
+              <p class='answer' name='bayesnet-q10'>No! In fact, now *both* paths from T to S are open. They are: <br/>T &rarr; O &larr; C &larr; S and additionally,<br/>T &rarr; O &rarr; D &larr; B &larr; S</p>
+              <br/>
+              <p class='question' name='bayesnet-q11'>Is <code class='prettyprint'>d-sep( {T}, {}, {S} )</code></p>
+              <p class='answer' name='bayesnet-q11'>Yes! Now all paths are blocked</p>
+              <br/>
+              <p class='question' name='bayesnet-q12'>Is <code class='prettyprint'>d-sep( {T, X}, {B}, {S} )</code></p>
+              <p class='answer' name='bayesnet-q12'>No! A path is open from: X &larr; O &larr; C &larr; S</p>
+              <br/>
+              <p>And now, one final, conceptual question:</p>
+              <p class='question' name='bayesnet-q13'>Are the independence relationships given by the Markovian assumptions implied by d-separation? Is the reverse true?</p>
+              <p class='answer' name='bayesnet-q13'>The Markovian independence relationships are implied by d-separation.</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='inference' class='scrollspy-element' scrollspy-title='Inference'></div>
+            <h1>Inference</h1>
+            <div>
+              <p>So now that we have our Bayesian networks defined and we know what independence relationships they claim... what do we do with them?</p>
+              <p>Well, we can ask them questions of course!</p>
+              <p>For our networks, those questions will be of the form: &quot;What's the probability of witnessing events Q given that I've seen evidence e?&quot; (where Q is a set of variables and e is an
+                instantiation of evidence)</p>
+              <br/>
+              <p>This problem would be pretty easy if we had our joint distribution... but we don't with Bayesian networks! We just have CPTs.</p>
+              <p>Furthermore, we want to avoid reconstructing the joint because it might be massive!</p>
+              <p class='definition'><strong>Variable elimination</strong> is an inference strategy designed to use only our CPTs to pose queries on our network.</p>
+              <p class='debug'>WARNING: The topic of Bayesian network inference is massive (there's a whole class on it, 262a, which I genuinely suggest taking!) and so this section is very hand-wavy.</p>
+              <br/>
+              <p>The idea of variable elimination is that, with some query and evidence variables, we want to find Pr(Q | e).</p>
+              <p>For example, we might be interested in Pr(Cancer | Smoking = true)</p>
+              <p>Above, Q = {Cancer} and e = {Smoking = true}</p>
+              <p>Let's use this as our example! (example credit to Dr. Darwiche, and my notebook for surviving this long to be useful)</p>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-7.PNG' />
+              </div>
+              <br/>
+              <p><strong>Step One:</strong> Zero out CPT rows that are inconsistent with the evidence (these inconsistent rows are often just omitted entirely)</p>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-8.PNG' />
+              </div>
+              <p><strong>Step Two:</strong> Choose an &quot;elimination order&quot;</p>
+              <p>Our goal is to get ONE CPT at the end that only mentions variables in Q; we do this by successively multiplying table values and summing out irrelevant variables.</p>
+              <p>The order in which you do this matters greatly for computational complexity, but that discussion is omitted herein; for now, let's just choose an order:</p>
+<pre class='prettyprint'>
+  ; &Pi; is used to designate an ordering
+  &Pi; = {A, B, C}
+  
+  ; Meaning A first, then B, etc.
+</pre>
+              <br/>
+              <p>Since A is up first, this means we multiply all the CPTs mentioning A and get back a <strong>factor</strong>, which is simply some function mapping variables to some positive numbers.</p>
+              <p>Factors are NOT distributions, but simply the intermediary computational elements of variable elimination.</p>
+              <p>So, the two CPTs mentioning A in our example are: Pr(A) and Pr(B | A) so:</p>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-9.PNG' />
+              </div>
+              <br/>
+              <p>Since we've now dealt with all of the tables mentioning A, we can <strong>eliminate</strong> it by summing out, giving us:</p>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-10.PNG' />
+              </div>
+              <br/>
+              <p>Our next variable to eliminate is B, which is mentioned in both our current factor (&Sigma;_A Pr(B | A) * Pr(A)) and Pr(C | B), so do the same thing there!</p>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-11.PNG' />
+              </div>
+              <br/>
+              <p>Almost there! But now B is irrelevant, so we can sum it out to get:</p>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-12.PNG' />
+              </div>
+              <br/>
+              <p>So close! But let's look at what we have so far:</p>
+<pre class='prettyprint'>
+  ; The term currently in our table:
+  &Sigma;_B Pr(C | B) * &Sigma;_A Pr(B | A) * Pr(A)
+  
+  ; ...is really just the joint with B and A summed out!
+  ; (after accounting for evidence A = true, of course)
+  
+  = &Sigma;_B &Sigma;_A Pr(C | B) * Pr(B | A) * Pr(A)
+  = &Sigma;_B &Sigma;_A Pr(A, B, C)
+</pre>
+              <br/>
+              <p>So, since our final factor has only C remaining, and accounted for A = true, the values it represents are a marginal on C and A = true!</p>
+<pre class='prettyprint'>
+  ; So, from our final factor:
+  Pr(C = true, A = true) = 0.192
+  Pr(C = false, A = true) = 0.408
+  
+  &there4; Pr(A = true) = 0.600
+  
+  ; Now we have everything we need to compute
+  ; our query:
+  ; Pr(Q | e) = Pr(C | A = true)
+  
+  ; ...using Bayes conditioning:
+  Pr(C = true | A = true) = Pr(C = true, A = true) / Pr(A = true)
+                          = 0.192 / 0.600
+                          = 0.32
+                          
+  Pr(C = false | A = true) = Pr(C = false, A = true) / Pr(A = true)
+                           = 0.408 / 0.600
+                           = 0.68
+</pre>
+              <br/>
+              <p>And that's that!</p>
+              <p>Like I say, there's a whole class on Bayesian network inference, so this is but a small example and one strategy that can be used for such.</p>
+              <p>Thus concludes our brief tour of Bayesian networks... hope you enjoyed the ride!</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='enumeration' class='scrollspy-element' scrollspy-title='Enumeration Inference'></div>
+            <h1>Enumeration Inference</h1>
+            <div>
+              <p>Another approach to inference is given by the text under the Enumeration Inference algorithm.</p>
+              <p>Although it and variable-elimination perform the same task, it is explained herein for completeness.</p>
+              <p>Here is the algorithm replicated for reference and annotated for clarity (with specifics given for discrete variables):</p>
+              <br/>
+<pre class='prettyprint'>
+  ; Returns the *distribution* of Pr(X | e)
+  ; which is a table (distirbution) on X
+  ; [INPUTS]
+  ;   X  - query variable
+  ;   e  - observed evidence variable values
+  ;   bn - network composed of {X} &cup; E &cup; Y
+  ;        where Y is simply every network variable
+  ;        not in {X} or E
+  ; [OUTPUT]
+  ;   A distribution (table) on X
+  
+  function Enumeration-Ask (X, e, bn)
+      Q(X) &larr; a distribution (table) on X, empty at start
+      
+      ; Try to populate each row of Q(X)
+      for each value x_i in X do
+          Q(x_i) &larr; Enumerate-All(bn.Vars, e &cup; {x_i})
+      
+      return Normalize(Q(X))
+      
+  ; Enumerate-All is a helper that fills out a single
+  ; row in Q(X) above by returning Pr(x_i | e &cup; {x_i})
+  function Enumerate-All(vars, e)
+      if Empty?(vars) then return 1.0
+      Y &larr; First(vars)
+      if Y has value y in e
+          then return Pr(y | Parents(Y)) * Enumerate-All(Rest(vars), e)
+          else return &Sigma; Pr(y | Parents(Y)) * Enumerate-All(Rest(vars), e &cup; {y})
+</pre>
+              <br/>
+              <p class='example'>Use the enumeration inference algorithm to answer the query Pr(A | C = 1), (i.e., X = A and e = {C = 1}) in the following Bayesian network:</p>
+              <br/>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-7.PNG' />
+              </div>
+              <br/>
+              <p>Observe a trace (for our example) the above Enumeration-Ask algorithm with recursive calls represented in blue and real number returns represented in orange.</p>
+              <br/>
+              <hr/>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-8/enum-0.PNG' />
+              </div>
+              <br/>
+              <p>Things to notice:</p>
+              <ul class='indent-1'>
+                <li><p>I'm representing the Enumerate-All(vars, e) in a probability format: Enumerate-All(vars | e)</p></li>
+                <li><p>At each recursive call, the variable we're looking at, Y, is set to First(vars)</p></li>
+                <li><p>In the case where we need Enumerate-All(B, C | A = 0, C = 1), and B is NOT in the evidence, we split on all possible values for b, and add those to the evidence in each branch.</p></li>
+              </ul>
+              <br/>
+              <p>Simplifying the expressions we returned while accounting for parents that are in our evidence vars:</p>
+              <hr/>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-8/enum-1.PNG' />
+              </div>
+              <br/>
+              <p>Now, simply gathering the real-numbers returned (highlighted in orange in the derivation) from our CPTs above, we can find the first row of our query table.</p>
+              <hr/>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-8/enum-2.PNG' />
+              </div>
+              <br/>
+              <p>Repeating the same process as before for our second row (I've saved you the effort):</p>
+              <hr/>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-8/enum-3.PNG' />
+              </div>
+              <p>And finally, remembering to normalize the result as indicated by our algorithm (which is simply dividing by the sum of both rows before normalization):</p>
+              <hr/>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-8/enum-4.PNG' />
+              </div>
+              <br/>
+              <p>And there you have it!</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='homework4' class='scrollspy-element' scrollspy-title='Homework 4'></div>
+            <h1>Homework 4</h1>
+            <div>
+              <p>Now that I've had a chance to look through the homework and do some solutions, I have a few hints that might be helpful in crafting your own!</p>
+              <table class='table table-striped table-bordered'>
+                <thead>
+                  <tr>
+                    <th><p>Problem</p></th>
+                    <th><p>Tip</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><p>1. SF-UNIFY</p></td>
+                    <td><p>Remember, to watch out for ordering in frames and lists of frames! The book algorithm attempts to unify slots in frames, and frames in lists, *in the same order*, but
+                      our frames don't care about that!</p><br/><p>As such, you might find it useful to have multiple helper functions to handle the cases mentioned by the book, accounting
+                      for frames that might successfully unify but that simply aren't ordered the same.</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>2. SF-SUBST</p></td>
+                    <td><p>As you might have already seen, the solution to this one looks a lot like a couple of other functions we've done in the past that have to replace fillers with other values...</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>3. SF-INFER</p></td>
+                    <td><p>Fairly straightforward once you have SF-UNIFY working, since it does most of the heavy lifting...</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>4. FORWARD1</p></td>
+                    <td><p>Be careful to avoid infinite loops with the facts that you learn! Hmm, how to screen the results of SF-INFER?</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>5. BACKWARD1</p></td>
+                    <td><p>Now much easier since we're only doing the first step of backward chaining, this one too is reduced to a search problem on the first consequent that successfully unifies to the
+                      query.</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>6. C-GEN</p></td>
+                    <td><p>Deceptively intricate; make sure you read through the examples and piece together a plan of attack. I suggest dividing the algorithm into several steps: (1) isoltaing the
+                      pattern to use, (2) picking apart each pattern component, and (3) recursing as necessary.</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>7. C-GENS</p></td>
+                    <td><p>Trivial once Problem 6 is solved.</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+              <p>Hope those tips help a bit!</p>
+            </div>
+            <hr/>
+            
+            
+            <a class='btn btn-default pull-right hidden-print' href='javascript:window.print();'>
+              <span class='glyphicon glyphicon-print'></span>
+              &nbsp; PDF / Print
+            </a>
+            
+          </div>
+          <!-- END PRESENTATION CONTENT -->
+          
+          <!-- MATERIALS FROM CLASS: -->
+          
+            
+        </div>
+      </div>
+      <!-- END MAIN CONTENT -->
+      
+      
+    </div>
+    <!-- END WRAPPER -->
+    
+    <!-- BEGIN FOOTER -->
+    <div id="footer">
+      <div class="container">
+        <div class="col-md-12 text-center">
+          
+        </div>
+      </div>
+    </div>
+    <!-- END FOOTER -->
+    
+  </body>
+</html>
