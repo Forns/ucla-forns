@@ -854,71 +854,61 @@
               <p>You awake again? OK...</p>
               <p>In the last section we derived that <code class='prettyprint'>Asthma &perp; Cancer | Smoking</code> from our dentist example.</p>
               <p>Let's look at an interesting consequence:</p>
-              <p class='question' name='bayesnet-q0'>Give the chain-rule factorization of the joint probability table: <code class='prettyprint'>Pr(Asthma, Cancer, Smoking)</code></p>
-              <p class='answer' name='bayesnet-q0'>Pr(Asthma, Cancer, Smoking) = Pr(Asthma | Cancer, Smoking) * Pr(Cancer | Smoking) * Pr(Smoking)</p>
+              <p class='question' name='bayesnet-q0'>Give a chain-rule factorization of the joint probability table: <code class='prettyprint'>Pr(Asthma, Cancer, Smoking)</code></p>
+              <p class='answer' name='bayesnet-q0'>\(Pr(Asthma, Cancer, Smoking)\\= Pr(Asthma | Cancer, Smoking) * Pr(Cancer | Smoking) * Pr(Smoking)\)</p>
+              <p class='question' name='bayes-q00'>Based on our conditional independence relation found from the previous section \((Asthma \independence Cancer | Smoking)\), can we reduce this to anything simpler?</p>
+              <div class='answer' name='bayes-q00'>
+                <p>Yes! Since based on our independence relation:<br/>$$Pr(Asthma | Cancer, Smoking) = Pr(Asthma | Smoking)$$</p>
+                <p>So, our factorization reduces to:</p>
+                <p class='text-center'>
+                  \(
+                    Pr(Asthma, Cancer, Smoking)\\
+                    = Pr(Asthma | Cancer, Smoking) * Pr(Cancer | Smoking) * Pr(Smoking)\\
+                    = Pr(Asthma | Smoking) * Pr(Cancer | Smoking) * Pr(Smoking)
+                  \)
+                </p>
+              </div>
               <br/>
-              <p>OK, and based on our conditional independence relation found from the previous section, can we reduce this to anything simpler?</p>
-              <br/>
-<pre class='prettyprint'>
-  ; Yes! Since:
-  Asthma &perp; Cancer | Smoking
-  
-  ; Then:
-    Pr(Asthma | Cancer, Smoking)
-  = Pr(Asthma | Smoking)
-  
-  ; And so our factorization:
-    Pr(Asthma, Cancer, Smoking)
-  = Pr(Asthma | Cancer, Smoking) * Pr(Cancer | Smoking) * Pr(Smoking)
-  = Pr(Asthma | Smoking) * Pr(Cancer | Smoking) * Pr(Smoking)
-</pre>
-              <br/>
+              
               <p>Hmm, interesting... so we took a big joint probability table (Pr(Asthma, Cancer, Smoking)) and broke it down into 3 smaller tables!</p>
               <p>There's something else interesting about our factorization...</p>
-              <p>Remembering that we presumed that both Asthmas and Canceres were indicators of cavities:</p>
-              <p class='question' name='bayesnet-q1'>Thinking about cause-effect relationships, what's interesting about the tables: Pr(Asthma | Smoking) and Pr(Cancer | Smoking)</p>
+              <p>Remembering that we presumed that both Asthma and Cancer were indicators of Smoking:</p>
+              
+              <p class='question' name='bayesnet-q1'>Observation 1: Thinking about cause-effect relationships, what's interesting about the tables: Pr(Asthma | Smoking) and Pr(Cancer | Smoking)?</p>
               <p class='answer' name='bayesnet-q1'>They are tables structured according to a possible effect *given* that effect's possible causes!</p>
               <br/>
               <p>Alright, we're almost ready to hit the punchline... one final example.</p>
-              <p class='example'>Using the following distribution properties, compare the full joint probability distribution's size (over all 5 variables) to its chain-rule factorization:</p>
-<pre class='prettyprint'>
-  ; Say we have 5 binary variables:
-  A, B, C, D, E
-  
-  ; They elicit a joint probability distrbution:
-  Pr(A, B, C, D, E)
-  
-  ; [?] How many rows are in this table?
-  
-  ; Now, say we had independence relationships
-  ; that allowed us to factor that joint distribution
-  ; into the following:
-    Pr(A, B, C, D, E)
-  = Pr(A) * Pr(B) * Pr(C) * Pr(D) * Pr(E)
-  
-  ; [?] How many rows are in each of these smaller
-  ; tables?
-  
-  ; [?] Do we witness a difference between the number
-  ; of rows in the full joint vs. the factorization?
-</pre>
+              <p class='example'>Suppose we have 5 binary variables: A, B, C, D, and E. Each of these variables are pairwise independent.</p>
+              <p class='question' name='bayes-ex-0'>How many worlds are in the table / distribution:<br/>$$Pr(A, B, C, D, E)$$</p>
+              <p class='answer' name='bayes-ex-0'>Since each variable is binary, there are:<br/>$$2^n = 2^5 = 32$$</p>
+              <p class='question' name='bayes-ex-1'>Use the chain rule to factor this table. What is the resulting factorization?</p>
+              <p class='answer' name='bayes-ex-1'>\(Pr(A, B, C, D, E)\\ = Pr(A | B, C, D, E) * Pr(B | C, D, E) * Pr(C | D, E) * Pr(D | E) * Pr(E)\\ = Pr(A) * Pr(B) * Pr(C) * Pr(D) * Pr(E)\)</p>
+              <p class='question' name='bayes-ex-2'>How many worlds are there in each of these factored tables? How many rows total?</p>
+              <p class='answer' name='bayes-ex-2'>Each new table is simply the prior on every variable, which are binary, so there are only 2 worlds per 5 table, for a total of 10 worlds.</p>
               <br/>
-              <p>Yes! Big savings, in fact!</p>
+              
+              <p class='definition'>Observation 2: The more independence relationships we're able to make on our distribution, the more compact we make the factored joint.</p>
               <p>There are 32 rows in the full joint, but only 10 rows in the individual, factored tables!</p>
+              <p>Observations 1 and 2 lead us to the beauty of Bayesian networks.</p>
+              <br/>
+              
               <p class='definition'><strong>Bayesian Networks</strong> attempt to exploit independence relationships to reduce massive joint probability distributions to smaller tables, all while
                 capturing the intuitive notions of cause and effect to structure the independences.</p>
               <br/>
+              
               <p>In the words of the great Judea Pearl, who was instrumental in their development, Bayesian networks are, &quot;A parsimonious representation&quot; of the joint distribution.</p>
               <p>They're just really intuitive data structures!</p>
-              <p>Here's a simple Bayesian network representing our dentist's problem:</p>
+              <p>Here's a simple Bayesian network representing our smoking problem:</p>
               <div class='fit-pres text-center'>
                 <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-0.PNG' />
               </div>
+              <hr/>
               <br/>
-              <p>There's a lot to note about Bayesian networks:</p>
-              <p class='definition'>Bayesian networks are a class of graphs called <strong>directed, acyclic graphs (DAGs)</strong>, meaning that the edges between nodes are directed and they form 
+              
+              <h3>Bayesian Network Properties</h3>
+              <p class='definition'>Bayesian networks belong to a class of graphs called <strong>directed, acyclic graphs (DAGs)</strong>, meaning that the edges between nodes are directed and they form 
                 no cycles (derp).</p>
-              <p class='definition'>The network's <strong>nodes</strong> are the variables in our distributions.</p>
+              <p class='definition'>The network's <strong>nodes</strong> represent the variables in our distributions.</p>
               <p class='definition'>The network's <strong>edges</strong> represent <strong>dependence</strong> relationships, i.e., two connected nodes are dependent upon one another.</p>
               <p class='definition'>Edges illustrate only a dependence; effects can have multiple causes and causes can have multiple effects, any one of which illustrates an influence that may be negative 
                 OR positive (correlationally).</p>
@@ -932,26 +922,24 @@
                 </div>
               </a>
               <br/>
+              
               <p>We would need stronger tools to claim confidence in a true causal relation, but for the purposes of Bayesian networks, it is convenient and intuitive to draw arrows from causes to effects.</p>
-              <p>The reason being the same as in our dentist example: if we know that someone has a Smoking (the cause), then knowing that they also have a Asthma doesn't tell us more about their chance
+              <p>The reason being the same as in our smoking example: if we know that someone has a Smoking (the cause), then knowing that they also have a Asthma doesn't tell us more about their chance
                 of having a Cancer.</p>
               <p>That is, as soon as we know the state of the causes, we don't get any new information about the effects!</p>
               <p>Thus, we glean some notion of the <strong>semantics / meaning</strong> implicit within Bayesian networks:</p>
-              <div class='definition'>
-<pre class='prettyprint'>
-  ; The joint distribution:
-    Pr(X1, X2, ..., Xn)
-  
-  ; ...can be factored using independence
-  ; relationships to:
-  = Pr(X1 | Parents(X1)) * Pr(X2 | Parents(X2)) * ...
-  
-  ; ...which semantically represents the putative
-  ; relationship between causes and effects:
-  = Pr(Effect1 | Causes(Effect1)) * (Effect2 | Causes(Effect2)) * ...
-  
-  = &Pi;_X&in;Vars Pr(X | Parents(X))
-</pre>
+              <div class='well'>
+                <p>The joint distribution can be factored using independence relationships to:</p>
+                <p>$$Pr(X_1, X_2, ..., X_n) = Pr(X_1 | Parents(X_1)) * Pr(X_2 | Parents(X_2)) * ...$$</p>
+                
+                <p>...which semantically represents the putative relationship between causes and effects:</p>
+                <p class='text-center'>
+                  \(
+                    Pr(X_1 | Parents(X_1)) * Pr(X_2 | Parents(X_2)) * ...\\
+                    = Pr(Effect_1 | Causes(Effect_1)) * (Effect_2 | Causes(Effect_2)) * ...\\
+                    = \prod_{X_i \in Vars} Pr(X_i | Parents(X_i))
+                  \)
+                </p>
               </div>
               <br/>
               <p class='definition'>This factorization allows us to express the large joint distribution in terms of <strong>conditional probability tables (CPTs)</strong> of an effect given its parents.</p>
