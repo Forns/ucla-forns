@@ -852,7 +852,7 @@
               <p>I haven't had any means of working this joke into conversation, and the previous part of this lecture's been dull, so here we are...</p>
               <br/>
               <p>You awake again? OK...</p>
-              <p>In the last section we derived that <code class='prettyprint'>Asthma &perp; Cancer | Smoking</code> from our dentist example.</p>
+              <p>In the last section we derived that \(Asthma \independence Cancer | Smoking\) from our smoking example.</p>
               <p>Let's look at an interesting consequence:</p>
               <p class='question' name='bayesnet-q0'>Give a chain-rule factorization of the joint probability table: <code class='prettyprint'>Pr(Asthma, Cancer, Smoking)</code></p>
               <p class='answer' name='bayesnet-q0'>\(Pr(Asthma, Cancer, Smoking)\\= Pr(Asthma | Cancer, Smoking) * Pr(Cancer | Smoking) * Pr(Smoking)\)</p>
@@ -944,7 +944,7 @@
               <br/>
               <p class='definition'>This factorization allows us to express the large joint distribution in terms of <strong>conditional probability tables (CPTs)</strong> of an effect given its parents.</p>
               <br/>
-              <p>For our dentist example, the CPTs would look like:</p>
+              <p>For our smoking example, the CPTs would look like:</p>
               <div class='fit-pres text-center'>
                 <img src='../../../assets/images/winter-2015/cs-161/week-8/bayesnet-1.PNG' />
               </div>
