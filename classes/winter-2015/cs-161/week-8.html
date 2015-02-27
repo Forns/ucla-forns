@@ -900,7 +900,7 @@
               <p>They're just really intuitive data structures!</p>
               <p>Here's a simple Bayesian network representing our smoking problem:</p>
               <div class='fit-pres text-center'>
-                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-0.PNG' />
+                <img src='../../../assets/images/winter-2015/cs-161/week-8/bayesnet-0.PNG' />
               </div>
               <hr/>
               <br/>
@@ -946,55 +946,65 @@
               <br/>
               <p>For our dentist example, the CPTs would look like:</p>
               <div class='fit-pres text-center'>
-                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-1.PNG' />
+                <img src='../../../assets/images/winter-2015/cs-161/week-8/bayesnet-1.PNG' />
               </div>
               <br/>
               <p class='question' name='bayesnet-q2'>Using the above CPTs, compute: Pr(Smoking = 0, Asthma = 1, Cancer = 0)</p>
               <div class='answer' name='bayesnet-q2'>
-<pre class='prettyprint'>
-    Pr(Smoking = 0, Asthma = 1, Cancer = 0)
-  = Pr(Asthma = 1 | Smoking = 0) * Pr(Cancer = 0 | Smoking = 0) * Pr(Smoking = 0)
-  = 0.1 * 0.8 * 0.8
-  = 0.064
-</pre>
+                <p>
+                  \(
+                    Pr(Smoking = 0, Asthma = 1, Cancer = 0)\\
+                    = Pr(Asthma = 1 | Smoking = 0) * Pr(Cancer = 0 | Smoking = 0) * Pr(Smoking = 0)\\
+                    = 0.1 * 0.8 * 0.8\\
+                    = 0.064
+                  \)
+                </p>
               </div>
               <br/>
+              
               <p>Since our CPTs describe a world in which the effects can be screened off from other portions of the network by knowing about their causes, we say that Bayesian networks make the
                 Markovian assumption:</p>
-              <p class='definition'>The <strong>Markovian assumption</strong> states that every node is independent of its non-descendents given its parents.</p>
+              <p class='definition'>The <strong>Markovian assumption</strong> states that every node is <strong>independent</strong> of its non-descendents <strong>given</strong> its parents, or formally,
+                for node X, we write:
+                $$X \independence NonDescendants(X) | Parents(X)$$
+              </p>
+              <p class='definition'><strong>Non-descendants</strong> of node X are any node that can be reached by taking a directed path starting at X.</p>
               <br/>
-              <p>(non-descendents of node X are defined as any node that you could not reach taking a directed path starting at X)</p>
+              
               <p>You should repeat that a couple times... make it your mantra.</p>
+              <p>The Markovian assumptions are intuitive because they convey the "screening off" of extraneous effects once we know all of the causes for a given variable.</p>
               <p class='example'>What are the Markovian assumptions implicit in the following Bayesian network?</p>
               <div class='fit-pres text-center'>
                 <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-2.PNG' />
               </div>
               <p class='question' name='bayesnet-q3'>Click for answer.</p>
               <div class='answer' name='bayesnet-q3'>
-<pre class='prettyprint'>
-  Earthquake &perp; Burglary
-  
-  Radio &perp; Alarm | Earthquake
-  Radio &perp; Call | Earthquake
-  Radio &perp; Burglary | Earthquake
-  
-  Burglary &perp; Radio
-  
-  Alarm &perp; Radio | Earthquake, Burglary
-  
-  Call &perp; Radio | Alarm
-  Call &perp; Earthquake | Alarm
-  Call &perp; Burglary | Alarm
-</pre>
+                <div class='well'>
+                  <p>The Markovian assumptions implicit in the network are:</p>
+                  <p>Earthquake \(\independence\) Burglary</p>
+                  <br/>
+                  
+                  <p>Radio \(\independence\) Alarm | Earthquake</p>
+                  <p>Radio \(\independence\) Call | Earthquake</p>
+                  <p>Radio \(\independence\) Burglary | Earthquake</p>
+                  <br/>
+                  
+                  <p>Burglary \(\independence\) Radio</p>
+                  <br/>
+                  
+                  <p>Alarm \(\independence\) Radio | Earthquake, Burglary</p>
+                  <br/>
+                  
+                  <p>Call \(\independence\) Radio | Alarm</p>
+                  <p>Call \(\independence\) Earthquake | Alarm</p>
+                  <p>Call \(\independence\) Burglary | Alarm</p>
+                </div>
               </div>
               <br/>
-              <p>We notice a couple things about our Markovian assumptions:</p>
-              <ol class='indent-1'>
-                <li><p>There are some redundancies (e.g., Burglary &perp; Radio, but we also have that Radio &perp; Burglary | Earthquake)</p></li>
-                <li><p>There are some independence relations that they miss...</p></li>
-              </ol>
-              <br/>
-              <p>Let's look at a formalization of independences implicit within our Bayesian Network next.</p>
+              
+              <p>Markovian assumptions are great and can give us some off-the-top independence relationships encoded by our networks...</p>
+              <p>...however, they don't give us a clean way of asking arbitrary claims of independence between nodes given other nodes.</p>
+              <p>To help us with such queries, we turn to the notion of d-separation.</p>
             </div>
             <hr/>
             
@@ -1004,7 +1014,7 @@
             <h1>D-Separation</h1>
             <div>
               <p>Let's start off by considering 3 different simple Bayesian networks and observe how we can generalize their characteristics.</p>
-              <p>We'll examine Bayesian networks as a plumbing network where:</p>
+              <p>Consider each of the following 3-node Bayesian networks as a plumbing network where:</p>
               <ol class='indent-1'>
                 <li><p>Nodes are &quot;valves&quot; that allow water (information) to flow through</p></li>
                 <li><p>Edges are &quot;pipes&quot; that connect the valves</p></li>
@@ -1012,19 +1022,25 @@
                   any valves along any pipe-path are closed or not (our evidence, some set of variables Z)</p></li>
               </ol>
               <br/>
+              
               <p>We'll start with a familar problem:</p>
-              <p class='definition'>A valve Z is <strong>divergent / a fork</strong> along some path if it is a common cause of two effects, X and Y.<br/>
-                <code class='prettyprint'>X &larr; Z &rarr; Y</code></p>
+              <p class='definition'>A valve Z is <strong>divergent / a fork</strong> along some path if it is a common cause of two effects, X and Y. Moreover, whenever we're given Z, X is independent
+                from Y.<br/>
+                $$X \leftarrow Z \rightarrow Y \Rightarrow X \independence Y | Z$$
+              </p>
               <br/>
               <div class='fit-pres text-center'>
-                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-0.PNG' />
+                <img src='../../../assets/images/winter-2015/cs-161/week-8/bayesnet-0.PNG' />
               </div>
               <br/>
               <p>Divergent nodes are sometimes referred to as common causes. Here, we see that if we know whether or not someone has a Smoking, then information does NOT flow from Asthma to Cancer.</p>
               <p>So, the rule for divergent valves along some path is that when we have a triplet X &larr; Z &rarr; Y, given Z blocks information flow from X to Y.</p>
+              <hr/>
               <br/>
+              
               <p class='definition'>A valve Z is <strong>sequential / a chain</strong> along some path if some other variable X is its cause and Z has some effect Y.<br/>
-                <code class='prettyprint'>X &rarr; Z &rarr; Y</code> OR <code class='prettyprint'>Y &larr; Z &larr; X</code></p>
+                $$X \rightarrow Z \rightarrow Y \Rightarrow X \independence Y | Z$$
+                $$Y \leftarrow Z \leftarrow X \Rightarrow X \independence Y | Z$$</p>
               <br/>
               <p>Here's an example path of a chain:</p>
               <div class='fit-pres text-center'>
@@ -1032,10 +1048,16 @@
               </div>
               <br/>
               <p>Here, knowing that someone has tar in their lungs means that we no longer get information flowing from any knowledge that the person smoked to whether they'll have lung cancer.</p>
+              <p>"If Lung Tar (the medical term, of course) is the true cause of Lung Cancer, then it's irrelevant how the tar got there in the first place to whether or not you have Lung Cancer."</p>
               <p>So, the rule for chain valves along some path is that for triple X &rarr; Z &rarr; Y, given Z blocks information flow from X to Y.</p>
+              <hr/>
               <br/>
+              
               <p class='definition'>A valve Z is <strong>convergent / a sink</strong> along some path if it is the common effect of two causes, X and Y.<br/>
-                <code class='prettyprint'>X &rarr; Z &larr; Y</code>
+                \begin{eqnarray}
+                  X \rightarrow Z \leftarrow Y &\Rightarrow& X \dependence Y | Z\\
+                                               &\Rightarrow& X \dependence Y | Descendants(Z)
+                \end{eqnarray}
               </p>
               <br/>
               <p>Convergent nodes are a special beast, so let's look at the following scenario:</p>
@@ -1047,11 +1069,10 @@
                 <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-4.PNG' />
               </div>
               <br/>
-              <p class='question' name='bayesnet-q4'>If I know whether or not the bell rings, does information flow from coinflip 1 to coinflip 2?</p>
-              <p class='answer' name='bayesnet-q4'>Yes! If I know the bell rang, then knowing that coinflip 1 came up heads tells me exactly that coinflip 2 must have been heads!</p>
-              <br/>
-              <p class='question' name='bayesnet-q5'>If I DO NOT know whether or not the bell rang, does information flow from coinflip 1 to coinflip 2?</p>
-              <p class='answer' name='bayesnet-q4'>No! Just by knowing that coinflip 1 came up heads tells me nothing about coinflip 2.</p>
+              <p class='question' name='bayesnet-q41'>If I know whether or not <strong>the bell rings</strong>, does information flow from knowing about coinflip 1 to coinflip 2?</p>
+              <p class='answer' name='bayesnet-q41'>Yes! If I know the bell rang, then knowing that coinflip 1 came up heads tells me exactly that coinflip 2 must have been heads!</p>
+              <p class='question' name='bayesnet-q42'>If I DO NOT know whether or not the bell rang, does information flow from knowing about coinflip 1 to coinflip 2?</p>
+              <p class='answer' name='bayesnet-q42'>No! Just by knowing that coinflip 1 came up heads tells me nothing about coinflip 2.</p>
               <br/>
               <p>Now consider the following scenario:</p>
               <blockquote>
@@ -1063,10 +1084,9 @@
                 <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-5.PNG' />
               </div>
               <br/>
-              <p class='question' name='bayesnet-q5'>If I know whether or not Jeeves brings tea, does information flow from coinflip 1 to coinflip 2?</p>
+              <p class='question' name='bayesnet-q5'>If I know whether or not <strong>Jeeves brings tea</strong>, does information flow from knowing about coinflip 1 to coinflip 2?</p>
               <p class='answer' name='bayesnet-q5'>Yes! If I know that Jeeves brought tea, then I know that the bell *probably* rang! As such, I gain information about coinflip 2 based on whatever coinflip 1 was.</p>
-              <br/>
-              <p class='question' name='bayesnet-q6'>If I DO NOT know whether or not the bell rang AND I DO NOT know whether Jeeves brought tea, does information flow from coinflip 1 to coinflip 2?</p>
+              <p class='question' name='bayesnet-q6'>If I DO NOT know whether or not the bell rang AND I DO NOT know whether Jeeves brought tea, does information flow from knowing about coinflip 1 to coinflip 2?</p>
               <p class='answer' name='bayesnet-q6'>No!</p>
               <br/>
               <p>So, the rule for convergent valves is the following: for common effect Z in configuration: X &rarr; Z &larr; Y, then Z is blocked if neither it NOR any of its descendants are given!</p>
@@ -1075,6 +1095,8 @@
               <h3>d-Separation</h3>
               <p>Now, we can think about these three cases of valves as being elements along a path in a Bayesian network.</p>
               <p class='definition'><strong>d-separation</strong> (directional separation) allows us to determine all independence relations implicit from the graph just by looking at its structure.</p>
+              <p class='definition'>We use the following notation to pose d-separation queries and assert independence through d-separation between variables:<br/> 
+                $$dsep(X, Z, Y) \Leftrightarrow X \independence Y | Z$$</p>
               <br/>
               <p>The rules of d-separation are as follows:</p>
 <pre class='prettyprint'>
@@ -1127,38 +1149,53 @@
               </table>
               <br/>
               <p>It might look complicated, but the fact that it's a strictly graphical criterion for independence makes it easy to trace.</p>
-              <p class='definition'>We use the following notation to establish d-separation relationships: 
-                <code class='prettyprint'>d-sep(X, Z, Y) &equiv; X &perp; Y | Z</code></p>
-              <br/>
               <p>Let's do a bunch of examples:</p>
               <br/>
               <p class='example'>Use the following Bayesian network to determine if each variable set X is separated from Y given Z. If it is not, show the open path.</p>
               <div class='fit-pres text-center'>
                 <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-6.PNG' />
               </div>
-              <br/>
-              <p class='question' name='bayesnet-q7'>Is <code class='prettyprint'>d-sep( {V}, {}, {T} )</code></p>
-              <p class='answer' name='bayesnet-q7'>No! They're directly connected ya dingus! The open path is simply: V &rarr; T</p>
-              <br/>
-              <p class='question' name='bayesnet-q8'>Is <code class='prettyprint'>d-sep( {V}, {T}, {O} )</code></p>
-              <p class='answer' name='bayesnet-q8'>Yes! The only path between V and O is: V &rarr; T &rarr; O, in which T is a chain that is given, so that path is blocked.</p>
-              <br/>
-              <p class='question' name='bayesnet-q9'>Is <code class='prettyprint'>d-sep( {T}, {O}, {S} )</code></p>
-              <p class='answer' name='bayesnet-q9'>No! There are two paths from T to S: one that goes through O to D (and is blocked), but the other which goes through O and up to C (which is open because
-                O is a sink and is given). So, the open path is: T &rarr; O &larr; C &larr; S</p>
-              <br/>
-              <p class='question' name='bayesnet-q10'>Is <code class='prettyprint'>d-sep( {T}, {D}, {S} )</code></p>
-              <p class='answer' name='bayesnet-q10'>No! In fact, now *both* paths from T to S are open. They are: <br/>T &rarr; O &larr; C &larr; S and additionally,<br/>T &rarr; O &rarr; D &larr; B &larr; S</p>
-              <br/>
-              <p class='question' name='bayesnet-q11'>Is <code class='prettyprint'>d-sep( {T}, {}, {S} )</code></p>
-              <p class='answer' name='bayesnet-q11'>Yes! Now all paths are blocked</p>
-              <br/>
-              <p class='question' name='bayesnet-q12'>Is <code class='prettyprint'>d-sep( {T, X}, {B}, {S} )</code></p>
-              <p class='answer' name='bayesnet-q12'>No! A path is open from: X &larr; O &larr; C &larr; S</p>
+              <table class='table table-bordered table-striped'>
+                <thead>
+                  <tr>
+                    <th><p>Query</p></th>
+                    <th><p>Answer</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><p class='question' name='bayesnet-q7'>\(dsep( \{V\}, \{\}, \{T\} )\)</p></td>
+                    <td><p class='answer' name='bayesnet-q7'>No! V is directly connected to T! The open path is simply: \(V \rightarrow T\)</p></td>
+                  </tr>
+                  <tr>
+                    <td><p class='question' name='bayesnet-q8'>\(dsep( \{V\}, \{T\}, \{O\} )\)</p></td>
+                    <td><p class='answer' name='bayesnet-q8'>Yes! The only path between V and O is: \(V \rightarrow T \rightarrow O\), in which T is a chain that is given, so that path is blocked.</p></td>
+                  </tr>
+                  <tr>
+                    <td><p class='question' name='bayesnet-q9'>\(dsep( \{T\}, \{O\}, \{S\} )\)</p></td>
+                    <td><p class='answer' name='bayesnet-q9'>No! There are two paths from T to S: one that goes through O to D (and is blocked), but the other which goes through O and up to C (which is open because
+                      O is a sink and is given). So, the open path is: \(T \rightarrow O \leftarrow C \leftarrow S\)</p></td>
+                  </tr>
+                  <tr>
+                    <td><p class='question' name='bayesnet-q10'>\(dsep( \{T\}, \{D\}, \{S\} )\)</p></td>
+                    <td><p class='answer' name='bayesnet-q10'>No! In fact, now *both* paths from T to S are open. They are:<br/>\(T \rightarrow O \leftarrow C \leftarrow S\)
+                      <br/>\(T \rightarrow O \rightarrow D \leftarrow B \leftarrow S\)</p></td>
+                  </tr>
+                  <tr>
+                    <td><p class='question' name='bayesnet-q11'>\(dsep( \{T\}, \{\}, \{S\} )\)</p></td>
+                    <td><p class='answer' name='bayesnet-q11'>Yes! Now all paths are blocked</p></td>
+                  </tr>
+                  <tr>
+                    <td><p class='question' name='bayesnet-q12'>\(dsep( \{T, X\}, \{B\}, \{S\} )\)</p></td>
+                    <td><p class='answer' name='bayesnet-q12'>No! A path is open from: \(X \leftarrow O \leftarrow C \leftarrow S\)</p></td>
+                  </tr>
+                </tbody>
+              </table>
               <br/>
               <p>And now, one final, conceptual question:</p>
               <p class='question' name='bayesnet-q13'>Are the independence relationships given by the Markovian assumptions implied by d-separation? Is the reverse true?</p>
-              <p class='answer' name='bayesnet-q13'>The Markovian independence relationships are implied by d-separation.</p>
+              <p class='answer' name='bayesnet-q13'>The Markovian independence relationships are implied by d-separation. Although technically the reverse is also true, the Markovian assumptions do not
+                explicitly state all independence relationships.</p>
             </div>
             <hr/>
             
@@ -1172,46 +1209,76 @@
               <p>For our networks, those questions will be of the form: &quot;What's the probability of witnessing events Q given that I've seen evidence e?&quot; (where Q is a set of variables and e is an
                 instantiation of evidence)</p>
               <br/>
-              <p>This problem would be pretty easy if we had our joint distribution... but we don't with Bayesian networks! We just have CPTs.</p>
-              <p>Furthermore, we want to avoid reconstructing the joint because it might be massive!</p>
-              <p class='definition'><strong>Variable elimination</strong> is an inference strategy designed to use only our CPTs to pose queries on our network.</p>
+              <p>A couple things to note about the inference problem:</p>
+              <ul class='indent-1'>
+                <li><p>This problem would be pretty easy if we had our joint distribution... but we don't with Bayesian networks! In fact, the whole point of Bayesian networks is to avoid
+                  having to reconstruct our giant joint table. We just have CPTs.</p></li>
+                <li><p>Accounting for evidence in terms of these CPTs is therefore less trivial because of the "information flow" we talked about in the last section, where conditioning on some evidence
+                  might actually OPEN flow from one variable to another.</p></li>
+                <li><p>We might have a lot of superfluous variables that don't contribute to our query and need a means of getting rid of them before beginning inference.</p></li>
+              </ul>
+              <br/>
+              <p class='definition'><strong>Inference queries</strong>, for query sentence \(Q\) and evidence \(e\), compute the quantity \(Pr(Q | e)\) using the network CPTs.</p>
+              <p class='definition'><strong>Variable elimination</strong> is an inference strategy designed to use only our CPTs to pose queries on our network by successively eliminating variables
+                until we are left with our query.</p>
               <p class='debug'>WARNING: The topic of Bayesian network inference is massive (there's a whole class on it, 262a, which I genuinely suggest taking!) and so this section is very hand-wavy.</p>
               <br/>
-              <p>The idea of variable elimination is that, with some query and evidence variables, we want to find Pr(Q | e).</p>
-              <p>For example, we might be interested in Pr(Cancer | Smoking = true)</p>
-              <p>Above, Q = {Cancer} and e = {Smoking = true}</p>
-              <p>Let's use this as our example! (example credit to Dr. Darwiche, and my notebook for surviving this long to be useful)</p>
+              <p>The steps of variable elimination are as follows:</p>
+              <ol class='indent-1'>
+                <li><p><strong>Trim</strong> any network nodes that are conditionally independent from our queries given our evidence.</p></li>
+                <li><p><strong>Zero out</strong> all CPT rows inconsistent with the evidence.</p></li>
+                <li><p><strong>Choose an order</strong> to eliminate variables in (different orders will give you same result, but some orders are less computationally efficient than others).</p></li>
+                <li><p><strong>Multiply</strong> CPT rows together to form factors in the order chosen above.</p></li>
+                <li><p><strong>Compute result</strong> when you have reduced to factors containing only your query variable(s) (with all other variables eliminated).</p></li>
+              </ol>
+              <br/>
+              
+              <p class='example'>Use variable elimination to find the following Table in the given Bayesian network:<br/>
+                $$Pr(Cancer | Smoking = true)$$
+                $$Q = \{Cancer\}$$
+                $$e = \{Smoking = true\}$$</p>
               <div class='fit-pres text-center'>
                 <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-7.PNG' />
               </div>
               <br/>
-              <p><strong>Step One:</strong> Zero out CPT rows that are inconsistent with the evidence (these inconsistent rows are often just omitted entirely)</p>
+              <p><strong>Step One:</strong> There are no variables that are independent from our query given the evidence, so we have no nodes to trim here.</p>
+              <hr/>
+              <p><strong>Step Two:</strong> Zero out CPT rows that are inconsistent with the evidence (these inconsistent rows are often just omitted entirely)</p>
               <div class='fit-pres text-center'>
                 <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-8.PNG' />
               </div>
-              <p><strong>Step Two:</strong> Choose an &quot;elimination order&quot;</p>
+              <hr/>
+              <p><strong>Step Three:</strong> Choose an &quot;elimination order&quot;</p>
               <p>Our goal is to get ONE CPT at the end that only mentions variables in Q; we do this by successively multiplying table values and summing out irrelevant variables.</p>
               <p>The order in which you do this matters greatly for computational complexity, but that discussion is omitted herein; for now, let's just choose an order:</p>
-<pre class='prettyprint'>
-  ; &Pi; is used to designate an ordering
-  &Pi; = {A, B, C}
-  
-  ; Meaning A first, then B, etc.
-</pre>
+              <div class='well'>
+                <p>
+                  \(\Pi\) designates the elimination order; we'll arbitrarily choose:
+                  $$\Pi = \{A, B, C\}$$
+                  Meaning A first, then B, etc.
+                </p>
+                
+              </div>
               <br/>
-              <p>Since A is up first, this means we multiply all the CPTs mentioning A and get back a <strong>factor</strong>, which is simply some function mapping variables to some positive numbers.</p>
-              <p>Factors are NOT distributions, but simply the intermediary computational elements of variable elimination.</p>
+              
+              <hr/>
+              <p><strong>Step Four:</strong> Multiply CPTs in the given elimination order to reduce to a factor over only query variables.</p>
+              <p>Since A is up first in our order, this means we multiply all the CPTs mentioning A and get back a <strong>factor</strong>.</p>
+              <p class='toolkit'><strong>Factors</strong> (in variable elimination) are NOT proper distributions, but are the result of multiplying tables and marginalizing over those variables
+                that are being eliminated.</p>
+              <p class='toolkit'>Table multiplication yields a factor result that is simply the product of all consistent worlds.</p>
               <p>So, the two CPTs mentioning A in our example are: Pr(A) and Pr(B | A) so:</p>
               <div class='fit-pres text-center'>
                 <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-9.PNG' />
               </div>
               <br/>
-              <p>Since we've now dealt with all of the tables mentioning A, we can <strong>eliminate</strong> it by summing out, giving us:</p>
+              <p>Since we've now dealt with all of the tables mentioning A, we can <strong>eliminate</strong> it by summing out, giving us our first factor:</p>
               <div class='fit-pres text-center'>
                 <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-10.PNG' />
               </div>
               <br/>
-              <p>Our next variable to eliminate is B, which is mentioned in both our current factor (&Sigma;_A Pr(B | A) * Pr(A)) and Pr(C | B), so do the same thing there!</p>
+              <p>Our next variable to eliminate is B, which is mentioned in both our current factor and the CPT for C:
+                $$\sum_A Pr(B | A) * Pr(A), Pr(C | B)$$</p>
               <div class='fit-pres text-center'>
                 <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-11.PNG' />
               </div>
@@ -1220,40 +1287,55 @@
               <div class='fit-pres text-center'>
                 <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-12.PNG' />
               </div>
-              <br/>
-              <p>So close! But let's look at what we have so far:</p>
-<pre class='prettyprint'>
-  ; The term currently in our table:
-  &Sigma;_B Pr(C | B) * &Sigma;_A Pr(B | A) * Pr(A)
-  
-  ; ...is really just the joint with B and A summed out!
-  ; (after accounting for evidence A = true, of course)
-  
-  = &Sigma;_B &Sigma;_A Pr(C | B) * Pr(B | A) * Pr(A)
-  = &Sigma;_B &Sigma;_A Pr(A, B, C)
-</pre>
+              <hr/>
+              
+              <p><strong>Step Five:</strong> Use the remaining factor(s) over query variables (having accounted for evidence) to find target quantity.</p>
+              <p>Let's look at our remaining factor:</p>
+              <div class='well'>
+                <p>The term currently in our factor is really just the joint with B and A summed out after having accounted for the evidence that A = true:</p>
+                <p>
+                  \begin{eqnarray}
+                    \sum_B Pr(C | B) * \sum_A Pr(B | A) * Pr(A) &=& \sum_B \sum_A Pr(C | B) * Pr(B | A) * Pr(A)\\
+                                                                &=& \sum_B \sum_A Pr(A, B, C)
+                  \end{eqnarray}
+                </p>
+              </div>
               <br/>
               <p>So, since our final factor has only C remaining, and accounted for A = true, the values it represents are a marginal on C and A = true!</p>
-<pre class='prettyprint'>
-  ; So, from our final factor:
-  Pr(C = true, A = true) = 0.192
-  Pr(C = false, A = true) = 0.408
-  
-  &there4; Pr(A = true) = 0.600
-  
-  ; Now we have everything we need to compute
-  ; our query:
-  ; Pr(Q | e) = Pr(C | A = true)
-  
-  ; ...using Bayes conditioning:
-  Pr(C = true | A = true) = Pr(C = true, A = true) / Pr(A = true)
-                          = 0.192 / 0.600
-                          = 0.32
-                          
-  Pr(C = false | A = true) = Pr(C = false, A = true) / Pr(A = true)
-                           = 0.408 / 0.600
-                           = 0.68
-</pre>
+              <p class='toolkit'>In general, the final factor after variable elimination yields some subset of worlds consistent with the evidence from:<br/>
+                $$\sum_{v \in V &land; v \not\in Q} Pr(Q, e)$$
+              </p>
+              <br/>
+              <p>We then use our remaining factor to compute (a) the probability of the evidence, and then using Bayes' conditioning, (b) our target quantity.</p>
+              <div class='well'>
+                <p>So, from our final factor:
+                \begin{eqnarray}
+                  Pr(C = true, A = true) &=& 0.192\\
+                  Pr(C = false, A = true) &=& 0.408\\
+                  &there4; Pr(A = true) &=& \sum_C Pr(A = true, C)\\
+                                        &=& 0.600
+                \end{eqnarray}
+                </p>
+                <p>Now we have everything we need to compute our query using Bayes' conditioning:
+                  \begin{eqnarray}
+                    Pr(Q | e) &=& Pr(C | A = true)\\
+                              &=& \frac{Pr(C, A = true)}{Pr(A = true)}
+                  \end{eqnarray}
+                </p>
+                <p>...using Bayes conditioning:
+                  \begin{eqnarray}
+                    Pr(C = true | A = true) &=& \frac{Pr(C = true, A = true)}{Pr(A = true)}\\
+                                            &=& \frac{0.192}{0.600}\\
+                                            &\approx& 0.32
+                  \end{eqnarray}
+                                            
+                  \begin{eqnarray}
+                    Pr(C = false | A = true) &=& \frac{Pr(C = false, A = true)}{Pr(A = true)}\\
+                                             &=& \frac{0.408}{0.600}\\
+                                             &\approx& 0.68
+                  \end{eqnarray}
+                </p>
+              </div>
               <br/>
               <p>And that's that!</p>
               <p>Like I say, there's a whole class on Bayesian network inference, so this is but a small example and one strategy that can be used for such.</p>
@@ -1353,7 +1435,7 @@
             <div id='homework4' class='scrollspy-element' scrollspy-title='Homework 4'></div>
             <h1>Homework 4</h1>
             <div>
-              <p>Now that I've had a chance to look through the homework and do some solutions, I have a few hints that might be helpful in crafting your own!</p>
+              <p>Your last grueling exercise set! Let's go over it now and look at some hints...</p>
               <table class='table table-striped table-bordered'>
                 <thead>
                   <tr>
@@ -1363,36 +1445,18 @@
                 </thead>
                 <tbody>
                   <tr>
-                    <td><p>1. SF-UNIFY</p></td>
-                    <td><p>Remember, to watch out for ordering in frames and lists of frames! The book algorithm attempts to unify slots in frames, and frames in lists, *in the same order*, but
-                      our frames don't care about that!</p><br/><p>As such, you might find it useful to have multiple helper functions to handle the cases mentioned by the book, accounting
-                      for frames that might successfully unify but that simply aren't ordered the same.</p></td>
+                    <td><p>1. C-GENW</p></td>
+                    <td><p>Fairly trivial upon completing Problem 2.</p></td>
                   </tr>
                   <tr>
-                    <td><p>2. SF-SUBST</p></td>
-                    <td><p>As you might have already seen, the solution to this one looks a lot like a couple of other functions we've done in the past that have to replace fillers with other values...</p></td>
-                  </tr>
-                  <tr>
-                    <td><p>3. SF-INFER</p></td>
-                    <td><p>Fairly straightforward once you have SF-UNIFY working, since it does most of the heavy lifting...</p></td>
-                  </tr>
-                  <tr>
-                    <td><p>4. FORWARD1</p></td>
-                    <td><p>Be careful to avoid infinite loops with the facts that you learn! Hmm, how to screen the results of SF-INFER?</p></td>
-                  </tr>
-                  <tr>
-                    <td><p>5. BACKWARD1</p></td>
-                    <td><p>Now much easier since we're only doing the first step of backward chaining, this one too is reduced to a search problem on the first consequent that successfully unifies to the
-                      query.</p></td>
-                  </tr>
-                  <tr>
-                    <td><p>6. C-GEN</p></td>
+                    <td><p>2. C-GEN</p></td>
                     <td><p>Deceptively intricate; make sure you read through the examples and piece together a plan of attack. I suggest dividing the algorithm into several steps: (1) isoltaing the
-                      pattern to use, (2) picking apart each pattern component, and (3) recursing as necessary.</p></td>
+                      pattern to use, (2) picking apart each pattern component, and (3) recursing on slots as necessary.</p></td>
                   </tr>
                   <tr>
-                    <td><p>7. C-GENS</p></td>
-                    <td><p>Trivial once Problem 6 is solved.</p></td>
+                    <td><p>3. DTR-INTERP</p></td>
+                    <td><p>A standard-sized problem that is neither trivial nor overly difficult, but requires you to trace a couple decision trees by hand to get a feel for the recursion. Remember
+                      to appropriately handle sub-trees along a path by using recursive techniques!</p></td>
                   </tr>
                 </tbody>
               </table>
