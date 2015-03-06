@@ -157,7 +157,7 @@
               <p>This means that eating a cake does *not* necessarily imply: &not;Have(Cake)</p>
               <br/>
               <p class='toolkit'>The <strong>stochastic outcome</strong> of action <code>a</code> from state <code>s0</code> to state <code>s1</code> under evidence <code>e</code> is given by:<br/>
-                $$\sum_{s' \in s0} Pr(Result(s0, a) = s1 | a) * Pr(s0 = s' | e)$$<br/><br/>
+                $$\sum_{s' \in s0} Pr(Result(s0, a) = s1 | a) * Pr(s0 = s' | e)$$
                 In other words, sum over all the states of the probability of being in the initial state given the evidence \(Pr(s0 = s' | e)\) times the probability of reaching state <code>s1</code>
                 with action <code>a</code>.
               </p>
@@ -247,63 +247,72 @@
                 $$EU(a | e) = \sum_s Pr(Result(a) = s | a, e) * U(s)$$
                 ...and determine where Andrew should spend his day off. (Click for solution)
               </p>
-              <div class='answer' name='dec-q0'>
-<pre class='prettyprint'>
-  ; First, determine the expected utility
-  ; of each action:
-  EU(home)
-    = Pr(home, clear | home) * U(home, clear) +
-      Pr(home, raining | home) * U(home, raining)
-    = 0.4 * 2 + 0.6 * 3
-    = 2.6
-    
-  EU(beach)
-    = Pr(beach, clear | beach) * U(beach, clear) +
-      Pr(beach, raining | beach) * U(beach, raining)
-    = 0.4 * 4 + 0.6 * 1
-    = 2.2
-    
-  ; Next, using MEU criteria:
-  action_chosen = argmax EU(a | e)
-                    a
-  
-                = argmax ({home: 2.6, beach: 2.2})
-                = home
-                
-  ; Golden Girls it is :(
-</pre>
+              <div class='answer white-bg' name='dec-q0'>
+              <div>
+                <p>First, determine the expected utility of each action:</p>
+                <p>
+                  \begin{eqnarray}
+                    EU(home) &=& Pr(home, clear | home) * U(home, clear)\\ 
+                             &+& Pr(home, raining | home) * U(home, raining)\\
+                             &=& 0.4 * 2 + 0.6 * 3\\
+                             &=& 2.6
+                  \end{eqnarray}
+                </p>
+                <p>
+                  \begin{eqnarray}
+                    EU(beach) &=& Pr(beach, clear | beach) * U(beach, clear)\\
+                              &+& Pr(beach, raining | beach) * U(beach, raining)\\
+                              &=& 0.4 * 4 + 0.6 * 1\\
+                              &=& 2.2
+                  \end{eqnarray}
+                </p>
+                <p>Next, using MEU criteria:</p>
+                <p>
+                  \begin{eqnarray}
+                    \text{ActionChoice} &=& \underset{a \in A}{\operatorname{argmax}} EU(a | e)\\
+                                        &=& \operatorname{argmax} ({home: 2.6, beach: 2.2})\\
+                                        &=& home
+                  \end{eqnarray}
+                </p>
+                <p>Golden Girls it is :(</p>
+              </div>
               </div>
               <br/>
-              <p class='example'>Recompute the previous example given that we observed Weather = clear outside.</p>
+              <p class='example'>Recompute the previous example given that we observed <code>Weather = clear</code> outside.</p>
               <p class='question' name='dec-q1'>Click for solution.</p>
-              <div class='answer' name='dec-q1'>
-<pre class='prettyprint'>
-  ; Our evidence:
-  e = {Weather = clear}
-  
-  ; First, determine the expected utility
-  ; of each action with the evidence:
-  EU(home | e)
-    = Pr(home, clear | home, e) * U(home, clear) +
-      Pr(home, raining | home, e) * U(home, raining)
-    = 1 * 2 + 0 * 3
-    = 2
-    
-  EU(beach)
-    = Pr(beach, clear | beach, e) * U(beach, clear) +
-      Pr(beach, raining | beach, e) * U(beach, raining)
-    = 1 * 4 + 0 * 1
-    = 4
-    
-  ; Next, using MEU criteria:
-  action_chosen = argmax EU(a | e)
-                    a
-  
-                = argmax ({home: 2, beach: 4})
-                = beach
-                
-  ; Beach time!
-</pre>
+              <div class='answer white-bg' name='dec-q1'>
+                <div>
+                  <p>Our evidence: <code>e = {Weather = clear}</code></p>
+                  <p>First, determine the expected utility of each action with the evidence:</p>
+                  <p>
+                    \begin{eqnarray}
+                      EU(home | e) &=& Pr(home, clear | home, e) * U(home, clear)\\
+                                   &+& Pr(home, raining | home, e) * U(home, raining)\\
+                                   &=& 1 * 2 + 0 * 3\\
+                                   &=& 2
+                    \end{eqnarray}
+                  </p>
+                    
+                  <p>
+                    \begin{eqnarray}
+                      EU(beach) &=& Pr(beach, clear | beach, e) * U(beach, clear)\\
+                                &+& Pr(beach, raining | beach, e) * U(beach, raining)\\
+                                &=& 1 * 4 + 0 * 1\\
+                                &=& 4
+                    \end{eqnarray}
+                  </p>
+                    
+                  <p>Next, using MEU criteria:</p>
+                  <p>
+                    \begin{eqnarray}
+                      \text{ActionChoice} &=& \underset{a \in A}{\operatorname{argmax}} EU(a | e)\\
+                                          &=& \operatorname{argmax} ({home: 2, beach: 4})\\
+                                          &=& beach
+                    \end{eqnarray}
+                  </p>
+                                
+                  <p>Beach time!</p>
+                </div>
               </div>
             </div>
             <hr/>
@@ -323,35 +332,41 @@
                 it over the other.</p>
               <p>First, to formalize the possible outcomes of an action, we turn to the notion of a lottery:</p>
               <br/>
-              <p class='definition'>A <strong>lottery</strong> is a representation of the possible outcome states from taking some action with the probabilities of reaching each outcome.</p>
-              <p class='definition'>An <strong>outcome</strong> is either a primitive state or, recursively, another lottery</p>
-<pre class='prettyprint'>
-  ; For some action, a lottery L
-  ; might look like:
-  L = [p1, S1; p2, S2; ...; pn Sn]
-  
-  ; ...where each:
-  ;   p_i = the probability of reaching
-  ;         S_i by taking that action
-  ;   S_i = a possible state outcome OR
-  ;         recursively, another lottery
-  
-  ; Example:
-  L1 = [0.5, S1; 0.25, S2; 0.25, L2]
-  L2 = [0.3, S3; 0.6, S1; 0.1, S5]
-</pre>
+              <p class='definition'>A <strong>lottery</strong> is a representation of the possible outcome states from taking some action with the probabilities of reaching each outcome, with the format:
+                $$L = [prob_1, outcome_1;  prob_2, outcome_2;  ...;  prob_n, outcome_n]$$
+              </p>
+              <p class='definition'>An <strong>outcome</strong> is either a primitive state (i.e., a set of fluents) or, recursively, another lottery</p>
+              <div class='well'>
+                <p>For primitive states such as:</p>
+                <p>$$S1 = { Eaten(Cake) }, S2 = ...$$</p>
+                <br/>
+                
+                <p>We might have two lotteries:</p>
+                <p>
+                  \begin{eqnarray}
+                    L1 &=& [0.5, S1; 0.25, S2; 0.25, L2]\\
+                    L2 &=& [0.3, S3; 0.6, S1; 0.1, S5]
+                  \end{eqnarray}
+                </p>
+                <br/>
+                <p>...indicating that from Lottery L1, we have a 50% chance of transitioning into state S1, etc.</p>
+              </div>
               <br/>
+              
               <p class='definition'>A lottery is called <strong>complex</strong> if it includes an outcome that is itself another lottery.</p>
               <p>The term &quot;lottery&quot; is intuitive because taking an action associated with a lottery is like buying a Lotto ticket, and hoping that you &quot;win&quot; the state you desired.</p>
               <p>Now that we know how we can model outcomes of taking a particular action, let's talk about preferences.</p>
-              <p>For any two lotteries A and B, we can use the following notation to describe preferences:</p>
+              <div class='well'>
+                <p>For any two lotteries A and B, we can use the following notation to describe preferences:</p>
+                <br/>
+                <ul class='indent-1'>
+                  <li><p>A > B &nbsp;&nbsp;&nbsp; the agent prefers A over B</p></li>
+                  <li><p>A ~ B &nbsp;&nbsp;&nbsp; the agent is indifferent between A and B</p></li>
+                  <li><p>A &ge; B &nbsp;&nbsp;&nbsp; the agent prefers A over B or is indifferent between them</p></li>
+                </ul>
+              </div>
               <br/>
-              <ul class='indent-1'>
-                <li><p>A > B &nbsp;&nbsp;&nbsp; the agent prefers A over B</p></li>
-                <li><p>A ~ B &nbsp;&nbsp;&nbsp; the agent is indifferent between A and B</p></li>
-                <li><p>A &ge; B &nbsp;&nbsp;&nbsp; the agent prefers A over B or is indifferent between them</p></li>
-              </ul>
-              <br/>
+              
               <p>The primary goal of utility theory is to determine how preferences between complex lotteries are related to preferences on the primitive states that compose them.</p>
               <p>To do this, we can define some axioms on lotteries that, if violated by our intelligent systems, would lead to irrational behavior.</p>
               <br/>
@@ -384,7 +399,7 @@
                   <tr>
                     <th><p>Substitutability</p></th>
                     <td><p>If two lotteries are equally preferrable, then you may substitute one in for the other in some other complex lottery.</p></td>
-                    <td><p>A ~ B &rArr;<br/>[p A; 1 - p, C] ~ [p, B; 1 - p, C]</p></td>
+                    <td><p>A ~ B &rArr;<br/>[p, A; 1 - p, C] ~ [p, B; 1 - p, C]</p></td>
                   </tr>
                   <tr>
                     <th><p>Monotonicity</p></th>
@@ -401,7 +416,7 @@
               <br/>
               <p class='question' name='pref-q0'>Substitutability tells us that two equally preferrable lotteries can be substituted for one another in some other lottery. Does the following also
                 hold?<br/>
-                <code class='prettyprint'>(A &gt; B) &rArr; [p, A; 1 - p, C] &gt; [p, B; 1 - p, C]</code>
+                $$(A > B) \Rightarrow [p, A; 1 - p, C] > [p, B; 1 - p, C]$$
               </p>
               <p class='answer' name='pref-q0'>Yes! We can think of this as the case of &quot;All other considerations constant,&quot; lotteries containing A will be preferrable to those containing B.</p>
               <br/>
@@ -427,7 +442,7 @@
                   <tr>
                     <th><p>Expected Utility</p></th>
                     <td><p>The utility of a lottery is the sum of the probability of each outcome times the utility of that outcome.</p></td>
-                    <td><p>U([p1, S1; ...; pn, Sn]) =<br/>&Sigma;_i p_i * U(S_i)</p></td>
+                    <td><p>$$U([p_1, S_1; ...; p_n, S_n]) =\\\sum_i p_i * U(S_i)$$</p></td>
                   </tr>
                 </tbody>
               </table>
@@ -454,74 +469,98 @@
   L2 = [0.5, B; 0.3, C; 0.2, L3]
   
   L3 = [0.6, D; 0.4, B]
+  
+  ; Which action ({1, 2}) should we take?
 </pre>
-              <br/>
-              <p class='question' name='dec-q1'>Click for solution.</p>
-              <div class='answer' name='dec-q1'>
-<pre class='prettyprint'>
-  ; Since Actions 1 and 2 have complex
-  ; lotteries, we can use decomposition to
-  ; compress them into simple lotteries:
-  L1 = [0.2, A; 0.3, B; 0.5, L3]
-     = [0.2, A; 0.3, B; 0.5, [0.6, D; 0.4, B]]
-     = [0.2, A; 0.5, B; 0.3, D]
-     
-  L2 = [0.5, B; 0.3, C; 0.2, L3]
-     = [0.5, B; 0.3, C; 0.2, [0.6, D; 0.4, B]]
-     = [0.58, B; 0.3, C; 0.12, D]
-     
-  ; Now compute the utility of each lottery:
-  U(L1) = &Sigma;_i p_i * U(S_i)
-        = 0.2 * 3 + 0.5 * 2 + 0.3 * 1
-        = 1.9
-        
-  U(L2) = &Sigma;_i p_i * U(S_i)
-        = 0.58 * 2 + 0.3 * 2 + 0.12 * 1
-        = 1.88
-        
-  ; Whew that was close! But it looks like action
-  ; 1 is the (slightly) more preferrable
-</pre>
+              <p class='question' name='dec-q1'>Click for solution. [Hint: Use decomposition and then compute the expected utility of each lottery]</p>
+              <div class='answer white-bg' name='dec-q1'>
+                <p>Since Actions 1 and 2 have complex lotteries, we can use decomposition to compress them into simple lotteries:</p>
+                <p>
+                  \begin{eqnarray}
+                    L1 &=& [0.2, A; 0.3, B; 0.5, L3]\\
+                       &=& [0.2, A; 0.3, B; 0.5, [0.6, D; 0.4, B]]\\
+                       &=& [0.2, A; 0.5, B; 0.3, D]
+                  \end{eqnarray}
+                </p>
+                   
+                <p>
+                  \begin{eqnarray}
+                    L2 &=& [0.5, B; 0.3, C; 0.2, L3]\\
+                       &=& [0.5, B; 0.3, C; 0.2, [0.6, D; 0.4, B]]\\
+                       &=& [0.58, B; 0.3, C; 0.12, D]
+                  \end{eqnarray}
+                </p>
+                   
+                <p>Now compute the utility of each lottery:</p>
+                <p>
+                  \begin{eqnarray}
+                    U(L1) &=& \sum_i p_i * U(S_i)\\
+                          &=& 0.2 * 3 + 0.5 * 2 + 0.3 * 1\\
+                          &=& 1.9
+                  \end{eqnarray}
+                </p>
+                      
+                <p>
+                  \begin{eqnarray}
+                    U(L2) &=& \sum_i p_i * U(S_i)\\
+                          &=& 0.58 * 2 + 0.3 * 2 + 0.12 * 1\\
+                          &=& 1.88
+                  \end{eqnarray}
+                </p>
+                      
+                <p>Whew that was close! But it looks like action 1 is the (slightly) more preferrable</p>
               </div>
               
               <br/>
               <h3>Multi-attribute Utility</h3>
               <p>Previously, we've dealt with states that have had an atomic utility value assigned to them, for example:</p>
-<pre class='prettyprint'>
-  ; Whole state of being at home and it
-  ; raining out gets assigned, statically,
-  ; the utility value of 3
-  U(home, rainy) = 3
-</pre>
+              <div class='well'>
+                <p>Whole state of being at home and it raining out gets assigned, statically, the utility value of 3</p>
+                <p>$$U(home, rainy) = 3$$</p>
+                <br/>
+                
+                <p>BUT, what if I wanted to assess *components* of states and treat them with different utility contributions?</p>
+                <p>$$U(home) = x, U(rainy) = y \Rightarrow U(home, rainy) = f(x, y)$$</p>
+              </div>
               <br/>
-              <p>BUT, what if I wanted to assess *components* of states and treat them with different utility contributions?</p>
-              <p>Take the book example for... example:</p>
+              
+              <p class='example'>The following example from the book analyzes variables for planning airport construction.</p>
               <blockquote>
-                Siting (i.e., determining where to build based on analyzed factors) an airport requires a variety of considerations. If we're choosing between some number of land plots on which to build
+                Siting an airport (i.e., determining where to build one based on analyzed factors) requires a variety of considerations. If we're choosing between some number of land plots on which to build
                 our airport, then we can analyze the putative values of some variables of interest based on our possible choices / actions. Let's say we were on the city planning committee of such and determined
                 the following variables would comprise our decision criteria:
               </blockquote>
               <ul class='indent-1'>
                 <li><p><strong>Cost:</strong> the price of the land required to build upon, plus construction costs, plus the price of legal fees and processing, etc.</p></li>
                 <li><p><strong>Noise:</strong> the amount of noise generated by the airport.</p></li>
-                <li><p><strong>Deaths:</strong> possible deaths from construction hazards and other airport-related risks.</p></li>
+                <li><p><strong>Deaths:</strong> possible deaths from construction hazards and other airport-related risks (propensities of nearby residents to stand on the runway? IDK...).</p></li>
               </ul>
               <br/>
+              
               <p>If we're considering a bunch of construction sites, it might not be feasible to sit down and assign a utility value to each one individually...</p>
               <p>BUT, we might have some data on our variables of interest based on projections from studies and other sources of information, so perhaps we can construct our utility values from these facts.</p>
               <p>That said, we often don't have deterministic information available (e.g., we don't know for certain that construction on site A will incur exactly 3 deaths), so we need to use estimation
                 techniques.</p>
-              <p>Additionally, we don't always treat all of our variables of interest equally--some might need to be weighted as more important than others.</p>
-              <p class='definition'>For some vector of variables <strong>X</strong> = {X1, X2, ..., Xn} and their value functions (f1, f2, ..., fn), where each f_i corresponds to a variable X_i, the
-                utility of a state with variable instantiation: x = {x1, x2, ..., xn} is given by:<br/><code class='prettyprint'>U(x1, x2, ..., xn) = F[f1(x1), f2(x2), ..., fn(xn)]</code></p>
+              <p>Additionally, we don't always treat all of our variables of interest equally -- some might need to be weighted as more important than others.</p>
+              <br/>
+              
+              <p class='definition'>For some vector of variables \(X = \{X_1, X_2, ..., X_n\}\) and their value functions \((f_1, f_2, ..., f_n)\), where each \(f_i\) corresponds to a variable \(X_i\), the
+                utility of a state with variable instantiation: \(x = \{x_1, x_2, ..., x_n\}\) is given by:
+                $$U(x_1, x_2, ..., x_n) = F[f_1(x_1), f_2(x_2), ..., f_n(x_n)]$$
+                ...where \(F\) is a function that combines the value functions in a meaningful way (usually just the sum).
+              </p>
               <p class='definition'>When our metrics of interest exibit <strong>mutual preferential independence</strong>, it means that a change in the value of one variable will not necessarily cause
                 a change in the value of another variable.</p>
-              <p class='toolkit'>If all of our metrics of interest exibit mutual preferential independence, then our agent's choice boils down to a simple maximimization of:<br/>
-                <code class='prettyprint'>F[f1(x1), f2(x2), ..., fn(xn)] = &Sigma;_i f_i(x_i)</code>
+              <p class='toolkit'>If all of our metrics of interest exibit mutual preferential independence, then our agent's choice boils down to a simple maximimization of:
+                $$F[f_1(x_1), f_2(x_2), ..., f_n(x_n)] = \sum_i f_i(x_i)$$
               </p>
               <br/>
-              <p>Here, F is a simple function like addition that would aggregate all of the individual variable-weighting <strong>value functions</strong> f1, f2, ..., fn for variable values x1, x2, ..., xn.</p>
+              
+              <p>Here, F is a simple function like addition that would aggregate all of the individual variable-weighting <strong>value functions</strong> \(f_1, f_2, ..., f_n\) for 
+                variable values \(x_1, x_2, ..., x_n\).</p>
               <p>The idea is that we want to condense all of the variable information into a single utility value based on the importance weights of each variable.</p>
+              <br/>
+              
               <p class='example'>For our airport siting example, let's consider the following two sites and the value functions that provide the proper variable weighting. We'll assume our variables of interest
                 exibit mutual preferential independence. Determine, using the mutual preferential independence utility function above with F being simple summation, which is the superior site.</p>
               <br/>
@@ -555,30 +594,33 @@
                   </tr>
                 </tbody>
               </table>
-              <br/>
               <p class='question' name='dec-q2'>Click for solution</p>
-              <div class='answer' name='dec-q2'>
-<pre class='prettyprint'>
-  ; Using our definition for mutual preferential
-  ; independence utility, we assess each site
-  U(Site1) = F[f_cost($10,000,000),
-               f_noise(200dB),
-               f_deaths(2)]
-           = -10,000,000 + (-200 * 1000) + (-2 * 10^9)
-           = -2,010,200,000
-           
-  U(Site2) = F[f_cost($15,000,000),
-               f_noise(180dB),
-               f_deaths(1)]
-           = -15,000,000 + (-180 * 1000) + (-1 * 10^9)
-           = -1,015,180,000
-           
-  ; Site2 is the superior site based on our utility
-  ; definitions!
-</pre>
+              <div class='answer white-bg' name='dec-q2'>
+                  <p>Using our definition for mutual preferential independence utility, we assess each site</p>
+                  <p>
+                    \begin{eqnarray}
+                      U(Site1) &=& F[f_{cost}($10,000,000), f_{noise}(200dB), f_{deaths}(2)]\\
+                               &=& -10,000,000 + (-200 * 1000) + (-2 * 10^9)\\
+                               &=& -2,010,200,000
+                    \end{eqnarray}
+                  </p>
+                  
+                  <p>
+                    \begin{eqnarray}
+                      U(Site2) &=& F[f_{cost}($15,000,000), f_{noise}(180dB), f_{deaths}(1)]\\
+                               &=& -15,000,000 + (-180 * 1000) + (-1 * 10^9)\\
+                               &=& -1,015,180,000
+                    \end{eqnarray}
+                  </p>
+                  
+                  <p>Site2 is the superior site based on our utility definitions!</p>
               </div>
+              <br/>
+              
               <p class='definition'><strong>Strict dominance</strong> is the case where a state is superior on all metrics.</p>
-              <p>We see that in our example above, Site2 is not strictly dominant compared to Site1 because Site1 actually has the lower monetary cost.</p>
+              <p class='question' name='dom-0'>Site2 was the dominant choice in our example above; is it strictly dominant to Site1?</p>
+              <p class='answer' name='dom-0'>No, Site2 is not strictly dominant compared to Site1 because Site1 actually has the lower monetary cost.</p>
+              <br/>
               <p>It turns out, however, that the utility cost of our estimated number of deaths far outweighs the monetary cost.</p>
               
               <br/>
@@ -602,6 +644,7 @@
               <p>BUT, that example uses continuous variables, which we're not used to seeing... let's look at a quick example using discrete variables:</p>
               <p>(here our decision node might have some nondeterministic action consequence)</p>
               <br/>
+              
               <div class='fit-pres text-center'>
                 <img src='../../../assets/images/spring-2014/cs-161/week-9/decision-9.PNG' />
               </div>
@@ -612,20 +655,22 @@
               </div>
               <br/>
               <p class='question' name='d-net-q0'>What is the expected utility of A1 as listed above? (click for solution)</p>
-              <div class='answer' name='d-net-q0'>
-<pre class='prettyprint'>
-  EU(A1) = Pr(Y = 0 | X = 0, D = A1) * Pr(X = 0) * U(Y = 0) +
-           Pr(Y = 1 | X = 0, D = A1) * Pr(X = 0) * U(Y = 1) +
-           Pr(Y = 0 | X = 1, D = A1) * Pr(X = 1) * U(Y = 0) +
-           Pr(Y = 1 | X = 1, D = A1) * Pr(X = 1) * U(Y = 1)
-         
-         = 0.2 * 0.4 * 3 +
-           0.8 * 0.4 * 1 +
-           0.7 * 0.6 * 3 +
-           0.3 * 0.6 * 1
-           
-         = 2
-</pre>
+              <div class='answer white-bg' name='d-net-q0'>
+                <p>
+                  \begin{eqnarray}
+                    EU(A1) &=& Pr(Y = 0 | X = 0, D = A1) * Pr(X = 0) * U(Y = 0)\\
+                           &+& Pr(Y = 1 | X = 0, D = A1) * Pr(X = 0) * U(Y = 1)\\
+                           &+& Pr(Y = 0 | X = 1, D = A1) * Pr(X = 1) * U(Y = 0)\\
+                           &+& Pr(Y = 1 | X = 1, D = A1) * Pr(X = 1) * U(Y = 1)\\
+                               \\
+                           &=& 0.2 * 0.4 * 3\\
+                           &+& 0.8 * 0.4 * 1\\
+                           &+& 0.7 * 0.6 * 3\\
+                           &+& 0.3 * 0.6 * 1\\
+                               \\
+                           &=& 2
+                  \end{eqnarray}
+                </p>
               </div>
               <br/>
               <p class='example'>Compute the EU(A2) using the above example.</p>
@@ -816,8 +861,8 @@
                 expected outcome should be (under the assumption that it will be able to formulate a classification function from lots of examples).</p>
               <br/>
               <p>So let's take a look at an arbitrary training set (Example credit to Evan Lloyd; it was too beautiful not to use)</p>
-              <p>Imagine that we have arbitrary attributes A, B, C, and D. We must make a yes / no decision for some classification X.</p>
-              <br/>
+              <p class='example'>Imagine that we have arbitrary attributes A, B, C, and D. We must make a yes / no decision for some classification X. Observe the following training set over each feature
+                and the expected decision for X.</p>
               <div class='fit-pres text-center'>
                 <img src='../../../assets/images/spring-2014/cs-161/week-9/decision-3.PNG' />
               </div>
@@ -828,9 +873,10 @@
               <p>Now, we want to find some decision tree that accurately gives the correct classification based on attributes A, B, C, and D.</p>
               <p>But which one do we choose?</p>
               <p class='toolkit'>A <strong>single-node split</strong> on a training set tries to maximize the classification accuracy based on a single attribute's values.</p>
+              <p class='definition'>In classification, a <strong>hit</strong> occurs whenever our split on attributes agrees with the training set, and a <strong>miss</strong> occurs when it disagrees.</p>
               <br/>
               <p>When we split on a value of a variable, e.g., A = red, we look at how many samples got classified to X = yes and X = no in the training set and try to make the classification that is most
-                accurate based only on A = red.</p>
+                accurate (most hits / fewest misses) based only on A = red.</p>
               <p>So... let's try splitting on A first. This would give us:</p>
               <table class='table table-striped table-bordered'>
                 <thead>
@@ -910,9 +956,14 @@
                 <img src='../../../assets/images/spring-2014/cs-161/week-9/decision-6.PNG' />
               </div>
               <br/>
+              
               <p>But, as we've seen with our restaurant waiting example, we're not always interested in a single-node split on an attribute, but a multi-node one... why waste all that extra info?!</p>
               <p>Now, of course, we have the question of which node to split on first... it's clear that order matters in deciding the most accurate classification!</p>
-              <p class='definition'><strong>Entropy</strong> is a measure of uncertainty of a random variable and is the fundamental unit of information theory.</p>
+              <p class='definition'><strong>Entropy</strong> is a measure of uncertainty of a random variable and is the fundamental unit of information theory. Formally, for variable \(V\), the entropy
+                \(H(V)\) is given by:
+                $$H(V) = -\sum_{v \in V} Pr(v) * log_2 [Pr(v)]$$
+                In other words, the entropy is the sum, for all values of \(V\), of the probability of seeing that value \(v\) times \(log_2\) of that probability.
+              </p>
               <br/>
               <p>Some things to note about entropy:</p>
               <ul class='indent-1'>
@@ -921,55 +972,50 @@
                 <li><p>The lower the entropy, the more certain the outcome is.</p></li>
               </ul>
               <br/>
-<pre class='prettyprint'>
-  ; The equation for entropy is given by:
-  H(V) = - &Sigma; Pr(v_k) * log_2 [Pr(v_k)]
-           k
-           
- ; In other words, it's the sum, for all values
- ; v &in; V, of the probability of seeing value
- ; v_k times log_2 of that probability
-</pre>
-              <br/>
-              <p class='question' name='ent-q0'>What is the entropy of a coin flip?</p>
-              <div class='answer' name='ent-q0'>
-<pre class='prettyprint'>
-  ; For variable C = coin flip
-  ;                = {heads, tails}
-  H(C) = - &Sigma; Pr(c_k) * log_2 [Pr(c_k)]
-           k
-           
-       = - [Pr(heads) * log_2[Pr(heads)] +
-            Pr(tails) * log_2[Pr(tails)]]
-       = - [0.5 * log_2(0.5) + 0.5 * log_2(0.5)]
-       = 1
-</pre>
+              <p class='question' name='ent-q0'>Find the entropy of a fair coin flip with \(V = \{heads, tails\}\). Click for solution.</p>
+              <div class='answer white-bg' name='ent-q0'>
+                <p>
+                  \begin{eqnarray}
+                    H(V) &=& - \sum_{v \in V} Pr(v) * log_2 [Pr(v)]\\
+                         &=& - [Pr(heads) * log_2[Pr(heads)] + Pr(tails) * log_2[Pr(tails)]]\\
+                         &=& - [0.5 * log_2(0.5) + 0.5 * log_2(0.5)]\\
+                         &=& 1
+                  \end{eqnarray}
+                </p>
               </div>
               <br/>
               <p>So, we see that a coin flip has 1 bit of entropy, since it only takes 1 bit (i.e., a 0 or 1 outcome uniformly distributed) to model the uncertainty.</p>
               <p>Our goal in building decision trees, however, is to MINIMIZE uncertainty.</p>
-              <p>Minimizing the remaining uncertainty after a split is equivalent to maximizing <strong>information gained</strong> from that split.</p>
-              <p class='definition'><strong>Information gain</strong> is the expected reduction in entropy from splitting on some attribute.</p>
+              <p class='definition'>In the classification problem, <strong>Information gain</strong> is the expected reduction in entropy from splitting our decision at a choice point on some attribute.
+                Therefore, to maximize the information gain, we may equivalently minimize the entropy (uncertainty).</p>
+              <p class='definition'>We can model this in terms of <strong>expected entropy,</strong> which provides a metric for the entropy reducing contributions of each variable value. Computing
+                the expected entropy reduction for splitting on a variable is a two step process described below.</p>
+              <div class='well'>
+                <p>
+                  \begin{eqnarray}
+                    \text{Let  } V &=& \text{the variable / feature being analyzed}\\
+                                 v &=& \text{a value of V}\\
+                                 p &=& \text{the positive classifications (X = YES) for } V = v\\
+                                 n &=& \text{the negative classifications (X = NO) for } V = v
+                  \end{eqnarray}
+                </p>
+                <p><strong>Step One:</strong> The entropy for \(V = v\) is given by \(H_v\) and is a function of the positive and negative classifications for that value:</p>
+                <p>
+                  \begin{eqnarray}
+                    H_v(p, n) = &-&\frac{p}{p + n} * log_2 \frac{p}{p + n}\\
+                                &-& \frac{n}{p + n} * log_2 \frac{n}{p + n}
+                  \end{eqnarray}
+                </p>
+                <p><strong>Step Two:</strong> The expected entropy for splitting on \(V\) is defined as:</p>
+                <p>
+                  \begin{eqnarray}
+                    EH(V) = \sum_{v \in V} Pr(v) * H_v(p, n)
+                  \end{eqnarray}
+                </p>
+                <p>In other words, for all values v in variable V, sum up their entropies split on positive and negative classifications.</p> 
+              </div>
               <br/>
-              <p>We can model this in terms of <strong>expected entropy,</strong> which provides a metric for the entropy reducing contributions of each variable value.</p>
-<pre class='prettyprint'>
-  ; For value v of variable V, the
-  ; positive classification cases p for that
-  ; value v, as well as the negative classification
-  ; cases n, then:
-  
-  E_v(p, n) = -[p / (p + n)] * log_2[p / (p + n)]
-            -  [n / (p + n)] * log_2[n / (p + n)]
-            
-  ; And the expected entropy is defined as:
-  &Sigma; Pr(v) * E_v(p, n)
-  v &in; V
-  
-  ; For all variable values v in variable V, sum
-  ; up their entropies split on positive and negative
-  ; classifications 
-</pre>
-              <br/>
+              
               <p class='example'>Compute the expected entropy of splitting on variable A in our example from before (table replicated below for ease):</p>
               <table class='table table-striped table-bordered'>
                 <thead>
@@ -982,72 +1028,90 @@
                 </thead>
                 <tbody>
                   <tr>
-                    <th><p>X = yes</p></th>
+                    <th><p>X = yes (p)</p></th>
                     <td><p>7</p></td>
                     <td><p>0</p></td>
                     <td><p>8</p></td>
                   </tr>
                   <tr>
-                    <th><p>X = no</p></th>
+                    <th><p>X = no (n)</p></th>
                     <td><p>0</p></td>
                     <td><p>9</p></td>
                     <td><p>6</p></td>
                   </tr>
                 </tbody>
               </table>
-              <br/>
-<pre class='prettyprint'>
-  ; Expected entropy of A is:
-    &Sigma; Pr(a) * E_a(p, n)
-    a &in; A
+              <p class='question' name='ent-s0'><strong>Step Zero - Setup:</strong>
+                Compute the probabilities of seeing each variable value from the table and setup what you need to find the entropy. (Click for solution)
+              </p>
+              <div class='answer white-bg' name='ent-s0'>
+                  <p>Expected entropy of A is:</p>
+                  <p>
+                    \begin{eqnarray}
+                      EH(A) &=& \sum_{a \in A} Pr(a) * E_a(p, n)\\
+                            &=& Pr(A = red) * H_{red}(p, n)\\
+                            &+& Pr(A = blu) * H_{blu}(p, n)\\
+                            &+& Pr(A = grn) * H_{grn}(p, n)\\
+                    \end{eqnarray}
+                  </p>
+                  <p>We know from the table that there are 30 samples, so we can find the probabilities:</p>
+                  <p>
+                    \begin{eqnarray}
+                      Pr(A = red) &=& \frac{7}{30}\\
+                      Pr(A = blu) &=& \frac{9}{30}\\
+                      Pr(A = grn) &=& \frac{14}{30}
+                    \end{eqnarray}
+                  </p>
+              </div>
   
-  = Pr(A = red) * E_red(p, n) +
-    Pr(A = blu) * E_blu(p, n) +
-    Pr(A = grn) * E_grn(p, n)
-  
-  ; Step One:
-  ; We know from the table that there are 30
-  ; samples, so we can find the probabilities:
-  
-  Pr(A = red) = 7 / 30
-  Pr(A = blu) = 9 / 30
-  Pr(A = grn) = 14 / 30
-</pre>
-  
-<pre class='prettyprint'>
-  ; Step Two:
-  ; We can compute each of the intermediary
-  ; values next:
-  
-  E_red(p, n) = E_red(7, 0)
-              = -[7 / (7 + 0)] * log_2[7 / (7 + 0)]
-              -  [0 / (7 + 0)] * log_2[0 / (7 + 0)]
-              = 0
-  
-  E_blu(p, n) = E_blu(0, 9)
-              = -[0 / (0 + 9)] * log_2[0 / (0 + 9)]
-              -  [9 / (0 + 9)] * log_2[9 / (0 + 9)]
-              = 0
+              <p class='question' name='ent-s1'><strong>Step One - Entropies:</strong>
+                Compute the entropy of each variable value across the positive and negative trials in our training set. (Click for solution)
+              </p>
+              <div class='answer white-bg' name='ent-s1'>
+                <p>
+                  \begin{eqnarray}
+                    H_{red}(p, n) &=& H_{red}(7, 0)\\
+                                  &=& -\frac{7}{7 + 0} * log_2 \frac{7}{7 + 0}\\
+                                  &-&  \frac{0}{7 + 0} * log_2 \frac{0}{7 + 0}\\
+                                  &=& 0
+                  \end{eqnarray}
+                </p>
+                  
+                <p>
+                  \begin{eqnarray}
+                    H_{blu}(p, n) &=& H_{blu}(0, 9)\\
+                                  &=& -\frac{0}{0 + 9} * log_2 \frac{0}{0 + 9}\\
+                                  &-&  \frac{9}{0 + 9} * log_2 \frac{9}{0 + 9}\\
+                                  &=& 0
+                  \end{eqnarray}
+                </p>
+                              
+                <p>
+                  \begin{eqnarray}
+                    H_{grn}(p, n) &=& H_{grn}(8, 6)\\
+                                  &=& -\frac{8}{8 + 6} * log_2 \frac{8}{8 + 6}\\
+                                  &-&  \frac{6}{8 + 6} * log_2 \frac{6}{8 + 6}\\
+                                  &\approx& 0.9852
+                  \end{eqnarray}
+                </p>
+              </div>
               
-  E_grn(p, n) = E_grn(8, 6)
-              = -[8 / (8 + 6)] * log_2[8 / (8 + 6)]
-              -  [6 / (8 + 6)] * log_2[6 / (8 + 6)]
-              = 0.9852
-</pre>
-  
-<pre class='prettyprint'>
-  ; Step Three
-  ; Now, to find expected entropy, we plug back in:
-    Pr(A = red) * E_red(p, n) +
-    Pr(A = blu) * E_blu(p, n) +
-    Pr(A = grn) * E_grn(p, n)
-  
-  = (7 / 30) * 0 +
-    (9 / 30) * 0 +
-    (14 / 30) * 0.9852
-    
-  = 0.4598 bits
-</pre>
+              <p class='question' name='ent-s2'><strong>Step Two - Expected Entropy:</strong> plug in relevant parts from step 1 into our goal from step 0 and solve.</p>
+              <div class='answer white-bg' name='ent-s2'>
+                <p>
+                  \begin{eqnarray}
+                      EH(A) &=& Pr(A = red) * H_{red}(p, n)\\
+                            &+& Pr(A = blu) * H_{blu}(p, n)\\
+                            &+& Pr(A = grn) * H_{grn}(p, n)\\
+                            \\
+                            &=& (7 / 30) * 0\\
+                            &+& (9 / 30) * 0\\
+                            &+& (14 / 30) * 0.9852\\
+                            \\
+                            &\approx& 0.4598 \text{ bits}
+                  \end{eqnarray}
+                </p>
+              </div>
               <br/>
               <p>Whew! What a pain! I hope I never have to do that again...</p>
               <br/>
@@ -1063,13 +1127,13 @@
                 </thead>
                 <tbody>
                   <tr>
-                    <th><p>X = yes</p></th>
+                    <th><p>X = yes (p)</p></th>
                     <td><p>6</p></td>
                     <td><p>2</p></td>
                     <td><p>7</p></td>
                   </tr>
                   <tr>
-                    <th><p>X = no</p></th>
+                    <th><p>X = no (n)</p></th>
                     <td><p>1</p></td>
                     <td><p>12</p></td>
                     <td><p>2</p></td>
@@ -1079,35 +1143,54 @@
               <br/>
               <p class='question' name='ent-q1'>Click for brief solution</p>
               <div class='answer' name='ent-q1'>
-<pre class='prettyprint'>
-  ; Expected entropy of splitting on B:
-    Pr(B = sml) * E_sml(p, n) +
-    Pr(B = med) * E_med(p, n) +
-    Pr(B = lrg) * E_lrg(p, n)
-    
-  = (7 / 30) * E_sml(6, 1) +
-    (14 / 30) * E_med(2, 12) +
-    (9 / 30) * E_lrg(7, 2)
-    
-  = 0.6434 bits
-</pre>
+                <p>
+                  \begin{eqnarray}
+                    EH(B) &=& \sum_{b \in B} Pr(b) * E_a(p, n)\\ 
+                          &=& Pr(B = sml) * H_{sml}(p, n)\\
+                          &+& Pr(B = med) * H_{med}(p, n)\\
+                          &+& Pr(B = lrg) * H_{lrg}(p, n)\\
+                          \\
+                          &=& (7 / 30) * H_{sml}(6, 1)\\
+                          &+& (14 / 30) * H_{med}(2, 12)\\
+                          &+& (9 / 30) * H_{lrg}(7, 2)\\
+                          \\
+                          &\approx& 0.6434 \text{ bits}
+                  \end{eqnarray}
+                </p>
               </div>
               <br/>
-              <p>SO, we see that the expected entropy of splitting on A is actually *less than* that of splitting on B, even though it's the less accurate choice by itself...</p>
-              <p>BUT, what if we then split its innacurate component (i.e., A = grn) on B? How would we decide to do that?</p>
-              <p class='toolkit'>The <strong>decision tree algorithm</strong> provides us a mean of automating the attribute splitting to minimize expected entropy.</p>
+              <div class='well'>
+                <p>Conclusion:</p>
+                <p>
+                  $$EH(B) = 0.6434 > EH(A) = 0.4598$$
+                  $$\text{Accuracy}(B) = 86\% > \text{Accuracy}(A) = 80\%$$
+                </p>
+                <p>Therefore, we see that splitting on A actually has less uncertainty associated with it than splitting on B, even though A is less accurate by itself.</p>
+                <p>(Recall that splitting on A had 6 misses compared to splitting on B which had 5).</p>
+              </div>
               <br/>
-              <p>Its basic steps are as follows:</p>
-              <ol class='indent-1'>
-                <li><p>Pick an attribute A (via the expected entropy, like we did above), and set that as the root</p></li>
-                <li><p>For each <strong>value</strong> of A, if there are attributes remaining on which to split, and classification is not perfect, then recurse on the subtree with A removed.</p></li>
-                <li><p>Otherwise, there were no more attributes on which to split, so simply maximize your accuracy by classifying with a plurality vote (i.e., satisfy the most positives or negatives
-                  even though you won't be perfect).</p></li>
-              </ol>
+              
+              <p>So how does knowing the expected entropy of A help us? This brings us to the next question:</p>
+              <p>Since A is accurate for A = red and A = blu, what if we then split its innacurate component (i.e., A = grn) on B? How would we decide to do that?</p>
+              <p class='toolkit'>The <strong>decision tree algorithm</strong> provides means of automating the attribute splitting to minimize expected entropy across multiple variable splits.</p>
+              <div class='well'>
+                <p><strong>&quot;Naive&quot; Decision Tree Algorithm</strong></p>
+                <ol class='indent-1'>
+                  <li><p>Pick an attribute A with the minimal expected entropy, and set that as the root</p></li>
+                  <li><p>For each <strong>value</strong> of A, if there are attributes remaining on which to split, and classification is not perfect, then recurse on each subtree with A removed.</p></li>
+                  <li><p>Otherwise, there were no more attributes on which to split, so simply maximize your accuracy by classifying with a plurality vote (i.e., satisfy the most positives or negatives
+                    even though you won't be perfect).</p></li>
+                </ol>
+              </div>
               <br/>
-              <p>Applying this algorithm to our example, we would set variable A as the root.</p>
-              <p>We note that A = red and A = blu are perfect accuracy, but A = grn is NOT.</p>
-              <p>So, we can recurse on the A = grn subtree (i.e., the cases in our sample in which A = grn) and try splitting on another attribute in the same manner... let's try B:</p>
+              <p class='example'>Use the decision tree algorithm on our above example to perform a multi-variable split on the classification task.</p>
+              <div class='well'>
+                <ol class='indent-1'>
+                  <li><p>Choose attribute A for the root since it has the minimal entropy.</p></li>
+                  <li><p>We note that for A = red and A = blue, we have perfect accuracy (and therefore need not recurse on those sub-trees), but we are not perfect for A = grn.</p></li>
+                  <li><p>Recurse on all of the samples where A = grn and try to find a new attribute to split. In this case, splitting on B gives us a perfect split!</p></li>
+                </ol>
+              </div>
               <div class='fit-pres text-center'>
                 <img src='../../../assets/images/spring-2014/cs-161/week-9/decision-7.PNG' />
               </div>
@@ -1144,9 +1227,12 @@
                 <li><p><strong>Form (F):</strong> we have some scoring algorithm that returns a score from 0 - 5 based on whether an object has human parts like a head, torso, arms, etc.</p></li>
               </ul>
               <br/>
+              
               <p>The goal, then, is to determine for each object we encounter assessed with the above 4 attributes, whether or not that object is a human.</p>
               <p>(ignoring, of course, that this is just a re-labelling of the previous example with different semantics...)</p>
-              <p>The problem is that our classification might not be so simple as splitting on a single attribute, some confounding cases might be:</p>
+              <br/>
+              
+              <p class='debug'><strong>Complications:</strong> our classification might not be so simple as splitting on a single attribute, some confounding cases might be:</p>
               <ul class='indent-1'>
                 <li><p>A loudspeaker might announce the latest deals and be perceived as &quot;speaking&quot; even though it's not a human.</p></li>
                 <li><p>A mannequin might have a good human form, and the right height, even though it's not human.</p></li>
@@ -1158,40 +1244,43 @@
               <p class='definition'><strong>Probably Approximately Correct (PAC)</strong> classification strategies are those that, given a sufficiently large training set, can make a decision based on the
                 most likely outcome of any witnessed evidence.</p>
               <br/>
+              
               <p>Frankly, I think the term &quot;Probably Approximately Correct&quot; sounds like a rationalizing scientist who isn't quite sure of his invention...</p>
               <div class='fit-pres text-center'>
                 <img src='../../../assets/images/spring-2014/cs-161/week-9/profFrink.png' />
               </div>
               <br/>
+              
               <p>PAC strategies are good when we don't need a completely accurate answer where all cases are considered, but we have a good gist for when to say &quot;Yes&quot; and when to say &quot;No&quot;</p>
-              <p class='definition'>The <strong>Naive Bayes Classifier</strong> is a PAC classification structure where we consider some class C to be the cause of witnessing some number of identifiers, F_i.</p>
+              <p class='definition'>The <strong>Naive Bayes Classifier</strong> is a PAC classification structure where we consider some class C to be the cause of witnessing some number of identifiers, or
+                effects, \(F_i\). It is called &quot;Naive&quot; because given the class, we assume that all of the indicators are conditionally independent.</p>
               <br/>
+              
               <p>The Naive Bayes Classifier is a Bayesian network where we have a single cause (the class) being the reason for certain indications of that class.</p>
-              <p>It's called &quot;Naive&quot; because given the class, we assume that all of the indicators are conditionally independent.</p>
               <p>For our example, the Naive Bayes structure might look like this:</p>
               <br/>
               <div class='fit-pres text-center'>
                 <img src='../../../assets/images/spring-2014/cs-161/week-9/decision-1.PNG' />
               </div>
               <br/>
+              
               <p>This classifier says, &quot;If you are a human, then you'll probably exibit some movement, a certain height distribution, the propensity for speech, and some amount of human form.&quot;</p>
               <p>Furthermore, if we know you're human, then the indicators are all conditionally independent of one another because knowing that a human can speak tells us nothing more about a human's ability
                 to move.</p>
               <p>Being a Bayesian network, these indicating propensities are all implicit within the network's conditional probability tables.</p>
-              <p class='toolkit'>Naive Bayes classification then simply asks: having observed some object with indicators F1, F2, ..., Fn, which classification is most likely?</p>
+              <p class='toolkit'>Naive Bayes classification then simply asks: having observed some object with indicators \(F_1, F_2, ..., F_n\), which classification (i.e., value of the class \(C = c\))
+                is most likely?</p>
               <br/>
               <p>Let's look at the probability statements of interest:</p>
-<pre class='prettyprint'>
-  ; We are interested in determining which
-  ; classification in some set of class
-  ; variable (C) values is most likely, having
-  ; witnessed some object with indicators F
-  
-  ; So, we are interested in the table:
-  Pr(C | f1, f2, ..., fn)
-  
-  ; ...to see which value of C is most probable.
-</pre>
+              <div class='well'>
+                <p>We are interested in determining which classification in some set of class variable (C) values is most likely, having witnessed some object with indicators \(F = f\)</p>
+                <p>So, we are interested in the table:</p>
+                <p>$$Pr(C | f_1, f_2, ..., f_n)$$</p>
+                <br/>
+                
+                <p>...to see which value of C is most probable, we would then find the value for C for which:</p>
+                <p>$$\underset{c \in C}{\operatorname{argmax}} Pr(c | f_1, f_2, ..., f_n)$$</p>
+              </div>
               <br/>
               <p>So, for our example, let's say we encountered an object exibiting the following:</p>
               <table class='table table-striped table-bordered'>
@@ -1215,78 +1304,119 @@
               <br/>
               <p>Here we have some object that is moving slowly, of moderate height, that's speaking, and closely resembles the human form.</p>
               <p>Chances are good that it's a human!</p>
+              <p>Let's derive what we'll need to make that determination.</p>
               <br/>
-<pre class='prettyprint'>
-  ; In this sense, f1, f2, ..., fn is our evidence
-  ; so we can simply use a familiar theorem to
-  ; find our answer:
-  
-    Pr(C | f1, f2, ..., fn)
-  = [Pr(f1, f2, ..., fn | C) * Pr(C)] / Pr(f1, f2, ..., fn)
-  
-  ; Notice that Pr(C) is the prior on C, and since
-  ; our evidence is conditionally independent given C,
-  ; we can write
-  
-  = [Pr(f1 | C) * Pr(f2 | C) * ... * Pr(fn | C) * Pr(C)]
-    / Pr(f1, f2, ..., fn)
-</pre>
+              
+              <div class='well'>
+                <p>Note that \(f_1, f_2, ..., f_n\) is our evidence so we can simply use a familiar theorem to find our answer:</p>
+                <p>
+                  \begin{eqnarray}
+                    Pr(C | f_1, f_2, ..., f_n) = \frac{Pr(f_1, f_2, ..., f_n | C) * Pr(C)}{Pr(f_1, f_2, ..., f_n)}
+                  \end{eqnarray}
+                </p>
+                <br/>
+                
+                <p>Notice that Pr(C) is the prior on C, and since our evidence is conditionally independent given C, we can write the chain-rule factorization to achieve:</p>
+                <p>
+                  \begin{eqnarray}
+                    = \frac{Pr(f_1 | C) * Pr(f_2 | C) * ... * Pr(f_n | C) * Pr(C)}{Pr(f_1, f_2, ..., f_n)}
+                  \end{eqnarray}
+                </p>
+              </div>
               <br/>
-              <p>So, in our example, we would have each indicator f_i be a different attribute about our witnessed object, so our quantity of interest is:</p>
+              <p>So, in our example, we would have each indicator \(f_i\) be a different attribute about our witnessed object.</p>
+              <p>So our example's quantity of interest is (for Hu? = Human?, M = movement, H = height, S = speech, F = form):</p>
               <br/>
-<pre class='prettyprint'>
-    Pr(Human? | Movement = slow,
-                Height = med,
-                Speech = 1,
-                Form = 4)
-  
-  = [Pr(Movement = slow | Human?) *
-     Pr(Height = med | Human?) *
-     Pr(Speech = 1 | Human?) *
-     Pr(Form = 4 | Human?) *
-     Pr(Human?)]
-   / Pr(Movement = slow, Height = med, Speech = 1, Form = 4)
-</pre>
+              <div class='well'>
+                <p class='text-left'>
+                  $$
+                    Pr(Hu? | M = slow, H = med, S = 1, F = 4) =\\
+                     \frac{Pr(M = slow | Hu?) * Pr(H = med | Hu?) * Pr(S = 1 | Hu?) * Pr(F = 4 | Hu?) * Pr(Hu?)}
+                     {Pr(M = slow, H = med, S = 1, F = 4)}
+                  $$
+                </p>
+              </div>
               <br/>
-              <p>Almost there! Now we just need one more element to complete our classification:</p>
+              <p>Almost there! Now we just &quot;need&quot; one more element to complete our classification:</p>
               <br/>
-<pre class='prettyprint'>
-  ; Now all we need to find out is the Pr(f1, f2, ..., fn)
-  ; We have a strategy to do this: Case analysis!
-  
-  Pr(f1, f2, ..., fn) 
-    = &Sigma;_c&in;C Pr(f1, f2, ..., fn | c) * Pr(c)
-    = &Sigma;_c&in;C Pr(f1 | c) * Pr(f2 | c) * ... * Pr(fn | c) * Pr(c)
-    
-  ; And so, substituting back into our original equation:
-  [Pr(f1 | c) * Pr(f2 | c) * ... * Pr(fn | c) * Pr(C)]
-    / Pr(f1, f2, ..., fn)
-    
-  = [Pr(f1 | C) * Pr(f2 | C) * ... * Pr(fn | C) * Pr(C)]
-    / [&Sigma;_c&in;C Pr(f1 | c) * Pr(f2 | c) * ... * Pr(fn | c) * Pr(c)]
-</pre>
+              <div class='well'>
+                <p>Now all we need to find out is the \(Pr(f_1, f_2, ..., f_n)\). We have a strategy to do this: Case analysis!</p>
+                <p>
+                  \begin{eqnarray}
+                    Pr(f_1, f_2, ..., f_n) &=& \sum_{c \in C} Pr(f_1, f_2, ..., f_n | c) * Pr(c)\\
+                                           &=& \sum_{c \in C} Pr(f_1 | c) * Pr(f_2 | c) * ... * Pr(f_n | c) * Pr(c)
+                  \end{eqnarray}
+                </p>
+                <br/>
+                
+                <p>And so, substituting back into our original equation:</p>
+                <p>
+                  $$
+                    \frac{Pr(f_1 | c) * Pr(f_2 | c) * ... * Pr(f_n | c) * Pr(C)}{Pr(f_1, f_2, ..., f_n)} =\\
+                    \frac{Pr(f_1 | C) * Pr(f_2 | C) * ... * Pr(f_n | C) * Pr(C)}{\sum_{c \in C} Pr(f_1 | c) * Pr(f_2 | c) * ... * Pr(f_n | c) * Pr(c)}
+                  $$
+                </p>
+              </div>
               <br/>
+              
               <p>Notice: This gives us a *table* since we have the class variable C in the numerator; we really want to determine *which* value of C is most likely.</p>
+              <p>We also notice that we don't need the denominator to make this determination since it's simply the normalizing constant!</p>
               <p>So, we simply compare the different values of C and classify based on whichever is most probable.</p>
               <p>This outcome is defined by:</p>
-<pre class='prettyprint'>
-  ; The most likely class for all classes in C will
-  ; be represented by:
-  argmax [Pr(f1 | c_i) * Pr(f2 | c_i) * ... * Pr(fn | c_i) * Pr(c_i)]
-  c_i&in;C   / [&Sigma;_c&in;C Pr(f1 | c) * Pr(f2 | c) * ... * Pr(fn | c) * Pr(c)]
-  
-  ; Noting that the division is simply the normalizing constant:
-  &prop; argmax [Pr(f1 | c_i) * Pr(f2 | c_i) * ... * Pr(fn | c_i) * Pr(c_i)]
-     c_i&in;C
-</pre>
+              <div class='well'>
+                <p>The most likely class for all classes in C will be represented by:</p>
+                <p>
+                  $$\underset{c' \in C}{\operatorname{argmax}} \frac{Pr(f_1 | c') * Pr(f_2 | c') * ... * Pr(fn | c') * Pr(c')}{\sum_{c \in C} Pr(f_1 | c) * Pr(f_2 | c) * ... * Pr(f_n | c) * Pr(c)}$$
+                </p>
+                <br/>
+                
+                <p>Noting that the division is simply the normalizing constant:</p>
+                <p>
+                  $$\propto \underset{c' \in C}{\operatorname{argmax}} Pr(f_1 | c') * Pr(f_2 | c') * ... * Pr(f_n | c') * Pr(c')$$
+                </p>
+              </div>
               <br/>
+              
               <p>...which looks intimidating, but just says, &quot;Choose the value of class variable C that has the highest probability given the witnessed indicator values for the object&quot;</p>
               <p>In our example, we would be choosing between: C = Human? = {yes, no}</p>
               
-              <!-- TODO: Example -->
-              
+              <p class='example'>Recall our example Bayesian network from last week (which is actually a Naive Bayes structure with Smoking as the class variable). Suppose that we observe:
+                $$\text{Asthma } = 1, \text{Cancer } = 0$$
+                Is it more likely that this patient is a smoker or non-smoker?
+              </p>
+              <div class='fit-pres text-center'>
+                <img src="../../../assets/images/winter-2015/cs-161/week-8/bayesnet-1.PNG">
+              </div>
+              <p class='question' name='naive-bayes-0'>Click for solution.</p>
+              <div class='answer white-bg' name='naive-bayes-0'>
+                <p>We'll find the solution to:</p>
+                <p>$$\underset{s \in Smoking}{\operatorname{argmax}} Pr(Asthma = 1 | s) * Pr(Cancer = 0 | s) * Pr(s)$$</p>
+                <p>
+                  \begin{eqnarray}
+                    Pr(A = 1 | S = 0) * Pr(C = 0 | S = 0) * Pr(S = 0) &=& 0.1 * 0.8 * 0.8\\
+                                                                      &=& 0.064
+                  \end{eqnarray}
+                </p>
+                <p>
+                  \begin{eqnarray}
+                    Pr(A = 1 | S = 1) * Pr(C = 0 | S = 1) * Pr(S = 1) &=& 0.6 * 0.1 * 0.2\\
+                                                                      &=& 0.012
+                  \end{eqnarray}
+                </p>
+                <p>Therefore, we conclude that it is more likely for our patient to NOT be a smoker.</p>
+              </div>
             </div>
             <hr/>
+            
+
+            <br/>
+            <div id='final-review' class='scrollspy-element' scrollspy-title='Final'></div>
+            <h1>Final</h1>
+            <div>
+              <p>Your final is fast approaching! Engage panic!</p>
+              <p>Just a quick note that I'll be preparing a massive practice final that I hope to be ready by early next week.</p>
+              <p>If you want any type of problem to be particularly represented, let me know and I'll be sure to include an instance!</p>
+            </div>
             
             
             <a class='btn btn-default pull-right hidden-print' href='javascript:window.print();'>
