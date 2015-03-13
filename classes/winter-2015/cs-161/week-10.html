@@ -584,7 +584,7 @@
               <br/>
               <p>As such, two hypotheses with at least one different extension will be inconsistent since they must disagree on the classification of at least one sample element.</p>
               <br/>
-              <p class='example'>Generate a FOL hypothesis representation of the following decision tree for some classification predicate X and trinary attributes A and B.</p>
+              <p class='example'>Generate a FOL hypothesis representation of the following decision tree for some classification predicate \(X(r)\) on sample \(r\) and trinary attributes A and B.</p>
               <br/>
               <div class='fit-pres text-center'>
                 <img src='../../../assets/images/spring-2014/cs-161/week-9/decision-8.PNG' />
@@ -629,7 +629,7 @@
           if ex consistent with h
               continue
           else ex false positive for h
-              ; Here we try to perform generalization on h,
+              ; Here we try to perform specialization on h,
               ; which must satisfy not only ex but all
               ; previous examples
               try to specialize h, or return fail
@@ -707,14 +707,12 @@
                   </tr>
                 </tbody>
               </table>
+              <p class='question' name='learn-0'>Give a hypothesis \(h_1\) over the first example on attribute A of the format:<br/>$$h_1: X(r) \Leftrightarrow ???$$</p>
+              <p class='answer' name='learn-0'>
+                  $$h_1: X(r) \Leftrightarrow A(r, red)$$
+              </p>
               <br/>
-<pre class='prettyprint'>
-  ; Choose our first hypothesis to rely solely
-  ; on attribute A such that:
-  h1:
-      X(r) &hArr; A(r, red)
-</pre>
-              <br/>
+              
               <p>Now continue to next example:</p>
               <table class='table table-bordered table-striped'>
                 <caption>Example 2</caption>
@@ -735,15 +733,15 @@
                   </tr>
                 </tbody>
               </table>
+              <p class='question' name='learn-1'>Give a hypothesis \(h_2\) modifying \(h_1: X(r) \Leftrightarrow A(r, red)\) over the first TWO examples on attributes A and B of the format:<br/>
+                $$h_2: X(r) \Leftrightarrow ???$$
+              </p>
+              <div class='answer' name='learn-1'>
+                  <p>Issue: h1 fails on this example (since we have A = red but X = no), indicating a false positive, so try to specialize</p>
+                  $$h_2: X(r) \Leftrightarrow A(r, red) \land B(r, sml)$$
+              </div>
               <br/>
-<pre class='prettyprint'>
-  ; Issue: h1 fails on this example (since we have
-  ; A = red but X = no), indicating a false
-  ; positive, so try to specialize
-  h2:
-      X(r) &hArr; A(r, red) &and; B(r, sml)
-</pre>
-              <br/>
+              
               <p>So far so good, demonstrably h2 now satisfies the classification outcome of examples 1 and 2... let's keep going...</p>
               <br/>
               <table class='table table-bordered table-striped'>
@@ -765,9 +763,10 @@
                   </tr>
                 </tbody>
               </table>
+              <p class='question' name='learn-2'>Is Example 3 consistent with \(h_2: X(r) \Leftrightarrow A(r, red) \land B(r, sml)\)? Do we need to specialize or generalize?</p>
+              <p class='answer' name='learn-2'>Yes! No need to change.</p>
               <br/>
-              <p>Looks OK, so far h2 seems alright, let's keep going...</p>
-              <br/>
+              
               <table class='table table-bordered table-striped'>
                 <caption>Example 4</caption>
                 <thead>
@@ -787,24 +786,25 @@
                   </tr>
                 </tbody>
               </table>
+              <p class='question' name='learn-3'>Give a hypothesis \(h_3\) modifying \(h_2: X(r) \Leftrightarrow A(r, red) \land B(r, sml)\) over the first FOUR examples on attributes A, B, and C of the format:<br/>
+                $$h_3: X(r) \Leftrightarrow ???$$
+              </p>
+              <div class='answer' name='learn-3'>
+                  <p>This means h2 represents a false negative for example 4, and so we must generalize ...perhaps a disjunction is in order?</p>
+                  <p>
+                    \begin{eqnarray}
+                      h3: X(r) \Leftrightarrow A(r, red) &\land& B(r, sml) \lor\\
+                                               A(r, red) &\land& C(r, 0)
+                    \end{eqnarray}
+                  </p>
+              </div>
               <br/>
-              <p>Uh oh, now h2 doesn't cut it: we have A = red but B &ne; sml and yet X = yes...</p>
-              <br/>
-<pre class='prettyprint'>
-  ; This means h2 represents a false negative
-  ; for example 4, and so we must generalize
-  ; ...perhaps a disjunction is in order?
-  h3:
-      X(r) &hArr; A(r, red) &and; B(r, sml) &or;
-              A(r, red) &and; C(r, 0)
-</pre>
-              <br/>
+
               <p>That looks like it fits! Notice, however, that only the latter extension is required to match all of our classifications... so current-best will detect that on a recursive call (see book
                 pg. 771) and reduce to:</p>
-<pre class='prettyprint'>
-  h4:
-      X(r) &hArr; A(r, red) &and; C(r, 0)
-</pre>
+              <p>
+                $$h4: X(r) \Leftrightarrow A(r, red) \land C(r, 0)$$
+              </p>
               <br/>
               <p>Looks good!</p>
               <p>Like we said, however, there are many efficiency concerns with this nondeterministic attribute selection, since *many* different hypotheses might satisfy the sample that we have.</p>
@@ -848,8 +848,10 @@
               <p>The Chinese Room scenario was posed by Searle in response to Turing's assertion that &quot;intelligence&quot; can be measured by the yardstick functionalism:</p>
               <p class='definition'>A <strong>mental state</strong> is the abstract notion of a thought.</p>
               <p class='definition'><strong>Functionalism</strong> asserts that a mental state is any intermediate causal condition between input and output.</p>
+              <p class='example'>Consider being given some visual input like seeing a flower, which evokes some thought about the input (the mental state),
+                and then produces some behavioral output (like picking the flower).</p>
               <br/>
-              <p>In other words, given some input (like seeing a flower) evokes some thought about the input (the mental state) and then produces some behavioral output (like picking the flower).</p>
+              
               <p>In this capacity, if we were able to surgically replace all of the neurons in someone's brain with devices that reproduced the exact input-output of the neurons they replaced, then
                 functionalists would argue that the mental state (i.e., the thought aspect of consciousness) remains unchanged.</p>
               <p>Searle, and other <strong>biological naturalists</strong> like him, argue that consciousness would be disrupted, and someone who has undergone the above procedure would slowly lose their
@@ -921,10 +923,10 @@
               <br/>
               <p class='definition'>If you haven't already filled out your <strong>TA evaluations</strong> for my discussion section, I implore you to do so! The feedback I get from you 
                 (who are technically my employers!) is vital and I'd love to know what worked and what didn't for you throughout the quarter.</p>
-              <p class='debug'>Your <strong>final</strong> is this Monday, June 9th, at 6:30pm. Remember to bring a Blue Book! Apropos, be sure to peruse my practice final and relevant book chapters from 
+              <p class='debug'>Your <strong>final</strong> is this Friday, March 10th, at 11:30am. Remember to bring a Blue Book! Apropos, be sure to peruse my practice final and relevant book chapters from 
                 Dr. Dyer's final topics note on CourseWeb.</p>
               <br/>
-              <p>Good luck all! Have fun with the final and enjoy the summer.</p>
+              <p>Good luck all! Have fun with the final and enjoy the spring!</p>
             </div>
             <hr/>
             

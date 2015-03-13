@@ -12,6 +12,7 @@
     <script src="../../../js/lib/expanding.js"></script>
     <script src="../../../js/display/general/general-display.js"></script>
     <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+    <script type="text/javascript" src="../../../js/display/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
   </head>
   
   <body data-spy="scroll" data-target="#scrollspy">
@@ -86,6 +87,12 @@
       </nav>
       <!-- END NAVIGATION -->
       
+      <!-- MathJax CUSTOM DEFS -->
+      <div class='hidden'>
+        \(\def\independence{\perp\!\!\!\perp}\)
+        \(\def\dependence{\perp\!\!\!\!\!/\!\!\!\!\!\perp}\)
+      </div>
+      
       <!-- BEGIN MAIN CONTENT -->
       <div id="main-content" class="container">
         <div class="row">
@@ -115,7 +122,8 @@
                 Any and all exercises listed herein are simply my best guess of the type of problems you'll encounter and what you should be expected to perform on a test. They may or may not represent the
                 difficulty of any question encountered on the exam.
               </p>
-              <br/>
+              <p class='definition'><strong>Note:</strong> since FOL inference was not on the midterm (as it usually is) you should also review the
+                <a href='http://cs.ucla.edu/~forns/classes/winter-2015/cs-161/midterm-practice.html#fol'>inference examples from the practice midterm (click here)</a></p>
               <p>Here's a smattering of problems I think might be on the exam. Have at it, and let me know if you have any questions!</p>
             </div>
             <hr/>
@@ -172,7 +180,6 @@
     On(A, Table) &and; On(B, A) &and; On(C, B)
   )
 </pre>
-              <br/>
               <p class='question' name='planning-q0'>Click for solution.</p>
               <div class='answer' name='planning-q0'>
 <pre class='prettyprint'>
@@ -182,11 +189,12 @@
 </pre>
               </div>
               <br/>
+              
               <p>OK hotshot, that was too easy... but now that you're warmed up...</p>
               <br/>
+              
               <p class='example'>[BLOCKS 2] Let's try the block moving problem, but add a degree of difficulty: now, there is only room on the table to hold 3 stacks of blocks, designated table spots T1, T2, T3. 
                 We will also have to modify the actions:</p>
-              <br/>
 <pre class='prettyprint'>
   ; Move block b from x to y
   ; [!] NOTE: x and y may now be table slots, which
@@ -217,7 +225,6 @@
     On(A, T3) &and; On(B, A) &and; On(C, B) &and; On(D, C) &and; On(E, D)
   )
 </pre>
-              <br/>
               <p class='question' name='planning-q1'>Click for solution.</p>
               <div class='answer' name='planning-q1'>
 <pre class='prettyprint'>
@@ -233,8 +240,9 @@
   ; ...great, I invented the Blocks of Hanoi...
 </pre>
               </div>
+              <hr/>
+              <br/>
               
-              <hr/><br/>
               <p>Alright that was a little obnoxious and grueling... so why not aim for more obnoxious and grueling with a planning graph?</p>
               <p>Your book starts the planning graph for the Tire Changing problem, but doesn't show some mutex connections... why don't we complete them?</p>
               <br/>
@@ -269,7 +277,6 @@
               <br/>
               <p class='example'>[TIRE 1] Step One: diagram the planning graph's initial state (HINT: remember to explicitly list the closed world assumptions!)</p>
               <p class='debug'>NOTE: For simplicity's sake, we will not model the Tire(x) nor the &not;At(Flat, Trunk) fluents, since those have no chance of changing.</p>
-              <br/>
               <p class='question' name='planning-q2'>Click for solution.</p>
               <div class='answer' name='planning-q2'>
                 <div class='fit-pres text-center'>
@@ -277,8 +284,9 @@
                 </div>
               </div>
               <br/>
-              <p class='example'>[TIRE 2] Step Two: diagram the planning graph's first Action level, A0 (without mutex links, for now):</p>
               <br/>
+              
+              <p class='example'>[TIRE 2] Step Two: diagram the planning graph's first Action level, A0 (without mutex links, for now):</p>
               <p class='question' name='planning-q3'>Click for solution.</p>
               <div class='answer' name='planning-q3'>
                 <div class='fit-pres text-center'>
@@ -286,8 +294,9 @@
                 </div>
               </div>
               <br/>
-              <p class='example'>[TIRE 3] Step Three: add mutex links between actions in A0:</p>
               <br/>
+              
+              <p class='example'>[TIRE 3] Step Three: add mutex links between actions in A0:</p>
               <p class='question' name='planning-q4'>Click for solution.</p>
               <div class='answer' name='planning-q4'>
                 <div class='fit-pres text-center'>
@@ -295,8 +304,9 @@
                 </div>
               </div>
               <br/>
-              <p class='example'>[TIRE 4] Step Four: diagram the second state level S1:</p>
               <br/>
+              
+              <p class='example'>[TIRE 4] Step Four: diagram the second state level S1:</p>
               <p class='question' name='planning-q5'>Click for solution.</p>
               <div class='answer' name='planning-q5'>
                 <div class='fit-pres text-center'>
@@ -304,16 +314,19 @@
                 </div>
               </div>
               <br/>
-              <p class='example'>[TIRE 5] Step Five: add mutex links between fluents of state S1:</p>
               <br/>
+              
+              <p class='example'>[TIRE 5] Step Five: add mutex links between fluents of state S1:</p>
               <p class='question' name='planning-q6'>Click for solution.</p>
               <div class='answer' name='planning-q6'>
                 <div class='fit-pres text-center'>
                   <img src='../../../assets/images/spring-2014/cs-161/final/final-4.PNG' />
                 </div>
               </div>
+              <hr/>
+              <br/>
+              <br/>
               
-              <hr/><br/>
               <p>How about a couple of nice, easy, conceptual questions after that?</p>
               <p class='question' name='planning-q7'>Under what condition does the planning graph stop generating new levels?</p>
               <p class='answer' name='planning-q7'>Two consecutive, identical state levels.</p>
@@ -321,12 +334,12 @@
               <p class='question' name='planning-q8'>If the planning graph &quot;levels off,&quot; the goal state's fluents exist in the final state level, and they are not mutex, are we guaranteed that a
                 solution exists to the planning problem?</p>
               <p class='answer' name='planning-q8'>No! We are only guaranteed that a solution does *not* exist if our final state level does *not* contain the goal fluents.</p>
+              <hr/>
+              <br/>
+              <br/>
               
-              <br/>
               <p class='example'>[REGRESSION 1] Use regression planning to derive an action sequence that will attain the given goal state from the given initial state.</p>
-              <br/>
-              <p><strong>Remember!</strong> <code class='prettyprint'>g' = (g - ADD(a)) &cup; Preconditions(a)</code></p>
-              <br/>
+              <p class='debug'><strong>Remember!</strong> For states \(g\) and actions \(a\)<br/>$$g' = (g - ADD(a)) \cup Preconditions(a)$$</p>
 <pre class='prettyprint'>
   ; Constants:
   Andrew, Dyer, Charlotte
@@ -889,8 +902,8 @@
               <p class='question' name='mb-q1'>[BN 5] What is the Markov Blanket for Node C?</p>
               <p class='answer' name='mb-q1'>{V, S, O, T}</p>
               <br/>
-              <p class='question' name='mb-q1'>[BN 6] What is the Markov Blanket for Node O?</p>
-              <p class='answer' name='mb-q1'>{T, C, X, D, B}</p>
+              <p class='question' name='mb-q2'>[BN 6] What is the Markov Blanket for Node O?</p>
+              <p class='answer' name='mb-q2'>{T, C, X, D, B}</p>
               
               <hr/>
               <br/>
@@ -907,11 +920,11 @@
               <br/>
               <p>As a reminder, here are some &quot;at a glance&quot; steps to variable elimination:</p>
               <ol class='indent-1'>
-                <li><p>Choose an elimination order (too complicated for CS161 -- we'll give you one)</p></li>
                 <li><p>Trim all nodes that are d-separated from the query.</p></li>
                 <li><p>Zero-out CPT rows inconsistent with the evidence.</p></li>
-                <li><p>Let's say variable C is first in the elimination order (and hasn't been trimmed by #2), then we multiply all tables / factors mentioning C into one giant factor, and then sum out C.</p></li>
-                <li><p>Repeat above step until we're only left with our query variables. <strong>THEN, MAKE SURE YOUR REMAINING FACTOR *IS* YOUR QUERY.</strong> Otherwise, you might need extra steps.</p></li>
+                <li><p>Choose an elimination order (too complicated for CS161 -- we'll give you one)</p></li>
+                <li><p>Iterate over all variables V in the elimination order, then multiply all tables / factors mentioning V into one giant factor, and summing out non-query variables.</p></li>
+                <li><p>Repeat above step until we're only left with a factor over our query variables. Then, use the resultant factor to compute your target quantity.</p></li>
               </ol>
               <br/>
               <div class='fit-pres text-center'>
@@ -919,12 +932,12 @@
               </div>
               <p class='question' name='bn-q9'>Click for solution.</p>
               <div class='answer' name='bn-q9'>
-                <p><strong>Step 1 (Done):</strong> &Pi; = C, B, A</p>
-                <p><strong>Step 2:</strong> Trim node C from the network since A &perp; C | B</p>
-                <p><strong>Step 3:</strong> Zero out the following rows inconsistent with evidence:</p>
+                <p><strong>Step 1:</strong> Trim node C from the network since A &perp; C | B</p>
+                <p><strong>Step 2:</strong> Zero out the following rows inconsistent with evidence:</p>
                 <div class='fit-pres text-center'>
                   <img src='../../../assets/images/spring-2014/cs-161/final/final-10.PNG' />
                 </div>
+                <p><strong>Step 3 (Done):</strong> &Pi; = C, B, A</p>
                 <br/>
                 <p><strong>Step 4a:</strong> Since C was trimmed, B is next in the elimination order, so multiply together all tables mentioning B (just the one) and sum it out.</p>
                 <div class='fit-pres text-center'>
@@ -983,12 +996,12 @@
               <br/>
               <p class='question' name='bn-q10'>Click for solution.</p>
               <div class='answer' name='bn-q10'>
-                <p><strong>Step 1 (Done):</strong> &Pi; = C2, J, B, C1</p>
-                <p><strong>Step 2:</strong> No nodes to trim; all are dependent with the given evidence!</p>
-                <p><strong>Step 3:</strong> Zero out the following rows inconsistent with evidence:</p>
+                <p><strong>Step 1:</strong> No nodes to trim; all are dependent with the given evidence!</p>
+                <p><strong>Step 2:</strong> Zero out the following rows inconsistent with evidence:</p>
                 <div class='fit-pres text-center'>
                   <img src='../../../assets/images/spring-2014/cs-161/final/final-14.PNG' />
                 </div>
+                <p><strong>Step 3 (Done):</strong> &Pi; = C2, J, B, C1</p>
                 <br/>
                 <p><strong>Step 4a:</strong> Variable C2 on the chopping block first, so multiply all tables and factors mentioning it:</p>
                 <div class='fit-pres text-center'>
