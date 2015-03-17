@@ -6,6 +6,8 @@
 $(function () {
   var scrollspy = $("#scrollspy"),
       presentationMode = false,
+      dyerMode = false,
+      DYER_RATE = 0.15,
       presentationClass = "presentation-display",
       noteMode = false,
       currentNote = 0,
@@ -108,6 +110,33 @@ $(function () {
             $("[name='" + $(this).attr("name") + "'].answer")
               .hide();
           });
+      }
+    });
+    
+  // Dyer mode
+  $(document)
+    .on("keypress", function (e) {
+      if (e.keyCode === 68) {
+        if (dyerMode) {
+          dyerMode = false;
+          $(".dyer-mode").remove();
+        } else {
+          dyerMode = true;
+          alert("[!] Dyer mode enabled. Press SHIFT+D again to disable.")
+          $("#main-content p").each(function () {
+            if (Math.random() < DYER_RATE) {
+              var currentText = $(this).text(),
+                  currentLength = currentText.length,
+                  randomPos = currentLength * Math.random();
+              
+              currentText = currentText.substring(0, randomPos) + "<span class='dyer-mode'>" +
+                            ((Math.random() < 0.5) ? "(" : ")") + "</span>" +
+                            currentText.substring(randomPos, currentLength);
+              
+              $(this).html(currentText);
+            }
+          });
+        }
       }
     });
   
