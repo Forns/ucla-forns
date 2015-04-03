@@ -104,7 +104,7 @@
             
             <ol class="breadcrumb hidden-print">
               <li><a href="../../../classes.html">Classes</a></li>
-              <li><a href="./cs-161.html">Spring14 CS161</a></li>
+              <li><a href="./cs-161.html">CS161</a></li>
               <li class="active">Week 1</li>
             </ol>
             
@@ -121,16 +121,16 @@
               <br/>
               <p><strong>About My Role as Your TA:</strong></p>
               <ul class='indent-1'>
-                <li><p>I am always available to email; don't hesitate to ask for any clarifications.</p></li>
+                <li><p>I am always available to email; don't hesitate to ask for any clarifications (though be sure to browse the Piazza forum first; your question has likely been asked already!).</p></li>
                 <li><p>
-                  My office hours are on Wednesdays, from 1:30 - 3:30pm in Boelter 2432. If you can't make those hours, email me to set up an appointment.
+                  My office hours are Tuesdays, 1:30 - 3:30pm in Boelter 2432. If you can't make those hours, email me to set up an appointment.
                 </p></li>
               </ul>
               <br/>
               <p><strong>Site Features:</strong></p>
               <ul class='indent-1'>
                 <li><p>
-                  You can now add notes inside the website so that you can follow along and type as I say stuff! Just hit <code class='prettyprint'>SHIFT + N</code> 
+                  You can add notes inside the website so that you can follow along and type as I say stuff! Just hit <code class='prettyprint'>SHIFT + N</code> 
                   and then click on a paragraph to add an editable note area below. NOTE: the notes you add will not persist if you close your browser, so make sure you save 
                   it to PDF when you're done taking notes! (see below)
                 </p></li>
@@ -144,8 +144,8 @@
               <p>I will be maintaining a class discussion board using Piazza for all of your homework and class-related questions.</p>
               <p>Please post to the forum first before emailing me, abiding by the Forum Rules (see the sticky post on the forum):</p>
               <ul class='indent-1'>
-                <li><p><a href='http://piazza.com/ucla/spring2014/cs161' target='_blank'>Register for the forum here!</a></p></li>
-                <li><p><a href='http://piazza.com/ucla/spring2014/cs161/home' target='_blank'>Access the forum here!</a></p></li>
+                <li><p><a href='http://piazza.com/ucla/spring2015/cs161' target='_blank'>Register for the forum here!</a></p></li>
+                <li><p><a href='http://piazza.com/ucla/spring2015/cs161/home' target='_blank'>Access the forum here!</a></p></li>
               </ul>
             </div>
             <hr/>
@@ -159,6 +159,7 @@
               <p>AI has many branches and facets, so a single definition is difficult; that said, we can say, generally, that:</p>
               <p class='definition'><strong>Artificial Intelligence</strong> is the attempt to automate the intelligent processes we often attribute to biological organisms (usually humans).</p>
               <br/>
+              
               <p>Tasks that humans perform daily are actually quite non-trivial for computers.</p>
               <p class='question' name='intro-q0'>What are some tasks at which humans excel over computers?</p>
               <div class='answer' name='intro-q0'>
@@ -173,6 +174,7 @@
                 </ul>
               </div>
               <br/>
+              
               <p>...and these are just a few applications!</p>
               <p>Indeed, AI need not be applied, necessarily; philosophers have long debated the nature of intelligence and whether or not man has the capacity to reproduce it artificially.</p>
               <p>We'll leave most of that philosophy stuff to north campus, though... this class will deal primarily with the technical aspects of AI.</p>
@@ -181,6 +183,7 @@
               <h3>Natural Language Processing (NLP)</h3>
               <p>Because this course dives most heavily into NLP, it's fair to take a quick look at it now.</p>
               <p class='definition'><strong>Natural Language Processing</strong> is a subfield of AI concerned with extracting meaning from text and speech.</p>
+              <br/>
               <p>Firstly, NLP in its entirety has not yet been solved; there are many nuances of language that computers just don't understand.</p>
               <p>That said, history has provided us with a few main approaches to NLP, each with some strengths and weaknesses:</p>
               <table class='table table-bordered table-striped'>
@@ -209,6 +212,7 @@
                 The <strong>Turing Test</strong> is a game described by Alan Turing whereby human judges attempt to discern whether an unseen (text) conversational partner is a machine or another human.
               </p>
               <br/>
+              
               <p>The game, as Turing described it, goes something like this:</p>
               <ul class='indent-1'>
                 <li><p>A human judge (the interlocutor) engages in conversation between two entities that are located in separate rooms.*</p></li>
@@ -252,13 +256,13 @@
               </ul>
               <br/>
               <p>When some of these constraints are relaxed, even very simple chatbots have completed modified Turing tests...</p>
-              <p>(Shameless plug for my own undergrad chatbot, (Gilbert &amp; Forney, in press))</p>
+              <p>(Shameless plug for my own undergrad chatbot, (Gilbert &amp; Forney, 2014))</p>
               
               <br/>
               <h3>Summary</h3>
               <ul class='indent-1'>
                 <li><p>NLP is hard...</p></li>
-                <li><p>...so hard that a (version) of a test for computer intelligence proposed over 50 years ago still hasn't been satisfactorily met.</p></li>
+                <li><p>...so hard that a (version of a) test for computer intelligence proposed over 50 years ago still hasn't been satisfactorily met.</p></li>
                 <li><p>Some, constrained, versions of the Turing test have been passed, though those studies are generally not... generalizable.</p></li>
                 <li><p>There are a variety of different approaches to NLP each with their own strengths and weaknesses, some of which we'll discuss in this course</p></li>
               </ul>
@@ -295,7 +299,7 @@
                 <tbody>
                   <tr>
                     <th><p>Windows</p></th>
-                    <td><p>At the top of <a href='http://www.clisp.org/' target='_blank'>this page (linked above)</a>, simply click on the word CLISP in the title and download the executable.</p></td>
+                    <td><p>At the right of <a href='http://www.clisp.org/' target='_blank'>this page (linked here)</a>, find a download under "our official distribution sites".</p></td>
                   </tr>
                   <tr>
                     <th><p>Mac OS X</p></th>
@@ -309,13 +313,17 @@
                         </p></li>
                         <li><p>You can now use your terminal to access the clisp interpreter as well as use the terminal to run your LISP code.</p></li>
                       </ol>
+                      <hr/>
+                      <p>Brew Alternate installation:</p>
+                      <p>MacPorts not working for you? <a href='http://objectcoder.com/2014/01/26/installing-common-lisp-clisp-on-mac-os-x/' target="blank">You can try the Brew tutorial located here</a>.</p>
+                      <p>(complete with strange, alien Lisp illustration)</p>
                     </td>
                   </tr>
                   <tr>
                     <th><p>Linux</p></th>
                     <td>
                       <ol class='indent-1'>
-                        <li><p>On the right of <a href='http://www.clisp.org/' target='_blank'>this page (linked above)</a>, find your flavor of Linux and check the package listing.</p></li>
+                        <li><p>On the right of <a href='http://www.clisp.org/' target='_blank'>this page (linked here)</a>, find your flavor of Linux and check the package listing.</p></li>
                         <li><p>Usually, you will then install the package of choice by opening a terminal and typing something like (depending on your Linux installation):<br/>
 <pre class='prettyprint'>
   sudo apt-get install clisp
@@ -348,9 +356,9 @@
               <br/>
               <p>Why LISP for AI?</p>
               <ul class='indent-1'>
-                <li><p>LISP syntax is tree-oriented (and therefore, recursion oriented), which is useful for NLP</p></li>
+                <li><p>LISP syntax is tree-oriented (and therefore, recursion oriented), which is useful for NLP and many other tree-based operations</p></li>
                 <li><p>Because of its tree-like properties, making proofs and algorithmic analysis is simplified</p></li>
-                <li><p>Interchangability of data and program code, which allows for ease of self-modifying behavior</p></li>
+                <li><p>LISP boasts interchangability of data and program code, which allows for ease of self-modifying behavior</p></li>
               </ul>
               <br/>
               <p class='definition'><strong>There are a variety of different LISP implementations.</strong> This class, and guide, describes the Common LISP variant.</p>
@@ -359,7 +367,7 @@
               <h3>Atom &amp; Eval</h3>
               <p>Get it? Because we're starting with the basics? :/</p>
               <p class='toolkit'><strong>Atoms</strong> are simple data types in LISP such as numbers and strings. These are indivisible into smaller components, thus the name.</p>
-              <p class='toolkit'><strong>Symbols</strong> are atoms that can refer to functions and variables.</p>
+              <p class='toolkit'><strong>Symbols</strong> are atoms that possess a name, possibly a value, and possibly a function definition.</p>
               <p>In this way, all symbols are atoms, but not all atoms are necessarily symbols.</p>
               <br/>
               <p class='debug'>NOTE: Symbols are case-insensitive, which means that a symbol representing some function called SYMBOL-ENOUGH is equivalent to referencing the same function SyMbOl-EnOuGh</p>
@@ -391,6 +399,11 @@
 <pre class='prettyprint'>
   '(item1 item2 ... itemN)
 </pre>
+                      ...which is actually a read-macro expansion for:
+<pre class='prettyprint'>
+  (quote (item1 item2 ... itemN))
+</pre>
+                      ...but we'll use the single-quote short-hand to simplify
                     </p></td>
                   </tr>
                 </tbody>
@@ -584,7 +597,7 @@
               <br/>
               <h3>List Manipulation</h3>
               <p>So we've looked at how to get things out of lists, but how about constructing them from different atoms and lists?</p>
-              <p class='toolkit'>The <code class='prettyprint'>cons</code> function returns a list composed of the first element (exactly) with the elements of the 2nd argument &quote;tacked on&quot; after.</p>
+              <p class='toolkit'>The <code class='prettyprint'>cons</code> function returns a list composed of the first element (exactly) with the elements of the 2nd argument &quot;tacked on&quot; after.</p>
               <p>Generally, we use cons to prepend an atom to the front of a list. For example:</p>
 <pre class='prettyprint'>
   ;; Any list L is equivalent to:
@@ -657,7 +670,7 @@
   (cons 1 (cons 2 '(3 4)))
 </pre>
               <br/>
-              <p>Be wary of this symbol in your code! It probably means you tried to cons something that you didn't mean to... instead, you'll probably want one of the following operations:</p>
+              <p>Be wary of this symbol in your code! It probably means you tried to cons something that you didn't mean to... instead, you'll probably want one of the operations discussed in the next section.</p>
               <p>One final note, observe the following special behavior of cons involving nil:</p>
 <pre class='prettyprint'>
   ;; #1
@@ -683,7 +696,7 @@
 </pre>
               
               <br/>
-              <p class='toolkit'>The <code class='prettyprint'>append</code> function takes the elements of each argument and embeds them in the previous argument.</p>
+              <p class='toolkit'>The <code class='prettyprint'>append</code> function takes the elements of each argument list and embeds them at the end of the previous argument list.</p>
               <br/>
               <p class='prettyprint'>What does the following code print out?</p>
 <pre class='prettyprint'>
@@ -866,7 +879,20 @@
   
   (+ lame (first example))
 </pre>
-              <p>Again, avoid using setq in your assignments; you may use it for test code!</p>
+              <p>Again, unless otherwise specified, you should avoid using setq in your assignments; you may use it for test code!</p>
+              <br/>
+              <p class='toolkit'>The <code class='prettyprint'>boundp</code> predicate tests whether or not a given symbol is bound to some definition.</p>
+<pre class='prettyprint'>
+  ;; Assuming no other code above, is 'TEST bound yet?
+  (print (boundp 'TEST))
+  
+  (setq TEST 5)
+  
+  ;; Now is 'TEST bound?
+  (print (boundp 'TEST))
+</pre>
+              <p>[HINT] You may find boundp useful in your homework for determining if gaps are conatms!</p>
+              <p>We'll talk about this later...</p>
               <br/>
               <p>Now, I know what your next question is: What's the difference between <code class='prettyprint'>let</code> and <code class='prettyprint'>let*</code>?</p>
               <ul class='indent-1'>
@@ -971,7 +997,7 @@
       ; Base case: pow is 0, return 1
       ((= pow 0) 1)
       
-      ; If power is positive, we'll recursively
+      ; If power is positive, we recursively
       ; multiply our result by n
       ((&gt; pow 0) (* n (power n (- pow 1))))
       
@@ -1051,11 +1077,11 @@
       ; Base case: L is empty, so return nil
       ( ??? )
       
-      ; Base case: n has reached 0, so we're
+      ; Base case: n has reached 0, so we are
       ; at the index in L to place R
       ((= n 0) ( ??? )
       
-      ; Recursive case: L isn't empty and n isn't 0, so
+      ; Recursive case: L is not empty and n is not 0, so
       ; add the first element of L to our result, and then
       ; recurse on the rest of L and n - 1
       (t (??? (first L) (replace-element ( ??? ) ( ??? ) R)))
@@ -1090,7 +1116,8 @@
                 </li>
                 <li><p>You can then run any of your files in the current directory by typing:</p>
                   <ul class='indent-1'>
-                    <li><p><code class='prettyprint'>clisp -c &quot;source.lsp&quot;</code> - Compiles your code</p></li>
+                    <li><p><code class='prettyprint'>clisp &quot;source.lsp&quot;</code> - Runs your code</p></li>
+                    <li><p><code class='prettyprint'>clisp -c &quot;source.lsp&quot;</code> - [optional] Compiles your code for more robust error checking</p></li>
                     <li><p><code class='prettyprint'>clisp -i &quot;source.lsp&quot;</code> - Loads your code and then enters into the interpreter</p></li>
                   </ul>
                 </li>
@@ -1145,25 +1172,36 @@
               <p>Well, we're interested in picking apart a text sentence, with all of the nuances of human writing, into computer-friendly pieces for semantic processing (extracting meaning).</p>
               <p>A frame abides by the following syntax:</p>
 <pre class='prettyprint'>
-  frame    -> (pred {slot filler}*) | ( )
-  pred     -> atom
-  slot     -> atom
-  filler   -> frame | gap
-  gap      -> atom | variable
-  variable -> (V atom)
+  frame      -> (pred slotfiller*) | NIL 
+  pred       -> atom
+  slotfiller -> slot filler
+  slot       -> atom
+  filler     -> frame | gap
+  gap        -> variable | atom
+  variable   -> (*V atom)
 </pre>
               <br/>
               <p>Here's an example:</p>
               <p class='example'>A frame representing the sentence:
                 <br/><br/>
-                &quot;Teenager Charlotte Newton feels excited.&quot;
+                &quot;Andrew taught class.&quot;
               </p>
-              <div class='text-center fit-pres'>
-                <img src="../../../assets/images/spring-2014/cs-161/week-1/lisp-1.PNG" />
-              </div>
-              
+<pre class='prettyprint'>
+  (ACT AGENT (HUMAN F-NAME (ANDREW)
+                    GENDER (MALE))
+       ACTION (TAUGHT)
+       OBJECT (CLASS))
+</pre>
+              <p>Some things to note:</p>
+              <ul class='indent-1'>
+                <li><p>Note the syntax structure with outermost predicate ACT, which has 3 slots: AGENT, ACTION, OBJECT.</p></li>
+                <li><p>The AGENT slot actually has a frame as a filler with predicate HUMAN and slots F-NAME and GENDER.</p></li>
+                <li><p>In Lisp, these are all lists of symbols, with the nesting schema specified by the above syntax.</p></li>
+              </ul>
+              <p>Using what we've learned today about Lisp, you should be able to complete all of your HW1 problems.</p>
+              <p>If there's time, we can go over a few of those now.</p>
               <br/>
-              <p>That's it for today, look over the functions you've been assigned and let me know if any need clarification!</p>
+              <p>That's it for today, look over the functions you've been assigned and let me know if any need clarification! Good luck!</p>
             </div>
             <hr/>
             
