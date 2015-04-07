@@ -395,16 +395,16 @@
                   </tr>
                   <tr>
                     <th><p>Lists as data</p></th>
-                    <td><p>If you would like a list of data elements, you simply prepend a list using a single quote:<br/>
+                    <td><p>If you would like a list of data elements, you simply prepend a list using a single quote:</p><br/>
 <pre class='prettyprint'>
   '(item1 item2 ... itemN)
 </pre>
-                      ...which is actually a read-macro expansion for:
+                      <p>...which is actually a read-macro expansion for:</p>
 <pre class='prettyprint'>
   (quote (item1 item2 ... itemN))
 </pre>
-                      ...but we'll use the single-quote short-hand to simplify
-                    </p></td>
+                      <p>...but we'll use the single-quote short-hand to simplify</p>
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -1079,7 +1079,7 @@
       
       ; Base case: n has reached 0, so we are
       ; at the index in L to place R
-      ((= n 0) ( ??? )
+      ((= n 0) ( ??? ))
       
       ; Recursive case: L is not empty and n is not 0, so
       ; add the first element of L to our result, and then
@@ -1105,7 +1105,7 @@
                   <p>Perhaps you have a file with your functions called &quot;funcs.lsp&quot;. If you want to test your functions in another test file, you can load them using:</p>
                   <ul class='indent-1'>
                     <li><p><code class='prettyprint'>(load &quot;source.lsp&quot;)</code></p></li>
-                    <li><p><code class='prettyprint'>(load &quot;source.lsp&quot; :compiling t)</code> - This CLISP specific command will compile your code before running, which might catch more bugs</p></li>
+                    <li><p><code class='prettyprint'>(load &quot;source.lsp&quot; :compiling t)</code> - [optional] This CLISP specific command will compile your code before running, which might catch more bugs</p></li>
                   </ul>
                 </li>
                 <li><p>Within your interpreter, you can change directory to the location of your LISP files:</p>
