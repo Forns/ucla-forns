@@ -1,0 +1,717 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Andrew Forney - UCLA CS</title>
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/magic-bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/main.css" rel="stylesheet" type="text/css">
+    <script src="../../../js/lib/jquery-2.0.3.min.js"></script>
+    <script src="../../../js/lib/bootstrap.min.js"></script>
+    <script src="../../../js/lib/expanding.js"></script>
+    <script src="../../../js/display/general/general-display.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+  </head>
+  
+  <body data-spy="scroll" data-target="#scrollspy">
+    
+    <!-- BEGIN WRAP -->
+    <div id="wrap">
+      
+      <!-- BEGIN NAVIGATION -->
+      <nav class='navbar navbar-default' role='navigation'>
+        <div class='nav-accent'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-12'>
+              <div class='navbar-header'>
+                <button class='navbar-toggle' type='button' data-toggle='collapse' data-target='.navbar-main-collapse'>
+                  <span class='sr-only'>Toggle Navigation</span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                </button>
+                <a class='navbar-brand' href='/~forns/'>
+                  <span id='brand-text'>
+                    Andrew Forney
+                  </span>
+                </a>
+              </div>
+              
+              <div id='nav-main' class='collapse navbar-collapse navbar-main-collapse'>
+                <ul class='nav navbar-nav navbar-right'>
+                  
+                  <li>
+                    <a href='/~forns/about.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-user'></span>
+                      </div>
+                      <p class='text-center'>About</p>
+                    </a>
+                  </li>
+                  
+                  <li class='active'>
+                    <a href='/~forns/classes.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-book'></span>
+                      </div>
+                      <p class='text-center'>Classes</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/contact.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-comment'></span>
+                      </div>
+                      <p class='text-center'>Contact</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/publications.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-file'></span>
+                      </div>
+                      <p class='text-center'>Publications</p>
+                    </a>
+                  </li>
+                  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <!-- END NAVIGATION -->
+      
+      <!-- BEGIN MAIN CONTENT -->
+      <div id="main-content" class="container">
+        <div class="row">
+          
+          <!-- BEGIN SCROLLSPY -->
+          <div class='col-md-2 hidden-sm hidden-xs'>
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+              <ul id='scrollspy' class="nav bs-sidenav">
+              </ul>
+            </div>
+          </div>
+          <!-- END SCROLLSPY -->
+          
+          <!-- BEGIN PRESENTATION CONTENT -->
+          <div class='col-md-10 presentation-content' role='main'>
+            
+            <ol class="breadcrumb hidden-print">
+              <li><a href="../../../classes.html">Classes</a></li>
+              <li><a href="./cs-161.html">CS161</a></li>
+              <li class="active">Week 3</li>
+            </ol>
+            
+            <div id='advLisp' class='scrollspy-element' scrollspy-title='More LISP'></div>
+            <h1>Some Advanced LISP Topics</h1>
+            <div>
+              <p>Now that you've done HW1, are all experts in LISP, and can see its beauty firsthand, you'll appreciate the following comic:</p>
+              <a href='https://xkcd.com/224/' target='_blank'>
+                <div class='text-center fit-pres'>
+                  <img src='http://imgs.xkcd.com/comics/lisp.jpg' />
+                  <p>(credit to XKCD, of course)</p>
+                </div>
+              </a>
+              <br/>
+              <p>Since you're enlightened by the LISP way, let us dive further into its beauty and see some convenience functions as well as some nice functional programming paradigms.</p>
+              
+              <br/>
+              <h3>(member item list)</h3>
+              <p class='toolkit'>The <strong>member</strong> function is used to determine if parameter item is located anywhere in parameter list (analogous to set-membership).</p>
+              <br/>
+              <p>There are a couple of peculiarities with this function:</p>
+              <ul class='indent-1'>
+                <li><p>If parameter item is indeed located within parameter list, then the *tail* of the list starting with matched element item is returned.</p></li>
+                <li><p>Asking if item NIL is located in the list is not the set-theoretical &quot;is the empty set a member of every set&quot; but is instead asking if NIL is an element of list!</p></li>
+              </ul>
+              <p class='example'>What will the following statements return?</p>
+<pre class='prettyprint'>
+  ;; #1
+  (member 1 '(1 2 3))
+  
+  ;; #2
+  (member 2 '(1 2 3))
+  
+  ;; #3
+  (member NIL '(1 2 3))
+  
+  ;; #4
+  (member NIL '(1 NIL 3))
+</pre>
+
+              <br/>
+              <p>Some functions offer optional named parameters.</p>
+              <p class='definition'>A <strong>named parameter</strong> is a parameter that is passed not by position in the argument list, but by name using the :name syntax.</p>
+              <br/>
+              <p>Furthermore, we can pass function names as arguments using the special syntax: <code class='prettyprint'>#'fun-name</code></p>
+              <p class='definition'>A <strong>function reference</strong> is a way to pass the names of functions using the syntax of <code class='prettyprint'>#'fun-name</code></p>
+              <br/>
+              <p>So, say we wanted our member function to be able to find lists instead of just atoms within the input list, observe:</p>
+<pre class='prettyprint'>
+  ;; #1
+  (member '(1 2) '((3 4) (1 2 3) (1 2) (4 5) ()))
+  
+  ;; #2
+  (member '(1 2) '((3 4) (1 2 3) (1 2) (4 5) ()) :test #'equal)
+</pre>
+              <p>The first call to member defaults by treating the input item '(1 2) as an atom, and so we actually don't find a match!</p>
+              <p>So, instead of using member's default test, we can instead define our own test using the equal function that we know and love!</p>
+              <p>The second statement says, &quot;See if our item is a member of the given list *using the test comparator of the equal function*&quot;</p>
+              <br/>
+              <p class='definition'>HINT! You can use the :test parameter in your unit tests to compare membership of frames (using #'fr-equal) and membership of lexicon entries (using #'equal).</p>
+              <br/>
+              <p class='question' name='lisp-q0'>So, what's the main difference between a symbol and a function reference?</p>
+              <p class='answer' name='lisp-q0'>A symbol can change the function it refers to whereas a function reference cannot.</p>
+              <br/>
+              <p>We'll see how to evaluate these function references using different forms later.</p>
+              <br/>
+              <h3>(subsetp list1 list2)</h3>
+              <p class='toolkit'>The <strong>subsetp</strong> predicate returns a boolean value for whether or not list1 is a subset of list2.</p>
+              <br/>
+              <p>So, we can determine if all elements of list1 appear, somewhere in sequence, in list2</p>
+              <p class='example'>What will the following statements return?</p>
+<pre class='prettyprint'>
+  ;; #1
+  (subsetp '(1) '(3 2 1 2 3))
+  
+  ;; #2
+  (subsetp '(1 2) '(3 2 1 2 3))
+  
+  ;; #3
+  (subsetp '(2 2) '(3 2 1 2 3))
+  
+  ;; #4
+  (subsetp '() '(3 2 1 2 3))
+</pre>
+
+              <br/>
+              <h3>Other Set Operations</h3>
+              <p class='toolkit'>We can perform the other standard set operations, treating lists as sets, including: <strong>intersection, union, and set-difference</strong></p>
+              <p class='example'>What will the following statements return?</p>
+<pre class='prettyprint'>
+  ;; #1
+  (union '(1 2 3) '(2 3 4))
+  
+  ;; #2
+  (intersection '(Veteran Wilshire) '(Wilshire Sepulveda))
+  
+  ;; #3
+  ;; Returns (list1 - list2)
+  (set-difference '(1 2 3) '(2 3 4))
+</pre>
+              
+              <br/>
+              <h3>(subseq sequence start &amp;optional end)</h3>
+              <p class='toolkit'>The <strong>subseq</strong>(uence) function returns a list consisting of parameter sequence starting with element index start and (if provided) ending with element index end.</p>
+              <p class='example'>What will the following statements return?</p>
+<pre class='prettyprint'>
+  ;; #1
+  (subseq '(DONT REMOVE ME PLEASE too bad) 4)
+  
+  ;; #2
+  (subseq '(DONT REMOVE ME PLEASE too bad) 1 3)
+</pre>
+
+              <br/>
+              <h3>(if (cond) true-exp false-exp)</h3>
+              <p>Want to have a conditional with only two cases? Why bother using cond when you can use if!</p>
+              <p class='toolkit'>The <strong>if</strong> form evaluates a single condition and then executes a single true expression if the conditional evalutes to true, or the false expression otherwise.</p>
+              <p class='example'>What will the following statements return?</p>
+<pre class='prettyprint'>
+  ;; #1
+  (setq L2 'L1)
+  (if (equal 'L1 L2) 'WOW-TRUE 'AWW-FALSE)
+  
+  ;; #2
+  (if (equal 'L1 'L2) 'WOW-TRUE 'AWW-FALSE)
+</pre>
+              <br/>
+              <p>Now, what if we wanted to execute multiple expressions in the true or false slot?</p>
+              
+              <br/>
+              <h3>(progn exp1 exp2 ...)</h3>
+              <p>Want to execute multiple expressions where a single one is expected?</p>
+              <p class='toolkit'>The <strong>progn</strong> form evaluates each of its expressions as though they were top-level expressions and returns the last one evaluated.</p>
+              <p class='example'>What will the following statements return?</p>
+<pre class='prettyprint'>
+  ;; #1
+  (setq L2 'L1)
+  (if (equal 'L1 L2) (progn (setq A 3) (* A 3)) (progn (setq A 2) (- A 3)))
+  
+  ;; #2
+  (if (equal 'L1 'L2) (progn (setq A 3) (* 2 3)) (progn (setq A 2) (- 2 3)))
+</pre>
+
+              <br/>
+              <h3>(loop for item in list do (expr1) (expr2))</h3>
+              <p>Thirsty for the old means of iteration? Well, LISP offers that too (reluctantly).</p>
+              <p class='toolkit'>The <strong>loop</strong> form repeatedly sets variable item to the next element in list starting with the first, and executes everything to the right of do with item = (first list).</p>
+              <br/>
+              <p>There are some peculiarities with looping:</p>
+              <ul class='indent-1'>
+                <li><p>Loops will return nil for the entire loop by default</p></li>
+                <li><p>If you want to return something from a loop, you must explicitly use the (return expr) function, which terminates the loop</p></li>
+              </ul>
+              
+              <p class='example'>What will the following statements print / return?</p>
+<pre class='prettyprint'>
+  ;; #1
+  (loop for v in '(1 2 3 4) do (if (evenp v) (print v) (print 'ODD)))
+  
+  ;; #2
+  (loop for v in '(1 2 3 4) do (if (evenp v) (return v) (print 'ODD)))
+</pre>
+              <br/>
+              <p>There are a *bunch* of variants on the loop syntax that each do slightly different things, three of which are listed below:</p>
+              <ul class='indent-1'>
+                <li><p><strong>(loop for v <u>on</u> list do)</strong><br/>Same as with using &quot;in&quot; list loop format except each iteration sets v = (rest list)</p></li>
+                <li><p><strong>(loop for v <u>while</u> (condition) do (expr))</strong><br/>Keep iterating with v = 0, 1, 2, ... until condition returns nil.</p></li>
+                <li><p><strong>(loop for v <u>from</u> lower to upper [by step] do (expr))</strong><br/>Iterate through the range from v = lower up to v = upper with optional step size (default 1)</p></li>
+              </ul>
+              <br/>
+              <p class='example'>What will the following statements print / return?</p>
+<pre class='prettyprint'>
+  ;; #1
+  (loop for v on '(1 2 3 4) do (print v))
+  
+  ;; #2
+  (loop for v while (not (= 5 v)) do (print v))
+  
+  ;; #3
+  (loop for v from 2 to 8 by 2 do (print v))
+  ; Who do we appreciate?
+</pre>
+              <br/>
+              <p>We can even collect the results of our individual loop iterations and compile them into a list!</p>
+              <p>The following two loop syntaxes are handy for this, where we use any form listed above but simply replace the &quot;do&quot; keyword with:</p>
+              <ul class='indent-1'>
+                <li><p><strong>(loop for v ... <u>collect</u> (fun-name v))</strong><br/>Returns a list of returned values from each iteration with fun-name called on each v.</p></li>
+                <li><p><strong>(loop for v ... <u>append</u> (fun-name v))</strong><br/>Similar to the above, but applies the append function to each element of the collection at the end.</p></li>
+              </ul>
+              <br/>
+              <p class='example'>What will the following statements print / return?</p>
+<pre class='prettyprint'>
+  ;; #1
+  (loop for v in '(1 2 3 4) collect (evenp v))
+  
+  ;; #2
+  (loop for v in 
+      '((some sublists) (ARE TOO LONG) (TO MAKE THE CUT) (yay))
+      append (if (&lt; (length v) 3) v nil))
+</pre>
+              
+              <br/>
+              <p>There are also a variety of shorthand loops that employ our function references again.</p>
+              <p>One of the more useful ones is &quot;every&quot;</p>
+              
+              <br/>
+              <h3>(every #'fun-name '(arg1 arg2 ...))</h3>
+              <p class='toolkit'>
+                The <strong>every</strong> form applies the function represented by the function reference to every element on its right, and returns true if all applications of #'fun-name
+                also return true (nil otherwise).
+              </p>
+              <p class='example'>What will the following statements print / return?</p>
+<pre class='prettyprint'>
+  ;; #1
+  (every #'evenp '(2 4 6 8 22))
+  
+  ;; #2
+  (every #'print '(4 5 2))
+</pre>
+              
+              <br/>
+              <h3>Function Evaluation</h3>
+              <p>We've already seen eval used to evaluate symbols and use data that can be treated as a function.</p>
+              <p>As it turns out, there are a couple of other function calling forms we can use depending on our syntactic needs, and what we know at runtime.</p>
+              
+              <br/>
+              <p class='definition'>The <strong>apply</strong> form allows us to split our function call into two parts: the function symbol name, and then a list containing the arguments.</p>
+              <p class='definition'>The <strong>funcall</strong> form allows us to split our function call into two parts: the function reference, and then the arguments, one after another.</p>
+              <br/>
+              <p>The difference is that apply takes a function symbol name and the arguments in a list whereas funcall takes a function reference and then the arguments one after another.</p>
+              <p>So, we can represent our three methods for calling functions as follows:</p>
+              <ul class='indent-1'>
+                <li><p><strong>(eval list)</strong> where list is a function and its arguments.</p></li>
+                <li><p><strong>(apply 'fun-symbol '(arg1 arg2 ...))</strong> where fun-symbol is the symbol for a function definition.</p></li>
+                <li><p><strong>(funcall #'fun-ref arg1 arg2 ...)</strong> where #'fun-ref is the function reference and the arguments are listed right after, not necessarily in list form.</p></li>
+              </ul>
+              <br/>
+              <p class='example'>What will the following statements return?</p>
+<pre class='prettyprint'>
+  (defun test (p1 p2 p3) (+ (* p1 p2) p3))
+  
+  ;; #1
+  (setq data-eval '(test 2 3 4))
+  (eval data-eval)
+  
+  ;; #2
+  (apply 'test '(2 3 4))
+  
+  ;; #3
+  (funcall #'test 2 3 4)
+</pre>
+              <br/>
+              <p>They all do the same thing!</p>
+              <p>So why use one over another? Well, sometimes our function names and arguments are scattered and these provide us with different ways of calling functions, e.g.:</p>
+              <ul class='indent-1'>
+                <li><p><strong>Use eval</strong> when our function name and arguments are all in one list ready to be executed.</p></li>
+                <li><p><strong>Use apply</strong> when our function name might need to be run on some list of arguments located elsewhere.</p></li>
+                <li><p><strong>Use funcall</strong> when we have a function reference and don't have a single list containing our arguments.</p></li>
+              </ul>
+              <br/>
+              <p>Use whichever one most naturally fits your task!</p>
+              
+              <br/>
+              <h3>(set var val) vs (setq sym val)</h3>
+              <p>So, what's the difference between set and setq?</p>
+              <p class='toolkit'>The <strong>set</strong> form sets the symbol *represented by* its first argument to the value val.</p>
+              <p class='toolkit'>The <strong>setq</strong> form sets the symbol *that IS the first argument* to the value val.</p>
+              <br/>
+              <p class='example'>What will the following statements return?</p>
+<pre class='prettyprint'>
+  ;; #1
+  (setq test 'stuff)
+  test
+  
+  ;; #2
+  (setq stuff 'yo)
+  stuff
+  
+  ;; #3
+  (set stuff 'test)
+  stuff
+  yo
+  
+  ;; #4
+  (set yo 5)
+  yo
+  test
+</pre>
+              <br/>
+              <p>This is a hint for how to do HW2's BIND problem!</p>
+              
+              <br/>
+              <h3>Optional Parameters</h3>
+              <p>We saw an optional parameter with subseq already, but let's define it a bit further.</p>
+              <p class='toolkit'>An <strong>optional parameter</strong> to a function is one that can be omitted entirely in a function call and still function properly.</p>
+              <br/>
+              <p>We use the <code class='prettyprint'>&amp;optional</code> syntax to indicate, in a parameter list, that every parameter to the right is optional.</p>
+              <p class='example'>What will the following statements return?</p>
+<pre class='prettyprint'>
+  (defun test (p1 p2 &amp;optional p3)
+      (let* ((result (* p1 p2)))
+          (if p3 (+ result p3) result)
+      )
+  )
+  
+  ;; #1
+  (test 2 3)
+  
+  ;; #2
+  (test 2 3 1)
+</pre>
+              <br/>
+              <p class='definition'>NB. Feel free to augment any of the HW2 function signatures with optional parameters SO LONG AS THE ORIGINAL PARAMETERS ARE STILL PRESENT AND IN THE SAME ORDER.</p>
+              <br/>
+              <p>For example, for SEARCH:</p>
+<pre class='prettyprint'>
+  ;; Original:
+  (SEARCH ATMLST MYATM DIR PRED)
+  
+  ;; The following is fine:
+  (SEARCH ATMLST MYATM DIR PRED &amp;optional opparam)
+</pre>
+              <br/>
+              <p>Your recursive calls might be cleaner given some optional parameters, but again, it's just a tool that you can use where you find it convenient!</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='homework2' class='scrollspy-element' scrollspy-title='Homework 2'></div>
+            <h1>Homework 2 In a Nutshell</h1>
+            <div>
+              <p>So homework 2... what would you say... ya do here?</p>
+              <p>Homework 2 is attempting to perform the task of taking a list of words representing a sentence, and turn them into a giant frame!</p>
+              <p>To do this, we use a few *cringe* global variables.</p>
+              <p class='definition'>A <strong>lexicon</strong> is a database of frames and &quot;semantic expectations&quot; indexed by words and phrases.</p>
+              <br/>
+              <p>We'll use our lexicon to build up the relevant definitions that can be found from words and phrases in our sentences.</p>
+              <p>Within a sentence, however, we need a way of resolving references. For example, using one of Dyer's examples:</p>
+              <p>&quot;John bludgeoned Mark with the sledgehammer of doom. He felt no regret.&quot;</p>
+              <p>Who is the &quot;he&quot; mentioned in the second sentence? John, presumably, but our system will need a means of disambiguating.</p>
+              <p class='definition'>The <strong>working memory</strong> is a list of frames (their representative atoms) that are used in order to resolve linguistic references and expectations.</p>
+              <br/>
+              <p>Furthermore, we need a means of empowering our reasoning system with some knowledge of classifications.</p>
+              <p>It may be useful, for example, to know that a DOG is a MAMMAL, a HUMAN is a MAMMAL, but no HUMAN is a DOG.</p>
+              <p class='definition'>A <strong>class hierarchy</strong> provides some classifications of subtypes and supertypes, and are defined recursively in ISA relationships.</p>
+              <p>So, let's take a look at the various functions now and discuss any questions thusfar (consult your actual homework pdf if you're reading from home).</p>
+              
+              <br/>
+              <h3>Function-specific Hints</h3>
+              <table class='table table-striped table-bordered'>
+                <thead>
+                  <tr>
+                    <th><p>Function</p></th>
+                    <th><p>Hints</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th><p>LEX</p></th>
+                    <td><p>Use a helper to check for duplicate phrases. Just make sure you modify the global variable with the proper order of inputs.</p></td>
+                  </tr>
+                  <tr>
+                    <th><p>RECOGN-PH</p></th>
+                    <td>
+                      <p>Non-trivial, you might consider the following:</p>
+                      <ul class='indent-1'>
+                        <li><p>Consider making a helper function that determines the length of a match between the front of the input sentence and an entry in the input lexicon.</p></li>
+                        <li><p>
+                          You'll only ever have to compare two matches at a time: the current best that you've found and then a contender. Replace the current best if the length is greater in the contender.
+                        </p></li>
+                      </ul>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th><p>GAPIFY</p></th>
+                    <td><p>Big hint: the format of this one will look very similar to that of HW1's FLESHOUT.</p></td>
+                  </tr>
+                  <tr>
+                    <th><p>BIND</p></th>
+                    <td><p>You'll have to think about which version of set (set vs setq) to use for the different requirements of this problem. Nonetheless, it isn't long.</p></td>
+                  </tr>
+                  <tr>
+                    <th><p>SEARCH</p></th>
+                    <td>
+                      <p>One of the least trivial; here are some hints:</p>
+                      <ul class='indent-1'>
+                        <li><p>
+                          Consider making a helper function that breaks the search space down into only the valid locations for a match to be within. For example, if your dir = AFT, only consider
+                          the sub-list from the matched starting atom to the end of the atmlst.
+                        </p></li>
+                        <li><p>Using a particular list manipulator, consider how we might turn direction BEF into its AFT counterpart, for simplicity.</p></li>
+                        <li><p>You might consider using an optional parameter to help you solve this problem!</p></li>
+                      </ul>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th><p>CLASS</p></th>
+                    <td><p>Remember to check for class hierarchies recursively! If A is a member of B and B is a member of C, then A is a member of C!</p></td>
+                  </tr>
+                  <tr>
+                    <th><p>SPAWN</p></th>
+                    <td><p>Remember to modify the DEMON-MEM global with completed demon instances!</p></td>
+                  </tr>
+                  <tr>
+                    <th><p>FIRE-DEMONS</p></th>
+                    <td>
+                      <p>Not particularly long but the pieces will have to fit together properly using some of the new tricks about calling functions you found today:</p>
+                      <ul class='indent-1'>
+                        <li><p>Consider the proper function call form that you'll use to execute each demons in the DEMON-MEM.</p></li>
+                        <li><p>This function might be another candidate for an optional parameter!</p></li>
+                        <li><p>You may find an iteration technique useful for executing each demon instance.</p></li>
+                      </ul>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th><p>C-ANALYZE</p></th>
+                    <td><p>Once all of the other functions are completed, C-ANALYZER will simply tie everything together. It probably won't be long, but you might find some loop mechanics useful...</p></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='adversarialSearch' class='scrollspy-element' scrollspy-title='Adversarial Search'></div>
+            <h1>Adversarial Search</h1>
+            <div>
+              <p class='definition'><strong>Adversarial Search</strong> is a game-theoretical search strategy where we have one agent competing against another in order to maximize utility.</p>
+              <br/>
+              <p>What a perfectly academic and boring definition.</p>
+              <p>Let's start with some definitions...</p>
+              <p class='definition'>An <strong>agent</strong> can be a human, a computer, or some sort of interacting entity within our search problem.</p>
+              <br/>
+              <p>When we're talking about adversarial search, usually we have two or more agents that are competitors on opposing sides of a game or conflict.</p>
+              <p>So, for example, if a human was playing tic-tac-toe against a computer, we would have two agents: the human player and the computer player, each trying to win.</p>
+              <p>
+                In the case of a game like tic-tac-toe, each agent is attempting to &quot;maximize&quot; their utility, meaning they have the goal of winning and want to make moves that 
+                increase their odds of doing so.
+              </p>
+              <p class='definition'><strong>Utility</strong> is therefore the score of a particular game outcome / conclusion state within our adversarial search space.</p>
+              <br/>
+              <p>Hence, each agent will want to maximize its utility at the game's conclusion and make moves that take them to a state of maximal utility.</p>
+              <p>So, let's use tic-tac-toe as our motivating example for this section.</p>
+              <p>The game consists of the following attributes:</p>
+              <ul class='indent-1'>
+                <li><p>Two players (agents) each attempting to win the game</p></li>
+                <li><p>A board with 9 tiles</p></li>
+                <li><p>A victory condition of one player connecting 3 of their symbols in a row horizontally, vertically, or diagonally.</p></li>
+                <li><p>A tie condition of all 9 tiles being filled before either player reached a victory condition</p></li>
+                <li><p>A turn where each player places one of their symbols on a vacant board slot</p></li>
+              </ul>
+              <br/>
+              <p>So, if one of our players is an intelligent agent that we're programming, then we can model the game (i.e., attempting to win it) as an adversarial search problem!</p>
+              <p class='question' name='advsearch-q0'>What will a state look like in our tic-tac-toe search problem?</p>
+              <p class='answer' name='advsearch-q0'>A game board (grid representation) with cells that hold nothing (a blank), an X, or an O</p>
+              <br/>
+              <p class='question' name='advsearch-q1'>A terminal state is one in which the game ends. What will terminal states look like in our problem?</p>
+              <p class='answer' name='advsearch-q1'>Either 3 X's or 3 O's are in a row somewhere on the game board, or all 9 tiles are filled with X's and O's with none 3 in a row.</p>
+              <br/>
+              <p class='question' name='advsearch-q3'>Will a terminal state always have all squares filled in?</p>
+              <p class='answer' name='advsearch-q3'>No, though the minimum number of filled in slots for a tic-tac-toe game with 2 players is 5 squares.</p>
+              <br/>
+              <p class='question' name='advsearch-q2'>What will an action look like in our search?</p>
+              <p class='answer' name='advsearch-q2'>A placement of a symbol (based on which player's turn it is) into a blank square.</p>
+              <br/>
+              <p>Now that we have the components of our search defined, the real difference between search and adversarial search will be in the format of the search tree.</p>
+              <p class='definition'>
+                The <strong>game tree</strong> is the theoretical complete instantiation of all states and the actions that were used to move between them, starting with the initial state at the root.
+              </p>
+              <br/>
+              <p>The game tree for tic-tac-toe, then, consists of all of the possible states starting with the initial, blank board and leading to all terminal states at the leaves.</p>
+              <p>So, part of our game tree might look like the following:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-3/advsearch-0.PNG' />
+              </div>
+              <br/>
+              <p>
+                Now, the search tree that we'll ultimately use to explore possible moves will be some subset of nodes from the game tree because as the game progresses, we will end up trimming branches
+                based upon the move that our opponent makes.
+              </p>
+              <p>Like we said, the objective of our intelligent agent will be to maximize its utility; we can therefore evaluate the utility of our terminal states using a utility function, U(s, p).</p>
+              <p class='definition'>A <strong>utility function</strong> U(s, p) is a function that scores a terminal state s based on how favorable it is to player p.</p>
+              <br/>
+              <p>So, for example, in tic-tac-toe, we might say that U(s, p) = 1 when player p wins in state s, 1/2 when state s is a tie, and 0 when state s is a loss for player p.</p>
+              <p>This gives us some example terminal states:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-3/advsearch-1.PNG' />
+              </div>
+              <br/>
+              <p>Thus, if we're X, then we want our agent to choose a path (given O's moves) that maximizes its chances of winning the game, or at the very least, tying it.</p>
+              <p>Our agent would then need some sort of strategy to search for the best chance of winning, which might mean using an evaluation function at every node along its frontier.</p>
+              <br/>
+              <p class='question' name='advsearch-q4'>If we had the full game tree at our disposal, what would be a good evaluation function for a node to maximize the agent's chances of winning?</p>
+              <p class='answer' name='advsearch-q4'>Perhaps the sum of all utility scores (at terminal nodes) that could be reached from that particular subtree!</p>
+              <br/>
+              <p>
+                Thus, if a node had a high evaluation function, that meant that there were many states along that path that could lead to a victory, and so, we would choose the move with the highest score.
+              </p>
+              <br/>
+              <p class='question' name='advsearch-q5'>What are two problems with this strategy and evaluation function?</p>
+              <p class='answer' name='advsearch-q5'>
+                1) The classical search paradigm doesn't work because we have an oponent who is also attempting to win, and so is precluding some of the best movement choices<br/>
+                2) Although it might be tractable for tic-tac-toe, for larger problems and search spaces we almost never have the full game tree at our disposal.
+              </p>
+              <br/>
+              <p>Let's address issue #1 first:</p>
+              
+              <br/>
+              <h3>Minimax Search</h3>
+              <p>Like we said, one of the issues with our traditional search is that it operates under the idea that the best solution can be found without the impedence of another agent.</p>
+              <p>With adversarial search, we have two or more agents fighting against one another.</p>
+              <p>For the purposes of the search strategy we're about to discuss, let's consider two agents named MAX and MIN, and the following abstract problem specifications:</p>
+              <ul class='indent-1'>
+                <li><p>At every move, either MAX or MIN can make one of three choices, starting with MAX and alternating.</p></li>
+                <li><p>Terminal nodes have a utility function that returns a positive integer score.</p></li>
+              </ul>
+              <br/>
+              <p>
+                So, in summary, for our arbitrary game, at each turn, MAX tries to maximize the utility it could possibly reach by pursuing a branch, and MIN tries to minimize the utility MAX could get
+                by pursuing a branch.
+              </p>
+              <p>We also make one key assumption about our agents: They are infallible, meaning that if a best move exists, they will make it (so we always prepare for the worst)</p>
+              <p>This means we can model our problem with a game tree that looks like the following (modified from book example):</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-3/advsearch-2.PNG' />
+              </div>
+              <br/>
+              <p class='question' name='advsearch-q6'>Assuming MAX started by making move max1, what move would MIN make from B?</p>
+              <p class='answer' name='advsearch-q6'>min1</p>
+              <br/>
+              <p class='question' name='advsearch-q7'>Assuming MAX started by making move max2, what move would MIN make from C?</p>
+              <p class='answer' name='advsearch-q7'>min4 OR min6</p>
+              <br/>
+              <p class='question' name='advsearch-q8'>Assuming MAX started by making move max3, what move would MIN make from D?</p>
+              <p class='answer' name='advsearch-q8'>min9</p>
+              <br/>
+              <p class='question' name='advsearch-q9'>What, then, is MAX's best starting move?</p>
+              <p class='answer' name='advsearch-q9'>max2, because max1 would have a utility of 5, max2 a utility of 6, and max3 a utility of 4, due to MIN's choices at B, C, and D, respectively.</p>
+              <br/>
+              <p>So nothing particularly astounding about minimax search! Some stats about it:</p>
+              <ul class='indent-1'>
+                <li><p>
+                  We perform depth-first search on the minimax tree, giving us both of the time and space complexities associated with depth-first with some max depth m [O(b^m) and O(b*m), respectively]
+                </p></li>
+                <li><p>Optimal assuming we have the game tree.</p></li>
+                <li><p>Complete unless the problem specification allows for a potentially infinite loop.</p></li>
+              </ul>
+              <br/>
+              <p class='definition'>
+                <strong>Alpha-Beta</strong> pruning is a simple tactic used to reduce the number of nodes expanded by minimax search, and says: &quot;I won't even bother exploring a subtree that I know
+                will be worse than what I've already explored.&quot;
+              </p>
+              <br/>
+              <p>This is accomplished by placing bounds of what the min and max value could be at a given node based on what we've already explored.</p>
+              <p>If a new node we then later explore is less than the established min or greater than the established max of its parent node's range, then we don't bother exploring it.</p>
+              <p class='example'>Try alpha-beta pruning with our example tree above, assuming that our tree extended beyond a depth of 2. What moves would get trimmed from consideration?</p>
+              <br/>
+              <p>We still have an exponential time complexity, but at least the constant of proportionality is approximately halved.</p>
+              <p>Now we need to address the second issue from before; what if we don't have the full game tree with huge search spaces like Chess?</p>
+              
+              <br/>
+              <h3>Imperfect Real-time Heuristics</h3>
+              <p>When game trees are massive, and we can't generate the entire tree, we'll instead use an evaluation function that scores states up until a certain depth cut-off.</p>
+              <p>These will represent our best guess using a heuristic scoring function of those states, and then treat the reduced sub-tree as a minimax search.</p>
+              <p>While not necessarily optimal, the farther the depth cut-off, the better our chances of reaching a victory state.</p>
+              <br/>
+              <p class='definition'>
+                <strong>Fun factoid:</strong> studies have illustrated that grand-master chess players use some flavor of this technique, with some able to accurately foresee the search tree
+                up to about 10 levels down from the current state!  
+              </p>
+            </div>
+            <hr/>
+            
+            
+            <a class='btn btn-default pull-right hidden-print' href='javascript:window.print();'>
+              <span class='glyphicon glyphicon-print'></span>
+              &nbsp; PDF / Print
+            </a>
+            
+          </div>
+          <!-- END PRESENTATION CONTENT -->
+          
+          <!-- MATERIALS FROM CLASS: -->
+          
+            <!-- TODO: New LISP conventions to go over: -->
+              <!-- TODO: string -->
+              <!-- TODO: gensym -->
+            
+        </div>
+      </div>
+      <!-- END MAIN CONTENT -->
+      
+      
+    </div>
+    <!-- END WRAPPER -->
+    
+    <!-- BEGIN FOOTER -->
+    <div id="footer">
+      <div class="container">
+        <div class="col-md-12 text-center">
+          
+        </div>
+      </div>
+    </div>
+    <!-- END FOOTER -->
+    
+  </body>
+</html>
