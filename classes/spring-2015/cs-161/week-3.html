@@ -394,7 +394,7 @@
   test
 </pre>
               <br/>
-              <p>This is a hint for how to do HW2's BIND problem!</p>
+              <p>This is a hint for how to do some of the "demons" in HW2's problems!</p>
               
               <br/>
               <h3>Optional Parameters</h3>
@@ -468,7 +468,7 @@
                     <td><p>Use a helper to check for duplicate phrases. Just make sure you modify the global variable with the proper order of inputs.</p></td>
                   </tr>
                   <tr>
-                    <th><p>RECOGN-PH</p></th>
+                    <th><p>GET-WORDPH</p></th>
                     <td>
                       <p>Non-trivial, you might consider the following:</p>
                       <ul class='indent-1'>
@@ -480,15 +480,11 @@
                     </td>
                   </tr>
                   <tr>
-                    <th><p>GAPIFY</p></th>
-                    <td><p>Big hint: the format of this one will look very similar to that of HW1's FLESHOUT.</p></td>
+                    <th><p>UNIQIFY</p></th>
+                    <td><p>Big hint: the format of this one will look very similar to that of HW1's UNGAP.</p></td>
                   </tr>
                   <tr>
-                    <th><p>BIND</p></th>
-                    <td><p>You'll have to think about which version of set (set vs setq) to use for the different requirements of this problem. Nonetheless, it isn't long.</p></td>
-                  </tr>
-                  <tr>
-                    <th><p>SEARCH</p></th>
+                    <th><p>SRCH</p></th>
                     <td>
                       <p>One of the least trivial; here are some hints:</p>
                       <ul class='indent-1'>
@@ -502,19 +498,19 @@
                     </td>
                   </tr>
                   <tr>
-                    <th><p>CLASS</p></th>
+                    <th><p>CLASS?</p></th>
                     <td><p>Remember to check for class hierarchies recursively! If A is a member of B and B is a member of C, then A is a member of C!</p></td>
                   </tr>
                   <tr>
                     <th><p>SPAWN</p></th>
-                    <td><p>Remember to modify the DEMON-MEM global with completed demon instances!</p></td>
+                    <td><p>Remember to modify the *DM global with completed demon instances!</p></td>
                   </tr>
                   <tr>
-                    <th><p>FIRE-DEMONS</p></th>
+                    <th><p>RUN-DEMONS</p></th>
                     <td>
                       <p>Not particularly long but the pieces will have to fit together properly using some of the new tricks about calling functions you found today:</p>
                       <ul class='indent-1'>
-                        <li><p>Consider the proper function call form that you'll use to execute each demons in the DEMON-MEM.</p></li>
+                        <li><p>Consider the proper function call form that you'll use to execute each demons in the *DM.</p></li>
                         <li><p>This function might be another candidate for an optional parameter!</p></li>
                         <li><p>You may find an iteration technique useful for executing each demon instance.</p></li>
                       </ul>
@@ -662,7 +658,32 @@
               <br/>
               <p>This is accomplished by placing bounds of what the min and max value could be at a given node based on what we've already explored.</p>
               <p>If a new node we then later explore is less than the established min or greater than the established max of its parent node's range, then we don't bother exploring it.</p>
-              <p class='example'>Try alpha-beta pruning with our example tree above, assuming that our tree extended beyond a depth of 2. What moves would get trimmed from consideration?</p>
+              <p>Wikipedia lists a nice pseudocode of the alpha-beta pruning algorithm, repeated here for your consumption:</p>
+<pre class='prettyprint'>
+  function alphabeta(node, depth, &alpha;, &beta;, maximizingPlayer)
+    if depth = 0 or node is a terminal node
+      return the heuristic score of node
+    if maximizingPlayer
+      v := -&infin;
+      for each child of node
+        v := max(v, alphabeta(child, depth - 1, &alpha;, &beta;, FALSE))
+        &alpha; := max(&alpha;, v)
+        if &beta; &le; &alpha;
+          break;
+      return v
+    else
+      v := &infin;
+      for each child of node
+        v := min(v, alphabeta(child, depth - 1, &alpha;, &beta;, TRUE))
+        &beta; := min(&beta;, v)
+        if &beta; &le; &alpha;
+          break;
+      return v
+</pre>
+              <p>Additionally, assuming we're starting with the maximizing player's turn, we would start the ball rolling with the call:</p>
+<pre class='prettyprint'>
+  alphabeta(root, depth, -&infin;, &infin;, TRUE)
+</pre>
               <br/>
               <p>We still have an exponential time complexity, but at least the constant of proportionality is approximately halved.</p>
               <p>Now we need to address the second issue from before; what if we don't have the full game tree with huge search spaces like Chess?</p>
@@ -691,9 +712,6 @@
           
           <!-- MATERIALS FROM CLASS: -->
           
-            <!-- TODO: New LISP conventions to go over: -->
-              <!-- TODO: string -->
-              <!-- TODO: gensym -->
             
         </div>
       </div>
