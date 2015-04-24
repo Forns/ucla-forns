@@ -743,13 +743,13 @@ var FIXED_U = false,
     N_exp = 1000,
     EPSILON = 0.15,
     TOLERANCE = 0.015,
-    T = 10000,
-    TESTS = 100,
+    T = 1000,
+    TESTS = 1000,
     
     // U, W, X
     rewardDist = [
       [ // U = 0
-        [0.5, 0.1], // W = 0, p = 0
+        [0.1, 0.5], // W = 0, p = 0
         [0.5, 0.1]  // W = 1, p = 1
       ],
       [ // U = 1
