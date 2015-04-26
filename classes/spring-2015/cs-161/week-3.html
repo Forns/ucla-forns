@@ -608,10 +608,15 @@
                 2) Although it might be tractable for tic-tac-toe, for larger problems and search spaces we almost never have the full game tree at our disposal.
               </p>
               <br/>
-              <p>Let's address issue #1 first:</p>
+              <p>We'll address issue #1 first...</p>
+            </div>
+            <hr/>
               
-              <br/>
-              <h3>Minimax Search</h3>
+              
+            <br/>
+            <div id='minimax' class='scrollspy-element' scrollspy-title='Minimax Search'></div>
+            <h1>Minimax Search</h1>
+            <div>
               <p>Like we said, one of the issues with our traditional search is that it operates under the idea that the best solution can be found without the impedence of another agent.</p>
               <p>With adversarial search, we have two or more agents fighting against one another.</p>
               <p>For the purposes of the search strategy we're about to discuss, let's consider two agents named MAX and MIN, and the following abstract problem specifications:</p>
@@ -650,7 +655,11 @@
                 <li><p>Optimal assuming we have the game tree.</p></li>
                 <li><p>Complete unless the problem specification allows for a potentially infinite loop.</p></li>
               </ul>
+              <p class='debug'>However, naive minimax search may explore branches of the game tree that would never be considered in a realistic game against an optimally acting opponent.</p>
+              <p>Such wasteful explorations can hinder the efficiency of minimax, so next we'll see how we can cut down on those wasteful explorations.</p>
               <br/>
+              
+              <h3>Alpha-Beta Pruning (&alpha;-&beta; Pruning)</h3>
               <p class='definition'>
                 <strong>Alpha-Beta</strong> pruning is a simple tactic used to reduce the number of nodes expanded by minimax search, and says: &quot;I won't even bother exploring a subtree that I know
                 will be worse than what I've already explored.&quot;
@@ -685,14 +694,137 @@
   alphabeta(root, depth, -&infin;, &infin;, TRUE)
 </pre>
               <br/>
-              <p>We still have an exponential time complexity, but at least the constant of proportionality is approximately halved.</p>
+              <p>So, we see the algorithm above, but what if we have to do this by hand on... say... an exam?</p>
+              <p>Fear not! There's a simple way to keep track of all of your stack frames.</p>
+              <br/>
+              
+              <ol class='indent-1'>
+                <li><p>Start at the root, and continue down the tree in a DFS order. Assume that at the root, &alpha; = -&infin; and &beta; = &infin;</p></li>
+                <li><p>For each node we encounter, we inherit the current &alpha; and &beta; values of its parent, and will record-keep several items:</p>
+                  <ul class='indent-1'>
+                    <li><p>If it's a MAX node, we know that &beta; will not change, but &alpha; might, so we'll include a small list tracking any changes to &alpha;, and vice versa for MIN nodes.</p></li>
+                    <li><p>We will also record-keep the value of V for each child of the current node, and update &alpha; (if it's a MAX node) or &beta; (if it's a MIN node) for each child encountered.</p></li>
+                    <li><p>If there are NO children (i.e., we've hit a leaf node), we simply pass our heuristic value back up to our parent.</p></li>
+                  </ul>
+                </li>
+                <li><p>If at any point we have &beta; &le; &alpha;, we stop exploring that node's children.</p></li>
+                <li><p>Continue DFS exploration until we've terminated all explorations by the above criteria, or have explored the entire tree.</p></li>
+              </ol>
+              <br/>
+              
+              <p>Let's see this in action on the following example:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/spring-2015/cs-161/week-3/ab-ex-0.PNG' height="75%" width="75%" />
+              </div>
+              <br/>
+              
+<pre>
+  Starting at the root: We're at a MAX node, so:
+    -> Record-keep changes to &alpha; (knowing that &beta; won't change for this node),
+       including room for change at each child of the node; we know that
+       the algorithm starts &alpha; = -&infin;
+    -> Record-keep changes to V at each child; since it's a MAX node,
+       we know V starts out at -&infin;
+</pre>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/spring-2015/cs-161/week-3/ab-ex-1.PNG' height="75%" width="75%" />
+              </div>
+              <br/>
+              
+<pre>
+  Visiting the root's first child, MIN node B:
+    -> Since this is a MIN node, its value for &alpha; will be inherited from
+       its parent, but &beta; has the potential to change
+    -> V starts out at &infin;
+</pre>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/spring-2015/cs-161/week-3/ab-ex-2.PNG' height="75%" width="75%" />
+              </div>
+              <br/>
+              
+<pre>
+  Visiting the first child of node B:
+    -> This is a leaf, so we would return its heuristic value (5)
+    -> Update the parent's current value for V to be:
+         V = min(v, [child's value])
+           = min(&infin;, 5)
+           = 5
+    -> Update the parent's &beta; to be:
+         &beta; = min(&beta;, v)
+           = min(&infin;, 5)
+           = 5
+</pre>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/spring-2015/cs-161/week-3/ab-ex-3.PNG' height="75%" width="75%" />
+              </div>
+              <br/>
+              
+<pre>
+  Continue visiting the children of node B:
+    -> Notice that at all stages, &alpha; &lt; &beta;, so we do not terminate
+    -> No child's value is less than the first child's, which was 5, so we
+       end up returning V = 5 to the parent of B
+    -> This means we update the values of V and &alpha; at node A accordingly
+</pre>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/spring-2015/cs-161/week-3/ab-ex-4.PNG' height="75%" width="75%" />
+              </div>
+              <br/>
+              
+<pre>
+  Visiting node C:
+    -> Notice that the new value for &alpha; in node A gets sent down
+       to this child
+    -> Again, with this as a MIN node, we seed its V = &infin;
+</pre>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/spring-2015/cs-161/week-3/ab-ex-5.PNG' height="75%" width="75%" />
+              </div>
+              <br/>
+              
+<pre>
+  Visiting first child of node C:
+    -> Update the values of V and &beta; = 3
+    -> NOTE: Now we've reached a state where:
+         &beta; &le; &alpha;
+         3 &le; 5
+</pre>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/spring-2015/cs-161/week-3/ab-ex-6.PNG' height="75%" width="75%" />
+              </div>
+              <br/>
+              
+<pre>
+  Terminate exploration of C's children
+    -> Now we've exhausted the exploration and terminated,
+       with no more nodes to explore, and having trimmed
+       exploration of 2 of C's children
+</pre>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/spring-2015/cs-161/week-3/ab-ex-7.PNG' height="75%" width="75%" />
+              </div>
+              <br/>
+              
+              <p>This result is intuitive, since we know that the leftmost child of node C is already worse than everything we explored on node B's side, so we don't even need to consider
+                the other children of C since we know that MIN (acting optimally at node C) will always choose a move that results in AT MOST a score of 3 for the MAX player.</p>
+              <p>So, using &alpha;-&beta; pruning, we can significantly reduce the size of the minimax tree.</p>
+              <p>Although we still have an exponential time complexity, at least the constant of proportionality is approximately halved by pruning.</p>
+              <br/>
+              
               <p>Now we need to address the second issue from before; what if we don't have the full game tree with huge search spaces like Chess?</p>
               
               <br/>
               <h3>Imperfect Real-time Heuristics</h3>
               <p>When game trees are massive, and we can't generate the entire tree, we'll instead use an evaluation function that scores states up until a certain depth cut-off.</p>
               <p>These will represent our best guess using a heuristic scoring function of those states, and then treat the reduced sub-tree as a minimax search.</p>
-              <p>While not necessarily optimal, the farther the depth cut-off, the better our chances of reaching a victory state.</p>
+              <p>For example, if we're using the &alpha;-&beta; pruning algorithm listed above, note the provision to provide a <code>DEPTH</code> parameter, which allows us to provide a depth cut-off.</p>
+              <p>This might look like:</p>
+<pre>
+  ; Cutoff depth of 5 levels
+  alphabeta(root, 5, -&infin;, &infin;, TRUE)
+</pre>
+              <br/>
+              <p>While not necessarily optimal, the farther the depth cut-off, the better our chances of predicting a victory state, since we consider more and more possible moves and counter-moves.</p>
               <br/>
               <p class='definition'>
                 <strong>Fun factoid:</strong> studies have illustrated that grand-master chess players use some flavor of this technique, with some able to accurately foresee the search tree
