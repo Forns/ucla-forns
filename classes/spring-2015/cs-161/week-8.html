@@ -265,14 +265,14 @@
               <p>So, to sum out Z, we simply collapse across the two rows! It's as though X were removed entirely from the equation, just leaving us with a distribution over X and Y.</p>
               <br/>
               <p>This amounts to the following joint marginal on X and Y with Z summed out, written:<br/>
-                $$\sum_z Pr(X, Y)$$
+                $$\sum_Z Pr(X, Y, Z)$$
               </p>
               <table class='table table-bordered'>
                 <thead>
                   <tr>
                     <th><p>X</p></th>
                     <th><p>Y</p></th>
-                    <th><p>\(\sum_z Pr(X, Y)\)</p></th>
+                    <th><p>\(\sum_Z Pr(X, Y, Z)\)</p></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -319,7 +319,7 @@
                   <tr>
                     <th><p>X</p></th>
                     <th><p>Y</p></th>
-                    <th><p>\(\sum_z Pr(X, Y)\)</p></th>
+                    <th><p>\(\sum_Z Pr(X, Y, Z)\)</p></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -400,7 +400,7 @@
                   <tr>
                     <th><p>Y</p></th>
                     <th><p>Z</p></th>
-                    <th><p>\(\sum_x Pr(Y, Z)\)</p></th>
+                    <th><p>\(\sum_X Pr(X, Y, Z)\)</p></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -1303,7 +1303,7 @@
               <br/>
               <p>So, since our final factor has only C remaining, and accounted for A = true, the values it represents are a marginal on C and A = true!</p>
               <p class='toolkit'>In general, the final factor after variable elimination yields some subset of worlds consistent with the evidence from:<br/>
-                $$\sum_{v \in V \land v \not\in Q} Pr(Q, e)$$
+                $$\sum_{v \in V \land v \not\in Q} Pr(Q, e, V)$$
               </p>
               <br/>
               <p>We then use our remaining factor to compute (a) the probability of the evidence, and then using Bayes' conditioning, (b) our target quantity.</p>
