@@ -1,0 +1,965 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Andrew Forney - UCLA CS</title>
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/magic-bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/main.css" rel="stylesheet" type="text/css">
+    <script src="../../../js/lib/jquery-2.0.3.min.js"></script>
+    <script src="../../../js/lib/bootstrap.min.js"></script>
+    <script src="../../../js/lib/expanding.js"></script>
+    <script src="../../../js/display/general/general-display.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+    <script type="text/javascript" src="../../../js/display/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  </head>
+  
+  <body data-spy="scroll" data-target="#scrollspy">
+    
+    <!-- BEGIN WRAP -->
+    <div id="wrap">
+      
+      <!-- BEGIN NAVIGATION -->
+      <nav class='navbar navbar-default' role='navigation'>
+        <div class='nav-accent'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-12'>
+              <div class='navbar-header'>
+                <button class='navbar-toggle' type='button' data-toggle='collapse' data-target='.navbar-main-collapse'>
+                  <span class='sr-only'>Toggle Navigation</span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                </button>
+                <a class='navbar-brand' href='/~forns/'>
+                  <span id='brand-text'>
+                    Andrew Forney
+                  </span>
+                </a>
+              </div>
+              
+              <div id='nav-main' class='collapse navbar-collapse navbar-main-collapse'>
+                <ul class='nav navbar-nav navbar-right'>
+                  
+                  <li>
+                    <a href='/~forns/about.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-user'></span>
+                      </div>
+                      <p class='text-center'>About</p>
+                    </a>
+                  </li>
+                  
+                  <li class='active'>
+                    <a href='/~forns/classes.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-book'></span>
+                      </div>
+                      <p class='text-center'>Classes</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/contact.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-comment'></span>
+                      </div>
+                      <p class='text-center'>Contact</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/publications.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-file'></span>
+                      </div>
+                      <p class='text-center'>Publications</p>
+                    </a>
+                  </li>
+                  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <!-- END NAVIGATION -->
+      
+      <!-- MathJax CUSTOM DEFS -->
+      <div class='hidden'>
+        \(\def\independence{\perp\!\!\!\perp}\)
+        \(\def\dependence{\perp\!\!\!\!\!/\!\!\!\!\!\perp}\)
+      </div>
+      
+      <!-- BEGIN MAIN CONTENT -->
+      <div id="main-content" class="container">
+        <div class="row">
+          
+          <!-- BEGIN SCROLLSPY -->
+          <div class='col-md-2 hidden-sm hidden-xs'>
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+              <ul id='scrollspy' class="nav bs-sidenav">
+              </ul>
+            </div>
+          </div>
+          <!-- END SCROLLSPY -->
+          
+          <!-- BEGIN PRESENTATION CONTENT -->
+          <div class='col-md-10 presentation-content' role='main'>
+            
+            <ol class="breadcrumb hidden-print">
+              <li><a href="../../../classes.html">Classes</a></li>
+              <li><a href="./cs-161.html">Spring14 CS161</a></li>
+              <li class="active">Week 10</li>
+            </ol>
+            
+            
+            <div id='neuralNets' class='scrollspy-element' scrollspy-title='Neural Nets'></div>
+            <h1>Neural Nets</h1>
+            <div>
+              <p>Hey this is artificial intelligence, let's take a look at the gold standard of intelligence: the brain!</p>
+              <p>As we know, the brain consists of about 100 *billion* neurons that resemble a certain basic structure:</p>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-10/neural-1.PNG' />
+              </div>
+              <br/>
+              <p>Here we have a basic neuron structure with dendrites, which collect the neurotransmitters from other connected neurons at their synapses...</p>
+              <p>...and if enough neurotransmitters are excitatory such that the neuron &quot;fires,&quot; it will then release neurotransmitters of its own into the synapses connected to its axon terminals.</p>
+              <p>In simplest terms, we want to try to model certain computational problems using the input / output semantics of actual neurons to tackle tasks like classification and deep learning.</p>
+              <br/>
+              <p>Let's root neural networks in a familiar problem: classification.</p>
+              <p>Remember that classification is the task of deciding whether our input attributes is indicative of a particular class, and returns a yes / no answer.</p>
+              <p class='example'>Take, for example, a very simple neuron which (through some process irrelevant to us) gets activated whenever you're looking at Jennifer Aniston (this was a real study, look
+                it up):</p>
+              <br/>
+              <p>This might look like the following:</p>
+              <br/>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-10/neural-2.PNG' />
+              </div>
+              <br/>
+              <p>(somewhere, someone who actually studies neuroscience is reading this and cringing)</p>
+              <p>However, if that same neuron were to respond to input of seeing Julia Roberts instead (which is, I believe, what they did in the study) it might not activate!</p>
+              <br/>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-10/neural-3.PNG' />
+              </div>
+              <br/>
+              <p>It would be nice, then, if we could take a bunch of neurons with certain activation patterns, and combine their outputs to serve our computation interests.</p>
+              <p>Let's look at the basic case first...</p>
+              <br/>
+              
+              <p>The anology to our neural networks is as follows:</p>
+              <p class='definition'>Artificial neural networks have <strong>input</strong> elements representing our attributes of interest (like the dendrites).</p>
+              <p class='definition'>Artificial neurons have <strong>activation functions</strong> that determine whether or not, based on the input, they will fire.</p>
+              <p class='definition'>Artificial neural networks have <strong>output</strong> elements that can be used for classification or simply returning results of the internal computations...</p>
+              <br/>
+              <p>Let's look at a very simple artificial neuron and then look at how to use it.</p>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-10/neural-4.PNG' />
+              </div>
+              <br/>
+              <p>What you choose for the activation function is up to you, but typical choices are the following:</p>
+              <p class='definition'>An activation function that is a <strong>step / threshold function</strong> will only produce an output when some minimum value is reached for its sum of weighted inputs.</p>
+              <br/>
+              <p>Typically, step functions output 0 if we haven't reached some threshold yet, or 1 otherwise.</p>
+              <p>These bear a close semblance to how actual neurons operate.</p>
+              <br/>
+              <p class='definition'>An activation function that is a <strong>logistic function</strong> (the inverse of the natural logit function) produces an s-curve used to convert the logarithm of
+                odds into a probability (positive inputs approach a ceiling of 1, negative inputs approach a floor of -1).</p>
+              
+              <br/>
+              <p>Why don't we look at a single node neuron and see how this all fits together.</p>
+              <p>Here are the steps for computation at a single neuron:</p>
+              <div class='well'>
+                <p><strong>Step One:</strong> Sum weighted inputs for \(n\) input links</p>
+                <p>$$in_j = \sum_{i=0}^{n} w_i * a_i$$</p>
+                <br/>
+                
+                <p><strong>Step Two:</strong> Apply \(g(in_j)\) where \(g\) is the activation function</p>
+                <p>$$a_j = g(in_j)$$</p>
+                <br/>
+                
+                <p><strong>Step Three:</strong> Propagate the output \(a_j\) to any output links</p>
+              </div>
+              <br/>
+              
+              <p class='example'>What will the following neuron output for the given inputs, weights, and activation function?</p>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-10/neural-5.PNG' />
+              </div>
+              <br/>
+              <p class='definition'>The above neuron, which is a single unit whose activation function is a step function, is called a <strong>perceptron</strong>.</p>
+              <br/>
+              <p>Some things to notice:</p>
+              <ul class='indent-1'>
+                <li><p>Weights can be negative (to immitate an inhibitory effect like our own neurons have)</p></li>
+                <li><p>Weights can be 0</p></li>
+                <li><p>(not shown) Weights can be any real number, not necessarily percentage values</p></li>
+                <li><p>The bias input value is always 1 though its weight can be modified</p></li>
+                <li><p>Other input values can be whatever you'd like to suit the problem at hand</p></li>
+              </ul>
+              <br/>
+              <p class='example'>What will the following neuron output for the given inputs, weights, and activation function?</p>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-10/neural-6.PNG' />
+              </div>
+              <br/>
+              <p class='definition'>The above neuron, which is a single unit whose activation function is a logistic function, is called a <strong>sigmoid perceptron</strong>, sometimes used as a probability
+                calculator.</p>
+              <br/>
+              <p class='definition'>The <strong>bias</strong> input is simply a means of shifting our sigmoid curve left and right by manipulating its weight, and (described later) for handling learning
+                where our inputs are 0.</p>
+              <br/>
+              <p>Observe how the output of a sigmoid perceptron changes by manipulating the bias input:</p>
+              <div class='well'>
+                <p>Say for perceptron n with 2 inputs and 1 bias input: (where sig() is the sigmoid logistic function and \(w_0 * a_0\) is the bias term)</p>
+                <p>
+                  \begin{eqnarray}
+                    a_n = sig&(&w_i * a_i\\
+                             &+& w_j * a_j\\
+                             &+& w_0 * a_0)
+                  \end{eqnarray}
+                </p>
+                
+                <p>
+                  \begin{eqnarray}
+                    a_n = sig&(&0.3 * 1\\
+                             &+& 0.2 * 1\\
+                             &+& 0.0 * 1)
+                        = 0.62
+                  \end{eqnarray}
+                </p>
+                <br/>
+                
+                <p>Change w_0 to 0.5 shifts right</p>
+                <p>
+                  \begin{eqnarray}
+                    a_n = sig&(&0.3 * 1\\
+                             &+& 0.2 * 1\\
+                             &+& 0.5 * 1)
+                        = 0.73
+                  \end{eqnarray}
+                </p>
+                    
+                <p>Change w_0 to -0.5 shifts left</p>
+                <p>
+                  \begin{eqnarray}
+                    a_n = sig&(&0.3 * 1\\
+                             &+& 0.2 * 1\\
+                             &-& 0.5 * 1)
+                        = 0.5
+                  \end{eqnarray}
+                </p>
+              </div>
+              <br/>
+              
+              <p>Visually, we can see the shift as the following (depicted below: only one input and taken from a really good SO article on Bias inputs, linked):</p>
+              <a href='http://stackoverflow.com/questions/2480650/role-of-bias-in-neural-networks' target='_blank'>
+                <div class='fit-pres text-center'>
+                  <img src='../../../assets/images/spring-2014/cs-161/week-10/neural-7.PNG' />
+                </div>
+              </a>
+              <br/>
+              <p>Typically you will have one bias input connected to all non-input neurons, though you can have one per level as well.</p>
+              <br/>
+              <p>Succinctly, the output of some neuron n is given by:</p>
+              <div class='well'>
+                <p>For \(i\) input links:</p>
+                <p>$$a_n = g(\sum_i w_i * x_i)$$</p>
+              </div>
+              <br/>
+              
+              <p>Perceptrons on their own can do many tasks quite well. The majority function is one of them:</p>
+              <p class='example'>Consider the following perceptron (step activation function) that implements the <strong>majority function</strong>, outputting 1 whenever the majority (MORE than half)
+                of its inputs are also 1. Determine the weight of the bias input for m inputs (each with weight and activation values of 1).</p>
+              <br/>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-10/neural-8.PNG' />
+              </div>
+              <br/>
+              <p>Need a hint? Consider m = 10 with 2 separate cases: in Case 1, 5 of those inputs are 1 and the others 0; in Case 2, 6 of those inputs are 1 and the others 0.</p>
+              <p class='question' name='neuro-q0'>Click for solution.</p>
+              <p class='answer' name='neuro-q0'>$$w_0 = -\frac{m}{2}$$ since, for even \(m\), you need to exclude the \(\frac{m}{2}\) case from activating the neuron.</p>
+
+              <br/>
+              <p>Now there is one problem to discuss with perceptrons. Let's condider the perceptron that performs a logical, binary OR, i.e., outputs 1 if either of its inputs (or both) are 1.</p>
+              <p>We might create a perceptron that looks like:</p>
+              <br/>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-10/neural-11.PNG' />
+              </div>
+              <br/>
+              <p>Which works out for the classification task of separating the 0 outcomes of a binary logical OR from the 1 outcomes:</p>
+              <br/>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-10/neural-12.PNG' />
+              </div>
+              <br/>
+              <p>The same can be said of a perceptron that performs a logical, binary AND, i.e., outputs 1 iff both inputs are 1.</p>
+              <br/>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-10/neural-13.PNG' />
+              </div>
+              <br/>
+              <p>Which works out for the classification task of separating the 0 outcomes of the AND operation from the 1 outcomes:</p>
+              <br/>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-10/neural-14.PNG' />
+              </div>
+              <br/>
+              <p>But what about logical XOR? i.e., returning 1 iff both inputs are different values:</p>
+              <br/>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-10/neural-15.PNG' />
+              </div>
+              <br/>
+              <p>Can't do it with a single dividing line like we did with AND and OR!</p>
+              <p class='definition'>Perceptrons by themselves can only solve classification problems that are <strong>linearly-separable</strong>.</p>
+              <br/>
+              <p>For this reason, we need to talk about <strong>networks</strong> of perceptrons that handle <strong>non-linear regression.</strong></p>
+              
+              <br/>
+              <h3>Feed-Forward Networks</h3>
+              <p>Now that we have some concept of the individual perceptrons, we can talk about tying them together to handle interesting tasks!</p>
+              <p class='definition'>A <strong>feed-forward neural network</strong> is one with some number of input and output nodes with edges that form a directed, acyclic graph.</p>
+              <br/>
+              <p>In other words, our feed-forward networks only propagate their outputs towards the output nodes.</p>
+              <p>As such, we can connect layer after layer of neuron to one another with the outputs of neurons at level \(i\) serving as inputs to neurons at level \(i+1\).</p>
+              <p class='definition'>A network's <strong>input layer</strong> for some vector of inputs \(X = (x_1, x_2, ...)\) sets each neuron's output in the input layer to its corresponding input value.<br/><br/>
+                So, for input neurons \(1, 2, ..., n\) the outputs of each is: \((a_1, a_2, ..., a_n) = (x_1, x_2, ..., x_n)\)
+              </p>
+              <p class='definition'>A network's <strong>hidden layer</strong> performs the internal computation for our network's task and are all neurons between the input and output layers.</p>
+              <br/>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-10/neural-10.PNG' />
+              </div>
+              <br/>
+              <p>Here's an example:</p>
+              <p class='example'>Say we had a simple, 3 layer network with 2 inputs, x1 and x2, and then 4 perceptrons (each with activation function g, which is a step function) with various output weights.
+                What is the output of 5 and 6 (i.e., output values C and D), when x1 = 1 and x2 = 2? Assume a 0 weight for the bias input.</p>
+              <br/>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-10/neural-9.PNG' />
+              </div>
+              <br/>
+              <p>NOTE: In the above, our input layer still consists of neurons who just happen to be set to our input; they're still neurons due to their multiple output links, which isn't the case for the
+                input values x1 and x2.</p>
+              <br/>
+              <p>Now that we know about multi-layer networks, we can solve our XOR problem! Let's do that now.</p>
+              <p class='example'>Complete the following feed-forward perceptron network to elicit the XOR behavior of two binary inputs, x1 and x2. i.e., solve for \(\theta\) of node 4 and \(W_{4,6}\)</p>
+              <br/>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-10/neural-16.PNG' />
+              </div>
+              <br/>
+              <p class='question' name='neuro-q1'>Click for solution.</p>
+              <p class='answer' name='neuro-q1'>\(\theta = 2\), \(w_4,6 = -2\)</p>
+              <br/>
+              <p>So, we see that our neural *networks* are really just <strong>non-linear regressors</strong> since we can find separations in classification problems that are non-linear so long as we use
+                multiple neurons.</p>
+              <p>This brings us to the next section: how do we train our networks? What learning tools do we have available to us?</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='learning' class='scrollspy-element' scrollspy-title='NN Learning'></div>
+            <h1>How to Train Your Neurons</h1>
+            <div>
+              <p>One of the most powerful features of Neural Networks is to be able to learn a classification problem.</p>
+              <p>As a form of supervised learning, we can give our networks a vector of inputs X and a vector of the expected outputs for that input Y, and train our network to make correct output.</p>
+              <p class='definition'>The learning <strong>parameters</strong> (i.e., what we have liberty to change in order to achieve our correct classification) in a neural network are its
+                <strong>weights</strong></p>
+              <br/>
+              <p>Furthermore, since each weight affects only one other neuron at its link's terminus, for m weights in the network we actually perform m separate learning problems!</p>
+              <p>So, how do we fine tune our weights in order to get the proper output?</p>
+              <p>The trick is: we're going to guess!</p>
+              <p>We'll start by guessing the correct answer, and depending on how wildly we were wrong from the expected answer, we will then <strong>update</strong> our weights.</p>
+              <p class='definition'><strong>Back-propagation learning</strong> is the learning task whereby we successively update our network weights based on the given, expected outputs for given inputs.</p>
+              <br/>
+              <p>The technique is called &quot;back-propagation&quot; because we always start by comparing our output guess to the actual answer, and then attempt to modify our weights to minimize error.</p>
+              <p>In this way, we are propagating the output error backwards in levels until we have changed the greatest weight-offenders (that might have led to a wrong answer) to their correct values.</p>
+              <br/>
+              <p>One thing to note: although we're attempting to discover the proper weights that are appropriate given our network, we have no means of determining the actual network structure.</p>
+              <p class='definition'><strong>Cross validation</strong> techniques allow us to try several putative models, run back-prop and determine which had the best performance.</p>
+              <br/>
+              <p>But, for now, we'll just assume that we had settled on some sort of network structure and now need to find the proper weights.</p>
+              <p>The backprop strategy is interested in the derivatives of our activation functions, and will use these to find a sort of gradient descent to minimizing error.</p>
+              <p class='definition'>For this reason, the activation functions of our nodes must be <strong>differentiable.</strong></p>
+              <br/>
+              <p>Luckily, logistic functions have a nice derivative that will prove handy for an example. Before we look at the algorithm, a review of notation:</p>
+              <ul class='indent-1'>
+                <li><p><strong>\(w_{i,j}\)</strong> = the weight associated with a link from node i to node j</p></li>
+                <li><p><strong>\(x_i\)</strong> = an input from a training data point's input vector corresponding to input node i</p></li>
+                <li><p><strong>\(in_j\)</strong> = the sum of weighted inputs to node j</p></li>
+                <li><p><strong>\(g(in_j)\)</strong> = the activation function for node j which is a function of the input weighted sum</p></li>
+                <li><p><strong>\(a_j\)</strong> = the output of node j equivalent to g(in_j)</p></li>
+                <li><p><strong>\(g'(in_j)\)</strong> = the derivative of the activation function of node j</p></li>
+                <li><p><strong>\(y_j\)</strong> = an output from a training data point's output vector corresponding to output node i</p></li>
+                <li><p><strong>\(\Delta[ j ]\)</strong> = the error term associated with node j, i.e., how distant its output is compared to the expected one</p></li>
+                <li><p><strong>\(\alpha\)</strong> = the <strong>learning rate</strong>, which is usually a small number like 0.01, which dictates how quickly our weights will change based on updates</p></li>
+              </ul>
+              <br/>
+              <p>Let's take a look at the algorithm and then start off an example in gory detail.</p>
+              <br/>
+<pre class='prettyprint'>
+  ; Takes the network structure (network) and a set
+  ; of training data (examples) to return a network
+  ; with proper weight parameters set
+  
+  function BACK-PROP-LEARNING (examples, network)
+  local variables: &Delta;, a vector of errors indexed by node
+  
+  repeat
+      for each weight w_i,j in network do
+          ; Seed network with our random guesses
+          w_i,j &larr; a small random number
+          
+      ; Example data point from training set with
+      ; input vector x and expected output y
+      for each example (x, y) in examples do
+      
+          ; Propagate the inputs, x, forward to
+          ; obtain our outputs, and then compare to
+          ; the expected
+          for each node i in the input layer do
+              a_i = x_i
+          
+          ; Go through each hidden layer up to
+          ; the output one, L
+          for layer = 2 in L do
+          
+              ; Compute the inputs to every node
+              for each node j in layer do
+                  in_j &larr; &Sigma;_i w_i,j * a_i
+                  a_j &larr; g(in_j)
+              
+          ; At this point, we can compare the outputs
+          ; that we got to the outputs we expected (y)
+          ; and get an error term to store in the delta
+          
+          for each node j in output layer do
+          
+              ; Here g'(in_j) is the derivative of the
+              ; activation function g(in_j)
+              &Delta;[ j ] &larr; g'(in_j) * (y_j - a_j)
+              
+          ; Populate the errors of each node in the hidden
+          ; layer
+          for layer = L - 1 to 1 do
+              for each node i in layer do
+                  &Delta;[ i ] &larr; g'(in_i) * &Sigma;_j w_i,j * &Delta;[ j ]
+          
+          ; Finally, update the weights, where &alpha; is our
+          ; learning rate constant
+          
+          for each weight w_i,j in network do
+              w_i,j &larr; w_i,j + &alpha; * a_i * &Delta;[ j ]
+              
+  until (MAX_ITERATIONS reached) OR
+        (Global error over &Delta; below some minimum)
+  
+  return network
+</pre>
+              <br/>
+              <p>Whew! That's a big algorithm! So notationally heavy!</p>
+              <p>Care to just glance at a small example (and not all of one, just a few steps)</p>
+              <p>Consider the following network and training sample where each activation function is the logistic function:</p>
+              <div class='well'>
+                <p>Logistic function:</p>
+                <p>$$g(in_j) = \frac{1}{(1 + exp(-in_j))}$$</p>
+                <br/>
+                
+                <p>Derivative of logistic function:</p>
+                <p>$$g'(in_j) = g(in_j) * (1 - g(in_j))$$</p>
+              </div>
+              <br/>
+              
+              <p>Now, consider the following (arbitrary) training set with input vector X and expected output vector Y.</p>
+              <br/>
+              <table class='table table-bordered table-striped'>
+                <thead>
+                  <tr>
+                    <th><p>Case</p></th>
+                    <th><p>X</p></th>
+                    <th><p>Y</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><p>1</p></td>
+                    <td><p>{0.5, 1.0}</p></td>
+                    <td><p>{0.2}</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>2</p></td>
+                    <td><p>{0.3, 0.5}</p></td>
+                    <td><p>{0.15}</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>3</p></td>
+                    <td><p>{0.9, 0.4}</p></td>
+                    <td><p>{0.8}</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>n</p></td>
+                    <td><p>...</p></td>
+                    <td><p>...</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+              <p>And then we had the following network:</p>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-10/neural-17.PNG' />
+              </div>
+              <br/>
+              <hr/>
+              <br/>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-10/neural-18.PNG' />
+              </div>
+              <hr/>
+              <br/>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-10/neural-19.PNG' />
+              </div>
+              <br/>
+              <hr/>
+              <br/>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-10/neural-20.PNG' />
+              </div>
+              <br/>
+              <hr/>
+              <br/>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-10/neural-21.PNG' />
+              </div>
+              <br/>
+              <hr/>
+              <br/>
+              <p>Wow... that is just... wow.</p>
+              <p>Let's let that simmer for a bit...</p>
+              <br/>
+              <p>At the end of this whole process, we end up with a network whose weights have hopefully been adjusted to fit our output requirements!</p>
+              <p class='definition'>This is why, like Naive Bayes, neural networks are members of the <strong>Probably, Approximately Correct (PAC)</strong> algorithms and structures.</p>
+              <br/>
+              <p>We can train to our sample data enough to generalize but we don't want to overtrain so we lose all flavor of generalizability.</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='knowledgeInLearning' class='scrollspy-element' scrollspy-title='Knowledge in Learning'></div>
+            <h1>Knowledge in Learning</h1>
+            <div>
+              <p>Our previous efforts to tackle learning problems has been data-driven and simply formulated around the examples in our training sets themselves.</p>
+              <p>However, what we haven't previously asserted is any knowledge that we might have a priori of seeing the data and converting our problems into FOL formulations.</p>
+              <p class='definition'>A <strong>hypothesis</strong> is a FOL description of the set of attributes that satisfy a positive classification on some learning task.</p>
+              <br/>
+              <p>For example, remember our Dining Dillema example with decision trees as to whether or not one would wait for a seat?</p>
+              <p>Consider the following conversion from decision tree to FOL hypothesis:</p>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-10/hypothesis-0.PNG' />
+              </div>
+              <br/>
+              <p>Here, in our FOL predicates, r represents a sample from the training set, and the predicates indicate whether or not that sample r has the attribute in question.</p>
+              <p>So, in general, our hypotheses are in the form:</p>
+<pre class='prettyprint'>
+  Classification(r) &hArr; CNF
+  
+  ; ...for some CNF that might look like:
+  
+  Classification(r) &hArr; Pred1(r) &and; Pred2(r) &and; ... &or;
+                       Pred1(r) &and; Pred3(r) &and; ... &or;
+                       ...
+</pre>
+              <br/>
+              <p class='definition'>The clauses of the CNF sentence that compose the hypothesis are called the hypothesis' <strong>extensions</strong>, which each cover the positive classifications 
+                of some number of disjoint sample examples.</p>
+              <br/>
+              <p>As such, two hypotheses with at least one different extension will be inconsistent since they must disagree on the classification of at least one sample element.</p>
+              <br/>
+              <p class='example'>Generate a FOL hypothesis representation of the following decision tree for some classification predicate \(X(r)\) on sample \(r\) and trinary attributes A and B.</p>
+              <br/>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-9/decision-8.PNG' />
+              </div>
+              <br/>
+              <p class='question' name='hypothesis-q0'>Click for solution.</p>
+              <div class='answer' name='hypothesis-q0'>
+<pre class='prettyprint'>
+  X(r) &hArr; A(r, red) &or;
+          A(r, grn) &and; B(r, sml) &or;
+          A(r, grn) &and; B(r, lrg)
+</pre>
+              </div>
+              <br/>
+              <p>As we iterate through training set examples, we can modify our hypotheses in one of two ways:</p>
+              <p class='toolkit'><strong>Generalization</strong> extends the number of positive classifications to samples by dropping a condition from an extension.</p>
+<pre class='prettyprint'>
+  ; Initial hypothesis:
+  X(r) &hArr; A(r, red) &and; B(r, sml)
+  
+  ; Generalization: drop condition:
+  X(r) &hArr; A(r, red)
+</pre>
+              <br/>
+              <p class='toolkit'><strong>Specialization</strong> reduces the number of positive classifications to samples by adding a condition to an extension.</p>
+<pre class='prettyprint'>
+  ; Initial hypothesis:
+  X(r) &hArr; Patrons?(r, full)
+  
+  ; Specialization: add condition:
+  X(r) &hArr; Patrons(r, full) &and; Hungry?(r)
+</pre>
+              <br/>
+              <p>Therefore, if we're interested in finding a hypothesis that suits our training set, we can iterate through each sample and attempt to modify our best hypothesis to do the job.</p>
+              <p class='definition'>The <strong>current best hypothesis</strong> tries to maintain a single hypothesis by adjusting for inconsistent classifications that might arise with each sample element.</p>
+              <br/>
+              <p>A crude outline of the algorithm goes something like:</p>
+              <br/>
+<pre class='prettyprint'>
+  function Current-Best-Learning(examples, h)
+      for each ex in examples
+          if ex consistent with h
+              continue
+          else ex false positive for h
+              ; Here we try to perform specialization on h,
+              ; which must satisfy not only ex but all
+              ; previous examples
+              try to specialize h, or return fail
+                if we cannot
+          else ex false negative for h
+              try to generalize h, or return fail
+                if we cannot
+</pre>
+              <br/>
+              <p>Some things to note:</p>
+              <ul class='indent-1'>
+                <li><p>Very computationally expensive to not only specialize and generalize according to a new inconsistent sample, but also to double check that a modification correctly works for all
+                  previous examples</p></li>
+                <li><p>Might have to back-track to a choice point to generalize / specialize since there are often multiple plausible attribute splits that might satisfy an example</p></li>
+                <li><p>In light of multiple-viable attribute splits, we would simply choose one non-deterministically and hope that we chose correctly for future examples</p></li>
+              </ul>
+              <br/>
+              <p>Let's try it once on a very simple example:</p>
+              <p class='example'>Find a hypothesis that meets the following example training set for classification task X. Use the current best hypothesis algorithm.</p>
+              <br/>
+              <table class='table table-bordered table-striped'>
+                <thead>
+                  <tr>
+                    <th><p>A</p></th>
+                    <th><p>B</p></th>
+                    <th><p>C</p></th>
+                    <th><p>X?</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><p>red</p></td>
+                    <td><p>sml</p></td>
+                    <td><p>0</p></td>
+                    <td><p>Yes</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>red</p></td>
+                    <td><p>med</p></td>
+                    <td><p>1</p></td>
+                    <td><p>No</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>grn</p></td>
+                    <td><p>sml</p></td>
+                    <td><p>0</p></td>
+                    <td><p>No</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>red</p></td>
+                    <td><p>med</p></td>
+                    <td><p>0</p></td>
+                    <td><p>Yes</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+              <p>Now we go example by example attempting to generate a hypothesis:</p>
+              <table class='table table-bordered table-striped'>
+                <caption>Example 1</caption>
+                <thead>
+                  <tr>
+                    <th><p>A</p></th>
+                    <th><p>B</p></th>
+                    <th><p>C</p></th>
+                    <th><p>X?</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><p>red</p></td>
+                    <td><p>sml</p></td>
+                    <td><p>0</p></td>
+                    <td><p>Yes</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <p class='question' name='learn-0'>Give a hypothesis \(h_1\) over the first example on attribute A of the format:<br/>$$h_1: X(r) \Leftrightarrow ???$$</p>
+              <p class='answer' name='learn-0'>
+                  $$h_1: X(r) \Leftrightarrow A(r, red)$$
+              </p>
+              <br/>
+              
+              <p>Now continue to next example:</p>
+              <table class='table table-bordered table-striped'>
+                <caption>Example 2</caption>
+                <thead>
+                  <tr>
+                    <th><p>A</p></th>
+                    <th><p>B</p></th>
+                    <th><p>C</p></th>
+                    <th><p>X?</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><p>red</p></td>
+                    <td><p>med</p></td>
+                    <td><p>1</p></td>
+                    <td><p>No</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <p class='question' name='learn-1'>Give a hypothesis \(h_2\) modifying \(h_1: X(r) \Leftrightarrow A(r, red)\) over the first TWO examples on attributes A and B of the format:<br/>
+                $$h_2: X(r) \Leftrightarrow ???$$
+              </p>
+              <div class='answer' name='learn-1'>
+                  <p>Issue: h1 fails on this example (since we have A = red but X = no), indicating a false positive, so try to specialize</p>
+                  <p>$$h_2: X(r) \Leftrightarrow A(r, red) \land B(r, sml)$$</p>
+              </div>
+              <br/>
+              
+              <p>So far so good, demonstrably h2 now satisfies the classification outcome of examples 1 and 2... let's keep going...</p>
+              <br/>
+              <table class='table table-bordered table-striped'>
+                <caption>Example 3</caption>
+                <thead>
+                  <tr>
+                    <th><p>A</p></th>
+                    <th><p>B</p></th>
+                    <th><p>C</p></th>
+                    <th><p>X?</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><p>grn</p></td>
+                    <td><p>sml</p></td>
+                    <td><p>0</p></td>
+                    <td><p>No</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <p class='question' name='learn-2'>Is Example 3 consistent with \(h_2: X(r) \Leftrightarrow A(r, red) \land B(r, sml)\)? Do we need to specialize or generalize?</p>
+              <p class='answer' name='learn-2'>Yes! No need to change.</p>
+              <br/>
+              
+              <table class='table table-bordered table-striped'>
+                <caption>Example 4</caption>
+                <thead>
+                  <tr>
+                    <th><p>A</p></th>
+                    <th><p>B</p></th>
+                    <th><p>C</p></th>
+                    <th><p>X?</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><p>red</p></td>
+                    <td><p>med</p></td>
+                    <td><p>0</p></td>
+                    <td><p>Yes</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <p class='question' name='learn-3'>Give a hypothesis \(h_3\) modifying \(h_2: X(r) \Leftrightarrow A(r, red) \land B(r, sml)\) over the first FOUR examples on attributes A, B, and C of the format:<br/>
+                $$h_3: X(r) \Leftrightarrow ???$$
+              </p>
+              <div class='answer' name='learn-3'>
+                  <p>This means h2 represents a false negative for example 4, and so we must generalize ...perhaps a disjunction is in order?</p>
+                  <p>
+                    \begin{eqnarray}
+                      h3: X(r) \Leftrightarrow A(r, red) &\land& B(r, sml) \lor\\
+                                               A(r, red) &\land& C(r, 0)
+                    \end{eqnarray}
+                  </p>
+              </div>
+              <br/>
+
+              <p>That looks like it fits! Notice, however, that only the latter extension is required to match all of our classifications... so current-best will detect that on a recursive call (see book
+                pg. 771) and reduce to:</p>
+              <p>
+                $$h4: X(r) \Leftrightarrow A(r, red) \land C(r, 0)$$
+              </p>
+              <br/>
+              <p>Looks good!</p>
+              <p>Like we said, however, there are many efficiency concerns with this nondeterministic attribute selection, since *many* different hypotheses might satisfy the sample that we have.</p>
+              
+              <br/>
+              <h3>Using Relevance Information</h3>
+              <p>Now comes the part where we can actually assert some knowledge on our hypothesis search by limiting the attributes that might contribute to predicting a classification:</p>
+              <p class='definition'><strong>Determinations</strong> assert which attributes are truly predictive of what other attributes or classifications.</p>
+              <br/>
+              <p>Sometimes these are called <strong>functional dependencies</strong> since they assert that classifications are simply a &quot;function&quot; of a set of attribute settings.</p>
+<pre class='prettyprint'>
+  ; We denote a determination by the syntax:
+  Predictor1 &and; Predictor2 &and; ... &and; PredictorN &gt; Classification
+  
+  ; For example, we know that Conductance of
+  ; a particular material is a function of its
+  ; Material type and Temperature:
+  
+  Material(x, m) &and; Temperature(x, l) &gt; Conductance(x, &rho;)
+  
+  ; In our last example:
+  
+  A(r, a) &and; C(r, c) &gt; X(r)
+</pre>
+              <br/>
+              <p>As such, we'd be interested in, given some training set over some number of attributes, which attributes are determinations of the classification.</p>
+              <p>Furthermore, if there does exist some set of attributes that are determinations for the classification, which has the fewest attributes?</p>
+              <p>The brute-force approach, described in the book on page 786, is simply to attempt to assemble sets of attributes that correctly predict the classification, starting with sets of size 1
+                and working up from there.</p>
+              <p>Naturally, this algorithm's complexity is a function of the size of the minimal determination (the number of attributes in it, let's say p) and n, the total number of attributes: O(n^p)</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='oddsAndEnds' class='scrollspy-element' scrollspy-title='Odds &amp; Ends'></div>
+            <h1>Odds &amp; Ends</h1>
+            <div>
+              <p>Just to comment on the philosophical analyses of artificial intelligence, John Searle's Chinese Room Argument poses a thought-provoking glance into the boundaries of intelligence.</p>
+              <p>Questions about just what it meant for a machine to be &quot;intelligent&quot; arose after Turing's famous test for machine intelligence was posed, and continue to this day.</p>
+              <p>The Chinese Room scenario was posed by Searle in response to Turing's assertion that &quot;intelligence&quot; can be measured by the yardstick functionalism:</p>
+              <p class='definition'>A <strong>mental state</strong> is the abstract notion of a thought.</p>
+              <p class='definition'><strong>Functionalism</strong> asserts that a mental state is any intermediate causal condition between input and output.</p>
+              <p class='example'>Consider being given some visual input like seeing a flower, which evokes some thought about the input (the mental state),
+                and then produces some behavioral output (like picking the flower).</p>
+              <br/>
+              
+              <p>In this capacity, if we were able to surgically replace all of the neurons in someone's brain with devices that reproduced the exact input-output of the neurons they replaced, then
+                functionalists would argue that the mental state (i.e., the thought aspect of consciousness) remains unchanged.</p>
+              <p>Searle, and other <strong>biological naturalists</strong> like him, argue that consciousness would be disrupted, and someone who has undergone the above procedure would slowly lose their
+                capacity for control.</p>
+              <p class='definition'><strong>Biological naturalists</strong> claim that mental state is not simply a neuronal-level product, but rather a higher level consequence of <strong>patterns</strong>
+                of neural activation and unspecified properties of neurons.
+              </p>
+              <br/>
+              <p>In other words, the <strong>high-level</strong> notion of thought is a result of a bunch of separate interactions of the <strong>low-level</strong> neuronal activations.</p>
+              <p>Furthermore, there is something in the <strong>unspecified</strong> properties of neurons that allow for the notion of thought that we cannot encapsulate in a machine replacement.</p>
+              <p>The big difference in the two perspectives is this:</p>
+              <ul class='indent-1'>
+                <li><p>Functionalists are OK with behavioral evidence of intelligence so long as a machine can reproduce human-like responses to input.</p></li>
+                <li><p>
+                  Biological naturalists claim that, although the input / output might be replicable, the mental state is not. As a tag phrase: &quot;Brains (the physical) cause minds (thought)&quot;
+                </p></li>
+              </ul>
+              <br/>
+              <p>Put simply, machines might one day be able to mimic a human's behavior, but Searle claims that they'll never be able to rationalize why they are doing so or to think like a human does.</p>
+              <p>To illustrate his argument, Searle posed the Chinese Room scenario:</p>
+              
+              <br/>
+              <h3>The Chinese Room Arugment</h3>
+              <p>The scenario goes like this:</p>
+              <blockquote>
+                &nbsp;&nbsp;&nbsp;Suppose you have some human sitting in an isolated room with only two connections to the outside world: an <strong>input</strong> slot in which he may receive input on 
+                paper and an <strong>output</strong> slot on which he might send some paper out. Additionally, the man is equipped with a <strong>rule book</strong> that determines what the output should be
+                given some sequence of inputs on paper. The man can also write what he wants on an infinite supply of paper.
+              </blockquote>
+              <br/>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-10/chinese-room.jpg' />
+              </div>
+              <br/>
+              <blockquote>
+                &nbsp;&nbsp;&nbsp;Here's the catch: both the inputs on paper, and the outputs that the man is meant to reproduce, are <strong>Chinese characters</strong> and the man knows nothing about
+                the Chinese language! Yet, by the dictations of the rule book, he is able to assess the given inputs and reproduce an output such that, to an outside observer, it will <strong>appear</strong>
+                that the man understands Chinese!
+              </blockquote>
+              <br/>
+              <div class='fit-pres text-center'>
+                <img src='../../../assets/images/spring-2014/cs-161/week-10/chinese-rule.jpg' />
+              </div>
+              <br/>
+              <p>Here, the man represents a computer's CPU and the input / output Chinese characters are simply the instructions being fed and retrieved from it.</p>
+              <p>The computer might be able to reproduce the expected output given the input, but that doesn't mean that it knows what it's doing!</p>
+              <br/>
+              <p>There are a variety of critiques to Searle's critique, which you can find in the book, pgs. 1032 - 1033.</p>
+              <p>The chief of which are:</p>
+              <ul class='indent-1'>
+                <li><p>Searle's argument is based on intuition rather than fact</p></li>
+                <li><p>It is actually just speed that makes neural communication lead to thought, and that with sufficient speed in our computers we can simulate human thought.</p></li>
+              </ul>
+              
+              <br/>
+              <h3>Further Reading</h3>
+              <p>You can view the Chinese Room argument in its glorious entirety <a href='http://plato.stanford.edu/entries/chinese-room/' target='_blank'>here</a>.</p>
+            </div>
+            <hr/>
+            
+              
+            <br/>
+            <div id='announcements' class='scrollspy-element' scrollspy-title='Announcements'></div>
+            <h1>Farewell Announcements... (oxymoron?)</h1>
+            <div>
+              <p>Week 10 already, how time has flown!</p>
+              <p>Just wanted to say what a pleasure it's been to be your TA--how much fun did we have?!</p>
+              <p>Some parting announcements:</p>
+              <br/>
+              <p class='definition'>If you haven't already filled out your <strong>TA evaluations</strong> for my discussion section, I implore you to do so! The feedback I get from you 
+                (who are technically my employers!) is vital and I'd love to know what worked and what didn't for you throughout the quarter.</p>
+              <p class='debug'>Your <strong>final</strong> is this Friday, June 12th, at 8:00 am. Remember to bring a Blue Book! Apropos, be sure to peruse my practice final and relevant book chapters from 
+                Dr. Dyer's final topics note on CourseWeb.</p>
+              <br/>
+              <p>Good luck all! Have fun with the final and enjoy the spring!</p>
+            </div>
+            <hr/>
+            
+            
+            
+            <a class='btn btn-default pull-right hidden-print' href='javascript:window.print();'>
+              <span class='glyphicon glyphicon-print'></span>
+              &nbsp; PDF / Print
+            </a>
+            
+          </div>
+          <!-- END PRESENTATION CONTENT -->
+          
+          <!-- MATERIALS FROM CLASS: -->
+          
+            
+        </div>
+      </div>
+      <!-- END MAIN CONTENT -->
+      
+      
+    </div>
+    <!-- END WRAPPER -->
+    
+    <!-- BEGIN FOOTER -->
+    <div id="footer">
+      <div class="container">
+        <div class="col-md-12 text-center">
+          
+        </div>
+      </div>
+    </div>
+    <!-- END FOOTER -->
+    
+  </body>
+</html>

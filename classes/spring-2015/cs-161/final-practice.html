@@ -445,49 +445,65 @@
             <div>
               <p>Get your theorems and rules ready kids, it's probability time!</p>
               <p>Why don't we start with a cheat sheet on stuff you're going to need:</p>
-<pre class='prettyprint'>
-  ; Product Rule:
-  Pr(A, B) = Pr(A | B) * Pr(B)
-           = Pr(B | A) * Pr(A)
+<div class='well'>
+  <p>Product Rule:</p>
+  <p>\begin{eqnarray}
+     Pr(A, B) &=& Pr(A | B) * Pr(B)\\
+              &=& Pr(B | A) * Pr(A)
+     \end{eqnarray}
+  </p>
+  <hr/>
   
-  ; Chain Rule:
-  Pr(A, B, C) = Pr(A | B, C) * Pr(B | C) * Pr(C)
+  <p>Chain Rule (Recursive application of Product Rule):</p>
+  <p>$$Pr(A, B, C) = Pr(A | B, C) * Pr(B | C) * Pr(C)$$</p>
+  <hr/>
   
-  ; Law of Total Probability
-  Pr(A) = &Sigma; Pr(A | b) * Pr(b)
-        &forall;b&in;B
-           
-  ; Bayes Conditioning
-  Pr(A | B) = Pr(A, B) / Pr(B)
+  <p>Law of Total Probability</p>
+  <p>\begin{eqnarray}
+       Pr(A) = \sum_{\forall b \in B} Pr(A | b) * Pr(b)
+     \end{eqnarray}
+  </p>
+  <hr/>
   
-  ; Bayes Rule
-  Pr(A | B) = [Pr(B | A) * Pr(A)] / Pr(B)
-</pre>
+  <p>Bayes' Conditioning</p>
+  <p>$$Pr(A | B) = \frac{Pr(A, B)}{Pr(B)}$$</p>
+  <hr/>
+  
+  <p>Bayes' Rule</p>
+  <p>$$Pr(A | B) = \frac{Pr(B | A) * Pr(A)}{Pr(B)}$$</p>
+</div>
               <br/>
-              <p class='question' name='prob-q0'>If <strong>the product rule</strong> tells us that <code class='prettyprint'>Pr(A, B) = Pr(A | B) * Pr(B)</code>, then in the general case accounting for
-                evidence E, can we say that <code class='prettyprint'>Pr(A, B | E) = Pr(A | B, E) * Pr(B | E)</code>?</p>
-              <p class='answer' name='prob-q0'>Yes! The property <code class='prettyprint'>Pr(A, B | E) = Pr(A | B, E) * Pr(B | E)</code> is called <strong>the generalized product rule</strong> and is
-                simply an application of the product rule (which is a special case of the chain rule).</p>
+              <p class='question' name='prob-q0'>[PROB1] If <strong>the product rule</strong> tells us that $$Pr(A, B) = Pr(A | B) * Pr(B)$$ ...then in the general case accounting for
+                evidence E, can we say that $$Pr(A, B | E) \stackrel{?}{=} Pr(A | B, E) * Pr(B | E)$$</p>
+              <p class='answer' name='prob-q0'>Yes! The property $$Pr(A, B | E) = Pr(A | B, E) * Pr(B | E)$$ is called <strong>the generalized product rule</strong> and is
+                simply an application of the product rule (which is a special case of the chain rule). Remember that when we condition on E, we're holding it as observed evidence, which holds after
+                we apply the produce rule to the joint on A and B.</p>
               <br/>
-              <p class='question' name='prob-q1'>Prove the <strong>generalized Bayes Rule</strong> stating: <code class='prettyprint'>Pr(A | B, E) = [Pr(B | A, E) * Pr(A | E)] / Pr(B | E)</code></p>
+              
+              <p class='question' name='prob-q1'>[PROB2] Prove the <strong>generalized Bayes Rule</strong> stating: $$Pr(A | B, E) = \frac{Pr(B | A, E) * Pr(A | E)}{Pr(B | E)}$$</p>
               <div class='answer' name='prob-q1'>
-<pre class='prettyprint'>
-    Pr(A | B, E)
+<p>\begin{eqnarray}
+    Pr(A | B, E) &=& \frac{Pr(A, B, E)}{Pr(B, E)} \quad \text{Bayes Conditioning}\\
   
-  ; Bayes Conditioning
-  = Pr(A, B, E) / Pr(B, E)
+                 &=& \frac{Pr(B, A, E)}{Pr(B, E)} \quad \text{Rearranging for clarity}\\
+
+                 &=& \frac{Pr(B | A, E) * Pr(A | E) * Pr(E)}{Pr(B | E) * Pr(E)} \quad \text{Chain Rule}\\
   
-  ; Re-arranging for clarity
-  = Pr(B, A, E) / Pr(B, E)
-  
-  ; Chain Rule
-  = [Pr(B | A, E) * Pr(A | E) * Pr(E)] / [Pr(B | E) * Pr(E)]
-  
-  ; Pr(E)s cancel out
-  = [Pr(B | A, E) * Pr(A | E)] / [Pr(B | E)]
-  
-  ; QED
-</pre>
+                 &=& \frac{Pr(B | A, E) * Pr(A | E)}{Pr(B | E)} \quad \text{Pr(E)s cancel out}
+   \end{eqnarray}
+</p>
+              </div>
+              
+              <p class='question' name='prob-q11'>[PROB3] Assuming that: $$C \perp A$$ $$A \independence B | C$$ prove that $$Pr(A, B, C) = Pr(A) * Pr(B, C)$$</p>
+              <div class='answer' name='prob-q11'>
+<p>\begin{eqnarray}
+     Pr(A, B, C) &=& Pr(B, A, C) \quad \text{Joints are rearrangeable}\\
+                 &=& Pr(B | A, C) * Pr(A | C) * Pr(C) \quad \text{Chain Rule}\\
+                 &=& Pr(B | C) * Pr(A) * Pr(C) \quad \text{Applying independence rules}\\
+                 &=& Pr(A) * Pr(B | C) * Pr(C) \quad \text{Rearranging}\\
+                 &=& Pr(A) * Pr(B, C) \quad \text{Product Rule}
+   \end{eqnarray}
+</p>
               </div>
               
               <hr/><br/>
