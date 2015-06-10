@@ -184,8 +184,8 @@
               <div class='answer' name='planning-q0'>
 <pre class='prettyprint'>
   1. MoveToTable(C, A)
-  2. Move(B, A)
-  3. Move(C, B)
+  2. Move(B, Table, A)
+  3. Move(C, Table, B)
 </pre>
               </div>
               <br/>
@@ -477,7 +477,7 @@
                 evidence E, can we say that $$Pr(A, B | E) \stackrel{?}{=} Pr(A | B, E) * Pr(B | E)$$</p>
               <p class='answer' name='prob-q0'>Yes! The property $$Pr(A, B | E) = Pr(A | B, E) * Pr(B | E)$$ is called <strong>the generalized product rule</strong> and is
                 simply an application of the product rule (which is a special case of the chain rule). Remember that when we condition on E, we're holding it as observed evidence, which holds after
-                we apply the produce rule to the joint on A and B.</p>
+                we apply the product rule to the joint on A and B.</p>
               <br/>
               
               <p class='question' name='prob-q1'>[PROB2] Prove the <strong>generalized Bayes Rule</strong> stating: $$Pr(A | B, E) = \frac{Pr(B | A, E) * Pr(A | E)}{Pr(B | E)}$$</p>
