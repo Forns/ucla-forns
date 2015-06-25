@@ -151,7 +151,7 @@
             <h1>A Return to CS31</h1>
             <div>
               <p>The first portion of CS 32 dealt heavily with topics from CS 31, and in particular, those surrounding classes and dynamic memory.</p>
-              <p>If you're unfamiliar with my site from last quarter, <a href='http://cs.ucla.edu/~forns/classes/fall-2013/cs-31/cs-31.html' target="_blank">here is a link</a> to *all* of the necessary review material.</p>
+              <p>If you're unfamiliar with my site from last quarter, <a href='http://cs.ucla.edu/~forns/classes/fall-2014/cs-31/cs-31.html' target="_blank">here is a link</a> to *all* of the necessary review material.</p>
               <p>More specifically:</p>
               <ul class='indent-1'>
                 <li><p><a href='http://cs.ucla.edu/~forns/classes/fall-2014/cs-31/week-9.html' target="_blank"><strong>Structs &amp; Classes:</strong> a previous quarter's lecture</a>.</p></li>
@@ -339,19 +339,8 @@
               cout &lt;&lt; "[P] Parameterized constructor" &lt;&lt; endl;
           }
   
-          NoisyClass (const NoisyClass&amp; other) {
-              s = other.s;
-              cout &lt;&lt; "[~] Copy constructor" &lt;&lt; endl;
-          }
-  
           ~NoisyClass () {
               cout &lt;&lt; "[D] Destructor" &lt;&lt; endl;
-          }
-  
-          NoisyClass&amp; operator= (const NoisyClass&amp; other) {
-              s = other.s;
-              cout &lt;&lt; "[=] Assignment" &lt;&lt; endl;
-              return *this;
           }
   };
 </pre>
@@ -359,9 +348,7 @@
 <pre class='prettyprint'>
   // [C] Default constructor
   // [P] Parameterized constructor
-  // [~] Copy constructor
   // [D] Destructor
-  // [=] Assignment
   int main () {
       NoisyClass* heapsOfNoise;
   
@@ -378,9 +365,7 @@
 <pre class='prettyprint'>
   // [C] Default constructor
   // [P] Parameterized constructor
-  // [~] Copy constructor
   // [D] Destructor
-  // [=] Assignment
   int main () {
       NoisyClass* heapsOfNoise = new NoisyClass[2];
       NoisyClass echo = heapsOfNoise[1];
@@ -399,7 +384,7 @@
               <p>This isn't Bob the Builder territory any more (I promise to stop using him in my constructor examples).</p>
               <p>
                 We spoke a bit more extensively about the details of constructors in CS31 
-                (<a href='http://cs.ucla.edu/~forns/classes/fall-2013/cs-31/cs-31-week-10.html#structs' target='_blank'>lecture here</a>) 
+                (<a href='http://cs.ucla.edu/~forns/classes/fall-2014/cs-31/week-10.html#structs' target='_blank'>lecture here</a>) 
                 but now there are a few more things to say.
               </p>
               <p>First, let's introduce a new tool for our constructors: the initialization list.</p>
@@ -1688,7 +1673,52 @@
               <p class='debug'>Include guards!</p>
               <p class='debug'>Comments!</p>
               <br/>
-              <p>IOU: A few specific tips on the assignment.</p>
+              <p>Some specific Project 1 tips:</p>
+              <ul class='indent-1'>
+                <li><p>Consider starting the assignment by splitting the classes into their respective files, and managing the inclusions first.</p></li>
+                <li><p>After performing the split, and working on the History class, you'll be tempted to have access to certain other classes like Player and Pit in History. As a hint, consider
+                  only what the spec allows you to have access to, what inclusions are necessary, and what you have access to in each class OTHER than History.</p></li>
+                <li><p>Remember to look out for circular dependencies!</p></li>
+              </ul>
+
+              <br/>
+              <h3>Homework 1</h3>
+              <p>Now, on Homework 1, you're asked to use typedef:</p>
+              <p class='toolkit'>A <strong>typedef</strong> keyword simply provides a new top-level name (alias) for an existing type.</p>
+              <br/>
+              <p>Uhh, OK... why do we need to use this?</p>
+              <p>
+                Well, if we want our code to be able to handle different types, but don't want users to have to find and replace every instance 
+                of a particular type in our code, we can provide a typedef to do the work for them!
+              </p>
+<pre class='prettyprint'>
+  // typedef syntax:
+  // typedef &lt;ExistingType&gt; &lt;NewTypeName&gt;;
+  
+  // ... so for example ...
+  typedef int CRAZY_INT_NAME_WOW;
+  
+  CRAZY_INT_NAME_WOW i = 1, j = 2;
+  cout &lt;&lt; i + j &lt;&lt; endl;
+</pre>
+              <p>Finally, some general reminders:</p>
+              <ul class='indent-1'>
+                <li><p>Comments!</p></li>
+                <li><p>Read the spec description for the <code class='prettyprint'>get</code> member functions very carefully...</p></li>
+                <li><p>Test your code! The general strategy for testing is that you should try to find some combination of legal statements that actually break it!</p></li>
+              </ul>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='announcements' class='scrollspy-element' scrollspy-title='Announcements'></div>
+            <h1>Announcements</h1>
+            <div>
+              <p>I have a couple of sad announcements for you, now that I've gotten you hooked on our discussion sections:</p>
+              <p class='definition'>There will be NO discussion sections (for anyone) on Friday, July 3rd, in observance of Independence Day. MERICA!</p>
+              <p class='definition'>I will be out of town Friday, July 10th, but have arranged for Thuy (another TA) to sub for my 10 am section in the same room. Lecture notes will still
+                be uploaded for that section. I'll miss you!</p>
             </div>
             <hr/>
             
