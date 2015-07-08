@@ -1,0 +1,430 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Andrew Forney - UCLA CS</title>
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/magic-bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/main.css" rel="stylesheet" type="text/css">
+    <script src="../../../js/lib/jquery-2.0.3.min.js"></script>
+    <script src="../../../js/lib/bootstrap.min.js"></script>
+    <script src="../../../js/lib/expanding.js"></script>
+    <script src="../../../js/display/general/general-display.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+  </head>
+  
+  <body data-spy="scroll" data-target="#scrollspy">
+    
+    <!-- BEGIN WRAP -->
+    <div id="wrap">
+      
+      <!-- BEGIN NAVIGATION -->
+      <nav class='navbar navbar-default' role='navigation'>
+        <div class='nav-accent'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-12'>
+              <div class='navbar-header'>
+                <button class='navbar-toggle' type='button' data-toggle='collapse' data-target='.navbar-main-collapse'>
+                  <span class='sr-only'>Toggle Navigation</span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                </button>
+                <a class='navbar-brand' href='/~forns/'>
+                  <span id='brand-text'>
+                    Andrew Forney
+                  </span>
+                </a>
+              </div>
+              
+              <div id='nav-main' class='collapse navbar-collapse navbar-main-collapse'>
+                <ul class='nav navbar-nav navbar-right'>
+                  
+                  <li>
+                    <a href='/~forns/about.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-user'></span>
+                      </div>
+                      <p class='text-center'>About</p>
+                    </a>
+                  </li>
+                  
+                  <li class='active'>
+                    <a href='/~forns/classes.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-book'></span>
+                      </div>
+                      <p class='text-center'>Classes</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/contact.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-comment'></span>
+                      </div>
+                      <p class='text-center'>Contact</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/publications.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-file'></span>
+                      </div>
+                      <p class='text-center'>Publications</p>
+                    </a>
+                  </li>
+                  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <!-- END NAVIGATION -->
+      
+      <!-- BEGIN MAIN CONTENT -->
+      <div id="main-content" class="container">
+        <div class="row">
+          
+          <!-- BEGIN SCROLLSPY -->
+          <div class='col-md-2 hidden-sm hidden-xs'>
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+              <ul id='scrollspy' class="nav bs-sidenav">
+              </ul>
+            </div>
+          </div>
+          <!-- END SCROLLSPY -->
+          
+          <!-- BEGIN PRESENTATION CONTENT -->
+          <div class='col-md-10 presentation-content' role='main'>
+            
+            <ol class="breadcrumb hidden-print">
+              <li><a href="../../../classes.html">Classes</a></li>
+              <li><a href="./cs-32.html">Winter14 CS32</a></li>
+              <li class="active">Midterm I Exercises</li>
+            </ol>
+            
+            <div id='review' class='scrollspy-element' scrollspy-title='Midterm I'></div>
+            <h1>Midterm I Review</h1>
+            <div>
+              <p>The following practice problems are meant to be supplemental to the lecture notes, and give some extra practice for problem types you might encounter on the midterm.</p>
+              <p class='debug'><strong>Disclaimer:</strong> These problems are meant to be supplemental to the Professor's given practice problems, and may or may not be representative
+                of the exact exam questions (that said, I'm told they're a fair likeness).</p>
+              <p>Topics that are fair game include, but are not limited to, the following:</p>
+              <ul class='indent-1'>
+                <li><p>Data abstraction</p></li>
+                <li><p>Classes &amp; Structs</p></li>
+                <li><p>Pointers</p></li>
+                <li><p>Dynamic memory</p></li>
+                <li><p>Dynamic arrays</p></li>
+                <li><p>Constructors, initialization lists, copy constructors, assignment overloading, and destructors</p></li>
+                <li><p>Linked Lists</p></li>
+              </ul>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='practice' class='scrollspy-element' scrollspy-title='Practice'></div>
+            <h1>Practice Problems</h1>
+            <div>
+              <p>Why not a little practice with our old friend NoisyClass?</p>
+<pre class='prettyprint'>
+  class NoisyClass {
+      private:
+          string s;
+    
+      public:
+          NoisyClass () {
+              cout &lt;&lt; "[C] Default constructor" &lt;&lt; endl;
+          }
+    
+          NoisyClass (string stuff) {
+              s = stuff;
+              cout &lt;&lt; "[P] Parameterized constructor" &lt;&lt; endl;
+          }
+    
+          NoisyClass (const NoisyClass&amp; other) {
+              s = other.s;
+              cout &lt;&lt; "[~] Copy constructor" &lt;&lt; endl;
+          }
+    
+          ~NoisyClass () {
+              cout &lt;&lt; "[D] Destructor" &lt;&lt; endl;
+          }
+    
+          NoisyClass&amp; operator= (const NoisyClass&amp; other) {
+              s = other.s;
+              cout &lt;&lt; "[=] Assignment" &lt;&lt; endl;
+              return *this;
+          }
+  };
+</pre>
+              <br/>
+              <p class='example'>Using the NoisyClass definition from above, what will the following functions print out?</p>
+<pre class='prettyprint'>
+  // Start with a warmup...
+  struct SoMeta {
+      NoisyClass n[2];
+      NoisyClass* ptr[2];
+  };
+  
+  int main () {
+      SoMeta s;
+      SoMeta* ptr;
+      SoMeta* dynamicYo = new SoMeta();
+      delete dynamicYo;
+  }
+</pre>
+              <br/>
+              <p class='example'>Using the NoisyClass definition from above, what will the following functions print out?</p>
+<pre class='prettyprint'>
+  // [!] Remember what it means for a function to pass
+  // by value, and subsequently, what it means to have
+  // a local parameter!
+  void whatsAllThisNoise (NoisyClass n) {
+      NoisyClass* copier = new NoisyClass();
+      n = *copier;
+      delete copier;
+  }
+  
+  int main () {
+      NoisyClass n;
+      whatsAllThisNoise(n);
+  }
+</pre>
+              <br/>
+              <p class='example'>Using the NoisyClass definition from above, what will the following functions print out?</p>
+<pre class='prettyprint'>
+  // [!] Remember what it means for a function to take a
+  // pointer parameter; also, remember what it means to
+  // return by value
+  NoisyClass whatsAllThisNoise (NoisyClass* n) {
+      if (n != nullptr) {
+          NoisyClass copier("test");
+          return copier;
+      } else {
+          return NoisyClass();
+      }
+  }
+  
+  int main () {
+      NoisyClass n;
+      whatsAllThisNoise(&amp;n);
+  }
+</pre>
+              <hr/>
+              <p class='example'>What will the following snippet print out?</p>
+<pre class='prettyprint'>
+  struct InitOrNot {
+      int i;
+      string s;
+      bool b;
+  
+      InitOrNot ():
+        i(5), s("lame")
+      {
+          i = 2;
+          s = "example";
+          b = true;
+      }
+  
+      void print () {
+          cout &lt;&lt; i &lt;&lt; " " &lt;&lt; s &lt;&lt; " " &lt;&lt; b &lt;&lt; endl;
+      }
+  };
+  
+  int main () {
+      InitOrNot suspense;
+      suspense.print();
+  }
+</pre>
+              <br/>
+              <p class='example'>What will the following snippet print out?</p>
+<pre class='prettyprint'>
+  struct InitOrNot {
+      int i;
+      string s;
+      bool b;
+  
+      InitOrNot (int iParam, string sParam = "TWIST!", bool bParam = false):
+        i(5), b(true)
+      {
+          i = iParam;
+          b = bParam;
+      }
+  
+      void print () {
+          cout &lt;&lt; i &lt;&lt; " " &lt;&lt; s &lt;&lt; " " &lt;&lt; b &lt;&lt; endl;
+      }
+  };
+  
+  int main () {
+      InitOrNot suspense(22);
+      suspense.print();
+  }
+</pre>
+              <br/>
+              <div class='question' name='review-q0'>
+                <p>
+                  Using the LinkedList class from Week 2 (and assuming a working erase function, which deletes the first Node with the input parameter value), what would the following code output?<br/>
+                  (also assume a get function that simply returns the string at the ith position of the List).
+                </p>
+<pre class='prettyprint'>
+  string s[] = {"a", "b", "c", "d", "e"};
+  LinkedList linky;
+  for (int i = 0; i &lt; 5; i++) {
+    linky.insert(s[i]);
+  }
+  for (int i = 0; i &lt; 2; i++) {
+    linky.erase(s[i]);
+    cout &lt;&lt; linky.get(i) &lt;&lt; endl;
+  }
+</pre>
+              </div>
+              <p class='answer' name='review-q0'>Output: b d<br/>...because the index for the call to get returns a letter farther down the List after erase shifts the indicies.</p>
+              <br/>
+              <p class='debug'>There are just like... a ton of issues with the following DeadHorse class... can you find them all? (PS. It's meant to implement a basic dynamic int array)</p>
+<pre class='prettyprint'>
+  // Because you're not sick of dynamic memory
+  // arrays, and copy constructors, this example
+  // will beat a...
+  struct DeadHorse {
+      private:
+          int* i;
+          int capacity;
+          int size;
+  
+      public:
+          DeadHorse () {
+              size = 0;
+              capacity = 2;
+              i = new int[2];
+          }
+  
+          DeadHorse (const DeadHorse other) {
+              i = other.i;
+              capacity = other.capacity;
+              size = other.size;
+          }
+  
+          ~DeadHorse () {
+              delete i;
+          }
+  
+          // Andrew's example levels reaching
+          // critical!
+          void addSomething (int toAdd) {
+              if (capacity == size) {
+                  int* temp = i;
+                  int newCap = capacity * 5;
+                  delete[] i;
+                  i = new int[newCap];
+                  for (int j = 0; j &lt; capacity; j++) {
+                      i[j] = temp[j];
+                  }
+                  capacity = newCap;
+              }
+              i[size] = toAdd;
+              size++;
+          }
+  
+          void print () {
+              for (int j = 0; j &lt; size; j++) {
+                  cout &lt;&lt; i[j] &lt;&lt; " ";
+              }
+              cout &lt;&lt; endl;
+          }
+  };
+  
+  int main () {
+      DeadHorse d1;
+      d1.addSomething(1);
+      d1.addSomething(2);
+      d1.print();
+  
+      DeadHorse d2 = d1;
+      d2.addSomething(3);
+      d1.print();
+      d2.print();
+  }
+</pre>
+              <p class='question' name='review-q1'>Here are just a few that I remember adding... probably more:</p>
+              <div class='answer' name='review-q1'>
+                <ul class='indent-1'>
+                  <li><p>Copy constructor param other not passed by reference!</p></li>
+                  <li><p>Copy constructor copies the pointer to the int array, but does not create a new list for the copied object.</p></li>
+                  <li><p>Destructor calls the wrong form of delete; should be delete[]</p></li>
+                  <li><p>The array-expanding attempt of addSomething tries to save the values of the array in temp, but then frees the memory, thus flooding the array with junk.</p></li>
+                </ul>
+              </div>
+              <h3>Hand Coding</h3>
+              <p class='example'>
+                Using the Stack class from Week 3, implement the popUntil member function, which returns an array of all the string elements popped from the Stack until the input argument is found, 
+                or the end of the Stack is reached.
+              </p>
+<pre class='prettyprint'>
+  Stack smoke;
+  stack.push("Poppin");
+  stack.push("All");
+  stack.push("These");
+  stack.push("Damn");
+  stack.push("Nodes!");
+  
+  // s will -> {"Nodes!", "Damn", "These", "All"}
+  // smoke would only have the "Poppin" Node left
+  string* s = stack.popUntil("All");
+</pre>
+              <br/>
+              <p class='example'>
+                Using the LinkedList class from Week 3 (or your own Doubly Linked list from Homework 2), implement the reverse member function, which 
+                takes the given LinkedList and reverses the order of its Nodes.
+              </p>
+<pre class='prettyprint'>
+  LinkedList linky;
+  linky.insert("Andrew");
+  linky.insert("is");
+  linky.insert("Cool");
+  linky.reverse();
+  
+  // Prints Cool is Andrew
+  // -said by Yoda
+  linky.print()
+</pre>
+            </div>
+            <hr/>
+            
+            
+            <a class='btn btn-default pull-right hidden-print' href='javascript:window.print();'>
+              <span class='glyphicon glyphicon-print'></span>
+              &nbsp; PDF / Print
+            </a>
+            
+          </div>
+          <!-- END PRESENTATION CONTENT -->
+          
+            
+        </div>
+      </div>
+      <!-- END MAIN CONTENT -->
+      
+      
+    </div>
+    <!-- END WRAPPER -->
+    
+    <!-- BEGIN FOOTER -->
+    <div id="footer">
+      <div class="container">
+        <div class="col-md-12 text-center">
+          
+        </div>
+      </div>
+    </div>
+    <!-- END FOOTER -->
+    
+  </body>
+</html>
