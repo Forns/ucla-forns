@@ -114,6 +114,7 @@
               <p>The following practice problems are meant to be supplemental to the lecture notes, and give some extra practice for problem types you might encounter on the midterm.</p>
               <p class='debug'><strong>Disclaimer:</strong> These problems are meant to be supplemental to the Professor's given practice problems, and may or may not be representative
                 of the exact exam questions (that said, I'm told they're a fair likeness).</p>
+              <p class='debug'>Weeks 1 and 2 of MY discussion notes will be relevant for the exam.</p>
               <p>Topics that are fair game include, but are not limited to, the following:</p>
               <ul class='indent-1'>
                 <li><p>Data abstraction</p></li>
@@ -122,10 +123,7 @@
                 <li><p>Dynamic memory</p></li>
                 <li><p>Dynamic arrays</p></li>
                 <li><p>Constructors, initialization lists, copy constructors, assignment overloading, and destructors</p></li>
-                <li><p>Linked Lists</p></li>
-                <li><p>Stacks and Queues</p></li>
                 <li><p>Inheritance</p></li>
-                <li><p>Polymorphism</p></li>
               </ul>
             </div>
             <hr/>
@@ -416,7 +414,7 @@
             <br/>
             
             
-            <div id='inheritanceAndPolymorphism' class='scrollspy-element' scrollspy-title='Inheritance and Polymorphism'></div>
+            <div id='inheritance' class='scrollspy-element' scrollspy-title='Inheritance'></div>
             <h1>NoisyClass? Again? Really?</h1>
             <div>
               <p>Yes really!</p>
@@ -470,16 +468,6 @@
               <br/>
               <p class='example'>Using the NoisyBase and NoisyDerived implementations above, what will the following code print out?</p>
 <pre class='prettyprint'>
-  int main() {
-      NoisyDerived d("base!", "derived!");
-      NoisyBase* bPtr = &amp;d;
-      cout &lt;&lt; bPtr-&gt;getS() &lt;&lt; endl;
-  }
-</pre>
-
-              <br/>
-              <p class='example'>Using the NoisyBase and NoisyDerived implementations above, what will the following code print out?</p>
-<pre class='prettyprint'>
   // [!] Note: no noisy copy constructor defined, but
   // b is still passed by value... so what happens
   // at the end of this function?
@@ -493,17 +481,6 @@
   }
 </pre>
 
-              <br/>
-              <p class='example'>Using the NoisyBase and NoisyDerived implementations above, what will the following code print out?</p>
-<pre class='prettyprint'>
-  int main() {
-      NoisyBase* bPtr0 = new NoisyBase("base!");
-      NoisyBase* bPtr1 = new NoisyDerived("base!", "derived!");
-      delete bPtr0;
-      // [!] Remember your order of destruction!
-      delete bPtr1;
-  }
-</pre>
               <br/>
               
               <p class='example'>Using the NoisyBase and NoisyDerived implementations above, what will the following code print out?</p>
