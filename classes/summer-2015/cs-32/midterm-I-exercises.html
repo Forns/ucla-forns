@@ -380,24 +380,24 @@
               </div>
               <h3>Hand Coding</h3>
               <p class='example'>
-                Using the Stack class from Week 3, implement the popUntil member function, which returns an array of all the string elements popped from the Stack until the input argument is found, 
-                or the end of the Stack is reached.
+                Using the Stack class from Week 2, implement the popUntil member function, which prints out all of the string elements popped from the Stack until the input argument is found, 
+                or the end of the Stack is reached, whichever comes first.
               </p>
 <pre class='prettyprint'>
   Stack smoke;
-  stack.push("Poppin");
-  stack.push("All");
-  stack.push("These");
-  stack.push("Damn");
-  stack.push("Nodes!");
+  smoke.push("Poppin");
+  smoke.push("Nodes");
+  smoke.push("All");
+  smoke.push("Day");
+  smoke.push("Long");
   
-  // s will -> {"Nodes!", "Damn", "These", "All"}
+  smoke.popUntil("Nodes");
+  // Prints: Long Day All Nodes
   // smoke would only have the "Poppin" Node left
-  string* s = stack.popUntil("All");
 </pre>
               <br/>
               <p class='example'>
-                Using the LinkedList class from Week 3 (or your own Doubly Linked list from Homework 2), implement the reverse member function, which 
+                Using the LinkedList class from Week 2, implement the reverse member function, which 
                 takes the given LinkedList and reverses the order of its Nodes.
               </p>
 <pre class='prettyprint'>
