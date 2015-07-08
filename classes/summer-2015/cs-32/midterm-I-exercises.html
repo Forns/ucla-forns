@@ -104,7 +104,7 @@
             
             <ol class="breadcrumb hidden-print">
               <li><a href="../../../classes.html">Classes</a></li>
-              <li><a href="./cs-32.html">Winter14 CS32</a></li>
+              <li><a href="./cs-32.html">CS32</a></li>
               <li class="active">Midterm I Exercises</li>
             </ol>
             
@@ -123,14 +123,17 @@
                 <li><p>Dynamic arrays</p></li>
                 <li><p>Constructors, initialization lists, copy constructors, assignment overloading, and destructors</p></li>
                 <li><p>Linked Lists</p></li>
+                <li><p>Stacks and Queues</p></li>
+                <li><p>Inheritance</p></li>
+                <li><p>Polymorphism</p></li>
               </ul>
             </div>
             <hr/>
             
             
             <br/>
-            <div id='practice' class='scrollspy-element' scrollspy-title='Practice'></div>
-            <h1>Practice Problems</h1>
+            <div id='consdest' class='scrollspy-element' scrollspy-title='Contruction &amp; Destruction'></div>
+            <h1>Constructors &amp; Destructors</h1>
             <div>
               <p>Why not a little practice with our old friend NoisyClass?</p>
 <pre class='prettyprint'>
@@ -217,7 +220,14 @@
       whatsAllThisNoise(&amp;n);
   }
 </pre>
-              <hr/>
+            </div>
+            <hr/>
+            <br/>
+            
+            
+            <div id='penpencil' class='scrollspy-element' scrollspy-title='Pen &amp; Pencil'></div>
+            <h1>Pen &amp; Pencil Exercises</h1>
+            <div>
               <p class='example'>What will the following snippet print out?</p>
 <pre class='prettyprint'>
   struct InitOrNot {
@@ -271,9 +281,16 @@
               <br/>
               <div class='question' name='review-q0'>
                 <p>
-                  Using the LinkedList class from Week 2 (and assuming a working erase function, which deletes the first Node with the input parameter value), what would the following code output?<br/>
-                  (also assume a get function that simply returns the string at the ith position of the List).
+                  Suppose we are using a LinkedList class that holds strings (like the one we did in discussion during Week 2) and has a public interface with three functions:
                 </p>
+                <ul class='indent-1'>
+                  <li><p><code>void insert(string s);</code> inserts the given string at the tail of the Linked List, e.g., inserting "a", "b", "c" (in that order) will have the head pointing at "a" and
+                    the tail pointing at "c"</p></li>
+                  <li><p><code>void erase(string s);</code> erases the node corresponding to the given string.</p></li>
+                  <li><p><code>string get(int i);</code> returns the string corresponding to the node at the given index, offset from the LinkedList's head.</p></li>
+                </ul>
+                <p>That said, what will the following code print out?</p>
+              </div>
 <pre class='prettyprint'>
   string s[] = {"a", "b", "c", "d", "e"};
   LinkedList linky;
@@ -285,7 +302,6 @@
     cout &lt;&lt; linky.get(i) &lt;&lt; endl;
   }
 </pre>
-              </div>
               <p class='answer' name='review-q0'>Output: b d<br/>...because the index for the call to get returns a letter farther down the List after erase shifts the indicies.</p>
               <br/>
               <p class='debug'>There are just like... a ton of issues with the following DeadHorse class... can you find them all? (PS. It's meant to implement a basic dynamic int array)</p>
@@ -397,7 +413,357 @@
 </pre>
             </div>
             <hr/>
+            <br/>
             
+            
+            <div id='inheritanceAndPolymorphism' class='scrollspy-element' scrollspy-title='Inheritance and Polymorphism'></div>
+            <h1>NoisyClass? Again? Really?</h1>
+            <div>
+              <p>Yes really!</p>
+              <p>You'll thank me later...</p>
+              <p>Here's the latest inheritance and polymorphism version:</p>
+<pre class='prettyprint'>
+  class NoisyBase {
+      private:
+          string s;
+      public:
+          NoisyBase (string sBase) {
+              cout &lt;&lt; "[B] Base Constructor: " &lt;&lt; sBase &lt;&lt; endl;
+              s = sBase;
+          }
+          virtual ~NoisyBase () {
+              cout &lt;&lt; "[B] Base Destructor!" &lt;&lt; endl;
+          }
+          virtual string getS () {
+              return s;
+          }
+  };
+  
+  class NoisyDerived: public NoisyBase {
+      private:
+          string s;
+      public:
+          NoisyDerived (string sBase, string sDerived): NoisyBase(sBase) {
+              cout &lt;&lt; "[D] Derived Constructor: " &lt;&lt; sDerived &lt;&lt; endl;
+              s = sDerived;
+          }
+          ~NoisyDerived () {
+              cout &lt;&lt; "[D] Derived Destructor!" &lt;&lt; endl;
+          }
+          virtual string getS () {
+              return s;
+          }
+  };
+</pre>
+              <br/>
+              <p>So, let's start off with the simple stuff and then ramp it up. Make sure you remember the order of construction and destruction!</p>
+              
+              <br/>
+              <p class='example'>Using the NoisyBase and NoisyDerived implementations above, what will the following code print out?</p>
+<pre class='prettyprint'>
+  int main() {
+      NoisyBase b("base!");
+      NoisyDerived d("base!", "derived!");
+  }
+</pre>
+
+              <br/>
+              <p class='example'>Using the NoisyBase and NoisyDerived implementations above, what will the following code print out?</p>
+<pre class='prettyprint'>
+  int main() {
+      NoisyDerived d("base!", "derived!");
+      NoisyBase* bPtr = &amp;d;
+      cout &lt;&lt; bPtr-&gt;getS() &lt;&lt; endl;
+  }
+</pre>
+
+              <br/>
+              <p class='example'>Using the NoisyBase and NoisyDerived implementations above, what will the following code print out?</p>
+<pre class='prettyprint'>
+  // [!] Note: no noisy copy constructor defined, but
+  // b is still passed by value... so what happens
+  // at the end of this function?
+  void NoisyFunc (NoisyBase b) {
+      cout &lt;&lt; b.getS() &lt;&lt; endl;
+  }
+  
+  int main() {
+      NoisyDerived d("base!", "derived!");
+      NoisyFunc(d);
+  }
+</pre>
+
+              <br/>
+              <p class='example'>Using the NoisyBase and NoisyDerived implementations above, what will the following code print out?</p>
+<pre class='prettyprint'>
+  int main() {
+      NoisyBase* bPtr0 = new NoisyBase("base!");
+      NoisyBase* bPtr1 = new NoisyDerived("base!", "derived!");
+      delete bPtr0;
+      // [!] Remember your order of destruction!
+      delete bPtr1;
+  }
+</pre>
+              <br/>
+              
+              <p class='example'>Using the NoisyBase and NoisyDerived implementations above, what will the following code print out?</p>
+<pre class='prettyprint'>
+  void f(int n) {
+      NoisyDerived* d = new NoisyDerived("base!", "derived!");
+      if (n &lt;= 0) {
+          delete d;
+          return;
+      } else {
+          f(n - 1);
+      }
+      delete d;
+  }
+  
+  int main() {
+      f(1);
+  }
+</pre>
+              <br/>
+              <p>OK, I think that's enough of that...</p>
+              
+              <br/>
+              <h3>ForneyMon Revisited</h3>
+              <p>Just when you thought we were done with ForneyMon, let's take a look at a modified version, with changes marked by [!]:</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  using namespace std;
+    
+  class DampyMon;
+  
+  class ForneyMon {
+      private:
+          string m_name;
+          int m_health;
+      public:
+          ForneyMon (string n, int h);
+          virtual int takeDamage (int dam, string type);
+          // [!] dealDamage no longer takes a type, but instead deals the
+          // damage type of the attacking ForneyMon (burny for BurnyMon, etc.)
+          virtual void dealDamage (ForneyMon* other, int dam) = 0;
+          // [!] Added virtual destructor, just in case
+          virtual ~ForneyMon () {};
+  };
+  
+  class BurnyMon : public ForneyMon {
+      public:
+          BurnyMon (string name);
+          void dealDamage (ForneyMon* other, int dam);
+  };
+  
+  class DampyMon : public ForneyMon {
+      public:
+          DampyMon (string name);
+          int takeDamage (int dam, string type);
+          void dealDamage (ForneyMon* other, int dam);
+  };
+  
+  ForneyMon::ForneyMon (string n, int h) {
+      m_name = n;
+      m_health = h;
+  }
+  
+  BurnyMon::BurnyMon (string n) : ForneyMon(n, 10) {}
+  DampyMon::DampyMon (string n) : ForneyMon(n, 15) {}
+  
+  // (General) Take damage regardless of the type of attack
+  int ForneyMon::takeDamage (int dam, string type) {
+      // Reduce the current health by dam amount
+      m_health -= dam;
+      // [!] Added more readable damage text
+      cout &lt;&lt; m_name &lt;&lt; " took [" &lt;&lt; type &lt;&lt; "] Damage: -" &lt;&lt; dam &lt;&lt; endl;
+      return m_health;
+  }
+  
+  // (DampyMon) Take damage equal to dam UNLESS the type
+  // of the attack was burny, in which case take 1 extra
+  int DampyMon::takeDamage (int dam, string type) {
+      if (type == "burny") {
+          dam += 1;
+      }
+      return ForneyMon::takeDamage(dam, type);
+  }
+  
+  void BurnyMon::dealDamage (ForneyMon* other, int dam) {
+      other-&gt;takeDamage(dam, "burny");
+  }
+  void DampyMon::dealDamage (ForneyMon* other, int dam) {
+      other-&gt;takeDamage(dam, "dampy");
+  }
+</pre>
+              <br/>
+              <p>Let's play around with a few features to get some practice with inheritance and polymorphism:</p>
+              <br/>
+              <p class='example'>Implement the following new &quot;block&quot; game component that completes this specification:</p>
+              <ul class='indent-1'>
+                <li><p>All ForneyMon can now initiate a block, which, after blocking, will prevent them from taking any damage from an attack.</p></li>
+                <li><p>A ForneyMon is no longer blocking after it has blocked an attack or initiated an attack.</p></li>
+                <li><p>(Overblocking) If a ForneyMon blocks, but wasn't attacked before their next move, then their next move (whether it be another block or an attack) causes them to take 1 damage.</p></li>
+                <li><p>Successful blocking should print &quot;&lt;nameOfForneyMon&gt; blocked the attack!&quot;</p></li>
+                <li><p>Initiating a block should print &quot;&lt;nameOfForneyMon&gt; started blocking!&quot;</p></li>
+                <li><p>Overblocking should print &quot;&lt;nameOfForneyMon&gt; took [overblock] Damage: -1&quot;</p></li>
+                <li><p>
+                  You may add a private variable to the ForneyMon class indicating whether or not the ForneyMon is blocking, a public getter for that variable, and a void function to set blocking status.
+                </p></li>
+              </ul>
+              <p>Here's how that behavior plays out:</p>
+<pre class='prettyprint'>
+  int main () {
+      DampyMon d("Pewpewtortoise");
+      BurnyMon b("Singelizard");
+  
+      cout &lt;&lt; "Turn 1:" &lt;&lt; endl;
+      d.block(true);
+      b.dealDamage(&amp;d, 2);
+  
+      cout &lt;&lt; endl &lt;&lt; "Turn 2:" &lt;&lt; endl;
+      d.dealDamage(&amp;b, 2);
+      b.block(true);
+  
+      cout &lt;&lt; endl &lt;&lt; "Turn 3:" &lt;&lt; endl;
+      d.block(true);
+      b.dealDamage(&amp;d, 2);
+  
+      cout &lt;&lt; endl &lt;&lt; "Turn 4:" &lt;&lt; endl;
+      d.block(true);
+      b.block(true);
+  
+      cout &lt;&lt; endl &lt;&lt; "Turn 5:" &lt;&lt; endl;
+      d.block(true);
+      b.dealDamage(&amp;d, 2);
+  }  
+</pre>
+              <p>...will print out:</p>
+<pre class='prettyprint'>
+  Turn 1:
+  Pewpewtortoise started blocking!
+  Pewpewtortoise blocked the attack!
+  
+  Turn 2:
+  Singelizard took [dampy] Damage: -2
+  Singelizard started blocking!
+  
+  Turn 3:
+  Pewpewtortoise started blocking!
+  Singelizard took [overblock] Damage: -1
+  Pewpewtortoise blocked the attack!
+  
+  Turn 4:
+  Pewpewtortoise started blocking!
+  Singelizard started blocking!
+  
+  Turn 5:
+  Pewpewtortoise took [overblock] Damage: -1
+  Pewpewtortoise started blocking!
+  Singelizard took [overblock] Damage: -1
+  Pewpewtortoise blocked the attack!
+</pre>
+              <br/>
+              <p class='question' name='forneymon-q0'>Once you've given it a shot, you can look at my sloppy solution here, with notes on the changes I made.</p>
+              <div class='answer' name='forneymon-q0'>
+<pre class='prettyprint'>
+  class DampyMon;
+  
+  class ForneyMon {
+      private:
+          string m_name;
+          int m_health;
+          // [!] Private member added
+          bool m_blocking;
+      public:
+          ForneyMon (string n, int h);
+          virtual int takeDamage (int dam, string type);
+          virtual void dealDamage (ForneyMon* other, int dam) = 0;
+          // [!] New member functions
+          bool isBlocking ();
+          void block (bool blocking);
+          virtual ~ForneyMon () {};
+  };
+  
+  class BurnyMon : public ForneyMon {
+      public:
+          BurnyMon (string name);
+          void dealDamage (ForneyMon* other, int dam);
+  };
+  
+  class DampyMon : public ForneyMon {
+      public:
+          DampyMon (string name);
+          int takeDamage (int dam, string type);
+          void dealDamage (ForneyMon* other, int dam);
+  };
+  
+  ForneyMon::ForneyMon (string n, int h) {
+      m_name = n;
+      m_health = h;
+      // [!] Initializing new private member
+      m_blocking = false;
+  }
+  
+  // [!] New member function definitions
+  bool ForneyMon::isBlocking () {return m_blocking;}
+  void ForneyMon::block (bool blocking) {
+      if (isBlocking()) {
+          m_blocking = false;
+          this-&gt;takeDamage(1, "overblock");
+      }
+      if (blocking) {
+          cout &lt;&lt; m_name &lt;&lt; " started blocking!" &lt;&lt; endl;
+      }
+      m_blocking = blocking;
+  }
+  
+  BurnyMon::BurnyMon (string n) : ForneyMon(n, 10) {}
+  DampyMon::DampyMon (string n) : ForneyMon(n, 15) {}
+  
+  // (General) Take damage regardless of the type of attack
+  int ForneyMon::takeDamage (int dam, string type) {
+      // Reduce the current health by dam amount if not blocking
+      // [!] New blocking logic
+      if (!m_blocking) {
+          m_health -= dam;
+          cout &lt;&lt; m_name &lt;&lt; " took [" &lt;&lt; type &lt;&lt; "] Damage: -" &lt;&lt; dam &lt;&lt; endl;
+      } else {
+          cout &lt;&lt; m_name &lt;&lt; " blocked the attack!" &lt;&lt; endl;
+          this-&gt;m_blocking = false;
+      }
+      return m_health;
+  }
+  
+  // (DampyMon) Take damage equal to dam UNLESS the type
+  // of the attack was burny, in which case take 1 extra
+  int DampyMon::takeDamage (int dam, string type) {
+      if (type == "burny") {
+          dam += 1;
+      }
+      return ForneyMon::takeDamage(dam, type);
+  }
+  
+  void BurnyMon::dealDamage (ForneyMon* other, int dam) {
+      // [!] Added check for blocking
+      if (this-&gt;isBlocking()) {
+          this-&gt;block(false);
+      }
+      other-&gt;takeDamage(dam, "burny");
+  }
+  void DampyMon::dealDamage (ForneyMon* other, int dam) {
+      // [!] Added check for blocking
+      if (this-&gt;isBlocking()) {
+          this-&gt;block(false);
+      }
+      other-&gt;takeDamage(dam, "dampy");
+  }
+</pre>
+              </div>
+              <br/>
+              <p>Well that was certainly ellaborate... did you get some semblance of practice dealing with inheritance and polymorphism?</p>
+            </div>
+            <hr/>
             
             <a class='btn btn-default pull-right hidden-print' href='javascript:window.print();'>
               <span class='glyphicon glyphicon-print'></span>
