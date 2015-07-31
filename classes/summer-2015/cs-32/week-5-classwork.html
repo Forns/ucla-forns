@@ -1,0 +1,278 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Andrew Forney - UCLA CS</title>
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/magic-bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/main.css" rel="stylesheet" type="text/css">
+    <script src="../../../js/lib/jquery-2.0.3.min.js"></script>
+    <script src="../../../js/lib/bootstrap.min.js"></script>
+    <script src="../../../js/lib/expanding.js"></script>
+    <script src="../../../js/display/general/general-display.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+  </head>
+  
+  <body data-spy="scroll" data-target="#scrollspy">
+    
+    <!-- BEGIN WRAP -->
+    <div id="wrap">
+      
+      <!-- BEGIN NAVIGATION -->
+      <nav class='navbar navbar-default' role='navigation'>
+        <div class='nav-accent'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-12'>
+              <div class='navbar-header'>
+                <button class='navbar-toggle' type='button' data-toggle='collapse' data-target='.navbar-main-collapse'>
+                  <span class='sr-only'>Toggle Navigation</span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                </button>
+                <a class='navbar-brand' href='/~forns/'>
+                  <span id='brand-text'>
+                    Andrew Forney
+                  </span>
+                </a>
+              </div>
+              
+              <div id='nav-main' class='collapse navbar-collapse navbar-main-collapse'>
+                <ul class='nav navbar-nav navbar-right'>
+                  
+                  <li>
+                    <a href='/~forns/about.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-user'></span>
+                      </div>
+                      <p class='text-center'>About</p>
+                    </a>
+                  </li>
+                  
+                  <li class='active'>
+                    <a href='/~forns/classes.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-book'></span>
+                      </div>
+                      <p class='text-center'>Classes</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/contact.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-comment'></span>
+                      </div>
+                      <p class='text-center'>Contact</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/publications.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-file'></span>
+                      </div>
+                      <p class='text-center'>Publications</p>
+                    </a>
+                  </li>
+                  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <!-- END NAVIGATION -->
+      
+      <!-- BEGIN MAIN CONTENT -->
+      <div id="main-content" class="container">
+        <div class="row">
+          
+          <!-- BEGIN SCROLLSPY -->
+          <div class='col-md-2 hidden-sm hidden-xs'>
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+              <ul id='scrollspy' class="nav bs-sidenav">
+              </ul>
+            </div>
+          </div>
+          <!-- END SCROLLSPY -->
+          
+          <!-- BEGIN PRESENTATION CONTENT -->
+          <div class='col-md-10 presentation-content' role='main'>
+            
+            <ol class="breadcrumb hidden-print">
+              <li><a href="../../../classes.html">Classes</a></li>
+              <li><a href="./cs-32.html">CS32</a></li>
+              <li class="active">Week 5 - Classwork</li>
+            </ol>
+            
+            <div id='sorting' class='scrollspy-element' scrollspy-title='Sorting'></div>
+            <h1>Sorting Classwork</h1>
+            <div>
+<pre class='prettyprint'>
+  // Helper to print out array elements
+  void printIntArr (int arr[], int size) {
+      for (int i = 0; i &lt; size; i++) {
+          cout &lt;&lt; arr[i] &lt;&lt; ", ";
+      }
+      cout &lt;&lt; endl;
+  }
+  
+  // Helper function; swaps two array elements via
+  // the input pointers
+  void swapInts (int* i1, int* i2) {
+      int temp = *i1;
+      *i1 = *i2;
+      *i2 = temp;
+  }
+  
+  // Not to be confused with BubleSort, which
+  // just replaces your array elements with lyrics
+  // from Haven't Met You Yet
+  void bubbleSort (int arr[], int size) {
+      for (int i = 0; i &lt; size; i++) {
+          bool swapped = false;
+          for (int j = size - 1; j &gt;= i + 1; j--) {
+              printIntArr(arr, size);
+              if (arr[j] &lt; arr[j-1]) {
+                  swapInts(arr+j, arr+j-1);
+                  swapped = true;
+              }
+          }
+          if (!swapped) {
+              return;
+          }
+      }
+  }
+  
+  void insertionSort (int arr[], int size) {
+      for (int i = 1; i &lt; size; i++) {
+          for (int j = i; j &gt; 0; j--) {
+              if (arr[j] &gt; arr[j-1]) {
+                  break;
+              }
+              swapInts(arr + j, arr + j-1);
+          }
+      }
+  }
+  
+  vector&lt;int&gt; concatVect (vector&lt;int&gt; v1, vector&lt;int&gt; v2) {
+      vector&lt;int&gt; result(v1.begin(), v1.end());
+      result.insert(result.end(), v2.begin(), v2.end());
+      return result;
+  }
+  
+  // Helper to print out array elements
+  void printIntVArr (vector&lt;int&gt; arr) {
+      for (vector&lt;int&gt;::iterator i = arr.begin(); i != arr.end(); i++) {
+          cout &lt;&lt; *i &lt;&lt; " ";
+      }
+      cout &lt;&lt; endl;
+  }
+  
+  vector&lt;int&gt; quickSort (vector&lt;int&gt; arr) {
+      // Base case: return current array if 1
+      // element or fewer
+      if (arr.size() &lt;= 1) {return arr;}
+  
+      // Randomly choose a pivot
+      srand(time(NULL));
+      int pivotChoice = (rand() % arr.size());
+      int pivot = arr[pivotChoice];
+  
+      // We'll make 3 blank vectors: 1 that holds
+      // all of the numbers less than the pivot,
+      // 1 that holds all of the numbers greater,
+      // and then 1 that just holds the pivot itself
+      // for ease of concatenation
+      vector&lt;int&gt; lesser, greater, pivotHolder;
+      vector&lt;int&gt;::iterator it = arr.begin();
+      pivotHolder.push_back(pivot);
+  
+      // Erase the pivot from the current vector
+      arr.erase(it + pivotChoice);
+  
+      for (int i = 0; i &lt; arr.size(); i++) {
+          // Put remaining elements in their respective
+          // greater or less than piles
+          if (arr[i] &lt; pivot) {
+              lesser.push_back(arr[i]);
+          } else {
+              greater.push_back(arr[i]);
+          }
+      }
+  
+      // Recurse on the lesser and greater vectors,
+      // and then concatenate their results with the
+      // pivot in the center
+      return concatVect(quickSort(lesser), 
+             concatVect(pivotHolder, quickSort(greater)));
+  }
+</pre>
+            </div>
+            <hr/>
+            
+            <br/>
+            <div id='trees' class='scrollspy-element' scrollspy-title='Trees'></div>
+            <h1>Tree Classwork</h1>
+            <div>
+<pre class='prettyprint'>
+  int treeDepth (TreeNode* n) {
+      int currentMax = 0;
+      for (int i = 0; i &lt; n-&gt;children.size(); i++) {
+          currentMax = max(currentMax, 1 + treeDepth(n-&gt;children[i]));
+      }
+      return currentMax;
+  }
+  
+  int nodesAtLevel (TreeNode* n, int level) {
+      // Base case! Return when...
+      if (level == 0) {
+          return 1;
+      }
+  
+      // [!] Iterate through every child
+      int nodes = 0;
+      for (int i = 0; i &lt; n-&gt;children.size(); i++) {
+          // [!] Add the number of nodes at the next level
+          // if that's our target level! (hint: don't
+          // need to use a conditional due to our base case)
+          nodes += nodesAtLevel(n-&gt;children[i], level - 1);
+      }
+      return nodes;
+  }
+</pre>
+            </div>
+            <hr/>
+            
+            
+            <a class='btn btn-default pull-right hidden-print' href='javascript:window.print();'>
+              <span class='glyphicon glyphicon-print'></span>
+              &nbsp; PDF / Print
+            </a>
+            
+          </div>
+          <!-- END PRESENTATION CONTENT -->
+          
+        </div>
+      </div>
+      <!-- END MAIN CONTENT -->
+      
+      
+    </div>
+    <!-- END WRAPPER -->
+    
+    <!-- BEGIN FOOTER -->
+    <div id="footer">
+      <div class="container">
+        <div class="col-md-12 text-center">
+          
+        </div>
+      </div>
+    </div>
+    <!-- END FOOTER -->
+    
+  </body>
+</html>

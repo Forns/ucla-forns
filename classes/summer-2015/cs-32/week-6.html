@@ -111,9 +111,8 @@
             
             
             <div id='review' class='scrollspy-element' scrollspy-title='Review'></div>
-            <h1>Practice &amp; Questions from Last Week</h1>
+            <h1>Questions from Last Week</h1>
             <div>
-              <p>Last class, someone asked a good question:</p>
               <p><strong>Q:</strong> What makes quicksort preferred to mergesort? What are the circumstances where we would use one over the other?</p>
               <p>A: As it turns out, quicksort wins on a variety of metrics, though its advantage is not clear cut in all circumstances. Here are its main benefits:</p>
               <ul class='indent-1'>
@@ -133,287 +132,33 @@
               <br/>
               <p>So there you have it... in summary:</p>
               <p><strong>tl;dr: Quicksort is faster on average, but if you need to guarantee linearithmic time complexity, use mergesort.</strong></p>
-              
-              <br/>
-              <h3>Complexity Review</h3>
-              
-              <p>There were a significant number of questions regarding time complexity in the logarithmic case.</p>
-              <p>Since tree algorithms generally involve some flavor of a log complexity, let's review some algorithms now...</p>
-              <p class='definition'>
-                A rule of thumb for logarithm complexity is when you're omitting or ignoring some number of input elements with every step that is proportional to the log of the size of the input.
-              </p>
-              <p>Often, this is manifest in divide-and-conquer algorithms, but sometimes it's simpler than that... that for example the following:</p>
-              <p class='example'>What is the time complexity of the following function?</p>
-<pre class='prettyprint'>
-  void someFunc (vector&lt;int&gt; v) {
-      for (int i = 1; i &lt; v.size(); i *= 2) {
-          cout &lt;&lt; v[i] &lt;&lt; endl;
-      }
-  }
-</pre>
-              <br/>
-              <p>We also know that some algorithms can have logarithmic components that rely on other components of the algorithm, and vice versa...</p>
-              <p class='example'>What is the time complexity of the following function?</p>
-<pre class='prettyprint'>
-  void someFunc (vector&lt;int&gt; v) {
-      for (int i = 0; i &lt; v.size(); i++) {
-          for (int j = i; j &gt; 0; j /= 2) {
-              if (v[j] == v[i]) {
-                  cout &lt;&lt; v[i] &lt;&lt; endl;
-              }
-          }
-      }
-  }
-</pre>
-              <br/>
-              <p>You should also be aware that big-O complexity need not be reliant upon a single input; you can have complexities in terms of multiple inputs as well!</p>
-              <p class='example'>What is the time complexity of the following function?</p>
-<pre class='prettyprint'>
-  // [!] Consider N = v1.size() and M = v2.size()
-  void someFunc (vector&lt;int&gt; v1, vector&lt;int&gt; v2) {
-      for (int i = 0; i &lt; v1.size(); i++) {
-          for (int j = 0; j &lt; v2.size(); j += 2) {
-              if (v1[i] == v2[j]) {
-                  cout &lt;&lt; v1[i] &lt;&lt; endl;
-              }
-          }
-      }
-  }
-</pre>
-              <br/>
-              <p>Lastly, let's remember our tree algorithm complexities...</p>
-              <p class='example'>What is the time complexity of the following function?</p>
-<pre class='prettyprint'>
-  // [!] Consider N = v1.size() and M = s.size()
-  void someFunc (vector&lt;int&gt; v1, set&lt;int&gt; s) {
-      for (int i = 0; i &lt; v1.size(); i++) {
-          if (s.find(v[i]) != s.end()) {
-              cout &lt;&lt; v1[i] &lt;&lt; endl;
-          }
-      }
-  }
-</pre>
-              <br/>
-              <h3>Binary Tree Review</h3>
-              <p class='example'>Continuing with some warmup... remind me what postorder traversal is again? What's the postorder traversal of this tree?</p>
-              <div class="text-center fit-pres">
-                <img src="../../../assets/images/winter-2014/cs-32/week-8/trees-7.PNG">
-              </div>
-              <p class='definition'>[!] Interesting property about postorder traversal... what happens when I remove each Node found in postorder traversal, in the order in which I visit them?</p>
             </div>
             <hr/>
             
             <br/>
-            <div id='bintreeAlgorithms' class='scrollspy-element' scrollspy-title='BinTree Algorithms'></div>
-            <h1>Binary Tree Algorithms</h1>
+            <div id='bst' class='scrollspy-element' scrollspy-title='Binary Search Trees'></div>
+            <h1>Binary Search Trees - Review</h1>
             <div>
-              <p>We've seen some traversal algorithms for binary trees, but let's look at a couple extra for practice.</p>
-              <p>Below, I've gotten us started with a Binary Tree class, as well as a new way to insert Nodes with a given path to an empty space.</p>
-<pre class='prettyprint'>
-  struct BinTree {
-      // BinTreeNode struct internal
-      // to the BinTree
-      struct BinTreeNode {
-          int data;
-          BinTreeNode* left;
-          BinTreeNode* right;
-          BinTreeNode(int d) {
-              data = d;
-              left = nullptr;
-              right = nullptr;
-          }
-      };
-  
-      // Root just points to a single
-      // BinTreeNode
-      BinTreeNode* root;
-  
-      BinTree() {
-          root = nullptr;
-      }
-      ~BinTree() {}; // TODO!
-      void insertAt (int i, string path);
-  };
-  
-  // Creates a new node with the given data member
-  // if input string p specifies a path in terms of
-  // L and R children to follow to an empty spot in
-  // the tree
-  // The path p will look like some string of "LRL"
-  void BinTree::insertAt (int data, string p) {
-      BinTreeNode* b = root;
-      BinTreeNode* last = nullptr;
-      int i = 0;
-  
-      // First, we'll go through our desired path
-      // of insertion
-      while (i &lt; p.length()) {
-          // If we hit the nullptr before we're
-          // done, just break out of the loop
-          if (b == nullptr) {
-              break;
-          }
-          // Keep track of our parent node...
-          last = b;
-          // ...then move on to the path's desired
-          // child
-          b = (p[i] == 'L') ? b-&gt;left : b-&gt;right;
-          i++;
-      }
-  
-      // If we followed a path the length of
-      // our desired path, then we have a valid
-      // insertion; otherwise the path was
-      // mis-specified
-      if (i == p.length()) {
-          // If there's already a node there,
-          // bad path, so we'll just return
-          if (b != nullptr) {
-              return;
-          }
-          // Otherwise, there's an opening, so
-          // we'll make a new node at b
-          b = new BinTreeNode(data);
-          // If there's nothing in the tree yet,
-          // then b is our root!
-          if (root == nullptr) {
-              root = b;
-          }
-          // If we have a parent node to add
-          // the child to, update its left or
-          // right pointer
-          if (last != nullptr) {
-              if (p[i - 1] == 'L') {
-                  last-&gt;left = b;
-              } else {
-                  last-&gt;right = b;
-              }
-          }
-      }
-  }
-</pre>
-              <p>So, if I wanted to add Nodes to my tree, I would simply say:</p>
+              <p class='definition'>
+                A <strong>binary search tree</strong> is a binary tree in which all elements in the left subtree of a node are less than the data member of that node, and all elements of the right
+                subtree are greater than the data member of that node.
+              </p>
+              <p>Some other constraints for (many) binary search trees is that there must be no duplicate nodes, and the left and right subtrees of each node must also be a binary search tree.</p>
+              <p>Let's take another look at last week's example tree:</p>
               <div class='text-center fit-pres'>
-                <img src='../../../assets/images/winter-2014/cs-32/week-9/btree-0.png' />
+                <img src='../../../assets/images/winter-2014/cs-32/week-8/trees-7.PNG' />
               </div>
               <br/>
-              <p>So, now I can recreate this tree in my BinaryTree class via:</p>
-<pre class='prettyprint'>
-  int main () {
-      BinTree bt;
-      bt.insertAt(14, "");
-      bt.insertAt(10, "L");
-      bt.insertAt(8, "LL");
-      bt.insertAt(11, "LR");
-      bt.insertAt(15, "R");
-  }
-</pre>
+              
+              <p>We observe that, for each node, the left subtree contains data elements strictly less than the data element of the subtree root, and vice versa for the right subtrees.</p>
               <br/>
-              <p>Neat! Now let's look at making some of our own functions...</p>
-              <p>First, let's have a way to print out our tree; we'll print out each subtree as enclosed within parentheses, like so:</p>
-<pre class='prettyprint'>
-  int main () {
-      BinTree bt;
-      
-      bt.insertAt(14, "");
-      // prints: (14)
-      printByClosure(bt.root);
-      cout &lt;&lt; endl;
-        
-      bt.insertAt(10, "L");
-      // prints: ((10)14)
-      printByClosure(bt.root);
-      cout &lt;&lt; endl;
-        
-      bt.insertAt(8, "LL");
-      // prints: (((8)10)14)
-      printByClosure(bt.root);
-      cout &lt;&lt; endl;
-        
-      bt.insertAt(11, "LR");
-      // prints: (((8)10(11))14)
-      printByClosure(bt.root);
-      cout &lt;&lt; endl;
-        
-      bt.insertAt(15, "R");
-      // prints: (((8)10(11))14(15))
-      printByClosure(bt.root);
-      cout &lt;&lt; endl;
-  }
-</pre>
+              <p>So we have our binary search trees... so what? Why are we considering using these data structures at all?</p>
+              <p class='question' name='bst-rationale'>Consider that we have the binary search tree above. By what means can we attain all of the elements in *sorted* order? What is the time complexity
+                of this operation?</p>
+              <p class='answer' name='bst-rationale'>Traverse the tree *inorder*, giving you back the values, sorted, with O(n).</p>
               <br/>
-              <p>Complete the function shell for printByClosure below:</p>
-<pre class='prettyprint'>
-  void printByClosure (BinTree::BinTreeNode* b) {
-      // [!] Base case
-      if ( ??? ) {
-          ???
-      }
-  
-      // [!] Otherwise, starting a new
-      // closure, so print out...
-      cout &lt;&lt; ???;
-  
-      // [!] Perform some form of traversal
-      // here... which one will give us the
-      // desired output?
-      
-      // [!] Ending our closure, so print...
-      cout &lt;&lt; ???;
-  }
-</pre>
-              <br/>
-              <p>Let's do something &quot;fun&quot;... why don't we create a function that turns our tree into a mirror image of itself?</p>
-<pre class='prettyprint'>
-  int main () {
-      BinTree bt;
-      bt.insertAt(14, "");
-      bt.insertAt(10, "L");
-      bt.insertAt(18, "R");
-      printByClosure(bt.root);
-      cout &lt;&lt; endl;
-      // Was ((10)14(18)),
-      // Now ((18)14(10))
-      mirror(bt.root);
-      printByClosure(bt.root);
-      cout &lt;&lt; endl;
-  
-      bt.insertAt(17, "LR");
-      printByClosure(bt.root);
-      cout &lt;&lt; endl;
-      // Was ((18(17))14(10)),
-      // Now ((10)14((17)18))
-      mirror(bt.root);
-      printByClosure(bt.root);
-      cout &lt;&lt; endl;
-  }
-</pre>
-              <br/>
-              <p class='example'>Complete the function shell for mirror, below:</p>
-<pre class='prettyprint'>
-  void mirror (BinTree::BinTreeNode* b) {
-      // [!] Base Case
-      if ( ??? ) {
-          return;
-      }
-    
-    // Create a temp holder for our swap
-      BinTree::BinTreeNode* temp;
-    
-    // [!] Perform some order of traversal
-    // to do the swap... which one?
-      ???
-    
-    // [!] Swap the current node's left
-    // and right with the temp, saving
-    // one into temp first
-      ???
-  }
-  // ^ Example credit to Stanford's tree examples
-  // (listed later)
-</pre>
-              <br/>
-              <p>I'll have some more examples using this class on the practice final...</p>
+              
+              <p>We'll look at some of the other benefits of using binary search trees in the next section!</p>
             </div>
             <hr/>
             
@@ -422,7 +167,7 @@
             <div id='bstAlgorithms' class='scrollspy-element' scrollspy-title='BST Algorithms'></div>
             <h1>Binary Search Tree Algorithms</h1>
             <div>
-              <p>Perhaps more interesting than simply binary trees, are Binary Search Trees, which as we recall, adhere to the additional constraints that:</p>
+              <p>Suppose we wish to create a binary search tree class... recall that BSTs must adhere to two principle restrictions:</p>
               <ul class='indent-1'>
                 <li><p>No node may have more than 2 children</p></li>
                 <li><p>All nodes to the left of a given node must be less than that node, and all nodes to the right of a given node must be less than (or equal) to it</p></li>
@@ -453,12 +198,15 @@
           root = nullptr;
       }
       ~BST() {}; // TODO!
+      bool find (int query, BSTNode* n = root); // TODO!
       void insert (int i); // TODO!
       void clear(BSTNode* subtree); // TODO!
   };
 </pre>
               <br/>
-              <p>Now, the insertion algorithm isn't too bad... let's try to code an iterative version:</p>
+              
+              <p>Let's start using this simple BST class by fleshing out some of its member functions!</p>
+              <p>Now, the insertion algorithm isn't too bad... let's try to code an iterative version.</p>
               <br/>
               <p class='example'>Complete the BST insert function started below:</p>
 <pre class='prettyprint'>
@@ -517,9 +265,48 @@
       cout &lt;&lt; bs.root-&gt;left-&gt;left-&gt;data &lt;&lt; endl; // 3
   }
 </pre>
+              <p class='question' name='bst-insert'>What is the time complexity of this insertion operation?</p>
+              <p class='answer' name='bst-insert'>Finding the location to insert takes log(n) time and then the actual insertion is constant, giving us a grand total of log(n).</p>
               <br/>
-              <p>Here's a good practice problem... how might we code the destructor of our BST? Hint: think about traversal tactics:</p>
-              <p class='example'>Complete the destructor code skeleton for our BST class below:</p>
+              
+              <p>Now that we have a taste for building our binary search trees, we see that implementing the actual search operation is pretty simple!</p>
+              <p>We'll do things recursively this time for extra practice.</p>
+              <p class='example'>Implement the BST's find member function, which takes in a query int to find in the tree, and returns true iff that value exists somewhere in the tree.</p>
+<pre class='prettyprint'>
+  bool BST::find (int query, BSTNode* n) {
+      // If our given node pointer is nullptr, return
+      // false -- we're out of tree to examine!
+      if (n == nullptr) {return false;}
+      
+      // [!] Otherwise, if the current node's data is our
+      // query, we're done!
+      if ( ??? ) { ??? }
+      
+      // [!] If it's not, we have to determine whether we
+      // want to continue by searching the left or right
+      // subtree:
+      else if ( ??? ) {
+          return ???;
+      } else {
+          return ???;
+      }
+  }
+</pre>
+              <p class='question' name='bstq-1'>On average, What is the time complexity of this search algorithm? (we'll think about worst-case later)</p>
+              <p class='answer' name='bstq-1'>O(log(n)), since at every step, we reduce the number of possible locations for the query to exist by about 1/2.</p>
+              <br/>
+              
+              <p>Great! So we've got our BSTs insertable and searchable, but what about cleanup?</p>
+              <p class='example'>Taking a step back for some review... remind me what postorder traversal is again? What's the postorder traversal of this tree?</p>
+              <div class="text-center fit-pres">
+                <img src="../../../assets/images/winter-2014/cs-32/week-8/trees-7.PNG">
+              </div>
+              <p class='question' name='bst-qdest'>Interesting property about postorder traversal... what happens when I remove each Node found in postorder traversal, in the order in which I visit them?</p>
+              <p class='answer' name='bst-qdest'>We remove each node's children before removing it! Perfect for destroying our tree nodes when we need to clean up.</p>
+              <br/>
+              
+              <p>So, here's a good practice problem... how might we code the destructor of our BST?</p>
+              <p class='example'>Complete the destructor helper-function code skeleton for our BST class below:</p>
               <br/>
 <pre class='prettyprint'>
   // Clears all nodes, making sure to
@@ -545,6 +332,29 @@
       clear(root);
   }
 </pre>
+              <p class='question' name='bst-destruction'>What is the time complexity of this destruction operation?</p>
+              <p class='answer' name='bst-destruction'>O(n), since we visit every element once.</p>
+              <br/>
+              
+              <h3>Binary Search Tree Node Deletion</h3>
+              <p>We'll discuss how to perform arbitrary node deletion here, but won't code it (left as an exercise? yada yada).</p>
+              <p>The steps for deletion are simple.</p>
+              <br/>
+              <div class='definition'><p>Suppose I wish to remove node N from a BST. This removal breaks down into several cases.</p>
+                <ul class='indent-1'>
+                  <li><p><strong>Node N is a leaf:</strong> remove N, and update the parent's pointer to it to nullptr.</p></li>
+                  <li><p><strong>Node N has 1 child:</strong> update the parent's pointer to N to now refer to N's sole child, then remove N.</p></li>
+                  <li><p><strong>Node N has 2 children:</strong> replace N with the smallest element of N's right subtree (call this S), remove N, then recursively call erase on S.</p></li>
+                </ul>
+              </div>
+              <br/>
+              <p>We can try this operation on our favorite example BST:</p>
+              <div class="text-center fit-pres">
+                <img src="../../../assets/images/winter-2014/cs-32/week-8/trees-7.PNG">
+              </div>
+              <p class='example'>Delete 12 in the above BST.</p>
+              <p class='example'>Delete 11 in the above BST.</p>
+              <p class='example'>Delete 21 in the above BST.</p>
             </div>
             <hr/>
             
@@ -553,18 +363,20 @@
             <div id='treeBalancing' class='scrollspy-element' scrollspy-title='Tree Balancing'></div>
             <h1>Balancing Binary Search Trees</h1>
             <div>
-              <p>
-                Now, we remember that binary search trees are great because, for some extra cost during their construction (average O(log(n)), worst O(n)), we can reduce search operations 
-                (in the average case) to about O(log(n)) time complexity.
-              </p>
               <p class='question' name='btree-q0'>Say I'm inserting ints into a binary search tree. What property of this input list of ints will cause insertion to take O(n) time?</p>
               <p class='answer' name='btree-q0'>When the insertions are done one at a time and arrive in sorted order.</p>
+              <p class='question' name='btree-q00'>Suppose I do create a binary search tree using the above detrimental insertion ordering. What efficiency guarantee on what operations does my BST lose?</p>
+              <p class='answer' name='btree-q00'>I lose log(n) performance of search and insertion!</p>
               <p class='definition'>You can test out insertion into a binary tree <a href='http://www.cs.jhu.edu/~goodrich/dsa/trees/btree.html' target='_blank'>here (click me)</a></p>
               <br/>
+
               <p>Well, as it turned out, that worst case insertion was problematic... and the more linear, and less tree-like binary search trees became, the less efficient their search became too!</p>
               <p>So the eggheads of yore considered making an algorithm that would keep the tree balanced such that any insertion won't make the tree become too linear.</p>
+              <br/>
+              <p class='definition'><strong>Balancing</strong> binary search trees is an operation that prevents them from becoming too linear, thus securing the performance guarantees we expect in a BST.</p>
               <p>There are a variety of different ways to keep trees balanced and maintain the log(n) search guarantee for binary search trees; we'll examine a couple now.</p>
               <br/>
+              
               <h3>AVL Trees</h3>
               <p class='definition'>AVL trees have 1 property in addition to those of binary search trees: the heights (depths) of any two of a given node's subtrees must differ by *at most* 1.</p>
               <p>This enforced property makes sure that the depth of any subtree never becomes too linear, which would degrade the efficiency of search and further insertions.</p>
@@ -1172,8 +984,28 @@
               <div class='text-center fit-pres'>
                 <img src='../../../assets/images/winter-2014/cs-32/week-10/hash-2.png' />
               </div>
-              <p>The solution that modern hash tables use: create more buckets whenever the load factor gets too high!</p>
-              <p>Assuming that our hash function is uniformly distributing keys, this puts a *constant upper bound* on the number of items in any given bucket list. Thus the O(1).</p>
+              <br/>
+              
+              <p>Solutions to resolving collisions depend on how we've modeled our Hashtables.</p>
+              <p>In the previous hash table examples, we've seen only one strategy of storing our keys, but there are two main divisions for how we might collect them.</p>
+              <ul class='indent-1'>
+                <li><p><strong>"Closed" Hashtables:</strong> keys are stored in separate containers for each bucket. This is the type of Hashtable we implemented above, since we have lists in
+                  each bucket location.</p></li>
+                <li><p><strong>"Open" Hashtables:</strong> keys are stored one-per-bucket, i.e., in the buckets themselves. When we wish to insert a new item in this schema, we first consult the
+                  hash function and then proceed to the first open bucket.</p></li>
+              </ul>
+              <br/>
+              
+              <p class='question' name='hashtypes-0'>What are some benefits / drawbacks of Closed Hashtables?</p>
+              <p class='answer' name='hashtypes-0'><strong>Benefits:</strong> good for storing large objects, robust for growth. <strong>Drawbacks:</strong> large overhead for storing small objects,
+                traversing linked lists inefficient, and allocating new LL nodes expensive.</p>
+              <p class='question' name='hashtypes-1'>What are some benefits / drawbacks of Open Hashtables?</p>
+              <p class='answer' name='hashtypes-1'><strong>Benefits:</strong> good for storing small objects, fast cache access, no need for allocating new nodes in LL buckets, smaller space footprint.
+                <strong>Drawbacks:</strong> bad for storing large objects, more stringent requirements on hash function, less adaptable to growth.</p>
+              
+              <p>So, how do we avoid poor performance when our number of collisions gets too high?</p>
+              <p>One solution that modern hash tables use: create more buckets whenever the load factor gets too high!</p>
+              <p>Assuming that our hash function is uniformly distributing keys, this puts a *constant upper bound* on the number of items in any given bucket list. Thus guaranteeing the O(1).</p>
               
               <br/>
               <h3>Hash Table Sorting</h3>
@@ -1224,6 +1056,286 @@
 </pre>
               <br/>
               <p>So those are hash tables!</p>
+            </div>
+            <hr/>
+            <br/>
+            
+            
+            <div id='practice' class='scrollspy-element' scrollspy-title='Practice'></div>
+            <h1>Practice &amp; Review</h1>
+            <div>
+                            <h3>Complexity Review</h3>
+              
+              <p>There were a significant number of questions regarding time complexity in the logarithmic case.</p>
+              <p>Since tree algorithms generally involve some flavor of a log complexity, let's review some algorithms now...</p>
+              <p class='definition'>
+                A rule of thumb for logarithm complexity is when you're omitting or ignoring some number of input elements with every step that is proportional to the log of the size of the input.
+              </p>
+              <p>Often, this is manifest in divide-and-conquer algorithms, but sometimes it's simpler than that... that for example the following:</p>
+              <p class='example'>What is the time complexity of the following function?</p>
+<pre class='prettyprint'>
+  void someFunc (vector&lt;int&gt; v) {
+      for (int i = 1; i &lt; v.size(); i *= 2) {
+          cout &lt;&lt; v[i] &lt;&lt; endl;
+      }
+  }
+</pre>
+              <br/>
+              <p>We also know that some algorithms can have logarithmic components that rely on other components of the algorithm, and vice versa...</p>
+              <p class='example'>What is the time complexity of the following function?</p>
+<pre class='prettyprint'>
+  void someFunc (vector&lt;int&gt; v) {
+      for (int i = 0; i &lt; v.size(); i++) {
+          for (int j = i; j &gt; 0; j /= 2) {
+              if (v[j] == v[i]) {
+                  cout &lt;&lt; v[i] &lt;&lt; endl;
+              }
+          }
+      }
+  }
+</pre>
+              <br/>
+              <p>You should also be aware that big-O complexity need not be reliant upon a single input; you can have complexities in terms of multiple inputs as well!</p>
+              <p class='example'>What is the time complexity of the following function?</p>
+<pre class='prettyprint'>
+  // [!] Consider N = v1.size() and M = v2.size()
+  void someFunc (vector&lt;int&gt; v1, vector&lt;int&gt; v2) {
+      for (int i = 0; i &lt; v1.size(); i++) {
+          for (int j = 0; j &lt; v2.size(); j += 2) {
+              if (v1[i] == v2[j]) {
+                  cout &lt;&lt; v1[i] &lt;&lt; endl;
+              }
+          }
+      }
+  }
+</pre>
+              <br/>
+              <p>Lastly, let's remember our tree algorithm complexities...</p>
+              <p class='example'>What is the time complexity of the following function?</p>
+<pre class='prettyprint'>
+  // [!] Consider N = v1.size() and M = s.size()
+  void someFunc (vector&lt;int&gt; v1, set&lt;int&gt; s) {
+      for (int i = 0; i &lt; v1.size(); i++) {
+          if (s.find(v[i]) != s.end()) {
+              cout &lt;&lt; v1[i] &lt;&lt; endl;
+          }
+      }
+  }
+</pre>
+
+              <br/>
+              <h3>Binary Tree Review</h3>
+              <p>We've seen some traversal algorithms for binary trees, but let's look at a couple extra for practice.</p>
+              <p>Below, I've gotten us started with a Binary Tree class, as well as a new way to insert Nodes with a given path to an empty space.</p>
+<pre class='prettyprint'>
+  struct BinTree {
+      // BinTreeNode struct internal
+      // to the BinTree
+      struct BinTreeNode {
+          int data;
+          BinTreeNode* left;
+          BinTreeNode* right;
+          BinTreeNode(int d) {
+              data = d;
+              left = nullptr;
+              right = nullptr;
+          }
+      };
+  
+      // Root just points to a single
+      // BinTreeNode
+      BinTreeNode* root;
+  
+      BinTree() {
+          root = nullptr;
+      }
+      ~BinTree() {}; // TODO!
+      void insertAt (int i, string path);
+  };
+</pre>
+              <br/>
+              
+              <p>Now, suppose I wish to define the insertAt member function:</p>
+<pre class='prettyprint'>
+  // Creates a new node with the given data member
+  // if input string p specifies a path in terms of
+  // L and R children to follow to an empty spot in
+  // the tree
+  // The path p will look like some string of "LRL"
+  void BinTree::insertAt (int data, string p) {
+      BinTreeNode* b = root;
+      BinTreeNode* last = nullptr;
+      int i = 0;
+  
+      // First, we'll go through our desired path
+      // of insertion
+      while (i &lt; p.length()) {
+          // If we hit the nullptr before we're
+          // done, just break out of the loop
+          if (b == nullptr) {
+              break;
+          }
+          // Keep track of our parent node...
+          last = b;
+          // ...then move on to the path's desired
+          // child
+          b = (p[i] == 'L') ? b-&gt;left : b-&gt;right;
+          i++;
+      }
+  
+      // If we followed a path the length of
+      // our desired path, then we have a valid
+      // insertion; otherwise the path was
+      // mis-specified
+      if (i == p.length()) {
+          // If there's already a node there,
+          // bad path, so we'll just return
+          if (b != nullptr) {
+              return;
+          }
+          // Otherwise, there's an opening, so
+          // we'll make a new node at b
+          b = new BinTreeNode(data);
+          // If there's nothing in the tree yet,
+          // then b is our root!
+          if (root == nullptr) {
+              root = b;
+          }
+          // If we have a parent node to add
+          // the child to, update its left or
+          // right pointer
+          if (last != nullptr) {
+              if (p[i - 1] == 'L') {
+                  last-&gt;left = b;
+              } else {
+                  last-&gt;right = b;
+              }
+          }
+      }
+  }
+</pre>
+              <p>So, if I wanted to add Nodes to my tree, I would simply say:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-9/btree-0.png' />
+              </div>
+              <br/>
+              <p>So, now I can recreate this tree in my BinaryTree class via:</p>
+<pre class='prettyprint'>
+  int main () {
+      BinTree bt;
+      bt.insertAt(14, "");
+      bt.insertAt(10, "L");
+      bt.insertAt(8, "LL");
+      bt.insertAt(11, "LR");
+      bt.insertAt(15, "R");
+  }
+</pre>
+              <br/>
+              <p>Neat! Now let's look at making some of our own functions...</p>
+              <p>First, let's have a way to print out our tree; we'll print out each subtree as enclosed within parentheses, like so:</p>
+<pre class='prettyprint'>
+  int main () {
+      BinTree bt;
+      
+      bt.insertAt(14, "");
+      // prints: (14)
+      printByClosure(bt.root);
+      cout &lt;&lt; endl;
+        
+      bt.insertAt(10, "L");
+      // prints: ((10)14)
+      printByClosure(bt.root);
+      cout &lt;&lt; endl;
+        
+      bt.insertAt(8, "LL");
+      // prints: (((8)10)14)
+      printByClosure(bt.root);
+      cout &lt;&lt; endl;
+        
+      bt.insertAt(11, "LR");
+      // prints: (((8)10(11))14)
+      printByClosure(bt.root);
+      cout &lt;&lt; endl;
+        
+      bt.insertAt(15, "R");
+      // prints: (((8)10(11))14(15))
+      printByClosure(bt.root);
+      cout &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p>Complete the function shell for printByClosure below:</p>
+<pre class='prettyprint'>
+  void printByClosure (BinTree::BinTreeNode* b) {
+      // [!] Base case
+      if ( ??? ) {
+          ???
+      }
+  
+      // [!] Otherwise, starting a new
+      // closure, so print out...
+      cout &lt;&lt; ???;
+  
+      // [!] Perform some form of traversal
+      // here... which one will give us the
+      // desired output?
+      
+      // [!] Ending our closure, so print...
+      cout &lt;&lt; ???;
+  }
+</pre>
+              <br/>
+              <p>Let's do something &quot;fun&quot;... why don't we create a function that turns our tree into a mirror image of itself?</p>
+<pre class='prettyprint'>
+  int main () {
+      BinTree bt;
+      bt.insertAt(14, "");
+      bt.insertAt(10, "L");
+      bt.insertAt(18, "R");
+      printByClosure(bt.root);
+      cout &lt;&lt; endl;
+      // Was ((10)14(18)),
+      // Now ((18)14(10))
+      mirror(bt.root);
+      printByClosure(bt.root);
+      cout &lt;&lt; endl;
+  
+      bt.insertAt(17, "LR");
+      printByClosure(bt.root);
+      cout &lt;&lt; endl;
+      // Was ((18(17))14(10)),
+      // Now ((10)14((17)18))
+      mirror(bt.root);
+      printByClosure(bt.root);
+      cout &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p class='example'>Complete the function shell for mirror, below:</p>
+<pre class='prettyprint'>
+  void mirror (BinTree::BinTreeNode* b) {
+      // [!] Base Case
+      if ( ??? ) {
+          return;
+      }
+    
+    // Create a temp holder for our swap
+      BinTree::BinTreeNode* temp;
+    
+    // [!] Perform some order of traversal
+    // to do the swap... which one?
+      ???
+    
+    // [!] Swap the current node's left
+    // and right with the temp, saving
+    // one into temp first
+      ???
+  }
+  // ^ Example credit to Stanford's tree examples
+  // (listed later)
+</pre>
+              <br/>
+              <p>I'll have some more examples using this class on the practice final...</p>
             </div>
             <hr/>
             
