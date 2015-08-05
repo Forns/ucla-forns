@@ -1,0 +1,1302 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Andrew Forney - UCLA CS</title>
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/magic-bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/main.css" rel="stylesheet" type="text/css">
+    <script src="../../../js/lib/jquery-2.0.3.min.js"></script>
+    <script src="../../../js/lib/bootstrap.min.js"></script>
+    <script src="../../../js/lib/expanding.js"></script>
+    <script src="../../../js/lib/chart.min.js"></script>
+    <script src="../../../js/display/general/general-display.js"></script>
+    <script src="week-7-display.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+  </head>
+  
+  <body data-spy="scroll" data-target="#scrollspy">
+    
+    <!-- BEGIN WRAP -->
+    <div id="wrap">
+      
+      <!-- BEGIN NAVIGATION -->
+      <nav class='navbar navbar-default' role='navigation'>
+        <div class='nav-accent'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-12'>
+              <div class='navbar-header'>
+                <button class='navbar-toggle' type='button' data-toggle='collapse' data-target='.navbar-main-collapse'>
+                  <span class='sr-only'>Toggle Navigation</span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                </button>
+                <a class='navbar-brand' href='/~forns/'>
+                  <span id='brand-text'>
+                    Andrew Forney
+                  </span>
+                </a>
+              </div>
+              
+              <div id='nav-main' class='collapse navbar-collapse navbar-main-collapse'>
+                <ul class='nav navbar-nav navbar-right'>
+                  
+                  <li>
+                    <a href='/~forns/about.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-user'></span>
+                      </div>
+                      <p class='text-center'>About</p>
+                    </a>
+                  </li>
+                  
+                  <li class='active'>
+                    <a href='/~forns/classes.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-book'></span>
+                      </div>
+                      <p class='text-center'>Classes</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/contact.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-comment'></span>
+                      </div>
+                      <p class='text-center'>Contact</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/publications.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-file'></span>
+                      </div>
+                      <p class='text-center'>Publications</p>
+                    </a>
+                  </li>
+                  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <!-- END NAVIGATION -->
+      
+      <!-- BEGIN MAIN CONTENT -->
+      <div id="main-content" class="container">
+        <div class="row">
+          
+          <!-- BEGIN SCROLLSPY -->
+          <div class='col-md-2 hidden-sm hidden-xs'>
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+              <ul id='scrollspy' class="nav bs-sidenav">
+              </ul>
+            </div>
+          </div>
+          <!-- END SCROLLSPY -->
+          
+          <!-- BEGIN PRESENTATION CONTENT -->
+          <div class='col-md-10 presentation-content' role='main'>
+            
+            <ol class="breadcrumb hidden-print">
+              <li><a href="../../../classes.html">Classes</a></li>
+              <li><a href="./cs-32.html">Summer14 CS32</a></li>
+              <li class="active">Week 7</li>
+            </ol>
+            
+            
+            <div id='questions' class='scrollspy-element' scrollspy-title='Review'></div>
+            <h1>Questions from Last Week</h1>
+            <div>
+              <p><strong>Q: Is there a particular "magic load factor" that guarantees Hash Table constant time performance on its operations?</strong></p>
+              <p>A: Well, I don't know about "magic," but as it turns out, many implementations aim for a load factor &lt; 0.7 lest too many collisions start to happen.</p>
+              
+              <br/>
+              <p><strong>Q: Is it possible to get a "perfect" hash function to avoid any collisions?</strong></p>
+              <p>A: Yes, but only when you know all of your keys in advance. Such "perfect" hashes are useful when you have frequent look-ups of a large hash table with infrequent (or no) updates.</p>
+              <p>You can read more about perfect hashes on the <a href='http://en.wikipedia.org/wiki/Perfect_hash_function' target='_blank'>Wiki article</a>.</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='heaps' class='scrollspy-element' scrollspy-title='Heaps'></div>
+            <h1>Heaps</h1>
+            <div>
+              <p>Let's talk about a new tree data structure. The heap!</p>
+              <p class='debug'>WARNING: The heap data structure is on no way related to the heap where dynamically allocated variables are stored!</p>
+              <br/>
+              <p>Such unfortunate naming schemas in computer science... it's not like humans have infinite generative language capacities or anything...</p>
+              <p>To break the ice, here's another topical XKCD because you guys seem to love these as much as I do:</p>
+              <a href='https://xkcd.com/835/' target='_blank'>
+                <div class='text-center fit-pres'>
+                  <img src='http://imgs.xkcd.com/comics/tree.png' />
+                </div>
+              </a>
+              <br/>
+              <p class='definition'>A <strong>heap</strong> (generally referring to a max heap) is a special type of tree where *all* subtrees of a given Node have values less than or equal to that Node's.</p>
+              <br/>
+              <p>In the above comic, we see that the heap of presents at the base has the largest at the top with children decreasing in size with greater depth.</p>
+              <p>Our discussion, however, will be restricted to binary heaps, which have some additional restrictions.</p>
+              <p class='definition'>A <strong>binary heap</strong> is a complete binary tree where all subtrees of a given Node have values less than or equal to that Node's.</p>
+              <br/>
+              <p>So we're restricting the number of children any Node can have to 2, AND requiring the binary tree be complete.</p>
+              <p class='definition'>
+                A <strong>complete</strong> binary tree is a binary tree with all full levels, except for possibly the last level, in which case it is required that the Nodes be filled from left to right without
+                any spaces.
+              </p>
+              <br/>
+              <p class='example'>Is the following binary tree complete? Is it a heap?</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-10/heap-0.png' />
+              </div>
+              <hr/>
+              <p class='example'>Is the following binary tree complete? Is it a heap?</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-10/heap-1.png' />
+              </div>
+              <hr/>
+              <p class='example'>Is the following binary tree complete? Is it a heap?</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-10/heap-2.png' />
+              </div>
+              <hr/>
+              <p class='example'>Is the following binary tree complete? Is it a heap?</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-10/heap-3.png' />
+              </div>
+              <br/>
+              <p class='question' name='heap-q0'>Is a single-node tree a heap?</p>
+              <p class='answer' name='heap-q0'>
+                Yes! It must be complete because the last (and only) level is full, and its value must be larger than its subtrees because it has no subtrees!
+              </p>
+              <br/>
+              <p class='question' name='heap-q1'>How many unique structural configurations (ignoring node values) are there for a complete binary tree with N nodes?</p>
+              <p class='answer' name='heap-q1'>
+                Just 1! If you were to change the position of any node in the structure, it would cease to be complete.
+              </p>
+              
+              <br/>
+              <h3>Heap Properties</h3>
+              <p>Heaps have some nice properties, for example:</p>
+              <p class='definition'>The largest value of a (max)heap is always at the root, and therefore accessible with constant time!</p>
+              <p class='definition'>Because heaps are complete trees, we can represent them as arrays to enable random access, with indexing starting at the root and numbering nodes level-by-level from 
+                left-to-right.</p>
+              <p class='question' name='heap-qq'>What performance benefit does representing a complete tree as an array have over a Node-with-pointers implementation?</p>
+              <p class='answer' name='heap-qq'>Arrays are indexed, meaning we can access any element with constant time.</p>
+              <br/>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-10/heap-4.png' />
+              </div>
+              <br/>
+              <p>&quot;Nice colors in that graph, Andrew, do you also design children's play equipment?&quot;</p>
+              <p>Shhh! It was illustrative!</p>
+              
+              <br/>
+              <p class='definition'>We know that in the array representation of a heap, the root must always be at index 0.</p>
+              <br/>
+              <p>But how do we determine the children and parent of any given index in an array?</p>
+              <p>Well, since it's a complete tree, we have a simple computational way of finding these indexes...</p>
+              <p class='question' name='heap-q2'>Given the index n of a &quot;Node&quot; in our conceptual tree structure, how can I get the index of the parent?</p>
+              <p class='answer' name='heap-q2'>
+                Index of parent: (n - 1) / 2; (NOTE: this is integer division, so we ignore the decimal of the quotient)
+              </p>
+              <br/>
+              <p>So, we can define a simple functional mapping:</p>
+<pre class='prettyprint'>
+  int getParent (int index) {
+      return (index - 1) / 2;
+  }
+</pre>
+              <br/>
+              <p>Getting the left and right children is a similar mechanical exercise:</p>
+<pre class='prettyprint'>
+  // Child is either 'L' or 'R'
+  int getChild (int index, char child) {
+      int result = (index * 2) + 1;
+      if (child == 'R') {
+          result++;
+      }
+      return result;
+  }
+</pre>
+              <br/>
+              <p class='example'>Draw the binary tree representation of the following heap:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-10/heap-5.png' />
+              </div>
+              <br/>
+              <p>Now that we have the basic tools down, we're ready to go over some heap algorithms!</p>
+            </div>
+            <hr/>
+            <br/>
+              
+            
+            <br/>
+            <div id='heapops' class='scrollspy-element' scrollspy-title='Heap Operations'></div>
+            <h1>Heap Operations</h1>
+            <div>
+              <h3>Insertion</h3>
+              <p class='definition'>After every operation on a heap, we have some general steps: perform the operation and then &quot;reheapify&quot; the binary tree.</p>
+              <p>For insertion, that looks like this:</p>
+              <ol class='indent-1'>
+                <li><p>Create a complete binary tree with the newly inserted node in its proper location as the right-most vacant leaf position on the last level of the tree.</p></li>
+                <li><p>Starting at that newly inserted node, bubble upwards ensuring that each node is less than its parent.</p></li>
+                <li><p>As soon as a parent is greater than the node we're bubbling, stop--your array is now reheapified! (assuming it was a heap before the insertion).</p></li>
+              </ol>
+              <br/>
+              
+              <p class='question' name='reheap-q0'>Why is it sufficient to conclude that in step 3, when the parent is greater than the node we're bubbling, that we may stop? Why must we not also continue
+                checking farther up the heap to verify its heapiness?</p>
+              <p class='answer' name='reheap-q0'>By assumption, we are inserting into a structure that is already a heap. This means that all nodes are already abiding by the definition of a heap. So, when
+                we insert a new node, and stop bubbling up whenever the parent is larger than what we're bubbling, we can trust that all nodes updwards are already heap-compliant.</p>
+              
+              <p class='example'>Using the above steps, insert the node with value 50 into the heap below:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-10/heap-6.png' />
+              </div>
+              <hr/>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-10/heap-7.png' />
+              </div>
+              <hr/>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-10/heap-8.png' />
+              </div>
+              <hr/>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-10/heap-9.png' />
+              </div>
+              <br/>
+              <p>Got that?</p>
+              <p>Let's make a simple BinaryHeap class with this algorithm!</p>
+              <p>I'll start you off...</p>
+              <p class='example'>Complete the insert function and its helper, bubbleUp, in our BinaryHeap below:</p>
+              <br/>
+<pre class='prettyprint'>
+  template &lt;typename T&gt;
+  class BinaryHeap {
+      private:
+          vector&lt;T&gt; heap;
+  
+          // Traversal helpers
+          int getParent (int index) {
+              return (index - 1) / 2;
+          }
+          int getChild (int index, char child) {
+              int result = (index * 2) + 1;
+              if (child == 'R') {
+                  result++;
+              }
+              return result;
+          }
+  
+          // Continues to bubble values up the
+          // tree until we find a node that is
+          // greater than it
+          void bubbleUp (int index) {
+              // [!] If we're at the root, then
+              // we're done
+              if ( ??? ) {return;}
+  
+              // [!] Get parent index and store it
+              int parent = ???;
+  
+              // [!] If the parent's value is less than
+              // the current one's...
+              if ( ??? ) {
+                  // [!] ...then we swap them...
+                  ???
+  
+                  // [!] ...and recurse on the new parent!
+                  bubbleUp(parent);
+              }
+  
+          }
+  
+      public:
+          void print () {
+              for (int i = 0; i &lt; heap.size(); i++) {
+                  cout &lt;&lt; heap[i] &lt;&lt; endl;
+              }
+          }
+  
+          void insert (T toInsert) {
+              // [!] Add new element to next available
+              // slot in the binary tree
+              ???
+  
+              // [!] Start bubbling values up from
+              // the newly added value
+              ???
+          }
+  };
+</pre>
+              <br/>
+              <p>Now let's test it using our example from before!</p>
+              <br/>
+<pre class='prettyprint'>
+  int main () {
+      BinaryHeap&lt;int&gt; b;
+      b.insert(25);
+      b.insert(10);
+      b.insert(20);
+      b.insert(8);
+  
+      cout &lt;&lt; "BEFORE adding 50:" &lt;&lt; endl;
+      b.print();
+  
+      b.insert(50);
+      cout &lt;&lt; "AFTER adding 50:" &lt;&lt; endl;
+      b.print();
+  }
+</pre>
+              <br/>
+              <p>Great! On to deletion.</p>
+              
+              <br/>
+              <h3>Deletion</h3>
+              <p>Nothing particularly surprising about deletion; it's essentially the same algorithm as insertion, in reverse!</p>
+              <ol class='indent-1'>
+                <li><p>Remove the target node from the heap</p></li>
+                <li><p>Promote the bottom-right-most leaf of the last level to the position of the removed node</p></li>
+                <li><p>Trickle down the promoted item such that if either of its two children are greater than it, then it trades places with the greatest of its children.</p></li>
+                <li><p>Continue trickling down until no child is greater than the trickling node.</p></li>
+              </ol>
+              <br/>
+              <p>Let's try removing the 50 node at the root from the heap below:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-10/heap-10.png' />
+              </div>
+              <hr/>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-10/heap-11.png' />
+              </div>
+              <hr/>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-10/heap-12.png' />
+              </div>
+              <hr/>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-10/heap-13.png' />
+              </div>
+              <br/>
+              <p class='example'>I shall leave it as an exercise to implement the deletion function into our BinaryHeap class!</p>
+              
+              <br/>
+              <p class='question' name='heap-comp'>What is the time complexity of insertion? Of deletion?</p>
+              <p class='answer' name='heap-comp'>Both are O(log(n)), for the same reason that binary search was. At each step of bubbling, we're ignoring 1/2 of the other nodes in the heap.</p>
+              <p class='question' name='heap-bs'>To find an element in a heap, can we perform the same binary search algorithm on heaps that we can on binary search trees?</p>
+              <p class='answer' name='heap-bs'>No, we do not have the same guarantee that an item must be found in one subtree or another; it could be at either if it is less than a given Node N.</p>
+            </div>
+            <hr/>
+            <br/>
+            
+            
+            <br/>
+            <div id='heapapps' class='scrollspy-element' scrollspy-title='Heap Applications'></div>
+            <h1>Heap Applications</h1>
+            <div>
+              <p>Heaps are nice for a variety of applications; we'll discuss a few right now!</p>
+              <br/>
+              
+              <h3>Priority Queues</h3>
+              <p class='definition'><strong>Priority queues</strong> are a data structure that use heaps for container with the restriction that removing elements from the heap can only be done at the root.</p>
+              <br/>
+              <p>Because we know the root of a maxheap is always the greatest element in that heap, we say that we're always removing the item with the highest priority before we get to the others.</p>
+              
+              <p class='question' name='priQ-q0'>
+                Is the standard queue data structure that we know a special case of a priority queue? What property of items in a standard queue would cause them to behave like a priority queue?
+              </p>
+              <p class='answer' name='priQ-q0'>
+                Yes! Standard queue items are simply removed in the FIFO order of their insertion; we could mimic this behavior with a priority queue by simply time stamping the time of insertion and
+                always removing the one with the earliest time stamp first.
+              </p>
+              <br/>
+              
+              <h3>Huffman Coding</h3>
+              <p>Suppose I wish to transmit a text message using the least amount of data as possible.</p>
+              <p>Since text is composed of characters, most general-purpose encoding schemas (like ASCII) will assign some binary representation to each character, giving it a unique code that can be
+                translated into text.</p>
+<pre>
+  // ASCII Bit-code Representation:
+  'A' = 65 (base 10 - decimal)
+      = 01000001 (base 2 - 8bit binary)
+  
+  // Character Strings:
+  "AAA" = 01000001 01000001 01000001 (24 bits)
+</pre>
+              <p class='question' name='huff-q0'>BUT, what if I don't have 256 different characters that I need to represent in my text message? How will ASCII be wasteful?</p>
+              <p class='answer' name='huff-q0'>Suppose my message consists of strings of only 4 characters. ASCII would use 8 bits to represent each character, even though I only need 2 bits to uniquely
+                represent them!</p>
+              <br/>
+              
+              <p>Suppose I'm using 2 bits to represent the letters {A, B, C}. I conclude that I can have bit codes translate as follows:</p>
+<pre>
+  // Custom Bit-code Representation:
+  1  = A
+  00 = B
+  01 = C
+  
+  // Character Strings:
+  "A"   = 1
+  "BA"  = 001
+  "CAB" = 01100
+</pre>
+              <p class='question' name='huff-q1'>Suppose I then discover that the letter 'A' appears very infrequently in my text messages, and C appears very frequently. If I want to keep my bit-string
+                representations of my text messages as small as possible, what change should I make to the above translation?</p>
+              <p class='answer' name='huff-q1'>Make 1 = C and 01 = A, since the frequent appearances of C and infrequent appearances of A will result in smaller bit-strings on average.</p>
+              <br/>
+              
+              <p>So, it'd be nice if, for any arbitrary alphabet I wish to define (or a restricted alphabet where I know I'm only using some N number of characters), I could minimize the bit-string
+                representation of any character-string to be parsimonious!</p>
+              <p class='definition'><strong>Huffman Coding</strong> provides an algorithm to create a binary tree that can encode and decode any string defined on an alphabet that is weighted by its
+                character frequency.</p>
+              <br/>
+              
+              <p>That too is a lot of words... what it means is that we have a way to generate bit string encoding schemas that minimize the number of bits we'd need to use to express a character-string
+                 in our alphabet (on average).</p>
+              <p>Let's see how it works!</p>
+              <br/>
+              
+              <p><strong>Encoding</strong></p>
+              <p class='example'>Produce a Huffman Encoding for an alphabet defined over 5 letters, {A, B, C, D, E} with the following frequencies:</p>
+<pre>
+  // Character: Frequency%
+  A: 20%
+  B: 30%
+  C: 10%
+  D: 15%
+  E: 25%
+</pre>
+              <br/>
+              <p class='toolkit'><strong>Step One:</strong> Place all of the characters into a MINHEAP priority queue, where the root will have the least frequency, and all subtrees of Node N have 
+                frequencies greater than N. In other words, nodes with the lowest frequency have the highest priority.</p>
+              <p class='question' name='huff-q2'>What will the minheap look like for the above characters, assuming I insert them in the order listed?</p>
+              <div class='answer' name='huff-q2'>
+                <div class='text-center fit-pres'>
+                  <img src='../../../assets/images/summer-2015/cs-32/week-7/huff-heap.png' />
+                </div>
+              </div>
+              <br/>
+              
+              <p class='toolkit'><strong>Step Two:</strong> Begin forming the Huffman Encoding binary tree. Until you are left with a single Node in the priority queue, do the following:</p>
+<pre class='prettyprint'>
+  Let Node X = pri_q.pop()
+  // [!] Node Y created after popping to get
+  // Node X, and then reheapifying
+  Let Node Y = pri_q.pop()
+  Create Node Z = new parent of X and Y
+  Set frequency of Z = freq(X) + freq(Y)
+  Insert Z into pri_q
+</pre>
+              <p>In short, we pop the 2 least frequency-nodes in the priority queue, join them with a new parent whose frequency is the sum of those two nodes, and then add that new parent into the priority
+                queue.</p>
+              <p>We do this until we are left with a single node, which is the root of our Huffman tree.</p>
+              <p>For our example, this will look like the following:</p>
+              <br/>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/summer-2015/cs-32/week-7/huff-1.PNG' />
+              </div>
+              <hr/>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/summer-2015/cs-32/week-7/huff-2.PNG' />
+              </div>
+              <hr/>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/summer-2015/cs-32/week-7/huff-3.PNG' />
+              </div>
+              <hr/>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/summer-2015/cs-32/week-7/huff-4.PNG' />
+              </div>
+              <hr/>
+              <br/>
+              
+              <p class='toolkit'><strong>Step 3:</strong> To get an encoding for our tree, simply treat every Node's left pointer as a 0 bit and every Node's right pointer as a 1 bit, and collect bits along
+                the path to find that character's bit code.</p>
+              <p>So, for our example, this will look like:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/summer-2015/cs-32/week-7/huff-encode.PNG' />
+              </div>
+              <br/>
+              <p>So, for example, the bit code for B = 11 and the bit code for D = 001.</p>
+              <p>Note: the most frequently used characters have the smallest bitcode! This is exactly what we wanted.</p>
+              <br/>
+              
+              <p><strong>Decoding</strong></p>
+              <p>Suppose now I have a Huffman tree, and wish to decode a message. The process for this is simple.</p>
+              <p class='definition'>To decode a bit-string using a Huffman tree, start at the tree's root, follow left branches when you see a 0, or right when you see a 1, return a character whenever you
+                reach a leaf, and then restart at the root for the next character.</p>
+              <p class='question' name='huff-dec'>Using the Huffman tree we created above, decode Andrew's old-school diss corresponding to bit-string: <code>00001001</code>. (Click for solution)</p>
+              <p class='answer' name='huff-dec'>CAD</p>
+              <br/>
+              <p>So that's Huffman coding! ...you cad!</p>
+              <p>How about some conceptual questions?</p>
+              <p class='question' name='huff-concq0'>Why do we use a priority queue to store the characters with their frequencies? Wouldn't it be easier to simply maintain a sorted vector?</p>
+              <p class='answer' name='huff-concq0'>No! Remember that we frequently insert the new parent nodes (Z) that are created in the algorithm, which would cause performance issues for vectors. Furthermore,
+                priority queues always have the next item we need to add to the Huffman tree at the root, and are accessible with O(1), then only + O(log(n)) to reheapify, rather than O(n) to reorganize a vector.
+                Finally, nodes popped from the priority queue can be the same nodes used in the Huffman tree, meaning we don't need to allocate anything other than the Nodes once, rather than allocating
+                a vector AND THEN every Node in the Huffman tree, which can be expensive.</p>
+              <p class='question' name='huff-concq1'>What is the computational complexity of Huffman encoding?</p>
+              <p class='answer' name='huff-concq1'>O(n log (n)). Popping, reheapifying, and inserting elements into the heap takes O(log(n)), and is done n times, one for each character.</p>
+              
+              
+              <br/>
+              <h3>Heap Sort</h3>
+              <p class='definition'><strong>Heap sort</strong> is a way to retrieve a sorted list of a heap's elements.</p>
+              <p>Its algorithm goes something like this:</p>
+<pre class='prettyprint'>
+  count = size of heap
+  while count > 1
+      heapify the heap
+      swap the root with the deepest, right-most leaf
+      count--
+</pre>
+              <br/>
+              <p>Since we are representing heaps in their array format, what we are left with after heapsort is a sorted array of that heap's elements.</p>
+              <p>Let's do some heap sorting!</p>
+              <br/>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-10/heap-sort-0.png' />
+              </div>
+              <hr/>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-10/heap-sort-1.png' />
+              </div>
+              <hr/>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-10/heap-sort-2.png' />
+              </div>
+              <hr/>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-10/heap-sort-3.png' />
+              </div>
+              <hr/>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-10/heap-sort-4.png' />
+              </div>
+              <hr/>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-10/heap-sort-5.png' />
+              </div>
+              <br/>
+              <p class='question' name='heapsort-q0'>What is the time complexity of heapsort?</p>
+              <p class='answer' name='heapsort-q0'>Heap sort has time complexity O(n*log(n)), like most other gold standard sorts, since "heapifying" take log(n) time, and is done n times, for each element.</p>
+              <br/>
+              <p>Heapsort takes less space than merge sort, but isn't possible to perform in parallel, unlike merge sort.</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='graphs' class='scrollspy-element' scrollspy-title='Graphs'></div>
+            <h1>Graphs</h1>
+            <div>
+              <p>Graphs are about as fun as a data structure can get (if you ask me).</p>
+              <p class='definition'>A <strong>graph</strong> is an abstract data type consisting of some number of Nodes connected by some number of edges, which may be directed or not.</p>
+              <br/>
+              <p>Such a loose definition! Let's look at a graph...</p>
+              <br/>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-10/graph-0.png' />
+              </div>
+              <br/>
+              <p>Seeing how a graph is just any collection of nodes and edges, let's think for a second...</p>
+              <p class='question' name='graph-q0'>Are all trees also graphs?</p>
+              <p class='answer' name='graph-q0'>Yes! Trees are just graphs with some additional constraints (which we'll see in a moment).</p>
+              <br/>
+              <p class='question' name='graph-q1'>Are all graphs also trees?</p>
+              <p class='answer' name='graph-q1'>No! Graphs can have a variety of properties that violate the constraints of trees; let's see those in the following table.</p>
+              <br/>
+              <table class='table table-bordered'>
+                <caption>Graphs vs. Trees</caption>
+                <thead>
+                  <th><p>Property</p></th>
+                  <th><p>Trees</p></th>
+                  <th><p>Graphs</p></th>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th><p>Notion of root</p></th>
+                    <td class='success'><p>Yes</p></td>
+                    <td class='danger'><p>Not necessarily</p></td>
+                  </tr>
+                  <tr>
+                    <th><p>One path from root to any node</p></th>
+                    <td class='success'><p>Yes</p></td>
+                    <td class='danger'><p>Not necessarily</p></td>
+                  </tr>
+                  <tr>
+                    <th><p>Can contain cycles</p></th>
+                    <td class='danger'><p>No</p></td>
+                    <td class='success'><p>Yes</p></td>
+                  </tr>
+                  <tr>
+                    <th><p>Nodes can have multiple inbound arrows</p></th>
+                    <td class='danger'><p>No</p></td>
+                    <td class='success'><p>Yes</p></td>
+                  </tr>
+                  <tr>
+                    <th><p>Have methods of traversing nodes</p></th>
+                    <td class='success'><p>Yes</p></td>
+                    <td class='success'><p>Yes*</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+              <p>
+                I put a star next to the graph capacity for traversal simply because, unlike with, say, a binary tree, in which we have defined traversal methods like left-to-right postorder, graphs
+                can be traversed starting at any node and following a variety of different traversal schemas.
+              </p>
+              <p>Additionally, we're not guaranteed that we could traverse all elements of a graph, even if we have a systematic algorithm for doing so. Take the following graph, for example:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-10/graph-1.png' />
+              </div>
+              <br/>
+              <p>Starting at any one of these nodes, we're not guaranteed that we'll visit every other node in the graph! (in fact, in this case it's not possible)</p>
+              <p>Long story short, there are a variety of niceties we had with trees that are lost with the loose constraints of graphs... but we also gain some cool stuff too.</p>
+              
+              <br/>
+              <h3>Graph Properties</h3>
+              <p class='definition'>A graph is said to be <strong>directed</strong> if every edge has at least one directed arrowhead.</p>
+              <p>This might even mean <strong>bidirected</strong> arrows with arrows on either end!</p>
+              <br/>
+              <p class='definition'>A graph is said to be <strong>acyclic</strong> if it contains no cycles.</p>
+              <p>A <strong>cycle</strong> exists in a graph whenever it is possible, by simply following some path of directed edges, to visit a node twice.</p>
+              <br/>
+              <p>A very common graph representation involves the case where both of these properties are combined:</p>
+              <p class='definition'>A <strong>directed, acyclic graph</strong> (also known as a DAG) is a directed graph with no directed cycles.</p>
+              <br/>
+              <p class='example'>Is the following graph a DAG?</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-10/graph-2.png' />
+              </div>
+              <br/>
+              <p class='example'>Is the following graph a DAG?</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-10/graph-0.png' />
+              </div>
+              
+              <br/>
+              <h3>Graph Algorithms</h3>
+              <p>There are a variety of graph algorithms for different applications, but for our introduction, let's just examine 1 or 2:</p>
+              <p class='definition'>
+                A <strong>depth-first traversal</strong> of a graph will visit every descendant of a given node, exploring the entirety of one outbound edge's subgraph before backtracking to explore another.
+              </p>
+              <p>A depth first traversal that remembers the nodes that it's already visited will not repeat them.</p>
+              <p>Depth first traversals are not necessarily unique!</p>
+              <p class='example'>Show a couple of depth-first traversals starting with node 1 in the following DAG:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-10/graph-3.png' />
+              </div>
+              <br/>
+              <p>Some viable depth-first traversals:</p>
+              <ul class='indent-1'>
+                <li><p>1, 2, 4, 64, 16, 8, 32</p></li>
+                <li><p>1, 16, 32, 8, 4, 64, 2</p></li>
+              </ul>
+              <br/>
+              <p class='debug'>The following are NOT viable depth-first traversals starting at node 1. Why?</p>
+              <ul class='indent-1'>
+                <li><p>1, 2, 16, 4, 8, 32, 64</p></li>
+                <li><p>1, 2, 4, 8, 64, 16, 32</p></li>
+              </ul>
+              
+              <br/>
+              <p class='indent-1'>A <strong>topological sort</strong> provides an ordering of nodes such that no node appears in the sequence before any of its parents.</p>
+              <p>This is useful for tracing dependencies where we have to resolve the parents before the children!</p>
+              <p class='example'>What are some viable topological sorts of the following graph?</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-10/graph-3.png' />
+              </div>
+              
+              <br/>
+              <p>OK cool, but how do we store these graphs?</p>
+              <p class='definition'>An <strong>adjacency matrix</strong> is a 2D array with a row / column for every node, and an indication at index [i][j] of whether node i is connected to node j.</p>
+              <p>Usually we indicate adjacencies with the number 1 to represent an edge going from node i to node j, and a 0 if there is no edge between them.</p>
+              <p>Problem: this matrix can have a lot of 0s and waste space.</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='massiveReview' class='scrollspy-element' scrollspy-title='Massive Review'></div>
+            <h1>Massive Review</h1>
+            <div>
+              <p>How about a nice massive review to wind us down?</p>
+              <p>For each of the following sorts and data structures, provide a description and time complexity (if appropriate) for the operations and case analyses:</p>
+              
+              <br/>
+              <h2>Sorts</h2>
+              <h3>Bubble Sort</h3>
+              <table class='table table-striped table-bordered'>
+                <thead>
+                  <tr>
+                    <th><p>Best Case</p></th>
+                    <th><p>Avg. Case</p></th>
+                    <th><p>Worst Case</p></th>
+                    <th><p>Stable?</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <p class='question' name='sort-q0'>Click for answer.</p>
+                      <p class='answer' name='sort-q0'><code class='prettyprint'>O(n)</code>: when array is nearly sorted.</p>
+                    </td>
+                    <td>
+                      <p class='question' name='sort-q1'>Click for answer.</p>
+                      <p class='answer' name='sort-q1'><code class='prettyprint'>O(n^2)</code></p>
+                    </td>
+                    <td>
+                      <p class='question' name='sort-q2'>Click for answer.</p>
+                      <p class='answer' name='sort-q2'><code class='prettyprint'>O(n^2)</code></p>
+                    </td>
+                    <td>
+                      <p class='question' name='sort-q2-1'>Click for answer.</p>
+                      <p class='answer' name='sort-q2-1'><code class='prettyprint'>Yes</code></p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              
+              <br/>
+              <h3>Insertion Sort</h3>
+              <table class='table table-striped table-bordered'>
+                <thead>
+                  <tr>
+                    <th><p>Best Case</p></th>
+                    <th><p>Avg. Case</p></th>
+                    <th><p>Worst Case</p></th>
+                    <th><p>Stable?</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <p class='question' name='sort-q3'>Click for answer.</p>
+                      <p class='answer' name='sort-q3'><code class='prettyprint'>O(n)</code>: when array is nearly sorted.</p>
+                    </td>
+                    <td>
+                      <p class='question' name='sort-q4'>Click for answer.</p>
+                      <p class='answer' name='sort-q4'><code class='prettyprint'>O(n^2)</code></p>
+                    </td>
+                    <td>
+                      <p class='question' name='sort-q5'>Click for answer.</p>
+                      <p class='answer' name='sort-q5'><code class='prettyprint'>O(n^2)</code></p>
+                    </td>
+                    <td>
+                      <p class='question' name='sort-q5-1'>Click for answer.</p>
+                      <p class='answer' name='sort-q5-1'><code class='prettyprint'>Yes</code></p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              
+              <br/>
+              <h3>Merge Sort</h3>
+              <table class='table table-striped table-bordered'>
+                <thead>
+                  <tr>
+                    <th><p>Best Case</p></th>
+                    <th><p>Avg. Case</p></th>
+                    <th><p>Worst Case</p></th>
+                    <th><p>Stable?</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <p class='question' name='sort-q6'>Click for answer.</p>
+                      <p class='answer' name='sort-q6'><code class='prettyprint'>O(n*log(n))</code></p>
+                    </td>
+                    <td>
+                      <p class='question' name='sort-q7'>Click for answer.</p>
+                      <p class='answer' name='sort-q7'><code class='prettyprint'>O(n*log(n))</code></p>
+                    </td>
+                    <td>
+                      <p class='question' name='sort-q8'>Click for answer.</p>
+                      <p class='answer' name='sort-q8'><code class='prettyprint'>O(n*log(n))</code></p>
+                    </td>
+                    <td>
+                      <p class='question' name='sort-q8-1'>Click for answer.</p>
+                      <p class='answer' name='sort-q8-1'><code class='prettyprint'>Yes</code></p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              
+              <br/>
+              <h3>Quick Sort</h3>
+              <table class='table table-striped table-bordered'>
+                <thead>
+                  <tr>
+                    <th><p>Best Case</p></th>
+                    <th><p>Avg. Case</p></th>
+                    <th><p>Worst Case</p></th>
+                    <th><p>Stable?</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <p class='question' name='sort-q9'>Click for answer.</p>
+                      <p class='answer' name='sort-q9'><code class='prettyprint'>O(n*log(n))</code>: faster than merge sort for mostly random input and many unique keys.</p>
+                    </td>
+                    <td>
+                      <p class='question' name='sort-q10'>Click for answer.</p>
+                      <p class='answer' name='sort-q10'><code class='prettyprint'>O(n*log(n))</code></p>
+                    </td>
+                    <td>
+                      <p class='question' name='sort-q11'>Click for answer.</p>
+                      <p class='answer' name='sort-q11'><code class='prettyprint'>O(n^2)</code>: few unique keys cause degradation to quadratic.</p>
+                    </td>
+                    <td>
+                      <p class='question' name='sort-q11-1'>Click for answer.</p>
+                      <p class='answer' name='sort-q11-1'><code class='prettyprint'>No!</code></p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              
+              <br/>
+              <h3>Heap Sort</h3>
+              <table class='table table-striped table-bordered'>
+                <thead>
+                  <tr>
+                    <th><p>Best Case</p></th>
+                    <th><p>Avg. Case</p></th>
+                    <th><p>Worst Case</p></th>
+                    <th><p>Stable?</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <p class='question' name='sort-q12'>Click for answer.</p>
+                      <p class='answer' name='sort-q12'><code class='prettyprint'>O(n*log(n))</code></p>
+                    </td>
+                    <td>
+                      <p class='question' name='sort-q13'>Click for answer.</p>
+                      <p class='answer' name='sort-q13'><code class='prettyprint'>O(n*log(n))</code></p>
+                    </td>
+                    <td>
+                      <p class='question' name='sort-q14'>Click for answer.</p>
+                      <p class='answer' name='sort-q14'><code class='prettyprint'>O(n*log(n))</code></p>
+                    </td>
+                    <td>
+                      <p class='question' name='sort-q14-1'>Click for answer.</p>
+                      <p class='answer' name='sort-q14-1'><code class='prettyprint'>No!</code></p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              
+              <br/>
+              <h2>Data Structures</h2>
+              <h3>Dynamic Arrays (STL vector)</h3>
+              <table class='table table-striped table-bordered'>
+                <thead>
+                  <tr>
+                    <th><p>Good for:</p></th>
+                    <th><p>Bad for:</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <p class='question' name='ds-q1'>Click for answer.</p>
+                      <p class='answer' name='ds-q1'><br/>- Random access O(1)<br/>- Indexing in sequence with ints</p>
+                    </td>
+                    <td>
+                      <p class='question' name='ds-q2'>Click for answer.</p>
+                      <p class='answer' name='ds-q2'><br/>- Arbitrary insertion O(n)<br/>- Arbitrary deletion O(n)<br/>- Non-sequential indexing</p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              
+              <br/>
+              <h3>Linked Lists (STL list)</h3>
+              <table class='table table-striped table-bordered'>
+                <thead>
+                  <tr>
+                    <th><p>Good for:</p></th>
+                    <th><p>Bad for:</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <p class='question' name='ds-q3'>Click for answer.</p>
+                      <p class='answer' name='ds-q3'><br/>- Arbitrary insertion O(1)<br/>- Arbitrary deletion O(1)<br/>- Compact</p>
+                    </td>
+                    <td>
+                      <p class='question' name='ds-q4'>Click for answer.</p>
+                      <p class='answer' name='ds-q4'><br/>- Arbitrary lookup O(n)</p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              
+              <br/>
+              <h3>Stacks (STL stack)</h3>
+              <table class='table table-striped table-bordered'>
+                <thead>
+                  <tr>
+                    <th><p>Good for:</p></th>
+                    <th><p>Bad for:</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <p class='question' name='ds-q5'>Click for answer.</p>
+                      <p class='answer' name='ds-q5'><br/>- Restricting data access (FILO)<br/>- Depth first traversal</p>
+                    </td>
+                    <td>
+                      <p class='question' name='ds-q6'>Click for answer.</p>
+                      <p class='answer' name='ds-q6'><br/>- Arbitrary lookup</p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              
+              <br/>
+              <h3>Queues (STL queue)</h3>
+              <table class='table table-striped table-bordered'>
+                <thead>
+                  <tr>
+                    <th><p>Good for:</p></th>
+                    <th><p>Bad for:</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <p class='question' name='ds-q7'>Click for answer.</p>
+                      <p class='answer' name='ds-q7'><br/>- Restricting data access (FIFO)<br/>- Breadth first traversal</p>
+                    </td>
+                    <td>
+                      <p class='question' name='ds-q8'>Click for answer.</p>
+                      <p class='answer' name='ds-q8'><br/>- Arbitrary lookup</p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              
+              <br/>
+              <h3>Binary Search Trees (STL set, map)</h3>
+              <table class='table table-striped table-bordered'>
+                <thead>
+                  <tr>
+                    <th><p>Good for:</p></th>
+                    <th><p>Bad for:</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <p class='question' name='ds-q9'>Click for answer.</p>
+                      <p class='answer' name='ds-q9'><br/>- Insertion O(log(n))<br/>- Balancing O(log(n))<br/>- Search O(log(n))<br/>- Sort (values already inside) O(n)<br/>- Compact</p>
+                    </td>
+                    <td>
+                      <p class='question' name='ds-q10'>Click for answer.</p>
+                      <p class='answer' name='ds-q10'><br/>- Linear insertion and search (if not balanced) can trend to O(n)</p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              
+              <br/>
+              <h3>Hash Tables (STL unordered_set)</h3>
+              <table class='table table-striped table-bordered'>
+                <thead>
+                  <tr>
+                    <th><p>Good for:</p></th>
+                    <th><p>Bad for:</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <p class='question' name='ds-q11'>Click for answer.</p>
+                      <p class='answer' name='ds-q11'><br/>- Insertion O(1)<br/>- Lookup O(1)<br/>- (General) many records, few updates</p>
+                    </td>
+                    <td>
+                      <p class='question' name='ds-q12'>Click for answer.</p>
+                      <p class='answer' name='ds-q12'><br/>- Not compact<br/>- Rehashing to keep low load factor expensive<br/>- Sorting not feasible</p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              
+              <br/>
+              <h3>Heaps</h3>
+              <table class='table table-striped table-bordered'>
+                <thead>
+                  <tr>
+                    <th><p>Good for:</p></th>
+                    <th><p>Bad for:</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <p class='question' name='ds-q13'>Click for answer.</p>
+                      <p class='answer' name='ds-q13'><br/>- Insertion O(log(n))<br/>- Get Max / Min O(1)<br/>- Compact</p>
+                    </td>
+                    <td>
+                      <p class='question' name='ds-q14'>Click for answer.</p>
+                      <p class='answer' name='ds-q14'><br/>- Arbitrary lookup</p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              
+            </div>
+            <hr/>
+            
+              
+            <br/>
+            <div id='theRightStuff' class='scrollspy-element' scrollspy-title='The Right Stuff'></div>
+            <h1>Having the Right Stuff</h1>
+            <div>
+              <p>The whole point about learning all of these different data structures and algorithms is so that we can choose the right candidate for the right job.</p>
+              <p>As we've seen, some data structures and algorithms are better suited for some scenarios than others... let's examine a couple of those scenarios below.</p>
+              <br/>
+              <p class='definition'>Solutions to most of the below can be found <a href='/~forns/classes/summer-2014/cs-32/week-7-classwork.html'>here, in this week's classwork section</a>.</p>
+              
+              <br/>
+              <h3>Data Structures</h3>
+              <br/>
+              <p><strong>Scenario 1:</strong>
+                In the year 3000 (following the fall of mankind to the great Forney Industries Fembot Malfunction), you (who have somehow survived until then) are tasked with
+                developing tracking chips to emplant in the loyal subjects of your dystopian hegemony (OK, so I might be writing a book on this). These tracking chips have very
+                little storage, and must be able to able to look for and possibly add a new contact for an individual in (at most) log(n) time.
+              </p>
+              <p class='example'>Can you suggest a data structure to be used for this purpose? Fun fact, the c++ STL collections made it to the year 3000, which of them might you employ?</p>
+              
+              <br/>
+              <p><strong>Scenario 2:</strong>
+                Before the collapse of society, Forney Industries developed TriageBot 4000, a robot designed to assess the severity of hospital patients' maladies and begin treatment on those
+                with the worst. It maintained a collection of waiting patients and was required to instantaneously determine who was most in need of the next available doctor.
+              </p>
+              <p class='example'>What data structure would best accomplish TriageBot 4000's collection of patients?</p>
+              
+              <br/>
+              <p><strong>Scenario 3:</strong>
+                One of the more popular inventions of Forney Industries was a geneticist family-tracking robot called the GENEy. It was employed by the Census bureau to make sure that your reported
+                family members were indeed related to you. Its job: canvas neighborhoods and organize People (capitalized to indicate it as a class) by their family name. It was required to track
+                last names of families and organize each family member sequentially (though not in any particular order within the family).
+              </p>
+              <p class='example'>What data structure would best track each family by their last name and organize each family's constituent People sequentially? Quick (at most O(log(n))) lookup and insertion of family members required.</p>
+              
+              <br/>
+              <p><strong>Scenario 4:</strong>
+                You are in charge of managing a prison for the political dissidents of the Forney Industries Empire. Prisoners are kept in isolation so as not to develop escape plans or further slander
+                the great Forney Industries name. The one time that Prisoners are not in isolation is during meal times, during which you want to track who speaks with whom, and how often. You must design
+                a system that can instantaneously find or place a Prisoner in one of your solitary-cells, and furthermore, in at most log(n) time determine how many times a Prisoner has spoken to another at mealtime.
+                As a side-note, your prison is always at max-capacity.
+              </p>
+              <p class='example'>Firstly, what container best stores the Prisoners in their cells? Secondly, what data structure internal to a Prisoner will best store their contacts? You need not worry
+                about sorting either the Prisoners nor their contacts, but your data structures should *waste no space.*</p>
+              
+              <br/>
+              <p><strong>Scenario 5:</strong>
+                One of the more mundane inventions that came from Forney Industries was the SparkleMaster 2k, an industrial dish-washing robot designed to take large groups of dishes, clean them, and then
+                file them into their proper kitchen locations. It received dishes in stacks on a conveyer-belt, and would need to clean each dish in a stack before moving to the next. After cleaning
+                a dish, it would assess the dish's size, shape, and color, and have the instantaneous knowledge of which cabinet to place it in. Within a cabinet, dishes must be sorted from largest (on
+                the bottom) to smallest (on the top).
+              </p>
+              <p class='example'>What data structure should you use to model the sequence of washing from the inbound conveyer-belt? What data structure should you use to model the plate storage? You may
+                need to use compound data-structures for each task.</p>
+              
+              
+              <br/>
+              <h3>Design Triage</h3>
+              <br/>
+              <p><strong>Scenario 1:</strong>
+                You are in charge of the M.E.R.I.C.A-S.T.A.R-S.P.A.N.G.L.E missile defense system (no one knows what the acronym stands for) that must assess which, out of some
+                collection of missiles, is the closest, and target that first. Your simulations suggest that as long as you're able to sort the missile distances for destruction
+                in n*log(n) time or less, the nation will be safe.
+              </p>
+              <p class='example'>Which sort that we've learned about would you *not* want to pick for this task? Why?</p>
+              
+              <br/>
+              <p><strong>Scenario 2:</strong>
+                You have been tasked with creating a new map app... a mapp... called Cartographer using the abstract data type of a graph with locations separated by distances. With your new graph
+                knowledge, you decide to represent your graph as an adjacency matrix with distances connecting two elements. Cartographer maps landmarks around the globe that are connected by roads.
+              </p>
+              <p class='example'>What is wrong with your design approach, and what can you instead use to be more efficient?</p>
+              
+              <br/>
+              <p><strong>Scenario 3:</strong>
+                You decided to get clever and reduce collisions in your hash table by making your buckets hash tables themselves (the second level of which has buckets that are lists)! Triumphantly,
+                you sit back in your chair for being so damn smart, but then run your code and discover that you have the same number of collisions that you had before!
+              </p>
+              <p class='example'>What did you forget to do that made this approach problematic?</p>
+              
+              <br/>
+              <p><strong>Scenario 4:</strong>
+                You are a programmer prone to frequent bouts of selective amnesia. Unfortunately, today you've forgotten how to use recursion... entirely. Just your luck, your boss comes in and asks
+                you to complete a task requiring a breadth-first traversal of some trees.
+              </p>
+              <p class='example'>What technique or data structure could you use to perform the breadth-first traversal using iteration instead of recursion?</p>
+              
+              <br/>
+              <p><strong>Scenario 5:</strong>
+                Inspired by the last project, you've decided to reinvent the spell checker in a very compact manner. You've shrewdly determined that it's possible to represent
+                words in a tree with insertion and lookup that is linear *for the size of the word,* which, if you're considering standard English, could be held beneath a constant that is the
+                size of the longest English word.
+              </p>
+              <p class='example'>Describe how you would structure the tree, and how you would use it to perform insertion and lookup that is linear in the size of the query word. In what ways is this
+                technique superior to the hashtable implementation?</p>
+              
+              
+              <br/>
+              <h3>General Practice</h3>
+              <br/>
+              <p class='example'>Generate the heap that would be formed with the insertion ordering: <code class='prettyprint'>5, 22, 19, 10, 10, 10, 3, 2</code>. Express your final answer in array form.</p>
+              
+              <br/>
+              <p class='example'>Insert nodes into a binary search tree in the order: <code class='prettyprint'>5, 10, 0, 15, 20</code>. Pretending this is now an unbalanced AVL tree, where would a rotation
+                occur and what would the new, balanced AVL tree look like?</p>
+              
+              <br/>
+              <p class='example'>Design a hash function that elicits the following behavior:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-10/hash-3.png' />
+              </div>
+              
+              <br/>
+              <h3>Coding Practice</h3>
+              <p>These examples, and other good ones if you're interested, were taken from <a href='http://www.careercup.com/'>CareerCup.com</a>.</p>
+              <br/>
+              <p class='example'>You are given a square grid of characters (we'll call it a maze), and a query string to find by an omni-directional path traversal in the maze. Your task is to count
+                the number of times that you could form the query string by starting anywhere in the maze and moving in any of the four cardinal directions: N, E, S, and W. For example:</p>
+              <br/>
+<pre class='prettyprint'>
+  const int GRID_SIZE = 4;
+  
+  int main () {
+      char maze[GRID_SIZE][GRID_SIZE] = {
+          { 'S', 'N', 'A', 'S' },
+          { 'B', 'A', 'K', 'E' },
+          { 'B', 'K', 'A', 'N' },
+          { 'S', 'E', 'B', 'S' }
+      };
+      
+      // Prints 5
+      cout &lt;&lt; countOccurences(maze, "SNAKES") &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p>To solve this, you'll complete the function signatures provided below, one of which counts all of the occurences in the grid, and the other that counts all of the occurences starting
+                at a given row and column:</p>
+<pre class='prettyprint'>
+  // Counts all occurences in the grid starting at row r
+  // and column c
+  int occurences (char maze[][GRID_SIZE], string query, int r, int c) {
+      // ... YOUR CODE HERE ...
+  }
+  
+  // Counts all occurences in the grid
+  int countOccurences (char maze[][GRID_SIZE], string query) {
+      // ... YOUR CODE HERE ...
+  }
+</pre>
+
+              <br/>
+              <p class='example'>You are given two sorted arrays of N &gt; 0 positive, unique (i.e., no repeats amongst either array) integers. Provide a function <code class='prettyprint'>median</code>, as
+                given by the skeleton below, that computes the median value of a hypothetical third, sorted array composed of the elements of the 2 input arrays combined in O(log(n)) time.</p>
+              <br/>
+<pre class='prettyprint'>
+  // Example usage
+  int main () {
+      {   // Prints 1.5
+          int a[] = {1};
+          int b[] = {2};
+          cout &lt;&lt; median(a, a+1, b, b+1) &lt;&lt; endl;
+      }
+      {   // Prints 2.5
+          int a[] = {2, 4};
+          int b[] = {1, 3};
+          cout &lt;&lt; median(a, a+2, b, b+2) &lt;&lt; endl;
+      }
+      {   // Prints 3.5
+          int a[] = {1, 3, 5};
+          int b[] = {2, 4, 6};
+          cout &lt;&lt; median(a, a+3, b, b+3) &lt;&lt; endl;
+      }
+  }
+</pre>
+              <br/>
+<pre class='prettyprint'>
+  // Function signature:
+  // b1 = beginning of array 1, e1 = end of array 1
+  // same for b2, e2 for second array
+  double median (int* b1, int* e1, int* b2, int* e2) {
+      // ... YOUR CODE HERE ... 
+  }
+</pre>
+            
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='final' class='scrollspy-element' scrollspy-title='Final'></div>
+            <h1>Final</h1>
+            <div>
+              <p class='definition'>Open notes! Open everything!</p>
+              <p>I suggest you bring along the following <a href='http://bigocheatsheet.com/' target='_blank'>computational complexity cheat sheet!</a></p>
+              <p>You're going to do fine, breathe deep, focus on your problems, and try not to look at the giant, ticking, countdown clock unless absolutely necessary.</p>
+              
+              <br/>
+              <h3>Goodbye but not Farewell</h3>
+              <p>A special thank you for everyone who attended discussions -- you've been a pleasure to teach. It was an honor and a privilege to get to know you all.</p>
+              <p>Don't be a stranger; you'll probably see me in the office hours room for awhile to come!</p>
+              <p class='definition'>Now... have you filled out your TA evals yet? :)</p>
+            </div>
+            <hr/>
+            
+              
+            <a class='btn btn-default pull-right hidden-print' href='javascript:window.print();'>
+              <span class='glyphicon glyphicon-print'></span>
+              &nbsp; PDF / Print
+            </a>
+            
+          </div>
+          <!-- END PRESENTATION CONTENT -->
+          
+          <!-- MATERIALS FROM CLASS: -->
+          
+          
+        </div>
+      </div>
+      <!-- END MAIN CONTENT -->
+      
+          
+    </div>
+    <!-- END WRAPPER -->
+    
+    <!-- BEGIN FOOTER -->
+    <div id="footer">
+      <div class="container">
+        <div class="col-md-12 text-center">
+          
+        </div>
+      </div>
+    </div>
+    <!-- END FOOTER -->
+    
+  </body>
+</html>
