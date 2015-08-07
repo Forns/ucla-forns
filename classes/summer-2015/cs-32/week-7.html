@@ -588,7 +588,7 @@
               </div>
               <br/>
               <p class='question' name='heapsort-q0'>What is the time complexity of heapsort?</p>
-              <p class='answer' name='heapsort-q0'>Heap sort has time complexity O(n*log(n)), like most other gold standard sorts, since "heapifying" take log(n) time, and is done n times, for each element.</p>
+              <p class='answer' name='heapsort-q0'>Heap sort has time complexity O(n*log(n)), like most other gold standard sorts, since "heapifying" takes log(n) time, and is done n times, for each element.</p>
               <br/>
               <p>Heapsort takes less space than merge sort, but isn't possible to perform in parallel, unlike merge sort.</p>
             </div>
@@ -688,7 +688,8 @@
               <h3>Graph Algorithms</h3>
               <p>There are a variety of graph algorithms for different applications, but for our introduction, let's just examine 1 or 2:</p>
               <p class='definition'>
-                A <strong>depth-first traversal</strong> of a graph will visit every descendant of a given node, exploring the entirety of one outbound edge's subgraph before backtracking to explore another.
+                A <strong>depth-first traversal</strong> of a graph, starting at some node N, will visit descendants of N along a straight line of child-succession until (a) we visit a child we've already
+                visited, or (b) we reach a leaf, at which point we backtrack to the nearest previously-visited ancestor with more children to visit.
               </p>
               <p>A depth first traversal that remembers the nodes that it's already visited will not repeat them.</p>
               <p>Depth first traversals are not necessarily unique!</p>
@@ -710,23 +711,121 @@
               </ul>
               
               <br/>
-              <p class='indent-1'>A <strong>topological sort</strong> provides an ordering of nodes such that no node appears in the sequence before any of its parents.</p>
+              <p class='definition'>A <strong>breadth-first traversal</strong> provides an ordering of nodes such that no node appears in the sequence before any of its parents. In other words, starting at
+                Node N in the graph, a breadth-first traversal will then visit all children of N before visiting any grandchildren of N.</p>
               <p>This is useful for tracing dependencies where we have to resolve the parents before the children!</p>
-              <p class='example'>What are some viable topological sorts of the following graph?</p>
+              <p class='example'>What are some viable breadth-first traversals of the following graph?</p>
               <div class='text-center fit-pres'>
                 <img src='../../../assets/images/winter-2014/cs-32/week-10/graph-3.png' />
               </div>
+              <p>A viable breadth-first traversal: 1, 2, 16, 8, 32, 4, 64</p>
+              <p class='question' name='bfs-q0'>Why is the following ordering *not* a legal breadth-first traversal of the above tree: 1, 2, 16, 4, 8, 32, 64</p>
+              <p class='answer' name='bfs-q0'>Because 4 is visited before 8, its parent.</p>
               
               <br/>
-              <p>OK cool, but how do we store these graphs?</p>
+              <h3>Representing Graphs</h3>
+              <p>OK cool, but how do we store these graphs? What data structures can we use to represent them?</p>
               <p class='definition'>An <strong>adjacency matrix</strong> is a 2D array with a row / column for every node, and an indication at index [i][j] of whether node i is connected to node j.</p>
+              <br/>
               <p>Usually we indicate adjacencies with the number 1 to represent an edge going from node i to node j, and a 0 if there is no edge between them.</p>
-              <p>Problem: this matrix can have a lot of 0s and waste space.</p>
+              <p class='example'>For example, an adjacency matrix denoting the graph (where each matrix index i corresponds to the node with value 2^i; so, for example, [0][1] corresponds to
+                the edge from the node with value 1 to the node with value 2) above might look like:</p>
+<pre>
+       1  2  4  8  16 32 64
+  1   [0, 1, 0, 1, 0, 0, 0]
+  2   [0, 0, 1, 0, 0, 0, 0]
+  4   [0, 0, 0, 0, 0, 0, 1]
+  8   [0, 0, 1, 0, 0, 0, 1]
+  16  [0, 0, 0, 1, 0, 1, 0]
+  32  [0, 0, 0, 0, 0, 0, 0]
+  64  [0, 0, 0, 0, 0, 0, 0]
+</pre>
+              <br/>
+              <p>Problem: this matrix can have a lot of 0s and waste space when there aren't many edges in our graph.</p>
+              <br/>
+              <p class='definition'>An <strong>adjacency list</strong> stores each edge connection as a vector of lists of ints, where each index contains the ints representing the nodes</p>
+              <p class='example'>For example, an adjacency list for the above graph might look like (ignoring the index-to-node-value gymnastics we did above with the adjacency matrix):</p>
+<pre>
+  1  [] -> 2 -> 16
+  2  [] -> 4
+  4  [] -> 64
+  8  [] -> 4 -> 64
+  16 [] -> 8 -> 32
+  32 []
+  64 []
+</pre>
+              <br/>
+              <p>Problem: this adjacency list can be wasteful when our graph has a lot of edges.</p>
+              <p class='definition'>We are best off using adjacency matrices when we have a lot of edges between nodes, but not a lot of nodes... and best off using adjacency lists when we have a 
+                lot of nodes but not a lot of edges.</p>
             </div>
             <hr/>
-            
-            
             <br/>
+            
+            
+            <div id='graphapp' class='scrollspy-element' scrollspy-title='Graph Applications'></div>
+            <h1>Graph Applications</h1>
+            <div>
+              <p>Graphs are very often used to represent geographical data and distances between points.</p>
+              <p>For this reason, one of the most ubiquitous graph algorithms helps us compute efficient distances between nodes in a graph.</p>
+              <p class='definition'>Given a graph with nodes = geographical locations, and edges connecting adjacent locations with some distances between them, Djikstra's algorithm tells us the least
+                distance we would have to travel from a given node S to any other node in the graph.</p>
+              <br/>
+              <p class='example'>The following example graph lists locations A through E that are separated by distances indicated along the edges.</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/summer-2015/cs-32/week-7/djikstra-1.PNG' />
+              </div>
+              <p class='question' name='djik-1'>What is the shorted distance from A to E? What path does it take?</p>
+              <p class='answer' name='djik-1'>A -> C -> E, with a total cost of 5.</p>
+              <br/>
+              <p>So, we'd like to have a way of automatically computing the shortest distance from a node to every other node in the network. Enter Djikstra's algorithm!</p>
+              <p>Djikstra's algorithm operates by maintaining two vectors:</p>
+              <ul class='indent-1'>
+                <li><p><strong>dist:</strong> for each node, tracks the optimal distance from the start node. Each element in this vector starts out with value infinity, except for the start node, which
+                  starts out with value 0.</p></li>
+                <li><p><strong>done:</strong> for each node, tracks whether or not we have already computed the optimal travel distance from it to its neighbors. Each element in this vector starts out
+                  as false, except for the start node, which starts out as true.</p></li>
+              </ul>
+<pre>
+  function Djikstra(graph, start):
+      initialize dist, done (as stated above)
+      set node u = start
+      while done still has 1 element false:
+          u = min distance, not done node from start
+          done[u] = true
+          for each node v in unvisited neighbors(u)
+              d = distance(u, v)
+              if d + distance(s, u) &lt; dist[v]
+                  dist[v] = distance(s, u) + d
+</pre>
+              <br/>
+              <p>Let's trace this algorithm through our example now.</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/summer-2015/cs-32/week-7/djikstra-s1.PNG' />
+              </div>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/summer-2015/cs-32/week-7/djikstra-s2.PNG' />
+              </div>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/summer-2015/cs-32/week-7/djikstra-s3.PNG' />
+              </div>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/summer-2015/cs-32/week-7/djikstra-s4.PNG' />
+              </div>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/summer-2015/cs-32/week-7/djikstra-s5.PNG' />
+              </div>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/summer-2015/cs-32/week-7/djikstra-s6.PNG' />
+              </div>
+              <p>There are many variants of Djikstra's algorithm, some suited for different purposes than a general shortest-distance computer, but the gist is the same of each: a procedural way of
+                finding shortest distances between nodes in a graph.</p>
+              <p>And that's Djiksta's algorithm!</p>
+            </div>
+            <hr/>
+            <br/>
+              
+              
             <div id='massiveReview' class='scrollspy-element' scrollspy-title='Massive Review'></div>
             <h1>Massive Review</h1>
             <div>
@@ -1072,14 +1171,14 @@
               <p>The whole point about learning all of these different data structures and algorithms is so that we can choose the right candidate for the right job.</p>
               <p>As we've seen, some data structures and algorithms are better suited for some scenarios than others... let's examine a couple of those scenarios below.</p>
               <br/>
-              <p class='definition'>Solutions to most of the below can be found <a href='/~forns/classes/summer-2014/cs-32/week-7-classwork.html'>here, in this week's classwork section</a>.</p>
+              <p class='definition'>Solutions to most of the below can be found <a href='/~forns/classes/summer-2015/cs-32/week-7-classwork.html'>here, in this week's classwork section</a>.</p>
               
               <br/>
               <h3>Data Structures</h3>
               <br/>
               <p><strong>Scenario 1:</strong>
                 In the year 3000 (following the fall of mankind to the great Forney Industries Fembot Malfunction), you (who have somehow survived until then) are tasked with
-                developing tracking chips to emplant in the loyal subjects of your dystopian hegemony (OK, so I might be writing a book on this). These tracking chips have very
+                developing tracking chips to implant in the loyal subjects of your dystopian hegemony (OK, so I might be writing a book on this). These tracking chips have very
                 little storage, and must be able to able to look for and possibly add a new contact for an individual in (at most) log(n) time.
               </p>
               <p class='example'>Can you suggest a data structure to be used for this purpose? Fun fact, the c++ STL collections made it to the year 3000, which of them might you employ?</p>
