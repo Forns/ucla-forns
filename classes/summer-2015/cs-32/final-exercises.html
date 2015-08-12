@@ -668,7 +668,8 @@
               
               
               <br/>
-              <p class='example'>What is the time complexity of the following function in terms of the number of nodes in s1 (call that number S) and the number in s2 (call that number R)?</p>
+              <p class='example'>What is the time complexity of the following function in terms of the number of nodes in s1 (call that number S) and the number in s2 (call that number R), assuming that 
+                s1 is a subset of s2?</p>
 <pre class='prettyprint'>
   void funkyFunc (set&lt;int&gt; s1, set&lt;int&gt; s2) {
       set&lt;int&gt;::iterator sit = s1.begin();
@@ -687,16 +688,19 @@
       set&lt;int&gt;::iterator sit = s1.begin();
       // [!] Goes through all S elements of s1
       while (sit != s1.end()) {
-          // [!] Find operation is binary search so log(R)
+          // [!] Find operation is binary search so log(R) (but will grow
+          // as we insert, and trend toward log(R + S) see below)
           if (s2.find(*sit) != s2.end()) {
-              // [!] Insertion into BST take log(R)
+              // [!] Insertion into BST takes log(R), but by assumption
+              // s1 is a subset of s2, so we must also take into account the growth
+              // of s2 from insertion, giving us log(R + S)
               s2.insert(*sit);
           }
           sit++;
       }
       // [!] Therefore, outer loop runs S times and with every loop
-      // we're performing O(log(R)), giving us total complexity:
-      // O(S*log(R))
+      // we're performing O(log(R + S)), giving us total complexity:
+      // O(S*log(R + S))
   }
 </pre>
               </div>
@@ -805,8 +809,8 @@
       ~Trickz () {
           insertion = head;
           Node* comp1 = head;
-          Node* comp2 = head;
           while (comp1 != nullptr) {
+              Node* comp2 = head;
               while (comp2 != nullptr) {
                   if (comp1-&gt;data == comp2-&gt;data) {
                       cout &lt;&lt; comp1-&gt;data &lt;&lt; endl;
