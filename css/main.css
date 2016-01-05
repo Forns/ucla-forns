@@ -19,6 +19,10 @@ html, body {
   font-family: 'Lato', 'Arial', sans-serif;
 }
 
+i, em {
+  font-style: italic;
+}
+
 pre, code {
   font-family: monospace;
 }
