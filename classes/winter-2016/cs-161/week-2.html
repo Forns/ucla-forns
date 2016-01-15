@@ -222,7 +222,7 @@
           ((null frontier) nil)
           ; Otherwise, more nodes on frontier, so keep
           ; expanding them
-          (t (expand-node frontier))
+          (t (EXPAND-NODE frontier))
       )
   )
   
@@ -454,15 +454,16 @@
               <p class='definition'>A <strong>heuristic</strong> is essentially an estimate of the cost that we might encounter expanding a search tree along a certain path.</p>
               <br/>
               <p>The goal of heuristic search is to look at every node along the frontier, and then expand the one that it thinks will lead to an optimal goal.</p>
-              <p>
-                To do this, we'll construct an evaluation function, <em>f(n)</em> that takes as input a node in our search tree (a state) and computes an estimated cost of reaching a goal state
-                <em>IF we decide to expand that node and follow a path from it.</em>
+              <p class='toolkit'>
+                To do this, we'll construct an evaluation function, <i>f(n)</i> that takes as input a node <i>n</i> in our search tree (a state) and computes an estimated cost of reaching a goal state
+                <i>IF we decide to expand that node and follow a path from it.</i>
               </p>
+              <br/>
+              <p>There are different strategies that we might adopt in constructing our evaluation function <i>f(n)</i>.</p>
               <p class='definition'><strong>Greedy / Best-first</strong> search is a heuristic search strategy that, instead of having a fixed exploration order, will choose an evaluation function that 
                 *only* attempts to minimize cost to a goal.
               </p>
-              <br/>
-              <p>In this way, we can think of greedy search as ONLY using a heuristic, h(n), where h(n) = the estimated cost of a goal state along the path of node n.</p>
+              <p class='toolkit'>In this way, we can think of greedy search as ONLY using a heuristic, h(n), where h(n) = the estimated cost of a goal state along the path of node n.</p>
               <p>In other words, for greedy search, our evaluation function f(n) = h(n)</p>
               <p class='question' name='heuristic-q0'>What would be a good heuristic choice for our maze pathfinding example?</p>
               <p class='answer' name='heuristic-q0'>Let's start by considering the <strong>Manhattan distance</strong> between a node and the closest goal.</p>
@@ -470,6 +471,7 @@
               <p>So, we might say:</p>
 <pre class='prettyprint'>
   Mazefinding Manhattan Distance Heuristic:
+  
   f(n) = h(n)
        = argmin( abs(nX - iGoalX) + abs(nY - iGoalY) )
             i
@@ -497,8 +499,8 @@
               <h3>A* Search</h3>
               <p>Greedy may have minimized our heuristic function but it didn't succeed with minimizing the *total* cost.</p>
               <p class='definition'><strong>A* search</strong> defines its evaluation function as a sum of a heuristic function and a &quot;history&quot; function, g(n).<br/>f(n) = g(n) + h(n)</p>
+              <p class='toolkit'>The history function <i>g(n)</i> keeps a total of the *actual* cost we've encountered along our path so far, and then adds it to our heuristic cost for what's to come.</p>
               <br/>
-              <p>The history function g(n) keeps a total of the *actual* cost we've encountered along our path so far, and then adds it to our heuristic cost for what's to come.</p>
               <p>This means that we now choose to expand the node on the frontier with the smallest cost that we've already encountered, and also the smallest cost of what's yet to come!</p>
               <p>So, if we maintain our Manhattan distance heuristic from before, we see that A* now successfully navigates our maze into the optimum goal.</p>
               <div class='text-center fit-pres'>
@@ -724,10 +726,10 @@
               <br/>
               <h3>Tips &amp; Warnings</h3>
               <ul class='indent-1'>
-                <li><p>On more complicated functions like UNGAP, you may have helper functions that call the main function, which call the helper function, etc. until a terminating
+                <li><p>On more complicated functions like EXPAND, you may have helper functions that call the main function, which call the helper function, etc. until a terminating
                   condition is met in both.</p></li>
-                <li><p>Beware of bound gaps along the path on PATHC and functions like it!</p></li>
-                <li><p>Beware of adding a duplicate slot on the insert functions!</p></li>
+                <li><p>Beware of bound gaps along the path on GET-NESTED-SF and EQUAL-SF!</p></li>
+                <li><p>Beware of adding a duplicate slot on the AMMEND function!</p></li>
               </ul>
             </div>
             <hr/>
