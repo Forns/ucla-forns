@@ -307,25 +307,34 @@
   &Theta; = { var1/object1, var2/object2, ... }
   ; Which says, "var1 is unified to object1, var2 is unified to object2, ..."
   
+</pre>
+<pre class='prettyprint'>
   ; Example 1:
   &forall;x person(x) &rArr; mortal(x); person(Socrates)
   &Theta; = { x/Socrates }
   
+</pre>
+<pre class='prettyprint'>
   ; Example 2:
   &forall;x, y parent(x, motherOf(y)) &rArr; grandparent(x, y); parent(Carter, z)
   ; "For all x and y, if x is the parent of the mother of y, then x is the grandparent of y."
   ; "Also, Carter is the parent of some child z."
   &Theta; = { x/Carter, z/motherOf(Stewie) }
   
+</pre>
+<pre class='prettyprint'>
   ; Example 3:
   Knows(John, x); Knows(y, Bill)
   &Theta; = { x/Bill, y/John }
   
+</pre>
+<pre class='prettyprint'>
   ; Example 4:
   Knows(John, x); Knows(x, Bill)
   &Theta; = CANNOT UNIFY
   ; (x would need to be 2 different values to work)
   ; Solution: give one of the x's a unique name (see below)
+  
 </pre>
               <br/>
               <p>That said, the rules for unifying universally quantified sentences are different than unifying those of existentially quantified sentences.</p>
@@ -359,6 +368,8 @@
                 sentence can be discarded. For example, we no longer need &exist;x Kill(x, Victim) once we have added the sentence Kill(Murderer, Victim).
               </blockquote>
               <br/>
+              <p class='definition'>If an existentially quantified variable (e.g. y) is nested in the context of a universal quantifier (e.g., x), we Skolemize y by adding a
+              	Skolem function F(x), which is a unique function grounding for y that still illustrates that it depends on x. Otherwise, we use a Skolem constant as defined above.</p>
               <p>An example Skolemization might use the functional notation such that:</p>
 <pre class='prettyprint'>
   ; Example 1:
@@ -478,7 +489,9 @@
      4. Evil(John) [1, 2, 3; &Theta; = { x/John }]
   ; Hidden propositionalization using unifier &Theta;:
   ; (King(John) &and; Greedy(John)) &rArr; Evil(John)
-     
+
+</pre>
+<pre class='prettyprint'>
   ; Example KB 2
   KB =
      1. &forall;x (King(x) &and; Greedy(x)) &rArr; Evil(x)
@@ -490,25 +503,13 @@
   ; Hidden propositionalization using unifier &Theta;:
   ; Greedy(John)
   ; (King(John) &and; Greedy(John)) &rArr; Evil(John)
+  
 </pre>
               <br/>
-              <p>
+              <p class='definition'>
                 We say that Generalized Modus Ponens is <strong>lifted</strong> because it takes Modus Ponens (like in Propositional Logic), which consists solely of ground terms, and &quot;lifts&quot;
                 it up to FOL whereby we need only make unifications where necessary for inference.
               </p>
-              <br/>
-              <p>So far, we haven't touched upon the format of our FOL KB clauses, but ideally, for resolution, we'd like to keep our KB in conjunctive normal form.</p>
-              <p>As such, it pays to know how to turn any arbitrary sentence into one that can be expressed in CNF.</p>
-              <p>For FOL, this is a bit trickier than the few logical operator manipulations we saw for PL, and consists of the steps on page 346 of your text (which you should review!)</p>
-              
-              <br/>
-              <p>The general steps are:</p>
-              <ol class='indent-1'>
-                <li><p>Remove implications (get sentences with only &not;, &and;, and &or;)</p></li>
-                <li><p>Push negations in using DeMorgan's law and quantifier duality</p></li>
-                <li><p>Remove quantifiers, remembering to use Skolemization where appropriate:<br/>&forall;x (&exist;y foo(y) &or; bar(x, y)) &rarr; &forall;x foo(F(X)) &or; bar(x, F(x))</p></li>
-                <li><p>Drop universal quantifiers</p></li>
-              </ol>
               
               <br/>
               <div class='definition'><p><strong>FOL Resolution</strong> is only different from PL resolution such that we unify the resultant clause added to the KB:</p>
@@ -541,7 +542,23 @@
                 FOL resolution is sound (guarantees any derived clause is entailed by KB) and refutation complete (if a contradiction is to exist in the KB, it will find it), though semi-decidable.
               </p>
               <br/>
-              <p>We'll perform the same steps that we used for PL inference proofs: proof by contradiction / refutation!</p>
+              <p>So far, we haven't touched upon the format of our FOL KB clauses, but ideally, for resolution, we'd like to keep our KB in conjunctive normal form.</p>
+              <p>As such, it pays to know how to turn any arbitrary sentence into one that can be expressed in CNF.</p>
+              <p>For FOL, this is a bit trickier than the few logical operator manipulations we saw for PL, and consists of the steps on page 346 of your text (which you should review!)</p>
+              
+              <br/>
+              <p class='toolkit'>Steps for Converting FoL KB into CNF</p>
+              <p>For each FoL sentence currently in the KB:</p>
+              <ol class='indent-1'>
+                <li><p>Remove implications (get sentences with only &not;, &and;, and &or;)</p></li>
+                <li><p>Push negations in using DeMorgan's law and quantifier duality</p></li>
+                <li><p>Remove quantifiers, remembering to use Skolemization where appropriate:<br/>&forall;x (&exist;y foo(y) &or; bar(x, y)) &rarr; &forall;x foo(F(X)) &or; bar(x, F(x))</p></li>
+                <li><p>Drop universal quantifiers</p></li>
+              </ol>
+              <br/>
+              <p>Now, to perform inference, we'll execute the same steps that we used for PL inference proofs: proof by contradiction / refutation!</p>
+              <p>The above steps tell us how to accomplish task (1) below.</p>
+              <p class='toolkit'>Steps for Performing FoL Proof by Refutation</p>
               <ol class='indent-1'>
                 <li><p>Convert KB to CNF if it isn't already.</p></li>
                 <li><p>Negate the query sentence, &alpha;, and add that negation to the KB.</p></li>
@@ -814,7 +831,8 @@
      8. Enemy(Nono, America)
 </pre>
               <br/>
-              <p>Now, since our KB consists only of definite clauses, forward chaining does the following:</p>
+              <p>Now, since our KB consists only of definite clauses, forward chaining exploits this format through the following steps.</p>
+              <p class='toolkit'>Steps of Forward Chaining</p>
               <ol class='indent-1'>
                 <li><p>Starting with your facts, unify over any rule that you can match completely and add those unified ground terms to your forward-chaining &quot;proof tree&quot;</p></li>
                 <li><p>Once you've unified all the rules you can using just your starting facts, take the new ground terms you found in step 1, add them to your facts, and try again.</p></li>
@@ -888,12 +906,12 @@
                 <img src='../../../assets/images/spring-2014/cs-161/week-5/fol-1.PNG' />
               </div>
               <br/>
-              <p>Above, the depth of our <strong>proof tree</strong> corresponds to the iteration level in our algorithm's steps, with depth = 1 at the top and nodes processed left-to-right.</p>
+              <p class='definition'>Above, the depth of our <strong>proof tree</strong> corresponds to the iteration level in our algorithm's steps, with depth = 1 at the top and nodes processed left-to-right.</p>
               <p>Notice that at depth d, our gathered facts include all facts at depth &lt; d</p>
-              <p>Arcs (as poorly illustrated as they may be) illustrate AND relationships between bindings.</p>
+              <p class='toolkit'>Arcs (as poorly illustrated as they may be) illustrate AND relationships between bindings.</p>
               <hr/>
               <p>Now, let's try to do the same problem over using backward chaining!</p>
-              <p>The steps of backward chaining are as follows:</p>
+              <p class='toolkit'>Steps of Backward Chaining:</p>
               <ol class='indent-1'>
                 <li><p>Start with JUST our query as a goal.</p></li>
                 <li><p>Now, find rules in our KB whose implication's RHS contain our goals' relations.</p></li>

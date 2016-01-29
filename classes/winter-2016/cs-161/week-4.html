@@ -344,6 +344,8 @@
   ; Step 1: Queue up those arcs!
   Q = { (W, X), (X, W), (W, Y), (Y, W), (X, Y), (Y, X) }
   
+  </pre>
+  <pre class='prettyprint'>
   ; ----------------------------------------------------
   ; While Q is not empty...
   ; Step 2: Choose an arc from the queue
@@ -355,6 +357,8 @@
   
   ; Arc is consistent! Remove this arc from queue!
   
+  </pre>
+  <pre class='prettyprint'>
   ; ----------------------------------------------------
   Q = { (X, W), (W, Y), (Y, W), (X, Y), (Y, X) }
   
@@ -365,6 +369,8 @@
   
   ; Arc is consistent! Remove this arc from queue!
   
+  </pre>
+  <pre class='prettyprint'>
   ; ----------------------------------------------------
   Q = { (W, Y), (Y, W), (X, Y), (Y, X) }
   
@@ -377,6 +383,8 @@
   ; and add neighbors of W (X, W) to queue
   DomainW = {0, 1}
   
+  </pre>
+  <pre class='prettyprint'>
   ; ----------------------------------------------------
   Q = { (Y, W), (X, Y), (Y, X), (X, W) }
   
@@ -387,6 +395,8 @@
   
   ; Arc is consistent! Remove this arc from queue!
   
+  </pre>
+  <pre class='prettyprint'>
   ; ----------------------------------------------------
   Q = { (X, Y), (Y, X), (X, W) }
   
@@ -399,6 +409,8 @@
   ; and add neighbors of X (W, X) to queue
   DomainX = {0, 1}
   
+  </pre>
+  <pre class='prettyprint'>
   ; ----------------------------------------------------
   Q = { (Y, X), (X, W), (W, X) }
   
@@ -411,6 +423,8 @@
   ; and add neighbors of Y (W, Y) to queue
   DomainY = {1, 2}
   
+  </pre>
+  <pre class='prettyprint'>
   ; ----------------------------------------------------
   Q = { (X, W), (W, X), (W, Y) }
   
@@ -421,6 +435,8 @@
   
   ; Arc is consistent! Remove this arc from queue!
   
+  </pre>
+  <pre class='prettyprint'>
   ; ----------------------------------------------------
   Q = { (W, X), (W, Y) }
   
@@ -431,6 +447,8 @@
   
   ; Arc is consistent! Remove this arc from queue!
   
+  </pre>
+  <pre class='prettyprint'>
   ; ----------------------------------------------------
   Q = { (W, Y) }
   
@@ -441,6 +459,8 @@
   
   ; Arc is consistent! Remove this arc from queue!
   
+  </pre>
+  <pre class='prettyprint'>
   ; ----------------------------------------------------
   Q = { }
   
@@ -536,8 +556,8 @@
                 <li><p>Using this knowledge, humans rationalize and perform <strong>inference</strong> from the facts that they know and extrapolate unto the facts that they don't.</p></li>
               </ul>
               <br/>
-              <p>For example, if I told you that &quot;If it is raining, then the pavement will be wet. Oh, by the way, it's raining.&quot; What might you infer about the pavement?</p>
-              <p>Hopefully, you infer that the pavement is wet! (and that I'm bad at concisely relaying information)</p>
+              <p class='question' name='inf-q0'>For example, if I told you that &quot;If it is raining, then the pavement will be wet. Oh, by the way, it's raining.&quot; What might you infer about the pavement?</p>
+              <p class='answer' name='inf-q0'>Hopefully, you infer that the pavement is wet! (and that I'm bad at concisely relaying information)</p>
               <p>This is a small gap that humans bridge very easily using reasoning about what they know and what they can infer from what they know.</p>
               <p>Computers, however, need a lot of help with this task; to start our quest to implement a reasoning engine, we'll talk about some definitions:</p>
               <p class='definition'>An intelligent system's <strong>knowledge base (KB)</strong> consists of a set of logical <strong>sentences</strong> that represent some assertions of the world.</p>
@@ -1177,7 +1197,7 @@
               <ul class='indent-1'>
                 <li><p>No, I don't know what's going to be on it -- you should certainly read your book!</p></li>
                 <li><p>That said, I have some *best guesses* for what is likely about 80% of the material. I've given you some relevant practice problems in my 
-                  <a href='/~forns/classes/winter-2015/cs-161/midterm-practice.html'>practice midterm located here</a>!</p></li>
+                  <a href='/~forns/classes/winter-2016/cs-161/midterm-practice.html'>practice midterm located here</a>!</p></li>
                 <li><p>In the event that First Order Logic is on the exam (which will be the topic of next week's discussion), I'll uploaded my lecture notes for it in advance of the exam.</p></li>
               </ul>
             </div>
