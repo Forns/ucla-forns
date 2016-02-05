@@ -142,7 +142,7 @@
               <br/>
               <h3>First Order Logic Syntax</h3>
               <p>Just as propositional logic had syntax and semantics, so does First Order Logic build upon them.</p>
-              <p class='definition'><strong>Objects</strong> are simply nouns and noun phrases that refer to... well... pretty much any noun our KB wants to talk about.</p>
+              <p class='definition'><strong>Objects</strong> (AKA constants) are simply nouns and noun phrases that refer to... well... pretty much any noun our KB wants to talk about.</p>
 <pre class='prettyprint'>
   ; Object Examples:
   People
@@ -155,16 +155,16 @@
 </pre>
               <br/>
               <p class='definition'><strong>Relations</strong> are simply verbs and verb phrases that establish descriptions of (unary relations) or relationships between (n-ary relations) objects.</p>
+			  <p class='definition'><strong>Predicates</strong> are relations that map their arguments to Boolean values.</p>
 <pre class='prettyprint'>
-  ; Unary Relations in format:
+  ; Unary Predicates in format:
   ; relation (object)
-  ; AKA predicates / properties
   primeNumber(3)
   red(balloon)
   utopia(The Republic of Forns)
   usesOverheadProjector(Dyer)
   
-  ; Binary Relations in format:
+  ; Binary Predicates in format:
   ; relation(obj1, obj2)
   greaterThan(5, 3)
   teaches(Andrew, CS161)
@@ -173,7 +173,7 @@
               <br/>
               <p>Relations like the above are called <strong>atomic sentences</strong> because they express a single truth in our KB.</p>
               <p class='definition'>We hold that atomic sentences in the KB are <strong>true</strong> and are used as axioms for the objects on which they establish relationships.</p>
-              <p class='definition'>Some relations have a unique output for a given input, and are termed <strong>functions</strong></p>
+              <p class='definition'><strong>Functions</strong> are relations that uniquely map their arguments to object outputs.</p>
 <pre class='prettyprint'>
   ; Functions are relations that map
   ; inputs to unique output
@@ -183,6 +183,7 @@
 </pre>
               <br/>
               <p class='definition'><strong>Connectives</strong> are the same logical operators we used in propositional logic and are used to create FOL sentences.</p>
+              <p class='definition'><strong>Complex Sentences</strong> are any FOL sentence that uses logical connectives or requires a function evaluation to ground an object.</p>
 <pre class='prettyprint'>
   ; Connectives (&and;, &or;, &not;, &rArr;)
   &not;hasSiblings(Andrew)
@@ -191,12 +192,7 @@
   isRoyal(Queen Elizabeth) &or; &not;isRoyal(Lorde)
 </pre>
               <br/>
-              <p class='definition'><strong>Complex Sentences</strong> are any FOL sentence that uses logical connectives or requires a function evaluation to ground an object.</p>
-<pre class='prettyprint'>
-  ; Complex Sentences
-  (any of the above examples)
-  &not;adjacentTo(49thState(USA), Russia)
-</pre>
+              
               <p>But now comes the truly expressive power of First Order Logic: the capacity to have relations with variable placeholders for objects.</p>
               <p class='definition'><strong>Variables</strong> are placeholders for objects in a given relation that can be bound during inference. They are used to establish general facts and rules.</p>
               <br/>
@@ -295,8 +291,14 @@
 </pre>
               <br/>
               <p>...but if we want to express that Andrew and Bob are friends, we need a way to <strong>ground</strong> our values for x and y.</p>
-              <div class='definition'><p><strong>Unification</strong> is the process of binding variables to values such that for two sentences &alpha; and &beta; and unifier &Theta;, we have:</p><br/>
-                <h3>&alpha;&Theta; = &beta;&Theta;</h3>
+              <p class='definition'><strong>Grounding</strong> variables means replacing them with satisfying objects. A variable can be ground whenever we find a relation with objects matching
+              	the format of relations with variables.</p>
+              <p class='definition'>A <strong>ground term</strong> is a relation without any variables.</p>
+              <div class='definition'><p><strong>Unification</strong> is the process of binding variables to objects that match their relation. In other words, unification tells us how to make
+                two sentences look equivalent, such that sentences &alpha; and &beta; and unifier &Theta;, we have:</p><br/>
+                <div class='text-center'>
+                	<h3>&alpha;&Theta; = &beta;&Theta;</h3>
+                </div>
               </div>
               <br/>
               <p>Unifying variables to values allows us to perform inference on ground terms and take our general knowledge rules and apply them to our intelligent agent's environment.</p>
@@ -305,7 +307,7 @@
 <pre class='prettyprint'>
   ; Unification syntax:
   &Theta; = { var1/object1, var2/object2, ... }
-  ; Which says, "var1 is unified to object1, var2 is unified to object2, ..."
+  ; Which says, "var1 shall be bound to object1, var2 shall be bound to object2, ..."
   
 </pre>
 <pre class='prettyprint'>
@@ -316,24 +318,27 @@
 </pre>
 <pre class='prettyprint'>
   ; Example 2:
-  &forall;x, y parent(x, motherOf(y)) &rArr; grandparent(x, y); parent(Carter, z)
-  ; "For all x and y, if x is the parent of the mother of y, then x is the grandparent of y."
-  ; "Also, Carter is the parent of some child z."
-  &Theta; = { x/Carter, z/motherOf(Stewie) }
-  
-</pre>
-<pre class='prettyprint'>
-  ; Example 3:
   Knows(John, x); Knows(y, Bill)
   &Theta; = { x/Bill, y/John }
   
 </pre>
+<p class='debug'>Unification can sometimes leave variables in the two sentences being unified.</p>
+<pre class='prettyprint'>
+  ; Example 3:
+  &forall;x, y parent(x, motherOf(y)) &rArr; grandparent(x, y); parent(Carter, z)
+  ; "For all x and y, if x is the parent of the mother of y, then x is the grandparent of y."
+  ; "Also, Carter is the parent of some child z."
+  &Theta; = { x/Carter, z/motherOf(y) }
+  
+</pre>
+<p class='debug'>Unification can fail when it is impossible to find a variable binding that makes the two sentences look equivalent.</p>
 <pre class='prettyprint'>
   ; Example 4:
   Knows(John, x); Knows(x, Bill)
   &Theta; = CANNOT UNIFY
-  ; (x would need to be 2 different values to work)
-  ; Solution: give one of the x's a unique name (see below)
+  ; (x would need to be 2 different values to make these
+  ; sentences look equivalent, but a variable can only
+  ; be bound to 1 object)
   
 </pre>
               <br/>
@@ -342,7 +347,7 @@
               <p>So, let's start by looking at universal instantiation and then compare it to existential.</p>
               <div class='definition'><p><strong>Universal Instantiation</strong> says we can infer any sentence obtained by substituting a ground term for a variable in the sentence, expressed:</p>
                 <div class='row'>
-                  <div class='col-md-3 text-center'>
+                  <div class='text-center' style="margin: 0 auto; width: 50%;">
                     <h3>&forall;v &alpha;</h3>
                     <hr>
                     <h3>SUBST( { v/g }, &alpha; )</h3>
@@ -400,7 +405,7 @@
               <p>As such, our new unification rule for existentially quantified sentences is:</p>
               <div class='definition'><p><strong>Existential Instantiation</strong> says we can infer any sentence obtained by substituting a Skolem constant for a variable in the sentence, expressed:</p>
                 <div class='row'>
-                  <div class='col-md-3 text-center'>
+                  <div class='text-center' style="margin: 0 auto; width: 50%;">
                     <h3>&exist;v &alpha;</h3>
                     <hr>
                     <h3>SUBST( { v/k }, &alpha; )</h3>
@@ -432,13 +437,14 @@
               <p class='definition'>Every statement entailed by a FOL KB is entailed by (a finite subset of) the PL KB that is the result of propositionalizing the FOL one.</p>
               <p class='definition'><strong>Decidability</strong> is a property of reasoning systems that asks if any arbitrary sentence can be shown to be entailed by the KB or not.</p>
               <br/>
-              <p>This concept is nice and an expected application, but throws one wrench in the gears: how do we know how many nested terms were used to propositionalize a sentence from our FOL KB?</p>
-              <p>What if I had a bunch of generated sentences such that:</p>
+              <p>This concept is nice and an expected application, but throws one wrench in the gears...</p>
+              <p class='debug'>Note that arguments to functions can be nested functions. Consider our reasoning system searching for some object that unifies to a rule like below. What's the problem?</p>
 <pre class='prettyprint'>
+  ; Given some rule I want to unify to:
   &forall;x Father(x) &rArr; ...
-  Father(John)
   
-  ; Then I could generate symbols:
+  ; Then in my search to ground x,
+  ; I could generate symbols by functions like:
   Father(Father(John)) &rArr; ...
   Father(Father(Father(John))) &rArr; ...
   Father(Father(Father(Father(John)))) &rArr; ...
