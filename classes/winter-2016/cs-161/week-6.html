@@ -115,7 +115,7 @@
               <p><strong>Q: Why would I use forward chaining over backward chaining or vice versa? When does one outshine the other?</strong></p>
               <p>In class I gave an approximation for when you might prefer forward chaining over backward chaining but didn't formalize it with examples...</p>
               <p>There are some great articles out there (a simple Google search away) that describe these scenarios, which I've outlined below.</p>
-              <p class='definition'>Use <strong>forward chaining</strong> when you need to reach a conclusion that you may not know at the onset or how to reach at the onset of your inference (deductive reasoning).</p>
+              <p class='definition'>Use <strong>forward chaining</strong> when you need to reach a conclusion that you may not know at the onset of your inference (deductive reasoning).</p>
               <br/>
               <p>Forward chaining is also preferable when:</p>
               <ul class='indent-1'>
@@ -233,11 +233,12 @@
               <p>Once we choose to take an action for which our state has satisfied the preconditions, the result is a new state KB where the set of fluents has changed.</p>
               <div class='definition'><p>The changes a state undergoes from taking an action are as follows:</p><br/>
                 <ul class='indent-1'>
-                  <li><p>If, in the postcondition, a fluent is positive, you add that to your KB. (the <strong>add-list</strong> [ADD])</p></li>
-                  <li><p>If, in the postcondition, a fluent is negative, you remove that fluent from your KB. (the <strong>delete-list</strong> [DEL])</p></li>
+                  <li><p>If, in the postcondition, a fluent is <strong>positive</strong>, you add that to your KB. (the <strong>add-list</strong> [ADD])</p></li>
+                  <li><p>If, in the postcondition, a fluent is <strong>negative</strong>, you remove that fluent from your KB. (the <strong>delete-list</strong> [DEL])</p></li>
                   <li><p>All other state fluents are left the same.</p></li>
-                  <li><p>Formally, the result of taking action a at state s is: <code class='prettyprint'>Result(s, a) = (s - DEL(a)) &cup; ADD(a)</code><br/>Or in other words, our current state
-                    minus the fluents in the delete list of the action, plus the fluents in the add list of the action.</p></li>
+                  <li><p>Formally, the result of taking action a at state s is:<br/>
+                    <div style='width:100%; text-align:center;'><code class='prettyprint'>Result(s, a) = (s - DEL(a)) &cup; ADD(a)</code></div>
+                    Or in other words, our current state minus the fluents in the delete list of the action, plus the fluents in the add list of the action.</p></li>
                 </ul>
               </div>
               <p class='question' name='planning-q1'>Why don't we add negative fluents to our KB?</p>
@@ -632,17 +633,14 @@
               <p>Clearly the choice of a good heuristic is necessary to adequately navigate a planning search space, especially if the number of constants and fluents is very large.</p>
               <p>As it turns out, however, the fact that backward search employs state sets to navigate its planning, finding good heuristics is generally quite difficult.</p>
               <p>For this reason, forward state-space search is largely the preferred method, and planning graphs represent a useful heuristic for reducing the search space.</p>
-              <p class='definition'>A <strong>planning graph</strong> is a directed graph organized into levels that alternate between state and action levels.</p>
-              <br/>
-              <p>So, we have the following decomposition of entities at each level where S_i represents the <strong>state</strong> levels and A_i the <strong>action</strong> levels:</p>
-              <ul class='indent-1'>
-                <li><p>At level S_i, all fluents that <strong>might possibly</strong> be accessible (from some sequence of actions) in i steps appear (NOTE: we never list a fluent that might not possibly
-                  exist at level i)</p></li>
-                <li><p>At level A_i, all actions that <strong>might possibly</strong> have their preconditions met given the previous state possibilities S_i appear (NOTE: we never list an action that
-                  might not possibly exist at level i)</p></li>
-                <li><p><strong>Mutex</strong> links illustrate mutually exclusive actions and fluents (i.e., if we were to choose one action / arrive at one fluent, 
-                  then we necessarily could not have chosen any to which a mutex link exists)</p></li>
-              </ul>
+              <p class='definition'>A <strong>planning graph</strong> is a directed graph organized into levels that alternate between state and action levels. 
+                At each level, S_i represents the level's <strong>state</strong> and A_i represents the level's available <strong>actions</strong>.</p>
+              <p class='toolkit'>At level S_i, all fluents that <strong>might possibly</strong> be accessible (from some sequence of actions) in i steps appear 
+                (NOTE: we never list a fluent that might not possibly exist at level i)</p>
+              <p class='toolkit'>At level A_i, all actions that <strong>might possibly</strong> have their preconditions met given the previous state possibilities S_i appear 
+                (NOTE: we never list an action that might not possibly exist at level i)</p>
+              <p class='toolkit'><strong>Mutex</strong> links illustrate mutually exclusive actions and fluents (i.e., if we were to choose one action / arrive at one fluent, 
+                  then we necessarily could not have chosen any to which a mutex link exists)</p>
               <br/>
               <p>The whole point of planning graphs is to prevent us from having to combinitorically choose one action after another and see if our effort reaches fruition.</p>
               <p>Although imperfect (e.g., a fluent will never appear too late, but it might show up too early than actually possible), remember that planning graphs are a heuristic strategy...</p>
