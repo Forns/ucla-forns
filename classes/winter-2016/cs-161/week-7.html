@@ -593,10 +593,17 @@
               <br/>
               <p class='toolkit'>Two sentences &alpha; and &beta; are said to be <strong>mutually exclusive</strong> if:<br/>$$Pr(\alpha \land \beta) = 0$$</p>
               <p class='toolkit'>We can bring this back to our inclusion-exclusion principle and observe that the &quot;overlap&quot; of probability mass for two logical sentences is 0 for any mutually exclusive sentences.</p>
-              <p class='question' name='pr-1-1'>In our example above, what is Pr(S = wet &and; S = dry)?</p>
+              <p class='question' name='pr-1-1'>In our example above, what is Pr(W = rainy &and; W = foggy)?</p>
               <p class='answer' name='pr-1-1'>0, because no variable can two different values in a single world.</p>
               <p class='question' name='pr-1'>In our example above, what is Pr(W = rainy &or; W = foggy)?</p>
-              <p class='answer' name='pr-1'>$$Pr(w_3) + Pr(w_4) + Pr(w_5) + Pr(w_6) = 0.75$$</p>
+              <p class='answer' name='pr-1'>Applying the inclusion-exclusion principle, we have: <span>
+                \begin{eqnarray}
+                  Pr(rainy \lor foggy) &=& Pr(rainy) + Pr(foggy) - Pr(rainy, foggy)\\
+                                       &=& [Pr(w_5) + Pr(w_6)] + [Pr(w_3) + Pr(w_4)] - 0\\
+                                       &=& 0.75
+                \end{eqnarray}
+              </span></p>
+              
               <br/>
               <p class='toolkit'>
                 The <strong>law of total probability</strong> says that for some set \({\beta_i}\) of pair-wise, mutually exclusive sentences that partition \(\Omega\) (cover every possible world),
@@ -606,6 +613,7 @@
               <br/>
               <p>The law of total probability says that &quot;If I want to determine the probability of &alpha;, sum over every world where &alpha; and some sentence &beta;_i (from my mutually exclusive 
                 set of sentences &beta; that partition the whole state space) are found together.&quot;</p>
+              <p>We can use the law of total probability to reduce larger, more general joint distributions into smaller, more specific distributions or worlds of more particular interest.</p>
               <p class='example'>Let's try that using our running example to find the probability that the sidewalk is dry...</p>
               <div class='well'>
                 <p>Defining &beta;</p>
@@ -658,7 +666,7 @@
               <p>Let's say we witnessed that it was raining outside...</p>
               <p>Conditioning says, &quot;I don't care about all of those other probabilities for when it's sunny or foggy out... it's raining! I'm looking at it rain right now!&quot;</p>
               <p>We say that evidence witnessed is now <strong>given</strong> in our probability calculations.</p>
-              <p class='toolkit'>For some query sentence &alpha; and witnessed evidence &beta;, we denote the probability of witnessing &alpha; under &beta; as:<br/>
+              <p class='toolkit'>For some query sentence &alpha; and witnessed evidence &beta;, we denote the probability of witnessing &alpha; under evidence &beta; as:<br/>
                 $$Pr(\alpha | \beta)$$
               </p>
               <p class='toolkit'>
@@ -666,7 +674,9 @@
                 with our evidence &beta; is 0. Formally, for witnessed evidence &beta;:<br/>
                 $$Pr(\neg \beta) = Pr(\alpha, \neg \beta) = Pr(\alpha | \neg \beta) = 0$$
               </p>
-              <p class='definition'>Note: we may notationally represent joint distributions using commas instead of the logical-and operator, e.g.:<br/>
+              <p>We can interpret the above as saying, "No world that is inconsistent with what we've witnessed shall be considered possible."</p>
+              <p>And so, we assign such contrary worlds a probability of 0% given the evidence.</p>
+              <p class='definition'>Note: we may represent joint distributions using commas instead of the logical-and operator, e.g.:<br/>
                   $$Pr(\alpha \land \beta) = Pr(\alpha, \beta)$$
               </p>
               <br/>
@@ -831,13 +841,13 @@
               
               
               <h3>Chain Rule</h3>
-              <p>As we saw above, Bayes' conditioning tells us that:<br/>$$Pr(\alpha | \beta) = Pr(\alpha \land \beta) / Pr(\beta)$$</p>
+              <p>As we saw above, Bayes' conditioning tells us that:<br/>$$Pr(\alpha | \beta) = \frac{Pr(\alpha, \beta)}{Pr(\beta)}$$</p>
               <p>There are a number of other tricks we can play with it to derive some interesting results!</p>
               <div class='well'>
                 <p>Starting with Bayes' conditioning, what happens when we multiply our normalizing constant \(Pr(\beta)\) to both sides?<br/>
                   \begin{eqnarray}
-                    Pr(\alpha | \beta) &=& \frac{Pr(\alpha \land \beta)}{Pr(\beta)}\\
-                    \therefore Pr(\alpha \land \beta) &=& Pr(\alpha | \beta) * Pr(\beta)\\
+                    Pr(\alpha | \beta) &=& \frac{Pr(\alpha, \beta)}{Pr(\beta)}\\
+                    \therefore Pr(\alpha, \beta) &=& Pr(\alpha | \beta) * Pr(\beta)\\
                   \end{eqnarray}
                 </p>
                 <p>Re-writing that to pretty it up:<br/>
@@ -863,8 +873,7 @@
                 
                 <p>Example 2:<br/>
                   \begin{eqnarray}
-                    Pr(A, B, C) &=& Pr(A, B | C) * Pr(C)\\
-                                &=& Pr(A | B, C) * Pr(B, C)\\
+                    Pr(A, B, C) &=& Pr(A | B, C) * Pr(B, C)\\
                                 &=& Pr(A | B, C) * Pr(B | C) * Pr(C)
                   \end{eqnarray}
                 </p>
@@ -927,8 +936,9 @@
               </div>
               <br/>
               <p>...at least some people seem to think so...</p>
-              <p class='question' name='bayes-q0'>What is so damn exciting about Bayes' theorem?</p>
-              <p class='answer' name='bayes-q0'>What isn't exciting about it?! It lets us estimate P(A | B) in terms of P(B | A)!</p>
+              <p class='question' name='bayes-qdef'>What is so damn exciting about Bayes' theorem? Hint: consider P(E | C) where E is an effect and C is a cause of that effect.</p>
+              <p class='answer' name='bayes-qdef'>What isn't exciting about it?! It lets us estimate P(E | C) in terms of P(C | E), and vice versa! Usually we know the probability of the effect given
+                the cause of some event, but not the other way around -- Bayes' theorem gives us such information.</p>
               <br/>
               <p>This is huge because we may not know anything about P(A | B), but knowing something about P(B | A) gives us a wealth of information that we may now infer.</p>
               <p>...and of course there's a relevant XKCD, thanks for asking!</p>
@@ -937,6 +947,8 @@
                   <img src='http://imgs.xkcd.com/comics/seashell.png' />
                 </div>
               </a>
+              <br/>
+              <p class='example'>Explain the above XKCD!</p>
               <br/>
               <p class='example'>Use Bayes' Theorem (replicated below) to compute the following quantity:<br/>$$Pr(A | B) = \frac{Pr(B | A) * Pr(A)}{Pr(B)}$$</p>
               <div class='well'>
@@ -1148,12 +1160,12 @@
                     <td><p>Fairly trivial; resembles two functions we've already done with only minor modification.</p></td>
                   </tr>
                   <tr>
-                    <th><p>RR-FRW</p></th>
+                    <th><p>MP-INFER</p></th>
                     <td><p>Remember that you must successfully unify across ALL of a rule's premises in order to infer its conclusion. Furthermore, be wary that variable names in rules 
                       have already been standardized, meaning a given variable cannot have two separate bindings. Fairly trivial once UNIFY-FR is complete.</p></td>
                   </tr>
                   <tr>
-                    <th><p>TRY-FIRE</p></th>
+                    <th><p>FRW-CHAIN</p></th>
                     <td><p>Straightforward once you've completed RR-FRW. The "hardest" part is determining when you've inferred a new conclusion or not. I suggest making a helper function for this purpose.
                       </p></td>
                   </tr>
