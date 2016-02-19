@@ -295,10 +295,10 @@
               <p class='debug'>
                 The rule for getting the sidewalk wet (in this case, only in the event that it's raining) does not handle <strong>exceptions</strong>; e.g., a covering of the sidewalk when it's raining.
               </p>
-              <p class='debug'>We deal only with boolean logic and have no parsimonious means of representing <strong>uncertainty</strong>.</p>
+              <p class='debug'>We deal only with boolean logic and have no parsimonious means of representing <strong>uncertainty</strong>; e.g., our sprinklers will turn on only if a coin flip comes up heads.</p>
+              <p class='question' name='uncertainty-q0'>So, for example, viewing our KB as stated above, does knowing anything about whether or not the sidewalk is wet tell us whether or not it's raining?</p>
+              <p class='answer' name='uncertainty-q0'>No! We don't have any rules to infer about observing the sidewalk whether it's raining or not, but certainly a wet sidewalk *suggests* that it might be raining.</p>
               <br/>
-              <p>So, for example, viewing our KB as stated above, does knowing anything about whether or not the sidewalk is wet tell us whether or not it's raining?</p>
-              <p>No! We don't have any rules to infer about observing the sidewalk whether it's raining or not, but certainly a wet sidewalk *suggests* that it might be raining.</p>
               <p class='definition'>In comes <strong>probabilistic reasoning</strong>, which attempts to model <strong>uncertainty</strong> about our environment in a parsimonious, statistical representation.</p>
               <p class='definition'>
                 <strong>Uncertainty</strong> about an environment arises when our agent has partial sensor information, any sort of ignorance, or the problem is nondeterministic, but we still must make a
@@ -592,7 +592,9 @@
               </table>
               <br/>
               <p class='toolkit'>Two sentences &alpha; and &beta; are said to be <strong>mutually exclusive</strong> if:<br/>$$Pr(\alpha \land \beta) = 0$$</p>
-              <p>We can bring this back to our inclusion-exclusion principle and observe that the &quot;overlap&quot; component is 0 for any mutually exclusive sentences.</p>
+              <p class='toolkit'>We can bring this back to our inclusion-exclusion principle and observe that the &quot;overlap&quot; of probability mass for two logical sentences is 0 for any mutually exclusive sentences.</p>
+              <p class='question' name='pr-1-1'>In our example above, what is Pr(S = wet &and; S = dry)?</p>
+              <p class='answer' name='pr-1-1'>0, because no variable can two different values in a single world.</p>
               <p class='question' name='pr-1'>In our example above, what is Pr(W = rainy &or; W = foggy)?</p>
               <p class='answer' name='pr-1'>$$Pr(w_3) + Pr(w_4) + Pr(w_5) + Pr(w_6) = 0.75$$</p>
               <br/>
