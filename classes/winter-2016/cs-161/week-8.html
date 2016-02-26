@@ -272,7 +272,7 @@
                   <tr>
                     <th><p>X</p></th>
                     <th><p>Y</p></th>
-                    <th><p>\(\sum_Z Pr(X, Y, Z)\)</p></th>
+                    <th><p>\(\sum_Z Pr(X, Y, Z) = Pr(X, Y)\)</p></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -319,7 +319,7 @@
                   <tr>
                     <th><p>X</p></th>
                     <th><p>Y</p></th>
-                    <th><p>\(\sum_Z Pr(X, Y, Z)\)</p></th>
+                    <th><p>\(\sum_Z Pr(X, Y, Z) = Pr(X, Y)\)</p></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -928,6 +928,8 @@
                 of having a Cancer.</p>
               <p>That is, as soon as we know the state of the causes, we don't get any new information about the effects!</p>
               <p>Thus, we glean some notion of the <strong>semantics / meaning</strong> implicit within Bayesian networks:</p>
+              <p class='definition'>The <strong>Markovian factorization</strong> of a Bayesian network says that we can use the chain rule to phrase the joint distribution as a product of "family" factors,
+                composed of a node given its parents.</p>
               <div class='well'>
                 <p>The joint distribution can be factored using independence relationships to:</p>
                 <p>$$Pr(X_1, X_2, ..., X_n) = Pr(X_1 | Parents(X_1)) * Pr(X_2 | Parents(X_2)) * ...$$</p>
@@ -1032,6 +1034,9 @@
               <div class='fit-pres text-center'>
                 <img src='../../../assets/images/winter-2015/cs-161/week-8/bayesnet-0.PNG' />
               </div>
+              <p class='question' name='fork-q0'>Intuit: why does knowing whether or not someone Smokes make knowing whether or not they have Asthma tell us nothing more about their likelihood of having Cancer?</p>
+              <p class='answer' name='fork-q0'>Because once we know the state of the single cause of Cancer (in this model, Smoking), knowing any of that cause's indicators doesn't tell us anything more than
+                already knowing the state of the cause.</p>
               <br/>
               <p>Divergent nodes are sometimes referred to as common causes. Here, we see that if we know whether or not someone has a Smoking, then information does NOT flow from Asthma to Cancer.</p>
               <p>So, the rule for divergent valves along some path is that when we have a triplet X &larr; Z &rarr; Y, given Z blocks information flow from X to Y.</p>
@@ -1046,6 +1051,9 @@
               <div class='fit-pres text-center'>
                 <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-3.PNG' />
               </div>
+              <p class='question' name='chain-q0'>Intuit: why does knowing whether or not someone has Lung Tar make knowing whether or not they Smoke tell us nothing more about their likelihood of having Cancer?</p>
+              <p class='answer' name='chain-q0'>Because once we know the state of the single cause of Cancer (in this model, Lung Tar), knowing any of that cause's causes doesn't tell us anything more than
+                already knowing the state of the cause.</p>
               <br/>
               <p>Here, knowing that someone has tar in their lungs means that we no longer get information flowing from any knowledge that the person smoked to whether they'll have lung cancer.</p>
               <p>"If Lung Tar (the medical term, of course) is the true cause of Lung Cancer, then it's irrelevant how the tar got there in the first place to whether or not you have Lung Cancer."</p>
@@ -1445,7 +1453,7 @@
                 </thead>
                 <tbody>
                   <tr>
-                    <td><p>1. E-GEN</p></td>
+                    <td><p>1. FR-TO-ENG</p></td>
                     <td><p>Deceptively intricate, but not impractical; consider breaking your solution down into several helper functions:</p>
                       <ul class='indent-1'>
                         <li><p>One that finds the pattern associated with the current top-level predicate.</p></li>
@@ -1455,7 +1463,7 @@
                     </td>
                   </tr>
                   <tr>
-                    <td><p>2. D-TREE-INT</p></td>
+                    <td><p>2. EVAL-D-TREE</p></td>
                     <td><p>A standard-sized problem that is neither trivial nor overly difficult, but requires you to trace a couple decision trees by hand to get a feel for the recursion. Big hint:
                       remember what the return value is for Clisp's logical AND!</p></td>
                   </tr>
