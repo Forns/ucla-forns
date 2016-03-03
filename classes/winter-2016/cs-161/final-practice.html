@@ -896,18 +896,18 @@
                 <img src='../../../assets/images/spring-2014/cs-161/final/final-6.PNG' />
               </div>
               <p class='question' name='bn-q6'>Click for solution.</p>
-              <p class='answer' name='bn-q6'>Yes! A quick trick to decide if two models are observationally equivalent is to see if any colliders are created or destroyed by an edge inversion; if they *are*
-                created or destroyed (at least one) then the two models will NOT be observationally equivalent.</p>
+              <p class='answer' name='bn-q6'>Yes! A quick trick to decide if two models are observationally equivalent is to see if any <strong>v-structures</strong> are created or destroyed by an edge inversion.
+              	V-structures are just colliders that do not have two or more adjacent (connected) parents. If any v-structures *are* created or destroyed (at least one) then the two models will NOT be observationally equivalent.</p>
               <br/>
               <p class='example'>[BN 4] Are the following two models observationally equivalent?</p>
               <div class='fit-pres text-center'>
                 <img src='../../../assets/images/spring-2014/cs-161/final/final-7.PNG' />
               </div>
               <p class='question' name='bn-q7'>Click for solution.</p>
-              <p class='answer' name='bn-q7'>No! See how we destroyed a collider at B &rarr; D &larr; C from the first model to the second?</p>
+              <p class='answer' name='bn-q7'>No! See how we destroyed a v-structure at B &rarr; D &larr; C from the first model to the second?</p>
               
               <br/>
-              <p class='definition'>A <strong>Markov Blanket</strong> for a node in a Bayesian Network (indicated BM(A) for node A) is the set of all nodes that, if given, render A independent from ALL other
+              <p class='definition'>A <strong>Markov Blanket</strong> for a node in a Bayesian Network (indicated MB(A) for node A) is the set of all nodes that, if given, render A independent from ALL other
                 nodes in the network. A Markov Blanket consists of a node's parents, children, and spouses.</p>
               <br/>
               <p class='example'>Observe the following Bayesian Network and answer the following questions about Markov Blankets:</p>
@@ -939,7 +939,7 @@
                 <li><p>Trim all nodes that are d-separated from the query.</p></li>
                 <li><p>Zero-out CPT rows inconsistent with the evidence.</p></li>
                 <li><p>Choose an elimination order (too complicated for CS161 -- we'll give you one)</p></li>
-                <li><p>Iterate over all variables V in the elimination order, then multiply all tables / factors mentioning V into one giant factor, and summing out non-query variables.</p></li>
+                <li><p>Iterate over all variables V in the elimination order, then multiply all tables / factors mentioning V into one giant factor, and sum out non-query variables.</p></li>
                 <li><p>Repeat above step until we're only left with a factor over our query variables. Then, use the resultant factor to compute your target quantity.</p></li>
               </ol>
               <br/>
