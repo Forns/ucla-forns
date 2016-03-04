@@ -710,12 +710,16 @@
               <br/>
               <p>So one of the first questions you might ask is: why give computers this adaptability at all? Shouldn't our programmers have all the tools necessary to empower their agents when they
                 sit down to program them in the first place?</p>
-              <p>As it turns out, the answer is: not always; there are a variety of cases in which it is not possible for a programmer to explicitly define an agent's behavior, including:</p>
-              <ul class='indent-1'>
-                <li><p>Prediction engines that assess changes over time cannot account for all possible future changes at the time of programming and must be adaptive.</p></li>
-                <li><p>Navigational systems cannot be programmed with all possible obstacles, mazes, and terrain features at the time of programming and must be adaptive.</p></li>
-                <li><p>Programmers may not *know* exactly how to define certain behavior, but can instead pose learning problems to their systems to get a gist for the intended behavior.</p></li>
-              </ul>
+              <p>As it turns out, the answer is: not always; there are a variety of cases in which it is not possible for a programmer to explicitly define an agent's behavior.</p>
+              <p class='question' name='learning-ex-q0'>What are some examples of cases where we want our systems to learn optimal behavior rather than coding it top-down as programmers?</p>
+              <div class='answer' name='learning-ex-q0'>
+                <p>Some scenarios include:</p>
+                <ul class='indent-1'>
+                  <li><p>Prediction engines that assess changes over time cannot account for all possible future changes at the time of programming and must be adaptive.</p></li>
+                  <li><p>Navigational systems cannot be programmed with all possible obstacles, mazes, and terrain features at the time of programming and must be adaptive.</p></li>
+                  <li><p>Programmers may not *know* exactly how to define certain behavior, but can instead pose learning problems to their systems to get a gist for the intended behavior.</p></li>
+                </ul>
+              </div>
               <br/>
               <p>Learning algorithms generally suit one of a few different flavors:</p>
               <table class='table table-bordered table-striped'>
