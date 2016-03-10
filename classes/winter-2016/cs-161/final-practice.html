@@ -932,22 +932,47 @@
               <p class='answer' name='bn-q8'>By d-separation, we know that S &perp; A since C is not given, so:<br/>Pr(S = 1 | A = 1) = Pr(S = 1) = 0.3</p>
               
               <hr/><br/>
-              <p class='example'>Use variable elimination to compute Pr(A = 1 | B = 0) with elimination order &Pi; = C, B, A. DO NOT construct the joint distribution.</p>
+              <p class='example'>Compute Pr(A = 1 | B = 0). DO NOT construct the entire joint distribution in your solution.</p>
               <br/>
-              <p>As a reminder, here are some &quot;at a glance&quot; steps to variable elimination:</p>
+              <p>As a reminder, here are some &quot;at a glance&quot; steps to enumeration inference:</p>
               <ol class='indent-1'>
-                <li><p>Trim all nodes that are d-separated from the query.</p></li>
-                <li><p>Zero-out CPT rows inconsistent with the evidence.</p></li>
-                <li><p>Choose an elimination order (too complicated for CS161 -- we'll give you one)</p></li>
-                <li><p>Iterate over all variables V in the elimination order, then multiply all tables / factors mentioning V into one giant factor, and sum out non-query variables.</p></li>
-                <li><p>Repeat above step until we're only left with a factor over our query variables. Then, use the resultant factor to compute your target quantity.</p></li>
+                <li><p>Identify your query (Q), evidence (e), and hidden variables (V) amongst all variables in the network (X).</p></li>
+                <li><p>Formulate your query expression in terms of the network CPTs, by the formula:<br/>$$Pr(Q|e) = \alpha \sum_{v \in V} Pr(Q, e, v)$$</p></li>
+                <li><p>[Optional] (But time saving) Re-arrange summations and factors to reduce number of multiplications (like when we pulled out Pr(A) above)</p></li>
+                <li><p>Solve for $$\alpha = 1 / Pr(e)$$ and substitute into (2) above!</p></li>
               </ol>
               <br/>
               <div class='fit-pres text-center'>
                 <img src='../../../assets/images/spring-2014/cs-161/final/final-9.PNG' />
               </div>
-              <p class='question' name='bn-q9'>Click for solution.</p>
-              <div class='answer' name='bn-q9'>
+              <p class='question' name='bn-q9-enum'>Click for solution (using Enumeration Inference).</p>
+              <div class='answer' name='bn-q9-enum'>
+                <p>
+                \begin{eqnarray}
+                  Pr(A = 1 | B = 0) &=& \alpha * \sum_{c} Pr(A = 1) * Pr(B = 0 | A = 1) * Pr(c | B = 0)\\
+                                    &=& \alpha * Pr(A = 1) * Pr(B = 0 | A = 1) * \sum_c Pr(c | B = 0)\\
+                                    &=& \alpha * Pr(A = 1) * Pr(B = 0 | A = 1) * [Pr(C = 0 | B = 0) + Pr(C = 1 | B = 0)]\\
+                                    &=& \alpha * 0.6 * 0.1 * [0.5 + 0.5]\\
+                                    &=& \alpha * 0.06
+                \end{eqnarray}
+                </p>
+                <p>
+                \begin{eqnarray}
+                  \alpha = Pr(B = 0) &=& \sum_{a} Pr(a, B = 0)\\
+                                     &=& \sum_{a} Pr(B = 0 | a) * Pr(a)\\
+                                     &=& Pr(B = 0 | A = 0) * Pr(A = 0) + Pr(B = 0 | A = 1) * Pr(A = 1)\\
+                                     &=& 0.8 * 0.4 + 0.1 * 0.6\\
+                                     &=& 0.38
+                \end{eqnarray}
+                </p>
+                <p>
+                \begin{eqnarray}
+                  \therefore Pr(A = 1 | B = 0) = 0.06 / 0.38 \approx 0.1578
+                \end{eqnarray}
+                </p>
+              </div>
+              <p class='question' name='bn-q9-elim'>Click for solution (using Elimination Inference).</p>
+              <div class='answer' name='bn-q9-elim'>
                 <p><strong>Step 1:</strong> Trim node C from the network since A &perp; C | B</p>
                 <p><strong>Step 2:</strong> Zero out the following rows inconsistent with evidence:</p>
                 <div class='fit-pres text-center'>
@@ -993,16 +1018,16 @@
               </div>
               <br/>
               <p>Whew! That one was intricate! But now that you know what you're doing... care to try it again? :)</p>
+              <p>(by the way, recall that Elimination Inference and Enumeration Inference will yield the same answer -- their procedures are just slightly different).</p>
               <br/>
-              <p class='example'>Read the following problem description and then compute the following quantity using variable elimination: Pr(C1 = 1 | J = 1, C2 = 1)</p>
+              <p class='example'>Read the following problem description and then compute the following quantity: Pr(C1 = 1 | J = 1, C2 = 1)</p>
               <blockquote>
                 Remember our example about a bell ringing whenever 2 coins both came up the same (both heads or both tails)? Well, let's introduce a little noise into the system: Now, whenever both coin
                 flips are the same, there is a 95% chance that the bell will ring, and a 5% chance that it will ring under all other scenarios. Furthermore, our butler, Jeeves, who is still hard of hearing,
                 will come serve us tea 70% of the time the bell rings, and 10% of the time that it does not (&quot;Was that the bell I heard?! Maybe...&quot;). This scenario is represented by the Bayesian
                 network and CPTs below.<br/><br/>
                 <p><strong>
-                  Given that Jeeves did indeed bring us tea (J = 1) and coin 2 came up heads (C2 = 1), what is the probability that coin 1 also came up heads?<br/><br/>
-                  Choose Elimination order: C2, J, B, C1
+                  Given that Jeeves did indeed bring us tea (J = 1) and coin 2 came up heads (C2 = 1), what is the probability that coin 1 also came up heads?
                 </strong></p>
               </blockquote>
               <br/>
@@ -1010,7 +1035,7 @@
                 <img src='../../../assets/images/spring-2014/cs-161/final/final-13.PNG' />
               </div>
               <br/>
-              <p class='question' name='bn-q10'>Click for solution.</p>
+              <p class='question' name='bn-q10'>Click for solution (using Elimination Inference).</p>
               <div class='answer' name='bn-q10'>
                 <p><strong>Step 1:</strong> No nodes to trim; all are dependent with the given evidence!</p>
                 <p><strong>Step 2:</strong> Zero out the following rows inconsistent with evidence:</p>

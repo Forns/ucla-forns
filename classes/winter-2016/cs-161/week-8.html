@@ -1216,6 +1216,16 @@
               <p>Well, we can ask them questions of course!</p>
               <p>For our networks, those questions will be of the form: &quot;What's the probability of witnessing events Q given that I've seen evidence e?&quot; (where Q is a set of variables and e is an
                 instantiation of evidence)</p>
+              <p class='definition'><strong>Inference queries</strong>, for query sentence \(Q\) and evidence \(e\), compute the quantity \(Pr(Q | e)\) using the network CPTs.</p>
+              <div class='toolkit'>
+                <p>Every variable in the network can be classified under one of three categories while performing inference:</p>
+                <ul class='indent-1'>
+                  <li><p><strong>Query Variables (Q):</strong> variables in which we are interested in computing the probability mass.</p></li>
+                  <li><p><strong>Evidence Variables (e):</strong> events that we have witnessed that will serve as our conditioned variables.</p></li>
+                  <li><p><strong>"Hidden" Variables (V):</strong> variables in the network that are neither query nor evidence variables, but may still propagate information through the network. Unlike
+                    evidence variables, we don't know the state of hidden variables, so we have to sum over all of their possible values.</p></li>
+                </ul>
+              </div>
               <br/>
               <p>A couple things to note about the inference problem:</p>
               <ul class='indent-1'>
@@ -1226,215 +1236,100 @@
                 <li><p>We might have a lot of superfluous variables that don't contribute to our query and need a means of getting rid of them before beginning inference.</p></li>
               </ul>
               <br/>
-              <p class='definition'><strong>Inference queries</strong>, for query sentence \(Q\) and evidence \(e\), compute the quantity \(Pr(Q | e)\) using the network CPTs.</p>
-              <p class='definition'><strong>Variable elimination</strong> is an inference strategy designed to use only our CPTs to pose queries on our network by successively eliminating variables
-                until we are left with our query.</p>
-              <p class='debug'>WARNING: The topic of Bayesian network inference is massive (there's a whole class on it, 262a, which I genuinely suggest taking!) and so this section is very hand-wavy.</p>
-              <br/>
-              <p>The steps of variable elimination are as follows:</p>
-              <ol class='indent-1'>
-                <li><p><strong>Trim</strong> any network nodes that are conditionally independent from our queries given our evidence.</p></li>
-                <li><p><strong>Zero out</strong> all CPT rows inconsistent with the evidence.</p></li>
-                <li><p><strong>Choose an order</strong> to eliminate variables in (different orders will give you same result, but some orders are less computationally efficient than others).</p></li>
-                <li><p><strong>Multiply</strong> CPT rows together to form factors in the order chosen above.</p></li>
-                <li><p><strong>Compute result</strong> when you have reduced to factors containing only your query variable(s) (with all other variables eliminated).</p></li>
-              </ol>
-              <br/>
               
-              <p class='example'>Use variable elimination to find the following Table in the given Bayesian network:<br/>
-                $$Pr(Cancer | Smoking = true)$$
-                $$Q = \{Cancer\}$$
-                $$e = \{Smoking = true\}$$</p>
-              <div class='fit-pres text-center'>
-                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-7.PNG' />
-              </div>
-              <br/>
-              <p><strong>Step One:</strong> There are no variables that are independent from our query given the evidence, so we have no nodes to trim here.</p>
-              <hr/>
-              <p><strong>Step Two:</strong> Zero out CPT rows that are inconsistent with the evidence (these inconsistent rows are often just omitted entirely)</p>
-              <div class='fit-pres text-center'>
-                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-8.PNG' />
-              </div>
-              <hr/>
-              <p><strong>Step Three:</strong> Choose an &quot;elimination order&quot;</p>
-              <p>Our goal is to get ONE CPT at the end that only mentions variables in Q; we do this by successively multiplying table values and summing out irrelevant variables.</p>
-              <p>The order in which you do this matters greatly for computational complexity, but that discussion is omitted herein; for now, let's just choose an order:</p>
+              <p class='definition'><strong>Enumeration Inference</strong> is a strategy for computing an arbitrary Bayesian network query via a sum of products of CPT values from the network.</p>
+              <p>Let's consider how we might compute an arbitrary query on a Bayesian network using Enumeration Inference.</p>
               <div class='well'>
-                <p>
-                  \(\Pi\) designates the elimination order; we'll arbitrarily choose:
-                  $$\Pi = \{A, B, C\}$$
-                  Meaning A first, then B, etc.
-                </p>
-                
+                <p>Here's what we want:</p>
+                <p>$$Pr(Q|e)$$</p>
+                <p>Now, we don't have (nor want to recreate) the joint distribution, but we do have a set of our network's conditional probability tables.</p>
+                <p>So, using Bayes' conditioning, we can phrase any query as:</p>
+                <p>$$Pr(Q|e) = \alpha \sum_{v \in V} Pr(Q, e, v)$$</p>
+                <p>Above, &alpha; is simply a normalizing constant that is equivalent to 1 / Pr(e).</p>
+                <p>Finally, we know that the joint that we're summing over can be factorized into the Markovian family factors for all nodes X:</p>
+                <p>$$Pr(Q, e, V) = \Pi_{x \in X} Pr(x | Parents(x))$$</p>
               </div>
               <br/>
               
-              <hr/>
-              <p><strong>Step Four:</strong> Multiply CPTs in the given elimination order to reduce to a factor over only query variables.</p>
-              <p>Since A is up first in our order, this means we multiply all the CPTs mentioning A and get back a <strong>factor</strong>.</p>
-              <p class='toolkit'><strong>Factors</strong> (in variable elimination) are NOT proper distributions, but are the result of multiplying tables and marginalizing over those variables
-                that are being eliminated.</p>
-              <p class='toolkit'>Table multiplication yields a factor result that is simply the product of all consistent worlds.</p>
-              <p>So, the two CPTs mentioning A in our example are: Pr(A) and Pr(B | A) so:</p>
-              <div class='fit-pres text-center'>
-                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-9.PNG' />
+              <p class='example'>Use the following Bayesian network and its CPTs to compute:<br/>$$Pr(Cancer = 1 | Smoking = 1)$$</p>
+              <div class="fit-pres text-center">
+                <img src="../../../assets/images/spring-2014/cs-161/week-8/bayesnet-7.PNG">
               </div>
               <br/>
-              <p>Since we've now dealt with all of the tables mentioning A, we can <strong>eliminate</strong> it by summing out, giving us our first factor:</p>
-              <div class='fit-pres text-center'>
-                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-10.PNG' />
-              </div>
-              <br/>
-              <p>Our next variable to eliminate is B, which is mentioned in both our current factor and the CPT for C:
-                $$\sum_A Pr(B | A) * Pr(A), Pr(C | B)$$</p>
-              <div class='fit-pres text-center'>
-                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-11.PNG' />
-              </div>
-              <br/>
-              <p>Almost there! But now B is irrelevant, so we can sum it out to get:</p>
-              <div class='fit-pres text-center'>
-                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-12.PNG' />
-              </div>
-              <hr/>
-              
-              <p><strong>Step Five:</strong> Use the remaining factor(s) over query variables (having accounted for evidence) to find target quantity.</p>
-              <p>Let's look at our remaining factor:</p>
-              <div class='well'>
-                <p>The term currently in our factor is really just the joint with B and A summed out after having accounted for the evidence that A = true:</p>
-                <p>
-                  \begin{eqnarray}
-                    \sum_B Pr(C | B) * \sum_A Pr(B | A) * Pr(A) &=& \sum_B \sum_A Pr(C | B) * Pr(B | A) * Pr(A)\\
-                                                                &=& \sum_B \sum_A Pr(A, B, C)
-                  \end{eqnarray}
-                </p>
-              </div>
-              <br/>
-              <p>So, since our final factor has only C remaining, and accounted for A = true, the values it represents are a marginal on C and A = true!</p>
-              <p class='toolkit'>In general, the final factor after variable elimination yields some subset of worlds consistent with the evidence from:<br/>
-                $$\sum_{v \in V \land v \not\in Q} Pr(Q, e, V)$$
+              <p class='question' name='inf-q0'>What are our query, evidence, and hidden variables above?</p>
+              <p class='answer' name='inf-q0'>Query: C = 1<br/>Evidence: A = 1<br/>Hidden: B</p>
+              <p class='question' name='inf-q1'>Provide the query statement in terms of a sum of products over our network CPTs.</p>
+              <p class='answer' name='inf-q1'>
+                \begin{eqnarray}
+                  Pr(C = 1 | A = 1) &=& \alpha * \sum_{b \in B} Pr(C = 1, A = 1, b)\\
+                                    &=& \alpha * \sum_{b \in B} Pr(A = 1) * Pr(b | A = 1) * Pr(C = 1 | b)
+                \end{eqnarray}
               </p>
               <br/>
-              <p>We then use our remaining factor to compute (a) the probability of the evidence, and then using Bayes' conditioning, (b) our target quantity.</p>
+              
+              <p>Now, notice that above expression (the answer to the question above) says to "Sum over all of the possible values of B and multiply the family factors."</p>
+              <p>This works, but we could improve it slightly, because the first factor Pr(A = 1) does not rely on the summation over B (see how B isn't mentioned in Pr(A = 1)?).</p>
+              <p>So, we can simply move it outside of the summation to simplify, giving us:</p>
               <div class='well'>
-                <p>So, from our final factor:
+                <p>
                 \begin{eqnarray}
-                  Pr(C = true, A = true) &=& 0.192\\
-                  Pr(C = false, A = true) &=& 0.408\\
-                  &there4; Pr(A = true) &=& \sum_C Pr(A = true, C)\\
-                                        &=& 0.600
+                  Pr(C = 1 | A = 1) &=& \alpha * Pr(A = 1) \sum_{b \in B} Pr(b | A = 1) * Pr(C = 1 | b)\\
+                                    &=& \alpha * Pr(A = 1) [Pr(B = 0 | A = 1) * Pr(C = 1 | B = 0) + Pr(B = 1 | A = 1) * Pr(C = 1 | B = 1)]\\
+                                    &=& \alpha * 0.6 * [0.1 * 0.5 + 0.9 * 0.3]\\
+                                    &=& \alpha * 0.192
                 \end{eqnarray}
                 </p>
-                <p>Now we have everything we need to compute our query using Bayes' conditioning:
-                  \begin{eqnarray}
-                    Pr(Q | e) &=& Pr(C | A = true)\\
-                              &=& \frac{Pr(C, A = true)}{Pr(A = true)}
-                  \end{eqnarray}
+              </div>
+              <br/>
+              
+              <p>So close to finishing our computation! Now we just need to find a value for $$\alpha = 1 / Pr(e) = 1 / Pr(A = 1)$$</p>
+              <p>Easy enough! We happen to know this from our CPT for A. This gives us:</p>
+              <div class='well'>
+                \begin{eqnarray}
+                  Pr(C = 1 | A = 1) &=& \alpha * 0.192\\
+                                    &=& \frac{0.192}{Pr(A = 1)}\\
+                                    &=& \frac{0.192}{0.6}\\
+                                    &=& 0.32
+                \end{eqnarray}
+              </div>
+              <br/>
+              
+              <p>And there you have it! So in summary, the steps of enumeration inference are:</p>
+              <ol class='indent-1'>
+                <li><p>Identify your query (Q), evidence (e), and hidden variables (V) amongst all variables in the network (X).</p></li>
+                <li><p>Formulate your query expression in terms of the network CPTs, by the formula:<br/>$$Pr(Q|e) = \alpha \sum_{v \in V} Pr(Q, e, v)$$</p></li>
+                <li><p>[Optional] (But time saving) Re-arrange summations and factors to reduce number of multiplications (like when we pulled out Pr(A) above)</p></li>
+                <li><p>Solve for, and substitute into (2) above: $$\alpha = 1 / Pr(e)$$</p></li>
+              </ol>
+              <hr/>
+              <br/>
+              
+              <h3>Additional Practice</h3>
+              <p class='example'>Use the following Bayesian network to answer the queries that follow. Assume that each CPT denotes 0 as an absence of the variable and 1 as the presence of it (e.g. H = 1 means that you have hypertension). Use Enumeration Inference as described above.</p>
+              <div class="fit-pres text-center">
+                <img src="../../../assets/images/winter-2016/cs-161/b-net-ex-2.PNG">
+              </div>
+              <br/>
+              <p class='question' name='inf-prac-q0'>What is the probability that an individual has hypertension given that they exercise? [Click for solution]</p>
+              <div class='answer' name='inf-prac-q0'>
+                <p>
+                \begin{eqnarray}
+                  Pr(H = 1 | E = 1) &=& \alpha * \sum_{w, d} Pr(E = 1) * Pr(d) * Pr(w | E = 1, d) * Pr(H = 1 | w, E = 1)\\
+                                    &=& \alpha * Pr(E = 1) * \sum_{w, d} Pr(d) * Pr(w | E = 1, d) * Pr(H = 1 | w, E = 1)\\
+                                    &=& \alpha * Pr(E = 1) * \sum_{d} Pr(d) * \sum_{w} Pr(w | E = 1, d) * Pr(H = 1 | w, E = 1)\\
+                                    &=& \alpha * Pr(E = 1)\\
+                                    &*& [Pr(D = 0) * [Pr(W = 0 | E = 1, D = 0) * Pr(H = 1 | W = 0, E = 1)\\
+                                    &+& Pr(W = 1 | E = 1, D = 0) * Pr(H = 1 | W = 1, E = 1)]\\
+                                    &+& Pr(D = 1) * [Pr(W = 0 | E = 1, D = 1) * Pr(H = 1 | W = 0, E = 1)\\
+                                    &+& Pr(W = 1 | E = 1, D = 1) * Pr(H = 1 | W = 1, E = 1)]]\\
+                                    &=& \alpha * 0.6 * [0.3 * [0.7 * 0.4 + 0.3 * 0.1] + 0.7 * [0.2 * 0.4 + 0.8 * 0.1]]\\
+                                    &=& \alpha * 0.123
+                \end{eqnarray}
                 </p>
-                <p>...using Bayes conditioning:
-                  \begin{eqnarray}
-                    Pr(C = true | A = true) &=& \frac{Pr(C = true, A = true)}{Pr(A = true)}\\
-                                            &=& \frac{0.192}{0.600}\\
-                                            &\approx& 0.32
-                  \end{eqnarray}
-                                            
-                  \begin{eqnarray}
-                    Pr(C = false | A = true) &=& \frac{Pr(C = false, A = true)}{Pr(A = true)}\\
-                                             &=& \frac{0.408}{0.600}\\
-                                             &\approx& 0.68
-                  \end{eqnarray}
-                </p>
+                <p>Whew! Almost there, now we just have to find $$\alpha = 1 / Pr(E = 1) = 1 / 0.6$$</p>
+                <p>$$\therefore Pr(H = 1 | E = 1) = 0.123 / 0.6 = 0.205$$</p>
+                <p>So, the chance that you have hypertension given that you exercise is about 20%. Now go do some pushups!</p>
               </div>
-              <br/>
-              <p>And that's that!</p>
-              <p>Like I say, there's a whole class on Bayesian network inference, so this is but a small example and one strategy that can be used for such.</p>
-              <p>Thus concludes our brief tour of Bayesian networks... hope you enjoyed the ride!</p>
-            </div>
-            <hr/>
-            
-            
-            <br/>
-            <div id='enumeration' class='scrollspy-element' scrollspy-title='Enumeration Inference'></div>
-            <h1>Enumeration Inference</h1>
-            <div>
-              <p>Another approach to inference is given by the text under the Enumeration Inference algorithm.</p>
-              <p>Although it and variable-elimination perform the same task, it is explained herein for completeness.</p>
-              <p>Here is the algorithm replicated for reference and annotated for clarity (with specifics given for discrete variables):</p>
-              <br/>
-<pre class='prettyprint'>
-  ; Returns the *distribution* of Pr(X | e)
-  ; which is a table (distirbution) on X
-  ; [INPUTS]
-  ;   X  - query variable
-  ;   e  - observed evidence variable values
-  ;   bn - network composed of {X} &cup; E &cup; Y
-  ;        where Y is simply every network variable
-  ;        not in {X} or E
-  ; [OUTPUT]
-  ;   A distribution (table) on X
-  
-  function Enumeration-Ask (X, e, bn)
-      Q(X) &larr; a distribution (table) on X, empty at start
-      
-      ; Try to populate each row of Q(X)
-      for each value x_i in X do
-          Q(x_i) &larr; Enumerate-All(bn.Vars, e &cup; {x_i})
-      
-      return Normalize(Q(X))
-      
-  ; Enumerate-All is a helper that fills out a single
-  ; row in Q(X) above by returning Pr(x_i | e &cup; {x_i})
-  function Enumerate-All(vars, e)
-      if Empty?(vars) then return 1.0
-      Y &larr; First(vars)
-      if Y has value y in e
-          then return Pr(y | Parents(Y)) * Enumerate-All(Rest(vars), e)
-          else return &Sigma; Pr(y | Parents(Y)) * Enumerate-All(Rest(vars), e &cup; {y})
-</pre>
-              <br/>
-              <p class='example'>Use the enumeration inference algorithm to answer the query Pr(A | C = 1), (i.e., X = A and e = {C = 1}) in the following Bayesian network:</p>
-              <br/>
-              <div class='fit-pres text-center'>
-                <img src='../../../assets/images/spring-2014/cs-161/week-8/bayesnet-7.PNG' />
-              </div>
-              <br/>
-              <p>Observe a trace (for our example) the above Enumeration-Ask algorithm with recursive calls represented in blue and real number returns represented in orange.</p>
-              <br/>
-              <hr/>
-              <div class='fit-pres text-center'>
-                <img src='../../../assets/images/spring-2014/cs-161/week-8/enum-0.PNG' />
-              </div>
-              <br/>
-              <p>Things to notice:</p>
-              <ul class='indent-1'>
-                <li><p>I'm representing the Enumerate-All(vars, e) in a probability format: Enumerate-All(vars | e)</p></li>
-                <li><p>At each recursive call, the variable we're looking at, Y, is set to First(vars)</p></li>
-                <li><p>In the case where we need Enumerate-All(B, C | A = 0, C = 1), and B is NOT in the evidence, we split on all possible values for b, and add those to the evidence in each branch.</p></li>
-              </ul>
-              <br/>
-              <p>Simplifying the expressions we returned while accounting for parents that are in our evidence vars:</p>
-              <hr/>
-              <div class='fit-pres text-center'>
-                <img src='../../../assets/images/spring-2014/cs-161/week-8/enum-1.PNG' />
-              </div>
-              <br/>
-              <p>Now, simply gathering the real-numbers returned (highlighted in orange in the derivation) from our CPTs above, we can find the first row of our query table.</p>
-              <hr/>
-              <div class='fit-pres text-center'>
-                <img src='../../../assets/images/spring-2014/cs-161/week-8/enum-2.PNG' />
-              </div>
-              <br/>
-              <p>Repeating the same process as before for our second row (I've saved you the effort):</p>
-              <hr/>
-              <div class='fit-pres text-center'>
-                <img src='../../../assets/images/spring-2014/cs-161/week-8/enum-3.PNG' />
-              </div>
-              <p>And finally, remembering to normalize the result as indicated by our algorithm (which is simply dividing by the sum of both rows before normalization):</p>
-              <hr/>
-              <div class='fit-pres text-center'>
-                <img src='../../../assets/images/spring-2014/cs-161/week-8/enum-4.PNG' />
-              </div>
-              <br/>
-              <p>And there you have it!</p>
             </div>
             <hr/>
             
@@ -1464,8 +1359,7 @@
                   </tr>
                   <tr>
                     <td><p>2. EVAL-D-TREE</p></td>
-                    <td><p>A standard-sized problem that is neither trivial nor overly difficult, but requires you to trace a couple decision trees by hand to get a feel for the recursion. Big hint:
-                      remember what the return value is for Clisp's logical AND!</p></td>
+                    <td><p>Trivial. Big hint: remember what the return value is for Clisp's logical AND!</p></td>
                   </tr>
                 </tbody>
               </table>
