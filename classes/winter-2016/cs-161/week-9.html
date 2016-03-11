@@ -968,10 +968,12 @@
                 $$H(V) = -\sum_{v \in V} Pr(v) * log_2 [Pr(v)]$$
                 In other words, the entropy is the sum, for all values of \(V\), of the probability of seeing that value \(v\) times \(log_2\) of that probability.
               </p>
+              <p class='toolkit'>Intuitively, entropy weights the rarity of seeing a particular value of a variable by the same uncertainty its probability represents. So, the more, equally likely
+                values a variable has, the higher its entropy's magnitude. The fewer, more certainly occuring values it has, the lower its entropy's magnitude.</p>
               <br/>
               <p>Some things to note about entropy:</p>
               <ul class='indent-1'>
-                <li><p>It's measured in the bits it would require in order to represent all possible equally likely outcomes (manifest in the log_2 in the equation, to follow)</p></li>
+                <li><p>It's measured in the bits it would require in order to represent all possible equally likely outcomes (manifest in the log_2 in the equation)</p></li>
                 <li><p>A higher entropy means it's closer in value to a uniform distribution, like a coin flip (i.e., the higher the value, the more random)</p></li>
                 <li><p>The lower the entropy, the more certain the outcome is.</p></li>
               </ul>
@@ -1046,7 +1048,7 @@
                 </tbody>
               </table>
               <p class='question' name='ent-s0'><strong>Step Zero - Setup:</strong>
-                Compute the probabilities of seeing each variable value from the table and setup what you need to find the entropy. (Click for solution)
+                Compute the probabilities of seeing each variable value from the table and write the equation for the expected entropy of a split on A. (Click for solution)
               </p>
               <div class='answer white-bg' name='ent-s0'>
                   <p>Expected entropy of A is:</p>
