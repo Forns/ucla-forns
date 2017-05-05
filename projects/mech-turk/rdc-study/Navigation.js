@@ -55,6 +55,9 @@ function swap(vanish, appear) {
 //go to the next page
 function next() {
   current++;
+  if (current >= Quiz.startIndex && current < (Quiz.startIndex + Quiz.questions.length)) {
+    nextQuestion();
+  }
   swap(effectivePage(current - 1), effectivePage(current));
 }
 
@@ -74,7 +77,7 @@ Array.prototype.shuffle = function () {
     }
 
     return this;
-}
+};
 
 //randomize the order of trials i through j
 //note: don't call this on the same index twice!
