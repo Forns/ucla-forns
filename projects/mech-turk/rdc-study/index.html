@@ -117,11 +117,11 @@
         In this study, you will be asked to answer 30 short questions of the following format:
       </p>
       <ol class='indent-1'>
-        <li><p>At the top of each page, you will be shown a word followed by a selection of four additional words.</p></li>
-        <li><p>One of the four word choices will be considered the "correct" choice, and the other three will be considered "incorrect."</p></li>
+        <li><p>At the top of each page, you will be shown a word followed by a selection of three additional words.</p></li>
+        <li><p>One of the three word choices will be considered the "correct" choice, and the other two will be considered "incorrect."</p></li>
         <li><p>You will receive a BONUS of $0.01 for each word that you choose correctly, but will need to use your own decision-making strategy to maximize your gains.</p></li>
-        <li><p>For each question, you will have 20 seconds to choose one of the answer choices. If you answer after the 20 seconds have elapsed, you will NOT receive a bonus $0.01 for
-          answering that question correctly.</p></li>
+        <li><p><strong>You need not rush</strong>, but for each question, you will have 30 seconds to choose one of the answer choices.
+          If you answer after the 30 seconds have elapsed, you will NOT receive a bonus $0.01 for answering that question correctly.</p></li>
       </ol>
       <p>
         Please do this experiment in one sitting, without taking any breaks.
@@ -215,12 +215,16 @@
       <h2>Thank You!</h2>
       
       <p>
-        Thank you for your responses! Please click "Submit" below to complete the HIT. We will review your submission shortly.
+        Thank you for your help!
       </p>
+      <p class='alert alert-success text-center'>You scored <span id='report-correct'></span> / <span id='report-possible'></span></p>
+      <p class='alert alert-warning text-center'>You earned a bonus of &cent;<span id='report-bonus'></span>, which will be payed after review of your submission.</p>
+      <p>Please click "Submit" below to complete the HIT. We will review your submission shortly.</p>
       <br />
       <input id="condition" type="text" style="display: none" disabled="true" />
       <textarea id="question-order" style="display: none" disabled="true"></textarea>
       <textarea id="question-results" style="display: none" disabled="true"></textarea>
+      <textarea id="question-intents" style="display: none" disabled="true"></textarea>
       <textarea id="question-bonuses" style="display: none" disabled="true"></textarea>
       <input type="submit" value="Submit" />
     </div>
