@@ -55,7 +55,7 @@ function swap(vanish, appear) {
 //go to the next page
 function next() {
   current++;
-  if (current >= Quiz.startIndex && current < (Quiz.startIndex + Quiz.questions.length)) {
+  if (current >= Quiz.startIndex && current < (Quiz.startIndex + (2*Quiz.questions.length))) {
     nextQuestion();
   }
   swap(effectivePage(current - 1), effectivePage(current));

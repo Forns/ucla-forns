@@ -7,6 +7,7 @@ var quizDelim = $("#quiz-delimeter"),
     reportCorrect = $("#report-correct"),
     reportPossible = $("#report-possible"),
     reportBonus = $("#report-bonus"),
+    retestString = "-retest",
     
     // Main Quiz Object
     Quiz = {
@@ -141,7 +142,7 @@ var quizDelim = $("#quiz-delimeter"),
       conditionInput.val(Quiz.condition);
     },
     
-    renderQuiz = function () {
+    renderQuiz = function (idAdd) {
       for (var q of Quiz.questions) {
         var opOrder = [0, 1, 2].shuffle();
         
@@ -152,30 +153,31 @@ var quizDelim = $("#quiz-delimeter"),
               "<table class='table'>" +
                 "<tbody>" +
                   "<tr class='alert alert-warning'>" +
-                    "<td colspan=2><h3>Question: " + (Quiz.pageIndex - Quiz.startIndex) + " / " + Quiz.questions.length + "</h3></td>" +
-                    "<td class='text-right'><span class='glyphicon glyphicon-time'></span>&nbsp;&nbsp;<h3 class='ilb' id='" + q.id + "_timer'>" + Quiz.timer.startTime + "</h3></td>" +
+                    "<td colspan=2><h3>Question: " + (Quiz.pageIndex - Quiz.startIndex) + " / " + (2*Quiz.questions.length) + "</h3></td>" +
+                    "<td class='text-right'><span class='glyphicon glyphicon-time'></span>&nbsp;&nbsp;<h3 class='ilb' id='" + q.id + "_timer" + idAdd + "'>" + Quiz.timer.startTime + "</h3></td>" +
                   "</tr>" +
                   "<tr>" +
                     "<td colspan=3 class='text-center'><h1 class='text-center'>" + q.target + "</h1></td>" +
                   "</tr>" +
                   "<tr class='text-center'>" +
-                    "<td colspan=3><div class='radio'><label><input name='" + q.id + "_ans' type='radio' value='" + q.options[opOrder[0]].w + "' />" + q.options[opOrder[0]].w + "</label></div>" +
-                    "<div class='radio'><label><input name='" + q.id + "_ans' type='radio' value='" + q.options[opOrder[1]].w + "' />" + q.options[opOrder[1]].w + "</label></div>" +
-                    "<div class='radio'><label><input name='" + q.id + "_ans' type='radio' value='" + q.options[opOrder[2]].w + "' />" + q.options[opOrder[2]].w + "</label></div></td>" +
+                    "<td colspan=3>" +
+                      "<div class='radio'><label><input name='" + q.id + "_ans" + idAdd + "' type='radio' value='" + q.options[opOrder[0]].w + "' />" + q.options[opOrder[0]].w + "</label></div>" +
+                      "<div class='radio'><label><input name='" + q.id + "_ans" + idAdd + "' type='radio' value='" + q.options[opOrder[1]].w + "' />" + q.options[opOrder[1]].w + "</label></div>" +
+                      "<div class='radio'><label><input name='" + q.id + "_ans" + idAdd + "' type='radio' value='" + q.options[opOrder[2]].w + "' />" + q.options[opOrder[2]].w + "</label></div>" +
+                    "</td>" +
                   "</tr>" +
                 "</tbody>" +
               "</table>" +
-              "<input id='" + q.id + "_result' type='text' disabled='true' style='display: none' />" +
-              "<div class='text-center'><input id='" + q.id + "_next' style='display: none' disabled='true' onclick='next();' type='button' value='Continue' /></div>" +
+              "<input id='" + q.id + "_result" + idAdd + "' type='text' disabled='true' style='display: none' />" +
+              "<div class='text-center'><input id='" + q.id + "_next" + idAdd + "' style='display: none' disabled='true' onclick='next();' type='button' value='Continue' /></div>" +
             "</div>" +
           "</div>"
         );
         
         // Add event handlers
-        (function (id) {
-          $("[name='" + id + "_ans']").click(function (event) {
+        (function (id, idAdd) {
+          $("[name='" + id + "_ans" + idAdd + "']").click(function (event) {
             var val = $(this).val(),
-                qId = $(this).attr("name").split("_"),
                 result,
                 resultText,
                 resultCSS,
@@ -184,7 +186,7 @@ var quizDelim = $("#quiz-delimeter"),
                 intentBit;
                 
             event.stopPropagation();
-            $("[name='" + id + "_ans']")
+            $("[name='" + id + "_ans" + idAdd + "']")
               .unbind("click")
               .attr("disabled", true);
               
@@ -192,8 +194,7 @@ var quizDelim = $("#quiz-delimeter"),
             clearInterval(Quiz.timer.active);
             
             // Mark as correct or incorrect
-            qId = qId.slice(0, qId.length - 1).join("_");
-            result = val === Quiz.qmap[qId].options[Quiz.condition].w;
+            result = val === Quiz.qmap[id].options[Quiz.condition].w;
             if (result) {
               resultText = "Correct!";
               resultCSS  = "alert alert-success";
@@ -204,9 +205,9 @@ var quizDelim = $("#quiz-delimeter"),
               resultCSS  = "alert alert-danger";
               resultBit  = "0";
             }
-            intentBit  = (val === Quiz.qmap[qId].options[0].w) ? "1" : "0";
+            intentBit  = (val === Quiz.qmap[id].options[0].w) ? "1" : "0";
             
-            $("#" + id + "_next")
+            $("#" + id + "_next" + idAdd)
               .show()
               .attr("disabled", false)
               .before("<p class='" + resultCSS + "'>" + resultText + "</p>");
@@ -215,34 +216,31 @@ var quizDelim = $("#quiz-delimeter"),
             questionBonuses.val(questionBonuses.val() + bonusBit);
             questionIntents.val(questionIntents.val() + intentBit);
           });
-        })(q.id);
+        })(q.id, idAdd);
       }
-      
-      // Finish quiz id naming
-      $("#dec-question").attr("id", Quiz.pageIndex++);
-      $("#dem-question").attr("id", Quiz.pageIndex++);
-      $("#sub-question").attr("id", Quiz.pageIndex++);
     },
     
     nextQuestion = function () {
-      var currentQuestion = Quiz.questions[Quiz.activeQuestion],
-          currentId = currentQuestion.id;
-      startTimer(currentId);
+      var effectiveActive = Quiz.activeQuestion % Quiz.questions.length,
+          currentQuestion = Quiz.questions[effectiveActive],
+          currentId = currentQuestion.id,
+          idAdd = (Quiz.activeQuestion > Quiz.questions.length) ? retestString : "";
+      
+      startTimer(currentId, idAdd);
       Quiz.activeQuestion++;
       completeQuiz();
     },
     
-    startTimer = function (id) {
-      console.log(id);
-      var currentTimer = $("#" + id + "_timer");
+    startTimer = function (id, idAdd) {
+      var currentTimer = $("#" + id + "_timer" + idAdd);
       Quiz.timer.currentTime = Quiz.timer.startTime;
       Quiz.timer.expired = false;
       Quiz.timer.active = setInterval(function () {
-        tickTimer(id);
+        tickTimer(id, idAdd);
       }, 1000);
     },
     
-    tickTimer = function (id) {
+    tickTimer = function (id, idAdd) {
       Quiz.timer.currentTime--;
       var timerText = Quiz.timer.currentTime;
       if (Quiz.timer.currentTime <= 0) {
@@ -250,13 +248,13 @@ var quizDelim = $("#quiz-delimeter"),
         clearInterval(Quiz.timer.active);
         timerText = "Out of Time!";
       }
-      $("#" + id + "_timer").text(timerText);
+      $("#" + id + "_timer" + idAdd).text(timerText);
     },
     
     completeQuiz = function () {
       var correct  = questionResults.val().split("1").length,
           bonus    = questionBonuses.val().split("1").length,
-          possible = Quiz.questions.length;
+          possible = Quiz.questions.length * 2;
       
       reportCorrect.text(correct);
       reportPossible.text(possible);
@@ -267,5 +265,10 @@ var quizDelim = $("#quiz-delimeter"),
 
 // Main Workflow:
 prepQuiz();
-renderQuiz();
-console.log(Quiz.condition);
+renderQuiz("");           // 1st test
+renderQuiz(retestString); // 2nd test
+
+// Finish quiz id naming
+$("#dec-question").attr("id", Quiz.pageIndex++);
+$("#dem-question").attr("id", Quiz.pageIndex++);
+$("#sub-question").attr("id", Quiz.pageIndex++);
