@@ -165,6 +165,10 @@ var quizDelim = $("#quiz-delimeter"),
           options: [{w: "stair", s: 0.370}, {w: "up", s: 0.205}, {w: "ladder", s: 0.082}]
         },
         {
+          target: "sailing",
+          options: [{w: "boat", s: 0.359}, {w: "water", s: 0.148}, {w: "swim", s: 0.021}]
+        },
+        {
           target: "task",
           options: [{w: "job", s: 0.370}, {w: "work", s: 0.212}, {w: "duty", s: 0.055}]
         },
@@ -249,7 +253,7 @@ var quizDelim = $("#quiz-delimeter"),
               "<table class='table'>" +
                 "<tbody>" +
                   "<tr class='alert alert-warning'>" +
-                    "<td colspan=2><h3>Question: " + (Quiz.pageIndex - Quiz.startIndex) + " / " + (2*Quiz.questions.length) + "</h3></td>" +
+                    "<td colspan=2><h3>Question: " + (Quiz.pageIndex - Quiz.startIndex) + " / " + (Quiz.questions.length) + "</h3></td>" +
                     "<td class='text-right'><span class='glyphicon glyphicon-time'></span>&nbsp;&nbsp;<h3 class='ilb' id='" + q.id + "_timer" + idAdd + "'>" + Quiz.timer.startTime + "</h3></td>" +
                   "</tr>" +
                   "<tr>" +
@@ -361,8 +365,7 @@ var quizDelim = $("#quiz-delimeter"),
 
 // Main Workflow:
 prepQuiz();
-renderQuiz("");           // 1st test
-renderQuiz(retestString); // 2nd test
+renderQuiz("");
 
 // Finish quiz id naming
 $("#dec-question").attr("id", Quiz.pageIndex++);
