@@ -11,7 +11,7 @@
     <script src="../../../js/lib/bootstrap.min.js"></script>
     <script src="../../../js/lib/expanding.js"></script>
     <script src="../../../js/display/general/general-display.js"></script>
-    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
   </head>
   
   <body data-spy="scroll" data-target="#scrollspy">
@@ -1137,6 +1137,13 @@
               currentCopy = 0;
           }
   
+          void addOrder (string s) {
+              if (currentCopy &lt;= MAX_COPIES) {
+                  copies[currentCopy] = s;
+                  currentCopy++;
+              }
+          }
+  
           string makeCopy () {
               string copy;
               if (currentCopy &gt; 0) {
@@ -1144,13 +1151,6 @@
                   currentCopy--;
               }
               return copy;
-          }
-  
-          void addOrder (string s) {
-              if (currentCopy &lt;= MAX_COPIES) {
-                  copies[currentCopy] = s;
-                  currentCopy++;
-              }
           }
   };
 </pre>
@@ -1222,6 +1222,14 @@
               delete[] copies;
           }
   
+          Kinkos&amp; addOrder (string s) {
+              if (currentCopy &lt;= maxCopies) {
+                  copies[currentCopy] = s;
+                  currentCopy++;
+              }
+              return *this;
+          }
+  
           string makeCopy () {
               string copy;
               if (currentCopy &gt; 0) {
@@ -1229,14 +1237,6 @@
                   currentCopy--;
               }
               return copy;
-          }
-  
-          Kinkos&amp; addOrder (string s) {
-              if (currentCopy &lt;= maxCopies) {
-                  copies[currentCopy] = s;
-                  currentCopy++;
-              }
-              return *this;
           }
   };
 </pre>
@@ -1668,12 +1668,16 @@
             <div id='proj1' class='scrollspy-element' scrollspy-title='Project 1'></div>
             <h1>Project 1 Tips</h1>
             <div>
+              <p class='definition'>In Project 1, you'll be practicing file management on a larger scale, similar to what we did with Survivors and Weapons earlier.</p>
+              <p class='definition'>You'll also be making some class modifications that require you to edit parts of a game's history [Demo to be done here in class].</p>
+              <br/>
+              
               <p>A couple things to look out for on Project 1 that may doom you:</p>
               <p class='debug'>Although your code may still work, superfluous include directives may cost you points! Make sure that you include only what is necessary to include in each header.</p>
               <p class='debug'>Remember to test compilation under multiple compilers! Test *thoroughly* in all of your assignments!</p>
               <p class='debug'>Standard indentation and styling!</p>
               <p class='debug'>Include guards!</p>
-              <p class='debug'>Comments!</p>
+              <p class='debug'>Comments (where appropriate -- better to follow good naming conventions so your code's function is obvious)!</p>
               <br/>
               <p>Some specific Project 1 tips:</p>
               <ul class='indent-1'>
