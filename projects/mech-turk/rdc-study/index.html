@@ -45,15 +45,6 @@
   .warning {
     font-weight: bold;
   }
-
-  body {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-  }
   
   .text-center {
     text-align: center;
@@ -118,9 +109,10 @@
         In this study, you will be asked to answer 50 short questions of the following format:
       </p>
       <ol class='indent-1'>
-        <li><p>At the top of each page, you will be shown a word followed by a selection of three additional words.</p></li>
-        <li><p>One of the three word choices will be considered the "correct" choice by a hidden rule, and the other two will be considered "incorrect."</p></li>
-        <li><p>You will receive a BONUS of $0.01 for each word that you choose correctly, but will need to use your own decision-making strategy to maximize your gains.</p></li>
+        <li><p>At the top of each page, you will be shown a word followed by a selection of two additional words.</p></li>
+        <li><p>One of the two options will be considered the "correct" choice by a hidden rule, and the other will be considered "incorrect."</p></li>
+        <li><p>Your task: develop your own decision-making strategy to answer as many right as possible.
+               You will receive a BONUS of $0.01 for each word that you choose correctly.</p></li>
         <li><p><strong>You need not rush</strong>, but for each question, you will have 30 seconds to choose one of the answer choices.
           If you answer after the 30 seconds have elapsed, you will NOT receive a bonus $0.01 for answering that question correctly.</p></li>
       </ol>
@@ -220,6 +212,8 @@
       </p>
       <p class='alert alert-success text-center'>You scored <span id='report-correct'></span> / <span id='report-possible'></span></p>
       <p class='alert alert-warning text-center'>You earned a bonus of &cent;<span id='report-bonus'></span>, which will be payed after review of your submission.</p>
+      <p>For reporting purposes only; your correctness string:</p>
+      <p id="report-string"></p>
       <p>Please click "Submit" below to complete the HIT. We will review your submission shortly.</p>
       <br />
       <input id="condition" name="condition" type="text" style="display: none" disabled="true" />

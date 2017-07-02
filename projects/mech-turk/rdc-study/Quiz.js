@@ -7,6 +7,7 @@ var quizDelim = $("#quiz-delimeter"),
     reportCorrect = $("#report-correct"),
     reportPossible = $("#report-possible"),
     reportBonus = $("#report-bonus"),
+    reportString = $("#report-string"),
     retestString = "-retest",
     
     // Main Quiz Object
@@ -14,7 +15,7 @@ var quizDelim = $("#quiz-delimeter"),
       startIndex: 3,
       pageIndex: 3,
       activeQuestion: 0,
-      condition: 2, // Math.floor(Math.random() * 4),
+      condition: 2,
       questions: [
         {
           target: "accelerate",
@@ -232,7 +233,8 @@ var quizDelim = $("#quiz-delimeter"),
       Quiz.questions.shuffle();
       for (var q of Quiz.questions) {
         q.id = q.target;
-        for (var op of q.options) {
+        var limitedOps = [q.options[0], q.options[2]];
+        for (var op of limitedOps) {
           q.id += "_" + op.w;
         }
         Quiz.qmap[q.id] = q;
@@ -244,7 +246,8 @@ var quizDelim = $("#quiz-delimeter"),
     
     renderQuiz = function (idAdd) {
       for (var q of Quiz.questions) {
-        var opOrder = [0, 1, 2].shuffle();
+        // var opOrder = [0, 1, 2].shuffle();
+        var opOrder = [0, 2].shuffle();
         
         // Add each question
         quizDelim.after(
@@ -263,7 +266,7 @@ var quizDelim = $("#quiz-delimeter"),
                     "<td colspan=3>" +
                       "<div class='radio'><label><input name='" + q.id + "_ans" + idAdd + "' type='radio' value='" + q.options[opOrder[0]].w + "' />" + q.options[opOrder[0]].w + "</label></div>" +
                       "<div class='radio'><label><input name='" + q.id + "_ans" + idAdd + "' type='radio' value='" + q.options[opOrder[1]].w + "' />" + q.options[opOrder[1]].w + "</label></div>" +
-                      "<div class='radio'><label><input name='" + q.id + "_ans" + idAdd + "' type='radio' value='" + q.options[opOrder[2]].w + "' />" + q.options[opOrder[2]].w + "</label></div>" +
+                      // "<div class='radio'><label><input name='" + q.id + "_ans" + idAdd + "' type='radio' value='" + q.options[opOrder[2]].w + "' />" + q.options[opOrder[2]].w + "</label></div>" +
                     "</td>" +
                   "</tr>" +
                 "</tbody>" +
@@ -354,11 +357,13 @@ var quizDelim = $("#quiz-delimeter"),
     completeQuiz = function () {
       var correct  = questionResults.val().split("1").length,
           bonus    = questionBonuses.val().split("1").length,
-          possible = Quiz.questions.length * 2;
+          repStr   = questionResults.val().split("").join(","),
+          possible = Quiz.questions.length;
       
       reportCorrect.text(correct);
       reportPossible.text(possible);
       reportBonus.text(bonus);
+      reportString.text(repStr);
       Quiz.completed = true;
     };
     
