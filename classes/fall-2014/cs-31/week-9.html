@@ -143,7 +143,6 @@
 </pre>
               <br/>
               <p>Here, I've defined a struct named Computer that has three data members: (1) a 5 element cstring named model, (2) an int named processors, and (3) a double for the processor speed.</p>
-              <p class='debug'>Warning! You cannot initialize members within the struct definition using the traditional notation! The following will NOT compile:</p>
 <pre class='prettyprint'>
   struct Computer {
       char model[5] = "L4M3";
@@ -152,7 +151,7 @@
   };
 </pre>
               <br/>
-              <p>We'll talk about &quot;initializing&quot; structs later.</p>
+              <p>We'll talk more about &quot;initializing&quot; struct data members later.</p>
               <p class='toolkit'>A struct <strong>instance / object</strong> is a particular object of a particular type of struct.</p>
               <br/>
               <p>If we modeled the car company Ford as a struct, then an instance of Ford might be: <code class='prettyprint'>Ford myMustang;</code>.</p>
@@ -270,7 +269,7 @@
       double processorSpeed;
   } c1, c2, andrewsHackStation5000;
 </pre>
-              <p>This is useful for when we want to organize data in a struct locally to a function without poluting the global namespace.</p>
+              <p>This is useful for when we want to organize data in a struct locally to a function without polluting the global namespace.</p>
               <br/>
               <p class='debug'>Which of the following marked lines would I need to remove in order for the code to compile and run correctly?</p>
 <pre class='prettyprint'>
