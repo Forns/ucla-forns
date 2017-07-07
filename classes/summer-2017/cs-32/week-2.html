@@ -1,0 +1,588 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Andrew Forney - UCLA CS</title>
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/magic-bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/main.css" rel="stylesheet" type="text/css">
+    <script src="../../../js/lib/jquery-2.0.3.min.js"></script>
+    <script src="../../../js/lib/bootstrap.min.js"></script>
+    <script src="../../../js/lib/expanding.js"></script>
+    <script src="../../../js/display/general/general-display.js"></script>
+    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+  </head>
+  
+  <body data-spy="scroll" data-target="#scrollspy">
+    
+    <!-- BEGIN WRAP -->
+    <div id="wrap">
+      
+      <!-- BEGIN NAVIGATION -->
+      <nav class='navbar navbar-default' role='navigation'>
+        <div class='nav-accent'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-12'>
+              <div class='navbar-header'>
+                <button class='navbar-toggle' type='button' data-toggle='collapse' data-target='.navbar-main-collapse'>
+                  <span class='sr-only'>Toggle Navigation</span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                </button>
+                <a class='navbar-brand' href='/~forns/'>
+                  <span id='brand-text'>
+                    Andrew Forney
+                  </span>
+                </a>
+              </div>
+              
+              <div id='nav-main' class='collapse navbar-collapse navbar-main-collapse'>
+                <ul class='nav navbar-nav navbar-right'>
+                  
+                  <li>
+                    <a href='/~forns/about.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-user'></span>
+                      </div>
+                      <p class='text-center'>About</p>
+                    </a>
+                  </li>
+                  
+                  <li class='active'>
+                    <a href='/~forns/classes.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-book'></span>
+                      </div>
+                      <p class='text-center'>Classes</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/contact.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-comment'></span>
+                      </div>
+                      <p class='text-center'>Contact</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/publications.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-file'></span>
+                      </div>
+                      <p class='text-center'>Publications</p>
+                    </a>
+                  </li>
+                  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <!-- END NAVIGATION -->
+      
+      <!-- BEGIN MAIN CONTENT -->
+      <div id="main-content" class="container">
+        <div class="row">
+          
+          <!-- BEGIN SCROLLSPY -->
+          <div class='col-md-2 hidden-sm hidden-xs'>
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+              <ul id='scrollspy' class="nav bs-sidenav">
+              </ul>
+            </div>
+          </div>
+          <!-- END SCROLLSPY -->
+          
+          <!-- BEGIN PRESENTATION CONTENT -->
+          <div class='col-md-10 presentation-content' role='main'>
+            
+            <ol class="breadcrumb hidden-print">
+              <li><a href="../../../classes.html">Classes</a></li>
+              <li><a href="./cs-32.html">CS32</a></li>
+              <li class="active">Week 2</li>
+            </ol>
+            
+            
+            <div id='announcements' class='scrollspy-element' scrollspy-title='Announcements'></div>
+            <h1>Announcements</h1>
+            <div>
+              <p class='definition'>Professor Russell wishes to alert the class that he has uploaded an explanation for one of the recursive examples covered during lecture
+                <code>(firstNegative)</code> on his website, <a href='http://www.solomonlrussell.com/summer17/cs32/ClassSource/Recursion/firstNegative.html' target='_blank'>located here.</a></p>
+              <p>Today's agenda:</p>
+              <ol class='indent-1'>
+                <li><p>Review of recursion.</p></li>
+                <li><p>A fair amount of practice.</p></li>
+                <li><p>Go over Homework 1 and Project 2 (with hints!).</p></li>
+                <li><p>Try to finish a bit early to have a mini homework lab.</p></li>
+              </ol>
+            </div>
+            <hr/>
+            <br/>
+            
+            
+            <div id='recursion' class='scrollspy-element' scrollspy-title='Recursion'></div>
+            <h1>Recursion</h1>
+            <div>
+              <p>Recursion is just one of those iconic elements of computer science that takes a rather large paradigm shift to learn.</p>
+              <p>Not only is recursion useful, and can often simplify otherwise messy code, but it is the butt of many CS jokes; even Google is in on it:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-5/inheritance-2.PNG' />
+              </div>
+              <p>Recursion is a little difficult to wrap your head around at first, but it will quickly feel like second nature.</p>
+              <p>Let's start with some definitions and facts:</p>
+              <p class='definition'><strong>Recursion</strong> is the repeated application of a recursive process; less formally, in CS, it is when a function calls itself.</p>
+              <p class='definition'><strong>Recursion vs. Iteration:</strong> Any process that can be written using recursion can be written using iteration, and vice versa. However, while it may be computationally 
+                faster to use iteration, sometimes the code is untenable and a much simpler recursive solution exists.</p>
+              <p class='definition'>
+                <strong>Reasons for Using:</strong> Typically, we use recursion to take a large problem that is difficult to solve, break it into some number of small problems that are easy to solve, and then combine our mini-results into
+                a result that solves the original large problem!
+              </p>
+              <p>Usually, this splitting of a problem involves two key cases:</p>
+              <p class='definition'>
+                The <strong>Base Case</strong> or stopping condition, is when we've split our problem into a sufficiently small one that we can trivially solve. We return a solution
+                to our small problem in the base case(s) and do not recurse further.
+              </p>
+              <p class='definition'>
+                The <strong>Recursive Case(s)</strong> are when we have not reached a small enough subproblem to solve and need to continue looking for a base case that is trivially solved.
+                In these cases, we call our function from within our function on some even smaller problems.
+              </p>
+              <br/>
+              <p>Now, there are some constraints on valid recursive functions:</p>
+              <ul class='indent-1'>
+                <li><p>Recursive functions must have some stopping condition lest they recurse infinitely.</p></li>
+                <li><p>Each recursive case must bring the problem closer to a base case or solution; if they diverge, then we're not guaranteed that the recursion will successfully terminate.</p></li>
+              </ul>
+              <p>Let's start off gently, shall we?</p>
+            </div>
+            <hr/>
+            <br/>
+            
+            
+            <div id='firstAndRest' class='scrollspy-element' scrollspy-title='First &amp; Rest Splits'></div>
+            <h1>First &amp; Rest Splits</h1>
+            <div>
+              <p>When we talk about solving smaller subproblems, we don't always have to think about performing massive splits on our data set to achieve our goal.</p>
+              <p class='definition'><strong>First and rest splits</strong> (or linear recursion) reduces the size of the input by a linear amount with every recursive step (e.g.,
+                reducing the size of an input array by 1 on each recursive call).</p>
+              <p>For our first example, we'll focus on an array of ints.</p>
+              <br/>
+              
+              <p class='example'>Create a recursive function <code class='prettyprint'>sum</code> that returns the sum of an array of ints.</p>
+              <p>Let's use the following <b>overly-parameterized</b> function signature for sum (that we'll simplify later):</p>
+<pre class='prettyprint'>
+  int sum (const int arr[], int size, int total);
+</pre>
+              <p>Here, I have an int array arr, the number of elements remaining in it (size), and the running total of the elements' sum.</p>
+              <p>My strategy is to look at the first element in my current sub-list, add it to my total, then recurse on the rest of the list!</p>
+              <p class='question' name='recursion-0'>What is my base case in this scenario?</p>
+              <p class='answer' name='recursion-0'>Since I'm summing all of the elements, my base case is when I've summed the last element and have run out of list items! i.e., size will be 0.</p>
+              <p>As soon as I hit my base case, I want to return the solution that I've collected.</p>
+              <p>Here's a function skeleton to get us on our way:</p>
+<pre class='prettyprint'>
+  int sum (const int arr[], int size, int total) {
+      // [!] Base case check
+      if ( ... ) {
+          // [!] Return solution
+          return ...;
+      }
+      // [!] Recursive case; go to next element, dec
+      // size, and then add the current front to total
+      return sum( ... );
+  }
+</pre>
+              <p class='question' name='rec-ex-0'>Click for solution...</p>
+              <div class='answer' name='rec-ex-0'>
+<pre class='prettyprint'>
+  int sum (const int arr[], int size, int total) {
+      // [!] Base case check
+      if (size &lt;= 0) {
+          // [!] Return solution
+          return total;
+      }
+      // [!] Recursive case; go to next element, dec
+      // size, and then add the current front to total
+      return sum(arr + 1, size - 1, total + *arr);
+  }
+</pre>
+              </div>
+              <br/>
+              
+              <p class='example'>With this implementation in mind, trace the stack frames of the following call to sum:</p>
+<pre class='prettyprint'>
+  int i[] = {1, 3, 6};
+  cout &lt;&lt; sum(i, 3, 0) &lt;&lt; endl;
+</pre>
+              <a href='../../../assets/images/winter-2014/cs-32/week-5/recursion.GIF' target='_blank'>
+                <div class='text-center fit-pres'>
+                  <img src='../../../assets/images/winter-2014/cs-32/week-5/recursion.GIF' />
+                </div>
+              </a>
+              <p>Yeah I haven't mastered the whole gif thing yet so... enjoy all that whitespace above...</p>
+              <p class='definition'>Note: Whenever a recursive call is made, I suspend my position in the current stack frame until the ones above it return.</p>
+              <p>See how that works?</p>
+              <br/>
+              
+              <h3>Tricks with Recursive Returns</h3>
+              <p>One of the biggest hurdles with learning recursion is realizing that solutions need not be stored in a single variable (like the <code>total</code> parameter
+                in the example above), but rather, can be built up in each stack frame's return values.</p>
+              <p>This will typically look like a recursive call of the format: <code>return something + recursiveCall(...);</code></p>
+              <br/>
+              
+              <p class='example'>Now, let's try a fancier version of sum that does not rely on the crutch of the <code>total</code> parameter:<br/>
+                <code>int sum (const int arr[], int size)</code>
+              </p>
+              <p>Here's another function skeleton to get us on our way:</p>
+<pre class='prettyprint'>
+  int sum (const int arr[], int size) {
+      // [!] Base case check
+      if (size == 0) {
+          return 0;
+      }
+      // [!] Recursive case
+      return ...;
+  }
+</pre>
+              <p class='question' name='rec-ex-12'>Click for solution...</p>
+              <div class='answer' name='rec-ex-12'>
+<pre class='prettyprint'>
+  int sum(const int arr[], int size) {
+      // [!] Base case check
+      if (size == 0) {
+        return 0;
+      }
+    
+      // [!] Recursive case
+      return *arr + sum(arr + 1, size - 1);
+  }
+</pre>
+            </div>
+            <hr/>
+            <br/>
+            
+            
+            <div id='divideAndConquer' class='scrollspy-element' scrollspy-title='Divide &amp; Conquer Split'></div>
+            <h1>Divide &amp; Conquer Splits</h1>
+            <div>
+              <p class='definition'>Divide &amp; conquer splits attempt to reduce the size of the problem by <strong>some factor</strong> (e.g., into 2 halves) with each recursive call.</p>
+              <p>Unlike the first &amp; rest split, we will attempt to substantively reduce the size of each subproblem, solve the trivial case, 
+                and then recombine to the larger problem.</p>
+              <p>Later in the course, we'll see algorithms that rely upon divide-and-conquer splits to improve efficiency, but for now, we'll look at a simple example that demonstrates
+                the mechanics.</p>
+              <p>Here's a preview of the <strong>mergesort</strong> algorithm, which divides a list of values into smaller and smaller sub-lists until they are of size 2, and it is
+                easy to determine if the 2-element lists are already sorted or should be switched (which is then done upwards until the list is reconstructed).</p>
+              <p>We'll look at this algorithm later in the course, but here's a preview:</p>
+<pre class='prettyprint'>
+  void sort (int a[], int b, int e) {
+      if (e - b >= 2) {
+          int mid = (b + e) / 2;
+          
+          // Recursive call on first half of a
+          sort(a, b, mid);
+          // Recursive call on other half of a
+          sort(a, mid, e);
+          
+          // Merge those sorted subpropblems!
+          merge(a, b, mid, e);
+      }
+  }
+  
+  int main () {
+      int arr[] = {4, 3, 1, 2};
+      sort(arr, 0, 4);
+      // arr will now be {1, 2, 3, 4}
+  }
+</pre>
+              <p>There's a big step of understanding how this works, and it's under the assumption of a working merge function:</p>
+              <p>Here, the merge function combines the two sublists into a single, ordered sublist.</p>
+              <p>Let's take a look at it in action (gif shamelessly stolen from <a href='http://en.wikipedia.org/wiki/Merge_sort' target='_blank'>Wikipedia</a>):</p>
+              <a href='../../../assets/images/winter-2014/cs-32/week-5/mergesort.gif' target='_blank'>
+                <div class='text-center fit-pres'>
+                  <img src='../../../assets/images/winter-2014/cs-32/week-5/mergesort.gif' />
+                </div>
+              </a>
+            </div>
+            <hr/>
+            <br/>
+            
+            
+            <div id='indirectRec' class='scrollspy-element' scrollspy-title='Indirect Recursion'></div>
+            <h1>Indirect Recursion</h1>
+            <div>
+              <p class='definition'><strong>Indirect Recursion</strong> is a recursion style where some function A calls another function B which then calls A again. It is sometimes
+                referred to as "mutual recursion."</p>
+              <div class='definition'><p>We typically use indirect recursion when:</p>
+                <ul class='indent-1'>
+                  <li><p>It is simpler to delegate one part of the recursive process to one method (say, A), and a separate part to another (say, B).</p></li>
+                  <li><p>When a programming language does not support recursion, but we want recursive behavior.</p></li>
+                </ul>
+              </div>
+              <br/>
+              
+              <p>You might find this approach useful for your upcoming Project 2, but for now, here's a simple example, taken shamelessly from
+                <a href='https://www.codeproject.com/Articles/25470/Recursion-Primer-Using-C-Part' target='_blank'>this article, with other good recursion materials</a>:</p>
+<pre class='prettyprint'>
+  bool isEven(int no)
+  {
+      // Base case
+      if (0 == no)
+          return true;
+      // Recursive case
+      else
+          return isOdd(no - 1);
+  }
+  
+  bool isOdd(int no)
+  {
+      // Base case
+      if (0 == no)
+          return false;
+      // Recursive case
+      else
+          return isEven(no - 1);
+  }
+</pre>
+              <br/>
+              
+              <p>Calling the above with <code>isEven(4)</code> appears as:</p>
+              <div class='text-center fit-pres'>
+                <img src='https://www.codeproject.com/KB/cpp/Recursion_Prmr_CPP_01/05-Mutual_Recursion.gif' />
+              </div>
+            </div>
+            <hr/>
+            <br/>
+            
+            
+            <div id='practice' class='scrollspy-element' scrollspy-title='Practice'></div>
+            <h1>Practice</h1>
+            <div>
+              <p>Let's try some practice recursion problems!</p>
+              <div class='definition'>
+                <p>When approaching your recursion solutions, keep the following guidelines in mind:</p>
+                <ul class='indent-1'>
+                  <li><p>Start with your base cases, and then design your recursive cases with the starting arguments in mind -- think about how you can get from the start to your
+                    base cases!</p></li>
+                  <li><p>Remember, where appropriate, you can modify your parameters in recursive calls to get closer to base cases.</p></li>
+                  <li><p>To record-keep a solution as it's being formed, remember that you can get clever with return values like <code>return something + recursiveCall(...);</code>,
+                    where the <code>+</code> operator is only one of many options to use!</p></li>
+                </ul>
+              </div>
+              <p class='toolkit'>To test our solutions, we'll use a popular tool from the C++ <code>assert</code> library in the form of assert statements.</p>
+<pre class='prettyprint'>
+  #include &lt;assert.h&gt;
+  // No, that's not a typo, it's really
+  // &lt;assert.h&gt; with the .h
+  
+  // [!] Terminates the program if the argument
+  // is false, does nothing otherwise
+  assert(booleanExpression);
+</pre>
+              <br/>
+              
+              <h3>Cliche Recursion: Fibonacci Sequence</h3>
+              <p>There's a rite of passage for all students of recursion: you must solve the Fibonacci problem.</p>
+              <p>The Fibonacci sequence begins with two 1's, and then continues with each digit being the sum of the two previous.</p>
+              <p class='example'>Compute the nth Fibonacci number in this sequence using a recursive function with signature: <code>int Fibonacci(int n);</code></p>
+              <p>Here's a sample start of the Fibonacci sequence:</p>
+<pre class='prettyprint'>
+  // 1, 1, 2, 3, 5, 8, 13, 21, ...
+  int main() {
+      assert(fib(0) == 0);
+      assert(fib(1) == 1);
+      assert(fib(2) == 1);
+      assert(fib(5) == 5);
+      assert(fib(8) == 21);
+      cout &lt;&lt; "[!] Tests passed!" &lt;&lt; endl;
+  }
+</pre>
+              <p>Here's a code skeleton:</p>
+<pre class='prettyprint'>
+  int fib(int n) {
+      // Base cases:
+      if (n == 0) { return ???; }
+      if (n == 1) { return ???; }
+      
+      // Recursive case:
+      return fib( ??? ) + fib( ??? );
+  }
+</pre>
+              <p>No more hand-holding, you can try the next ones yourselves!</p>
+              <br/>
+              
+              <h3>Reversing Strings</h3>
+              <p class='example'>Create a recursive function that takes a string as input and returns its reverse. Signature: <code>string reverseString(string s);</code></p>
+<pre class='prettyprint'>
+  int main() {
+      assert(reverseString("") == "");
+      assert(reverseString("a") == "a");
+      assert(reverseString("bat") == "tab");
+      assert(reverseString("andrew") == "werdna");
+      assert(reverseString("racecar") == "racecar"); // lol
+      cout &lt;&lt; "[!] Tests passed!" &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              
+              <h3>Max Int in List</h3>
+              <p class='example'>Create a recursive function that takes in an array of ints, the size of the array, and returns the max int. Signature: <code>int maxInt(int arr[], int size);</code></p>
+              <p>We'll make 2 simplifying assumptions:</p>
+              <ul class='indent-1'>
+                <li><p>You may assume that arr always has at least 1 element</p></li>
+                <li><p>You may use the <code>#include &gt;algorithm&gt;</code> library's <code>max(a, b)</code> function which returns the larger of ints a and b.</p></li>
+              </ul>
+<pre class='prettyprint'>
+  int main() {
+      int a[] = { 5 };
+      int b[] = { 1, 5, 2 };
+      int c[] = { 1, 17, 22, 90 };
+      assert(maxInt(a, 1) == 5);
+      assert(maxInt(b, 3) == 5);
+      assert(maxInt(c, 4) == 90);
+      cout &lt;&lt; "[!] Tests passed!" &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              
+              <h3>Is an Int Prime?</h3>
+              <p class='example'>Create a recursive implementation (no iteration) of a function that determines if the input int is prime or not. Signature: <code>bool isPrime(int n);</code></p>
+              <p>Hint: create a helper method that has parameters that are conducive to a solution.</p>
+<pre class='prettyprint'>
+  int main() {
+      assert(isPrime(2));
+      assert(isPrime(3));
+      assert(!isPrime(4));
+      assert(isPrime(5));
+      cout &lt;&lt; "[!] Tests passed!" &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              
+              <h3>Is a String Symmetrical?</h3>
+              <p class='example'>Create a recursive function to determine if a string is the same forwards as backwards. Signature: <code>bool isSymmetrical(string s);</code></p>
+<pre class='prettyprint'>
+  int main() {
+      assert(isSymmetrical(""));
+      assert(isSymmetrical("a"));
+      assert(isSymmetrical("aba"));
+      assert(isSymmetrical("racecar"));
+      assert(!isSymmetrical("mirror"));
+      cout &lt;&lt; "[!] Tests passed!" &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              
+              <h3>Does a String Contain A Sequence?</h3>
+              <p>This one's a challenge! If you can figure it out, you're likely well equipped to embrace the homework.</p>
+              <p class='example'>Create a recursive function to determine if a target string is found *in sequence* within a container string.
+                Signature: <code>bool containsSequence(string container, string target);</code></p>
+<pre class='prettyprint'>
+  int main() {
+      assert(containsSequence("cdaotg", "dog"));
+      assert(containsSequence("cdaotg", "cat"));
+      assert(!containsSequence("cdaotg", "catdog"));
+      cout &lt;&lt; "[!] Tests passed!" &lt;&lt; endl;
+  }
+</pre>
+            </div>
+            <br/>
+            <hr/>
+            
+            
+            <div id='homeworkTips' class='scrollspy-element' scrollspy-title='Homework Tips'></div>
+            <h1>Homework Tips</h1>
+            <div>
+              <p>In the upcoming Homework 1 and Project 2, you'll get ample time to practice your skills with recursion!</p>
+              <p>We'll take a look at each assignment now, and I'll give you a few tips that might help you think about each problem.</p>
+              <br/>
+              
+              <h3>Homework 1</h3>
+              <p class='definition'>Homework 1 gives you a smattering of simple recursion exercises.
+                <a href='http://www.solomonlrussell.com/summer17/cs32/Homeworks/1/spec.html' target='_blank'>Click here for the link!</a>
+              </p>
+              
+              <table class='table table-bordered table-striped'>
+                <thead>
+                  <tr>
+                    <th><p>Problem</p></th>
+                    <th><p>Hint</p></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><p>mult</p></td>
+                    <td><p>Consider manipulating only 1 of the parameters on every recursive call!</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>countDigit</p></td>
+                    <td><p>Consider a linear recursion with "return tricks" like we did for sum above.</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>pairPlus</p></td>
+                    <td><p>Same as hint above.</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>subParen</p></td>
+                    <td><p>Consider "squeezing" the string down to the open and closed parens on each recursive call.</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>sumCombination</p></td>
+                    <td><p>Consider an approach whose base case is that the total is reduced to 0 by subtracting combinations of the ints. You might find the string sequence
+                      example above inspirational...</p></td>
+                  </tr>
+                  <tr>
+                    <td><p>pathExists</p></td>
+                    <td><p>Consider trying all directions in a single recursive call (you'll see this in the pseudocode).</p></td>
+                  </tr>
+                </tbody>
+              </table>
+              <br/>
+              
+              <h3>Project 2</h3>
+              <p class='definition'>Project 2 puts your recursion skills to the test, requiring you to build anagrams (words that can be formed from a set of letters)
+                <a href='http://www.solomonlrussell.com/summer17/cs32/Projects/2/spec.html' target='_blank'>Click here for the link!</a>
+              </p>
+              <p>Hint:</p>
+              <ul class='indent-1'>
+                <li><p>Consider breaking the recursivePermute function down using mutual recursion.</p></li>
+                <li><p>In particular, consider having another function that "slides" each letter in the input string from the front to the back, and the main workhorse function
+                  does this for every letter.</p></li>
+                <li><p>Remember to make sure that you're not adding duplicates to the results!</p></li>
+              </ul>
+            </div>
+            <hr/>
+
+            
+            <a class='btn btn-default pull-right hidden-print' href='javascript:window.print();'>
+              <span class='glyphicon glyphicon-print'></span>
+              &nbsp; PDF / Print
+            </a>
+            
+          </div>
+          <!-- END PRESENTATION CONTENT -->
+          
+          
+        </div>
+      </div>
+      <!-- END MAIN CONTENT -->
+      
+      
+    </div>
+    <!-- END WRAPPER -->
+    
+    <!-- BEGIN FOOTER -->
+    <div id="footer">
+      <div class="container">
+        <div class="col-md-12 text-center">
+          
+        </div>
+      </div>
+    </div>
+    <!-- END FOOTER -->
+    
+  </body>
+</html>
