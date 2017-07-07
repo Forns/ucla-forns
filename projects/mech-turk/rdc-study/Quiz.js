@@ -66,8 +66,8 @@ var quizDelim = $("#quiz-delimeter"),
           options: [{w: "fish", s: 0.396}, {w: "shark", s: 0.228}, {w: "dolphin", s: 0.114}]
         },
         {
-          target: "galoshes",
-          options: [{w: "rain", s: 0.307}, {w: "boots", s: 0.244}, {w: "mud", s: 0.024}]
+          target: "gain",
+          options: [{w: "weight", s: 0.260}, {w: "XXX", s: 0.244}, {w: "acquire", s: 0.016}]
         },
         {
           target: "gourmet",
@@ -114,8 +114,8 @@ var quizDelim = $("#quiz-delimeter"),
           options: [{w: "breathe", s: 0.362}, {w: "cancer", s: 0.150}, {w: "smoke", s: 0.057}]
         },
         {
-          target: "moron",
-          options: [{w: "idiot", s: 0.331}, {w: "stupid", s: 0.221}, {w: "jerk", s: 0.039}]
+          target: "mortgage",
+          options: [{w: "house", s: 0.349}, {w: "payment", s: 0.221}, {w: "bill", s: 0.024}]
         },
         {
           target: "mansion",
@@ -264,8 +264,9 @@ var quizDelim = $("#quiz-delimeter"),
                   "</tr>" +
                   "<tr class='text-center'>" +
                     "<td colspan=3>" +
-                      "<div class='radio'><label><input name='" + q.id + "_ans" + idAdd + "' type='radio' value='" + q.options[opOrder[0]].w + "' />" + q.options[opOrder[0]].w + "</label></div>" +
-                      "<div class='radio'><label><input name='" + q.id + "_ans" + idAdd + "' type='radio' value='" + q.options[opOrder[1]].w + "' />" + q.options[opOrder[1]].w + "</label></div>" +
+                      "<button id='" + q.id + "_reveal'>Reveal Answer Choices</button>" +
+                      "<div class='radio " + q.id + "_choices' style='display:none;'><label><input name='" + q.id + "_ans" + idAdd + "' type='radio' value='" + q.options[opOrder[0]].w + "' />" + q.options[opOrder[0]].w + "</label></div>" +
+                      "<div class='radio " + q.id + "_choices' style='display:none;'><label><input name='" + q.id + "_ans" + idAdd + "' type='radio' value='" + q.options[opOrder[1]].w + "' />" + q.options[opOrder[1]].w + "</label></div>" +
                       // "<div class='radio'><label><input name='" + q.id + "_ans" + idAdd + "' type='radio' value='" + q.options[opOrder[2]].w + "' />" + q.options[opOrder[2]].w + "</label></div>" +
                     "</td>" +
                   "</tr>" +
@@ -279,6 +280,14 @@ var quizDelim = $("#quiz-delimeter"),
         
         // Add event handlers
         (function (id, idAdd) {
+          // Setup reveal buttons
+          $("#" + id + "_reveal")
+            .click(function () {
+              $(this).hide();
+              $("." + id + "_choices").show();
+            });
+          
+          // Setup choice buttons
           $("[name='" + id + "_ans" + idAdd + "']").click(function (event) {
             var val = $(this).val(),
                 result,
