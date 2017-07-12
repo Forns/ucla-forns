@@ -92,7 +92,8 @@
         as a worker, and may prevent you from completing HITs in the future.
       </div>
       <br />
-      <div class='text-center'><input onclick="next();" type="button" value="Continue" /></div>
+      <div id='quiz-loading' class='text-center'><p style='color:blue;'>Loading, please wait...</p></div>
+      <div id='quiz-start' class='text-center' style='display:none;'><input onclick="next();" type="button" value="Continue" /></div>
     </div>
   </div>
 
@@ -108,7 +109,7 @@
       <p>
         In this study, you will be asked to answer 50 short questions of the following format:
       </p>
-      <ol class='indent-1'>
+      <ol id='rule-list' class='indent-1'>
         <li><p>At the top of each page, you will be shown a word, which you should consider before clicking
                a button to reveal a selection of two additional words.
                <b>The questions and answer choices are given in random order.</b></p></li>
@@ -118,8 +119,6 @@
         <li><p><strong>You need not rush</strong>, but for each question, you will have 30 seconds to choose one of the answer choices.
           If you answer after the 30 seconds have elapsed, you will NOT receive a bonus $0.01 for answering that question correctly.</p></li>
       </ol>
-      <p class='alert alert-info'><b>HINT:</b> after revealing the answer choices, consider which of the two you <i>feel</i>
-                                  like choosing before doing so.</p>
       <p>
         Please do this experiment in one sitting, without taking any breaks.
       </p>

@@ -1,4 +1,6 @@
 var quizDelim = $("#quiz-delimeter"),
+    quizStart = $("#quiz-start"),
+    quizLoad = $("#quiz-loading"),
     conditionInput = $("#condition"),
     questionOrder = $("#question-order"),
     questionResults = $("#question-results"),
@@ -8,6 +10,7 @@ var quizDelim = $("#quiz-delimeter"),
     reportPossible = $("#report-possible"),
     reportBonus = $("#report-bonus"),
     reportString = $("#report-string"),
+    ruleList = $("#rule-list"),
     retestString = "-retest",
     
     // Main Quiz Object
@@ -15,7 +18,8 @@ var quizDelim = $("#quiz-delimeter"),
       startIndex: 3,
       pageIndex: 3,
       activeQuestion: 0,
-      condition: 2,
+      cIndex: 2,
+      condition: Math.floor(Math.random() * 2),
       questions: [
         {
           target: "accelerate",
@@ -306,7 +310,7 @@ var quizDelim = $("#quiz-delimeter"),
             clearInterval(Quiz.timer.active);
             
             // Mark as correct or incorrect
-            result = val === Quiz.qmap[id].options[Quiz.condition].w;
+            result = val === Quiz.qmap[id].options[Quiz.cIndex].w;
             if (result) {
               resultText = "Correct!";
               resultCSS  = "alert alert-success";
@@ -330,6 +334,16 @@ var quizDelim = $("#quiz-delimeter"),
           });
         })(q.id, idAdd);
       }
+      
+      if (Quiz.condition) {
+        ruleList.after(
+          "<p class='alert alert-info'><b>HINT:</b> the hidden rule relates to which answer choice you <i>feel</i> like choosing first. Take this into consideration before making your final choice!</p>"
+        );
+      }
+      
+      // Finished loading quiz, ready to start!
+      quizLoad.hide();
+      quizStart.show();
     },
     
     nextQuestion = function () {
