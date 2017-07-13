@@ -268,7 +268,7 @@ var quizDelim = $("#quiz-delimeter"),
                   "</tr>" +
                   "<tr class='text-center'>" +
                     "<td colspan=3>" +
-                      "<button id='" + q.id + "_reveal'>Reveal Answer Choices</button>" +
+                      "<input id='" + q.id + "_reveal' type='button' value='Reveal Answer Choices' />" +
                       "<div class='radio " + q.id + "_choices' style='display:none;'><label><input name='" + q.id + "_ans" + idAdd + "' type='radio' value='" + q.options[opOrder[0]].w + "' />" + q.options[opOrder[0]].w + "</label></div>" +
                       "<div class='radio " + q.id + "_choices' style='display:none;'><label><input name='" + q.id + "_ans" + idAdd + "' type='radio' value='" + q.options[opOrder[1]].w + "' />" + q.options[opOrder[1]].w + "</label></div>" +
                       // "<div class='radio'><label><input name='" + q.id + "_ans" + idAdd + "' type='radio' value='" + q.options[opOrder[2]].w + "' />" + q.options[opOrder[2]].w + "</label></div>" +
