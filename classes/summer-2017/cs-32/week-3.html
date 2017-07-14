@@ -1,0 +1,771 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Andrew Forney - UCLA CS</title>
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/magic-bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/main.css" rel="stylesheet" type="text/css">
+    <script src="../../../js/lib/jquery-2.0.3.min.js"></script>
+    <script src="../../../js/lib/bootstrap.min.js"></script>
+    <script src="../../../js/lib/expanding.js"></script>
+    <script src="../../../js/display/general/general-display.js"></script>
+    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+  </head>
+  
+  <body data-spy="scroll" data-target="#scrollspy">
+    
+    <!-- BEGIN WRAP -->
+    <div id="wrap">
+      
+      <!-- BEGIN NAVIGATION -->
+      <nav class='navbar navbar-default' role='navigation'>
+        <div class='nav-accent'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-12'>
+              <div class='navbar-header'>
+                <button class='navbar-toggle' type='button' data-toggle='collapse' data-target='.navbar-main-collapse'>
+                  <span class='sr-only'>Toggle Navigation</span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                </button>
+                <a class='navbar-brand' href='/~forns/'>
+                  <span id='brand-text'>
+                    Andrew Forney
+                  </span>
+                </a>
+              </div>
+              
+              <div id='nav-main' class='collapse navbar-collapse navbar-main-collapse'>
+                <ul class='nav navbar-nav navbar-right'>
+                  
+                  <li>
+                    <a href='/~forns/about.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-user'></span>
+                      </div>
+                      <p class='text-center'>About</p>
+                    </a>
+                  </li>
+                  
+                  <li class='active'>
+                    <a href='/~forns/classes.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-book'></span>
+                      </div>
+                      <p class='text-center'>Classes</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/contact.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-comment'></span>
+                      </div>
+                      <p class='text-center'>Contact</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/publications.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-file'></span>
+                      </div>
+                      <p class='text-center'>Publications</p>
+                    </a>
+                  </li>
+                  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <!-- END NAVIGATION -->
+      
+      <!-- BEGIN MAIN CONTENT -->
+      <div id="main-content" class="container">
+        <div class="row">
+          
+          <!-- BEGIN SCROLLSPY -->
+          <div class='col-md-2 hidden-sm hidden-xs'>
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+              <ul id='scrollspy' class="nav bs-sidenav">
+              </ul>
+            </div>
+          </div>
+          <!-- END SCROLLSPY -->
+          
+          <!-- BEGIN PRESENTATION CONTENT -->
+          <div class='col-md-10 presentation-content' role='main'>
+            
+            <ol class="breadcrumb hidden-print">
+              <li><a href="../../../classes.html">Classes</a></li>
+              <li><a href="./cs-32.html">CS32</a></li>
+              <li class="active">Week 3</li>
+            </ol>
+            
+            
+            <div id='resources' class='scrollspy-element' scrollspy-title='Resource Management'></div>
+            <h1>Introduction to Resource Management</h1>
+            <div>
+              <p>
+                As you might have already seen in class, one of the interesting aspects of programming is that different problem solutions (although eliciting the same correct behavior), 
+                may go about finding the solution in wildly different ways.
+              </p>
+              <p>The next thing you'll notice is that not all solutions are of the same quality!</p>
+              <p>What I mean by this is that what one solution takes 2 minutes to solve, another takes 2 days...</p>
+              <p>Just because they arrive at the same answer, doesn't mean that one of them wasn't incredibly stupid in doing it.</p>
+              <p class='definition'><strong>Resource management</strong> involves the ability to effectively, efficiently, and economically use data structures to accomplish your program's goals.</p>
+              <br/>
+              <p>That sounded more like a business slogan than a definition, but the idea is that you want to use the right tool for the right job, and then effectively clean up after yourself.</p>
+              <p>So, let's examine how to engineer the right tools so we won't be sad.</p>
+            </div>
+            <hr/>
+            <br/>
+            
+            
+            <div id='linkedLists' class='scrollspy-element' scrollspy-title='Linked Lists'></div>
+            <h1>Linked Lists</h1>
+            <div>
+              <p>Last class, we learned about the <strong>list</strong> Abstract Data Type (ADT), where elements are ordered relative to one another.</p>
+              <p>We then investigated one implementation using arrays, but hark! Today we have another list implementation.</p>
+              <br/>
+              
+              <h4>Linked List Overview</h4>
+              <hr/>
+              <p class='definition'>A <strong>linked list</strong> is an implementation of the list ADT, except that instead of indexes indicating the position of each list element, 
+                the relative order of data is stored through references in each data node.</p>
+              <p class='definition'>A <strong>linked list node</strong> is used to enclose the data being stored, as well as references to the next node in the chain (in the case of
+                a singly linked list), or references to both the next and previous node in the chain (in the case of doubly linked lists).</p>
+              <br/>
+              
+              <p>Depending on your needs, you may implement either a singly or doubly linked list, but we'll examine the simpler today: the singly linked list.</p>
+              <p>Let's start out by seeing what a linked list looks like pictorially:</p>
+              <div class='text-center fit-pres'>
+                <img src='http://web.cs.ucla.edu/~forns/assets/images/winter-2014/cs-32/week-3/linkedLists-0.PNG' />
+              </div>
+              <p class='definition'>Note: just like the contents of any sequential list index, the <strong>data</strong> field of any node can contain data of
+                any type (even another linked list!).</p>
+              <br/>
+              
+              <h4>Inside Linked Lists</h4>
+              <hr/>
+              <p>Let's examine the contents of a linked list, starting with each Node:</p>
+              <p class='toolkit'>As mentioned, the <strong>data</strong> field contains the "meat" of the linked list, and can hold data of any type.</p>
+              <p>This is already an advantage of linked lists over array implementations, since the data can be of different types between nodes.</p>
+              <p class='definition'>Whenever we have a collection of mixed-type data, we call it <strong>heterogeneous</strong>, compared to a collection with contents of the same type,
+                which we call <strong>homogeneous</strong>.</p>
+              <p>Though it is not always necessary, or necessarily a good idea, to have heterogeneous collections, linked lists can fascilitate them more naturally that arrays.</p>
+              <p class='example'>Name some of the pros and cons of using Linked Lists over traditional arrays.</p>
+              <br/>
+              
+              <p class='toolkit'>The <strong>next</strong> field in each Node simply contains a pointer to another Node, or is set to <code>nullptr</code> to indicate that it is the
+                last element in the list.</p>
+              <p class='debug'>Note: There are also implementations of linked lists where <code>nullptr</code> is never used; for instance, <strong>circular</strong>
+                linked lists simply connect the last Node to the first, and can check if any Node is the final by seeing if its next is the same as the first!</p>
+              <p>Which brings us to the next component...</p>
+              <br/>
+              
+              <p class='definition'>We also record-keep a reference to the first node in the list, often called the <strong>head</strong>.</p>
+              <p>In some implementations, we may also record-keep a pointer to the last node, often called the tail, though there are valid arguments for and against doing so.</p>
+              <p>In a non-circular LL implementation, the head is set to <code>nullptr</code> when the list is empty.</p>
+              <br/>
+              
+              <p>Now that we've seen the internals of linked lists and their Nodes, let's look at a few of the operations that we've seen lists support:</p>
+              <br/>
+              
+              <h4>Linked List Operations</h4>
+              <hr/>
+              <p>Just like the operations in sequential lists, linked lists host a variety of operations for adding, removing, and manipulating their contained data.</p>
+              <p>However, because our data organization is different for linked lists, the implementations of these operations will vary.</p>
+              <br/>
+              
+              <p><strong>Insertion</strong></p>
+              <p>Inserting into linked lists is quite simple *when we know where we want to insert the new Node*</p>
+              <p>Here is a simple example: inserting a Node at the front of the list.</p>
+              <ol class='indent-1'>
+                <li><p>Set the new node's <code>next</code> to point to the currently first.</p></li>
+                <li><p>Update the <code>head</code> to reference the newly added node.</p></li>
+              </ol>
+              <p>Done! Later, we'll see how simple this insertion is.</p>
+              <p>However, what if we want to insert an element at the end of the list?</p>
+              <p class='question' name='ll-q0'>Can we access linked list nodes by index like we do with arrays? (e.g., intArray[1] returns the element at intArray's second position.)</p>
+              <p class='answer' name='ll-q0'>No! Remember, the way we maintain ordering in a linked list is through pointers, which are not inherently index-able.</p>
+              <p>This presents a small problem. If we want to insert a Node anywhere in the linked list except for the front, we have to find where to insert it first!</p>
+              <p>So, the steps are slightly different:</p>
+              <ol class='indent-1'>
+                <li><p>Find the position in which to insert the new node.</p></li>
+                <li><p>Set the <code>next</code> pointer in the node previous to that position to now point to the new node.</p></li>
+                <li><p>Update the new node's <code>next</code> pointer accordingly.</p></li>
+              </ol>
+              <p>For an end-of-the-list insertion, this might look like the following:</p>
+              <div class='text-center fit-pres'>
+                <img src='http://web.cs.ucla.edu/~forns/assets/images/winter-2014/cs-32/week-3/linkedLists-2.PNG' />
+              </div>
+              <p>Shortly, we'll look at how these different insertion formats compare to the sequential list implementation.</p>
+              <br/>
+              
+              <p><strong>Removal</strong></p>
+              <p>As with any operation in linked lists, the main difficulty is making sure that we've updated our references properly.</p>
+              <p>This is especially true with removing Nodes in a linked list.</p>
+              <p>The steps for removing a Node are as follows:</p>
+              <ol class='indent-1'>
+                <li><p>Find the Node you want to remove (the mechanics of which we'll cover shortly), and for this discussion, we'll refer to this Node as "RN" (Removed Node)</p></li>
+                <li><p>Update the Node to the left of the RN to point to the Node to the right of the RN, and vice versa if doubly linked.</p></li>
+                <li><p>Update any record-keeping fields, like the linked list's <code>head</code> reference if the RN was the first in the list (or the <code>size</code> field if record-kept).</p></li>
+              </ol>
+              <p>Let's look at how this might be depicted:</p>
+              <div class='text-center fit-pres'>
+                <img src='http://web.cs.ucla.edu/~forns/assets/images/winter-2014/cs-32/week-3/linkedLists-5.PNG' />
+              </div>
+              <p>Note above that we delete the Node with data "great" and redirect the <code>next</code> pointer of its predecessor to the "examples" Node.</p>
+              <p>Now the only thing left to consider is how we "find" Nodes in our linked list.</p>
+              <p>Since we can't use index access like with sequential lists, we turn to a new means of accessing and changing elements.</p>
+              <br/>
+              
+              <p><strong>Access &amp; Iterators</strong></p>
+              <p>Earlier we saw that the "find a node" operation might be easy to implement, but costly in the number of steps it takes.</p>
+              <p>If we were to access every element in a linked list sequentially by starting at the <code>head</code> node each time, it would be very inefficient!</p>
+              <p>So, for arbitrary access of data in a linked list, we can turn to Iterators for help.</p>
+              <p class='definition'>An <strong>iterator</strong> is an object defined on top of a data structure that allows users to efficiently access (and sometimes modify)
+                the elements of that structure by maintaining a "sliding" pointer to each element.</p>
+              <p>That's a bit of a vague definition, but consider an iterator object defined *on* a given linked list that can be asked to move to the previous Node, next Node, or
+                to access the data of the one it is looking at.</p>
+              <p>We'll talk more about iterators later in the course.</p>
+            </div>
+            <hr/>
+            <br/>
+            
+            
+            <div id='impLL' class='scrollspy-element' scrollspy-title='Implementing Linked Lists'></div>
+            <h1>Implementing Linked Lists</h1>
+            <div>
+              <p>In this implementation tutorial, we'll cover the basics of a singly linked list with a few simple methods.</p>
+              <p>To do so, we'll be creating 2 classes:</p>
+              <ul class='indent-1'>
+                <li><p>The <code>IntLinkedList</code> class itself</p></li>
+                <li><p>The <code>Node</code> class to hold the data of the linked list</p></li>
+              </ul>
+              <br/>
+              
+              <p>Often times, when we want to make "helper classes" to be used by the main class, but don't want users to be able to instantiate instances of these helpers. Typically,
+                this is done by making private inner classes.</p>
+              <p class='definition'><strong>Inner classes</strong> are classes that are defined within the scope of another class. In C++, they have no special access to any of the
+                private members of the containing (outer) class, but the outer class may instantiate members of the inner class.</p>
+              <p class='toolkit'>Since we *don't* want users of our IntLinkedList class to be able to access Nodes directly, we'll make it a <strong>private inner class</strong>.</p>
+              <p>However, since *we* want to be able to access the Node's members, we'll make it a private struct (not class, in which all members are private by default).</p>
+              <p class='definition'>An inner class that is <strong>private</strong> cannot be instantiated or used outside of the class, but those that are public can be.</p>
+              <p>Here's a scaffold that illustrates how we want to structure our 3 classes:</p>
+<pre class='prettyprint' filetag='IntLinkedList.h'>
+  #ifndef INTLINKEDLIST_H
+  #define INTLINKEDLIST_H
+  
+  class IntLinkedList {
+  private:
+      struct Node {
+        // TODO: complete Node
+      };
+    
+      // TODO: Add data members
+  
+  public:
+      // TODO: Add member functions
+  };
+  
+  #endif
+</pre>
+              <br/>
+              
+              <h4>Designing Nodes</h4>
+              <hr/>
+              <p>Let's start by designing our Nodes, which is quite simple: as we said, in a singly linked list, they contain only the data and a pointer to the next Node in the chain.</p>
+              <p>So, let's try to fill in the blanks:</p>
+              <div class='question' name='node-q0'>
+                <p>Complete the Node class below:</p>
+<pre class='prettyprint'>
+  ...
+  struct Node {
+      // [!] Define data members (data and next)
+      
+      // [!] Define constructor
+      Node (int d) {
+          // [!] TODO
+      }
+  }
+  ...
+</pre>
+              </div>
+              <div class='answer' name='node-q0'>
+<pre class='prettyprint'>
+  ...
+  struct Node {
+      int   data;
+      Node* next;
+  
+      Node(int d) {
+          data = d;
+          next = nullptr;
+      }
+  };
+  ...
+</pre>
+              </div>
+              <br/>
+              
+              <h4>Designing the IntLinkedList</h4>
+              <hr/>
+              <p>With our Nodes in place, we can now turn our attention to designing the IntLinkedList itself.</p>
+              <p>For this tutorial, we'll implement a few methods to be used by IntLinkedList objects themselves:</p>
+              <ul class='indent-1'>
+                <li><p><code>int getSize ();</code> returns the number of elements currently in the IntLinkedList.</p></li>
+                <li><p><code>void prepend (int toAdd);</code> adds the given int toAdd to the the head of the IntLinkedList.</p></li>
+                <li><p><code>bool contains (int toFind);</code> returns true if the IntLinkedList contains the given int toFind, false otherwise.</p></li>
+              </ul>
+              <p>Let's start out easy by defining our fields, constructor, destructor, and then declaring our methods.</p>
+              <div class='question' name='LLImp-q0'>
+                <p>Add the signatures for the IntLinkedList data-members, constructor, destructor, and member functions below:</p>
+<pre class='prettyprint' filetag='IntLinkedList.h'>
+  ...
+  class IntLinkedList {
+  private:
+      struct Node { ... };
+      // [!] Data members here: size and head
+  
+  public:
+      // [!] Declare member functions here
+      // constructor, getSize, prepend, and contains
+  };
+  ...
+</pre>
+              </div>
+              <div class='answer' name='LLImp-q0'>
+<pre class='prettyprint'>
+  ...
+  class IntLinkedList {
+  private:
+      struct Node { ... };
+    
+      int   size;
+      Node* head;
+  
+  public:
+      IntLinkedList();
+      ~IntLinkedList();
+      int getSize();
+      void prepend(int toAdd);
+      bool contains(int toFind);
+  };
+  ...
+</pre>
+              </div>
+              <br/>
+              
+              <p>Great! Now let's head on over to our IntLinkedList.cpp and start implementing our methods!</p>
+<pre class='prettyprint' filetag='IntLinkedList.cpp'>
+  #include "IntLinkedList.h"
+  using namespace std;
+  
+  IntLinkedList::IntLinkedList() {
+      // TODO
+  }
+  
+  IntLinkedList::~IntLinkedList() {
+      // TODO
+  }
+  
+  int IntLinkedList::getSize() {
+      // TODO
+      return 0;
+  }
+  
+  void IntLinkedList::prepend(int toAdd) {
+      // TODO
+  }
+  
+  bool IntLinkedList::contains(int toFind) {
+      // TODO
+      return false;
+  }
+</pre>
+              <br/>
+              
+              <p>We'll start off with the constructor and move from there.</p>
+              <div class='question' name='LLImp-q1'>
+                <p>Implement the IntLinkedList constructor:</p>
+<pre class='prettyprint' filetag='IntLinkedList.cpp'>
+  ...
+  IntLinkedList::IntLinkedList() {
+      // TODO: Initialize an empty IntLinkedList
+  }
+  ...
+</pre>
+              </div>
+              <div class='answer' name='LLImp-q1'>
+<pre class='prettyprint'>
+  ...
+  IntLinkedList::IntLinkedList() {
+      size = 0;
+      head = nullptr;
+  }
+  ...
+</pre>
+              </div>
+              <br/>
+              
+              <p>Simple enough! Now let's get some ints inside by tackling the getSize and prepend methods.</p>
+              <p class='toolkit'>The trick here is careful record-keeping. We have to remember that prepending to a linked list can occur in a couple of cases: (1) when it's empty, and (2) when there
+                is at least one item already added.</p>
+              <p>If we're clever, we can structure our prepend method to handle both of these cases elegantly...</p>
+              <div class='question' name='LLImp-q2'>
+                <p>Implement the IntLinkedList getSize and prepend methods:</p>
+<pre class='prettyprint' filetag='IntLinkedList.cpp'>
+  ...
+  int IntLinkedList::getSize() {
+      // TODO: just return size -_-
+  }
+  
+  void IntLinkedList::prepend(int toAdd) {
+      // TODO: add a new Node containint toAdd
+      // to head, remembering that current head iss:
+          // nullptr (empty list) OR
+          // a Node (non-empty list)
+      // Hint: takes 4 lines of code!
+  }
+  ...
+</pre>
+              </div>
+              <div class='answer' name='LLImp-q2'>
+<pre class='prettyprint'>
+  ...
+  int IntLinkedList::getSize() {
+      return size;
+  }
+  
+  void IntLinkedList::prepend(int toAdd) {
+      Node* currentHead = head;
+      head = new Node(toAdd);
+      head->next = currentHead;
+      size++;
+  }
+  ...
+</pre>
+              </div>
+              <br/>
+              
+              <p>Let's implement our contains method next...</p>
+              <div class='question' name='LLImp-q3'>
+                <p>Implement the IntLinkedList getSize and prepend methods:</p>
+<pre class='prettyprint' filetag='IntLinkedList.cpp'>
+  ...
+  bool IntLinkedList::contains(int toFind) {
+      // TODO: iterate through the LL to see
+      // if toFind is within
+  }
+  ...
+</pre>
+              </div>
+              <div class='answer' name='LLImp-q3'>
+<pre class='prettyprint'>
+  ...
+  bool IntLinkedList::contains(int toFind) {
+      for (Node* n = head; n != nullptr; n = n->next) {
+          if (n->data == toFind) {
+            return true;
+          }
+      }
+      return false;
+  }
+  ...
+</pre>
+              </div>
+              <br/>
+              
+              <p>Looking good, we're almost ready to test our class for basic functionality!</p>
+              <p>We have one last thing to consider...</p>
+              <p class='question' name='dest-q0'>In our prepend method, we created new Nodes using the dynamic allocation syntax; what must we do to avoid memory leaks?</p>
+              <p class='answer' name='dest-q0'>Make sure their memory gets released in the destructor, of course! This will require us to call delete on EACH Node.</p>
+              <br/>
+              
+              <p>Let's make sure we release *all* of our dynamically allocated Nodes in the destructor:</p>
+              <div class='question' name='LLImp-q4'>
+                <p>Implement the IntLinkedList destructor:</p>
+<pre class='prettyprint' filetag='IntLinkedList.cpp'>
+  ...
+  ~IntLinkedList() {
+      // TODO: Release all allocated Nodes
+  }
+  ...
+</pre>
+              </div>
+              <div class='answer' name='LLImp-q4'>
+<pre class='prettyprint'>
+  ...
+  ~IntLinkedList() {
+      Node* n = head;
+      Node* prev = nullptr;
+      while (n != nullptr) {
+          prev = n;
+          n = n->next;
+          delete prev;
+      }
+  }
+  ...
+</pre>
+              </div>
+              <br/>
+              
+              <p>Nice! Now let's give it a whir...</p>
+<pre class='prettyprint'>
+  int main() {
+      IntLinkedList linky;
+      linky.prepend(3);
+      linky.prepend(2);
+      linky.prepend(1);
+      assert(linky.getSize() == 3);
+      assert(linky.contains(2));
+      assert(!linky.contains(5));
+      cout &lt;&lt; "[!] You did it! Yay!" &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              
+              <p>Now, we're only missing one thing: being able to access the elements of our IntLinkedList in the order they appear!</p>
+              <p>At this point, we would define an Iterator for our IntLinkedList class, but that will be a topic of a future discussion...</p>
+              <p>For now, let's remember a couple of last concerns from last week's topics...</p>
+            </div>
+            <hr/>
+            <br/>
+            
+              
+            <div id='copies' class='scrollspy-element' scrollspy-title='Copying IntLinkedLists'></div>
+            <h1>Copying IntLinkedLists</h1>
+            <div>
+              <p>Suppose I want to have a couple of different IntLinkedLists, but (as you well know), I'm far too lazy to add values to both, so I'd like to instead copy the values
+                from one into the other.</p>
+              <p>This would be very convenient! Still, I would like to have 2, autonomous IntLinkedLists after the copy, with each having the same stored values, but being otherwise
+                independent.</p>
+              <p>Do we get this behavior for free? Let's find out!</p>
+              <p class='example'>What will be printed below, or will there be undefined behavior?</p>
+<pre class='prettyprint'>
+  int main() {
+      IntLinkedList linky;
+      linky.prepend(3);
+      linky.prepend(2);
+      linky.prepend(1);
+    
+      IntLinkedList linkyAlsoQuestionMark = linky;
+      linkyAlsoQuestionMark.prepend(0);
+    
+      // [?] What will get printed here?
+      cout &lt;&lt; linky.contains(0) &lt;&lt; endl;
+      cout &lt;&lt; linkyAlsoQuestionMark.contains(0) &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              
+              <p class='question' name='copy-q0'>Hmm, that's odd -- what happened in the above, and why?</p>
+              <p class='answer' name='copy-q0'>Depending on your system, you may or may not get an error from the above, but there is indeed an issue -- the compiler-provided
+                copy-constructor for IntLinkedList copied the head pointer from linky when it made linkyAlsoQuestionMark, and so they both refer to the same Nodes in memory!</p>
+              <p class='example'>Draw a diagram that illustrates the Nodes being referred to by each of linky and linkyAlsoQuestionMark.</p>
+              <br/>
+              
+              <p>So, let's safely define our own copy-constructor for the IntLinkedList class.</p>
+              <div class='question' name='LLImp-q5'>
+                <p>Implement the IntLinkedList copy-constructor:</p>
+<pre class='prettyprint' filetag='IntLinkedList.cpp'>
+  ...
+  IntLinkedList::IntLinkedList(const IntLinkedList&amp; other) {
+      head = nullptr;     // Initialize head to nullptr
+      Node* p = nullptr;  // Maintain a ptr to previous Node
+    
+      // Iterate through each of the other Nodes
+      for (Node* n = other.head; n != nullptr; n = n->next) {
+          // TODO: Create a new Node with n's data
+          // TODO: Update p's next ptr
+          // TODO: Update head if appropriate
+          // TODO: set p appropriately
+      }
+    
+      // TODO: Update one other data member...
+  }
+  ...
+</pre>
+              </div>
+              <div class='answer' name='LLImp-q5'>
+<pre class='prettyprint'>
+  ...
+  IntLinkedList::IntLinkedList(const IntLinkedList&amp; other) {
+      head = nullptr;     // Initialize head to nullptr
+      Node* p = nullptr;  // Maintain a ptr to previous Node
+    
+      // Iterate through each of the other Nodes
+      for (Node* n = other.head; n != nullptr; n = n->next) {
+          Node* newNode = new Node(n->data);
+          if (p != nullptr) {
+            p->next = newNode;
+          }
+          if (head == nullptr) {
+            head = newNode;
+          }
+          p = newNode;
+      }
+    
+      size = other.size;
+  }
+  ...
+</pre>
+              </div>
+              <br/>
+              
+              <p>Now the moment of truth, let's test it once more...</p>
+<pre class='prettyprint'>
+  int main() {
+      IntLinkedList linky;
+      linky.prepend(3);
+      linky.prepend(2);
+      linky.prepend(1);
+    
+      IntLinkedList linkyAlsoQuestionMark = linky;
+      linky.prepend(0);
+    
+      assert(linky.getSize() == 4);
+      assert(linkyAlsoQuestionMark.getSize() == 3);
+      assert(linky.contains(0));
+      assert(!linkyAlsoQuestionMark.contains(0));
+      cout &lt;&lt; "[!] Huzzah! Crisis averted" &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              
+              <p>Of course, where copy construction is allowed, so too should we make sure that the assignment operator functions as intended.</p>
+              <p>However, since assignment is so similar to copy construction, we can re-use our work with the copy-constructor by what is known as a "copy and swap."</p>
+              <p class='toolkit'>A <strong>copy and swap</strong> operation can be used for assignment between objects (A = B), where we simply copy-construct a new version of
+                the assigned object (B), and then set A's data members to the copy.</p>
+              <p>Let's see how that'd look:</p>
+<pre class='prettyprint'>
+  ...
+  IntLinkedList&amp; IntLinkedList::operator=(const IntLinkedList&amp; other) {
+      // Copy...
+      IntLinkedList* copy = new IntLinkedList(other);
+    
+      // ...then swap!
+      head = copy->head;
+      size = copy->size;
+      return *this;
+  }
+  ...
+</pre>
+              <p class='question' name='ass-q0'>What would happen if copy (in the above) was a local variable rather than a dynamically allocated one? Would the assignment operation
+                still operate as intended?</p>
+              <p class='answer' name='ass-q0'>When we return from the operator= function, the copy (and its data members) would be deleted by the destructor, and so the assigned-to
+                IntLinkedList would have deallocated data members!</p>
+              <br/>
+              
+              <p>And once more, just to test...</p>
+<pre class='prettyprint'>
+  int main() {
+      IntLinkedList linky;
+      linky.prepend(3);
+      linky.prepend(2);
+    
+      IntLinkedList theRelinkening;
+      theRelinkening = linky;
+      theRelinkening.prepend(1);
+    
+      assert(linky.getSize() == 2);
+      assert(theRelinkening.getSize() == 3);
+      assert(linky.contains(2));
+      assert(!linky.contains(1));
+      assert(theRelinkening.contains(3));
+      assert(theRelinkening.contains(1));
+      cout &lt;&lt; "[!] Assignment complete!" &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              
+              <h4>Summary</h4>
+              <hr/>
+              <ul class='indent-1'>
+                <li><p>Whenever your classes have data-members pointers, you will generally want to define a copy-constructor and assignment operation (lest the compiler's given
+                  ones not do what you want).</p></li>
+                <li><p>Additionally, whenever your classes have dynamically allocated data members (like Nodes!), your destructors must make sure to delete them. Rule of thumb: for
+                  every time you use the new keyword, so also should you use the delete.</p></li>
+              </ul>
+            </div>
+            <hr/>
+            <br/>
+            
+            
+            <div id='practice' class='scrollspy-element' scrollspy-title='Practice'></div>
+            <h1>Practice</h1>
+            <div>
+              <p>Let's do a couple of practice problems using our IntLinkedList class!</p>
+              <p class='example'>Add a new member function <code>isSorted</code> to the IntLinkedList class, which returns true if and only if the list's elements occur in ascending
+                order from the head. Two consecutive and equivalent ints (and the empty list) are considered sorted. Signature:<br/><code>bool isSorted();</code></p>
+<pre class='prettyprint'>
+  int main() {
+      IntLinkedList linky;
+      linky.prepend(3);
+      linky.prepend(2);
+      linky.prepend(1);
+      assert(linky.isSorted());
+      linky.prepend(5);
+      assert(!linky.isSorted());
+      cout &lt;&lt; "[!] Tests passed!" &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              
+              <p class='example'>[Challenge] Add a new member function <code>remove</code> to the IntLinkedList class, which removes the Node at the given index starting from the head
+                (at index 0) of the IntLinkedList. Signature:<br/><code>void remove(int index);</code></p>
+<pre class='prettyprint'>
+  int main() {
+      IntLinkedList linky;
+      linky.prepend(3);
+      linky.prepend(2);
+      linky.prepend(1);
+      linky.remove(1); // Removes the 2
+      assert(linky.contains(3));
+      assert(!linky.contains(2));
+      cout &lt;&lt; "[!] Tests passed!" &lt;&lt; endl;
+  }
+</pre>
+            </div>
+            <hr/>
+            <br/>
+            
+            
+            <a class='btn btn-default pull-right hidden-print' href='javascript:window.print();'>
+              <span class='glyphicon glyphicon-print'></span>
+              &nbsp; PDF / Print
+            </a>
+            
+          </div>
+          <!-- END PRESENTATION CONTENT -->
+          
+          <!-- MATERIALS FROM CLASS: -->
+          
+        </div>
+      </div>
+      <!-- END MAIN CONTENT -->
+      
+      
+    </div>
+    <!-- END WRAPPER -->
+    
+    <!-- BEGIN FOOTER -->
+    <div id="footer">
+      <div class="container">
+        <div class="col-md-12 text-center">
+          
+        </div>
+      </div>
+    </div>
+    <!-- END FOOTER -->
+    
+  </body>
+</html>

@@ -100,7 +100,7 @@ $(function () {
             .fadeIn(animationTime);
         });
     });
-    
+  
   // Setup question reset
   $(document)
     .on("keypress", function (e) {
@@ -112,6 +112,12 @@ $(function () {
           });
       }
     });
+    
+  // Configure display of file tags
+  $("[filetag]").each(function () {
+    var filename = $(this).attr("filetag");
+    $(this).before("<span class='filetag'><span class='glyphicon glyphicon-file'></span>&nbsp;" + filename + "</span>");
+  });
     
   // Dyer mode
   $(document)

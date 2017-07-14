@@ -55,6 +55,17 @@ body {
   color: white;
 }
 
+.filetag {
+  display: inline-block;
+  border: 1px solid #888;
+  background-color: #FFF3CC;
+  border-bottom: 0;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  padding: 5px 8px;
+  margin-left: 10px;
+}
+
 /* NAVIGATION */
 .nav-accent {
   height: 4px;
