@@ -644,35 +644,30 @@
               <p>Of course, where copy construction is allowed, so too should we make sure that the assignment operator functions as intended.</p>
               <p>However, since assignment is so similar to copy construction, we can re-use our work with the copy-constructor by what is known as a "copy and swap."</p>
               <p class='toolkit'>A <strong>copy and swap</strong> operation can be used for assignment between objects (A = B), where we simply copy-construct a new version of
-                the assigned object (B), and then set A's data members to the copy.</p>
+                the assigned object (B), and then swap A's and B's data members.</p>
               <p>Let's see how that'd look:</p>
 <pre class='prettyprint'>
   ...
-  // Define this private function that does
-  // the same thing as the destructor,
-  // and can be called within it as well
-  void IntLinkedList::clear() {
-      ...
-  }
-  
   IntLinkedList&amp; IntLinkedList::operator=(const IntLinkedList&amp; other) {
       // Copy...
-      IntLinkedList* copy = new IntLinkedList(other);
-      
-      // ...delete any existing nodes...
-      clear();
+      IntLinkedList copy(other);
     
       // ...then swap!
-      head = copy->head;
-      size = copy->size;
+      std::swap(head, copy.head);
+      std::swap(size, copy.size);
+      // NB, std::swap(A, B) does:
+      // temp = A; A = B; B = temp;
       return *this;
   }
   ...
 </pre>
-              <p class='question' name='ass-q0'>What would happen if copy (in the above) was a local variable rather than a dynamically allocated one? Would the assignment operation
-                still operate as intended?</p>
-              <p class='answer' name='ass-q0'>When we return from the operator= function, the copy (and its data members) would be deleted by the destructor, and so the assigned-to
-                IntLinkedList would have deallocated data members!</p>
+              <p>To explain the above:</p>
+              <ul class='indent-1'>
+                <li><p>We copy-construct <code>copy</code> from other, which means we now want the assigned IntLinkedList (i.e., A in A = B) to be "equal to" the copy.</p></li>
+                <li><p>To set A = B, we simply swap the data members of A with the <code>copy</code>.</p></li>
+                <li><p>Any existing Nodes from A are deleted when the <code>copy</code> exits the scope of the assignment operator overload (because we've already designed the
+                  destructor!).</p></li>
+              </ul>
               <br/>
               
               <p>And once more, just to test...</p>
