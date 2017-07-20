@@ -648,9 +648,19 @@
               <p>Let's see how that'd look:</p>
 <pre class='prettyprint'>
   ...
+  // Define this private function that does
+  // the same thing as the destructor,
+  // and can be called within it as well
+  void IntLinkedList::clear() {
+      ...
+  }
+  
   IntLinkedList&amp; IntLinkedList::operator=(const IntLinkedList&amp; other) {
       // Copy...
       IntLinkedList* copy = new IntLinkedList(other);
+      
+      // ...delete any existing nodes...
+      clear();
     
       // ...then swap!
       head = copy->head;

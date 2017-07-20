@@ -378,8 +378,8 @@ var quizDelim = $("#quiz-delimeter"),
     },
     
     completeQuiz = function () {
-      var correct  = questionResults.val().split("1").length,
-          bonus    = questionBonuses.val().split("1").length,
+      var correct  = questionResults.val().split("1").length - 1,
+          bonus    = questionBonuses.val().split("1").length - 1,
           repStr   = questionResults.val().split("").join(","),
           possible = Quiz.questions.length;
       
@@ -389,6 +389,8 @@ var quizDelim = $("#quiz-delimeter"),
       reportString.text(repStr);
       Quiz.completed = true;
     };
+    
+    Quiz.questions = Quiz.questions.slice(0, 2);
     
 
 // Main Workflow:
