@@ -1,0 +1,784 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Andrew Forney - UCLA CS</title>
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/magic-bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/main.css" rel="stylesheet" type="text/css">
+    <script src="../../../js/lib/jquery-2.0.3.min.js"></script>
+    <script src="../../../js/lib/bootstrap.min.js"></script>
+    <script src="../../../js/lib/expanding.js"></script>
+    <script src="../../../js/display/general/general-display.js"></script>
+    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+  </head>
+  
+  <body data-spy="scroll" data-target="#scrollspy">
+    
+    <!-- BEGIN WRAP -->
+    <div id="wrap">
+      
+      <!-- BEGIN NAVIGATION -->
+      <nav class='navbar navbar-default' role='navigation'>
+        <div class='nav-accent'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-12'>
+              <div class='navbar-header'>
+                <button class='navbar-toggle' type='button' data-toggle='collapse' data-target='.navbar-main-collapse'>
+                  <span class='sr-only'>Toggle Navigation</span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                </button>
+                <a class='navbar-brand' href='/~forns/'>
+                  <span id='brand-text'>
+                    Andrew Forney
+                  </span>
+                </a>
+              </div>
+              
+              <div id='nav-main' class='collapse navbar-collapse navbar-main-collapse'>
+                <ul class='nav navbar-nav navbar-right'>
+                  
+                  <li>
+                    <a href='/~forns/about.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-user'></span>
+                      </div>
+                      <p class='text-center'>About</p>
+                    </a>
+                  </li>
+                  
+                  <li class='active'>
+                    <a href='/~forns/classes.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-book'></span>
+                      </div>
+                      <p class='text-center'>Classes</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/contact.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-comment'></span>
+                      </div>
+                      <p class='text-center'>Contact</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/publications.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-file'></span>
+                      </div>
+                      <p class='text-center'>Publications</p>
+                    </a>
+                  </li>
+                  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <!-- END NAVIGATION -->
+      
+      <!-- BEGIN MAIN CONTENT -->
+      <div id="main-content" class="container">
+        <div class="row">
+          
+          <!-- BEGIN SCROLLSPY -->
+          <div class='col-md-2 hidden-sm hidden-xs'>
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+              <ul id='scrollspy' class="nav bs-sidenav">
+              </ul>
+            </div>
+          </div>
+          <!-- END SCROLLSPY -->
+          
+          <!-- BEGIN PRESENTATION CONTENT -->
+          <div class='col-md-10 presentation-content' role='main'>
+            
+            <ol class="breadcrumb hidden-print">
+              <li><a href="../../../classes.html">Classes</a></li>
+              <li><a href="./cs-32.html">CS32</a></li>
+              <li class="active">Week 4</li>
+            </ol>
+            
+            
+            <div id='Announcements' class='scrollspy-element' scrollspy-title='Announcements'></div>
+            <h1>Announcements</h1>
+            <div>
+              <p>Well... kind of a mix of announcements, review, and our agenda for today.</p>
+              <p class='debug'>My notes from last week have been updated! In particular, please see the new section on copying LinkedLists
+                <a href='http://web.cs.ucla.edu/~forns/classes/summer-2017/cs-32/week-3.html#copies'>located here</a>.</p>
+              
+              <h3>Review</h3>
+              <hr/>
+              <p class='question' name='rev-q1'>What is the purpose of defining a destructor?</p>
+              <p class='answer' name='rev-q1'>To ensure that any dynamically allocated resources have their memory freed when the object containing them is freed.</p>
+              <p class='question' name='rev-q0'>What is the purpose of defining a copy-constructor and overloading the assignment operator for a class?</p>
+              <p class='answer' name='rev-q0'>To ensure that each copied / assigned object's resources (i.e., its data members) are its own, that modifying one object will not modify another object
+                that improperly shares resources (as by a compiler-provided copy-constructor, e.g.), and that shared resources are not multiply deleted by multiple destructors 
+                (like two LinkedLists sharing the same list of Nodes).</p>
+              <br/>
+              
+              <h3>Today's Agenda</h3>
+              <hr/>
+              <p>Things will be a bit light today, since you had your midterm this week!</p>
+              <ul class='indent-1'>
+                <li><p>Stacks</p></li>
+                <li><p>Queues</p></li>
+                <li><p>Doubly-Linked Lists</p></li>
+                <li><p>Project 3</p></li>
+                <li><p>Debugging</p></li>
+              </ul>
+            </div>
+            <hr/>
+            <br/>
+            
+            
+            <div id='LL-stacks' class='scrollspy-element' scrollspy-title='Linked List Stacks'></div>
+            <h1>Application of Linked Lists: The Stack</h1>
+            <div>
+              <p>Heretofore (can you believe that's a word?), we've only seen some abstract uses for LinkedLists and their comparisons to Arrays...</p>
+              <p>Let's talk about a real-world data structure that works well with LinkedLists: the stack.</p>
+              <p class='definition'>A <strong>stack</strong> is a data structure used to store elements in a way that the most recently stored items are the first to be retrieved.</p>
+              <p class='toolkit'>It is said that stacks have <strong>last-in, first-out (LIFO)</strong> behavior, because the most recently retrieved item will be the most recently
+                added, or in other words, the least recently added item will be the last to be retrieved.</p>
+              <br/>
+              
+              <p>Trust me, it's cool! By analogy, think of a pile of dishes:</p>
+              <ul class='indent-1'>
+                <li><p>You <em>stack</em> dishes one on top of the other</p></li>
+                <li><p>Once you've stacked dish Z on top of all the other dishes, you can only access dish Z (and <em>cannot</em> access any other dish beneath it) until you pop Z off the top again</p></li>
+              </ul>
+              <p>
+                Stacks are very useful; in fact, there's a reason why local variables are stored in <strong>the stack,</strong> because every function's variables get stacked on the top when they're called, 
+                and popped off again when you leave the function!
+              </p>
+              <p>So, let's try to use a LinkedList to represent this data structure:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-3/linkedLists-6.PNG' />
+              </div>
+              <br/>
+              <p class='question' name='stacks-q0'>OK, Andrew, why would we want to make a data structure that's a LinkedList... but more restricted than one?</p>
+              <p class='answer' name='stacks-q0'>
+                This goes back to our public vs. private interface discussion: we want to give users of our classes certain guaranteed behaviors that allow for predictable code execution. 
+                If an algorithm requires that only the most recently pushed Node can be accessed at any time, we need to make sure our users don't tamper with that guaranteed behavior.
+              </p>
+              <br/>
+              
+              <h3>Implementing a Stack</h3>
+              <hr/>
+              <p>Here's my new interface:</p>
+<pre class='prettyprint' filetag='Stack.h'>
+  #ifndef STACK_H
+  #define STACK_H
+  #include &lt;string&gt;
+  
+  class Stack {
+  private:
+      struct Node {
+          std::string data;
+          Node* next;
+          Node (std::string s) {
+              data = s;
+              next = nullptr;
+          }
+      };
+
+      Node* head;
+      int size;
+  
+  public:
+      Stack();
+      ~Stack();
+      void push(std::string s);
+      std::string pop();
+      void print();
+  };
+  
+  #endif
+</pre>
+              <br/>
+              <p>And, of course, a shell for the implementation.</p>
+<pre class='prettyprint' filetag='Stack.cpp'>
+  #include "Stack.h"
+  #include &lt;iostream&gt;
+  using namespace std;
+  
+  // Default Stack constructor
+  Stack::Stack() {
+      head = nullptr;
+      size = 0;
+  }
+  
+  // Destructor
+  Stack::~Stack() {
+      // TODO
+  }
+  
+  // Pushes a new Node with data string s
+  // to the top of the stack!
+  void Stack::push(string s) {
+      // TODO
+  }
+  
+  // Pops the top Node on the stack off,
+  // returning its data member and removing
+  // itself from the top (making the one beneath
+  // it the new top)
+  string Stack::pop() {
+      // TODO
+      return "";
+  }
+  
+  void Stack::print() {
+      for (Node* n = head; n != nullptr; n = n->next) {
+          cout &lt;&lt; n-&gt;data &lt;&lt; endl;
+      }
+  }
+</pre>
+              <br/>
+              
+              <p>Let's fill out the push and pop functions to see it in action:</p>
+              <div class='question' name='stacks-q1'>
+                <p>Complete the push member function for a stack:</p>
+<pre class='prettyprint'>
+  ...
+  // Pushes a new Node with data string s
+  // to the top of the stack!
+  void Stack::push (std::string s) {
+      // 1) Dynamically allocate a new Node
+      Node* toAdd = new Node(s);
+  
+      // 2) The new node now points to the
+      // current head
+      // [!] Fill in here!
+  
+      // 3) Whether it's first or not, have the head point
+      // to the new node
+      // [!] Fill in here!
+  
+      // 4) Bump the size
+      size++;
+  }
+  ...
+</pre>
+              </div>
+              <div class='answer' name='stacks-q1'>
+<pre class='prettyprint'>
+  ...
+  void Stack::push(std::string s) {
+      Node* toAdd = new Node(s);
+      toAdd->next = head;
+      head = toAdd;
+      size++;
+  }
+  ...
+</pre>
+              </div>
+              <br/>
+              
+              <p class='example'>If we test our push with the following main function, what gets printed out?</p>
+<pre class='prettyprint'>
+  int main () {
+      Stack onStacksOnStacks;
+      onStacksOnStacks.push("Bill");
+      onStacksOnStacks.push("Dolla");
+      onStacksOnStacks.push("Dolla");
+      onStacksOnStacks.print();
+  }
+</pre>
+              <br/>
+              
+              <p>Now that we can push Nodes onto a Stack, let's consider how to pop them off!</p>
+              <div class='question' name='stacks-q2'>
+                <p>Complete the pop member function for a stack:</p>
+<pre class='prettyprint'>
+  ...
+  // Pops the top Node on the stack off,
+  // returning its data member and removing
+  // itself from the top (making the one beneath
+  // it the new top)
+  string Stack::pop () {
+      // 1) Return the empty string if empty
+      if (head == nullptr) {
+          return "";
+      }
+  
+      // 2) Set a pointer to the top node
+      // [!] Fill in here!
+  
+      // 3) Save the top Node's data
+      string result; // [!] Fill in here!
+  
+      // 4) Adjust head accordingly
+      // [!] Fill in here!
+  
+      // 5) ...take care of the top Node... quietly...
+      // [!] Fill in here!
+      
+      // 6) Reduce size
+      size--;
+  
+      return result;
+  }
+  ...
+</pre>
+              </div>
+              <div class='answer' name='stacks-q2'>
+<pre class='prettyprint'>
+  ...
+  string Stack::pop() {
+      if (head == nullptr) {
+          return "";
+      }
+    
+      Node* top = head;
+      string result = top->data;
+      head = head->next;
+      delete top;
+      size--;
+    
+      return result;
+  }
+  ...
+</pre>
+              </div>
+              <br/>
+              
+              <p class='example'>If we test our pop with the following main function, what gets printed out?</p>
+<pre class='prettyprint'>
+  int main () {
+      Stack onStacksOnStacks;
+      onStacksOnStacks.pop();
+      onStacksOnStacks.push("TA");
+      onStacksOnStacks.push("great");
+      onStacksOnStacks.pop();
+      onStacksOnStacks.push("is a");
+      onStacksOnStacks.push("Andrew");
+      onStacksOnStacks.push("Great...");
+      onStacksOnStacks.print();
+  }
+</pre>
+              <br/>
+              <p>-_-</p>
+              <br/>
+              
+              <p class='example'>Practice: try implementing the destructor yourself!</p>
+            </div>
+            <hr/>
+            <br/>
+            
+            
+            <div id='double-LL' class='scrollspy-element' scrollspy-title='Doubly Linked Lists'></div>
+            <h1>Doubly Linked Lists</h1>
+            <div>
+              <p>Wake up your neighbors folks, let's talk Doubly Linked Lists.</p>
+              <p class='definition'>
+                A <strong>doubly linked list</strong> is just like a regular linked list, except each Node has a pointer to the previous Node in the sequence along with a pointer to the next Node.
+              </p>
+              <br/>
+              <p>What's this look like you ask?</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-3/linkedLists-7.PNG' />
+              </div>
+              <p>&quot;I like the new arrows, Andrew... what good do they do?&quot;</p>
+              <p class='question' name='dll-q0'>What is the purpose of having <code>prev</code> pointers in every Node? In what scenarios might they be useful?</p>
+              <p class='answer' name='dll-q0'>
+                Whereas previously, in the Singly Linked List, we had only forward arrows, if we ever wanted information about a Node behind us in the sequence, we had to start 
+                all over at the beginning... now we don't! Doubly-linked lists are useful when we have operations that need to operate on Nodes before and after the one under current
+                inspection.
+              </p>
+              <p>I'm sure the 1 or 2 cases in which these new arrows save us headaches will more than make up for their upkeep...</p>
+              <br/>
+              
+              <h3>Implementing a Doubly-Linked-List</h3>
+              <hr/>
+              <p>Alright... so we've been dealing with Nodes this whole time, but you know what?</p>
+              <p>I'm bored with Nodes... let's use a more pop-culture-friendly class and implementation.</p>
+              <br/>
+<pre class='prettyprint' filetag='HumanCentipede.h'>
+  #ifndef HC_H
+  #define HC_H
+  #include &lt;string&gt;
+  #include &lt;iostream&gt;
+  
+  class HumanCentipede {
+      private:
+          struct Person {
+              std::string m_data;
+              Person* m_front;
+              Person* m_behind;
+              Person (std::string s) {
+                  m_data = s;
+                  m_front = nullptr;
+                  m_behind = nullptr;
+              }
+          };
+  
+          Person* head;
+          Person* tail;
+          int size;
+  
+      public:
+          HumanCentipede();
+          ~HumanCentipede();
+          void insert(std::string);
+          bool erase(std::string);
+          void print();
+  };
+  
+  #endif
+</pre>
+              <br/>
+              
+<pre class='prettyprint' filetag='HumanCentipede.cpp'>
+  #include "HumanCentipede.h"
+  #include&lt;iostream&gt;
+  using namespace std;
+  
+  HumanCentipede::HumanCentipede() {
+      head = nullptr;
+      size = 0;
+  }
+  
+  HumanCentipede::~HumanCentipede() {
+      // TODO
+  }
+  
+  void HumanCentipede::prepend(string toAdd) {
+      // TODO
+  }
+  
+  bool HumanCentipede::remove(string toRemove) {
+      // TODO
+      return false;
+  }
+  
+  void HumanCentipede::print() {
+      for (Person* p = head; p != nullptr; p = p->next) {
+          cout &lt;&lt; p->data &lt;&lt; " ";
+      }
+      cout &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p>...and if you haven't seen the movie, or didn't catch the reference, please don't look it up (read: please don't sue me if you do)</p>
+              
+              <br/>
+              <p>Should we start at the start? Let's try simply inserting elements to the front of our DLL via a prepend operation.</p>
+              <div class='question' name='dll-q0'>
+                <p>Complete the prepend member function for our doubly-linked list... well... human centipede:</p>
+<pre class='prettyprint'>
+  ...
+  void HumanCentipede::prepend(string toAdd) {
+      Person* newPerson = new Person(toAdd);
+      // TODO: set newPerson to point to old head
+      
+      if (head != nullptr) {
+          // TODO: if head != nullptr, what
+          // do we have to update?
+      }
+      
+      // TODO: update head appropriately
+      
+      // TODO: update any other data members...
+  }
+  ...
+</pre>
+              </div>
+              <div class='answer' name='dll-q0'>
+<pre class='prettyprint'>
+  ...
+  void HumanCentipede::prepend(string toAdd) {
+      Person* newPerson = new Person(toAdd);
+      newPerson->next = head;
+      if (head != nullptr) {
+        head->prev = newPerson;
+      }
+      head = newPerson;
+      size++;
+  }
+  ...
+</pre>
+              </div>
+              <br/>
+              
+              <p>It should work with this main function:</p>
+<pre class='prettyprint'>
+  int main () {
+      HumanCentipede cent;
+      // Yes, I looked up the character names
+      cent.prepend("Katsuro");
+      cent.prepend("Lindsay");
+      cent.prepend("Jenny");
+      cent.print();
+  }
+</pre>
+              <br/>
+              
+              <p>Alright, that one was basically a freebie... no more freebies for HumanCentipede... instead, let's just walk through the erase function.</p>
+              <p>Here are some behaviors for erasing a node at certain positions in a Doubly Linked... sorry... HumanCentipede:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-3/linkedLists-9.PNG' />
+              </div>
+              <hr/>
+              <p>K, how about this one?</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-3/linkedLists-10.PNG' />
+              </div>
+              <p class='question' name='dll-q1'>There are, in general, 3 cases for updates required to our DLL for any arbitrary deletion. E.g., 1) is that if we delete the head, we
+                must update the head pointer. What are the other 2?</p>
+              <p class='answer' name='dll-q1'>2) If we delete a Person p with p->next != nullptr, then we must update p->next's prev.
+                3) If we delete a Person p with p->prev != nullptr, then we must update p->prev's next.</p>
+              <br/>
+              
+              <p>With these 3 cases in mind, let's try implementing the remove function.</p>
+              <p class='toolkit'>In the following skeleton, note that <code>nullptr</code> evaluates to false in if-conditionals (i.e., anywhere a bool is expected), and any pointers not
+                nullptr evaluate to true.</p>
+              <div class='question' name='dll-q2'>
+                <p>Complete the remove member function for our human centipede:</p>
+<pre class='prettyprint'>
+  ...
+  bool HumanCentipede::remove(string toRemove) {
+      // 1) Search for the Person toRemove
+      Person* toFind = head;
+      while (toFind != nullptr) {
+          // TODO: if we found it, break
+          if ( ??? ) { break; }
+          toFind = toFind->next;
+      }
+      
+      // 2) Make updates based on result of search
+      // Case 1: what if toRemove wasn't found?
+      if ( ??? ) { ??? }
+      // Case 2: what if toFind was the head?
+      if (toFind == head) { ??? }
+      // Case 3: what if toFind had a next Person?
+      if (toFind->next) { ??? }
+      // Case 4: what if toFind had a prev Person?
+      if (toFind->prev) { ??? }
+      
+      // 3) Delete toFind and return true 
+      delete toFind;
+      size--;
+      return true;
+  }
+  ...
+</pre>
+              </div>
+              <div class='answer' name='dll-q2'>
+<pre class='prettyprint'>
+  ...
+  bool HumanCentipede::remove(string toRemove) {
+      Person* toFind = head;
+      while (toFind != nullptr) {
+          if (toFind->data == toRemove) { break; }
+          toFind = toFind->next;
+      }
+    
+      if (toFind == nullptr) { return false; }
+      if (toFind == head) { head = toFind->next; }
+      if (toFind->next) { toFind->next->prev = toFind->prev; }
+      if (toFind->prev) { toFind->prev->next = toFind->next; }
+      delete toFind;
+      size--;
+      return true;
+  }
+  ...
+</pre>
+              </div>
+              <br/>
+              
+              <p>If we did the above correctly, the following should work!</p>
+<pre class='prettyprint'>
+  int main() {
+      HumanCentipede cent;
+      cent.prepend("D");
+      cent.prepend("C");
+      cent.prepend("B");
+      cent.prepend("A");
+      cent.print();   // A B C D
+      cent.remove("C");
+      cent.print();   // A B D
+      cent.remove("A");
+      cent.print();   // B D
+      cent.remove("D");
+      cent.print();   // B
+  }
+</pre>
+              <br/>
+              
+              <p class='example'>Practice: try implementing the doubly-linked list's destructor! And if you're up for it, the copy-constructor!</p>
+            </div>
+            <hr/>
+            <br/>
+            
+            
+            <div id='queues' class='scrollspy-element' scrollspy-title='Queues'></div>
+            <h1>Application of DLL: Queueueueueues</h1>
+            <div>
+              <p>(Queues have so many u's and e's next to each other, what a strange word!)</p>
+              <p>Queues are just like lines at a shopping market or amusement park -- they have a back where people enter and a front where they are served.</p>
+              <p class='definition'><strong>Queues</strong> are an abstract data type whereby added items are <strong>enqueued</strong> to the back and then retrieved or <strong>dequeued</strong>
+                from the front.</p>
+              <p class='toolkit'>Queues are said to have <strong>first-in first-out (FIFO)</strong> behavior because the first items added are the first to be retrieved.</p>
+              <br/>
+              
+              <p>Let's examine a Queue as an application for our doubly-linked lists.</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-4/dl-queue.PNG' />
+              </div>
+              <p>Again, though, you should be aware that a queue is an abstract data type, and that some implementations WILL allow you to access the intermediary nodes behind the front.</p>
+              <p>That, however, is not true of the C++ STL queue, which only has access to the front and back element (We'll cover the STL later in the course).</p>
+              <br/>
+              
+              <h3>Common Queue Operations</h3>
+              <hr/>
+              <ul class='indent-1'>
+                <li><p><strong>push(element)</strong> (sometimes called enqueue) adds an element to the back of the queue.</p></li>
+                <li><p><strong>pop()</strong> (sometimes called dequeue) removes the element from the front of the queue.</p></li>
+                <li><p><strong>back()</strong> returns a reference to the element at the back of the queue (most recently added)</p></li>
+                <li><p><strong>empty()</strong> returns true if the queue has no elements, false otherwise</p></li>
+                <li><p><strong>size()</strong> returns a count of the number of elements in the queue</p></li>
+              </ul>
+              <br/>
+              
+              <h3>Examples</h3>
+              <hr/>
+              <p class='example'>Suppose we have a Queue storing ints defined with a <code>print()</code> function that prints its values from front to back. What will the following print?</p>
+<pre class='prettyprint'>
+  Queue q;
+  q.push(1);
+  q.push(2);
+  q.push(3);
+  // [?] What gets printed here?
+  q.print();
+</pre>
+              <br/>
+              
+              <p class='example'>Suppose we have a Queue storing ints defined with a <code>print()</code> function that prints its values from front to back. What will the following print?</p>
+<pre class='prettyprint'>
+  Queue q;
+  q.push(1);
+  q.push(2);
+  q.push(3);
+  q.pop();
+  q.pop();
+  q.push(4);
+  // [?] What gets printed here?
+  q.print();
+</pre>
+              <br/>
+            </div>
+            <hr/>
+            <br/>
+            
+            
+            <div id='project3' class='scrollspy-element' scrollspy-title='Project 3'></div>
+            <h1>Project 3</h1>
+            <div>
+              <p class='definition'>Project 3 requires you to implement a <strong>doubly-linked list</strong> to store <strong>People</strong> by <strong>alphabetically sorted</strong>
+                first and last name.
+              </p>
+              <p class='toolkit'>People will have a first name, a last name, and some data value (of variant type) associated with them (like age or gpa).</p>
+              <p class='toolkit'>A person's name is sorted alphabetically by 1) Last name, and if two People have the same last name, they are then sorted by 2) First name.</p>
+              <p>Let's take a look at the spec here: <a href='http://www.solomonlrussell.com/summer17/cs32/Projects/3/spec.html' target='_blank'>Click to Open Spec!</a></p>
+              <br/>
+              
+              <h3>Hints</h3>
+              <hr/>
+              <p class='toolkit'>Group your doubly-linked list nodes by last name, then sort by first name within these groups -- this will make a variety of functions easier.</p>
+              <p>This means you should maintain your doubly-linked list as a sorted list -- each time you insert a new Person, find their proper, alphabetically sorted position in the
+                list before inserting!</p>
+              <br/>
+              
+              <p class='toolkit'>Private helper functions that return pointers to your Nodes / People (for various search operations) will simplify the flow of your code substantially.</p>
+              <p>For example, consider having a private function <code>Node* findLastName(string name);</code> that returns a pointer to the first Node with the given last name, or the
+                first Node before where that name would go if it doesn't exist (just a suggestion, feel free to improvise).</p>
+              <br/>
+              
+              <p class='toolkit'>Strings can be compared alphabetically by simple <code>&lt;, &gt;, &lt;=, &gt;=</code> operators!</p>
+              <p>For example, <code>"adam" &lt; "brett"</code> is true because 'a' alphabetically precedes 'b'.</p>
+              <p>Note: this comparison is case-sensitive!</p>
+              <br/>
+              
+              <p class='toolkit'>Confused about an operation / function? Draw out some simple cases and then translate what you drew into code!</p>
+              <p>I can't overstate the value of drawing intended behavior before implementation -- it's truly helpful!</p>
+            </div>
+            <hr/>
+            <br/>
+            
+            
+            <div id='debugger' class='scrollspy-element' scrollspy-title='Debugging'></div>
+            <h1>Short Debugging Seminar</h1>
+            <div>
+              <p>I've had many a curious individual ask about how to use the debugger, so here's a live demo!</p>
+              <p class='example'>Suppose we made the mistake in our HumanCentipede.cpp of forgetting to update the head when the first Node is removed. [Comment that if-statement out
+                in your file to follow along]</p>
+              <p>Now, suppose we try to run the following test, and find that it fails.</p>
+<pre class='prettyprint'>
+  int main() {
+      HumanCentipede cent;
+      cent.prepend("C");
+      cent.prepend("B");
+      cent.prepend("A");
+      cent.print();   // A B C
+      cent.remove("A");
+      cent.print();   // B C
+      cent.remove("C");
+      cent.print();   // B
+  }
+</pre>
+              <br/>
+              
+              <p>Here are some general debugging steps:</p>
+              <ol class='indent-1'>
+                <li><p><strong>Set breakpoints in functions that you think are to blame.</strong> In the above, the remove function seems like a good candidate.</p></li>
+                <li><p><strong>Step through the breakpoints and inspect the state of the calling object.</strong> Verify that all data members are what you expect them to be with
+                  every step of the code.</p></li>
+                <li><p><strong>Continue setting breakpoints in functions that are called by other functions until you find a violated assumption.</strong> The debugger helps
+                  "keep us honest" -- we often assume things as true that we overlook just by staring at the code!</p></li>
+              </ol>
+            </div>
+            <hr/>
+            <br/>
+            
+            
+            
+            <a class='btn btn-default pull-right hidden-print' href='javascript:window.print();'>
+              <span class='glyphicon glyphicon-print'></span>
+              &nbsp; PDF / Print
+            </a>
+            
+          </div>
+          <!-- END PRESENTATION CONTENT -->
+          
+          <!-- MATERIALS FROM CLASS: -->
+          
+        </div>
+      </div>
+      <!-- END MAIN CONTENT -->
+      
+      
+    </div>
+    <!-- END WRAPPER -->
+    
+    <!-- BEGIN FOOTER -->
+    <div id="footer">
+      <div class="container">
+        <div class="col-md-12 text-center">
+          
+        </div>
+      </div>
+    </div>
+    <!-- END FOOTER -->
+    
+  </body>
+</html>
