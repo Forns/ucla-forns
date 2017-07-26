@@ -671,6 +671,35 @@
               </ul>
               <br/>
               
+              <p>Depicting the above, let's step through each part of copy-and-swap.</p>
+              <p class='toolkit'><strong>Step 1 - Identifying goals:</strong> let's say we have the operation <code>copyInto = copyFrom;</code> We want the resources allocated in
+                copyInto to be released, and then those in copyFrom to be deep-copied into copyInto.</p>
+              <div class='text-center fit-pres'>
+                <img src='http://web.cs.ucla.edu/~forns/assets/images/winter-2014/cs-32/week-3/copy-swap-0.PNG' />
+              </div>
+              <br/>
+              
+              <p class='toolkit'><strong>Step 2 - Copy-step:</strong> the first thing we want to do is make a deep-copy of copyFrom. We'll simply use the copy-constructor we've
+                defined for our Linked List to do this job for us, and create a new, local Linked List called copy that is a deep-copy of copyFrom.</p>
+              <div class='text-center fit-pres'>
+                <img src='http://web.cs.ucla.edu/~forns/assets/images/winter-2014/cs-32/week-3/copy-swap-1.PNG' />
+              </div>
+              <br/>
+              
+              <p class='toolkit'><strong>Step 3 - Swap-step:</strong> next, we'll simply swap the data members of copyInto and copy such that copyInto now points to the Nodes that
+                were deep-copied from copyFrom, and copy now points to copyInto's old Nodes.</p>
+              <div class='text-center fit-pres'>
+                <img src='http://web.cs.ucla.edu/~forns/assets/images/winter-2014/cs-32/week-3/copy-swap-2.PNG' />
+              </div>
+              <br/>
+              
+              <p class='toolkit'><strong>Step 4 - After-assignment Cleanup:</strong> after the operator= function returns, copyInto now correctly points to the Nodes that are deep
+                copies of those in copyFrom, and since copy was local to the operator= function, its destructor is called, which then cleans up all of copyInto's old Nodes!</p>
+              <div class='text-center fit-pres'>
+                <img src='http://web.cs.ucla.edu/~forns/assets/images/winter-2014/cs-32/week-3/copy-swap-3.PNG' />
+              </div>
+              <br/>
+              
               <p>And once more, just to test...</p>
 <pre class='prettyprint'>
   int main() {
