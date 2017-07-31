@@ -1,0 +1,449 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Andrew Forney - UCLA CS</title>
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/magic-bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/main.css" rel="stylesheet" type="text/css">
+    <script src="../../../js/lib/jquery-2.0.3.min.js"></script>
+    <script src="../../../js/lib/bootstrap.min.js"></script>
+    <script src="../../../js/lib/expanding.js"></script>
+    <script src="../../../js/display/general/general-display.js"></script>
+    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+  </head>
+  
+  <body data-spy="scroll" data-target="#scrollspy">
+    
+    <!-- BEGIN WRAP -->
+    <div id="wrap">
+      
+      <!-- BEGIN NAVIGATION -->
+      <nav class='navbar navbar-default' role='navigation'>
+        <div class='nav-accent'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-12'>
+              <div class='navbar-header'>
+                <button class='navbar-toggle' type='button' data-toggle='collapse' data-target='.navbar-main-collapse'>
+                  <span class='sr-only'>Toggle Navigation</span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                </button>
+                <a class='navbar-brand' href='/~forns/'>
+                  <span id='brand-text'>
+                    Andrew Forney
+                  </span>
+                </a>
+              </div>
+              
+              <div id='nav-main' class='collapse navbar-collapse navbar-main-collapse'>
+                <ul class='nav navbar-nav navbar-right'>
+                  
+                  <li>
+                    <a href='/~forns/about.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-user'></span>
+                      </div>
+                      <p class='text-center'>About</p>
+                    </a>
+                  </li>
+                  
+                  <li class='active'>
+                    <a href='/~forns/classes.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-book'></span>
+                      </div>
+                      <p class='text-center'>Classes</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/contact.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-comment'></span>
+                      </div>
+                      <p class='text-center'>Contact</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/publications.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-file'></span>
+                      </div>
+                      <p class='text-center'>Publications</p>
+                    </a>
+                  </li>
+                  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <!-- END NAVIGATION -->
+      
+      <!-- BEGIN MAIN CONTENT -->
+      <div id="main-content" class="container">
+        <div class="row">
+          
+          <!-- BEGIN SCROLLSPY -->
+          <div class='col-md-2 hidden-sm hidden-xs'>
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+              <ul id='scrollspy' class="nav bs-sidenav">
+              </ul>
+            </div>
+          </div>
+          <!-- END SCROLLSPY -->
+          
+          <!-- BEGIN PRESENTATION CONTENT -->
+          <div class='col-md-10 presentation-content' role='main'>
+            
+            <ol class="breadcrumb hidden-print">
+              <li><a href="../../../classes.html">Classes</a></li>
+              <li><a href="./cs-32.html">CS32</a></li>
+              <li class="active">Midterm Exercises</li>
+            </ol>
+            
+            <div id='review' class='scrollspy-element' scrollspy-title='Midterm Disclaimer'></div>
+            <h1>Midterm Review</h1>
+            <div>
+              <p>The following practice problems are meant to be supplemental to the lecture notes, and give some extra practice for problem types you might encounter on the midterm.</p>
+              <p class='debug'><strong>Disclaimer:</strong> These problems are meant to be supplemental to the Professor's given practice problems, and may or may not be representative
+                of the exact exam questions (that said, I'm told they're a fair likeness).</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='consdest' class='scrollspy-element' scrollspy-title='Contruction &amp; Destruction'></div>
+            <h1>Constructors &amp; Destructors</h1>
+            <div>
+              <p>Why not a little practice with our old friend NoisyClass?</p>
+<pre class='prettyprint'>
+  class NoisyClass {
+      private:
+          string s;
+    
+      public:
+          NoisyClass () {
+              cout &lt;&lt; "[C] Default constructor" &lt;&lt; endl;
+          }
+    
+          NoisyClass (string stuff) {
+              s = stuff;
+              cout &lt;&lt; "[P] Parameterized constructor" &lt;&lt; endl;
+          }
+    
+          NoisyClass (const NoisyClass&amp; other) {
+              s = other.s;
+              cout &lt;&lt; "[~] Copy constructor" &lt;&lt; endl;
+          }
+    
+          ~NoisyClass () {
+              cout &lt;&lt; "[D] Destructor" &lt;&lt; endl;
+          }
+    
+          NoisyClass&amp; operator= (const NoisyClass&amp; other) {
+              s = other.s;
+              cout &lt;&lt; "[=] Assignment" &lt;&lt; endl;
+              return *this;
+          }
+  };
+</pre>
+              <br/>
+              <p class='example'>Using the NoisyClass definition from above, what will the following functions print out?</p>
+<pre class='prettyprint'>
+  // Start with a warmup...
+  struct SoMeta {
+      NoisyClass n[2];
+      NoisyClass* ptr[2];
+  };
+  
+  int main () {
+      SoMeta s;
+      SoMeta* ptr;
+      SoMeta* dynamicYo = new SoMeta();
+      delete dynamicYo;
+  }
+</pre>
+              <br/>
+              <p class='example'>Using the NoisyClass definition from above, what will the following functions print out?</p>
+<pre class='prettyprint'>
+  // [!] Remember what it means for a function to pass
+  // by value, and subsequently, what it means to have
+  // a local parameter!
+  void whatsAllThisNoise (NoisyClass n) {
+      NoisyClass* copier = new NoisyClass();
+      n = *copier;
+      delete copier;
+  }
+  
+  int main () {
+      NoisyClass n;
+      whatsAllThisNoise(n);
+  }
+</pre>
+            </div>
+            <hr/>
+            <br/>
+            
+            
+            <div id='penpencil' class='scrollspy-element' scrollspy-title='Pen &amp; Pencil'></div>
+            <h1>Pen &amp; Pencil Exercises</h1>
+            <div>
+              <p class='debug'>There are just like... a ton of issues with the following DeadHorse class... can you find them all? (PS. It's meant to [poorly] implement a basic dynamic int array)</p>
+<pre class='prettyprint'>
+  // Because you're not sick of dynamic memory
+  // arrays, and copy constructors, this example
+  // will beat a...
+  struct DeadHorse {
+      private:
+          int* i;
+          int capacity;
+          int size;
+  
+      public:
+          DeadHorse () {
+              size = 0;
+              capacity = 2;
+              i = new int[2];
+          }
+  
+          DeadHorse (const DeadHorse other) {
+              i = other.i;
+              capacity = other.capacity;
+              size = other.size;
+          }
+  
+          ~DeadHorse () {
+              delete i;
+          }
+  
+          // Andrew's example levels reaching
+          // critical!
+          void addSomething (int toAdd) {
+              if (capacity == size) {
+                  int* temp = i;
+                  int newCap = capacity * 5;
+                  delete[] i;
+                  i = new int[newCap];
+                  for (int j = 0; j &lt; capacity; j++) {
+                      i[j] = temp[j];
+                  }
+                  capacity = newCap;
+              }
+              i[size] = toAdd;
+              size++;
+          }
+  
+          void print () {
+              for (int j = 0; j &lt; size; j++) {
+                  cout &lt;&lt; i[j] &lt;&lt; " ";
+              }
+              cout &lt;&lt; endl;
+          }
+  };
+  
+  int main () {
+      DeadHorse d1;
+      d1.addSomething(1);
+      d1.addSomething(2);
+      d1.print();
+  
+      DeadHorse d2 = d1;
+      d2.addSomething(3);
+      d1.print();
+      d2.print();
+  }
+</pre>
+              <p class='question' name='review-q1'>Here are just a few that I remember adding... probably more:</p>
+              <div class='answer' name='review-q1'>
+                <ul class='indent-1'>
+                  <li><p>Copy constructor param other not passed by reference!</p></li>
+                  <li><p>Copy constructor copies the pointer to the int array, but does not create a new list for the copied object.</p></li>
+                  <li><p>Destructor calls the wrong form of delete; should be delete[]</p></li>
+                  <li><p>The array-expanding attempt of addSomething tries to save the values of the array in temp, but then frees the memory, thus flooding the array with junk.</p></li>
+                </ul>
+              </div>
+              <h3>Hand Coding</h3>
+              <p class='example'>
+                Using the Stack class from discussion, implement the popUntil member function, which prints out all of the string elements popped from the Stack until the input argument is found, 
+                or the end of the Stack is reached, whichever comes first.
+              </p>
+<pre class='prettyprint'>
+  Stack smoke;
+  smoke.push("Poppin");
+  smoke.push("Nodes");
+  smoke.push("All");
+  smoke.push("Day");
+  smoke.push("Long");
+  
+  smoke.popUntil("Nodes");
+  // Prints: Long Day All Nodes
+  // smoke would only have the "Poppin" Node left
+</pre>
+            </div>
+            <hr/>
+            <br/>
+            
+            
+            <div id='inheritance' class='scrollspy-element' scrollspy-title='Inheritance'></div>
+            <h1>NoisyClass? Again? Really?</h1>
+            <div>
+              <p>Yes really!</p>
+              <p>You'll thank me later...</p>
+              <p>Here's the latest inheritance and polymorphism version:</p>
+<pre class='prettyprint'>
+  class NoisyBase {
+      private:
+          string s;
+      public:
+          NoisyBase (string sBase) {
+              cout &lt;&lt; "[B] Base Constructor: " &lt;&lt; sBase &lt;&lt; endl;
+              s = sBase;
+          }
+          virtual ~NoisyBase () {
+              cout &lt;&lt; "[B] Base Destructor!" &lt;&lt; endl;
+          }
+          virtual string getS () {
+              return s;
+          }
+  };
+  
+  class NoisyDerived: public NoisyBase {
+      private:
+          string s;
+      public:
+          NoisyDerived (string sBase, string sDerived): NoisyBase(sBase) {
+              cout &lt;&lt; "[D] Derived Constructor: " &lt;&lt; sDerived &lt;&lt; endl;
+              s = sDerived;
+          }
+          ~NoisyDerived () {
+              cout &lt;&lt; "[D] Derived Destructor!" &lt;&lt; endl;
+          }
+          virtual string getS () {
+              return s;
+          }
+  };
+</pre>
+              <br/>
+              <p>So, let's start off with the simple stuff and then ramp it up. Make sure you remember the order of construction and destruction!</p>
+              
+              <br/>
+              <p class='example'>Using the NoisyBase and NoisyDerived implementations above, what will the following code print out?</p>
+<pre class='prettyprint'>
+  int main() {
+      NoisyBase b("base!");
+      NoisyDerived d("base!", "derived!");
+  }
+</pre>
+
+              <br/>
+              <p class='example'>Using the NoisyBase and NoisyDerived implementations above, what will the following code print out?</p>
+<pre class='prettyprint'>
+  int main() {
+      NoisyDerived d("base!", "derived!");
+      NoisyBase* bPtr = &amp;d;
+      cout &lt;&lt; bPtr-&gt;getS() &lt;&lt; endl;
+  }
+</pre>
+
+              <br/>
+              <p class='example'>Using the NoisyBase and NoisyDerived implementations above, what will the following code print out?</p>
+<pre class='prettyprint'>
+  // [!] Note: no noisy copy constructor defined, but
+  // b is still passed by value... so what happens
+  // at the end of this function?
+  void NoisyFunc (NoisyBase b) {
+      cout &lt;&lt; b.getS() &lt;&lt; endl;
+  }
+  
+  int main() {
+      NoisyDerived d("base!", "derived!");
+      NoisyFunc(d);
+  }
+</pre>
+
+              <br/>
+              <p class='example'>Using the NoisyBase and NoisyDerived implementations above, what will the following code print out?</p>
+<pre class='prettyprint'>
+  int main() {
+      NoisyBase* bPtr0 = new NoisyBase("base!");
+      NoisyBase* bPtr1 = new NoisyDerived("base!", "derived!");
+      delete bPtr0;
+      // [!] Remember your order of destruction!
+      delete bPtr1;
+  }
+</pre>
+              <br/>
+              
+              <p class='example'>Using the NoisyBase and NoisyDerived implementations above, what will the following code print out?</p>
+<pre class='prettyprint'>
+  // [!] Note: no noisy copy constructor defined, but
+  // b is still passed by value... so what happens
+  // at the end of this function?
+  void NoisyFunc (NoisyBase b) {
+      cout &lt;&lt; b.getS() &lt;&lt; endl;
+  }
+  
+  int main() {
+      NoisyDerived d("base!", "derived!");
+      NoisyFunc(d);
+  }
+</pre>
+
+              <br/>
+              
+              <p class='example'>Using the NoisyBase and NoisyDerived implementations above, what will the following code print out?</p>
+<pre class='prettyprint'>
+  void f(int n) {
+      NoisyDerived* d = new NoisyDerived("base!", "derived!");
+      if (n &lt;= 0) {
+          delete d;
+          return;
+      } else {
+          f(n - 1);
+      }
+      delete d;
+  }
+  
+  int main() {
+      f(1);
+  }
+</pre>
+            </div>
+            <hr/>
+            
+            <a class='btn btn-default pull-right hidden-print' href='javascript:window.print();'>
+              <span class='glyphicon glyphicon-print'></span>
+              &nbsp; PDF / Print
+            </a>
+            
+          </div>
+          <!-- END PRESENTATION CONTENT -->
+          
+            
+        </div>
+      </div>
+      <!-- END MAIN CONTENT -->
+      
+      
+    </div>
+    <!-- END WRAPPER -->
+    
+    <!-- BEGIN FOOTER -->
+    <div id="footer">
+      <div class="container">
+        <div class="col-md-12 text-center">
+          
+        </div>
+      </div>
+    </div>
+    <!-- END FOOTER -->
+    
+  </body>
+</html>
