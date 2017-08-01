@@ -355,22 +355,6 @@
               <br/>
               <p class='example'>Using the NoisyBase and NoisyDerived implementations above, what will the following code print out?</p>
 <pre class='prettyprint'>
-  // [!] Note: no noisy copy constructor defined, but
-  // b is still passed by value... so what happens
-  // at the end of this function?
-  void NoisyFunc (NoisyBase b) {
-      cout &lt;&lt; b.getS() &lt;&lt; endl;
-  }
-  
-  int main() {
-      NoisyDerived d("base!", "derived!");
-      NoisyFunc(d);
-  }
-</pre>
-
-              <br/>
-              <p class='example'>Using the NoisyBase and NoisyDerived implementations above, what will the following code print out?</p>
-<pre class='prettyprint'>
   int main() {
       NoisyBase* bPtr0 = new NoisyBase("base!");
       NoisyBase* bPtr1 = new NoisyDerived("base!", "derived!");
