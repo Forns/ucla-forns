@@ -10,7 +10,9 @@
     <script src="../../../js/lib/jquery-2.0.3.min.js"></script>
     <script src="../../../js/lib/bootstrap.min.js"></script>
     <script src="../../../js/lib/expanding.js"></script>
+    <script src="../../../js/lib/chart.min.js"></script>
     <script src="../../../js/display/general/general-display.js"></script>
+    <script src="week-4-display.js"></script>
     <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
   </head>
   
@@ -233,17 +235,1462 @@
               
               <h3>Today's Agenda</h3>
               <hr/>
-              <p>Since you just had a midterm, we'll be looking </p>
+              <p>I'd like to say that because you just had a midterm, we can take it easy, but such is life there is much to cover!</p>
+              <p>As such, we'll try to prioritize what you want to hear about most, from among the topics below (and anything else can be "assigned reading" heh).</p>
+              <ul class='indent-1'>
+                <li><p>Runtime Analysis</p></li>
+                <li><p>Sorting</p></li>
+                <li><p>Project 4 Review</p></li>
+                <li><p>STL and Iterators</p></li>
+              </ul>
             </div>
             <hr/>
             <br/>
             
             
-            <div id='analysis' class='scrollspy-element' scrollspy-title='Runtime Analysis'></div>
-            <h1>Runtime Analysis</h1>
+            <div id='complexity' class='scrollspy-element' scrollspy-title='Complexity Analysis'></div>
+            <h1>Complexity Analysis</h1>
             <div>
+              <p>So we've just seen some common algorithms that programmers of yore have abstracted for us, but now a new question crops up: is one algorithm better than another?</p>
+              <p>Perhaps we need to take a step back... what does it mean for an algorithm to be better than another?</p>
+              <p class='definition'>
+                Algorithm complexity is often measured in terms of the growth rate of the time (and sometimes space in memory) it takes to successfully solve a problem based on the size of its input.
+              </p>
+              <p>So, given the same input and the same task (sort, search, replace, etc.), we would like a way to judge which of some set of algorithms do it the best.</p>
+              <p>This is not only useful for comparing algorithm efficiency, but also for determining how well a single algorithm scales with large input. Let's look at speed first:</p>
+              <p class='question' name='complexity-q0'>Is it a viable test for speed to run two algorithms on two computers and simply time each to see which is faster?</p>
+              <p class='answer' name='complexity-q0'>Not in general! Differences in hardware, running processes, and other differences between platforms can confound a speed test.</p>
+              <br/>
+              <p>OK, so we want some sort of evaluation that is hardware-agnostic.</p>
+              <p class='question' name='complexity-q1'>Suggest another way to measure the speed of an algorithm.</p>
+              <p class='answer' name='complexity-q1'>Count the number of statements that algorithm executes, which translate to machine instructions, which translate to time.</p>
+              <br/>
+              <p>Alright, let's look at a simple algorithm then:</p>
+<pre class='prettyprint'>
+  // Returns true iff the dividend is evenly divided
+  // by the divisor
+  bool divisibleBy (int dividend, int divisor) {
+      return (dividend % divisor == 0);
+  }
+  
+  int main () {
+      cout &lt;&lt; divisibleBy(5, 2) &lt;&lt; endl;
+      cout &lt;&lt; divisibleBy(9, 3) &lt;&lt; endl;
+      cout &lt;&lt; divisibleBy(500, 200) &lt;&lt; endl;
+      cout &lt;&lt; divisibleBy(900, 300) &lt;&lt; endl;
+      cout &lt;&lt; divisibleBy(50000, 20000) &lt;&lt; endl;
+      cout &lt;&lt; divisibleBy(90000, 30000) &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p class='question' name='complexity-q2'>Does the algorithm take more steps or execute more statements the larger the input gets?</p>
+              <p class='answer' name='complexity-q2'>No! Regardless of how large the input gets, i.e., independent of the input, this algorithm takes the same number of steps: a single modulus calculation.</p>
+              <div class='text-center'>
+                <p>Steps in algorithm (Y) as a function of size of input (X)</p>
+                <canvas id='bigOConstant' width='400' height='400'></canvas>
+              </div>
+              <br/>
+              <p>&quot;Andrew, that's possibly the worst graph I've ever seen. It is literally a box.&quot;</p>
+              <p>It's to illustrate a point! Wait til you see the next one...</p>
+              <p>In any event, we see that regardless of how large the input gets, we still take the same amount of steps.</p>
+              <p class='definition'>To represent a tight bound of complexity, it is common to use <strong>Big O Notation</strong>, designated <strong>O(N)</strong> where N is some growth rate.</p>
+              <p>Big O notation says that, &quot;As this algorithm's input gets larger and larger until infinity, we can predict that its pattern of growth will approximately follow some function of N.&quot;</p>
+              <p>Since we don't really care about small input (computers will handle small jobs quickly regardless of how good an algorithm is), we speak of efficiency at the asymptotic level.</p>
+              <p class='definition'><strong>Asymptotic</strong> analysis means we're looking at how well an algorithm performs as the size of its input reaches infinity.</p>
+              <p class='question' name='assan-q0'>Why are we typically concerned with asymptotic analysis rather than, say, finite-input-size analysis?</p>
+              <p class='answer' name='assan-q0'>Most smaller input sizes will be handled easily by modern computers, and so reasoning as the size trends to infinity helps us focus
+                on the larger cases where performance might start to degrade. It also allows us some theoretical simplifications when it comes to proving performance bounds.</p>
+              <br/>
+              <p>So, from our divisbleBy example, we saw that regardless of the input size, it still only took 1 step. So, we'd say that had a time complexity O(1).</p>
+              <p class='definition'>A <strong>constant</strong> time complexity is an algorithm that is independent of the input size. We represent this as O(1).</p>
+              <br/>
+              <p>Let's take a quick detour into Big O notation before we continue.</p>
+              <p>We said that our analysis is on the asymptotic case where our input is infinitely large.</p>
+              <p>We could say that as our data size, n -&gt; infinity, then a constant time algorithm will be unchanged. i.e.:</p>
+<pre class='prettyprint'>
+  lim 1 = 1
+  n -&gt; infinity
+</pre>
+              <br/>
+              <p>Now, say we observed an algorithm that takes the following number of steps:</p>
+<pre class='prettyprint'>
+  5n + 10000
+</pre>
+              <p>Even though this algorithm takes 10005 steps for an input size of 1 (n = 1), look what happens as n goes to infinity:</p>
+<pre class='prettyprint'>
+  [n = 100]       500 + 10000
+  [n = 10000]     50000 + 10000
+  [n = 100000000] 500000000 + 10000
+</pre>
+              <p>The larger n gets, the less significant that extra, constant 10000 steps appears to be.</p>
+              <p>So, when we measure growth rates in the form of Big O notation, we only care about the highest degree term of the polynomial. We don't even care about coefficients at the asymptotic level.</p>
+              <p class='example'>Determine the Big O equivalents of the following expressions:</p>
+<pre class='prettyprint'>
+  1) 500
+  2) 2000n + 1
+  3) 5000n + 2000n
+  4) 3n^2 + 2n + 10000
+</pre>
+              <p class='question' name='complexity-q3'>Answers here.</p>
+              <p class='answer' name='complexity-q3'><br/>1) O(1)<br/>2) O(n)<br/>3) O(n)<br/>4) O(n^2)</p>
+              <br/>
+              <p>Now that we know how to represent complexities, let's talk about how to discover them from a code segment.</p>
+              <p>Here's my heuristic for examining complexity:</p>
+              <ol class='indent-1'>
+                <li><p>Find all statements / control flow structures (typically iterations / recurrences) that rely on the size of the input.</p></li>
+                <li><p>Identify any code that executes as a consequence of one of these statements or control flow structures and note how they will be dependent on the size 
+                  of the input (e.g., code inside of a loop that is dependent on the size of the input will be executed more times the larger the input).</p></li>
+                <li><p>Determine how many times the code identified in (2) will be affected by the size-dependent code from (1).</p></li>
+              </ol>
+              <br/>
+              
+              <p>This gives a basic algorithm for finding the complexity of an algorithm (woah, meta).</p>
+              <p>Shall we give it a try? Let's look at this simple indexOf function:</p>
+              <br/>
+<pre class='prettyprint'>
+  // Returns the location of the query int
+  // within the given int array
+  int indexOf (int i[], int size, int query) {
+      for (int index = 0; index &lt; size; index++) {
+          if (i[index] == query) {
+              return index;
+          }
+      }
+      return -1;
+  }
+  
+  int main () {
+      int i[] = {5, 17, 22, -10, 0, 0, 28};
+      cout &lt;&lt; indexOf(i, 7, 0) &lt;&lt; endl;
+      cout &lt;&lt; indexOf(i, 7, 1) &lt;&lt; endl;
+  }
+</pre>
+              <p>Why don't we assess the time complexity of the indexOf function?</p>
+              <p>Let's follow the steps.</p>
+              <p class='toolkit'>NB., typically we use the variable "n" to refer to the size of the input, even though (like in the example below), the actual size of the input
+                is captured in other variables, like "size."</p>
+<pre class='prettyprint'>
+  int indexOf (int i[], int size, int query) {         // Times  Cost
+      for (int index = 0; index &lt; size; index++) {  // n      c1
+          if (i[index] == query) {                     // n      c2
+              return index;                            // n      c3
+          }
+      }
+      return -1;                                       // 1      c4
+  }
+</pre>
+              <p>We can represent the number of steps taken by the above as a "total cost function": T(n) = n * (c1 + c2 + c3) + c4.</p>
+              <p>As such, O(T(n)) = O(n) since n was the highest-degree polynomial in the total cost.</p>
+              <br/>
+              <p>Pictorially, we can see this as:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-7/complexity-0.PNG' />
+              </div>
+              <br/>
+              <div class='text-center'>
+                <p>Steps in algorithm (Y) as a function of size of input (X)</p>
+                <canvas id='bigOLinear' width='400' height='400'></canvas>
+              </div>
+              <br/>
+              <p>So in this case, we have a linear relationship between the size of our input and the number of steps our algorithm takes.</p>
+              <p class='definition'>A <strong>linear</strong> time complexity is designated <strong>O(n)</strong>, with an (approximately) equal number of steps added for every element added.</p>
+              <br/>
+              <p>Why don't we do another one?</p>
+<pre class='prettyprint'>
+  void hillPrint (int arr[], int size) {
+      for (int i = 0; i &lt; size; i++) {
+          cout &lt;&lt; arr[i] &lt;&lt; " ";
+      }
+      cout &lt;&lt; endl;
+      for (int j = size - 1; j &gt;= 0; j--) {
+          cout &lt;&lt; arr[j] &lt;&lt; " ";
+      }
+      cout &lt;&lt; endl;
+  }
+  
+  int main () {
+      int i[] = {10, 20, 30, 40, 50};
+      hillPrint(i, 5);
+  }
+</pre>
+              <br/>
+              <p>Let's look at it pictorially again:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-7/complexity-1.PNG' />
+              </div>
+              <br/>
+              <p>If you trace my pseudo-algorithm from before, you'll find that you end up with O(n + n) = O(2n) -&gt; O(n). So still linear!</p>
+              
+              <br/>
+              <p>Here's another...</p>
+<pre class='prettyprint'>
+  // res[i] = number of instances of arr[i] in arr
+  void dumbDuplicateCount (int arr[], int res[], int size) {
+      for (int i = 0; i &lt; size; i++) {
+          res[i] = 0;
+          for (int j = 0; j &lt; size; j++) {
+              if (arr[j] == arr[i]) {
+                  res[i] += 1;
+              }
+          }
+      }
+  }
+  
+  int main () {
+      int i[] = {1, 2, 2, 2, 3, 4, 3};
+      int res[7];
+      dumbDuplicateCount(i, res, 7);
+      // res is now: {1, 3, 3, 3, 2, 1, 2}
+  }
+</pre>
+              <br/>
+              <p>Once more, pictorially:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-7/complexity-2.PNG' />
+              </div>
+              <br/>
+              <div class='text-center'>
+                <p>Steps in algorithm (Y) as a function of size of input (X)</p>
+                <canvas id='bigOQuadratic' width='400' height='400'></canvas>
+              </div>
+              <br/>
+              <p>So here, we see that a loop dependent on n nested inside another loop dependent on n gives us quadratic time: O(n^2)</p>
+              <p class='definition'><strong>Polynomial time</strong> is represented by <strong>O(n^k)</strong> for some constant k; O(n^2) is a special case of polynomial time called
+                <strong>quadratic time.</strong>
+              </p>
+              <p>Yikes! That could get out of hand really quickly!</p>
+              
+              <br/>
+              <p>Here's another interesting example...</p>
+              <br/>
+<pre class='prettyprint'>
+  bool hasDuplicate (int arr[], int size) {
+      for (int i = 0; i &lt; size; i++) {
+          // [!] Inner loop depends on outer loop,
+          // which depends on input size...
+          for (int j = i + 1; j &lt; size; j++) {
+              if (arr[j] == arr[i]) {
+                  return true;
+              }
+          }
+      }
+      return false;
+  }
+  
+  int main () {
+      int i[] = {1, 2, 2, 2, 3, 4, 3};
+      int j[] = {1, 2, 3, 4, 5, 6, 7};
+      cout &lt;&lt; hasDuplicate(i, 7) &lt;&lt; endl;
+      cout &lt;&lt; hasDuplicate(j, 7) &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p>Observe that this algorithm is very similar to our last quadratic one, with one key exception:</p>
+              <p>Instead of both loops running all n times, the inner loop only runs i times, where i is the current value of the outer loop iteration.</p>
+              <p class='example'>Prove that the hasDuplicate function operates in quadratic time, O(n^2)</p>
+              <p class='question' name='complexity-q5'>Click here for a sketched proof.</p>
+              <div class='answer' name='complexity-q5'>
+                <p>We observe that the number of statement executions, if we consider the innermost if statement to be 1 evaluation, is the sum of an ever increasing i:</p>
+                <p>1 + 2 + 3 + 4 + ... + (n-3) + (n-2) + (n-1) + n</p>
+                <p>Now, we observe that there are n of these summed terms above (we know that because the outer loop runs n times).</p>
+                <p>Observe what happens when I add the first and last element, then then the second and second-to-last element, etc.:</p>
+                <p>(n + 1) + (n + 1) + ... + (n + 1)</p>
+                <p>As it turns out, since I added each term from the &quot;front&quot; to its corresponding term in the &quot;back&quot; of the expression, I end up with the sum of a bunch of (n + 1)s</p>
+                <p>How many (n + 1)s did I end up with? Well there were n terms to start, and I combined two for every (n + 1), which means I now have n / 2 number of (n + 1)s.</p>
+                <p>Thus, we have (n(n+1))/2 as our count for the number of statement executions.</p>
+                <p>(n(n+1))/2 = (n^2 + n) / 2 = (n^2 / 2) + (n / 2) -&gt; O(n^2)</p>
+              </div>
+              <br/>
+              <p>Let's look at one final class of complexities:</p>
+              <p>Here's the binary search algorithm (which we'll review briefly).</p>
+              <p>Let's see our example again:</p>
+              <br/>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-7/iterators-1.PNG' />
+              </div>
+              <br/>
+              <p class='question' name='complexity-q6'>By what factor are we reducing our search space with each step of binary search (hint: it's in the name)?</p>
+              <p class='answer' name='complexity-q6'>A factor of 2, since we're halving the potential locations of our query with each step!</p>
+              <br/>
+              <p>This algorithm belongs to a class of algorithms where we start with some N elements in our search space, and with each step reduce the search space by some factor.</p>
+              <p class='definition'>A <strong>logarithmic</strong> time complexity enjoys efficiency by decreasing the operations required at each step with every step taken.</p>
+              <br/>
+              <p>We can take our binary search for example.</p>
+              <p>With every step binary search takes, we see that we reduce the search space of our previous step by half, giving us a growth curve looking like:</p>
+              <br/>
+              <div class='text-center'>
+                <p>Steps in algorithm (Y) as a function of size of input (X)</p>
+                <canvas id='bigOLogarithmic' width='400' height='400'></canvas>
+              </div>
+              <br/>
+              <p>OK, so that's a lousy looking curve, but you get the idea!</p>
+              <p>Logarithmic curves do NOT grow as quickly as linear ones, so any time you can reduce the search space of your problems in logarithmic time, you try to do so!</p>
+              <p>We'll see many examples of logarithmic time complexities in next week's lecture.</p>
+              <br/>
+              <p>
+                Whew! Congratulations, you can now understand this XKCD, a reference to the supposedly intractable &quot;Traveling Salesman&quot; problem, which asks for the most efficient route 
+                between a set of geographic locations (like a salesman attempting to plot the fastest route going door-to-door selling a product):
+              </p>
+              <br/>
+              <div class='text-center fit-pres'>
+                <a href='http://xkcd.com/399/' target='_blank'>
+                  <img src='http://imgs.xkcd.com/comics/travelling_salesman_problem.png' />
+                </a>
+              </div>
             </div>
             <hr/>
+            <br/>
+            
+            
+            <div id='sorting' class='scrollspy-element' scrollspy-title='Sorting'></div>
+            <h1>Sorting</h1>
+            <div>
+              <p>Now that we can judge the algorithmic complexity of code, it's time to look at a very common and applicable subject in computing: sorting!</p>
+              <p class='definition'><strong>Sorting</strong> involves the act of ordering items in a collection systematically.</p>
+              <p>The systematic aspect of sorting has been of research interest for computer scientists since the dawn of the digital age, and many algorithms have sprung forth from such endeavors.</p>
+              <p>Just as we know that not all algorithms were created equal, so must we observe that not all sorting methods are equally good for certain sorting tasks.</p>
+              <p>We'll now examine several sorting algorithms, see how they work, what they're good at, and what they're horrible at, all to avoid producing sorting algorithms like the following:</p>
+              <div class='text-center fit-pres'>
+                <a href='http://xkcd.com/1185/' target='_blank'>
+                  <img src='../../../assets/images/winter-2014/cs-32/week-8/sorting-0.PNG' />
+                  <br/>
+                  <small>(credit of course to the great XKCD)</small>
+                </a>
+              </div>
+              
+             <br/>
+             <h3>Quadratic Sorts</h3>
+             <p>The quadratic sorts are those that perform with O(n^2) time complexity... they're not that great, and there's rarely a good reason to use them.</p>
+             <p>Now let's study a couple :)</p>
+             
+             <br/>
+             <h3>Bubble Sort</h3>
+             <p>Perhaps the cliche first-sorting-lesson algorithm, bubble sort operates with the following steps:</p>
+<pre class='prettyprint'>
+  for each item i in the array of n items:
+      for each item j from n to i+1:
+          if the item at a[j] is less than the item at a[j-1]
+              swap those two items
+      stop if you didn't swap any items on this iteration
+</pre>
+              <p>
+                So essentially, just compare two adjacent numbers from the back to the front of the array, arranging the two with the lesser on the left and greater on the right (assuming ascending order),
+                and continue to do so until the smallest numbers have "bubbled" to the front, and the largest have bubbled to the back.
+              </p>
+              <br/>
+              <p class='example'>Use Bubblesort to sort the following list of ints:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-8/sorting-1.PNG' />
+              </div>
+              <p class='question' name='sorting-q1'>Click here for the steps the algorithm would take.</p>
+              <div class='answer' name='sorting-q1'>
+                <div class='text-center fit-pres'>
+                  <img src='../../../assets/images/winter-2014/cs-32/week-8/sorting-2.PNG' />
+                </div>
+              </div>
+              <br/>
+              <p>Now that we've seen how it's done, let's look at how to implement it in code:</p>
+              <p class='example'>Complete the shell for BubbleSort described below:</p>
+<pre class='prettyprint'>
+  // Helper to print out array elements
+  void printIntArr (int arr[], int size) {
+      for (int i = 0; i &lt; size; i++) {
+          cout &lt;&lt; arr[i] &lt;&lt; " ";
+      }
+      cout &lt;&lt; endl;
+  }
+  
+  // Helper function; swaps two array elements via
+  // the input pointers
+  void swapInts (int* i1, int* i2) {
+      int temp = *i1;
+      *i1 = *i2;
+      *i2 = temp;
+  }
+  
+  // Not to be confused with BubleSort, which
+  // just replaces your array elements with lyrics
+  // from Haven't Met You Yet
+  void bubbleSort (int arr[], int size) {
+      // [!] Iterate through each element of the
+      // list
+      for ( ??? ) {
+          // Track if a swap has been made
+          bool swapped = false;
+          // [!] Iterate through all elements of the list
+          // starting at the end element and up to the
+          // i + 1 element
+          for ( ??? ) {
+              // [!] Swap if the two currently adjacent
+              // in the 2nd loop iteration are out of order
+              if ( ??? ) {
+                  swapInts( ??? );
+                  // Mark that you've swapped
+                  swapped = true;
+              }
+          }
+          // [!] Return if you made no swaps
+          if (!swapped) {return;}
+      }
+  }
+  
+  int main () {
+      int i[] = {0, -5, 4, 2, -2, 0, 1, 6, 9, 3};
+      bubbleSort(i, 10);
+      printIntArr(i, 10);
+  }
+</pre>
+              <br/>
+              <p class='question' name='sorting-q2'>Bubble sort can &quot;sort&quot; a list in linear time if the list has what property?</p>
+              <p class='answer' name='sorting-q2'>It's already almost sorted :P</p>
+              <p class='question' name='sorting-q3'>What list property will cause BubbleSort the most inconvenience?</p>
+              <p class='answer' name='sorting-q3'>Reversed order of elements.</p>
+              <br/>
+              <p class='definition'>There are some good BubbleSort animations <a href='http://www.sorting-algorithms.com/bubble-sort' target='_blank'>located here</a>.</p>
+              <p>OK nice! Got a simple sort down... here's another one that you should avoid writing on a midterm:</p>
+              <div class='text-center fit-pres'>
+                <a href='http://xkcd.com/1185/' target='_blank'>
+                  <img src='../../../assets/images/winter-2014/cs-32/week-8/sorting-3.PNG' />
+                  <br/>
+                  <small>(credit to XKCD)</small>
+                </a>
+              </div>
+              
+              <br/>
+              <h3>Insertion Sort</h3>
+              <p>The second most cliche sorting algorithm, insertion sort operates with the following steps:</p>
+<pre class='prettyprint'>
+  for each element i in the array, starting with the 2nd:
+      for each element k = i down to k = 0 where arr[k] &lt; arr[k-1]:
+          swap a[k] and a[k-1]
+</pre>
+              <p>So, the idea is that we continue to lock items at the front of the array into their proper place, assuming everything to the left of the current one is sorted already.</p>
+              <p class='example'>Use Insertion Sort to sort the following list of ints:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-8/sorting-1.PNG' />
+              </div>
+              <p class='question' name='sorting-q4'>Click here for the steps the algorithm would take.</p>
+              <div class='answer' name='sorting-q4'>
+                <div class='text-center fit-pres'>
+                  <img src='../../../assets/images/winter-2014/cs-32/week-8/sorting-4.PNG' />
+                  <img src='../../../assets/images/winter-2014/cs-32/week-8/sorting-5.PNG' />
+                </div>
+              </div>
+              <p>(maybe if I don't say anything, they won't notice that the illustration is actually two different images because I couldn't fit it all into one slide...)</p>
+              <p>Any who, let's implement this now; it won't take long!</p>
+              <p class='example'>Implement the insertionSort skeleton begun below.</p>
+<pre class='prettyprint'>
+  void insertionSort (int arr[], int size) {
+      // [!] Iterate through each element of the array
+      // starting with the second
+      for ( ??? ) {
+          // [!] Iterate through the first i elements
+          // of the array, except the first
+          for ( ??? ) {
+              // [!] If the currently examined
+              // element is greater than the one
+              // before it in the list, stop
+              if ( ??? ) {
+                  break;
+              }
+              // [!] Otherwise, swap the two
+              swapInts( ??? );
+          }
+      }
+  }
+</pre>
+              <p class='question' name='sorting-q5'>Insertion sort can &quot;sort&quot; a list in linear time if the list has what property?</p>
+              <p class='answer' name='sorting-q5'>It's already almost sorted... same as BubbleSort, but insertion sort has less overhead</p>
+              <p class='question' name='sorting-q6'>What list property will cause Insertion Sort the most inconvenience?</p>
+              <p class='answer' name='sorting-q6'>Reversed order of elements.</p>
+              <br/>
+              <p class='definition'>There are some good Insertion animations <a href='http://www.sorting-algorithms.com/insertion-sort' target='_blank'>located here</a>.</p>
+              <p>I think that's it for covering quadratic sorts... remember that these have O(n^2) and are generally not preferred on their own in the general case.</p>
+              <p>Let's take a quick review of merge sort, unlike the following half-hearted implementation:</p>
+              <div class='text-center fit-pres'>
+                <a href='http://xkcd.com/1185/' target='_blank'>
+                  <img src='../../../assets/images/winter-2014/cs-32/week-8/sorting-6.PNG' />
+                  <br/>
+                  <small>(credit to XKCD)</small>
+                </a>
+              </div>
+              
+              <h3>Better Sort Algorithms</h3>
+              <p>We can do much better than quadratic sorting time; let's look at some alternatives below:</p>
+              
+              <br/>
+              <h3>Merge Sort</h3>
+              <p>Merge sort is a recursive algorithm that performs the following three steps in the example code below (note: the merge function is a bit complicated for this example, so it exists only in
+                name below):</p>
+<pre class='prettyprint'>
+  void mergeSort (int a[], int b, int e) {
+      if (e - b >= 2) {
+          int mid = (b + e) / 2;
+          
+          // Recursive call on first half of a
+          mergeSort(a, b, mid);
+          // Recursive call on other half of a
+          mergeSort(a, mid, e);
+          
+          // Merge those sorted subpropblems!
+          merge(a, b, mid, e);
+      }
+  }
+  
+  int main () {
+      int arr[] = {4, 3, 1, 2};
+      sort(arr, 0, 4);
+      // arr will now be {1, 2, 3, 4}
+  }
+</pre>
+              <p>Here, the merge function combines the two sublists into a single, ordered sublist.</p>
+              <p>Let's take another look at it in action (gif shamelessly stolen from <a href='http://en.wikipedia.org/wiki/Merge_sort' target='_blank'>Wikipedia</a>):</p>
+              <a href='../../../assets/images/winter-2014/cs-32/week-5/mergesort.gif' target='_blank'>
+                <div class='text-center fit-pres'>
+                  <img src='../../../assets/images/winter-2014/cs-32/week-5/mergesort.gif' />
+                </div>
+              </a>
+              <p class='question' name='sorting-q7'>What is the time complexity of MergeSort?</p>
+              <p class='answer' name='sorting-q7'>
+                O(n*log(n)) because it continuously splits the array into smaller subarrays [O(log(n))], and then merges them [O(n)]
+              </p>
+              <p class='question' name='sorting-q8'>Taking into account its splitting and merging behavior, are there any properties of lists that MergeSort struggles with?</p>
+              <p class='answer' name='sorting-q8'>
+                MergeSort actually handles input of any type pretty much the same; because of the splits down to small, managable sub-arrays, the format of the larger array is not relevant to its performance.
+              </p>
+              <br/>
+              <p class='definition'>There are some good MergeSort animations <a href='http://www.sorting-algorithms.com/merge-sort' target='_blank'>located here</a>.</p>
+              
+              <br/>
+              <h3>Quick Sort</h3>
+              <p>The sort of choice for the discerning programmer, Quick Sort (or some variant of it) is used in many modern sorting applications.</p>
+              <p>It goes something like this:</p>
+<pre class='prettyprint'>
+  Return the current array if 1 element or fewer
+  Randomly choose a pivot value in the array
+  Remove the pivot from the array
+  For each remaining array element:
+      Put those greater than the pivot into an array
+      Put those smaller than the pivot into another
+  // Recursive step on lesser and greater arrays:
+  return concat(quickSort(lesser), pivot, quicksort(greater))
+</pre>
+              <br/>
+              <p>So, we want to, at each call, choose a pivot randomly, divide the numbers less than and greater than the pivot into two piles, then recurse on those and combine back up!</p>
+              <p class='example'>Use QuickSort to sort the following list of ints:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-8/sorting-8.PNG' />
+              </div>
+              <p class='question' name='sorting-q9'>Click here for the steps the algorithm *could* take.</p>
+              <div class='answer' name='sorting-q9'>
+                <div class='text-center fit-pres'>
+                  <img src='../../../assets/images/winter-2014/cs-32/week-8/sorting-9.PNG' />
+                  <img src='../../../assets/images/winter-2014/cs-32/week-8/sorting-10.PNG' />
+                </div>
+              </div>
+              
+              <p>Here's a, perhaps more intuitive, implementation of quicksort that has an increased high space cost but illustrates the point:</p>
+<pre class='prettyprint'>
+  vector&lt;int&gt; quickSort (vector&lt;int&gt; arr) {
+      // Base case: return current array if 1
+      // element or fewer
+      if (arr.size() &lt;= 1) {return arr;}
+  
+      // Randomly choose a pivot
+      int pivotChoice = (rand() % arr.size());
+      int pivot = arr[pivotChoice];
+  
+      // We'll make 3 blank vectors: 1 that holds
+      // all of the numbers less than the pivot,
+      // 1 that holds all of the numbers greater,
+      // and then 1 that just holds the pivot itself
+      // for ease of concatenation
+      vector&lt;int&gt; lesser, greater, pivotHolder;
+      vector&lt;int&gt;::iterator it = arr.begin();
+      pivotHolder.push_back(pivot);
+  
+      // Erase the pivot from the current vector
+      arr.erase(it + pivotChoice);
+  
+      for (int i = 0; i &lt; arr.size(); i++) {
+          // Put remaining elements in their respective
+          // greater or less than piles
+          if (arr[i] &lt; pivot) {
+              lesser.push_back(arr[i]);
+          } else {
+              greater.push_back(arr[i]);
+          }
+      }
+  
+      // Recurse on the lesser and greater vectors,
+      // and then concatenate their results with the
+      // pivot in the center
+      return concatVect(quickSort(lesser), 
+             concatVect(pivotHolder, quickSort(greater)));
+  }
+  
+  int main () {
+      int i[] = {0, 4, 2, 0, 1, 6, 9, 3};
+      vector&lt;int&gt; v(i, i+8);
+      v = quickSort(v);
+      printIntVArr(v);
+  }
+</pre>
+              <br/>
+              <p class='question' name='sorting-q10'>Is QuickSort going to perform equally well every time it runs?</p>
+              <p class='answer' name='sorting-q10'>No! We can get really unlucky with pivot choices and divisions, trending towards O(n^2)</p>
+              <br/>
+              <p class='question' name='sorting-q11'>So what is the time complexity of QuickSort?</p>
+              <p class='answer' name='sorting-q11'>The average case is that it hits O(n*log(n)) because of its divide and conquer behavior.</p>
+              <br/>
+              <p>There are a variety of improvements to this QuickSort algorithm that better its performance, including:</p>
+              <ul class='indent-1'>
+                <li><p>Perform a 3-way partitioning</p></li>
+                <li><p>When a sub list is small enough (typically around 9 items) use another sort like insertion sort, then recombine upwards.</p></li>
+              </ul>
+              <p class='debug'>Warning: QuickSort performs best when the elements are randomly distributed; a lack of unique values will actually slow it down!</p>
+              <p class='definition'>There are some good QuickSort animations <a href='http://www.sorting-algorithms.com/quick-sort' target='_blank'>located here</a>.</p>
+              
+              <br/>
+              <p>Now that you're accustomed to QuickSort, this won't be you in a job interview:</p>
+              <div class='text-center fit-pres'>
+                <a href='http://xkcd.com/1185/' target='_blank'>
+                  <img src='../../../assets/images/winter-2014/cs-32/week-8/sorting-7.PNG' />
+                  <br/>
+                  <small>(credit to XKCD)</small>
+                </a>
+              </div>
+              
+              <br/>
+              <h3>Practice</h3>
+              <p>How about a couple of practice problems to round this all out?</p>
+              <p class='example'>The following examples show a starting list of ints, followed by several steps taken by a sorting algorithm. Identify which algorithm(s) are being applied!</p>
+<pre class='prettyprint'>
+  8, 6, 1, 2, 5, 0, 7, 3, 9, 4
+  ====== BEGIN SORTING ======
+  6, 8, 1, 2, 5, 0, 7, 3, 9, 4
+  6, 1, 8, 2, 5, 0, 7, 3, 9, 4
+  1, 6, 8, 2, 5, 0, 7, 3, 9, 4
+  1, 6, 2, 8, 5, 0, 7, 3, 9, 4
+  1, 2, 6, 8, 5, 0, 7, 3, 9, 4
+  1, 2, 6, 8, 5, 0, 7, 3, 9, 4
+  1, 2, 6, 5, 8, 0, 7, 3, 9, 4
+  1, 2, 5, 6, 8, 0, 7, 3, 9, 4
+  1, 2, 5, 6, 8, 0, 7, 3, 9, 4
+  1, 2, 5, 6, 0, 8, 7, 3, 9, 4
+  1, 2, 5, 0, 6, 8, 7, 3, 9, 4
+  1, 2, 0, 5, 6, 8, 7, 3, 9, 4
+  1, 0, 2, 5, 6, 8, 7, 3, 9, 4
+</pre>
+              <br/>
+              <p class='example'>How many *swaps* will BubbleSort make in sorting the following:</p>
+<pre class='prettyprint'>
+  1, 2, 0, 3, 4
+</pre>
+              <br/>
+              <p class='example'>Which sorting algorithm will excel at sorting the following input? Which will degenerate toward quadratic time?</p>
+<pre class='prettyprint'>
+  0, 0, 0, 0, 2, 2, 1, 1, 2, 2, 1, 1, 3, 3, 3, 3, 4, 4, 4, 4
+</pre>
+            </div>
+            <hr/>
+            <br/>
+            
+            
+            <div id='stl' class='scrollspy-element' scrollspy-title='STL'></div>
+            <h1>The Standard Template Library</h1>
+            <div>
+              <p>Oh right, we've been talking about templates...</p>
+              <p>In fact, we've actually been using templates without knowing much about them!</p>
+              <p>When we've used a stack of ints from the STL stack, we've said something like <code class='prettyprint'>stack&lt;int&gt; si;</code></p>
+              <p class='definition'>The <strong>standard template library</strong> is a template-driven code base with 4 main components: containers, iterators, algorithms, and functors.</p>
+              <br/>
+              <p>We'll see examples of each of those momentarily!</p>
+              <p>The impetus for the STL was that programmers witnessed commonalities in many of their data structures and algorithms that differed only in the types they were using them with.</p>
+              <p>Sorry for ending that sentence in a preposition.</p>
+              <p>I'll make it up to you by starting with the exciting STL world of containers.</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='containers' class='scrollspy-element' scrollspy-title='Containers'></div>
+            <h1>STL Containers</h1>
+            <div>
+              <p>Just when you thought things would get dull, we get to tackle containers!... which are basically what we've been covering...</p>
+              <p class='definition'><strong>Containers</strong> are simply means by which we refer to groups of objects while abiding by the &quot;rules&quot; of a given container.</p>
+              <br/>
+              <p>So what are the rules of a container?</p>
+              <p class='question' name='containers-q0'>What are some containers we've discussed in class and by what rules should each abide?</p>
+              <div class='answer' name='containers-q0'>
+                <ul class='indent-1'>
+                  <li><p>A <code class='prettyprint'>stack</code> is a container that follows the last-in, first-out (LIFO) interface with pushing and popping from the top of the stack.</p></li>
+                  <li><p>A <code class='prettyprint'>queue</code> is a container that follows the first-in, first-out (FIFO) interface with pushing to the back and popping from the front.</p></li>
+                  <li><p>A <code class='prettyprint'>vector</code> is a dynamic array with random index access and dynamic resizing. (contiguous elements)</p></li>
+                  <li><p>A <code class='prettyprint'>list</code> is the STL implementation of a doubly linked list without random index access, but no need for dynamic resizing. (non-contiguous elements)</p></li>
+                </ul>
+              </div>
+              <br/>
+              <p>So none of this is particularly new... in fact, it's kinda what we've been doign this whole quarter...</p>
+              <p>That said, we haven't closely examined the intricacies of some STL containers, so let's use vectors and lists as our examples for the next section or two:</p>
+              
+              <br/>
+              <h3>#include &lt;vector&gt;</h3>
+              <p class='definition'>The <strong>vector</strong> container is just a dynamic array, which means we have random access to its elements plus the ability to resize it as we need.</p>
+              <p class='question' name='container-q1'>What does it mean for a container to have random access?</p>
+              <p class='answer' name='container-q1'>
+                It means that at any time, we can access elements at an arbitrary offset, similar to how pointers operate with random access (we can talk about pointers with any offset).
+              </p>
+              <br/>
+              <p>Let's look at some vector operations and see how they're similar and different from what we know:</p>
+              
+              <br/>
+              <p class='toolkit'>Although we can't initialize vectors directly using the familiar array bracket notation (before C++11), we can initialize them from pointers designating a range in an array.</p>
+<pre class='prettyprint'>
+  int main () {
+      int i[] = {2, 4, 6, 8};
+      // Anyone catch this reference?
+      // *tumbleweed*
+      vector&lt;int&gt; victor(i, i+4);
+  }
+</pre>
+              
+              <br/>
+              <p class='toolkit'><strong>push_back( ... )</strong> appends an element to the end of the vector. <strong>pop_back()</strong> removes the last element (and does NOT return it).</p>
+<pre class='prettyprint'>
+  int main () {
+      vector&lt;int&gt; victor;
+      victor.push_back(5);
+      victor.push_back(10);
+      victor.push_back(15);
+      victor.pop_back();
+      // Victor is now just: {5, 10}
+  }
+</pre>
+              <p>Nothing surprising there...</p>
+              
+              <br/>
+              <p class='toolkit'>The <strong>front(), back()</strong> member functions return the items at the front and back of the vector, respectively.</p>
+<pre class='prettyprint'>
+  int main () {
+      vector&lt;int&gt; victor;
+      victor.push_back(5);
+      victor.push_back(10);
+      victor.push_back(15);
+      cout &lt;&lt; victor.front() &lt;&lt; endl;
+      cout &lt;&lt; victor.back() &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p>We also said that vectors enjoy random access, so we have the following accessor functions at our disposal as well:</p>
+              <p class='toolkit'>The <strong>at(n)</strong> accessor returns the element at index n in the vector.</p>
+<pre class='prettyprint'>
+  int main () {
+      vector&lt;int&gt; victor;
+      victor.push_back(5);
+      victor.push_back(10);
+      victor.push_back(15);
+      // victor = {5, 10, 15}
+  
+      cout &lt;&lt; victor.at(1) &lt;&lt; endl;
+      victor.at(1) = 20;
+      // victor = {5, 20, 15}
+  }
+</pre>
+              <br/>
+              <p>Vectors also overload the pointer offset notation, so we can replicate the above code by saying:</p>
+<pre class='prettyprint'>
+  int main () {
+      vector&lt;int&gt; victor;
+      victor.push_back(5);
+      victor.push_back(10);
+      victor.push_back(15);
+      // victor = {5, 10, 15}
+  
+      cout &lt;&lt; victor[1] &lt;&lt; endl;
+      victor[1] = 20;
+      // victor = {5, 20, 15}
+      cout &lt;&lt; victor[1] &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p class='toolkit'>
+                The <strong>size()</strong> function returns how many elements are currently in the vector. The <strong>capacity</strong> function returns how much space the vector has reserved.
+              </p>
+              <p class='question' name='vector-q0'>Remembering that vectors are dynamic arrays, will size() and capacity() always be equivalent? What can we say about their relationship?</p>
+              <p class='answer' name='vector-q0'>No, they may not be equivalent, but we know that size() &lt;= capacity()</p>
+<pre class='prettyprint'>
+  int main() {
+      vector&lt;int&gt; victor;
+      for (int i = 0; i &lt; 100; i++) {
+          victor.push_back(i);
+      }
+      cout &lt;&lt; victor.size() &lt;&lt; endl;
+      cout &lt;&lt; victor.capacity() &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p class='debug'>[!] WARNING: Accessing or assigning to vector (let's say vector v) elements using v.at(n) or v[n] is only defined if n is currently less than v.size().</p>
+              <p class='debug'>Does the following code exhibit any undefined behavior? If not, what will it print out?</p>
+<pre class='prettyprint'>
+  int main() {
+      vector&lt;int&gt; victor;
+      for (int i = 0; i &lt; 100; i++) {
+          victor.push_back(i);
+      }
+      cout &lt;&lt; victor.size() &lt;&lt; endl;
+      cout &lt;&lt; victor.capacity() &lt;&lt; endl;
+      victor[100] = 1;
+      victor.push_back(2);
+      cout &lt;&lt; victor[100] &lt;&lt; endl;
+      cout &lt;&lt; victor.size() &lt;&lt; endl;
+      cout &lt;&lt; victor.capacity() &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p>So, remember, we can only reliably use the at and [] functions for indexes less than the size, not the capacity!</p>
+              
+              <br/>
+              <h3>#include &lt;list&gt;</h3>
+              <p>So, whereas vectors are the STL dynamic array container, lists are the STL doubly linked list.</p>
+              <p>There are some key differences between the interfaces of vectors and lists; let's look at some below:</p>
+              <p class='toolkit'>We can add items to the front and back of a list using the <strong>push_front(...)</strong> and <strong>push_back(...)</strong> functions, respectively.</p>
+              <p class='question' name='lists-q0'>Why do we have the ability to push_front() with lists but not with vectors?</p>
+              <p class='answer' name='lists-q0'>Insertion to the front of a linked list is easy and performed in constant time; it is non-trivial with arrays because we need to shift everything down!</p>
+              <br/>
+              <p class='toolkit'>Similarly, we can pop items from the front or back of a list using <strong>pop_front()</strong> and <strong>pop_back()</strong> respectively.</p>
+<pre class='prettyprint'>
+  int main () {
+      list&lt;string&gt; less;
+      less.push_back("The");
+      less.push_back("Iceman");
+      less.push_front("Cometh");
+      less.pop_front();
+      less.push_front(":D");
+  }
+</pre>
+              <br/>
+              <p class='toolkit'>
+                We have a variety of accessor strategies for lists, two of which are to get references to the front and back via functions <strong>front()</strong> and <strong>back()</strong>
+                respectively.
+              </p>
+<pre class='prettyprint'>
+  int main () {
+      list&lt;string&gt; less;
+      less.push_back("Less");
+      less.push_back("is");
+      less.push_back("more");
+      less.back() = "actually still less";
+      cout &lt;&lt; less.front() &lt;&lt; endl;
+      cout &lt;&lt; less.back() &lt;&lt; endl;
+  }
+</pre>
+              <p class='definition'>Remember! We *cannot* perform random access with linked lists. This means that lists do NOT have the at and [] functions.</p>
+              <p>So how can we access elements that aren't at the back or the front? Let's shift our discussion to iterators...</p>
+            </div>
+            <hr/>
+            
+            
+            <br/>
+            <div id='iterators' class='scrollspy-element' scrollspy-title='Iterators'></div>
+            <h1>Iterators</h1>
+            <div>
+              <p>
+                When we dealt with linked lists in the past, the way we would iterate through elements was through a Node pointer on which we could successively look at 
+                <code class='prettyprint'>n-&gt;next;</code>
+              </p>
+              <p>With the STL list, however, we no longer have access to the internal representation of the Node, so how do we iterate?!</p>
+              <p class='toolkit'>Iterators are STL *objects* (not pointers, necessarily) that refer to a position in some sort of sequential collection, and allow us to (surprise)
+                iterate through the elements in some order.</p>
+              <p>Iterators are objects specific to a particular collection, so lists have their own iterators, vectors have their own iterators, etc.</p>
+              <p>For the purposes of lists, iterators are somewhat analogous to our familiar Node pointers, but with several key differences.</p>
+              <p>Let's look at the specifics next:</p>
+              
+              <br/>
+              <h3>Construction &amp; Assignment</h3>
+              <p class='toolkit'>We can construct new Iterators for a collection via the syntax: <code class='prettyprint'>collection&lt;type&gt;::iterator name;</code></p>
+              <p>So, to define a string iterator for a list, we'd say:</p>
+<pre class='prettyprint'>
+  list&lt;string&gt;::iterator iter;
+</pre>
+              <p>Not very useful yet...</p>
+              <br/>
+              <p class='toolkit'>
+                For *both vectors and lists* we can get an iterator at the position of the first or last element via the functions <strong>begin()</strong> and <strong>end()</strong>
+                respectively.
+              </p>
+              <p>So, let's make a couple iterators:</p>
+<pre class='prettyprint'>
+  int main () {
+      list&lt;string&gt; less;
+      less.push_back("Hey");
+      less.push_back("Iterate");
+      less.push_back("THIS!");
+      list&lt;string&gt;::iterator b = less.begin();
+      list&lt;string&gt;::iterator e = less.end();
+  }
+</pre>
+              <p class='debug'>[!] WARNING: the end() iterator refers to the theoretical position *just past* the last element. Keep this in mind for the next sections.</p>
+              <p>So, the current picture we have is:</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-7/iterators-0.PNG' />
+              </div>
+              
+              <br/>
+              <h3>Dereference</h3>
+              <p class='toolkit'>Iterators support the dereference operation (*), which functions just like pointer dereference, returning the value that the iterator points to in the container.</p>
+              <br/>
+              <p class='debug'>Will the following code compile? If so, what will it print?</p>
+<pre class='prettyprint'>
+  int main () {
+      list&lt;string&gt; less;
+      less.push_back("Hey");
+      less.push_back("Iterate");
+      less.push_back("THIS!");
+      list&lt;string&gt;::iterator b = less.begin();
+      list&lt;string&gt;::iterator e = less.end();
+      cout &lt;&lt; *b &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p class='debug'>Will the following code compile? If so, what will it print?</p>
+<pre class='prettyprint'>
+  int main () {
+      list&lt;string&gt; less;
+      less.push_back("Hey");
+      less.push_back("Iterate");
+      less.push_back("THIS!");
+      list&lt;string&gt;::iterator b = less.begin();
+      list&lt;string&gt;::iterator e = less.end();
+      cout &lt;&lt; *e &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p>Always be careful with the iterator returned by end()!</p>
+              <p>Now, let's see how we can use iterators for something useful...</p>
+              
+              <br/>
+              <h3>Increment &amp; Decrement</h3>
+              <p class='toolkit'>Iterators support the increment (++) and decrement (--) operations when there is a legitimate position to iterate to in that direction.</p>
+              <p>
+                So, just like we could never call n-&gt;next on a Node pointer that is equal to the nullptr, we can't perform decrement on the iterator equivalent with begin() nor increment on the iterator
+                equivalent with end().
+              </p>
+              <p class='debug'>Will the following code compile? If so, what will it print?</p>
+<pre class='prettyprint'>
+  int main () {
+      list&lt;string&gt; less;
+      less.push_back("Hey");
+      less.push_back("Iterate");
+      less.push_back("THIS!");
+      list&lt;string&gt;::iterator b = less.begin();
+      list&lt;string&gt;::iterator e = less.end();
+      
+      // b--; BAD! Iterates off the beginning of the list
+      // e++; BAD! Iterates off the end of the list
+  
+      b++;
+      e--;
+      cout &lt;&lt; *b &lt;&lt; endl;
+      cout &lt;&lt; *e &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p>We're almost done looking at the basic operations of iterators... I kinda promise...</p>
+              
+              <br/>
+              <h3>Equivalence &amp; Nonequivalence</h3>
+              <p class='toolkit'>We can compare two iterators to see if they refer to the same container element via the familiar equivalence (==) and nonequivalence (!=) operators.</p>
+              <p>This allows us to use iterators in loops!</p>
+<pre class='prettyprint'>
+  int main () {
+      list&lt;string&gt; less;
+      less.push_back("Hey");
+      less.push_back("Iterate");
+      less.push_back("THIS!");
+      list&lt;string&gt;::iterator b = less.begin();
+      list&lt;string&gt;::iterator e = less.end();
+      
+      // Print out the data at b, then increment
+      // it until we reach the end of the list!
+      while (b != e) {
+          cout &lt;&lt; *b++ &lt;&lt; endl;
+      }
+  }
+</pre>
+
+              <br/>
+              <h3>Iterator Trickz</h3>
+              <p class='toolkit'>You can use iterators as ranges for copying between collections.</p>
+              <p>Here, I'll choose to copy all of the contents of my list into a new vector, specifying the begin and end copy range as the full list (less.begin(), less.end())</p>
+<pre class='prettyprint'>
+  int main () {
+      list&lt;string&gt; less;
+      less.push_back("Cool");
+      less.push_back("Copy");
+      less.push_back("Bro");
+  
+      vector&lt;string&gt; v(less.begin(), less.end());
+      vector&lt;string&gt;::iterator b = v.begin();
+      vector&lt;string&gt;::iterator e = v.end();
+  
+      while (b != e) {
+          cout &lt;&lt; *b++ &lt;&lt; endl;
+      }
+  }
+</pre>
+              <br/>
+              <p class='toolkit'>Use the <strong>insert(iterator, value);</strong> function to insert a value at the position *just before* the given iterator.</p>
+<pre class='prettyprint'>
+  int main () {
+      list&lt;string&gt; less;
+      less.push_back("Cool");
+      less.push_back("Insertion");
+      less.push_back("Bro");
+  
+      list&lt;string&gt;::iterator b = less.begin();
+      list&lt;string&gt;::iterator e = less.end();
+  
+      list&lt;string&gt;::iterator iter = less.begin();
+      iter++;
+      less.insert(iter, "HELP I'M TRAPPED IN A LIST");
+  
+      while (b != e) {
+          cout &lt;&lt; *b++ &lt;&lt; endl;
+      }
+  }
+</pre>
+              <br/>
+              <p class='toolkit'>Use the <strong>erase(iter)</strong> to erase a single iterator item, or <strong>erase(begin, end)</strong> to delete a range of items.</p>
+<pre class='prettyprint'>
+  int main () {
+      list&lt;string&gt; less;
+      less.push_back("Cool");
+      less.push_back("Insertion");
+      less.push_back("Bro");
+  
+      list&lt;string&gt;::iterator b = less.begin();
+      list&lt;string&gt;::iterator e = less.end();
+  
+      list&lt;string&gt;::iterator iter = less.begin();
+      iter++;
+      less.erase(iter, e);
+  
+      while (b != e) {
+          cout &lt;&lt; *b++ &lt;&lt; endl;
+      }
+  }
+</pre>
+              <br/>
+              <p>Some final notes that are just nice to know:</p>
+              <p class='toolkit'>Assuming your iterators are still valid in a vector, subtraction (-) is well defined and acts as though the iterators represented their analogous indexes.</p>
+              <p class='toolkit'>Most collections (at least list and vector) have a clear() function that simply removes all elements from them.</p>
+              
+              <br/>
+              <h3>Dangers &amp; Caveats</h3>
+              <p class='definition'>*VECTOR* iterators support random access because of the dynamic array indexing. *LIST* iterators do NOT!</p>
+              <p>This means that (++) and (--) are the only ways to traverse lists, but we can perform additions and subtractions to iterators in vectors:</p>
+<pre class='prettyprint'>
+  int main () {
+      vector&lt;string&gt; v;
+      v.push_back("Cool");
+      v.push_back("Insertion");
+      v.push_back("Bro");
+  
+      vector&lt;string&gt;::iterator b = v.begin();
+      b += 2;
+      cout &lt;&lt; *b &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p class='debug'>For this same reason, &gt;, &gt;=, &lt;, and &lt;= comparisons are valid for vector iterators but NOT list iterators!</p>
+              <br/>
+              <p>One final warning before we move on from iterators...</p>
+              <p class='debug'>Insertions and deletions on *vectors*, but not lists, will INVALIDATE any iterators defined on that vector.</p>
+              <p class='debug'>Will the following code have any undefined behavior? If not, what will it print?</p>
+<pre class='prettyprint'>
+  int main () {
+      vector&lt;int&gt; v;
+      v.push_back(50);
+      v.push_back(22);
+      v.push_back(10);
+  
+      vector&lt;int&gt;::iterator b = v.begin();
+      vector&lt;int&gt;::iterator e = v.end();
+      for (int i = 0; i &lt; 100; i++) {
+          v.push_back(i);
+      }
+      while (b != e) {
+          cout &lt;&lt; *b++ &lt;&lt; endl;
+      }
+  }
+</pre>
+              <br/>
+              <p class='question' name='iterator-q1'>Why is this a problem?</p>
+              <p class='answer' name='iterator-q1'>
+                Vectors are dynamic arrays, which means they might resize themselves as needed. Whenever this happens, the old array is deleted in favor of a new one, but the old iterators
+                are not also updated, and so they refer to deallocated memory.
+              </p>
+              
+              <br/>
+              <h3>Example Application</h3>
+              <p>Let's consider the binary search algorithm on a sorted vector (we'll look at sorting later; for now, just assume we're given a sorted vector).</p>
+              <p>
+                Binary search says this: I'm going to be asked to find a value in some sorted collection, and rather than search linearly from the first element to the last for this requested value, I'm
+                going to take advantage of the fact that the collection is sorted...
+              </p>
+              <p>
+                I'll do this by choosing a mid point index in the collection, ask if the target value is less than, greater than, or equal to the value at that index, and ignore the side that
+                is no longer relevant. Rinse, repeat, until either I find the value or it's not in the collection.
+              </p>
+              <p>So how does that work? Let's look at an example: say I have a vector / array of ints: {1, 5, 8, 32, 45, 99, 100} and I want to know if 45 is an element.</p>
+              <div class='text-center fit-pres'>
+                <img src='../../../assets/images/winter-2014/cs-32/week-7/iterators-1.PNG' />
+              </div>
+              <p class='example'>
+                Program binarySearch (which can, for the purposes of this exercise, assume sorted input), which searches for the given value in the given vector using iterators and the
+                binary search algorithm described above.
+              </p>
+<pre class='prettyprint'>
+  template&lt;typename T&gt;
+  bool binarySearch(vector&lt;T&gt; v, T query) {
+      // First, define our iterators on v
+      // We'll narrow down the possible indexes of
+      // our vector by shifting the minIndex right
+      // and the maxIndex left, when appropriate
+      typename vector&lt;T&gt;::iterator minIndex = v.begin(),
+               maxIndex = v.end(),
+               mid;
+  
+      // Keep looking as long as we haven't narrowed
+      // down the results to nothing (hint: think
+      // in terms of our iterators)
+      while ( ??? ) {
+          // Examine the midpoint element between the
+          // minIndex and the maxIndex (remember, it's
+          // an iterator on a vector!
+          mid = minIndex + ???;
+  
+          // Is the element at mid our query? If so,
+          // return true
+          if ( ??? ) {
+              return true;
+          }
+  
+          // Otherwise, we can narrow our search; only look
+          // to the left of the midpoint if our query is smaller
+          // than the mid, and vice versa if query is larger
+          // Hint: Think of squeezing the array on one side
+          if ( *mid &lt; query ) {
+              minIndex = ???;
+          } else {
+              maxIndex = ???;
+          }
+      }
+  
+      // If we make it here, we never found the query
+      return false;
+  }
+</pre>
+              <br/>
+              <p>If everything went according to plan, the following code should output 1 0 1 0 (with newlines, of course):</p>
+<pre class='prettyprint'>
+  int main () {
+      int i[] = {1, 5, 8, 32, 45, 99, 100};
+      vector&lt;int&gt; v(i, i+7);
+  
+      cout &lt;&lt; binarySearch(v, 45) &lt;&lt; endl;
+      cout &lt;&lt; binarySearch(v, 42) &lt;&lt; endl;
+      
+      vector&lt;string&gt; s;
+      string query = "Eva";
+      s.push_back("Andrew");
+      s.push_back("Bobby");
+      s.push_back("CyynthiaWithTwoYs");
+      s.push_back("Daren");
+      s.push_back("Eva");
+      s.push_back("ForneyBecauseImMakingThis");
+      s.push_back("ForneyBecauseWhyNot");
+      s.push_back("ForneyToShowEvenNumber");
+  
+      cout &lt;&lt; binarySearch(s, query) &lt;&lt; endl;
+      cout &lt;&lt; binarySearch(s, query + "NOT") &lt;&lt; endl;
+  }
+</pre>
+              <p>Cool right? Our function works with both ints and strings, and any other type capable of comparisons!</p>
+              <p class='debug'>Remember: The above algorithm assumes the input data is sorted... we'll look at sorting later!</p>
+              <br/>
+              <p class='example'>Try repeating the above binary search algorithm recursively using the code skeleton below:</p>
+              <br/>
+<pre class='prettyprint'>
+  template&lt;typename T, typename Iter&gt;
+  bool binarySearchExec(vector&lt;T&gt; v, T&amp; query,
+                        Iter minIndex, Iter maxIndex) {
+  
+      // Base case: the end iterator is before the begin
+      // iterator
+      if ( ??? ) {
+          return false;
+      }
+  
+      // Otherwise, find the midpoint:
+      Iter mid = minIndex + ((maxIndex - minIndex) / 2);
+  
+      // Base case: we've found our query!
+      if (*mid == query) {
+          return true;
+      }
+  
+      // Recursive cases:
+      // Otherwise, we need to keep "squeezing" our iterator
+      // bounds:
+  
+      // If our query is greater than the mid, recusively
+      // squeeze our min index
+      if (query &gt; *mid) {
+          return ???;
+      } else {
+          return ???;
+      }
+  }
+  
+  template&lt;typename T&gt;
+  bool binarySearchRecursive(vector&lt;T&gt; v, T query) {
+      return binarySearchExec(v, query, v.begin(), v.end());
+  }
+</pre>
+              <br/>
+              <p>We can then test against the same main function using our new recursive version, expecting 1, 0, 1, 0 once more:</p>
+              <br/>
+<pre class='prettyprint'>
+  int main () {
+      int i[] = {1, 5, 8, 32, 45, 99, 100};
+      vector&lt;int&gt; v(i, i+7);
+    
+      cout &lt;&lt; binarySearchRecursive(v, 45) &lt;&lt; endl;
+      cout &lt;&lt; binarySearchRecursive(v, 42) &lt;&lt; endl;
+        
+      vector&lt;string&gt; s;
+      string query = "Eva";
+      s.push_back("Andrew");
+      s.push_back("Bobby");
+      s.push_back("CyynthiaWithTwoYs");
+      s.push_back("Daren");
+      s.push_back("Eva");
+      s.push_back("ForneyBecauseImMakingThis");
+      s.push_back("ForneyBecauseWhyNot");
+      s.push_back("ForneyToShowEvenNumber");
+    
+      cout &lt;&lt; binarySearchRecursive(s, query) &lt;&lt; endl;
+      cout &lt;&lt; binarySearchRecursive(s, query + "NOT") &lt;&lt; endl;
+  }
+</pre>
+            </div>
+            <hr/>
+            <br/>
+            
+            
+            <div id='algorithms' class='scrollspy-element' scrollspy-title='Algorithms'></div>
+            <h1>STL Algorithms</h1>
+            <div>
+              <p>In our example above, we templated a function to behave correctly across a variety of types, but the semantics of our code are fixed.</p>
+              <p>By that I mean that every time we run binarySearch as coded above, it will perform a binary search algorithm!</p>
+              <p>But what if I wanted to create sort of an... algorithm template, whereby I can perform similar steps while eliciting different behaviors based on my situational needs?</p>
+              <p class='definition'>An <strong>algorithm</strong> describes a series of steps to take to accomplish an outcome, which can be specialized for a particular scenario.</p>
+              <p>OK, so what does that mean?</p>
+              <p>Let's say I wanted to find the maximum int in a list. I might code the following:</p>
+<pre class='prettyprint'>
+  int maximum(list&lt;int&gt; listy) {
+      list&lt;int&gt;::iterator it = listy.begin();
+      if (it == listy.end()) {
+          return NULL;
+      }
+  
+      int currentMax = *it++;
+      while (it != listy.end()) {
+          if (*it &gt; currentMax) {
+              currentMax = *it;
+          }
+          it++;
+      }
+  
+      return currentMax;
+  }
+</pre>
+              <br/>
+              <p>You can test it if you want...</p>
+<pre class='prettyprint'>
+  int main () {
+      int i[] = {50, 29, 100, 72};
+      list&lt;int&gt; listy(i, i+4);
+  
+      cout &lt;&lt; maximum(listy) &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p>But now, what if I wanted to find the minimum in a list?</p>
+              <p>Am I to write an entirely new function, or can I somehow use elements of the algorithm I described above, but change the if statement in the while loop?</p>
+              <p>Well, Andrew, obviously the latter; stop with the leading questions.</p>
+              <p>Here's how to do it: I'll begin by creating two functions: greaterThan and lessThan, and then rename my algorithm function: lookAtEach (as in, look at each element and then return something)</p>
+<pre class='prettyprint'>
+  bool greaterThan (int a, int b) {
+      return (a &gt; b);
+  }
+  
+  bool lessThan (int a, int b) {
+      return (a &lt; b);
+  }
+</pre>
+              <p>
+                Now here's the magic... I'll tell my lookAtEach function that I want it to maintain the behavior of looking at each element in the collection I pass in, but then return some element
+                by the criteria of my choosing.
+              </p>
+              <p>How do I choose that criteria? Well, in some cases, I want to find the max, and in others I want to find the min, so I'll just pass in those criteria functions as parameters!</p>
+              <p class='toolkit'>
+                You can use templates to pass pointers to functions as parameters into another function, and call the parameter function from within the body. This allows you to have an algorithm
+                with a generic function call!
+              </p>
+              <br/>
+              <p class='question' name='algorithms-q0'>How can we pass in a pointer to a function? I thought pointers were only for variables?</p>
+              <p class='answer' name='algorithms-q0'>Don't forget, our running code is all in memory, which is all addressed, so even functions have a starting address in memory... which we can pass along!</p>
+              <br/>
+              <p>So here's how I revise lookAtEach:</p>
+<pre class='prettyprint'>
+  // [!] New template type to indicate the
+  // generic function return type
+  template&lt;typename Function&gt;
+  // [!] Add Function f as a parameter
+  int lookAtEach(list&lt;int&gt; listy, Function f) {
+      list&lt;int&gt;::iterator it = listy.begin();
+  
+      int currentMax = *it++;
+      while (it != listy.end()) {
+          // [!] Call f with my two compared
+          // values so it serves as my
+          // selection criteria
+          if (f(*it, currentMax)) {
+              currentMax = *it;
+          }
+          it++;
+      }
+  
+      return currentMax;
+  }
+</pre>
+              <br/>
+              <p>Now, depending on whether I want the max or the min, I can just pass in the function pointer I want!</p>
+<pre class='prettyprint'>
+  int main () {
+      int i[] = {50, 29, 100, 72};
+      list&lt;int&gt; listy(i, i+4);
+  
+      cout &lt;&lt; lookAtEach(listy, greaterThan) &lt;&lt; endl;
+      cout &lt;&lt; lookAtEach(listy, lessThan) &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              
+              <h3>STL Algorithms</h3>
+              <p>So, naturally, there a variety of these common behavior functions that are implemented in the algorithms package of the STL.</p>
+              <p>There are many, but we can look at a couple. (make sure you #include &lt;algorithm&gt;)</p>
+              <p class='toolkit'>
+                The <strong>find_if(iterator1, iterator2, criteriaFunc)</strong> algorithm finds (iterator pointing to)
+                the first element between iterators 1 and 2 that satisfies the criteriaFunc.
+              </p>
+              <p class='example'>What will the following code print out?</p>
+<pre class='prettyprint'>
+  bool isNegative (int i) {
+      return i &lt; 0;
+  }
+  
+  int main () {
+      int i[] = {-10, 22, 50, 29, 100, 72, -5, 17};
+      list&lt;int&gt; listy(i, i+8);
+      list&lt;int&gt;::iterator b = listy.begin();
+      list&lt;int&gt;::iterator e = listy.end();
+  
+      cout &lt;&lt; *find_if(++b, e, isNegative) &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              <p>How about 2 at a time?</p>
+              <p class='toolkit'>The <strong>for_each(iterator1, iterator2, func)</strong> algorithm calls func with every element between iterator1 and iterator2, one at a time.</p>
+              <p class='toolkit'>The <strong>replace(iterator1, iterator2, oldVal, newVal)</strong> algorithm replaces all instances of oldVal with newVal in range iterator1 to iterator2.</p>
+              <p class='example'>What will the following code print out?</p>
+<pre class='prettyprint'>
+  // One of my better puns
+  void prInt (int i) {
+      cout &lt;&lt; i &lt;&lt; " ";
+  }
+  
+  int main () {
+      int i[] = {22, -50, 17, 25, 22, 22, 19};
+      list&lt;int&gt; listy(i, i+7);
+      list&lt;int&gt;::iterator b = listy.begin();
+      list&lt;int&gt;::iterator e = listy.end();
+  
+      replace(b, e, 22, 0);
+      for_each(b, e, prInt);
+  }
+</pre>
+            </div>
+            <hr/>
+            <br/>
+            
+            
+            <div id='proj4' class='scrollspy-element' scrollspy-title='Project 4'></div>
+            <h1>Project 4</h1>
+            <div>
+              <p>Let's take a look at Project 4 in all of its glory! (we'll do a demo of the game in-class here).</p>
+              <p>Knowing what the finished product looks like (and you can run the completed game from the course site if you're following from home), let me give you some hot tips!</p>
+              <br/>
+              
+              <h3>Lesson from Proj 4 Warmup</h3>
+              <hr/>
+              <p>It's not that I don't trust you, but in case you decide to skip the Project 4 warmup, here's a big takeaway message...</p>
+              <p class='debug'>In your Project 4 implementation, you will maintain a collection (either vector or list) of pointers to your game's dynamically allocated Actors.
+                The lesson: <strong>Erasing a pointer from this collection is not the same as freeing its dynamically allocated object.</strong></p>
+              <p>Here's a simple example:</p>
+              <p class='example'>Observe the following code snippet that dynamically allocates strings to a list of string pointers, and then attempts to clear the list using an
+                iterator. What goes wrong, and why?</p>
+<pre class='prettyprint'>
+  #include &lt;iostream&gt;
+  #include &lt;string&gt;
+  #include &lt;list&gt;
+  using namespace std;
+  
+  int main() {
+      list&lt;string*&gt; listless;
+      listless.push_back(new string("I"));
+      listless.push_back(new string("AM NOT"));
+      listless.push_back(new string("FREED"));
+    
+      // Define an iterator on listless
+      list&lt;string*&gt;::iterator it = listless.begin();
+      while (it != listless.end()) {
+          it = listless.erase(it);
+      }
+    
+      cout &lt;&lt; listless.size() &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              
+              <h3>Tips for Getting Started</h3>
+              <hr/>
+              <p class='definition'>Make it your first goal to just get a single block of ice to show on the screen.</p>
+              <p>Here are some steps towards that end:</p>
+              <ul class='indent-1'>
+                <li><p>Design a base class from which all of your actors will be derived (maybe call it... I dunno... the Actor base class), and have it derive from GraphObject.</p></li>
+                <li><p>Create an Ice class that derives from Actor, and make sure to set it to visible in its constructor.</p></li>
+                <li><p>In your StudentWorld implementation of move(), comment out the decLives() statement and return <code>GWSTATUS_CONTINUE_GAME</code> instead of
+                  <code>GWSTATUS_PLAYER_DIED</code></p></li>
+                <li><p>Create your collection of Actors to be used in StudentWorld, and in init(), construct a new Ice object.</p></li>
+                <li><p>Run the program and bask in your 16 pixels of icey glory!</p></li>
+              </ul>
+            </div>
+            <hr/>
+            <br/>
             
             
             <a class='btn btn-default pull-right hidden-print' href='javascript:window.print();'>
