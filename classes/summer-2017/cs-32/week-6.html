@@ -1,0 +1,278 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>Andrew Forney - UCLA CS</title>
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/magic-bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/main.css" rel="stylesheet" type="text/css">
+    <script src="../../../js/lib/jquery-2.0.3.min.js"></script>
+    <script src="../../../js/lib/bootstrap.min.js"></script>
+    <script src="../../../js/lib/expanding.js"></script>
+    <script src="../../../js/display/general/general-display.js"></script>
+    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+  </head>
+  
+  <body data-spy="scroll" data-target="#scrollspy">
+    
+    <!-- BEGIN WRAP -->
+    <div id="wrap">
+      
+      <!-- BEGIN NAVIGATION -->
+      <nav class='navbar navbar-default' role='navigation'>
+        <div class='nav-accent'></div>
+        <div class='container'>
+          <div class='row'>
+            <div class='col-md-12'>
+              <div class='navbar-header'>
+                <button class='navbar-toggle' type='button' data-toggle='collapse' data-target='.navbar-main-collapse'>
+                  <span class='sr-only'>Toggle Navigation</span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                  <span class='icon-bar'></span>
+                </button>
+                <a class='navbar-brand' href='/~forns/'>
+                  <span id='brand-text'>
+                    Andrew Forney
+                  </span>
+                </a>
+              </div>
+              
+              <div id='nav-main' class='collapse navbar-collapse navbar-main-collapse'>
+                <ul class='nav navbar-nav navbar-right'>
+                  
+                  <li>
+                    <a href='/~forns/about.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-user'></span>
+                      </div>
+                      <p class='text-center'>About</p>
+                    </a>
+                  </li>
+                  
+                  <li class='active'>
+                    <a href='/~forns/classes.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-book'></span>
+                      </div>
+                      <p class='text-center'>Classes</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/contact.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-comment'></span>
+                      </div>
+                      <p class='text-center'>Contact</p>
+                    </a>
+                  </li>
+                  
+                  <li>
+                    <a href='/~forns/publications.html'>
+                      <div class='text-center'>
+                        <span class='glyphicon glyphicon-file'></span>
+                      </div>
+                      <p class='text-center'>Publications</p>
+                    </a>
+                  </li>
+                  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <!-- END NAVIGATION -->
+      
+      <!-- BEGIN MAIN CONTENT -->
+      <div id="main-content" class="container">
+        <div class="row">
+          
+          <!-- BEGIN SCROLLSPY -->
+          <div class='col-md-2 hidden-sm hidden-xs'>
+            <div class="bs-sidebar hidden-print affix" role="complementary">
+              <ul id='scrollspy' class="nav bs-sidenav">
+              </ul>
+            </div>
+          </div>
+          <!-- END SCROLLSPY -->
+          
+          <!-- BEGIN PRESENTATION CONTENT -->
+          <div class='col-md-10 presentation-content' role='main'>
+            
+            <ol class="breadcrumb hidden-print">
+              <li><a href="../../../classes.html">Classes</a></li>
+              <li><a href="./cs-32.html">CS32</a></li>
+              <li class="active">Week 6</li>
+            </ol>
+            
+            
+            <div id='announcements' class='scrollspy-element' scrollspy-title='Announcements'></div>
+            <h1>Announcements</h1>
+            <div>
+              <p class='debug'>I'm leaving for Australia tonight and will be gone for a week! As such, my office hours for next
+                week (usually on Thursday, 8/10) will instead be after next week's discussion, 8/11 from 2:30 pm - 5:30 pm.</p>
+              <p>Fear not! I'll try not to leave you in the lurch with Project 4 and will still be monitoring emails while away,
+                just don't be alarmed if they arrive upside-down.</p>
+              
+              <h3>Questions from Last Week</h3>
+              <hr/>
+              <p>A few individuals had questions last week that I promised to clear up at the start of today's discussion; let's do
+                so now!</p>
+              <p class='definition'><b>Question 1:</b> what happens if an abstract class has a pure-virtual destructor, but also has
+                dynamically allocated data members that it needs to clean up?</p>
+              <p class='toolkit'><b>Answer 1:</b> remember that pure-virtual functions can still be implemented (i.e., given a
+                definition). Observe the following example.</p>
+<pre class='prettyprint' filetag='Inheritance.cpp'>
+  #include &lt;string&gt;
+  #include &lt;iostream&gt;
+  using namespace std;
+  
+  struct AbstractBase {
+      string* s;
+      AbstractBase() {
+          cout &lt;&lt; "[C] Abstract Base Constructor!" &lt;&lt; endl;
+          s = new string("test!");
+      }
+      virtual ~AbstractBase() = 0;
+  };
+  
+  struct ConcreteDerived : public AbstractBase {
+      // ...
+  };
+  
+  AbstractBase::~AbstractBase() {
+      cout &lt;&lt; "[D] Abstract Base Destructor!" &lt;&lt; endl;
+      delete s;
+  }
+  
+  int main() {
+      ConcreteDerived d;
+      // [!] What will happen if we un-comment
+      // the following line?
+      // AbstractBase a;
+  }
+</pre>
+              <br/>
+              
+              <p class='definition'><b>Question 2:</b> How does the placement of the <code>const</code> keyword affect the behavior
+                of my member functions?</p>
+              <div class='toolkit'>
+                <p>The two placements that tend to confuse the most are as follows:</p>
+                <ul class='indent-1'>
+                  <li><p><code>const returnType name () { ... }</code>: this format promises that the <b>returned</b> returnType will be
+                    const-modified (and therefore its data members cannot be modified).</p></li>
+                  <li><p><code>returnType name () const { ... }</code>: this format promises that the <b>calling</b> object will
+                    not have any of its data-members changed by invoking the function.</p></li>
+                </ul>
+              </div>
+              <br/>
+              
+              <p>Here's a small example:</p>
+<pre class='prettyprint' filetag='AssTest.cpp'>
+  #include &lt;string&gt;
+  #include &lt;iostream&gt;
+  using namespace std;
+  
+  struct AssTest {
+      int i;
+    
+      AssTest(int j) : i(j) {};
+    
+      // [!] Promises to return a const reference to this
+      // AssTest...
+      const AssTest& operator+=(const AssTest& other) {
+          i += other.i;
+          return *this;
+      }
+  };
+</pre>
+              <p>The following main method will work just fine.</p>
+<pre class='prettyprint'>
+  int main() {
+      AssTest a1(1);
+      AssTest a2(2);
+      // Types are:
+      // AssTest += AssTest += AssTest
+      a1 += a2 += a2;
+      cout &lt;&lt; a1.i &lt;&lt; endl;
+      cout &lt;&lt; a2.i &lt;&lt; endl;
+  }
+</pre>
+              <p>BUT, our tagging the return type as const will prevent behavior that invites ambiguity like:</p>
+<pre class='prettyprint'>
+  int main() {
+      AssTest a1(1);
+      AssTest a2(2);
+      // [X] Will NOT compile. Types are:
+      // (AssTest += AssTest) += AssTest
+      // => const AssTest += AssTest
+      (a1 += a2) += a2;
+      cout &lt;&lt; a1.i &lt;&lt; endl;
+      cout &lt;&lt; a2.i &lt;&lt; endl;
+  }
+</pre>
+              <br/>
+              
+              <p class='debug'>Consider whether or not the following overload of the += operator will compile:</p>
+<pre class='prettyprint'>
+  struct AssTest {
+      int i;
+    
+      AssTest(int j) : i(j) {};
+    
+      // [?] Will this work?
+      AssTest& operator+=(const AssTest& other) const {
+          i += other.i;
+          return *this;
+      }
+  };
+</pre>
+              
+              <h3>Today's Agenda</h3>
+              <hr/>
+              <p>Since you just had a midterm, we'll be looking </p>
+            </div>
+            <hr/>
+            <br/>
+            
+            
+            <div id='analysis' class='scrollspy-element' scrollspy-title='Runtime Analysis'></div>
+            <h1>Runtime Analysis</h1>
+            <div>
+            </div>
+            <hr/>
+            
+            
+            <a class='btn btn-default pull-right hidden-print' href='javascript:window.print();'>
+              <span class='glyphicon glyphicon-print'></span>
+              &nbsp; PDF / Print
+            </a>
+            
+          </div>
+          <!-- END PRESENTATION CONTENT -->
+          
+          <!-- MATERIALS FROM CLASS: -->
+          
+        </div>
+      </div>
+      <!-- END MAIN CONTENT -->
+      
+      
+    </div>
+    <!-- END WRAPPER -->
+    
+    <!-- BEGIN FOOTER -->
+    <div id="footer">
+      <div class="container">
+        <div class="col-md-12 text-center">
+          
+        </div>
+      </div>
+    </div>
+    <!-- END FOOTER -->
+    
+  </body>
+</html>
