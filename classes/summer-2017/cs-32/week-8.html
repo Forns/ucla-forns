@@ -690,6 +690,17 @@
                 A <strong>depth-first traversal</strong> of a graph, starting at some node N, will visit descendants of N along a straight line of child-succession until (a) we visit a child we've already
                 visited, or (b) we reach a leaf, at which point we backtrack to the nearest previously-visited ancestor with more children to visit.
               </p>
+              <p class='toolkit'>We can use a <strong>stack</strong> to exhibit a depth-first traversal of a graph in the following manner:</p>
+<pre class='prettyprint'>
+  // Pseudocode
+  S = Stack of vertices
+  S.push(root) // pushing a vertex onto S also marks it as "visited"
+  while S is not empty:
+      current = S.pop() // assume popping returns vertex at front
+      visit current
+      for each unvisited child c of current:
+          S.push(c)
+</pre>
               <p>A depth first traversal that remembers the nodes that it's already visited will not repeat them.</p>
               <p>Depth first traversals are not necessarily unique!</p>
               <p class='example'>Show a couple of depth-first traversals starting with node 1 in the following DAG:</p>
@@ -697,12 +708,12 @@
                 <img src='../../../assets/images/winter-2014/cs-32/week-10/graph-3.png' />
               </div>
               <br/>
-              <p>Some viable depth-first traversals:</p>
-              <ul class='indent-1'>
-                <li><p>1, 2, 4, 64, 16, 8, 32</p></li>
-                <li><p>1, 16, 32, 8, 4, 64, 2</p></li>
-              </ul>
+              <p>Some viable depth-first traversal:</p>
               <br/>
+              <ul class='indent-1'>
+                <li><p>1, 16, 32, 8, 64, 4, 2</p></li>
+                <li><p>1, 2, 4, 64, 16, 8, 32</p></li>
+              </ul>
               <p class='debug'>The following are NOT viable depth-first traversals starting at node 1. Why?</p>
               <ul class='indent-1'>
                 <li><p>1, 2, 16, 4, 8, 32, 64</p></li>
@@ -712,14 +723,23 @@
               <br/>
               <p class='definition'>A <strong>breadth-first traversal</strong> provides an ordering of nodes such that no node appears in the sequence before any of its parents. In other words, starting at
                 Node N in the graph, a breadth-first traversal will then visit all children of N before visiting any grandchildren of N.</p>
+              <p class='toolkit'>We can use a <strong>queue</strong> to exhibit a breadth-first traversal of a graph in the following manner:</p>
+<pre class='prettyprint'>
+  // Pseudocode
+  Q = Queue of vertices
+  Q.push(root) // pushing a vertex into Q also marks it as "visited"
+  while Q is not empty:
+      current = Q.pop() // assume popping returns vertex at front
+      visit current
+      for each unvisited child c of current:
+          Q.push(c)
+</pre>
               <p>This is useful for tracing dependencies where we have to resolve the parents before the children!</p>
               <p class='example'>What are some viable breadth-first traversals of the following graph?</p>
               <div class='text-center fit-pres'>
                 <img src='../../../assets/images/winter-2014/cs-32/week-10/graph-3.png' />
               </div>
-              <p>A viable breadth-first traversal: 1, 2, 16, 8, 32, 4, 64</p>
-              <p class='question' name='bfs-q0'>Why is the following ordering *not* a legal breadth-first traversal of the above tree: 1, 2, 16, 4, 8, 32, 64</p>
-              <p class='answer' name='bfs-q0'>Because 4 is visited before 8, its parent.</p>
+              <p>A viable breadth-first traversal: 1, 2, 16, 4, 8, 32, 64</p>
               
               <br/>
               <h3>Representing Graphs</h3>
