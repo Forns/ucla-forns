@@ -9,7 +9,6 @@ var quizDelim = $("#quiz-delimeter"),
     reportCorrect = $("#report-correct"),
     reportPossible = $("#report-possible"),
     reportBonus = $("#report-bonus"),
-    reportString = $("#report-string"),
     ruleList = $("#rule-list"),
     retestString = "-retest",
     
@@ -386,11 +385,8 @@ var quizDelim = $("#quiz-delimeter"),
       reportCorrect.text(correct);
       reportPossible.text(possible);
       reportBonus.text(bonus);
-      reportString.text(repStr);
       Quiz.completed = true;
     };
-    
-    Quiz.questions = Quiz.questions.slice(0, 2);
     
 
 // Main Workflow:
