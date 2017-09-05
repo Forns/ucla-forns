@@ -16,6 +16,8 @@ var quizDelim = $("#quiz-delimeter"),
     ruleList = $("#rule-list"),
     progressTracker = $("#progress-tracker"),
     retestString = "-retest",
+    masterTimer = 0,
+    masterTimerRec = $("#master-timer"),
     
     // Main Quiz Object
     Quiz = {
@@ -407,6 +409,7 @@ var quizDelim = $("#quiz-delimeter"),
         clearInterval(Quiz.timer.active);
         timerText = "Out of Time!";
       }
+      masterTimer++;
       $("#" + id + "_timer" + idAdd).text(timerText);
     },
     
@@ -416,11 +419,9 @@ var quizDelim = $("#quiz-delimeter"),
       reportPossible.text(Quiz.questions.length);
       reportBonus.text(questionBonusesNum);
       questionBonusesTally.val(questionBonusesNum);
+      masterTimerRec.val(masterTimer);
       Quiz.completed = true;
     };
-    
-    // Test code, remove:
-    // Quiz.questions = Quiz.questions.slice(0, 3);
     
 
 // Main Workflow:
