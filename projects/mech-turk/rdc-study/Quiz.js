@@ -240,7 +240,7 @@ var quizDelim = $("#quiz-delimeter"),
     
     prepQuiz = function () {
       var qOrderString = "",
-          boxWidth = 100 / Quiz.questions.length;
+          boxWidth = (100 / Quiz.questions.length) - 0.05;
       boxWidth = boxWidth.toPrecision(2);
       
       Quiz.questions.shuffle();
