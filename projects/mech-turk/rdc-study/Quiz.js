@@ -4,12 +4,17 @@ var quizDelim = $("#quiz-delimeter"),
     conditionInput = $("#condition"),
     questionOrder = $("#question-order"),
     questionResults = $("#question-results"),
+    questionResultsTally = $("#question-results-tally"),
+    questionResultsNum = 0,
     questionBonuses = $("#question-bonuses"),
+    questionBonusesNum = 0,
+    questionBonusesTally = $("#question-bonuses-tally"),
     questionIntents = $("#question-intents"),
     reportCorrect = $("#report-correct"),
     reportPossible = $("#report-possible"),
     reportBonus = $("#report-bonus"),
     ruleList = $("#rule-list"),
+    progressTracker = $("#progress-tracker"),
     retestString = "-retest",
     
     // Main Quiz Object
@@ -29,8 +34,8 @@ var quizDelim = $("#quiz-delimeter"),
           options: [{w: "noun", s: 0.333}, {w: "verb", s: 0.181}, {w: "English", s: 0.043}]
         },
         {
-          target: "bargain",
-          options: [{w: "sale", s: 0.371}, {w: "deal", s: 0.159}, {w: "basement", s: 0.032}]
+          target: "bell",
+          options: [{w: "ring", s: 0.399}, {w: "xxx", s: 0.159}, {w: "school", s: 0.041}]
         },
         {
           target: "bandage",
@@ -65,16 +70,16 @@ var quizDelim = $("#quiz-delimeter"),
           options: [{w: "cold", s: 0.370}, {w: "snow", s: 0.255}, {w: "jack", s: 0.036}]
         },
         {
-          target: "fin",
-          options: [{w: "fish", s: 0.396}, {w: "shark", s: 0.228}, {w: "dolphin", s: 0.114}]
+          target: "fur",
+          options: [{w: "coat", s: 0.324}, {w: "xxx", s: 0.228}, {w: "warm", s: 0.047}]
         },
         {
           target: "gain",
-          options: [{w: "weight", s: 0.260}, {w: "XXX", s: 0.244}, {w: "acquire", s: 0.016}]
+          options: [{w: "weight", s: 0.260}, {w: "xxx", s: 0.244}, {w: "acquire", s: 0.016}]
         },
         {
-          target: "gourmet",
-          options: [{w: "food", s: 0.357}, {w: "cook", s: 0.245}, {w: "chef", s: 0.083}]
+          target: "glue",
+          options: [{w: "sticky", s: 0.371}, {w: "xxx", s: 0.245}, {w: "paper", s: 0.053}]
         },
         {
           target: "hoop",
@@ -109,8 +114,8 @@ var quizDelim = $("#quiz-delimeter"),
           options: [{w: "fork", s: 0.327}, {w: "cut", s: 0.179}, {w: "spoon", s: 0.051}]
         },
         {
-          target: "lawn",
-          options: [{w: "grass", s: 0.397}, {w: "mower", s: 0.185}, {w: "cut", s: 0.038}]
+          target: "lobby",
+          options: [{w: "hotel", s: 0.345}, {w: "xxx", s: 0.185}, {w: "lounge", s: 0.034}]
         },
         {
           target: "lung",
@@ -145,8 +150,8 @@ var quizDelim = $("#quiz-delimeter"),
           options: [{w: "friend", s: 0.325}, {w: "pressure", s: 0.195}, {w: "group", s: 0.039}]
         },
         {
-          target: "pillow",
-          options: [{w: "sleep", s: 0.321}, {w: "soft", s: 0.236}, {w: "case", s: 0.042}]
+          target: "picture",
+          options: [{w: "frame", s: 0.316}, {w: "xxx", s: 0.236}, {w: "camera", s: 0.051}]
         },
         {
           target: "quantity",
@@ -157,16 +162,16 @@ var quizDelim = $("#quiz-delimeter"),
           options: [{w: "house", s: 0.307}, {w: "top", s: 0.197}, {w: "tar", s: 0.024}]
         },
         {
-          target: "radiator",
-          options: [{w: "car", s: 0.362}, {w: "heat", s: 0.197}, {w: "heater", s: 0.059}]
+          target: "ray",
+          options: [{w: "sun", s: 0.362}, {w: "xxx", s: 0.197}, {w: "beam", s: 0.047}]
         },
         {
           target: "scold",
           options: [{w: "yell", s: 0.320}, {w: "punish", s: 0.190}, {w: "anger", s: 0.020}]
         },
         {
-          target: "step",
-          options: [{w: "stair", s: 0.370}, {w: "up", s: 0.205}, {w: "ladder", s: 0.082}]
+          target: "scheme",
+          options: [{w: "plan", s: 0.392}, {w: "xxx", s: 0.205}, {w: "sneaky", s: 0.028}]
         },
         {
           target: "sailing",
@@ -197,8 +202,8 @@ var quizDelim = $("#quiz-delimeter"),
           options: [{w: "guest", s: 0.365}, {w: "friend", s: 0.189}, {w: "relative", s: 0.061}]
         },
         {
-          target: "when",
-          options: [{w: "where", s: 0.401}, {w: "now", s: 0.217}, {w: "how", s: 0.046}]
+          target: "wrist",
+          options: [{w: "watch", s: 0.345}, {w: "xxx", s: 0.217}, {w: "bracelet", s: 0.061}]
         },
         {
           target: "weird",
@@ -232,7 +237,10 @@ var quizDelim = $("#quiz-delimeter"),
     },
     
     prepQuiz = function () {
-      var qOrderString = "";
+      var qOrderString = "",
+          boxWidth = 100 / Quiz.questions.length;
+      boxWidth = boxWidth.toPrecision(2);
+      
       Quiz.questions.shuffle();
       for (var q of Quiz.questions) {
         q.id = q.target;
@@ -242,6 +250,9 @@ var quizDelim = $("#quiz-delimeter"),
         }
         Quiz.qmap[q.id] = q;
         qOrderString += q.id + ",";
+        
+        // Prep progress tracker
+        progressTracker.append("<span class='progress-block' id='" + q.id  + "-progress-block' style='width:" + boxWidth + "%;'></span>");
       }
       questionOrder.val(qOrderString);
       conditionInput.val(Quiz.condition);
@@ -262,6 +273,7 @@ var quizDelim = $("#quiz-delimeter"),
                     "<td colspan=2><h3>Question: " + (Quiz.pageIndex - Quiz.startIndex) + " / " + (Quiz.questions.length) + "</h3></td>" +
                     "<td class='text-right'><span class='glyphicon glyphicon-time'></span>&nbsp;&nbsp;<h3 class='ilb' id='" + q.id + "_timer" + idAdd + "'>" + Quiz.timer.startTime + "</h3></td>" +
                   "</tr>" +
+                  "<tr><td id='" + q.id + "-progress' class='progress-holder text-center' colspan=3></td></tr>" +
                   "<tr>" +
                     "<td colspan=3 class='text-center'><h1 class='text-center'>" + q.target + "</h1></td>" +
                   "</tr>" +
@@ -277,6 +289,7 @@ var quizDelim = $("#quiz-delimeter"),
               "</table>" +
               "<input id='" + q.id + "_result" + idAdd + "' type='text' disabled='true' style='display: none' />" +
               "<div class='text-center'><input id='" + q.id + "_next" + idAdd + "' style='display: none' disabled='true' onclick='next();' type='button' value='Continue' /></div>" +
+              ((Quiz.condition) ? "<br/><p id='" + q.id + "-hint' class='alert alert-info' style='display:none;'><b>HINT:</b> the hidden rule relates to which answer choice you <i>feel</i> like choosing first. Take this into consideration before making your final choice!</p>" : "") +
             "</div>" +
           "</div>"
         );
@@ -298,7 +311,8 @@ var quizDelim = $("#quiz-delimeter"),
                 resultCSS,
                 resultBit,
                 bonusBit = "0",
-                intentBit;
+                intentBit,
+                currentTracker = $("#" + id + "-progress-block");
                 
             event.stopPropagation();
             $("[name='" + id + "_ans" + idAdd + "']")
@@ -315,12 +329,18 @@ var quizDelim = $("#quiz-delimeter"),
               resultCSS  = "alert alert-success";
               resultBit  = "1";
               bonusBit   = (Quiz.timer.expired) ? "0" : "1";
+              currentTracker.addClass("alert-success");
             } else {
               resultText = "Incorrect";
               resultCSS  = "alert alert-danger";
               resultBit  = "0";
+              currentTracker.addClass("alert-danger");
             }
             intentBit  = (val === Quiz.qmap[id].options[0].w) ? "1" : "0";
+            
+            if (Quiz.condition) {
+              $("#" + id + "-hint").show();
+            }
             
             $("#" + id + "_next" + idAdd)
               .show()
@@ -330,6 +350,8 @@ var quizDelim = $("#quiz-delimeter"),
             questionResults.val(questionResults.val() + resultBit);
             questionBonuses.val(questionBonuses.val() + bonusBit);
             questionIntents.val(questionIntents.val() + intentBit);
+            questionResultsNum += parseInt(resultBit);
+            questionBonusesNum += parseInt(bonusBit);
           });
         })(q.id, idAdd);
       }
@@ -339,6 +361,10 @@ var quizDelim = $("#quiz-delimeter"),
           "<p class='alert alert-info'><b>HINT:</b> the hidden rule relates to which answer choice you <i>feel</i> like choosing first. Take this into consideration before making your final choice!</p>"
         );
       }
+      
+      // Setup first progress tracker
+      moveProgressTracker($("#" + Quiz.questions[0].id + "-progress"));
+      progressTracker.show();
       
       // Finished loading quiz, ready to start!
       quizLoad.hide();
@@ -353,7 +379,15 @@ var quizDelim = $("#quiz-delimeter"),
       
       startTimer(currentId, idAdd);
       Quiz.activeQuestion++;
-      completeQuiz();
+      moveProgressTracker($("#" + Quiz.questions[effectiveActive].id + "-progress"));
+      if (Quiz.activeQuestion === Quiz.questions.length) {
+        completeQuiz();
+      }
+    },
+    
+    moveProgressTracker = function (moveTo) {
+      progressTracker.appendTo(moveTo);
+      progressTracker = $("#progress-tracker");
     },
     
     startTimer = function (id, idAdd) {
@@ -377,16 +411,16 @@ var quizDelim = $("#quiz-delimeter"),
     },
     
     completeQuiz = function () {
-      var correct  = questionResults.val().split("1").length - 1,
-          bonus    = questionBonuses.val().split("1").length - 1,
-          repStr   = questionResults.val().split("").join(","),
-          possible = Quiz.questions.length;
-      
-      reportCorrect.text(correct);
-      reportPossible.text(possible);
-      reportBonus.text(bonus);
+      reportCorrect.text(questionResultsNum);
+      questionResultsTally.val(questionResultsNum);
+      reportPossible.text(Quiz.questions.length);
+      reportBonus.text(questionBonusesNum);
+      questionBonusesTally.val(questionBonusesNum);
       Quiz.completed = true;
     };
+    
+    // Test code, remove:
+    // Quiz.questions = Quiz.questions.slice(0, 3);
     
 
 // Main Workflow:

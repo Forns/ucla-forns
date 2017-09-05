@@ -65,6 +65,16 @@
   .ilb {
     display: inline-block;
   }
+  
+  .progress-holder {
+    display: relative;
+  }
+  
+  .progress-block {
+    display: inline-block;
+    height: 25px;
+    border: 1px solid gray;
+  }
 </style>
 <div class="wrapper">
   
@@ -86,10 +96,20 @@
       </div>
       &nbsp;
 
-      <div class="warning">
-        Please only complete this HIT once. You will not be paid for retakes. If you have already completed this HIT or any other version of this HIT and submit it again, 
-        all submissions but the first will be rejected, and you will only be paid for the first submission. Having a submission rejected is detrimental to your reputation 
-        as a worker, and may prevent you from completing HITs in the future.
+      <div class="alert alert-warning">
+        <p><strong>Requirements:</strong> by continuing with this HIT, you hereby agree that:</p>
+        <ul class='indent-1'>
+          <li><p>You are 18 years of age or older.</p></li>
+          <li><p>You are a native English speaker, having had English as a first language.</p></li>
+          <li><p>You have never taken this HIT before. You will not be paid for retakes. If you have already completed this HIT or any other version of this HIT and submit it again, 
+            all submissions but the first will be rejected, and you will only be paid for the first submission. Having a submission rejected is detrimental to your reputation 
+            as a worker, and may prevent you from completing HITs in the future.</p></li>
+        </ul>
+      </div>
+      
+      <div class='alert alert-info'>
+        <p><strong>About this Quiz:</strong> The following task will require you to answer a quiz of short questions (whose format will be described on the next page). For each question, you will have 30 seconds to
+          answer, and if you answer "correctly" within that time, you will be paid a bonus of +$0.01 upon successful completion and acceptance of your submission.</p> 
       </div>
       <br />
       <div id='quiz-loading' class='text-center'><p style='color:blue;'>Loading, please wait...</p></div>
@@ -110,15 +130,22 @@
         In this study, you will be asked to answer 50 short questions of the following format:
       </p>
       <ol id='rule-list' class='indent-1'>
-        <li><p>At the top of each page, you will be shown a word, which you should consider before clicking
-               a button to reveal a selection of two additional words.
-               <b>The questions and answer choices are given in random order.</b></p></li>
-        <li><p>One of the two options will be considered the "correct" choice by a hidden rule, and the other will be considered "incorrect."</p></li>
-        <li><p>Your task: develop your own decision-making strategy to answer as many right as possible.
-               You will receive a BONUS of $0.01 for each word that you choose correctly.</p></li>
-        <li><p><strong>You need not rush</strong>, but for each question, you will have 30 seconds to choose one of the answer choices.
-          If you answer after the 30 seconds have elapsed, you will NOT receive a bonus $0.01 for answering that question correctly.</p></li>
+        <li><p>At the top of each page, you will be shown a word; <b>consider the first thing that comes to mind</b> when you see that word before clicking a button to reveal two additional words which will be your answer choices.
+          <i>Note: The questions and answer choices are given in random order.</i></p></li>
+        <li><p>One of the two options will be considered the "correct" choice by a hidden rule, and the other will be considered "incorrect." 
+          When you have made a decision, click on the answer choice you believe to be correct.</p></li>
+        <li><p>Your task: develop your own decision-making strategy to answer as many correctly as possible.</p></li>
       </ol>
+      <p>Here is an example quiz question, with the answer choices "test" and "illustrating" revealed:</p>
+      <div class='well'>
+        <h1 class='text-center'>example</h1>
+        <hr/>
+        <div class='text-center'>
+          <div class='radio'><label><input name='example1' type='radio' disabled />test</label></div>
+          <div class='radio'><label><input name='example1' type='radio' disabled />illustrating</label></div>
+        </div>
+      </div>
+      
       <p>
         Please do this experiment in one sitting, without taking any breaks.
       </p>
@@ -130,6 +157,7 @@
   <!-- QUIZ MAIN CONTENT ========================= -->
   <!-- =========================================== -->
   <div id='quiz-delimeter'></div>
+  <div id='progress-tracker' style='display: none;'></div>
   
 
   <!-- =========================================== -->
@@ -193,16 +221,24 @@
       </select>
 
       <p>
-        <b>*What country are you from?</b>
+        <b>*In what country were you born?</b>
       </p>
       <select id="country" name="country">
         <script>
           document.writeln(countryInputHTML);
         </script>
       </select>
+      
+      <p>
+        <b>*Select the political ideology with which you most identify.</b>
+      </p>
+      <select id="politics" name="politics">
+        <option selected="selected" value="default">Please select</option><option value="Conservative">Conservative</option><option value="Liberal">Liberal</option><option value="Independent">Independent</option><option value="Other">Other</option>
+      </select>
+      
       <br />
       <br />
-      <input onclick="function filledOut(id) { return document.getElementById(id).value != 'default' } if(filledOut('gender') &amp;&amp; filledOut('age') &amp;&amp; filledOut('lang1') &amp;&amp; filledOut('country')) { next(); }else{ alert('Please answer all of the questions marked with an asterisk (*).'); }" type="button" value="Continue" />
+      <input onclick="function filledOut(id) { return document.getElementById(id).value != 'default' } if(filledOut('gender') &amp;&amp; filledOut('age') &amp;&amp; filledOut('lang1') &amp;&amp; filledOut('country') &amp;&amp; filledOut('politics')) { next(); }else{ alert('Please answer all of the questions marked with an asterisk (*).'); }" type="button" value="Continue" />
     </div>
   </div>
 
@@ -215,13 +251,15 @@
       </p>
       <p class='alert alert-success text-center'>You scored <span id='report-correct'></span> / <span id='report-possible'></span></p>
       <p class='alert alert-warning text-center'>You earned a bonus of &cent;<span id='report-bonus'></span>, which will be payed after review of your submission.</p>
-      <p>Please click "Submit" below to complete the HIT. We will review your submission shortly.</p>
+      <p>Please click "Submit" below to complete the HIT. We will review your submission and awarded your bonuses shortly.</p>
       <br />
       <input id="condition" name="condition" type="text" style="display: none" />
       <textarea id="question-order" name="question-order" style="display: none"></textarea>
       <textarea id="question-results" name="question-results" style="display: none"></textarea>
+      <input id="question-results-tally" name="question-results-tally" type="text" style="display: none" value="0" />
       <textarea id="question-intents" name="question-intents" style="display: none"></textarea>
       <textarea id="question-bonuses" name="question-bonuses" style="display: none"></textarea>
+      <input id="question-bonuses-tally" name="question-bonuses-tally" type="text" style="display: none" value="0" />
       <input type="submit" value="Submit" />
     </div>
   </div>
