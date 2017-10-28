@@ -10,6 +10,7 @@ var quizDelim = $("#quiz-delimeter"),
     questionBonusesNum = 0,
     questionBonusesTally = $("#question-bonuses-tally"),
     questionIntents = $("#question-intents"),
+    questionResTimes = $("#question-resTimes"),
     reportCorrect = $("#report-correct"),
     reportPossible = $("#report-possible"),
     reportBonus = $("#report-bonus"),
@@ -297,7 +298,6 @@ var quizDelim = $("#quiz-delimeter"),
                 "</tbody>" +
               "</table>" +
               "<input id='" + q.id + "_result" + idAdd + "' type='text' disabled='true' style='display: none' />" +
-              "<input id='" + q.id + "-resTime" + idAdd + "' type='text' name='" + q.id + "-resTime' style='display: none' />" +
               "<div class='text-center'><input id='" + q.id + "_next" + idAdd + "' style='display: none' disabled='true' onclick='next();' type='button' value='Continue' /></div>" +
               ((Quiz.condition) ? "<br/><p id='" + q.id + "-hint' class='alert alert-info' style='display:none;'>" + hint + "</p>" : "") +
             "</div>" +
@@ -322,8 +322,7 @@ var quizDelim = $("#quiz-delimeter"),
                 resultBit,
                 bonusBit = "0",
                 intentBit,
-                currentTracker = $("#" + id + "-progress-block"),
-                questionTimer = $("#" + id + "-resTime");
+                currentTracker = $("#" + id + "-progress-block");
                 
             event.stopPropagation();
             $("[name='" + id + "_ans" + idAdd + "']")
@@ -362,7 +361,7 @@ var quizDelim = $("#quiz-delimeter"),
             questionResults.val(questionResults.val() + resultBit);
             questionBonuses.val(questionBonuses.val() + bonusBit);
             questionIntents.val(questionIntents.val() + intentBit);
-            questionTimer.val(Quiz.timer.question.toFixed(2));
+            questionResTimes.val(questionResTimes.val() + ";" + Quiz.timer.question.toFixed(2));
             questionResultsNum += parseInt(resultBit);
             questionBonusesNum += parseInt(bonusBit);
           });
