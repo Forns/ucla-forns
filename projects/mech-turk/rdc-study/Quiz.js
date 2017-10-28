@@ -18,6 +18,7 @@ var quizDelim = $("#quiz-delimeter"),
     retestString = "-retest",
     masterTimer = 0,
     masterTimerRec = $("#master-timer"),
+    hint = "",
     
     // Main Quiz Object
     Quiz = {
@@ -25,7 +26,7 @@ var quizDelim = $("#quiz-delimeter"),
       pageIndex: 3,
       activeQuestion: 0,
       cIndex: 2,
-      condition: Math.floor(Math.random() * 2),
+      condition: Math.floor(Math.random() * 3), // 0 = no hint, 1 = weak hint, 2 = strong hint
       questions: [
         {
           target: "accelerate",
@@ -233,7 +234,9 @@ var quizDelim = $("#quiz-delimeter"),
         startTime: 30, // s
         currentTime: 30,
         expired: false,
-        active: null
+        active: null,
+        question: 0,
+        questionActive: null
       },
       completed: false
     },
@@ -258,6 +261,10 @@ var quizDelim = $("#quiz-delimeter"),
       }
       questionOrder.val(qOrderString);
       conditionInput.val(Quiz.condition);
+      switch (Quiz.condition) {
+        case 1: hint = "<b>HINT:</b> the hidden rule is the same for each question in the quiz and is either that: the answer choice you <i>feel</i> like choosing first will likely (1) <b>always</b> be correct OR (2) <b>never</b> be correct. Take this into consideration before making your final choice!"; break;
+        case 2: hint = "<b>HINT:</b> the hidden rule is the same for each question in the quiz and is that the answer choice you <i>feel</i> like choosing first will likely <b>never</b> be correct! Take this into consideration before making your final choice!"; break;
+      }
     },
     
     renderQuiz = function (idAdd) {
@@ -290,8 +297,9 @@ var quizDelim = $("#quiz-delimeter"),
                 "</tbody>" +
               "</table>" +
               "<input id='" + q.id + "_result" + idAdd + "' type='text' disabled='true' style='display: none' />" +
+              "<input id='" + q.id + "-resTime" + idAdd + "' type='text' name='" + q.id + "-resTime' disabled='true' style='display: none' />" +
               "<div class='text-center'><input id='" + q.id + "_next" + idAdd + "' style='display: none' disabled='true' onclick='next();' type='button' value='Continue' /></div>" +
-              ((Quiz.condition) ? "<br/><p id='" + q.id + "-hint' class='alert alert-info' style='display:none;'><b>HINT:</b> the hidden rule relates to which answer choice you <i>feel</i> like choosing first. Take this into consideration before making your final choice!</p>" : "") +
+              ((Quiz.condition) ? "<br/><p id='" + q.id + "-hint' class='alert alert-info' style='display:none;'>" + hint + "</p>" : "") +
             "</div>" +
           "</div>"
         );
@@ -314,15 +322,17 @@ var quizDelim = $("#quiz-delimeter"),
                 resultBit,
                 bonusBit = "0",
                 intentBit,
-                currentTracker = $("#" + id + "-progress-block");
+                currentTracker = $("#" + id + "-progress-block"),
+                questionTimer = $("#" + id + "-resTime");
                 
             event.stopPropagation();
             $("[name='" + id + "_ans" + idAdd + "']")
               .unbind("click")
               .attr("disabled", true);
               
-            // Stop timer
+            // Stop timers
             clearInterval(Quiz.timer.active);
+            clearInterval(Quiz.timer.questionActive);
             
             // Mark as correct or incorrect
             result = val === Quiz.qmap[id].options[Quiz.cIndex].w;
@@ -352,6 +362,7 @@ var quizDelim = $("#quiz-delimeter"),
             questionResults.val(questionResults.val() + resultBit);
             questionBonuses.val(questionBonuses.val() + bonusBit);
             questionIntents.val(questionIntents.val() + intentBit);
+            questionTimer.val(Quiz.timer.question.toFixed(2));
             questionResultsNum += parseInt(resultBit);
             questionBonusesNum += parseInt(bonusBit);
           });
@@ -360,7 +371,7 @@ var quizDelim = $("#quiz-delimeter"),
       
       if (Quiz.condition) {
         ruleList.after(
-          "<p class='alert alert-info'><b>HINT:</b> the hidden rule relates to which answer choice you <i>feel</i> like choosing first. Take this into consideration before making your final choice!</p>"
+          "<p class='alert alert-info'>" + hint + "</p>"
         );
       }
       
@@ -396,6 +407,10 @@ var quizDelim = $("#quiz-delimeter"),
       var currentTimer = $("#" + id + "_timer" + idAdd);
       Quiz.timer.currentTime = Quiz.timer.startTime;
       Quiz.timer.expired = false;
+      Quiz.timer.question = 0;
+      Quiz.timer.questionActive = setInterval(function () {
+        Quiz.timer.question += 0.1;
+      }, 100);
       Quiz.timer.active = setInterval(function () {
         tickTimer(id, idAdd);
       }, 1000);
