@@ -297,7 +297,7 @@ var quizDelim = $("#quiz-delimeter"),
                 "</tbody>" +
               "</table>" +
               "<input id='" + q.id + "_result" + idAdd + "' type='text' disabled='true' style='display: none' />" +
-              "<input id='" + q.id + "-resTime" + idAdd + "' type='text' name='" + q.id + "-resTime' disabled='true' style='display: none' />" +
+              "<input id='" + q.id + "-resTime" + idAdd + "' type='text' name='" + q.id + "-resTime' style='display: none' />" +
               "<div class='text-center'><input id='" + q.id + "_next" + idAdd + "' style='display: none' disabled='true' onclick='next();' type='button' value='Continue' /></div>" +
               ((Quiz.condition) ? "<br/><p id='" + q.id + "-hint' class='alert alert-info' style='display:none;'>" + hint + "</p>" : "") +
             "</div>" +
