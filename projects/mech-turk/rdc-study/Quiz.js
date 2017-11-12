@@ -27,7 +27,7 @@ var quizDelim = $("#quiz-delimeter"),
       pageIndex: 3,
       activeQuestion: 0,
       cIndex: 2,
-      condition: 2, // 0 = no hint, 1 = weak hint, 2 = strong hint
+      condition: 1, // 0 = no hint, 1 = weak hint, 2 = strong hint
       questions: [
         {
           target: "accelerate",
