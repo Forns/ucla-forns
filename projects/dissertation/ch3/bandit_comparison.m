@@ -19,8 +19,6 @@ clc;
 
 T = 1000; % Number of timesteps.
 N = 1000; % Number of Monte Carlo samples.
-N_obs = 100; % Number of observational samples, per arm.
-N_exp = 100; % Number of experimental samples, per arm.
 
 % algorithms
 algorithms = {'epsilonGreedyRun', 'thompsonRun', 'exp3Run', 'ucb1Run', 'observationalRun', 'experimentalRun', 'thompsonRDTRun'};
@@ -137,11 +135,9 @@ end
 
 %% Finish.
 % Place legend.
-if N < 3
-    subplot(1,N_PLOTS,1);
-    legend(names, 'Location', 'SouthEast');
-    subplot(1,N_PLOTS,2);
-    legend(names, 'Location', 'SouthEast');
-end
+subplot(1,N_PLOTS,1);
+legend(names, 'Location', 'SouthEast');
+subplot(1,N_PLOTS,2);
+legend(names, 'Location', 'SouthEast');
 
 % END OF SCRIPT
